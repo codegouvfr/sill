@@ -1,7 +1,7 @@
 {
     "homepage": "https://sill.code.gouv.fr",
     "name": "sill-web",
-    "version": "1.2.3",
+    "version": "1.2.4",
     "license": "MIT",
     "scripts": {
         "start": "react-app-rewired start",
@@ -18,7 +18,7 @@
         "prebuild": "only-include-used-icons"
     },
     "dependencies": {
-        "@codegouvfr/react-dsfr": "^0.46.1",
+        "@codegouvfr/react-dsfr": "^0.46.0",
         "@codegouvfr/sill": "^0.4.0",
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
