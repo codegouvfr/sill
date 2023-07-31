@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "@codegouvfr/react-dsfr": "^0.73.0",
-        "@codegouvfr/sill": "^1.13.1",
+        "@codegouvfr/sill": "^1.14.0",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.0.4",
