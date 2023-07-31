@@ -13,7 +13,6 @@ import { AlikeSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Button } from "@codegouvfr/react-dsfr/Button";
-import { exclude } from "tsafe/exclude";
 import type { PageRoute } from "./route";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
@@ -167,16 +166,7 @@ export default function SoftwareDetails(props: Props) {
                                 "isDefault": route.params.tab === "alternatives",
                                 "content": (
                                     <AlikeSoftwareTab
-                                        alikeExternalSoftwares={software.similarSoftwares
-                                            .map(item =>
-                                                item.isInSill ? item.software : undefined
-                                            )
-                                            .filter(exclude(undefined))}
-                                        alikeInternalSoftwares={software.similarSoftwares
-                                            .map(item =>
-                                                item.isInSill === false ? item : undefined
-                                            )
-                                            .filter(exclude(undefined))}
+                                        similarSoftwares={software.similarSoftwares}
                                         getLinks={({ softwareName }) => ({
                                             "declarationForm": routes.declarationForm({
                                                 "name": softwareName
@@ -189,6 +179,13 @@ export default function SoftwareDetails(props: Props) {
                                                     "name": softwareName
                                                 }).link
                                         })}
+                                        getAddWikipediaSoftwareToSillLink={({
+                                            wikidataId
+                                        }) =>
+                                            routes.softwareCreationForm({
+                                                wikidataId
+                                            }).link
+                                        }
                                     />
                                 )
                             }

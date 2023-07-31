@@ -9,17 +9,17 @@ import { SearchMultiInput } from "ui/shared/SearchMultiInput";
 import type { useCoreFunctions } from "core";
 import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 
 export type Step1Props = {
     className?: string;
     initialFormData: {
         mainSoftwareSillId: number | undefined;
-        otherSoftwares: WikidataEntry[];
+        otherWikidataSoftwares: WikidataEntry[];
     };
     onSubmit: (formData: {
         mainSoftwareSillId: number;
-        otherSoftwares: WikidataEntry[];
+        otherWikidataSoftwares: WikidataEntry[];
     }) => void;
     allSillSoftwares: {
         softwareName: string;
@@ -27,10 +27,12 @@ export type Step1Props = {
         softwareDescription: string;
     }[];
     evtActionSubmit: NonPostableEvt<void>;
-    getWikidataOptions: (
+    getLibreSoftwareWikidataOptions: (
         queryString: string
     ) => ReturnType<
-        ReturnType<typeof useCoreFunctions>["softwareForm"]["getWikidataOptions"]
+        ReturnType<
+            typeof useCoreFunctions
+        >["softwareForm"]["getLibreSoftwareWikidataOptions"]
     >;
 };
 
@@ -40,12 +42,13 @@ export function InstanceFormStep1(props: Step1Props) {
         initialFormData,
         onSubmit,
         evtActionSubmit,
-        getWikidataOptions,
+        getLibreSoftwareWikidataOptions,
         allSillSoftwares
     } = props;
 
     const { t } = useTranslation({ InstanceFormStep1 });
     const { t: tCommon } = useTranslation({ "App": null });
+    const { resolveLocalizedString } = useResolveLocalizedString();
 
     const {
         handleSubmit,
@@ -57,7 +60,7 @@ export function InstanceFormStep1(props: Step1Props) {
             softwareSillId: number;
             softwareDescription: string;
         };
-        otherSoftwares: WikidataEntry[];
+        otherWikidataSoftwares: WikidataEntry[];
     }>({
         "defaultValues": {
             "mainSoftware": (() => {
@@ -76,7 +79,7 @@ export function InstanceFormStep1(props: Step1Props) {
 
                 return mainSoftware;
             })(),
-            "otherSoftwares": initialFormData.otherSoftwares
+            "otherWikidataSoftwares": initialFormData.otherWikidataSoftwares
         }
     });
 
@@ -100,7 +103,7 @@ export function InstanceFormStep1(props: Step1Props) {
             onSubmit={handleSubmit(data =>
                 onSubmit({
                     "mainSoftwareSillId": data.mainSoftware.softwareSillId,
-                    "otherSoftwares": data.otherSoftwares
+                    "otherWikidataSoftwares": data.otherWikidataSoftwares
                 })
             )}
         >
@@ -142,22 +145,28 @@ export function InstanceFormStep1(props: Step1Props) {
             />
 
             <Controller
-                name="otherSoftwares"
+                name="otherWikidataSoftwares"
                 control={control}
                 render={({ field }) => (
                     <SearchMultiInput
                         debounceDelay={400}
-                        getOptions={getWikidataOptions}
+                        getOptions={getLibreSoftwareWikidataOptions}
                         value={field.value}
                         onValueChange={value => field.onChange(value)}
-                        getOptionLabel={wikidataEntry => wikidataEntry.wikidataLabel}
+                        getOptionLabel={wikidataEntry =>
+                            resolveLocalizedString(wikidataEntry.label)
+                        }
                         renderOption={(liProps, wikidataEntity) => (
                             <li {...liProps}>
                                 <div>
-                                    <span>{wikidataEntity.wikidataLabel}</span>
+                                    <span>
+                                        {resolveLocalizedString(wikidataEntity.label)}
+                                    </span>
                                     <br />
                                     <span className={fr.cx("fr-text--xs")}>
-                                        {wikidataEntity.wikidataDescription}
+                                        {resolveLocalizedString(
+                                            wikidataEntity.description
+                                        )}
                                     </span>
                                 </div>
                             </li>

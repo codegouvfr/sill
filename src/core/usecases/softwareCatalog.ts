@@ -14,6 +14,7 @@ import { createCompareFn } from "../tools/compareFn";
 import { exclude } from "tsafe/exclude";
 import FlexSearch from "flexsearch";
 import type { ApiTypes } from "@codegouvfr/sill";
+import { createResolveLocalizedString } from "i18nifty";
 
 export type State = {
     softwares: State.Software.Internal[];
@@ -1086,7 +1087,7 @@ function apiSoftwareToInternalSoftware(params: {
         logoUrl,
         softwareDescription,
         latestVersion,
-        parentSoftware: parentSoftwareWikidataRef,
+        parentWikidataSoftware,
         testUrl,
         addedTime,
         updateTime,
@@ -1102,14 +1103,19 @@ function apiSoftwareToInternalSoftware(params: {
         Equals<ApiTypes.Software["prerogatives"], State.Software.Internal["prerogatives"]>
     >();
 
+    const { resolveLocalizedString } = createResolveLocalizedString({
+        "currentLanguage": "fr",
+        "fallbackLanguage": "en"
+    });
+
     const parentSoftware: State.Software.Internal["parentSoftware"] = (() => {
-        if (parentSoftwareWikidataRef === undefined) {
+        if (parentWikidataSoftware === undefined) {
             return undefined;
         }
 
         in_sill: {
             const software = apiSoftwares.find(
-                software => software.wikidataId === parentSoftwareWikidataRef.wikidataId
+                software => software.wikidataId === parentWikidataSoftware.wikidataId
             );
 
             if (software === undefined) {
@@ -1124,8 +1130,8 @@ function apiSoftwareToInternalSoftware(params: {
 
         return {
             "isInSill": false,
-            "softwareName": parentSoftwareWikidataRef.wikidataLabel,
-            "url": `https://www.wikidata.org/wiki/${parentSoftwareWikidataRef.wikidataId}`
+            "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.wikidataId}`
         };
     })();
 
@@ -1154,7 +1160,18 @@ function apiSoftwareToInternalSoftware(params: {
                 " (" +
                 [
                     ...keywords,
-                    ...similarSoftwares.map(({ wikidataLabel }) => wikidataLabel),
+                    ...similarSoftwares
+                        .map(similarSoftware =>
+                            similarSoftware.isInSill
+                                ? similarSoftware.softwareName
+                                : resolveLocalizedString(similarSoftware.label)
+                        )
+                        .map(name =>
+                            name === "VSCodium"
+                                ? ["Visual Studio Code", "VSCodium"]
+                                : name
+                        )
+                        .flat(),
                     parentSoftware === undefined ? undefined : parentSoftware.softwareName
                 ]
                     .filter(exclude(undefined))
@@ -1233,16 +1250,21 @@ function internalSoftwareToExternalSoftware(params: {
 
 export function apiSoftwareToExternalCatalogSoftware(params: {
     apiSoftwares: ApiTypes.Software[];
-    wikidataId: string;
+    softwareRef:
+        | {
+              type: "wikidataId";
+              wikidataId: string;
+          }
+        | {
+              type: "name";
+              softwareName: string;
+          };
 }): State.Software.External | undefined {
-    const { apiSoftwares, wikidataId } = params;
+    const { apiSoftwares, softwareRef } = params;
 
     const internalSoftware = apiSoftwareToInternalSoftware({
         apiSoftwares,
-        "softwareRef": {
-            "type": "wikidataId",
-            wikidataId
-        },
+        softwareRef,
         "userDeclaration": undefined
     });
 

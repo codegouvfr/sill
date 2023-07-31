@@ -11,7 +11,7 @@ import type { useCoreFunctions } from "core";
 import type { FormData } from "core/usecases/softwareForm";
 import type { ReturnType } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import { useStyles } from "tss-react/dsfr";
 
 export type Step2Props = {
@@ -23,11 +23,13 @@ export type Step2Props = {
     getAutofillDataFromWikidata: ReturnType<
         typeof useCoreFunctions
     >["softwareForm"]["getAutofillData"];
-    getWikidataOptions: (
+    getLibreSoftwareWikidataOptions: (
         queryString: string
     ) => Promise<
         ReturnType<
-            ReturnType<typeof useCoreFunctions>["softwareForm"]["getWikidataOptions"]
+            ReturnType<
+                typeof useCoreFunctions
+            >["softwareForm"]["getLibreSoftwareWikidataOptions"]
         >
     >;
 };
@@ -39,12 +41,13 @@ export function SoftwareFormStep2(props: Step2Props) {
         initialFormData,
         onSubmit,
         evtActionSubmit,
-        getWikidataOptions,
+        getLibreSoftwareWikidataOptions,
         getAutofillDataFromWikidata
     } = props;
 
     const { t } = useTranslation({ SoftwareFormStep2 });
     const { t: tCommon } = useTranslation({ "App": "App" });
+    const { resolveLocalizedString } = useResolveLocalizedString();
 
     const {
         handleSubmit,
@@ -54,7 +57,9 @@ export function SoftwareFormStep2(props: Step2Props) {
         formState: { errors },
         setValue
     } = useForm<{
-        wikidataEntry: ReturnType<typeof getWikidataOptions>[number] | undefined;
+        wikidataEntry:
+            | ReturnType<typeof getLibreSoftwareWikidataOptions>[number]
+            | undefined;
         comptoirDuLibreIdInputValue: string;
         softwareName: string;
         softwareDescription: string;
@@ -78,8 +83,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                         ? undefined
                         : {
                               wikidataId,
-                              "wikidataDescription": "",
-                              "wikidataLabel": rest.softwareName
+                              "description": "",
+                              "label": rest.softwareName
                           },
                 "comptoirDuLibreIdInputValue":
                     comptoirDuLibreId === undefined
@@ -221,17 +226,23 @@ export function SoftwareFormStep2(props: Step2Props) {
                     <SearchInput
                         className={wikidataInputId}
                         debounceDelay={400}
-                        getOptions={getWikidataOptions}
+                        getOptions={getLibreSoftwareWikidataOptions}
                         value={field.value}
                         onValueChange={field.onChange}
-                        getOptionLabel={wikidataEntry => wikidataEntry.wikidataLabel}
+                        getOptionLabel={wikidataEntry =>
+                            resolveLocalizedString(wikidataEntry.label)
+                        }
                         renderOption={(liProps, wikidataEntity) => (
                             <li {...liProps} key={wikidataEntity.wikidataId}>
                                 <div>
-                                    <span>{wikidataEntity.wikidataLabel}</span>
+                                    <span>
+                                        {resolveLocalizedString(wikidataEntity.label)}
+                                    </span>
                                     <br />
                                     <span className={fr.cx("fr-text--xs")}>
-                                        {wikidataEntity.wikidataDescription}
+                                        {resolveLocalizedString(
+                                            wikidataEntity.description
+                                        )}
                                     </span>
                                 </div>
                             </li>

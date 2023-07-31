@@ -4,12 +4,14 @@ import { useStyles } from "tss-react/dsfr";
 
 type Props = {
     className?: string;
+    /** Default 1000 (1 second) */
+    showAfterMs?: number;
 };
 
 export const loadingFallbackClassName = "loading-fallback";
 
 export function LoadingFallback(props: Props) {
-    const { className } = props;
+    const { className, showAfterMs = 1000 } = props;
 
     const { cx, css } = useStyles();
 
@@ -24,13 +26,13 @@ export function LoadingFallback(props: Props) {
             }
 
             showCircularProgress();
-        }, 1000);
+        }, showAfterMs);
 
         return () => {
             clearTimeout(timer);
             isActive = false;
         };
-    });
+    }, [showAfterMs]);
 
     return (
         <div

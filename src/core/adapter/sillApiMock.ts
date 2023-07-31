@@ -35,7 +35,7 @@ export const sillApi: SillApi = {
                     "id": 0,
                     "mainSoftwareSillId": 9,
                     "organization": "CNRS",
-                    "otherSoftwares": [],
+                    "otherWikidataSoftwares": [],
                     "publicUrl": "https://videos.ahp-numerique.fr/",
                     "targetAudience": `Plateforme vidéos des Archives Henri-Poincaré (laboratoire du CNRS, de l'Université de Lorraine et de 
                 l'Université de Strasbourg). Vous y trouverez des vidéos de philosophie et d'histoire des sciences et des techniques.`
@@ -89,9 +89,9 @@ export const sillApi: SillApi = {
             "officialWebsiteUrl": undefined,
             "softwareDescription": formData.softwareDescription,
             "latestVersion": undefined,
-            "parentSoftware": undefined,
+            "parentWikidataSoftware": undefined,
             "softwareType": formData.softwareType,
-            "similarSoftwares": formData.similarSoftwares,
+            "similarSoftwares": [],
             "testUrl": undefined,
             "addedTime": Date.now(),
             "updateTime": Date.now(),
@@ -140,9 +140,9 @@ export const sillApi: SillApi = {
                 "officialWebsiteUrl": undefined,
                 "softwareDescription": formData.softwareDescription,
                 "latestVersion": undefined,
-                "parentSoftware": undefined,
+                "parentWikidataSoftware": undefined,
                 "softwareType": formData.softwareType,
-                "similarSoftwares": formData.similarSoftwares,
+                "similarSoftwares": [],
                 "testUrl": undefined,
                 "addedTime": Date.now(),
                 "updateTime": Date.now(),
@@ -208,43 +208,49 @@ export const sillApi: SillApi = {
     "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`
 };
 
-const options: (ApiTypes.WikidataEntry & { isInSill: boolean })[] = [
+const options = [
     {
         "wikidataId": "Q110492908",
-        "wikidataLabel": "Onyxia",
-        "wikidataDescription": "A data science oriented container launcher",
-        "isInSill": true
+        "label": "Onyxia",
+        "description": "A data science oriented container launcher",
+        "isInSill": true,
+        "isLibreSoftware": true
     },
     {
         "wikidataId": "Q107693197",
-        "wikidataLabel": "Keycloakify",
-        "wikidataDescription": "Build tool for creating Keycloak themes using React",
-        "isInSill": true
+        "label": "Keycloakify",
+        "description": "Build tool for creating Keycloak themes using React",
+        "isInSill": true,
+        "isLibreSoftware": true
     },
     {
         "wikidataId": "Q8038",
-        "wikidataDescription": "image retouching and editing tool",
-        "wikidataLabel": "GIMP",
-        "isInSill": true
+        "description": "image retouching and editing tool",
+        "label": "GIMP",
+        "isInSill": true,
+        "isLibreSoftware": true
     },
     {
         "wikidataId": "Q10135",
-        "wikidataDescription": "office suite supported by the free software community",
-        "wikidataLabel": "LibreOffice",
-        "isInSill": true
+        "description": "office suite supported by the free software community",
+        "label": "LibreOffice",
+        "isInSill": true,
+        "isLibreSoftware": true
     },
     {
         "wikidataId": "Q19841877",
-        "wikidataDescription": "source code editor developed by Microsoft",
-        "wikidataLabel": "Visual Studio Code",
-        "isInSill": true
+        "description": "source code editor developed by Microsoft",
+        "label": "Visual Studio Code",
+        "isInSill": true,
+        "isLibreSoftware": true
     },
     {
         "wikidataId": "Q50938515",
-        "wikidataDescription":
+        "description":
             "decentralized video hosting network, based on free/libre software",
-        "wikidataLabel": "PeerTube",
-        "isInSill": true
+        "label": "PeerTube",
+        "isInSill": true,
+        "isLibreSoftware": true
     }
 ];
 
@@ -261,10 +267,12 @@ const softwares = [
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [
             {
-                "wikidataDescription":
+                "description":
                     "team collaboration and videoconferencing application developed by Microsoft",
                 "wikidataId": "Q28406404",
-                "wikidataLabel": "Microsoft Teams"
+                "label": "Microsoft Teams",
+                "isLibreSoftware": false,
+                "isInSill": false
             }
         ],
         "wikidataId": "Q25874683",
@@ -273,7 +281,7 @@ const softwares = [
         "softwareDescription":
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras feugiat, ex sit amet pretium blandit, tortor eros dapibus sem, ultricies tempor nunc magna in dolor. Curabitur non tincidunt ex. Nulla facilisi. Integer vestibulum ultricies risus eu blandit. Duis accumsan dolor sit amet arcu semper ultrices. Cras tincidunt commodo mauris quis iaculis. Morbi iaculis massa sit amet nunc porttitor malesuada. Sed venenatis congue dolor eu posuere. Praesent nec pulvinar massa. Ut id diam congue, elementum nulla in, varius mi.",
         "latestVersion": undefined,
-        "parentSoftware": undefined as any,
+        "parentWikidataSoftware": undefined,
         "testUrl": undefined,
         "addedTime": 1670416144,
         "updateTime": 1674739365178,
@@ -311,9 +319,12 @@ const softwares = [
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [
             {
-                "wikidataDescription": "suite of office programs developed by Microsoft",
-                "wikidataId": "Q11255",
-                "wikidataLabel": "Microsoft Office"
+                "description":
+                    "team collaboration and videoconferencing application developed by Microsoft",
+                "wikidataId": "Q28406404",
+                "label": "Microsoft Teams",
+                "isLibreSoftware": false,
+                "isInSill": false
             }
         ],
         "wikidataId": "Q10135",
@@ -325,7 +336,7 @@ const softwares = [
             "semVer": "10.1.3",
             "publicationTime": 1670503742
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "testUrl": undefined,
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
@@ -386,7 +397,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1667911742
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "testUrl": undefined,
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
@@ -432,7 +443,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1665233342
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -473,9 +484,12 @@ const softwares = [
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [
             {
-                "wikidataId": "Q381",
-                "wikidataLabel": "Ubuntu",
-                "wikidataDescription": "Debian-based Linux operating system"
+                "description":
+                    "team collaboration and videoconferencing application developed by Microsoft",
+                "wikidataId": "Q28406404",
+                "label": "Microsoft Teams",
+                "isLibreSoftware": false,
+                "isInSill": false
             }
         ],
         "wikidataId": "Q7715973",
@@ -486,7 +500,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "stack"
         },
@@ -538,7 +552,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -551,9 +565,12 @@ const softwares = [
         },
         "similarSoftwares": [
             {
-                "wikidataId": "Q80911",
-                "wikidataLabel": "Microsoft Outlook",
-                "wikidataDescription": "email, notes, task and calendar software"
+                "description":
+                    "team collaboration and videoconferencing application developed by Microsoft",
+                "wikidataId": "Q28406404",
+                "label": "Microsoft Teams",
+                "isLibreSoftware": false,
+                "isInSill": false
             }
         ],
         "testUrl": undefined,
@@ -608,7 +625,7 @@ const softwares = [
                 "ios": true
             }
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
@@ -663,7 +680,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "testUrl": undefined,
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
@@ -718,7 +735,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "testUrl": undefined,
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
@@ -762,7 +779,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "cloud"
         },
@@ -801,7 +818,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -844,7 +861,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -887,7 +904,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -930,7 +947,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -973,7 +990,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -1016,7 +1033,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -1059,7 +1076,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {
@@ -1102,7 +1119,7 @@ const softwares = [
             "semVer": "Dernière stable",
             "publicationTime": 1633524542
         },
-        "parentSoftware": undefined,
+        "parentWikidataSoftware": undefined,
         "softwareType": {
             "type": "desktop/mobile",
             "os": {

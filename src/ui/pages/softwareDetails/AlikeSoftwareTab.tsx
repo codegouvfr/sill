@@ -1,38 +1,35 @@
-import React from "react";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
-import type { State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
+import type { State as softwareDetails } from "core/usecases/softwareDetails";
 import { SoftwareCatalogCard } from "ui/pages/softwareCatalog/SoftwareCatalogCard";
 import type { Link } from "type-route";
 import { capitalize } from "tsafe/capitalize";
 import { useStyles } from "tss-react/dsfr";
+import { exclude } from "tsafe/exclude";
+import { useResolveLocalizedString } from "ui/i18n";
+import { Tag } from "@codegouvfr/react-dsfr/Tag";
 
 export type Props = {
     className?: string;
-    alikeExternalSoftwares: SoftwareCatalogState.Software.External[];
-    alikeInternalSoftwares: {
-        isInSill: false;
-        url: string;
-        description: string;
-        name: string;
-    }[];
+    similarSoftwares: softwareDetails.Software["similarSoftwares"];
     getLinks: (params: {
         softwareName: string;
     }) => Record<
         "declarationForm" | "softwareDetails" | "softwareUsersAndReferents",
         Link
     >;
+    getAddWikipediaSoftwareToSillLink: (params: { wikidataId: string }) => Link;
 };
 
 export const AlikeSoftwareTab = (props: Props) => {
     const {
         className,
-        alikeExternalSoftwares,
-        alikeInternalSoftwares,
+        similarSoftwares,
         getLinks,
+        getAddWikipediaSoftwareToSillLink,
         ...rest
     } = props;
 
@@ -43,76 +40,125 @@ export const AlikeSoftwareTab = (props: Props) => {
 
     const { css } = useStyles();
 
+    const { resolveLocalizedString } = useResolveLocalizedString();
+
     return (
         <section className={className}>
             <p className={fr.cx("fr-text--bold")}>
-                {t("alike software sill")} ({alikeExternalSoftwares.length}) :
+                {t("similar software in sill")} (
+                {similarSoftwares.filter(({ isInSill }) => isInSill).length}) :
             </p>
-            {alikeExternalSoftwares.map(software => {
-                const {
-                    logoUrl,
-                    softwareName,
-                    latestVersion,
-                    softwareDescription,
-                    userCount,
-                    referentCount,
-                    testUrl,
-                    prerogatives,
-                    userDeclaration
-                } = software;
+            {similarSoftwares
+                .map(similarSoftware =>
+                    similarSoftware.isInSill ? similarSoftware.software : undefined
+                )
+                .filter(exclude(undefined))
+                .map(software => {
+                    const {
+                        logoUrl,
+                        softwareName,
+                        latestVersion,
+                        softwareDescription,
+                        userCount,
+                        referentCount,
+                        testUrl,
+                        prerogatives,
+                        userDeclaration
+                    } = software;
 
-                const { declarationForm, softwareDetails, softwareUsersAndReferents } =
-                    getLinks({ softwareName });
-
-                return (
-                    <SoftwareCatalogCard
-                        className={css({
-                            "maxWidth": 600,
-                            ...fr.spacing("margin", {
-                                "rightLeft": "auto",
-                                "topBottom": "6v"
-                            })
-                        })}
-                        key={softwareName}
-                        logoUrl={logoUrl}
-                        softwareName={softwareName}
-                        latestVersion={latestVersion}
-                        softwareDescription={softwareDescription}
-                        prerogatives={prerogatives}
-                        testUrl={testUrl}
-                        userCount={userCount}
-                        referentCount={referentCount}
-                        declareFormLink={declarationForm}
-                        softwareDetailsLink={softwareDetails}
-                        softwareUsersAndReferentsLink={softwareUsersAndReferents}
-                        searchHighlight={undefined}
-                        userDeclaration={userDeclaration}
-                    />
-                );
-            })}
-            <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
-                {t("alike software external")} ({alikeInternalSoftwares?.length}) :
-            </p>
-            <ul>
-                {alikeInternalSoftwares.map(software => {
-                    const { name, description, url } = software;
+                    const {
+                        declarationForm,
+                        softwareDetails,
+                        softwareUsersAndReferents
+                    } = getLinks({ softwareName });
 
                     return (
-                        <li key={name}>
-                            <p>
-                                <a href={url} target="_blank" rel="noreferrer">
-                                    {name}
-                                </a>
-                                :&nbsp;&nbsp;{capitalize(description)}
-                            </p>
-                        </li>
+                        <SoftwareCatalogCard
+                            className={css({
+                                "maxWidth": 600,
+                                ...fr.spacing("margin", {
+                                    "rightLeft": "auto",
+                                    "topBottom": "6v"
+                                })
+                            })}
+                            key={softwareName}
+                            logoUrl={logoUrl}
+                            softwareName={softwareName}
+                            latestVersion={latestVersion}
+                            softwareDescription={softwareDescription}
+                            prerogatives={prerogatives}
+                            testUrl={testUrl}
+                            userCount={userCount}
+                            referentCount={referentCount}
+                            declareFormLink={declarationForm}
+                            softwareDetailsLink={softwareDetails}
+                            softwareUsersAndReferentsLink={softwareUsersAndReferents}
+                            searchHighlight={undefined}
+                            userDeclaration={userDeclaration}
+                        />
                     );
                 })}
+            <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
+                {t("similar software not in sill")} (
+                {similarSoftwares.filter(({ isInSill }) => !isInSill).length}) :
+            </p>
+            <ul>
+                {similarSoftwares
+                    .map(similarSoftware =>
+                        similarSoftware.isInSill ? undefined : similarSoftware
+                    )
+                    .filter(exclude(undefined))
+                    .sort(
+                        (
+                            { isLibreSoftware: isLibreSoftwareA },
+                            { isLibreSoftware: isLibreSoftwareB }
+                        ) => {
+                            if (isLibreSoftwareA && !isLibreSoftwareB) {
+                                return -1;
+                            }
+                            if (!isLibreSoftwareA && isLibreSoftwareB) {
+                                return 1;
+                            }
+                            return 0;
+                        }
+                    )
+                    .map(({ wikidataId, label, description, isLibreSoftware }) => {
+                        return (
+                            <li key={wikidataId}>
+                                <p
+                                    className={css({
+                                        "display": "inline-block",
+                                        "marginRight": fr.spacing("4v")
+                                    })}
+                                >
+                                    <a
+                                        href={`https://www.wikidata.org/wiki/${wikidataId}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                    >
+                                        {resolveLocalizedString(label)}
+                                    </a>
+                                    :&nbsp;&nbsp;
+                                    {capitalize(resolveLocalizedString(description))}
+                                </p>
+                                {isLibreSoftware ? (
+                                    <Tag
+                                        iconId="ri-check-fill"
+                                        linkProps={getAddWikipediaSoftwareToSillLink({
+                                            wikidataId
+                                        })}
+                                    >
+                                        {t("libre software")}
+                                    </Tag>
+                                ) : null}
+                            </li>
+                        );
+                    })}
             </ul>
         </section>
     );
 };
 
 export const { i18n } = declareComponentKeys<
-    "alike software sill" | "alike software external"
+    "similar software in sill" | "similar software not in sill" | "libre software"
 >()({ AlikeSoftwareTab });

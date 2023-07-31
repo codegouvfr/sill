@@ -21,6 +21,7 @@ import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
 import { useLang } from "ui/i18n";
+import { LoadingFallback } from "ui/shared/LoadingFallback";
 
 type Props = {
     className?: string;
@@ -44,10 +45,23 @@ export default function SoftwareForm(props: Props) {
     const { softwareForm } = useCoreFunctions();
 
     useEffect(() => {
-        softwareForm.initialize({
-            "softwareName":
-                route.name === "softwareUpdateForm" ? route.params.name : undefined
-        });
+        softwareForm.initialize(
+            (() => {
+                switch (route.name) {
+                    case "softwareCreationForm":
+                        return {
+                            "scenario": "create",
+                            "wikidataId": route.params.wikidataId
+                        };
+                    case "softwareUpdateForm":
+                        return {
+                            "scenario": "update",
+                            "softwareName": route.params.name
+                        };
+                }
+            })()
+        );
+
         return () => softwareForm.clear();
     }, [route.name]);
 
@@ -71,7 +85,7 @@ export default function SoftwareForm(props: Props) {
     const { lang } = useLang();
 
     if (formData === undefined) {
-        return <CircularProgress />;
+        return <LoadingFallback className={className} showAfterMs={150} />;
     }
 
     assert(step !== undefined);
@@ -149,8 +163,11 @@ export default function SoftwareForm(props: Props) {
                         })
                     }
                     getAutofillDataFromWikidata={softwareForm.getAutofillData}
-                    getWikidataOptions={queryString =>
-                        softwareForm.getWikidataOptions({ "language": lang, queryString })
+                    getLibreSoftwareWikidataOptions={queryString =>
+                        softwareForm.getLibreSoftwareWikidataOptions({
+                            "language": lang,
+                            queryString
+                        })
                     }
                     evtActionSubmit={evtActionSubmitStep.pipe(() => step === 2)}
                 />

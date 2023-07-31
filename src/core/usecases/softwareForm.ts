@@ -5,6 +5,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import type { ApiTypes } from "@codegouvfr/sill";
+import { exclude } from "tsafe/exclude";
+import type { LocalizedString } from "i18nifty";
 import type { Language } from "@codegouvfr/sill";
 
 type SoftwareFormState = SoftwareFormState.NotInitialized | SoftwareFormState.Ready;
@@ -44,8 +46,8 @@ export type FormData = {
     };
     step4: {
         similarSoftwares: {
-            wikidataLabel: string;
-            wikidataDescription: string;
+            label: LocalizedString<Language>;
+            description: LocalizedString<Language>;
             wikidataId: string;
         }[];
     };
@@ -68,6 +70,51 @@ export const { reducer, actions } = createSlice({
                 "step": 1,
                 "isSubmitting": false
             }),
+        "initializedForCreateWithPreSelectedSoftware": (
+            _state,
+            {
+                payload
+            }: PayloadAction<{
+                wikidataId: string;
+                comptoirDuLibreId: number | undefined;
+                softwareName: string;
+                softwareDescription: string;
+                softwareLicense: string;
+                softwareMinimalVersion: string;
+                softwareLogoUrl: string | undefined;
+                softwareKeywords: string[];
+            }>
+        ) => {
+            const {
+                wikidataId,
+                comptoirDuLibreId,
+                softwareName,
+                softwareDescription,
+                softwareLicense,
+                softwareMinimalVersion,
+                softwareLogoUrl,
+                softwareKeywords
+            } = payload;
+
+            return id<SoftwareFormState.Ready>({
+                "stateDescription": "ready",
+                "formData": {
+                    "step2": {
+                        wikidataId,
+                        comptoirDuLibreId,
+                        softwareName,
+                        softwareDescription,
+                        softwareLicense,
+                        softwareMinimalVersion,
+                        softwareLogoUrl,
+                        softwareKeywords
+                    }
+                },
+                "softwareSillId": undefined,
+                "step": 1,
+                "isSubmitting": false
+            });
+        },
         "initializedForUpdate": (
             _state,
             {
@@ -163,11 +210,21 @@ export const { reducer, actions } = createSlice({
 
 export const thunks = {
     "initialize":
-        (params: { softwareName: string | undefined }) =>
+        (
+            params:
+                | {
+                      scenario: "create";
+                      wikidataId: string | undefined;
+                  }
+                | {
+                      scenario: "update";
+                      softwareName: string;
+                  }
+        ) =>
         async (...args) => {
-            const { softwareName } = params;
-
             const [dispatch, getState, { sillApi }] = args;
+
+            console.log("initialize");
 
             {
                 const state = getState()[name];
@@ -182,48 +239,116 @@ export const thunks = {
                 }
             }
 
-            if (softwareName === undefined) {
+            if (params.scenario === "create" && params.wikidataId === undefined) {
                 dispatch(actions.initializedForCreate());
                 return;
             }
 
             dispatch(actions.initializationStarted());
 
-            const software = (await sillApi.getSoftwares()).find(
-                software => software.softwareName === softwareName
-            );
+            switch (params.scenario) {
+                case "create":
+                    {
+                        const { wikidataId } = params;
 
-            assert(software !== undefined);
+                        assert(wikidataId !== undefined);
 
-            dispatch(
-                actions.initializedForUpdate({
-                    "softwareSillId": software.softwareId,
-                    "formData": {
-                        "step1": {
-                            "softwareType": software.softwareType
-                        },
-                        "step2": {
-                            "wikidataId": software.wikidataId,
-                            "comptoirDuLibreId": software.compotoirDuLibreId,
-                            "softwareDescription": software.softwareDescription,
-                            "softwareLicense": software.license,
-                            "softwareMinimalVersion": software.versionMin,
-                            "softwareName": software.softwareName,
-                            "softwareLogoUrl": software.logoUrl,
-                            "softwareKeywords": software.keywords
-                        },
-                        "step3": {
-                            "isPresentInSupportContract":
-                                software.prerogatives.isPresentInSupportContract,
-                            "isFromFrenchPublicService":
-                                software.prerogatives.isFromFrenchPublicServices
-                        },
-                        "step4": {
-                            "similarSoftwares": software.similarSoftwares
-                        }
+                        const {
+                            comptoirDuLibreId,
+                            keywords,
+                            softwareDescription,
+                            softwareLicense,
+                            softwareLogoUrl,
+                            softwareMinimalVersion,
+                            softwareName
+                        } = await dispatch(thunks.getAutofillData({ wikidataId }));
+
+                        dispatch(
+                            actions.initializedForCreateWithPreSelectedSoftware({
+                                wikidataId,
+                                comptoirDuLibreId,
+                                "softwareName": softwareName ?? "",
+                                "softwareDescription": softwareDescription ?? "",
+                                "softwareLicense": softwareLicense ?? "",
+                                "softwareMinimalVersion": softwareMinimalVersion ?? "",
+                                softwareLogoUrl,
+                                "softwareKeywords": keywords
+                            })
+                        );
                     }
-                })
-            );
+                    break;
+                case "update":
+                    {
+                        const softwares = await sillApi.getSoftwares();
+
+                        const software = softwares.find(
+                            software => software.softwareName === params.softwareName
+                        );
+
+                        assert(software !== undefined);
+
+                        dispatch(
+                            actions.initializedForUpdate({
+                                "softwareSillId": software.softwareId,
+                                "formData": {
+                                    "step1": {
+                                        "softwareType": software.softwareType
+                                    },
+                                    "step2": {
+                                        "wikidataId": software.wikidataId,
+                                        "comptoirDuLibreId": software.compotoirDuLibreId,
+                                        "softwareDescription":
+                                            software.softwareDescription,
+                                        "softwareLicense": software.license,
+                                        "softwareMinimalVersion": software.versionMin,
+                                        "softwareName": software.softwareName,
+                                        "softwareLogoUrl": software.logoUrl,
+                                        "softwareKeywords": software.keywords
+                                    },
+                                    "step3": {
+                                        "isPresentInSupportContract":
+                                            software.prerogatives
+                                                .isPresentInSupportContract,
+                                        "isFromFrenchPublicService":
+                                            software.prerogatives
+                                                .isFromFrenchPublicServices
+                                    },
+                                    "step4": {
+                                        "similarSoftwares": software.similarSoftwares
+                                            .map(similarSoftware => {
+                                                if (!similarSoftware.isInSill) {
+                                                    return similarSoftware;
+                                                } else {
+                                                    const software = softwares.find(
+                                                        software =>
+                                                            software.softwareName ===
+                                                            similarSoftware.softwareName
+                                                    );
+
+                                                    if (
+                                                        software === undefined ||
+                                                        software.wikidataId === undefined
+                                                    ) {
+                                                        return undefined;
+                                                    }
+
+                                                    return {
+                                                        "label": software.softwareName,
+                                                        "description":
+                                                            software.softwareDescription,
+                                                        "wikidataId": software.wikidataId,
+                                                        "isLibreSoftware": true
+                                                    };
+                                                }
+                                            })
+                                            .filter(exclude(undefined))
+                                    }
+                                }
+                            })
+                        );
+                    }
+                    break;
+            }
         },
     "clear":
         () =>
@@ -294,7 +419,9 @@ export const thunks = {
                 "softwareMinimalVersion": step2.softwareMinimalVersion,
                 "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
                 "isFromFrenchPublicService": step3.isFromFrenchPublicService,
-                "similarSoftwares": formDataStep4.similarSoftwares,
+                "similarSoftwareWikidataIds": formDataStep4.similarSoftwares.map(
+                    ({ wikidataId }) => wikidataId
+                ),
                 "softwareLogoUrl": step2.softwareLogoUrl,
                 "softwareKeywords": step2.softwareKeywords
             };
@@ -319,15 +446,25 @@ export const thunks = {
 
             dispatch(actions.navigatedToPreviousStep());
         },
-    /** Can be used even if the usecase isn't instantiated */
-    "getWikidataOptions":
+    "getLibreSoftwareWikidataOptions":
         (props: { queryString: string; language: Language }) =>
-        (...args) => {
+        async (...args) => {
             const { queryString, language } = props;
 
             const [, , { sillApi }] = args;
 
-            return sillApi.getWikidataOptions({ queryString, language });
+            return (await sillApi.getWikidataOptions({ queryString, language })).filter(
+                option => option.isLibreSoftware
+            ); //TODO: Make sure we have all the license API side
+        },
+    "getWikidataOptions":
+        (props: { queryString: string; language: Language }) =>
+        async (...args) => {
+            const { queryString, language } = props;
+
+            const [, , { sillApi }] = args;
+
+            return await sillApi.getWikidataOptions({ queryString, language });
         },
     "getAutofillData":
         (props: { wikidataId: string }) =>

@@ -12,6 +12,8 @@ import {
 import { exclude } from "tsafe/exclude";
 import { createUsecaseContextApi } from "redux-clean-architecture";
 import { Evt } from "evt";
+import { createResolveLocalizedString, LocalizedString } from "i18nifty";
+import { Language } from "@codegouvfr/sill";
 
 export type State = State.NotReady | State.Ready;
 
@@ -91,9 +93,10 @@ export namespace State {
               }
             | {
                   isInSill: false;
-                  url: string;
-                  description: string;
-                  name: string;
+                  isLibreSoftware: boolean;
+                  wikidataId: string;
+                  label: LocalizedString<Language>;
+                  description: LocalizedString<Language>;
               }
         )[];
     };
@@ -311,7 +314,7 @@ function apiSoftwareToSoftware(params: {
         codeRepositoryUrl,
         softwareDescription,
         latestVersion,
-        parentSoftware: parentSoftwareWikidata_api,
+        parentWikidataSoftware: parentWikidataSoftware_api,
         testUrl,
         addedTime,
         dereferencing,
@@ -327,14 +330,19 @@ function apiSoftwareToSoftware(params: {
         annuaireCnllServiceProviders
     } = apiSoftware;
 
+    const { resolveLocalizedString } = createResolveLocalizedString({
+        "currentLanguage": "fr",
+        "fallbackLanguage": "en"
+    });
+
     const parentSoftware: State.Software["parentSoftware"] = (() => {
-        if (parentSoftwareWikidata_api === undefined) {
+        if (parentWikidataSoftware_api === undefined) {
             return undefined;
         }
 
         in_sill: {
             const software = apiSoftwares.find(
-                software => software.wikidataId === parentSoftwareWikidata_api.wikidataId
+                software => software.wikidataId === parentWikidataSoftware_api.wikidataId
             );
 
             if (software === undefined) {
@@ -349,8 +357,8 @@ function apiSoftwareToSoftware(params: {
 
         return {
             "isInSill": false,
-            "softwareName": parentSoftwareWikidata_api.wikidataLabel,
-            "url": `https://www.wikidata.org/wiki/${parentSoftwareWikidata_api.wikidataId}`
+            "softwareName": resolveLocalizedString(parentWikidataSoftware_api.label),
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.wikidataId}`
         };
     })();
 
@@ -399,18 +407,29 @@ function apiSoftwareToSoftware(params: {
                                 }
                       )
                       .filter(exclude(undefined)),
-        "similarSoftwares": similarSoftwares_api.map(softwareRef => {
+        "similarSoftwares": similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
                 apiSoftwares,
-                "wikidataId": softwareRef.wikidataId
+                "softwareRef": similarSoftware.isInSill
+                    ? {
+                          "type": "name",
+                          "softwareName": similarSoftware.softwareName
+                      }
+                    : {
+                          "type": "wikidataId",
+                          "wikidataId": similarSoftware.wikidataId
+                      }
             });
 
             if (software === undefined) {
+                assert(!similarSoftware.isInSill);
+
                 return {
                     "isInSill": false,
-                    "url": `https://www.wikidata.org/wiki/${softwareRef.wikidataId}`,
-                    "description": softwareRef.wikidataDescription,
-                    "name": softwareRef.wikidataLabel
+                    "wikidataId": similarSoftware.wikidataId,
+                    "label": similarSoftware.label,
+                    "description": similarSoftware.description,
+                    "isLibreSoftware": similarSoftware.isLibreSoftware
                 };
             }
 

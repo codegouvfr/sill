@@ -5,8 +5,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import type { ApiTypes } from "@codegouvfr/sill";
+import type { LocalizedString } from "i18nifty";
+import type { Language } from "@codegouvfr/sill";
 
-export type WikidataEntry = ApiTypes.WikidataEntry;
+export type WikidataEntry = {
+    label: LocalizedString<Language>;
+    description: LocalizedString<Language>;
+    wikidataId: string;
+};
 
 type State = State.NotInitialized | State.Ready;
 
@@ -25,7 +31,7 @@ namespace State {
                   type: "update";
                   instanceId: number;
                   mainSoftwareSillId: number;
-                  otherSoftwares: WikidataEntry[];
+                  otherWikidataSoftwares: WikidataEntry[];
                   organization: string;
                   publicUrl: string | undefined;
                   targetAudience: string;
@@ -39,7 +45,7 @@ namespace State {
         step1Data:
             | {
                   mainSoftwareSillId: number;
-                  otherSoftwares: WikidataEntry[];
+                  otherWikidataSoftwares: WikidataEntry[];
               }
             | undefined;
         isSubmitting: boolean;
@@ -182,7 +188,7 @@ export const thunks = {
                                 "type": "update",
                                 "instanceId": instance.id,
                                 "mainSoftwareSillId": instance.mainSoftwareSillId,
-                                "otherSoftwares": instance.otherSoftwares,
+                                "otherWikidataSoftwares": instance.otherWikidataSoftwares,
                                 "organization": instance.organization,
                                 "publicUrl": instance.publicUrl,
                                 "targetAudience": instance.targetAudience
@@ -238,9 +244,12 @@ export const thunks = {
             dispatch(actions.cleared());
         },
     "completeStep1":
-        (props: { mainSoftwareSillId: number; otherSoftwares: WikidataEntry[] }) =>
+        (props: {
+            mainSoftwareSillId: number;
+            otherWikidataSoftwares: WikidataEntry[];
+        }) =>
         (...args) => {
-            const { mainSoftwareSillId, otherSoftwares } = props;
+            const { mainSoftwareSillId, otherWikidataSoftwares } = props;
 
             const [dispatch] = args;
 
@@ -248,7 +257,7 @@ export const thunks = {
                 actions.step1Completed({
                     "step1Data": {
                         mainSoftwareSillId,
-                        otherSoftwares
+                        otherWikidataSoftwares
                     }
                 })
             );
@@ -275,7 +284,9 @@ export const thunks = {
             const formData: ApiTypes.InstanceFormData = {
                 "mainSoftwareSillId": step1Data.mainSoftwareSillId,
                 organization,
-                "otherSoftwares": step1Data.otherSoftwares,
+                "otherSoftwareWikidataIds": step1Data.otherWikidataSoftwares.map(
+                    ({ wikidataId }) => wikidataId
+                ),
                 publicUrl,
                 targetAudience
             };
@@ -363,7 +374,7 @@ export const selectors = (() => {
                 case "update":
                     return {
                         "mainSoftwareSillId": preFillData.mainSoftwareSillId,
-                        "otherSoftwares": preFillData.otherSoftwares,
+                        "otherSoftwares": preFillData.otherWikidataSoftwares,
                         "organization": preFillData.organization,
                         "publicUrl": preFillData.publicUrl,
                         "targetAudience": preFillData.targetAudience

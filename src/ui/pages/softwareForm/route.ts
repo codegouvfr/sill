@@ -2,7 +2,10 @@ import { createGroup, defineRoute, createRouter, param, type Route } from "type-
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "softwareCreationForm": defineRoute(appPath + "/add"),
+    "softwareCreationForm": defineRoute(
+        { "wikidataId": param.query.optional.string },
+        () => appPath + "/add"
+    ),
     "softwareUpdateForm": defineRoute(
         { "name": param.query.string },
         () => appPath + "/update"

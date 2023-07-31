@@ -7,7 +7,7 @@ import { SearchMultiInput } from "ui/shared/SearchMultiInput";
 import type { FormData } from "core/usecases/softwareForm";
 import type { useCoreFunctions } from "core";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import type { ReturnType } from "tsafe";
 
 export type Step4Props = {
@@ -46,6 +46,8 @@ export function SoftwareFormStep4(props: Step4Props) {
 
     const { t: tCommon } = useTranslation({ "App": null });
 
+    const { resolveLocalizedString } = useResolveLocalizedString();
+
     useEvt(
         ctx => {
             if (submitButtonElement === null) {
@@ -71,14 +73,20 @@ export function SoftwareFormStep4(props: Step4Props) {
                         getOptions={getWikidataOptions}
                         value={field.value}
                         onValueChange={value => field.onChange(value)}
-                        getOptionLabel={wikidataEntry => wikidataEntry.wikidataLabel}
+                        getOptionLabel={wikidataEntry =>
+                            resolveLocalizedString(wikidataEntry.label)
+                        }
                         renderOption={(liProps, wikidataEntity) => (
                             <li {...liProps}>
                                 <div>
-                                    <span>{wikidataEntity.wikidataLabel}</span>
+                                    <span>
+                                        {resolveLocalizedString(wikidataEntity.label)}
+                                    </span>
                                     <br />
                                     <span className={fr.cx("fr-text--xs")}>
-                                        {wikidataEntity.wikidataDescription}
+                                        {resolveLocalizedString(
+                                            wikidataEntity.description
+                                        )}
                                     </span>
                                 </div>
                             </li>

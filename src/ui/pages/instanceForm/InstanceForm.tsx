@@ -19,6 +19,7 @@ import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
 import { useLang } from "ui/i18n";
+import { LoadingFallback } from "ui/shared/LoadingFallback";
 
 export type Props = {
     className?: string;
@@ -42,7 +43,7 @@ export default function InstanceForm(props: Props) {
 
     const {
         instanceForm,
-        softwareForm: { getWikidataOptions }
+        softwareForm: { getLibreSoftwareWikidataOptions }
     } = useCoreFunctions();
 
     useEffect(() => {
@@ -88,7 +89,7 @@ export default function InstanceForm(props: Props) {
     const { lang } = useLang();
 
     if (step === undefined) {
-        return <CircularProgress />;
+        return <LoadingFallback className={className} showAfterMs={150} />;
     }
 
     assert(initializationData !== undefined);
@@ -146,15 +147,15 @@ export default function InstanceForm(props: Props) {
                     className={cx(classes.step, classes.step1)}
                     initialFormData={{
                         "mainSoftwareSillId": initializationData.mainSoftwareSillId,
-                        "otherSoftwares": initializationData.otherSoftwares
+                        "otherWikidataSoftwares": initializationData.otherSoftwares
                     }}
-                    getWikidataOptions={queryString =>
-                        getWikidataOptions({ queryString, "language": lang })
+                    getLibreSoftwareWikidataOptions={queryString =>
+                        getLibreSoftwareWikidataOptions({ queryString, "language": lang })
                     }
-                    onSubmit={({ mainSoftwareSillId, otherSoftwares }) =>
+                    onSubmit={({ mainSoftwareSillId, otherWikidataSoftwares }) =>
                         instanceForm.completeStep1({
                             mainSoftwareSillId,
-                            otherSoftwares
+                            otherWikidataSoftwares
                         })
                     }
                     allSillSoftwares={allSillSoftwares}
