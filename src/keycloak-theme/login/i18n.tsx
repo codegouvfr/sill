@@ -30,9 +30,9 @@ export const { useI18n } = createUseI18n({
     },
     "fr": {
         /* spell-checker: disable */
-        "home": "Acceuil",
+        "home": "Accueil",
         "back": "Retour",
-        "alphanumericalCharsOnly": "Caractère alphanumérique uniquement",
+        "alphanumericalCharsOnly": "Caractères alphanumériques uniquement",
         "administrativeEmail": "Email administratif",
         "agencyName": "Nom du service de rattachement",
         "connect": "Se connecter",

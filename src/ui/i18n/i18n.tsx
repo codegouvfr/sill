@@ -480,7 +480,7 @@ const {
                 "prerogatives": "Prerogatives",
                 "last version": "Last version",
                 "last version date": ({ date }) => `in ${date}`,
-                "register": "Date de l'ajout: ",
+                "register": "Date de l'ajout : ",
                 "register date": ({ date }) => `${date}`,
                 "minimal version": "Minimal required version: ",
                 "license": "License : ",
@@ -943,7 +943,7 @@ const {
                         case 4:
                             return `Logiciels similaires et équivalents${
                                 softwareName === undefined ? "" : ` à ${softwareName}`
-                            } (propiétaire ou libre)`;
+                            } (propriétaire ou libre)`;
                         default:
                             return "";
                     }
@@ -1006,11 +1006,12 @@ const {
                 "autofill notice":
                     "Cette information remplira automatiquement d'autres champs",
                 "logo url": "URL vers une image du logo du logiciel",
-                "logo url hint": "L'URL doit Access-Control-Allow-Origin: * (CORS)",
+                "logo url hint":
+                    "La fonctionnalité Access-Control-Allow-Origin (CORS) doit être activée sur le site",
                 "must be an url": "Doit être un URL valide",
                 "keywords": "Mot-clés",
                 "keywords hint":
-                    "Mot clés pour aidée a la reherche du logiciel, séparé par des virgules",
+                    "mots-clés pour aider à la recherche du logiciel, séparés par des virgules",
                 "logo preview alt": "Aperçu du logo du logiciel",
                 "invalid comptoir du libre id":
                     "Doit être un URL comptoir du libre ou un identifiant numérique"
@@ -1301,7 +1302,7 @@ const {
                 "title": "Socle Interministériel des Logiciels Libres",
                 "navigation welcome": "Bienvenue sur le SILL",
                 "navigation catalog": "Catalogue de logiciels",
-                "navigation add software": "Ajouter un logiciel ou une instance",
+                "navigation add software": "Ajouter un logiciel ou une instance ",
                 "navigation update software": "Mettre à jour un logiciel ou une instance",
                 "navigation support request": "Demande d'accompagnement",
                 "navigation about": "À propos du site",

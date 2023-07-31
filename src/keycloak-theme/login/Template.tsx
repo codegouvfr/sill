@@ -65,27 +65,36 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     return (
         <>
-            {(() => {
-                const serviceTitle = "Socle interministériel de logiciels libres";
-
-                return (
-                    <Header
-                        brandTop={
-                            <>
-                                République
-                                <br />
-                                Française
-                            </>
-                        }
-                        serviceTitle={serviceTitle}
-                        quickAccessItems={[headerFooterDisplayItem]}
-                        homeLinkProps={{
-                            "href": appLocationOrigin,
-                            "title": `${msgStr("home")} - ${serviceTitle}`
+            <Header
+                brandTop={
+                    <span
+                        dangerouslySetInnerHTML={{
+                            "__html":
+                                kcContext.properties.brandTop ||
+                                "République<br/>Française"
                         }}
                     />
-                );
-            })()}
+                }
+                serviceTitle={
+                    <span
+                        dangerouslySetInnerHTML={{
+                            "__html":
+                                kcContext.properties.serviceTitle ||
+                                kcContext.realm.displayNameHtml ||
+                                kcContext.realm.displayName ||
+                                ""
+                        }}
+                    />
+                }
+                quickAccessItems={[headerFooterDisplayItem]}
+                homeLinkProps={{
+                    "href":
+                        appLocationOrigin ||
+                        kcContext.properties.homeUrl ||
+                        window.location.origin,
+                    "title": `${msgStr("home")} - ${kcContext.realm.displayName ?? ""}`
+                }}
+            />
             <div className={cx(fr.cx("fr-container"), classes.container)}>
                 <div
                     className={cx(

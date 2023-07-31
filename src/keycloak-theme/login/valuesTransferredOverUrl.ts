@@ -134,7 +134,7 @@ export const { appLocationOrigin, addAppLocationOriginToQueryParams } = (() => {
     }
 
     const out = {
-        [queryParamName]: value ?? window.location.origin,
+        [queryParamName]: value ?? "",
         [`add${capitalize(queryParamName)}ToQueryParams` as const]: addToUrlQueryParams
     } as const;
 

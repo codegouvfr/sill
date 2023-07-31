@@ -1,6 +1,14 @@
-import { createGetKcContext } from "keycloakify/login";
+import { createGetKcContext, type PageId } from "keycloakify/login";
 
-export const { getKcContext } = createGetKcContext({
+export const { getKcContext } = createGetKcContext<{
+    pageId: PageId;
+    properties: {
+        // NOTE: Needs to be kept in sync with the definition in the package.json
+        homeUrl: string;
+        serviceTitle: string;
+        brandTop: string;
+    };
+}>({
     "mockData": [
         {
             "pageId": "login.ftl",
