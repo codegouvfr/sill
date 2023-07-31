@@ -1168,7 +1168,7 @@ function apiSoftwareToInternalSoftware(params: {
                         )
                         .map(name =>
                             name === "VSCodium"
-                                ? ["Visual Studio Code", "VSCodium"]
+                                ? ["vscode", "tVisual Studio Code", "VSCodium"]
                                 : name
                         )
                         .flat(),
