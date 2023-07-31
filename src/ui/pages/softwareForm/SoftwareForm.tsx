@@ -89,6 +89,9 @@ export default function SoftwareForm(props: Props) {
     }
 
     assert(step !== undefined);
+
+    console.log("===>", formData);
+
     return (
         <div className={className}>
             <div className={fr.cx("fr-container")}>
@@ -124,9 +127,13 @@ export default function SoftwareForm(props: Props) {
                         {(() => {
                             switch (route.name) {
                                 case "softwareCreationForm":
-                                    return tCommon("add software");
+                                    return t("add software", {
+                                        "name": formData.step2?.softwareName
+                                    });
                                 case "softwareUpdateForm":
-                                    return t("title software update form");
+                                    return t("update software", {
+                                        "name": formData.step2?.softwareName ?? ""
+                                    });
                             }
                         })()}
                     </h4>
@@ -136,10 +143,15 @@ export default function SoftwareForm(props: Props) {
                     stepCount={stepCount}
                     title={t("stepper title", {
                         "currentStepIndex": step,
-                        "softwareName":
-                            route.name === "softwareUpdateForm"
-                                ? route.params.name
-                                : undefined
+                        "softwareName": formData.step2?.softwareName,
+                        "action": (() => {
+                            switch (route.name) {
+                                case "softwareCreationForm":
+                                    return "add";
+                                case "softwareUpdateForm":
+                                    return "update";
+                            }
+                        })()
                     })}
                     className={classes.stepper}
                 />
@@ -215,9 +227,13 @@ export default function SoftwareForm(props: Props) {
                             {(() => {
                                 switch (route.name) {
                                     case "softwareCreationForm":
-                                        return t("add software");
+                                        return t("add software", {
+                                            "name": formData.step2?.softwareName
+                                        });
                                     case "softwareUpdateForm":
-                                        return t("update software");
+                                        return t("update software", {
+                                            "name": formData.step2?.softwareName ?? ""
+                                        });
                                 }
                             })()}
 
@@ -293,11 +309,28 @@ const useStyles = makeStyles<{ step: number | undefined }>({
 }));
 
 export const { i18n } = declareComponentKeys<
-    | "title software update form"
     | {
           K: "stepper title";
-          P: { currentStepIndex: number; softwareName: string | undefined };
+          P: {
+              currentStepIndex: number;
+              softwareName: string | undefined;
+              action: "add" | "update";
+          };
       }
-    | "add software"
-    | "update software"
+    | {
+          K: "add software";
+          P: { name: string | undefined };
+      }
+    | {
+          K: "update software";
+          P: { name: string };
+      }
+    | {
+          K: "add software button";
+          P: { name: string };
+      }
+    | {
+          K: "update software button";
+          P: { name: string };
+      }
 >()({ SoftwareForm });

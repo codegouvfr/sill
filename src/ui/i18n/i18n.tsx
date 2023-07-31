@@ -284,13 +284,19 @@ const {
                 )
             },
             "SoftwareForm": {
-                "title software update form": "Software update",
-                "stepper title": ({ currentStepIndex, softwareName }) => {
+                "stepper title": ({ currentStepIndex, softwareName, action }) => {
                     switch (currentStepIndex) {
                         case 1:
-                            return softwareName === undefined
-                                ? "What type of software do you want to add?"
-                                : `Modify the type of software of ${softwareName}`;
+                            return (() => {
+                                switch (action) {
+                                    case "add":
+                                        return softwareName === undefined
+                                            ? "What type of software do you want to add?"
+                                            : `What type of software is ${softwareName}?`;
+                                    case "update":
+                                        return `Modify the type of software of ${softwareName}`;
+                                }
+                            })();
                         case 2:
                             return `Information${
                                 softwareName === undefined ? "" : ` about ${softwareName}`
@@ -307,8 +313,11 @@ const {
                             return "";
                     }
                 },
-                "add software": "Add software",
-                "update software": "Confirm changes"
+                "add software": ({ name }) =>
+                    name === undefined ? "Add a software" : `Add ${name}`,
+                "update software": ({ name }) => `Update ${name}`,
+                "add software button": ({ name }) => `Add ${name} to the SILL`,
+                "update software button": ({ name }) => `Update ${name}`
             },
             "SoftwareFormStep1": {
                 "software desktop": "Desktop or mobile installable software",
@@ -925,31 +934,40 @@ const {
                 )
             },
             "SoftwareForm": {
-                "title software update form": "Mettre à jour un logiciel",
-                "stepper title": ({ currentStepIndex, softwareName }) => {
+                "stepper title": ({ currentStepIndex, softwareName, action }) => {
                     switch (currentStepIndex) {
                         case 1:
-                            return softwareName === undefined
-                                ? "Quel type de logiciel voulez-vous ajouter ?"
-                                : `Modifier la fiche de ${softwareName}`;
+                            return (() => {
+                                switch (action) {
+                                    case "add":
+                                        return softwareName === undefined
+                                            ? "Quel est le type du logiciel que vous désirez ajouter?"
+                                            : `À quelle type de logicel correspond ${softwareName}?`;
+                                    case "update":
+                                        return `Modifier le type de ${softwareName}`;
+                                }
+                            })();
                         case 2:
-                            return `Informations sur ${
-                                softwareName === undefined ? "le logiciel" : softwareName
+                            return `Information${
+                                softwareName === undefined ? "" : ` about ${softwareName}`
                             }`;
                         case 3:
-                            return `Prérequis${
-                                softwareName === undefined ? "" : ` de ${softwareName}`
+                            return `Prerequisites${
+                                softwareName === undefined ? "" : ` of ${softwareName}`
                             }`;
                         case 4:
-                            return `Logiciels similaires et équivalents${
-                                softwareName === undefined ? "" : ` à ${softwareName}`
-                            } (propriétaire ou libre)`;
+                            return `Similar and equivalent software${
+                                softwareName === undefined ? "" : ` of ${softwareName}`
+                            }`;
                         default:
                             return "";
                     }
                 },
-                "add software": "Ajouter le logiciel",
-                "update software": "Valider les modifications"
+                "add software": ({ name }) =>
+                    name === undefined ? "Ajouter un logiciel" : `Ajouter ${name}`,
+                "update software": ({ name }) => `Mettre à jour ${name}`,
+                "add software button": ({ name }) => `Ajouter ${name} au SILL`,
+                "update software button": ({ name }) => `Mettre à jour ${name}`
             },
             "SoftwareFormStep1": {
                 "software desktop": "Logiciel installable sur poste de travail",
