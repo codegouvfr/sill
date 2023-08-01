@@ -301,7 +301,7 @@ const useStyles = makeStyles({
         "gap": fr.spacing("4v")
     },
     "detailUsersAndReferents": {
-        color: theme.decisions.text.actionHigh.blueFrance.default
+        "color": theme.decisions.text.actionHigh.blueFrance.default
     }
 }));
 
