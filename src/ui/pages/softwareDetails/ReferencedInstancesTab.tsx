@@ -112,7 +112,9 @@ const useStyles = makeStyles({
         }
     },
     "card": {
-        "padding": fr.spacing("6v")
+        "&&&": {
+            "padding": fr.spacing("6v")
+        }
     },
     "name": {
         "marginBottom": fr.spacing("3v"),
