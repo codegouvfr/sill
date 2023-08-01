@@ -9,7 +9,7 @@ import { HeaderDetailCard } from "ui/pages/softwareDetails/HeaderDetailCard";
 import { PreviewTab } from "ui/pages/softwareDetails/PreviewTab";
 import { ReferencedInstancesTab } from "ui/pages/softwareDetails/ReferencedInstancesTab";
 import { Tabs } from "@codegouvfr/react-dsfr/Tabs";
-import { AlikeSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
+import { SimilarSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -165,7 +165,7 @@ export default function SoftwareDetails(props: Props) {
                                 }),
                                 "isDefault": route.params.tab === "alternatives",
                                 "content": (
-                                    <AlikeSoftwareTab
+                                    <SimilarSoftwareTab
                                         similarSoftwares={software.similarSoftwares}
                                         getLinks={({ softwareName }) => ({
                                             "declarationForm": routes.declarationForm({

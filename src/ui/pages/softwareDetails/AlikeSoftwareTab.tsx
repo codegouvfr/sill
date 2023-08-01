@@ -24,7 +24,7 @@ export type Props = {
     getAddWikipediaSoftwareToSillLink: (params: { wikidataId: string }) => Link;
 };
 
-export const AlikeSoftwareTab = (props: Props) => {
+export const SimilarSoftwareTab = (props: Props) => {
     const {
         className,
         similarSoftwares,
@@ -36,7 +36,7 @@ export const AlikeSoftwareTab = (props: Props) => {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ AlikeSoftwareTab });
+    const { t } = useTranslation({ SimilarSoftwareTab });
 
     const { css } = useStyles();
 
@@ -161,4 +161,4 @@ export const AlikeSoftwareTab = (props: Props) => {
 
 export const { i18n } = declareComponentKeys<
     "similar software in sill" | "similar software not in sill" | "libre software"
->()({ AlikeSoftwareTab });
+>()({ SimilarSoftwareTab });

@@ -566,7 +566,7 @@ const {
                 "go to instance": "Open the instance",
                 "add instance": "Reference new instance"
             },
-            "AlikeSoftwareTab": {
+            "SimilarSoftwareTab": {
                 "similar software in sill": "Alike software in the SILL",
                 "similar software not in sill":
                     "Other similar software that are not in the SILL, they might be proprietary or not",
@@ -1227,7 +1227,7 @@ const {
                 "go to instance": "Accéder à l'instance",
                 "add instance": "Référencer une nouvelle instance"
             },
-            "AlikeSoftwareTab": {
+            "SimilarSoftwareTab": {
                 "similar software in sill": "Logiciels similaires dans le SILL",
                 "similar software not in sill":
                     "Logiciels similaires qui ne font pas partie du SILL, ils peuvent être propriétaires ou libres",
