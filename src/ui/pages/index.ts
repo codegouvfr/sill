@@ -11,6 +11,7 @@ import * as softwareForm from "./softwareForm";
 import * as softwareUserAndReferent from "./softwareUserAndReferent";
 import * as terms from "./terms";
 import * as redirect from "./redirect";
+import * as userProfile from "./userProfile";
 
 import { objectKeys } from "tsafe/objectKeys";
 import type { UnionToIntersection } from "tsafe";
@@ -28,6 +29,7 @@ export const pages = {
     softwareUserAndReferent,
     terms,
     redirect,
+    userProfile,
     page404
 };
 

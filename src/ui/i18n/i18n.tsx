@@ -47,6 +47,7 @@ const {
     | typeof import("ui/pages/instanceForm/Step1").i18n
     | typeof import("ui/pages/instanceForm/Step2").i18n
     | typeof import("ui/pages/account/Account").i18n
+    | typeof import("ui/pages/userProfile/UserProfile").i18n
     | typeof import("ui/shared/DetailUsersAndReferents").i18n
     | typeof import("ui/shared/Header").i18n
     | typeof import("ui/shared/Footer").i18n
@@ -650,6 +651,9 @@ const {
                 "not a valid email": "Doesn't seem to be a valid email",
                 "email domain not allowed": ({ domain }) =>
                     `The domain ${domain} is not allowed yet`
+            },
+            "UserProfile": {
+                "user profile": "User profile"
             },
             "Header": {
                 "home title": "Home - Interministerial Free Software Catalog",
@@ -1314,6 +1318,9 @@ const {
                 "not a valid email": "Ceci ne semble pas être une adresse e-mail valide",
                 "email domain not allowed": ({ domain }) =>
                     `Le domaine ${domain} n'est pas autorisé pour le moment`
+            },
+            "UserProfile": {
+                "user profile": "User profile"
             },
             "Header": {
                 "home title": "Accueil - Socle Interministériel des Logiciels Libres",

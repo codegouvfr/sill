@@ -205,7 +205,11 @@ export const sillApi: SillApi = {
         async () => "https://sill-preprod.lab.sspcloud.fr/readme",
         { "promise": true }
     ),
-    "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`
+    "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`,
+    "getAgentAbout": async ({ email }) => `Markdown for ${email}`,
+    "updateAgentAbout": async ({ about }) => {
+        console.log(`Update about ${about}`);
+    }
 };
 
 const options = [
@@ -1159,7 +1163,8 @@ const agents: ApiTypes.Agent[] = [
                 "version": "1.1.1",
                 "usecaseDescription": "Usecase description"
             }
-        ]
+        ],
+        "isPublic": false
     },
     {
         "organization": "Babel",
@@ -1172,7 +1177,8 @@ const agents: ApiTypes.Agent[] = [
                 "isTechnicalExpert": true,
                 "usecaseDescription": "Usecase description"
             }
-        ]
+        ],
+        "isPublic": false
     },
     {
         "organization": "Éducation nationale",
@@ -1185,6 +1191,7 @@ const agents: ApiTypes.Agent[] = [
                 "isTechnicalExpert": true,
                 "usecaseDescription": "Usecase description"
             }
-        ]
+        ],
+        "isPublic": true
     }
 ];

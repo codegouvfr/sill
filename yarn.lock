@@ -1225,10 +1225,10 @@
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.14.0":
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.14.0.tgz#9c0bf0c6d21d5a48c8d277713d5b9f79b0ce5577"
-  integrity sha512-FeT96ibHsgKNI+HmBu00CjqT+gmAWcfxhDdyMnOnrTsiSwIy249lu+J7fXeSCg34enbWNodPJuH7rU46+/nDkg==
+"@codegouvfr/sill@^1.15.1":
+  version "1.15.1"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.15.1.tgz#e1d03bec6a230efd6c8935a92ece27c895338632"
+  integrity sha512-Ozsnm66JAlI8nwYtM2nA0qgiKqA1kOHk8lDxBfonZLvo7uQYVoLhYdttE/8Py2Zbil+/jNRXuIcGhzjvuWBBWg==
   dependencies:
     "@trpc/server" "^10.18.0"
     jwt-decode "^3.1.2"

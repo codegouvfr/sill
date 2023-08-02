@@ -154,7 +154,17 @@ export function createSillApi(params: {
         "getTermsOfServiceUrl": memoize(() => trpcClient.getTermsOfServiceUrl.query(), {
             "promise": true
         }),
-        "getMarkdown": params => trpcClient.getMarkdown.query(params)
+        "getMarkdown": params => trpcClient.getMarkdown.query(params),
+        "getAgentAbout": params => trpcClient.getAgentAbout.query(params),
+        "updateAgentAbout": async params => {
+            const out = await trpcClient.updateAgentAbout
+                .mutate(params)
+                .catch(errorHandler);
+
+            sillApi.getAgents.clear();
+
+            return out;
+        }
     };
 
     return sillApi;
