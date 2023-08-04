@@ -206,7 +206,10 @@ export const sillApi: SillApi = {
         { "promise": true }
     ),
     "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`,
-    "getAgentAbout": async ({ email }) => `Markdown for ${email}`,
+    "getAgentAbout": async ({ email }) => ({
+        "about": `Markdown for ${email}`,
+        "isPublic": true
+    }),
     "updateAgentAbout": async ({ about }) => {
         console.log(`Update about ${about}`);
     }

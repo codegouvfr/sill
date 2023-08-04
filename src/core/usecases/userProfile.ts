@@ -93,7 +93,7 @@ export const thunks = {
 
             const { organization } = agent;
 
-            const about = await sillApi.getAgentAbout({ email });
+            const { about } = await sillApi.getAgentAbout({ email });
 
             dispatch(
                 actions.initializationCompleted({

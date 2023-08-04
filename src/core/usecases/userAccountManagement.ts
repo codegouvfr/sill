@@ -26,6 +26,14 @@ namespace State {
             value: string;
             isBeingUpdated: boolean;
         };
+        about: {
+            value: string;
+            isBeingUpdated: boolean;
+        };
+        isPublic: {
+            value: boolean;
+            isBeingUpdated: boolean;
+        };
     };
 }
 
@@ -53,6 +61,8 @@ export const { reducer, actions } = createSlice({
                 organization: string;
                 email: string;
                 allOrganizations: string[];
+                about: string;
+                isPublic: boolean;
             }>
         ) => {
             const {
@@ -60,7 +70,9 @@ export const { reducer, actions } = createSlice({
                 allowedEmailRegexpStr,
                 organization,
                 email,
-                allOrganizations
+                allOrganizations,
+                about,
+                isPublic
             } = payload;
 
             return {
@@ -75,6 +87,14 @@ export const { reducer, actions } = createSlice({
                 "email": {
                     "value": email,
                     "isBeingUpdated": false
+                },
+                "about": {
+                    "value": about,
+                    "isBeingUpdated": false
+                },
+                "isPublic": {
+                    "value": isPublic,
+                    "isBeingUpdated": false
                 }
             };
         },
@@ -82,17 +102,30 @@ export const { reducer, actions } = createSlice({
             state,
             {
                 payload
-            }: PayloadAction<{
-                fieldName: "organization" | "email";
-                value: string;
-            }>
+            }: PayloadAction<
+                | {
+                      fieldName: "organization" | "email" | "about";
+                      value: string;
+                  }
+                | {
+                      fieldName: "isPublic";
+                      value: boolean;
+                  }
+            >
         ) => {
-            const { fieldName, value } = payload;
-
             assert(state.stateDescription === "ready");
 
-            state[fieldName] = {
-                value,
+            if (payload.fieldName === "isPublic") {
+                state[payload.fieldName] = {
+                    value: payload.value,
+                    "isBeingUpdated": true
+                };
+
+                return;
+            }
+
+            state[payload.fieldName] = {
+                value: payload.value,
                 "isBeingUpdated": true
             };
         },
@@ -101,7 +134,7 @@ export const { reducer, actions } = createSlice({
             {
                 payload
             }: PayloadAction<{
-                fieldName: "organization" | "email";
+                fieldName: "organization" | "email" | "about" | "isPublic";
             }>
         ) => {
             const { fieldName } = payload;
@@ -131,13 +164,19 @@ export const thunks = {
 
             assert(oidc.isUserLoggedIn);
 
-            const [user, { keycloakParams }, allowedEmailRegexpStr, allOrganizations] =
-                await Promise.all([
-                    getUser(),
-                    sillApi.getOidcParams(),
-                    sillApi.getAllowedEmailRegexp(),
-                    sillApi.getAllOrganizations()
-                ]);
+            const user = await getUser();
+
+            const [
+                { keycloakParams },
+                allowedEmailRegexpStr,
+                allOrganizations,
+                { about = "", isPublic }
+            ] = await Promise.all([
+                sillApi.getOidcParams(),
+                sillApi.getAllowedEmailRegexp(),
+                sillApi.getAllOrganizations(),
+                sillApi.getAgentAbout({ "email": user.email })
+            ]);
 
             dispatch(
                 actions.initialized({
@@ -158,24 +197,50 @@ export const thunks = {
                                   "name": "referrer",
                                   "value": keycloakParams.clientId
                               }).newUrl,
-                    allOrganizations
+                    allOrganizations,
+                    about,
+                    isPublic
                 })
             );
         },
     "updateField":
-        (params: { fieldName: "organization" | "email"; value: string }) =>
+        (
+            params:
+                | { fieldName: "organization" | "email" | "about"; value: string }
+                | {
+                      fieldName: "isPublic";
+                      value: boolean;
+                  }
+        ) =>
         async (...args) => {
-            const { fieldName, value } = params;
-            const [dispatch, , { sillApi, oidc }] = args;
+            const [dispatch, getState, { sillApi, oidc }] = args;
 
-            dispatch(actions.updateFieldStarted({ fieldName, value }));
+            dispatch(actions.updateFieldStarted(params));
 
-            switch (fieldName) {
+            const state = getState()[name];
+
+            assert(state.stateDescription === "ready");
+
+            switch (params.fieldName) {
                 case "organization":
-                    await sillApi.changeAgentOrganization({ "newOrganization": value });
+                    await sillApi.changeAgentOrganization({
+                        "newOrganization": params.value
+                    });
                     break;
                 case "email":
-                    await sillApi.updateEmail({ "newEmail": value });
+                    await sillApi.updateEmail({ "newEmail": params.value });
+                    break;
+                case "about":
+                    await sillApi.updateAgentAbout({
+                        "about": params.value || undefined,
+                        "isPublic": state.isPublic.value
+                    });
+                    break;
+                case "isPublic":
+                    await sillApi.updateAgentAbout({
+                        "about": state.about.value || undefined,
+                        "isPublic": params.value
+                    });
                     break;
             }
 
@@ -183,7 +248,7 @@ export const thunks = {
 
             await oidc.updateTokenInfo();
 
-            dispatch(actions.updateFieldCompleted({ fieldName }));
+            dispatch(actions.updateFieldCompleted({ "fieldName": params.fieldName }));
         },
     "getPasswordResetUrl":
         () =>
