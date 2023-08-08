@@ -22,6 +22,7 @@ import { useAsync } from "ui/tools/useAsync";
 import { useRerenderOnStateChange } from "evt/hooks";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
+import { routes } from "ui/routes";
 
 type Props = {
     className?: string;
@@ -36,8 +37,6 @@ export default function Account(props: Props) {
 
     const { userAccountManagement } = useCoreFunctions();
     const { readyState } = useCoreState(selectors.userAccountManagement.readyState);
-
-    console.log({ readyState });
 
     useEffect(() => {
         userAccountManagement.initialize();
@@ -59,7 +58,7 @@ function AccountReady(props: { className?: string }) {
         allOrganizations,
         email,
         organization,
-        about,
+        aboutAndIsPublic,
         doSupportPasswordReset,
         allowedEmailRegExp
     } = (function useClosure() {
@@ -88,7 +87,10 @@ function AccountReady(props: { className?: string }) {
     /* prettier-ignore */
     const [organizationInputValue, setOrganizationInputValue] = useState(organization.value);
 
-    const evtAboutInputValue = useConst(() => Evt.create(about.value));
+    const evtAboutInputValue = useConst(() => Evt.create(aboutAndIsPublic.about));
+
+    /* prettier-ignore */
+    const [isPublicInputValue, setIsPublicInputValue] = useState(aboutAndIsPublic.isPublic);
 
     useRerenderOnStateChange(evtAboutInputValue);
 
@@ -133,8 +135,8 @@ function AccountReady(props: { className?: string }) {
     const { getOrganizationFullName } = useGetOrganizationFullName();
 
     return (
-        <div className={className}>
-            <div className={cx(fr.cx("fr-container"), classes.oidcInfos)}>
+        <div className={cx(fr.cx("fr-container"), className)}>
+            <div className={classes.oidcInfos}>
                 <h2 className={classes.title}>{t("title")}</h2>
                 <div className={classes.inputAndPaddingBlockWrapper}>
                     <div className={classes.inputWrapper}>
@@ -248,67 +250,95 @@ function AccountReady(props: { className?: string }) {
                 )}
             </div>
 
-            <div className={cx(fr.cx("fr-container"))}>
-                <h2>About you</h2>
-                <p>
-                    This is a place to introduce yourself, what you do. How are you
-                    using/contributing to open source. And general information that you
-                    would like to share about yourself with the SILL community.
-                </p>
+            <h2>{t("about title")}</h2>
+            <p> {t("about description")} </p>
+            <div
+                style={{
+                    "display": "flex",
+                    "alignItems": "end",
+                    "marginBottom": fr.spacing("6v")
+                }}
+            >
                 <Checkbox
+                    className={classes.isPublicCheckbox}
+                    disabled={aboutAndIsPublic.isBeingUpdated}
                     options={[
                         {
-                            label: "Make my profile public",
-                            nativeInputProps: {
-                                name: "checkboxes-1",
-                                value: "value1"
+                            "label": t("isPublic label"),
+                            "nativeInputProps": {
+                                "checked": isPublicInputValue,
+                                "onChange": event =>
+                                    setIsPublicInputValue(event.target.checked)
                             }
                         }
                     ]}
-                    stateRelatedMessage="En cochant cette case vous rendez votre profil visible par les autres agens connécté au SILL."
+                    stateRelatedMessage={t("isPublic hint")}
                 />
-
-                <div data-color-mode={isDark ? "dark" : "light"}>
-                    <MDEditor
-                        value={evtAboutInputValue.state}
-                        onChange={value => {
-                            evtAboutInputValue.state = value ?? "";
-                        }}
-                    />
-                </div>
-                <div style={{ "display": "flex", "marginTop": fr.spacing("4w") }}>
-                    <div style={{ "flex": 1 }} />
-                    <div>
-                        <Button
-                            className={css({
-                                "visibility":
-                                    about.isBeingUpdated || true ? "hidden" : undefined
-                            })}
-                            onClick={() =>
-                                userAccountManagement.updateField({
-                                    "fieldName": "about",
-                                    "value": evtAboutInputValue.state
-                                })
-                            }
-                            disabled={about.value === evtAboutInputValue.state}
-                        >
-                            {t("update")}
-                        </Button>
-                        {(about.isBeingUpdated || true) && <CircularProgress size={30} />}
-                    </div>
+                <div style={{ "flex": 1 }} />
+                <div>
+                    <Button
+                        className={cx(
+                            classes.updateButton,
+                            css({
+                                "visibility": aboutAndIsPublic.isBeingUpdated
+                                    ? "hidden"
+                                    : undefined
+                            })
+                        )}
+                        onClick={() =>
+                            userAccountManagement.updateField({
+                                "fieldName": "aboutAndIsPublic",
+                                "about": evtAboutInputValue.state,
+                                "isPublic": isPublicInputValue
+                            })
+                        }
+                        disabled={
+                            aboutAndIsPublic.about === evtAboutInputValue.state &&
+                            aboutAndIsPublic.isPublic === isPublicInputValue
+                        }
+                    >
+                        {t("update")}
+                    </Button>
+                    {aboutAndIsPublic.isBeingUpdated && <CircularProgress size={30} />}
                 </div>
             </div>
+            <div
+                data-color-mode={isDark ? "dark" : "light"}
+                className={classes.editorWrapper}
+            >
+                <MDEditor
+                    value={evtAboutInputValue.state}
+                    onChange={value => {
+                        evtAboutInputValue.state = value ?? "";
+                    }}
+                    height={600}
+                />
+                {aboutAndIsPublic.isBeingUpdated && (
+                    <div className={classes.editorWrapperOverlay} />
+                )}
+            </div>
+            <a
+                {...routes.userProfile({
+                    "email": email.value
+                }).link}
+                style={{
+                    "display": "inline-block",
+                    "marginBottom": fr.spacing("6v")
+                }}
+            >
+                {t("go to profile")}
+            </a>
         </div>
     );
 }
 
 const useStyles = makeStyles({
     "name": { Account }
-})({
+})(theme => ({
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,
-        "paddingBottom": fr.spacing("6v")
+        "paddingBottom": fr.spacing("14v")
     },
     "title": {
         "marginBottom": fr.spacing("10v"),
@@ -359,8 +389,34 @@ const useStyles = makeStyles({
     },
     "resetPasswordLink": {
         "marginTop": fr.spacing("6v")
+    },
+    "isPublicCheckbox": {
+        "marginBottom": 0,
+        [`&&& .${fr.cx("fr-message")}`]: {
+            "marginBottom": 0
+        },
+        "maxWidth": 700
+    },
+    "editorWrapper": {
+        "marginBottom": fr.spacing("10v"),
+        "position": "relative"
+    },
+    "editorWrapperOverlay": {
+        "position": "absolute",
+        "top": 0,
+        "left": 0,
+        "width": "100%",
+        "height": "100%",
+        "backgroundColor": theme.decisions.background.disabled.grey.default,
+        "opacity": 0.8,
+        "cursor": "not-allowed",
+        "zIndex": 1000
+    },
+    "updateButton": {
+        "whiteSpace": "nowrap",
+        "marginLeft": fr.spacing("4v")
     }
-});
+}));
 
 export const { i18n } = declareComponentKeys<
     | "title"
@@ -374,4 +430,9 @@ export const { i18n } = declareComponentKeys<
           K: "email domain not allowed";
           P: { domain: string };
       }
+    | "about title"
+    | "about description"
+    | "isPublic label"
+    | "isPublic hint"
+    | "go to profile"
 >()({ Account });

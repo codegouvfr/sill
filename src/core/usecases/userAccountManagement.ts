@@ -26,12 +26,9 @@ namespace State {
             value: string;
             isBeingUpdated: boolean;
         };
-        about: {
-            value: string;
-            isBeingUpdated: boolean;
-        };
-        isPublic: {
-            value: boolean;
+        aboutAndIsPublic: {
+            isPublic: boolean;
+            about: string;
             isBeingUpdated: boolean;
         };
     };
@@ -92,8 +89,9 @@ export const { reducer, actions } = createSlice({
                     "value": about,
                     "isBeingUpdated": false
                 },
-                "isPublic": {
-                    "value": isPublic,
+                "aboutAndIsPublic": {
+                    about,
+                    isPublic,
                     "isBeingUpdated": false
                 }
             };
@@ -104,20 +102,22 @@ export const { reducer, actions } = createSlice({
                 payload
             }: PayloadAction<
                 | {
-                      fieldName: "organization" | "email" | "about";
+                      fieldName: "organization" | "email";
                       value: string;
                   }
                 | {
-                      fieldName: "isPublic";
-                      value: boolean;
+                      fieldName: "aboutAndIsPublic";
+                      about: string;
+                      isPublic: boolean;
                   }
             >
         ) => {
             assert(state.stateDescription === "ready");
 
-            if (payload.fieldName === "isPublic") {
+            if (payload.fieldName === "aboutAndIsPublic") {
                 state[payload.fieldName] = {
-                    value: payload.value,
+                    "about": payload.about,
+                    "isPublic": payload.isPublic,
                     "isBeingUpdated": true
                 };
 
@@ -134,7 +134,7 @@ export const { reducer, actions } = createSlice({
             {
                 payload
             }: PayloadAction<{
-                fieldName: "organization" | "email" | "about" | "isPublic";
+                fieldName: "organization" | "email" | "aboutAndIsPublic";
             }>
         ) => {
             const { fieldName } = payload;
@@ -206,10 +206,14 @@ export const thunks = {
     "updateField":
         (
             params:
-                | { fieldName: "organization" | "email" | "about"; value: string }
                 | {
-                      fieldName: "isPublic";
-                      value: boolean;
+                      fieldName: "organization" | "email";
+                      value: string;
+                  }
+                | {
+                      fieldName: "aboutAndIsPublic";
+                      about: string;
+                      isPublic: boolean;
                   }
         ) =>
         async (...args) => {
@@ -221,32 +225,26 @@ export const thunks = {
 
             assert(state.stateDescription === "ready");
 
+            assert(oidc.isUserLoggedIn);
+
             switch (params.fieldName) {
                 case "organization":
                     await sillApi.changeAgentOrganization({
                         "newOrganization": params.value
                     });
+                    await oidc.updateTokenInfo();
                     break;
                 case "email":
                     await sillApi.updateEmail({ "newEmail": params.value });
+                    await oidc.updateTokenInfo();
                     break;
-                case "about":
+                case "aboutAndIsPublic":
                     await sillApi.updateAgentAbout({
-                        "about": params.value || undefined,
-                        "isPublic": state.isPublic.value
-                    });
-                    break;
-                case "isPublic":
-                    await sillApi.updateAgentAbout({
-                        "about": state.about.value || undefined,
-                        "isPublic": params.value
+                        "about": params.about || undefined,
+                        "isPublic": params.isPublic
                     });
                     break;
             }
-
-            assert(oidc.isUserLoggedIn);
-
-            await oidc.updateTokenInfo();
 
             dispatch(actions.updateFieldCompleted({ "fieldName": params.fieldName }));
         },

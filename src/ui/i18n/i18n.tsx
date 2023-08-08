@@ -650,7 +650,16 @@ const {
                 "update": "Update",
                 "not a valid email": "Doesn't seem to be a valid email",
                 "email domain not allowed": ({ domain }) =>
-                    `The domain ${domain} is not allowed yet`
+                    `The domain ${domain} is not allowed yet`,
+                "about title": "Open Source Profile",
+                "about description": `Sketch out an overview of your journey and commitments to open source. 
+                Share your experiences here, how you use or contribute to open source, and any information you 
+                wish to highlight within the SILL community.`,
+                "isPublic label": "Public Profile",
+                "isPublic hint": `By enabling this option, your profile and description will be accessible to all 
+                agents connected to SILL. Otherwise, only the Codegouv team and the SILL maintainers will 
+                be able to view your profile.`,
+                "go to profile": "Go to live profile"
             },
             "UserProfile": {
                 "user profile": "User profile"
@@ -1317,7 +1326,14 @@ const {
                 "update": "Mettre à jour",
                 "not a valid email": "Ceci ne semble pas être une adresse e-mail valide",
                 "email domain not allowed": ({ domain }) =>
-                    `Le domaine ${domain} n'est pas autorisé pour le moment`
+                    `Le domaine ${domain} n'est pas autorisé pour le moment`,
+                "about title": "Profil Open Source",
+                "about description": `Dressez un panorama de votre parcours et de vos engagements envers l'open source. 
+                Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations 
+                que vous souhaitez mettre en avant au sein de la communauté du SILL.`,
+                "isPublic label": "Profil Public",
+                "isPublic hint": `En activant cette option, votre profil et votre description seront accessibles à tous les agents connectés au SILL. Sinon, seules l'équipe Codegouv et les mainteneurs du SILL pourront consulter votre profil.`,
+                "go to profile": "Voir mon profile partagé"
             },
             "UserProfile": {
                 "user profile": "User profile"
