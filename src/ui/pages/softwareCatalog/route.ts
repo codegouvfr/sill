@@ -9,6 +9,7 @@ import {
 import type { State } from "core/usecases/softwareCatalog";
 import { z } from "zod";
 import { assert, type Equals } from "tsafe";
+import { appPath } from "urls";
 
 export const routeDefs = {
     "softwareCatalog": defineRoute(
@@ -80,7 +81,7 @@ export const routeDefs = {
                 })
                 .default([])
         },
-        () => `/list`
+        () => appPath + `/list`
     )
 };
 
