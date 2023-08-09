@@ -249,85 +249,90 @@ function AccountReady(props: { className?: string }) {
                     </a>
                 )}
             </div>
-
-            <h2>{t("about title")}</h2>
-            <p> {t("about description")} </p>
-            <div
-                style={{
-                    "display": "flex",
-                    "alignItems": "end",
-                    "marginBottom": fr.spacing("6v")
-                }}
-            >
-                <Checkbox
-                    className={classes.isPublicCheckbox}
-                    disabled={aboutAndIsPublic.isBeingUpdated}
-                    options={[
-                        {
-                            "label": t("isPublic label"),
-                            "nativeInputProps": {
-                                "checked": isPublicInputValue,
-                                "onChange": event =>
-                                    setIsPublicInputValue(event.target.checked)
-                            }
-                        }
-                    ]}
-                    stateRelatedMessage={t("isPublic hint")}
-                />
-                <div style={{ "flex": 1 }} />
-                <div>
-                    <Button
-                        className={cx(
-                            classes.updateButton,
-                            css({
-                                "visibility": aboutAndIsPublic.isBeingUpdated
-                                    ? "hidden"
-                                    : undefined
-                            })
-                        )}
-                        onClick={() =>
-                            userAccountManagement.updateField({
-                                "fieldName": "aboutAndIsPublic",
-                                "about": evtAboutInputValue.state,
-                                "isPublic": isPublicInputValue
-                            })
-                        }
-                        disabled={
-                            aboutAndIsPublic.about === evtAboutInputValue.state &&
-                            aboutAndIsPublic.isPublic === isPublicInputValue
-                        }
+            {Date.now() === 0 && (
+                <>
+                    <h2>{t("about title")}</h2>
+                    <p> {t("about description")} </p>
+                    <div
+                        style={{
+                            "display": "flex",
+                            "alignItems": "end",
+                            "marginBottom": fr.spacing("6v")
+                        }}
                     >
-                        {t("update")}
-                    </Button>
-                    {aboutAndIsPublic.isBeingUpdated && <CircularProgress size={30} />}
-                </div>
-            </div>
-            <div
-                data-color-mode={isDark ? "dark" : "light"}
-                className={classes.editorWrapper}
-            >
-                <MDEditor
-                    value={evtAboutInputValue.state}
-                    onChange={value => {
-                        evtAboutInputValue.state = value ?? "";
-                    }}
-                    height={600}
-                />
-                {aboutAndIsPublic.isBeingUpdated && (
-                    <div className={classes.editorWrapperOverlay} />
-                )}
-            </div>
-            <a
-                {...routes.userProfile({
-                    "email": email.value
-                }).link}
-                style={{
-                    "display": "inline-block",
-                    "marginBottom": fr.spacing("6v")
-                }}
-            >
-                {t("go to profile")}
-            </a>
+                        <Checkbox
+                            className={classes.isPublicCheckbox}
+                            disabled={aboutAndIsPublic.isBeingUpdated}
+                            options={[
+                                {
+                                    "label": t("isPublic label"),
+                                    "nativeInputProps": {
+                                        "checked": isPublicInputValue,
+                                        "onChange": event =>
+                                            setIsPublicInputValue(event.target.checked)
+                                    }
+                                }
+                            ]}
+                            stateRelatedMessage={t("isPublic hint")}
+                        />
+                        <div style={{ "flex": 1 }} />
+                        <div>
+                            <Button
+                                className={cx(
+                                    classes.updateButton,
+                                    css({
+                                        "visibility": aboutAndIsPublic.isBeingUpdated
+                                            ? "hidden"
+                                            : undefined
+                                    })
+                                )}
+                                onClick={() =>
+                                    userAccountManagement.updateField({
+                                        "fieldName": "aboutAndIsPublic",
+                                        "about": evtAboutInputValue.state,
+                                        "isPublic": isPublicInputValue
+                                    })
+                                }
+                                disabled={
+                                    aboutAndIsPublic.about === evtAboutInputValue.state &&
+                                    aboutAndIsPublic.isPublic === isPublicInputValue
+                                }
+                            >
+                                {t("update")}
+                            </Button>
+                            {aboutAndIsPublic.isBeingUpdated && (
+                                <CircularProgress size={30} />
+                            )}
+                        </div>
+                    </div>
+                    <div
+                        data-color-mode={isDark ? "dark" : "light"}
+                        className={classes.editorWrapper}
+                    >
+                        <MDEditor
+                            value={evtAboutInputValue.state}
+                            onChange={value => {
+                                evtAboutInputValue.state = value ?? "";
+                            }}
+                            height={600}
+                        />
+                        {aboutAndIsPublic.isBeingUpdated && (
+                            <div className={classes.editorWrapperOverlay} />
+                        )}
+                    </div>
+                    <a
+                        {...routes.userProfile({
+                            "email": email.value
+                        }).link}
+                        style={{
+                            "display": "inline-block",
+                            "marginBottom": fr.spacing("6v")
+                        }}
+                    >
+                        {t("go to profile")}
+                    </a>
+                </>
+            )}
         </div>
     );
 }
