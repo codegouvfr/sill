@@ -30,7 +30,7 @@ let keycloakIsDark: boolean;
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
-    "staticAssetsUrl": appUrl,
+    appUrl,
     // prettier-ignore
     "transformUrlBeforeRedirectToLogin": ({ url, termsOfServiceUrl }) =>
         [url]
