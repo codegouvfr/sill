@@ -26,7 +26,7 @@ setUseLang({
 
 const { CoreProvider } = createCoreProvider({
     "apiUrl": "",
-    "staticAssetsUrl": "",
+    "appUrl": "",
     "isUserInitiallyLoggedIn": true,
     "transformUrlBeforeRedirectToLogin": () => {
         assert(false);
