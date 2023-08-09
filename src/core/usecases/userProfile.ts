@@ -18,6 +18,7 @@ export namespace State {
         email: string;
         organization: string;
         about: string | undefined;
+        isUserProfile: boolean;
     };
 }
 
@@ -42,15 +43,17 @@ export const { reducer, actions } = createSlice({
                 email: string;
                 organization: string;
                 about: string | undefined;
+                isUserProfile: boolean;
             }>
         ) => {
-            const { about, email, organization } = payload;
+            const { about, email, organization, isUserProfile } = payload;
 
             return {
                 "stateDescription": "ready",
                 email,
                 organization,
-                about
+                about,
+                isUserProfile
             };
         },
         "cleared": () => ({
@@ -81,7 +84,7 @@ export const thunks = {
                 }
             }
 
-            const { sillApi } = extraArg;
+            const { sillApi, getUser } = extraArg;
 
             dispatch(actions.initializationStarted());
 
@@ -93,13 +96,18 @@ export const thunks = {
 
             const { organization } = agent;
 
-            const { about } = await sillApi.getAgentAbout({ email });
+            const { about } = agent.isPublic
+                ? await sillApi.getAgentAbout({ email })
+                : { "about": undefined };
+
+            const user = await getUser();
 
             dispatch(
                 actions.initializationCompleted({
                     email,
                     organization,
-                    about
+                    about,
+                    "isUserProfile": user.email === email
                 })
             );
         },
@@ -139,7 +147,8 @@ export const selectors = (() => {
         return {
             "email": readyState.email,
             "organization": readyState.organization,
-            "about": readyState.about
+            "about": readyState.about,
+            "isUserProfile": readyState.isUserProfile
         };
     });
 

@@ -662,7 +662,10 @@ const {
                 "go to profile": "Go to live profile"
             },
             "UserProfile": {
-                "user profile": "User profile"
+                "user profile": "User profile",
+                "send email": "Send an email to this person",
+                "no description": "The user has not written a description yet",
+                "edit my profile": "Edit my profile"
             },
             "Header": {
                 "home title": "Home - Interministerial Free Software Catalog",
@@ -1336,7 +1339,11 @@ const {
                 "go to profile": "Voir mon profile partagé"
             },
             "UserProfile": {
-                "user profile": "User profile"
+                "user profile": "Profil agent",
+                "send email": "Envoyer un e-mail a l'agent",
+                "no description":
+                    "Cette agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
+                "edit my profile": "Modifier mon profil"
             },
             "Header": {
                 "home title": "Accueil - Socle Interministériel des Logiciels Libres",
