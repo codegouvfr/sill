@@ -820,9 +820,9 @@ const {
             "AddSoftwareLanding": {
                 "title": (
                     <>
-                        <span>Vous êtes agent public? </span> Ajoutez des logiciels libres
-                        ou des instances de logiciels libres utilisés ou déployées dans
-                        votre organisation !
+                        <span>Vous êtes agent public ? </span>Ajoutez des logiciels libres
+                        ou des instances de logiciels libres utilisés ou déployés dans
+                        votre organisation !
                     </>
                 ),
                 "subtitle":
