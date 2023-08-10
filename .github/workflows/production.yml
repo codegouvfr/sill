@@ -1,0 +1,61 @@
+name: Deploy to production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: build
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+          dir: build
+      - name: Build production bundle
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+          dir: build
+      - name: Archive production bundle
+        run: |
+          tar -zcvf sill-web.tar.gz build/*
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sill-web
+          path: sill-web.tar.gz
+
+  # Deployment job
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: sill-web
+          path: sill-web/
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-av --delete"
+          SOURCE: sill-web/
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST_PROD }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER_PROD }}
+          TARGET: ${{ secrets.REMOTE_TARGET_PROD }}/sill-web/
+          SCRIPT_AFTER: |
+            cd ${{ secrets.REMOTE_TARGET_PROD }}/sill-web
+            tar -zxvf sill-web.tar.gz --strip-components=1
+            rm sill-web.tar.gz
+            sudo chown -R $USER:www-data build
