@@ -14,4 +14,4 @@ export const routeGroup = createGroup(Object.values(createRouter(routeDefs).rout
 
 export type PageRoute = Route<typeof routeGroup>;
 
-export const getDoRequireUserLoggedIn: (route: PageRoute) => boolean = () => true;
+export const getDoRequireUserLoggedIn: (route: PageRoute) => boolean = () => false;

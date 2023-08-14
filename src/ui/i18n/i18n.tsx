@@ -656,10 +656,14 @@ const {
                 Share your experiences here, how you use or contribute to open source, and any information you 
                 wish to highlight within the SILL community.`,
                 "isPublic label": "Public Profile",
-                "isPublic hint": `By enabling this option, your profile and description will be accessible to all 
-                agents connected to SILL. Otherwise, only the Codegouv team and the SILL maintainers will 
-                be able to view your profile.`,
-                "go to profile": "Go to live profile"
+                "isPublic hint": ({ profileLik }) => (
+                    <>
+                        By enabling this option &nbsp;
+                        <a {...profileLik}>your SILL profile</a>&nbsp;will be made
+                        publicly accessible.
+                    </>
+                ),
+                "go to profile": "Go to public profile"
             },
             "UserProfile": {
                 "user profile": "User profile",
@@ -1335,8 +1339,14 @@ const {
                 Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations 
                 que vous souhaitez mettre en avant au sein de la communauté du SILL.`,
                 "isPublic label": "Profil Public",
-                "isPublic hint": `En activant cette option, votre profil et votre description seront accessibles à tous les agents connectés au SILL. Sinon, seules l'équipe Codegouv et les mainteneurs du SILL pourront consulter votre profil.`,
-                "go to profile": "Voir mon profile partagé"
+                "isPublic hint": ({ profileLik }) => (
+                    <>
+                        En activant cette option,&nbsp;{" "}
+                        <a {...profileLik}>votre profil SILL</a>&nbsp;sera publiquement
+                        accessible.
+                    </>
+                ),
+                "go to profile": "Voir mon profile public"
             },
             "UserProfile": {
                 "user profile": "Profil agent",

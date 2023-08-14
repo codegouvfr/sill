@@ -23,6 +23,7 @@ import { useRerenderOnStateChange } from "evt/hooks";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
 import { routes } from "ui/routes";
+import type { Link } from "type-route";
 
 type Props = {
     className?: string;
@@ -272,7 +273,10 @@ function AccountReady(props: { className?: string }) {
                                 }
                             }
                         ]}
-                        stateRelatedMessage={t("isPublic hint")}
+                        stateRelatedMessage={t("isPublic hint", {
+                            "profileLik": routes.userProfile({ "email": email.value })
+                                .link
+                        })}
                     />
                     <div style={{ "flex": 1 }} />
                     <div>
@@ -436,6 +440,10 @@ export const { i18n } = declareComponentKeys<
     | "about title"
     | "about description"
     | "isPublic label"
-    | "isPublic hint"
+    | {
+          K: "isPublic hint";
+          P: { profileLik: Link };
+          R: JSX.Element;
+      }
     | "go to profile"
 >()({ Account });

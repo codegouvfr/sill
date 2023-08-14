@@ -170,12 +170,14 @@ export const thunks = {
                 { keycloakParams },
                 allowedEmailRegexpStr,
                 allOrganizations,
-                { about = "", isPublic }
+                {
+                    agent: { about = "", isPublic }
+                }
             ] = await Promise.all([
                 sillApi.getOidcParams(),
                 sillApi.getAllowedEmailRegexp(),
                 sillApi.getAllOrganizations(),
-                sillApi.getAgentAbout({ "email": user.email })
+                sillApi.getAgent({ "email": user.email })
             ]);
 
             dispatch(
@@ -239,10 +241,27 @@ export const thunks = {
                     await oidc.updateTokenInfo();
                     break;
                 case "aboutAndIsPublic":
-                    await sillApi.updateAgentAbout({
-                        "about": params.about || undefined,
-                        "isPublic": params.isPublic
-                    });
+                    await Promise.all([
+                        (async () => {
+                            if (state.aboutAndIsPublic.about === params.about) {
+                                return;
+                            }
+
+                            await sillApi.updateAgentAbout({
+                                "about": params.about || undefined
+                            });
+                        })(),
+                        (async () => {
+                            if (state.aboutAndIsPublic.isPublic === params.isPublic) {
+                                return;
+                            }
+
+                            await sillApi.updateIsAgentProfilePublic({
+                                "isPublic": params.isPublic
+                            });
+                        })()
+                    ]);
+
                     break;
             }
 

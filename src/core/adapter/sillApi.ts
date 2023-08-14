@@ -155,15 +155,17 @@ export function createSillApi(params: {
             "promise": true
         }),
         "getMarkdown": params => trpcClient.getMarkdown.query(params),
-        "getAgentAbout": params => trpcClient.getAgentAbout.query(params),
-        "updateAgentAbout": async params => {
-            const out = await trpcClient.updateAgentAbout
+        "getAgent": params => trpcClient.getAgent.query(params),
+        "getIsAgentProfilePublic": params =>
+            trpcClient.getIsAgentProfilePublic.query(params),
+        "updateAgentAbout": params =>
+            trpcClient.updateAgentAbout.mutate(params).catch(errorHandler),
+        "updateIsAgentProfilePublic": async params => {
+            await trpcClient.updateIsAgentProfilePublic
                 .mutate(params)
                 .catch(errorHandler);
 
             sillApi.getAgents.clear();
-
-            return out;
         }
     };
 

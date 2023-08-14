@@ -99,12 +99,18 @@ export type SillApi = {
     getMarkdown: (
         params: TrpcRouterInput["getMarkdown"]
     ) => Promise<TrpcRouterOutput["getMarkdown"]>;
-    "getAgentAbout": (
-        params: TrpcRouterInput["getAgentAbout"]
-    ) => Promise<TrpcRouterOutput["getAgentAbout"]>;
-    "updateAgentAbout": (
+    getIsAgentProfilePublic: (
+        params: TrpcRouterInput["getIsAgentProfilePublic"]
+    ) => Promise<TrpcRouterOutput["getIsAgentProfilePublic"]>;
+    getAgent: (
+        params: TrpcRouterInput["getAgent"]
+    ) => Promise<TrpcRouterOutput["getAgent"]>;
+    updateAgentAbout: (
         params: TrpcRouterInput["updateAgentAbout"]
     ) => Promise<TrpcRouterOutput["updateAgentAbout"]>;
+    updateIsAgentProfilePublic: (
+        params: TrpcRouterInput["updateIsAgentProfilePublic"]
+    ) => Promise<TrpcRouterOutput["updateIsAgentProfilePublic"]>;
 };
 
 //NOTE: We make sure we don't forget queries

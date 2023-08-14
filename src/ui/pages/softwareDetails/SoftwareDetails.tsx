@@ -77,10 +77,7 @@ export default function SoftwareDetails(props: Props) {
                         onGoBackClick={() => {
                             const previousRouteName = getPreviousRouteName();
 
-                            if (
-                                previousRouteName === "softwareCatalog" ||
-                                previousRouteName === undefined
-                            ) {
+                            if (previousRouteName === "softwareCatalog") {
                                 //Restore scroll position
                                 session.back();
                                 return;

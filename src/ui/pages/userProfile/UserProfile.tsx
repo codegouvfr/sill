@@ -10,7 +10,7 @@ import { makeStyles } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
-import { routes, session } from "ui/routes";
+import { routes, session, getPreviousRouteName } from "ui/routes";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 
 type Props = {
@@ -69,13 +69,22 @@ function UserProfileReady(props: { className?: string }) {
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                     href={"#"}
-                    onClick={() => session.back()}
+                    onClick={() => {
+                        const previousRouteName = getPreviousRouteName();
+
+                        if (previousRouteName === false) {
+                            routes.softwareCatalog().push();
+                            return;
+                        }
+
+                        session.back();
+                    }}
                     className={classes.headerBackButton}
                 >
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
                 <h4 className={classes.headerTitle}>{t("user profile")}</h4>
-                {profile.isUserProfile && (
+                {profile.isHimself && (
                     <Button
                         className={classes.editProfileButton}
                         iconId="ri-pencil-line"

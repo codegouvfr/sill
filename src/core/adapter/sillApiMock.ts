@@ -206,12 +206,23 @@ export const sillApi: SillApi = {
         { "promise": true }
     ),
     "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`,
-    "getAgentAbout": async ({ email }) => ({
-        "about": `Markdown for ${email}`,
-        "isPublic": true
+    "getAgent": async ({ email }) => ({
+        "agent": {
+            "about": "About",
+            email,
+            "organization": "organization",
+            "declarations": [],
+            "isPublic": false
+        }
     }),
     "updateAgentAbout": async ({ about }) => {
         console.log(`Update about ${about}`);
+    },
+    "getIsAgentProfilePublic": async ({ email }) => ({
+        "isPublic": email.startsWith("public")
+    }),
+    "updateIsAgentProfilePublic": async ({ isPublic }) => {
+        console.log(`Update isPublic ${isPublic}`);
     }
 };
 
@@ -1166,8 +1177,7 @@ const agents: ApiTypes.Agent[] = [
                 "version": "1.1.1",
                 "usecaseDescription": "Usecase description"
             }
-        ],
-        "isPublic": false
+        ]
     },
     {
         "organization": "Babel",
@@ -1180,8 +1190,7 @@ const agents: ApiTypes.Agent[] = [
                 "isTechnicalExpert": true,
                 "usecaseDescription": "Usecase description"
             }
-        ],
-        "isPublic": false
+        ]
     },
     {
         "organization": "Éducation nationale",
@@ -1194,7 +1203,6 @@ const agents: ApiTypes.Agent[] = [
                 "isTechnicalExpert": true,
                 "usecaseDescription": "Usecase description"
             }
-        ],
-        "isPublic": true
+        ]
     }
 ];

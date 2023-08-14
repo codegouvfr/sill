@@ -18,7 +18,7 @@ export namespace State {
         email: string;
         organization: string;
         about: string | undefined;
-        isUserProfile: boolean;
+        isHimself: boolean;
     };
 }
 
@@ -43,17 +43,17 @@ export const { reducer, actions } = createSlice({
                 email: string;
                 organization: string;
                 about: string | undefined;
-                isUserProfile: boolean;
+                isHimself: boolean;
             }>
         ) => {
-            const { about, email, organization, isUserProfile } = payload;
+            const { about, email, organization, isHimself } = payload;
 
             return {
                 "stateDescription": "ready",
                 email,
                 organization,
                 about,
-                isUserProfile
+                isHimself
             };
         },
         "cleared": () => ({
@@ -84,30 +84,34 @@ export const thunks = {
                 }
             }
 
-            const { sillApi, getUser } = extraArg;
+            const { sillApi, getUser, oidc } = extraArg;
 
             dispatch(actions.initializationStarted());
 
-            const agent = (await sillApi.getAgents()).agents.find(
-                agent => agent.email === email
-            );
+            if (
+                !oidc.isUserLoggedIn &&
+                !(await sillApi.getIsAgentProfilePublic({ email }))
+            ) {
+                await oidc.login({
+                    "doesCurrentHrefRequiresAuth": true
+                });
+                assert(false, "never");
+            }
+
+            const { agent } = await sillApi.getAgent({ email });
 
             assert(agent !== undefined);
 
-            const { organization } = agent;
-
-            const { about } = agent.isPublic
-                ? await sillApi.getAgentAbout({ email })
-                : { "about": undefined };
-
-            const user = await getUser();
+            const isHimself = !oidc.isUserLoggedIn
+                ? false
+                : (await getUser()).email === email;
 
             dispatch(
                 actions.initializationCompleted({
                     email,
-                    organization,
-                    about,
-                    "isUserProfile": user.email === email
+                    "about": agent.about,
+                    "organization": agent.organization,
+                    isHimself
                 })
             );
         },
@@ -148,7 +152,7 @@ export const selectors = (() => {
             "email": readyState.email,
             "organization": readyState.organization,
             "about": readyState.about,
-            "isUserProfile": readyState.isUserProfile
+            "isHimself": readyState.isHimself
         };
     });
 
