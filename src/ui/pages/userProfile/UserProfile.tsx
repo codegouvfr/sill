@@ -12,6 +12,7 @@ import { Markdown } from "keycloakify/tools/Markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { routes, session, getPreviousRouteName } from "ui/routes";
 import { Button } from "@codegouvfr/react-dsfr/Button";
+import { Tag } from "@codegouvfr/react-dsfr/Tag";
 
 type Props = {
     className?: string;
@@ -48,8 +49,10 @@ function UserProfileReady(props: { className?: string }) {
     const { t } = useTranslation({ UserProfile });
 
     const { profile } = useCoreState(selectors.userProfile.profile);
+    const { softwares } = useCoreState(selectors.userProfile.softwares);
 
     assert(profile !== undefined);
+    assert(softwares !== undefined);
 
     const { cx, classes } = useStyles();
 
@@ -83,7 +86,12 @@ function UserProfileReady(props: { className?: string }) {
                 >
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
-                <h4 className={classes.headerTitle}>{t("user profile")}</h4>
+                <h4 className={classes.headerTitle}>
+                    {t("agent profile", {
+                        "email": profile.email,
+                        "organization": profile.organization
+                    })}
+                </h4>
                 {profile.isHimself && (
                     <Button
                         className={classes.editProfileButton}
@@ -93,6 +101,45 @@ function UserProfileReady(props: { className?: string }) {
                     >
                         {t("edit my profile")}
                     </Button>
+                )}
+            </div>
+            <div className={classes.softwareListing}>
+                {softwares.map(
+                    ({
+                        softwareName,
+                        isReferent,
+                        isUser,
+                        isTechnicalExpert,
+                        usecaseDescription
+                    }) => (
+                        <p>
+                            <a
+                                {...routes.softwareDetails({
+                                    "name": softwareName
+                                }).link}
+                            >
+                                {softwareName}
+                            </a>
+                            &nbsp;
+                            <Tag
+                                style={{
+                                    "position": "relative",
+                                    "top": 4,
+                                    "marginLeft": fr.spacing("2v")
+                                }}
+                                iconId="fr-icon-checkbox-circle-line"
+                            >
+                                {t("badge text", {
+                                    isUser,
+                                    isTechnicalExpert,
+                                    isReferent
+                                })}
+                            </Tag>
+                            <Markdown className={classes.usecaseDescription}>
+                                {usecaseDescription}
+                            </Markdown>
+                        </p>
+                    )
                 )}
             </div>
             {profile.about !== undefined ? (
@@ -114,7 +161,24 @@ function UserProfileReady(props: { className?: string }) {
 }
 
 export const { i18n } = declareComponentKeys<
-    "user profile" | "no description" | "send email" | "edit my profile"
+    | {
+          K: "agent profile";
+          P: {
+              email: string;
+              organization: string;
+          };
+      }
+    | "no description"
+    | "send email"
+    | "edit my profile"
+    | {
+          K: "badge text";
+          P: {
+              isUser: boolean;
+              isTechnicalExpert: boolean | undefined;
+              isReferent: boolean;
+          };
+      }
 >()({ UserProfile });
 
 const useStyles = makeStyles({ "name": { UserProfile } })(_ => ({
@@ -143,5 +207,11 @@ const useStyles = makeStyles({ "name": { UserProfile } })(_ => ({
         ...fr.spacing("margin", { "topBottom": "15v" }),
         "display": "flex",
         "justifyContent": "center"
+    },
+    "softwareListing": {
+        "marginBottom": fr.spacing("10v")
+    },
+    "usecaseDescription": {
+        "marginTop": fr.spacing("4v")
     }
 }));

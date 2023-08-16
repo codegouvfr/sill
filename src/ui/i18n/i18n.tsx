@@ -666,10 +666,23 @@ const {
                 "go to profile": "Go to public profile"
             },
             "UserProfile": {
-                "user profile": "User profile",
+                "agent profile": ({ email, organization }) =>
+                    `Profile of ${email} - ${organization}`,
                 "send email": "Send an email to this person",
                 "no description": "The user has not written a description yet",
-                "edit my profile": "Edit my profile"
+                "edit my profile": "Edit my profile",
+                "badge text": ({ isReferent, isTechnicalExpert, isUser }) => {
+                    if (isReferent && isTechnicalExpert) {
+                        return "Technical expert referent";
+                    }
+                    if (isReferent) {
+                        return "Referent";
+                    }
+                    if (isUser) {
+                        return "User";
+                    }
+                    assert(false);
+                }
             },
             "Header": {
                 "home title": "Home - Interministerial Free Software Catalog",
@@ -1349,11 +1362,24 @@ const {
                 "go to profile": "Voir mon profile public"
             },
             "UserProfile": {
-                "user profile": "Profil agent",
+                "agent profile": ({ email, organization }) =>
+                    `Profile de ${email} - ${organization}`,
                 "send email": "Envoyer un e-mail a l'agent",
                 "no description":
                     "Cette agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
-                "edit my profile": "Modifier mon profil"
+                "edit my profile": "Modifier mon profil",
+                "badge text": ({ isReferent, isTechnicalExpert, isUser }) => {
+                    if (isReferent && isTechnicalExpert) {
+                        return "Référent expert technique";
+                    }
+                    if (isReferent) {
+                        return "Référent";
+                    }
+                    if (isUser) {
+                        return "Utilisateur";
+                    }
+                    assert(false);
+                }
             },
             "Header": {
                 "home title": "Accueil - Socle Interministériel des Logiciels Libres",

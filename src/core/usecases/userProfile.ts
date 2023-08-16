@@ -4,6 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import { createSelector } from "@reduxjs/toolkit";
+import type { ApiTypes } from "@codegouvfr/sill";
 
 export type State = State.NotReady | State.Ready;
 
@@ -19,6 +20,7 @@ export namespace State {
         organization: string;
         about: string | undefined;
         isHimself: boolean;
+        declarations: ApiTypes.Agent["declarations"];
     };
 }
 
@@ -44,16 +46,18 @@ export const { reducer, actions } = createSlice({
                 organization: string;
                 about: string | undefined;
                 isHimself: boolean;
+                declarations: ApiTypes.Agent["declarations"];
             }>
         ) => {
-            const { about, email, organization, isHimself } = payload;
+            const { about, email, organization, isHimself, declarations } = payload;
 
             return {
                 "stateDescription": "ready",
                 email,
                 organization,
                 about,
-                isHimself
+                isHimself,
+                declarations
             };
         },
         "cleared": () => ({
@@ -111,6 +115,7 @@ export const thunks = {
                     email,
                     "about": agent.about,
                     "organization": agent.organization,
+                    "declarations": agent.declarations,
                     isHimself
                 })
             );
@@ -156,5 +161,81 @@ export const selectors = (() => {
         };
     });
 
-    return { profile };
+    const softwares = createSelector(readyState, readyState => {
+        if (readyState === undefined) {
+            return undefined;
+        }
+
+        const softwares: {
+            softwareName: string;
+            isReferent: boolean;
+            // Only defined if isReferent is true
+            isTechnicalExpert?: boolean;
+            isUser: boolean;
+            usecaseDescription: string;
+        }[] = [];
+
+        for (const declaration of readyState.declarations) {
+            let software = softwares.find(
+                software => software.softwareName === declaration.softwareName
+            );
+
+            if (software === undefined) {
+                software = {
+                    "softwareName": declaration.softwareName,
+                    "isReferent": false,
+                    "isUser": false,
+                    "usecaseDescription": ""
+                };
+
+                softwares.push(software);
+            }
+
+            switch (declaration.declarationType) {
+                case "referent":
+                    software.isReferent = true;
+                    software.isTechnicalExpert = declaration.isTechnicalExpert;
+                    break;
+                case "user":
+                    software.isUser = true;
+                    break;
+            }
+
+            software.usecaseDescription = declaration.usecaseDescription;
+        }
+
+        softwares.sort((a, b) => {
+            if (a.isReferent && !b.isReferent) {
+                return -1;
+            }
+            if (!a.isReferent && b.isReferent) {
+                return 1;
+            }
+            return 0;
+        });
+
+        softwares.sort((a, b) => {
+            if (
+                a.isReferent &&
+                b.isReferent &&
+                a.isTechnicalExpert &&
+                !b.isTechnicalExpert
+            ) {
+                return -1;
+            }
+            if (
+                a.isReferent &&
+                b.isReferent &&
+                !a.isTechnicalExpert &&
+                b.isTechnicalExpert
+            ) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return softwares;
+    });
+
+    return { profile, softwares };
 })();
