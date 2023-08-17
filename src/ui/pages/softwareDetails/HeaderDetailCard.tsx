@@ -1,7 +1,8 @@
 import { memo } from "react";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useLang } from "ui/i18n";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -175,9 +176,7 @@ export const HeaderDetailCard = memo((props: Props) => {
     );
 });
 
-const useStyles = makeStyles({
-    "name": { HeaderDetailCard }
-})(theme => ({
+const useStyles = tss.withName(symToStr({ HeaderDetailCard })).createUseStyles({
     "root": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,
@@ -229,11 +228,11 @@ const useStyles = makeStyles({
         "marginBottom": fr.spacing("1v")
     },
     "authors": {
-        "color": theme.decisions.text.mention.grey.default
+        "color": fr.colors.decisions.text.mention.grey.default
     },
     "authorLink": {
         "marginRight": fr.spacing("2v"),
-        "color": theme.decisions.text.actionHigh.blueFrance.default
+        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     },
     "externalLinkButtons": {
         "display": "flex",
@@ -244,9 +243,9 @@ const useStyles = makeStyles({
         "marginRight": fr.spacing("4v")
     },
     "dereferencedText": {
-        "color": theme.decisions.text.default.error.default
+        "color": fr.colors.decisions.text.default.error.default
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | "authors"

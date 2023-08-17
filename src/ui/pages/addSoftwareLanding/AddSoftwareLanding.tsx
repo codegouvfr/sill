@@ -1,4 +1,5 @@
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -97,7 +98,7 @@ export default function AddSoftwareLanding(props: Props) {
     );
 }
 
-const useStyles = makeStyles({ "name": { AddSoftwareLanding } })(theme => ({
+const useStyles = tss.withName(symToStr({ AddSoftwareLanding })).createUseStyles({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"
@@ -124,7 +125,7 @@ const useStyles = makeStyles({ "name": { AddSoftwareLanding } })(theme => ({
     "title": {
         "marginRight": fr.spacing("30v"),
         "&>span": {
-            color: theme.decisions.text.title.blueFrance.default
+            "color": fr.colors.decisions.text.title.blueFrance.default
         },
         [fr.breakpoints.down("md")]: {
             ...fr.spacing("margin", {
@@ -140,7 +141,7 @@ const useStyles = makeStyles({ "name": { AddSoftwareLanding } })(theme => ({
         }
     },
     "whoCanAddBackground": {
-        "backgroundColor": theme.decisions.background.alt.blueFrance.default
+        "backgroundColor": fr.colors.decisions.background.alt.blueFrance.default
     },
     "whoCanAddHeaderContainer": {
         "display": "flex",
@@ -165,7 +166,7 @@ const useStyles = makeStyles({ "name": { AddSoftwareLanding } })(theme => ({
     "accordionDescription": {
         "marginBottom": 0
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | {

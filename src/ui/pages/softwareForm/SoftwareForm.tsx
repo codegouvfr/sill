@@ -5,7 +5,8 @@ import { SoftwareFormStep1 } from "ui/pages/softwareForm/Step1";
 import { SoftwareFormStep2 } from "ui/pages/softwareForm/Step2";
 import { SoftwareFormStep3 } from "ui/pages/softwareForm/Step3";
 import { SoftwareFormStep4 } from "ui/pages/softwareForm/Step4";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
@@ -253,60 +254,61 @@ export default function SoftwareForm(props: Props) {
     );
 }
 
-const useStyles = makeStyles<{ step: number | undefined }>({
-    "name": { SoftwareForm }
-})((_theme, { step }) => ({
-    "step1": {
-        "display": step !== 1 ? "none" : undefined
-    },
-    "step2": {
-        "display": step !== 2 ? "none" : undefined
-    },
-    "step3": {
-        "display": step !== 3 ? "none" : undefined
-    },
-    "step4": {
-        "display": step !== 4 ? "none" : undefined
-    },
-    "breadcrumb": {
-        "marginBottom": fr.spacing("4v")
-    },
-    "headerDeclareUserOrReferent": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("10v")
-    },
-    "backButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
+const useStyles = tss
+    .withName(symToStr({ SoftwareForm }))
+    .withParams<{ step: number | undefined }>()
+    .createUseStyles(({ step }) => ({
+        "step1": {
+            "display": step !== 1 ? "none" : undefined
+        },
+        "step2": {
+            "display": step !== 2 ? "none" : undefined
+        },
+        "step3": {
+            "display": step !== 3 ? "none" : undefined
+        },
+        "step4": {
+            "display": step !== 4 ? "none" : undefined
+        },
+        "breadcrumb": {
+            "marginBottom": fr.spacing("4v")
+        },
+        "headerDeclareUserOrReferent": {
+            "display": "flex",
+            "alignItems": "center",
+            "marginBottom": fr.spacing("10v")
+        },
+        "backButton": {
+            "background": "none",
+            "marginRight": fr.spacing("4v"),
 
-        "&>i": {
-            "&::before": {
-                "--icon-size": fr.spacing("8v")
+            "&>i": {
+                "&::before": {
+                    "--icon-size": fr.spacing("8v")
+                }
             }
+        },
+        "title": {
+            "marginBottom": fr.spacing("1v")
+        },
+        "stepper": {
+            "flex": "1"
+        },
+        "footerContainer": {
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "end"
+        },
+        "softwareDetails": {
+            "marginRight": fr.spacing("4v"),
+            "&&::before": {
+                "--icon-size": fr.spacing("6v")
+            }
+        },
+        "progressSubmit": {
+            "marginLeft": fr.spacing("4v")
         }
-    },
-    "title": {
-        "marginBottom": fr.spacing("1v")
-    },
-    "stepper": {
-        "flex": "1"
-    },
-    "footerContainer": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end"
-    },
-    "softwareDetails": {
-        "marginRight": fr.spacing("4v"),
-        "&&::before": {
-            "--icon-size": fr.spacing("6v")
-        }
-    },
-    "progressSubmit": {
-        "marginLeft": fr.spacing("4v")
-    }
-}));
+    }));
 
 export const { i18n } = declareComponentKeys<
     | {

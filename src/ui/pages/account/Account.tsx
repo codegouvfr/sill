@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useTranslation, useGetOrganizationFullName, evtLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
@@ -339,9 +340,7 @@ function AccountReady(props: { className?: string }) {
     );
 }
 
-const useStyles = makeStyles({
-    "name": { Account }
-})(theme => ({
+const useStyles = tss.withName(symToStr({ Account })).createUseStyles({
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,
@@ -414,7 +413,7 @@ const useStyles = makeStyles({
         "left": 0,
         "width": "100%",
         "height": "100%",
-        "backgroundColor": theme.decisions.background.disabled.grey.default,
+        "backgroundColor": fr.colors.decisions.background.disabled.grey.default,
         "opacity": 0.8,
         "cursor": "not-allowed",
         "zIndex": 1000
@@ -423,7 +422,7 @@ const useStyles = makeStyles({
         "whiteSpace": "nowrap",
         "marginLeft": fr.spacing("4v")
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | "title"

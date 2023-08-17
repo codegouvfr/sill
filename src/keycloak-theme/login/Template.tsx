@@ -9,7 +9,8 @@ import type { TemplateProps } from "keycloakify/login/TemplateProps";
 import { usePrepareTemplate } from "keycloakify/lib/usePrepareTemplate";
 import type { KcContext } from "./kcContext";
 import type { I18n } from "./i18n";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import Header from "@codegouvfr/react-dsfr/Header";
 import { Alert } from "@codegouvfr/react-dsfr/Alert";
@@ -18,7 +19,7 @@ import { appLocationOrigin } from "keycloak-theme/login/valuesTransferredOverUrl
 import { useBreakpointsValues } from "@codegouvfr/react-dsfr/useBreakpointsValues";
 import { keyframes } from "tss-react";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
-import { Display, headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
+import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
     const {
@@ -278,17 +279,17 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
                     </div>
                 </div>
             </div>
-            <Display />
         </>
     );
 }
 
-const useStyles = makeStyles<{ contentWidth: number }>({
-    "name": { Template }
-})((_theme, { contentWidth }) => ({
-    "container": {
-        "marginTop": fr.spacing("10v"),
-        "animation": `${keyframes`
+const useStyles = tss
+    .withName(symToStr({ Template }))
+    .withParams<{ contentWidth: number }>()
+    .createUseStyles(({ contentWidth }) => ({
+        "container": {
+            "marginTop": fr.spacing("10v"),
+            "animation": `${keyframes`
             0% {
                 opacity: 0;
             }
@@ -296,21 +297,21 @@ const useStyles = makeStyles<{ contentWidth: number }>({
                 opacity: 1;
             }
             `} 400ms`
-    },
-    "centerCol": {
-        "display": "flex",
-        "flexDirection": "column",
-        "alignItems": "center"
-    },
-    "feedback": {
-        "marginBottom": fr.spacing("6v")
-    },
-    "kcContent": {
-        "width": "100%"
-    },
-    "contentWrapper": {
-        "maxWidth": `${contentWidth}px`,
-        "width": "100%",
-        "margin": "0 auto"
-    }
-}));
+        },
+        "centerCol": {
+            "display": "flex",
+            "flexDirection": "column",
+            "alignItems": "center"
+        },
+        "feedback": {
+            "marginBottom": fr.spacing("6v")
+        },
+        "kcContent": {
+            "width": "100%"
+        },
+        "contentWrapper": {
+            "maxWidth": `${contentWidth}px`,
+            "width": "100%",
+            "margin": "0 auto"
+        }
+    }));

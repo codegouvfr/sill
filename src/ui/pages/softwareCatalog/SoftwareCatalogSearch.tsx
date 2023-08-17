@@ -1,5 +1,6 @@
 import { useState, useId } from "react";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -321,64 +322,67 @@ export function SoftwareCatalogSearch(props: Props) {
 
 SoftwareCatalogSearch.displayName = "SoftwareCatalogSearch";
 
-const useStyles = makeStyles<{ filterWrapperMaxHeight: number }>({
-    "name": { SoftwareCatalogSearch }
-})((theme, { filterWrapperMaxHeight }) => ({
-    "root": {
-        "&:before": {
-            content: "none"
-        }
-    },
-    "basicSearch": {
-        "display": "flex",
-        "paddingTop": fr.spacing("6v")
-    },
-    "searchBar": {
-        "flex": 1
-    },
-    "filterButton": {
-        "backgroundColor": theme.decisions.background.actionLow.blueFrance.default,
-        "&&&:hover": {
-            "backgroundColor": theme.decisions.background.actionLow.blueFrance.hover
+const useStyles = tss
+    .withName(symToStr({ SoftwareCatalogSearch }))
+    .withParams<{ filterWrapperMaxHeight: number }>()
+    .createUseStyles(({ filterWrapperMaxHeight }) => ({
+        "root": {
+            "&:before": {
+                "content": "none"
+            }
         },
-        "color": theme.decisions.text.actionHigh.blueFrance.default,
-        "marginLeft": fr.spacing("4v")
-    },
-    "filtersWrapper": {
-        "transition": "max-height 0.2s ease-out",
-        "maxHeight": filterWrapperMaxHeight,
-        "overflow": "hidden",
-        "marginTop": fr.spacing("4v"),
-        "display": "grid",
-        "gridTemplateColumns": `repeat(4, minmax(20%, 1fr))`,
-        "columnGap": fr.spacing("4v"),
-        [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`
+        "basicSearch": {
+            "display": "flex",
+            "paddingTop": fr.spacing("6v")
         },
-        "paddingLeft": fr.spacing("1v")
-    },
-    "filterSelectGroup": {
-        "&:not(:last-of-type)": {
-            "borderRight": `1px ${theme.decisions.border.default.grey.default} solid`,
-            "paddingRight": fr.spacing("4v")
+        "searchBar": {
+            "flex": 1
         },
-        [fr.breakpoints.down("md")]: {
+        "filterButton": {
+            "backgroundColor":
+                fr.colors.decisions.background.actionLow.blueFrance.default,
+            "&&&:hover": {
+                "backgroundColor":
+                    fr.colors.decisions.background.actionLow.blueFrance.hover
+            },
+            "color": fr.colors.decisions.text.actionHigh.blueFrance.default,
+            "marginLeft": fr.spacing("4v")
+        },
+        "filtersWrapper": {
+            "transition": "max-height 0.2s ease-out",
+            "maxHeight": filterWrapperMaxHeight,
+            "overflow": "hidden",
+            "marginTop": fr.spacing("4v"),
+            "display": "grid",
+            "gridTemplateColumns": `repeat(4, minmax(20%, 1fr))`,
+            "columnGap": fr.spacing("4v"),
+            [fr.breakpoints.down("md")]: {
+                "gridTemplateColumns": `repeat(1, 1fr)`
+            },
+            "paddingLeft": fr.spacing("1v")
+        },
+        "filterSelectGroup": {
             "&:not(:last-of-type)": {
-                "border": "none"
+                "borderRight": `1px ${fr.colors.decisions.border.default.grey.default} solid`,
+                "paddingRight": fr.spacing("4v")
+            },
+            [fr.breakpoints.down("md")]: {
+                "&:not(:last-of-type)": {
+                    "border": "none"
+                }
+            }
+        },
+        "multiSelect": {
+            "marginTop": fr.spacing("2v"),
+            "paddingRight": 0,
+            "& > .MuiInputBase-input": {
+                "padding": 0
+            },
+            "& > .MuiSvgIcon-root": {
+                "display": "none"
             }
         }
-    },
-    "multiSelect": {
-        "marginTop": fr.spacing("2v"),
-        "paddingRight": 0,
-        "& > .MuiInputBase-input": {
-            "padding": 0
-        },
-        "& > .MuiSvgIcon-root": {
-            "display": "none"
-        }
-    }
-}));
+    }));
 
 export const { i18n } = declareComponentKeys<
     | "filters"

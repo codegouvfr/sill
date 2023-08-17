@@ -2,7 +2,8 @@ import { memo, ReactNode, useEffect, useRef, useState } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 
 export type Props = {
     className?: string;
@@ -52,24 +53,25 @@ export const ActionsFooter = memo((props: Props) => {
     );
 });
 
-const useStyles = makeStyles<{ isSticky: boolean }>({ "name": { ActionsFooter } })(
-    (theme, { isSticky }) => ({
+const useStyles = tss
+    .withName(symToStr({ ActionsFooter }))
+    .withParams<{ isSticky: boolean }>()
+    .createUseStyles(({ isSticky }) => ({
         "root": {
             "position": "sticky",
             "bottom": "0",
             "marginTop": fr.spacing("6v"),
             "boxShadow": `${
                 isSticky
-                    ? `0 -5px 5px -5px ${theme.decisions.background.overlap.grey.active}`
-                    : `0 0 5px -5px ${theme.decisions.background.overlap.grey.active}`
+                    ? `0 -5px 5px -5px ${fr.colors.decisions.background.overlap.grey.active}`
+                    : `0 0 5px -5px ${fr.colors.decisions.background.overlap.grey.active}`
             }`,
             "transition": "box-shadow 0.3s ease",
             ...fr.spacing("padding", {
                 "top": "4v",
                 "bottom": "6v"
             }),
-            "background": theme.decisions.background.default.grey.default,
+            "background": fr.colors.decisions.background.default.grey.default,
             "zIndex": 1
         }
-    })
-);
+    }));

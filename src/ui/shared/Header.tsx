@@ -6,7 +6,8 @@ import { useTranslation } from "ui/i18n";
 import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { contactEmail } from "ui/shared/contactEmail";
 import { LanguageSelector } from "./LanguageSelector";
 import { Language } from "../i18n";
@@ -165,17 +166,18 @@ export const Header = memo(
     })
 );
 
-const useStyles = makeStyles<{ isOnPageMyAccount: boolean }>({ "name": { Header } })(
-    (theme, { isOnPageMyAccount }) => ({
+const useStyles = tss
+    .withName(symToStr({ Header }))
+    .withParams<{ isOnPageMyAccount: boolean }>()
+    .createUseStyles(({ isOnPageMyAccount }) => ({
         "myAccountButton": {
             "&&": {
                 "backgroundColor": !isOnPageMyAccount
                     ? undefined
-                    : theme.decisions.background.default.grey.hover
+                    : fr.colors.decisions.background.default.grey.hover
             }
         }
-    })
-);
+    }));
 
 export const { i18n } = declareComponentKeys<
     | "home title"

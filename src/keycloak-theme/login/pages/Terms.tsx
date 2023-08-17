@@ -7,7 +7,8 @@ import {
 import tos_en_url from "../assets/tos_en.md";
 import tos_fr_url from "../assets/tos_fr.md";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import type { KcContext } from "../kcContext";
@@ -96,9 +97,7 @@ export default function Terms(
     );
 }
 
-const useStyles = makeStyles({
-    "name": { Terms }
-})({
+const useStyles = tss.withName(symToStr({ Terms })).createUseStyles({
     "formActions": {
         "display": "flex",
         "gap": fr.spacing("4v")

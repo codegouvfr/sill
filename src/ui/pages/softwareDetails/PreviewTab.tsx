@@ -2,7 +2,8 @@ import React from "react";
 import { declareComponentKeys } from "i18nifty";
 import { useLang, useTranslation } from "ui/i18n";
 import { fr } from "@codegouvfr/react-dsfr";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
@@ -263,9 +264,7 @@ export const PreviewTab = (props: Props) => {
     );
 };
 
-const useStyles = makeStyles({
-    "name": { PreviewTab }
-})(theme => ({
+const useStyles = tss.withName(symToStr({ PreviewTab })).createUseStyles({
     "tabContainer": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,
@@ -290,7 +289,7 @@ const useStyles = makeStyles({
         "alignItems": "center"
     },
     "prerogativeItemDetail": {
-        "color": theme.decisions.text.label.grey.default,
+        "color": fr.colors.decisions.text.label.grey.default,
         ...fr.spacing("margin", {
             "left": "3v",
             "right": "1v",
@@ -298,21 +297,21 @@ const useStyles = makeStyles({
         })
     },
     "prerogativeStatusSuccess": {
-        "color": theme.decisions.text.default.success.default
+        "color": fr.colors.decisions.text.default.success.default
     },
     "prerogativeStatusError": {
-        "color": theme.decisions.text.default.error.default
+        "color": fr.colors.decisions.text.default.error.default
     },
     "labelDetail": {
-        "color": theme.decisions.text.mention.grey.default
+        "color": fr.colors.decisions.text.mention.grey.default
     },
     "badgeVersion": {
         ...fr.spacing("margin", { rightLeft: "2v" })
     },
     "externalLink": {
-        "color": theme.decisions.text.actionHigh.blueFrance.default
+        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | "about"

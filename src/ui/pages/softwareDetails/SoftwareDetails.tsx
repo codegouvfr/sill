@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { selectors, useCoreState, useCoreFunctions } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";
@@ -275,9 +276,7 @@ export default function SoftwareDetails(props: Props) {
     );
 }
 
-const useStyles = makeStyles({
-    "name": { SoftwareDetails }
-})(theme => ({
+const useStyles = tss.withName(symToStr({ SoftwareDetails })).createUseStyles({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
     },
@@ -298,9 +297,9 @@ const useStyles = makeStyles({
         "gap": fr.spacing("4v")
     },
     "detailUsersAndReferents": {
-        "color": theme.decisions.text.actionHigh.blueFrance.default
+        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | "catalog breadcrumb"

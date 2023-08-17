@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { keyframes } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -30,7 +31,7 @@ export default function Home(props: Props) {
 
     assert<Equals<typeof rest, {}>>();
 
-    const { cx, classes, css, theme } = useStyles();
+    const { cx, classes, css } = useStyles();
     const { t } = useTranslation({ Home });
 
     const { stats } = useCoreState(selectors.generalStats.stats);
@@ -87,7 +88,7 @@ export default function Home(props: Props) {
                 <HomepageWaveSvg
                     className={css({
                         "& path": {
-                            "fill": theme.decisions.background.alt.blueFrance.default
+                            "fill": fr.colors.decisions.background.alt.blueFrance.default
                         }
                     })}
                 />
@@ -212,7 +213,7 @@ function AnimatedMetric(props: { className?: string; metricValue: number }) {
     );
 }
 
-const useStyles = makeStyles({ "name": { Home } })(theme => ({
+const useStyles = tss.withName(symToStr({ Home })).createUseStyles({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"
@@ -230,7 +231,7 @@ const useStyles = makeStyles({ "name": { Home } })(theme => ({
         }
     },
     "softwareSelectionBackground": {
-        "backgroundColor": theme.decisions.background.alt.blueFrance.default
+        "backgroundColor": fr.colors.decisions.background.alt.blueFrance.default
     },
     "softwareSelection": {
         "display": "grid",
@@ -242,7 +243,7 @@ const useStyles = makeStyles({ "name": { Home } })(theme => ({
         }
     },
     "sillNumbersBackground": {
-        "backgroundColor": theme.decisions.background.actionHigh.blueFrance.default
+        "backgroundColor": fr.colors.decisions.background.actionHigh.blueFrance.default
     },
     "sillNumbersContainer": {
         "textAlign": "center"
@@ -257,7 +258,7 @@ const useStyles = makeStyles({ "name": { Home } })(theme => ({
         }
     },
     "whiteText": {
-        "color": theme.decisions.text.inverted.grey.default
+        "color": fr.colors.decisions.text.inverted.grey.default
     },
     "SillNumberTitle": {
         "marginBottom": fr.spacing("20v")
@@ -266,7 +267,7 @@ const useStyles = makeStyles({ "name": { Home } })(theme => ({
         "marginBottom": fr.spacing("1v")
     },
     "helpUsBackground": {
-        "backgroundColor": theme.decisions.background.default.grey.hover
+        "backgroundColor": fr.colors.decisions.background.default.grey.hover
     },
     "helpUsCards": {
         "display": "grid",
@@ -277,7 +278,7 @@ const useStyles = makeStyles({ "name": { Home } })(theme => ({
             "rowGap": fr.spacing("4v")
         }
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | {
@@ -324,7 +325,7 @@ const { HeroSection } = (() => {
     function HeroSection(props: Props) {
         const { className } = props;
 
-        const { cx, classes, theme } = useStyles();
+        const { cx, classes } = useStyles();
 
         const { t } = useTranslation({ Home });
 
@@ -333,7 +334,8 @@ const { HeroSection } = (() => {
                 <div className={classes.titleWrapper}>
                     <h2 className={classes.title}>
                         {t("title", {
-                            "accentColor": theme.decisions.text.title.blueFrance.default
+                            "accentColor":
+                                fr.colors.decisions.text.title.blueFrance.default
                         })}
                     </h2>
                 </div>
@@ -346,7 +348,7 @@ const { HeroSection } = (() => {
         );
     }
 
-    const useStyles = makeStyles({ "name": { HeroSection } })({
+    const useStyles = tss.withName(symToStr({ HeroSection })).createUseStyles({
         "root": {
             "display": "flex",
             [fr.breakpoints.down("md")]: {
@@ -391,9 +393,7 @@ const { WhatIsTheSillSection } = (() => {
 
         const [isVisible, setIsVisible] = useState(false);
 
-        const { cx, classes, theme } = useStyles({
-            isVisible
-        });
+        const { cx, classes } = useStyles({ isVisible });
 
         const { t } = useTranslation({ Home });
 
@@ -403,22 +403,23 @@ const { WhatIsTheSillSection } = (() => {
                 <h2>{t("the sill in a few words")}</h2>
                 <p className={classes.paragraph}>
                     {t("the sill in a few words paragraph", {
-                        "accentColor": theme.decisions.text.title.blueFrance.default
+                        "accentColor": fr.colors.decisions.text.title.blueFrance.default
                     })}
                 </p>
             </section>
         );
     }
 
-    const useStyles = makeStyles<{ isVisible: boolean }>({
-        "name": { WhatIsTheSillSection }
-    })((_theme, { isVisible }) => ({
-        "root": {
-            "textAlign": "center",
-            "opacity": isVisible ? undefined : 0,
-            "animation": !isVisible
-                ? undefined
-                : `${keyframes`
+    const useStyles = tss
+        .withName(symToStr({ WhatIsTheSillSection }))
+        .withParams<{ isVisible: boolean }>()
+        .createUseStyles(({ isVisible }) => ({
+            "root": {
+                "textAlign": "center",
+                "opacity": isVisible ? undefined : 0,
+                "animation": !isVisible
+                    ? undefined
+                    : `${keyframes`
         0% {
             opacity: 0;
         }
@@ -426,12 +427,12 @@ const { WhatIsTheSillSection } = (() => {
             opacity: 1;
         }
         `} 1000ms`
-        },
-        "paragraph": {
-            "maxWidth": 700,
-            "margin": "auto"
-        }
-    }));
+            },
+            "paragraph": {
+                "maxWidth": 700,
+                "margin": "auto"
+            }
+        }));
 
     return { WhatIsTheSillSection };
 })();

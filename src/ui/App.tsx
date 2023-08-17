@@ -1,5 +1,6 @@
 import { Suspense } from "react";
-import { makeStyles, useStyles as useCss } from "tss-react/dsfr";
+import { tss, useStyles as useCss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { useRoute } from "ui/routes";
 import { Header } from "ui/shared/Header";
 import { Footer } from "ui/shared/Footer";
@@ -144,22 +145,23 @@ function ContextualizedApp() {
     );
 }
 
-const useStyles = makeStyles<{ headerHeight: number }>({
-    "name": { App }
-})((_theme, { headerHeight }) => ({
-    "root": {
-        "height": "100vh",
-        "display": "flex",
-        "flexDirection": "column"
-    },
-    "main": {
-        "flex": 1,
-        [`& .${loadingFallbackClassName}`]: {
-            "height": `calc(100vh - ${headerHeight}px)`
-        }
-    },
-    "page": {
-        "animation": `${keyframes`
+const useStyles = tss
+    .withName(symToStr({ App }))
+    .withParams<{ headerHeight: number }>()
+    .createUseStyles(({ headerHeight }) => ({
+        "root": {
+            "height": "100vh",
+            "display": "flex",
+            "flexDirection": "column"
+        },
+        "main": {
+            "flex": 1,
+            [`& .${loadingFallbackClassName}`]: {
+                "height": `calc(100vh - ${headerHeight}px)`
+            }
+        },
+        "page": {
+            "animation": `${keyframes`
             0% {
                 opacity: 0;
             }
@@ -167,8 +169,8 @@ const useStyles = makeStyles<{ headerHeight: number }>({
                 opacity: 1;
             }
             `} 400ms`
-    }
-}));
+        }
+    }));
 
 /**
  * "App" key is used for common translation keys

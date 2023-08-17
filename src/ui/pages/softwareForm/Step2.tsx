@@ -188,7 +188,7 @@ export function SoftwareFormStep2(props: Step2Props) {
         return { isAutocompleteInProgress };
     })();
 
-    const { css, theme } = useStyles();
+    const { css } = useStyles();
 
     return (
         <form
@@ -305,7 +305,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                         alt={t("logo preview alt")}
                         style={{
                             "marginLeft": fr.spacing("4v"),
-                            "border": `1px dotted ${theme.decisions.border.default.grey.default}`,
+                            "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,
                             "width": 100,
                             "height": 100,
                             "objectFit": "cover",

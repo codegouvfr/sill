@@ -11,7 +11,8 @@ import { Evt } from "evt";
 import { DeclarationFormStep1 } from "ui/pages/declarationForm/Step1";
 import { DeclarationFormStep2User } from "ui/pages/declarationForm/Step2User";
 import { DeclarationFormStep2Referent } from "ui/pages/declarationForm/Step2Referent";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { fr } from "@codegouvfr/react-dsfr";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
@@ -269,102 +270,105 @@ export default function DeclarationForm(props: Props) {
     );
 }
 
-const useStyles = makeStyles<{
-    step: 1 | 2 | undefined;
-    declarationType: "user" | "referent" | undefined;
-}>({ "name": { DeclarationForm } })((theme, { step, declarationType }) => ({
-    "step1": {
-        "display": step !== 1 ? "none" : undefined
-    },
-    "step2User": {
-        "display": step !== 2 || declarationType !== "user" ? "none" : undefined
-    },
-    "step2Referent": {
-        "display": step !== 2 || declarationType !== "referent" ? "none" : undefined
-    },
-    "breadcrumb": {
-        "marginBottom": fr.spacing("4v")
-    },
-    "headerDeclareUserOrReferent": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("10v")
-    },
-    "backButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
+const useStyles = tss
+    .withName(symToStr({ DeclarationForm }))
+    .withParams<{
+        step: 1 | 2 | undefined;
+        declarationType: "user" | "referent" | undefined;
+    }>()
+    .createUseStyles(({ step, declarationType }) => ({
+        "step1": {
+            "display": step !== 1 ? "none" : undefined
+        },
+        "step2User": {
+            "display": step !== 2 || declarationType !== "user" ? "none" : undefined
+        },
+        "step2Referent": {
+            "display": step !== 2 || declarationType !== "referent" ? "none" : undefined
+        },
+        "breadcrumb": {
+            "marginBottom": fr.spacing("4v")
+        },
+        "headerDeclareUserOrReferent": {
+            "display": "flex",
+            "alignItems": "center",
+            "marginBottom": fr.spacing("10v")
+        },
+        "backButton": {
+            "background": "none",
+            "marginRight": fr.spacing("4v"),
 
-        "&>i": {
-            "&::before": {
-                "--icon-size": fr.spacing("8v")
+            "&>i": {
+                "&::before": {
+                    "--icon-size": fr.spacing("8v")
+                }
             }
-        }
-    },
-    "title": {
-        "marginBottom": fr.spacing("1v")
-    },
-    "formContainer": {
-        "display": "grid",
-        "gridTemplateColumns": `repeat(2, 1fr)`,
+        },
+        "title": {
+            "marginBottom": fr.spacing("1v")
+        },
+        "formContainer": {
+            "display": "grid",
+            "gridTemplateColumns": `repeat(2, 1fr)`,
 
-        [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`
-        }
-    },
-    "leftCol": {
-        "marginLeft": fr.spacing("12v"),
-        "paddingRight": fr.spacing("16v"),
-        "borderRight": `1px ${theme.decisions.border.default.grey.default} solid`,
+            [fr.breakpoints.down("md")]: {
+                "gridTemplateColumns": `repeat(1, 1fr)`
+            }
+        },
+        "leftCol": {
+            "marginLeft": fr.spacing("12v"),
+            "paddingRight": fr.spacing("16v"),
+            "borderRight": `1px ${fr.colors.decisions.border.default.grey.default} solid`,
 
-        [fr.breakpoints.down("md")]: {
-            "borderRight": "none",
-            "marginLeft": "0",
-            "paddingRight": "0"
+            [fr.breakpoints.down("md")]: {
+                "borderRight": "none",
+                "marginLeft": "0",
+                "paddingRight": "0"
+            }
+        },
+        "softwareNameContainer": {
+            "display": "flex",
+            "alignItems": "center",
+            "marginBottom": fr.spacing("3v")
+        },
+        "logoWrapper": {
+            "width": fr.spacing("14v"),
+            "height": fr.spacing("14v"),
+            "marginRight": fr.spacing("3v"),
+            "overflow": "hidden"
+        },
+        "logo": {
+            "height": "100%"
+        },
+        "softwareName": {
+            "marginBottom": 0
+        },
+        "detailUserAndReferent": {
+            "color": fr.colors.decisions.text.actionHigh.blueFrance.default
+        },
+        "rightCol": {
+            "marginLeft": fr.spacing("6v"),
+            "paddingLeft": fr.spacing("10v"),
+            [fr.breakpoints.down("md")]: {
+                "marginLeft": "0",
+                "paddingLeft": "0"
+            }
+        },
+        "stepper": {
+            "flex": "1"
+        },
+        "buttons": {
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "end"
+        },
+        "back": {
+            "marginRight": fr.spacing("4v")
+        },
+        "progressSubmit": {
+            "marginLeft": fr.spacing("4v")
         }
-    },
-    "softwareNameContainer": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("3v")
-    },
-    "logoWrapper": {
-        "width": fr.spacing("14v"),
-        "height": fr.spacing("14v"),
-        "marginRight": fr.spacing("3v"),
-        "overflow": "hidden"
-    },
-    "logo": {
-        "height": "100%"
-    },
-    "softwareName": {
-        "marginBottom": 0
-    },
-    "detailUserAndReferent": {
-        color: theme.decisions.text.actionHigh.blueFrance.default
-    },
-    "rightCol": {
-        "marginLeft": fr.spacing("6v"),
-        "paddingLeft": fr.spacing("10v"),
-        [fr.breakpoints.down("md")]: {
-            "marginLeft": "0",
-            "paddingLeft": "0"
-        }
-    },
-    "stepper": {
-        "flex": "1"
-    },
-    "buttons": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end"
-    },
-    "back": {
-        "marginRight": fr.spacing("4v")
-    },
-    "progressSubmit": {
-        "marginLeft": fr.spacing("4v")
-    }
-}));
+    }));
 
 export const { i18n } = declareComponentKeys<
     | "catalog breadcrumb"

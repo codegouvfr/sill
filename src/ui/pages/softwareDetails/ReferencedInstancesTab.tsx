@@ -1,7 +1,8 @@
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";
 import { fr } from "@codegouvfr/react-dsfr";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Accordion } from "@codegouvfr/react-dsfr/Accordion";
@@ -99,9 +100,7 @@ export const ReferencedInstancesTab = (props: Props) => {
     );
 };
 
-const useStyles = makeStyles({
-    "name": { ReferencedInstancesTab }
-})(theme => ({
+const useStyles = tss.withName(symToStr({ ReferencedInstancesTab })).createUseStyles({
     "accordionGrid": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,
@@ -118,10 +117,10 @@ const useStyles = makeStyles({
     },
     "name": {
         "marginBottom": fr.spacing("3v"),
-        "color": theme.decisions.text.title.grey.default
+        "color": fr.colors.decisions.text.title.grey.default
     },
     "concernedPublic": {
-        "color": theme.decisions.text.mention.grey.default,
+        "color": fr.colors.decisions.text.mention.grey.default,
         "marginBottom": fr.spacing("2v")
     },
     "description": {
@@ -131,7 +130,7 @@ const useStyles = makeStyles({
         "display": "flex",
         "justifyContent": "flex-end"
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<
     | {

@@ -6,7 +6,8 @@ import { declareComponentKeys } from "i18nifty";
 import { useCoreFunctions, useCoreState, selectors } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
@@ -181,7 +182,7 @@ export const { i18n } = declareComponentKeys<
       }
 >()({ UserProfile });
 
-const useStyles = makeStyles({ "name": { UserProfile } })(_ => ({
+const useStyles = tss.withName(symToStr({ UserProfile })).createUseStyles({
     "header": {
         "display": "flex",
         "alignItems": "center",
@@ -193,7 +194,6 @@ const useStyles = makeStyles({ "name": { UserProfile } })(_ => ({
     "headerBackButton": {
         "background": "none",
         "marginRight": fr.spacing("4v"),
-
         "&>i": {
             "&::before": {
                 "--icon-size": fr.spacing("8v")
@@ -214,4 +214,4 @@ const useStyles = makeStyles({ "name": { UserProfile } })(_ => ({
     "usecaseDescription": {
         "marginTop": fr.spacing("4v")
     }
-}));
+});

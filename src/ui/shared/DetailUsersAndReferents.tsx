@@ -2,7 +2,8 @@ import { declareComponentKeys } from "i18nifty";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { Link } from "type-route";
 import { useTranslation } from "ui/i18n";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 
@@ -20,7 +21,7 @@ export function DetailUsersAndReferents(props: Props) {
     assert<Equals<typeof rest, {}>>();
 
     const { t } = useTranslation({ DetailUsersAndReferents });
-    const { classes, cx, theme } = useStyles();
+    const { classes, cx } = useStyles();
 
     return (
         <a
@@ -35,7 +36,7 @@ export function DetailUsersAndReferents(props: Props) {
                     "referentColor":
                         referentCount !== 0
                             ? undefined
-                            : theme.decisions.text.default.error.default
+                            : fr.colors.decisions.text.default.error.default
                 })}
             </span>
             <i className={cx(fr.cx("fr-icon-arrow-right-s-line"))} />
@@ -43,9 +44,7 @@ export function DetailUsersAndReferents(props: Props) {
     );
 }
 
-const useStyles = makeStyles({
-    "name": { DetailUsersAndReferents }
-})(() => ({
+const useStyles = tss.withName(symToStr({ DetailUsersAndReferents })).createUseStyles({
     "root": {
         "display": "flex",
         "alignItems": "center",
@@ -54,7 +53,7 @@ const useStyles = makeStyles({
     "detailsUsersIcon": {
         "marginRight": fr.spacing("2v")
     }
-}));
+});
 
 export const { i18n } = declareComponentKeys<{
     K: "userAndReferentCount";

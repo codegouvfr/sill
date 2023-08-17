@@ -3,7 +3,8 @@ import { routes, session } from "ui/routes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { InstanceFormStep1 } from "ui/pages/instanceForm/Step1";
 import { InstanceFormStep2 } from "ui/pages/instanceForm/Step2";
-import { makeStyles } from "tss-react/dsfr";
+import { tss } from "tss-react/dsfr";
+import { symToStr } from "tsafe/symToStr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
@@ -211,63 +212,63 @@ export default function InstanceForm(props: Props) {
     );
 }
 
-const useStyles = makeStyles<{ step: number | undefined }>({
-    "name": { InstanceForm }
-})((_theme, { step }) => ({
-    "step": {
-        "flexDirection": "column",
-        "gap": fr.spacing("8v")
-    },
-    "step1": {
-        "display": step !== 1 ? "none" : "flex"
-    },
-    "step2": {
-        "display": step !== 2 ? "none" : "flex",
-        "& .fr-input-group, & .fr-fieldset": {
-            ...fr.spacing("margin", {
-                "topBottom": 0
-            })
-        }
-    },
-    "breadcrumb": {
-        "marginBottom": fr.spacing("4v")
-    },
-    "headerDeclareUserOrReferent": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("10v")
-    },
-    "backButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
-
-        "&>i": {
-            "&::before": {
-                "--icon-size": fr.spacing("8v")
+const useStyles = tss
+    .withName(symToStr({ InstanceForm }))
+    .withParams<{ step: number | undefined }>()
+    .createUseStyles(({ step }) => ({
+        "step": {
+            "flexDirection": "column",
+            "gap": fr.spacing("8v")
+        },
+        "step1": {
+            "display": step !== 1 ? "none" : "flex"
+        },
+        "step2": {
+            "display": step !== 2 ? "none" : "flex",
+            "& .fr-input-group, & .fr-fieldset": {
+                ...fr.spacing("margin", {
+                    "topBottom": 0
+                })
             }
+        },
+        "breadcrumb": {
+            "marginBottom": fr.spacing("4v")
+        },
+        "headerDeclareUserOrReferent": {
+            "display": "flex",
+            "alignItems": "center",
+            "marginBottom": fr.spacing("10v")
+        },
+        "backButton": {
+            "background": "none",
+            "marginRight": fr.spacing("4v"),
+            "&>i": {
+                "&::before": {
+                    "--icon-size": fr.spacing("8v")
+                }
+            }
+        },
+        "title": {
+            "marginBottom": fr.spacing("1v")
+        },
+        "stepper": {
+            "flex": "1"
+        },
+        "footerContainer": {
+            "display": "flex",
+            "alignItems": "center",
+            "justifyContent": "end"
+        },
+        "softwareDetails": {
+            "marginRight": fr.spacing("4v"),
+            "&&::before": {
+                "--icon-size": fr.spacing("6v")
+            }
+        },
+        "progressSubmit": {
+            "marginLeft": fr.spacing("4v")
         }
-    },
-    "title": {
-        "marginBottom": fr.spacing("1v")
-    },
-    "stepper": {
-        "flex": "1"
-    },
-    "footerContainer": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end"
-    },
-    "softwareDetails": {
-        "marginRight": fr.spacing("4v"),
-        "&&::before": {
-            "--icon-size": fr.spacing("6v")
-        }
-    },
-    "progressSubmit": {
-        "marginLeft": fr.spacing("4v")
-    }
-}));
+    }));
 
 export const { i18n } = declareComponentKeys<
     | "breadcrumb add instance"
