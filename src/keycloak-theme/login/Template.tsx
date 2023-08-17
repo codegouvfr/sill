@@ -10,7 +10,6 @@ import { usePrepareTemplate } from "keycloakify/lib/usePrepareTemplate";
 import type { KcContext } from "./kcContext";
 import type { I18n } from "./i18n";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import Header from "@codegouvfr/react-dsfr/Header";
 import { Alert } from "@codegouvfr/react-dsfr/Alert";

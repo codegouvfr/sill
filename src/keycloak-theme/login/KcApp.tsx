@@ -1,7 +1,6 @@
 import { lazy, Suspense, useEffect } from "react";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
-import { symToStr } from "tsafe/symToStr";
 import Fallback, { type PageProps } from "keycloakify/login";
 import type { KcContext } from "./kcContext";
 import { useI18n } from "./i18n";
