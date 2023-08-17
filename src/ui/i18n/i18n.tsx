@@ -982,15 +982,17 @@ const {
                             })();
                         case 2:
                             return `Information${
-                                softwareName === undefined ? "" : ` about ${softwareName}`
+                                softwareName === undefined
+                                    ? ""
+                                    : ` à propos de ${softwareName}`
                             }`;
                         case 3:
-                            return `Prerequisites${
-                                softwareName === undefined ? "" : ` of ${softwareName}`
+                            return `Pré-requis${
+                                softwareName === undefined ? "" : ` pour ${softwareName}`
                             }`;
                         case 4:
-                            return `Similar and equivalent software${
-                                softwareName === undefined ? "" : ` of ${softwareName}`
+                            return `Logiciels similaires ou équivalents${
+                                softwareName === undefined ? "" : ` à ${softwareName}`
                             }`;
                         default:
                             return "";
