@@ -76,7 +76,7 @@ export default function KcApp(props: { kcContext: KcContext }) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ KcApp })).createUseStyles({
+const useStyles = tss.withName({ KcApp }).createUseStyles({
     "kcHtmlClass": {
         "fontSize": "unset",
         "& label": {

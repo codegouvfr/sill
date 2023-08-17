@@ -1,5 +1,4 @@
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -98,7 +97,7 @@ export default function AddSoftwareLanding(props: Props) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ AddSoftwareLanding })).createUseStyles({
+const useStyles = tss.withName({ AddSoftwareLanding }).createUseStyles({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"

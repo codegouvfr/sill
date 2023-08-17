@@ -12,7 +12,6 @@ import { DeclarationFormStep1 } from "ui/pages/declarationForm/Step1";
 import { DeclarationFormStep2User } from "ui/pages/declarationForm/Step2User";
 import { DeclarationFormStep2Referent } from "ui/pages/declarationForm/Step2Referent";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { fr } from "@codegouvfr/react-dsfr";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
@@ -271,7 +270,7 @@ export default function DeclarationForm(props: Props) {
 }
 
 const useStyles = tss
-    .withName(symToStr({ DeclarationForm }))
+    .withName({ DeclarationForm })
     .withParams<{
         step: 1 | 2 | undefined;
         declarationType: "user" | "referent" | undefined;

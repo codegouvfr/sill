@@ -4,7 +4,6 @@ import { useCoreFunctions, useCoreState, selectors } from "core";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { useLang } from "ui/i18n";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
 
@@ -43,7 +42,7 @@ export const { i18n } = declareComponentKeys<"no terms">()({
     Terms
 });
 
-export const useStyles = tss.withName(symToStr({ Terms })).createUseStyles({
+export const useStyles = tss.withName({ Terms }).createUseStyles({
     "root": {
         "display": "flex",
         "justifyContent": "center"

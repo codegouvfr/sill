@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { tss, useStyles as useCss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { useRoute } from "ui/routes";
 import { Header } from "ui/shared/Header";
 import { Footer } from "ui/shared/Footer";
@@ -146,7 +145,7 @@ function ContextualizedApp() {
 }
 
 const useStyles = tss
-    .withName(symToStr({ App }))
+    .withName({ App })
     .withParams<{ headerHeight: number }>()
     .createUseStyles(({ headerHeight }) => ({
         "root": {

@@ -1,7 +1,6 @@
 import { memo } from "react";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { type Language, languages } from "ui/i18n";
 
 type Props = {
@@ -65,9 +64,9 @@ export const LanguageSelector = memo((props: Props) => {
     );
 });
 
-const useStyles = tss.withName(symToStr({ LanguageSelector })).createUseStyles({
+const useStyles = tss.withName({ LanguageSelector }).createUseStyles({
     "root": {
-        display: "inline-flex"
+        "display": "inline-flex"
     },
     "menuLanguage": {
         "right": 0

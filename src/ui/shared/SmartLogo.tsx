@@ -3,7 +3,6 @@ import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr/fr";
 
 type Props = {
@@ -41,7 +40,7 @@ export function SmartLogo(props: Props) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ SmartLogo })).createUseStyles({
+const useStyles = tss.withName({ SmartLogo }).createUseStyles({
     "logo": {
         "marginLeft": fr.spacing("4v"),
         "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,

@@ -284,7 +284,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 }
 
 const useStyles = tss
-    .withName(symToStr({ Template }))
+    .withName({ Template })
     .withParams<{ contentWidth: number }>()
     .createUseStyles(({ contentWidth }) => ({
         "container": {

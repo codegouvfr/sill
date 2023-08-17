@@ -1,6 +1,5 @@
 import { useState, useId } from "react";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -323,7 +322,7 @@ export function SoftwareCatalogSearch(props: Props) {
 SoftwareCatalogSearch.displayName = "SoftwareCatalogSearch";
 
 const useStyles = tss
-    .withName(symToStr({ SoftwareCatalogSearch }))
+    .withName({ SoftwareCatalogSearch })
     .withParams<{ filterWrapperMaxHeight: number }>()
     .createUseStyles(({ filterWrapperMaxHeight }) => ({
         "root": {

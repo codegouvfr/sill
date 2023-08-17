@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { useCoreFunctions, useCoreState, selectors } from "core";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
 import { useLang } from "ui/i18n";
@@ -41,7 +40,7 @@ export default function Readme(props: Props) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ Readme })).createUseStyles({
+const useStyles = tss.withName({ Readme }).createUseStyles({
     "root": {
         "display": "flex",
         "justifyContent": "center"

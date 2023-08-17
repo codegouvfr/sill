@@ -2,7 +2,6 @@ import { useState } from "react";
 import { UserProfileFormFields } from "./shared/UserProfileFormFields";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
-import { symToStr } from "tsafe/symToStr";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import type { KcContext } from "../kcContext";
@@ -75,7 +74,7 @@ export default function RegisterUserProfile(
     );
 }
 
-const useStyles = tss.withName(symToStr({ RegisterUserProfile })).createUseStyles({
+const useStyles = tss.withName({ RegisterUserProfile }).createUseStyles({
     "centerCol": {
         "display": "flex",
         "flexDirection": "column",

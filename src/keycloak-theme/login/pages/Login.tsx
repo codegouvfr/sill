@@ -246,7 +246,7 @@ export default function Login(
     );
 }
 
-const useStyles = tss.withName(symToStr({ Login })).createUseStyles({
+const useStyles = tss.withName({ Login }).createUseStyles({
     "centerCol": {
         "display": "flex",
         "flexDirection": "column",

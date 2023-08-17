@@ -4,7 +4,6 @@ import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { useFromNow } from "ui/useMoment";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -216,7 +215,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
 });
 
 const useStyles = tss
-    .withName(symToStr({ SoftwareCatalogCard }))
+    .withName({ SoftwareCatalogCard })
     .withParams<{ isSearchHighlighted: boolean }>()
     .createUseStyles(({ isSearchHighlighted }) => ({
         "root": {

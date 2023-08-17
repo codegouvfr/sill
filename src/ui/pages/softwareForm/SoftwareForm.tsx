@@ -6,7 +6,6 @@ import { SoftwareFormStep2 } from "ui/pages/softwareForm/Step2";
 import { SoftwareFormStep3 } from "ui/pages/softwareForm/Step3";
 import { SoftwareFormStep4 } from "ui/pages/softwareForm/Step4";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
@@ -255,7 +254,7 @@ export default function SoftwareForm(props: Props) {
 }
 
 const useStyles = tss
-    .withName(symToStr({ SoftwareForm }))
+    .withName({ SoftwareForm })
     .withParams<{ step: number | undefined }>()
     .createUseStyles(({ step }) => ({
         "step1": {

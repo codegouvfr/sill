@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useTranslation, useGetOrganizationFullName, evtLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
@@ -340,7 +339,7 @@ function AccountReady(props: { className?: string }) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ Account })).createUseStyles({
+const useStyles = tss.withName({ Account }).createUseStyles({
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,

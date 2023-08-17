@@ -7,7 +7,6 @@ import { useCoreFunctions, useCoreState, selectors } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
@@ -182,7 +181,7 @@ export const { i18n } = declareComponentKeys<
       }
 >()({ UserProfile });
 
-const useStyles = tss.withName(symToStr({ UserProfile })).createUseStyles({
+const useStyles = tss.withName({ UserProfile }).createUseStyles({
     "header": {
         "display": "flex",
         "alignItems": "center",

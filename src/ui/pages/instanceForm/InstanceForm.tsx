@@ -4,7 +4,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { InstanceFormStep1 } from "ui/pages/instanceForm/Step1";
 import { InstanceFormStep2 } from "ui/pages/instanceForm/Step2";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
@@ -213,7 +212,7 @@ export default function InstanceForm(props: Props) {
 }
 
 const useStyles = tss
-    .withName(symToStr({ InstanceForm }))
+    .withName({ InstanceForm })
     .withParams<{ step: number | undefined }>()
     .createUseStyles(({ step }) => ({
         "step": {

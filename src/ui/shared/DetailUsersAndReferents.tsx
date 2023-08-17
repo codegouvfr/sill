@@ -3,7 +3,6 @@ import { fr } from "@codegouvfr/react-dsfr";
 import type { Link } from "type-route";
 import { useTranslation } from "ui/i18n";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 
@@ -44,7 +43,7 @@ export function DetailUsersAndReferents(props: Props) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ DetailUsersAndReferents })).createUseStyles({
+const useStyles = tss.withName({ DetailUsersAndReferents }).createUseStyles({
     "root": {
         "display": "flex",
         "alignItems": "center",

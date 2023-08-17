@@ -3,7 +3,6 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 
 export type Props = {
     className?: string;
@@ -54,7 +53,7 @@ export const ActionsFooter = memo((props: Props) => {
 });
 
 const useStyles = tss
-    .withName(symToStr({ ActionsFooter }))
+    .withName({ ActionsFooter })
     .withParams<{ isSticky: boolean }>()
     .createUseStyles(({ isSticky }) => ({
         "root": {

@@ -7,7 +7,6 @@ import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { contactEmail } from "ui/shared/contactEmail";
 import { LanguageSelector } from "./LanguageSelector";
 import { Language } from "../i18n";
@@ -167,7 +166,7 @@ export const Header = memo(
 );
 
 const useStyles = tss
-    .withName(symToStr({ Header }))
+    .withName({ Header })
     .withParams<{ isOnPageMyAccount: boolean }>()
     .createUseStyles(({ isOnPageMyAccount }) => ({
         "myAccountButton": {

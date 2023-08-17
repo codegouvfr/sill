@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { keyframes } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -213,7 +212,7 @@ function AnimatedMetric(props: { className?: string; metricValue: number }) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ Home })).createUseStyles({
+const useStyles = tss.withName({ Home }).createUseStyles({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"
@@ -348,7 +347,7 @@ const { HeroSection } = (() => {
         );
     }
 
-    const useStyles = tss.withName(symToStr({ HeroSection })).createUseStyles({
+    const useStyles = tss.withName({ HeroSection }).createUseStyles({
         "root": {
             "display": "flex",
             [fr.breakpoints.down("md")]: {
@@ -411,7 +410,7 @@ const { WhatIsTheSillSection } = (() => {
     }
 
     const useStyles = tss
-        .withName(symToStr({ WhatIsTheSillSection }))
+        .withName({ WhatIsTheSillSection })
         .withParams<{ isVisible: boolean }>()
         .createUseStyles(({ isVisible }) => ({
             "root": {

@@ -50,7 +50,7 @@
         "run-exclusive": "^2.2.19",
         "superjson": "^1.12.2",
         "tsafe": "^1.6.4",
-        "tss-react": "4.9.0-rc.3",
+        "tss-react": "4.9.0-rc.4",
         "type-route": "^1.0.1",
         "zod": "^3.21.4"
     },

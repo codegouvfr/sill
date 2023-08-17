@@ -3,7 +3,6 @@ import { declareComponentKeys } from "i18nifty";
 import { useLang, useTranslation } from "ui/i18n";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
@@ -264,7 +263,7 @@ export const PreviewTab = (props: Props) => {
     );
 };
 
-const useStyles = tss.withName(symToStr({ PreviewTab })).createUseStyles({
+const useStyles = tss.withName({ PreviewTab }).createUseStyles({
     "tabContainer": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,

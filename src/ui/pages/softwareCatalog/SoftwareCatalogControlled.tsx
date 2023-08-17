@@ -1,6 +1,5 @@
 import { useRef, useLayoutEffect, useMemo } from "react";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import type { State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -297,7 +296,7 @@ function RowVirtualizerDynamicWindow(
     );
 }
 
-const useStyles = tss.withName(symToStr({ SoftwareCatalogControlled })).createUseStyles({
+const useStyles = tss.withName({ SoftwareCatalogControlled }).createUseStyles({
     "root": {
         "paddingBottom": fr.spacing("30v"),
         [fr.breakpoints.down("md")]: {

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { selectors, useCoreState, useCoreFunctions } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react/dsfr";
-import { symToStr } from "tsafe/symToStr";
 import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useGetOrganizationFullName } from "ui/i18n";
@@ -299,7 +298,7 @@ export default function SoftwareUserAndReferent(props: Props) {
     );
 }
 
-const useStyles = tss.withName(symToStr({ SoftwareUserAndReferent })).createUseStyles({
+const useStyles = tss.withName({ SoftwareUserAndReferent }).createUseStyles({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
     },
