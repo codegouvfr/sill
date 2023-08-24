@@ -90,8 +90,6 @@ export default function SoftwareForm(props: Props) {
 
     assert(step !== undefined);
 
-    console.log("===>", formData);
-
     return (
         <div className={className}>
             <div className={fr.cx("fr-container")}>
