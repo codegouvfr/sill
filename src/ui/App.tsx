@@ -46,13 +46,6 @@ const { CoreProvider } = createCoreProvider({
 export default function App() {
     const { css } = useCss();
 
-    if (window.location.host === "sill.etalab.gouv.fr") {
-        const newUrl = new URL(window.location.href);
-        newUrl.host = "sill.code.gouv.fr";
-        window.location.href = newUrl.href;
-        return null;
-    }
-
     return (
         <CoreProvider
             fallback={<LoadingFallback className={css({ "height": "100vh" })} />}

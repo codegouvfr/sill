@@ -256,7 +256,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 "wikidataPageExampleUrl":
                                     "https://www.wikidata.org/wiki/Q107693197",
                                 "softwareSillUrl":
-                                    "https://sill.code.gouv.fr/detail?name=Keycloakify",
+                                    "https://code.gouv.fr/sill/detail?name=Keycloakify",
                                 "exampleSoftwareName": "Keycloakify"
                             }),
                             "nativeInputProps": {

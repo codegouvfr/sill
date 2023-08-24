@@ -1,5 +1,5 @@
 <p align="center">
-    <i><a href="https://sill.code.gouv.fr">sill.code.gouv.fr</a> frontend</i>
+    <i><a href="https://code.gouv.fr/sill">code.gouv.fr/sill</a> frontend</i>
     <br>
     <br>
     <a href="https://github.com/etalab/sill-web/actions">
