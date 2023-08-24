@@ -224,8 +224,6 @@ export const thunks = {
         async (...args) => {
             const [dispatch, getState, { sillApi }] = args;
 
-            console.log("initialize");
-
             {
                 const state = getState()[name];
 
