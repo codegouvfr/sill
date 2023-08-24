@@ -221,9 +221,9 @@ export const thunks = {
         async (...args) => {
             const [dispatch, getState, { sillApi, oidc }] = args;
 
-            dispatch(actions.updateFieldStarted(params));
-
             const state = getState()[name];
+
+            dispatch(actions.updateFieldStarted(params));
 
             assert(state.stateDescription === "ready");
 
