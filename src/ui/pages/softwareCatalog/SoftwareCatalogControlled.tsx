@@ -296,7 +296,7 @@ function RowVirtualizerDynamicWindow(
     );
 }
 
-const useStyles = tss.withName({ SoftwareCatalogControlled }).createUseStyles({
+const useStyles = tss.withName({ SoftwareCatalogControlled }).create({
     "root": {
         "paddingBottom": fr.spacing("30v"),
         [fr.breakpoints.down("md")]: {

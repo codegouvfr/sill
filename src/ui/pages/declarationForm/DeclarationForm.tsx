@@ -275,7 +275,7 @@ const useStyles = tss
         step: 1 | 2 | undefined;
         declarationType: "user" | "referent" | undefined;
     }>()
-    .createUseStyles(({ step, declarationType }) => ({
+    .create(({ step, declarationType }) => ({
         "step1": {
             "display": step !== 1 ? "none" : undefined
         },

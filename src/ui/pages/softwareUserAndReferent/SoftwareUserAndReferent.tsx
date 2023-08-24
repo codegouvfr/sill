@@ -298,7 +298,7 @@ export default function SoftwareUserAndReferent(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ SoftwareUserAndReferent }).createUseStyles({
+const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
     },

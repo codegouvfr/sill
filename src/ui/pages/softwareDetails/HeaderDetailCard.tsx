@@ -175,7 +175,7 @@ export const HeaderDetailCard = memo((props: Props) => {
     );
 });
 
-const useStyles = tss.withName({ HeaderDetailCard }).createUseStyles({
+const useStyles = tss.withName({ HeaderDetailCard }).create({
     "root": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,

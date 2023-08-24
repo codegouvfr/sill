@@ -55,7 +55,7 @@ export const ActionsFooter = memo((props: Props) => {
 const useStyles = tss
     .withName({ ActionsFooter })
     .withParams<{ isSticky: boolean }>()
-    .createUseStyles(({ isSticky }) => ({
+    .create(({ isSticky }) => ({
         "root": {
             "position": "sticky",
             "bottom": "0",

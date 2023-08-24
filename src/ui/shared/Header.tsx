@@ -168,7 +168,7 @@ export const Header = memo(
 const useStyles = tss
     .withName({ Header })
     .withParams<{ isOnPageMyAccount: boolean }>()
-    .createUseStyles(({ isOnPageMyAccount }) => ({
+    .create(({ isOnPageMyAccount }) => ({
         "myAccountButton": {
             "&&": {
                 "backgroundColor": !isOnPageMyAccount

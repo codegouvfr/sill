@@ -42,7 +42,7 @@ export const { i18n } = declareComponentKeys<"no terms">()({
     Terms
 });
 
-export const useStyles = tss.withName({ Terms }).createUseStyles({
+export const useStyles = tss.withName({ Terms }).create({
     "root": {
         "display": "flex",
         "justifyContent": "center"

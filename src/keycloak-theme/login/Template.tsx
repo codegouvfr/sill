@@ -285,7 +285,7 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 const useStyles = tss
     .withName({ Template })
     .withParams<{ contentWidth: number }>()
-    .createUseStyles(({ contentWidth }) => ({
+    .create(({ contentWidth }) => ({
         "container": {
             "marginTop": fr.spacing("10v"),
             "animation": `${keyframes`

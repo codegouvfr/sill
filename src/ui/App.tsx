@@ -147,7 +147,7 @@ function ContextualizedApp() {
 const useStyles = tss
     .withName({ App })
     .withParams<{ headerHeight: number }>()
-    .createUseStyles(({ headerHeight }) => ({
+    .create(({ headerHeight }) => ({
         "root": {
             "height": "100vh",
             "display": "flex",

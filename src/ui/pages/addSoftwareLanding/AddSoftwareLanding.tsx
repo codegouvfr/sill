@@ -97,7 +97,7 @@ export default function AddSoftwareLanding(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ AddSoftwareLanding }).createUseStyles({
+const useStyles = tss.withName({ AddSoftwareLanding }).create({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"

@@ -40,7 +40,7 @@ export function SmartLogo(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ SmartLogo }).createUseStyles({
+const useStyles = tss.withName({ SmartLogo }).create({
     "logo": {
         "marginLeft": fr.spacing("4v"),
         "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,

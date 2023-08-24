@@ -40,7 +40,7 @@ export default function Readme(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ Readme }).createUseStyles({
+const useStyles = tss.withName({ Readme }).create({
     "root": {
         "display": "flex",
         "justifyContent": "center"

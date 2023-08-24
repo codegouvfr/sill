@@ -214,7 +214,7 @@ export default function InstanceForm(props: Props) {
 const useStyles = tss
     .withName({ InstanceForm })
     .withParams<{ step: number | undefined }>()
-    .createUseStyles(({ step }) => ({
+    .create(({ step }) => ({
         "step": {
             "flexDirection": "column",
             "gap": fr.spacing("8v")

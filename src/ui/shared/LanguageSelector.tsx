@@ -64,7 +64,7 @@ export const LanguageSelector = memo((props: Props) => {
     );
 });
 
-const useStyles = tss.withName({ LanguageSelector }).createUseStyles({
+const useStyles = tss.withName({ LanguageSelector }).create({
     "root": {
         "display": "inline-flex"
     },

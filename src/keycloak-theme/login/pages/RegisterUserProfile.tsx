@@ -74,7 +74,7 @@ export default function RegisterUserProfile(
     );
 }
 
-const useStyles = tss.withName({ RegisterUserProfile }).createUseStyles({
+const useStyles = tss.withName({ RegisterUserProfile }).create({
     "centerCol": {
         "display": "flex",
         "flexDirection": "column",

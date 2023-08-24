@@ -324,7 +324,7 @@ SoftwareCatalogSearch.displayName = "SoftwareCatalogSearch";
 const useStyles = tss
     .withName({ SoftwareCatalogSearch })
     .withParams<{ filterWrapperMaxHeight: number }>()
-    .createUseStyles(({ filterWrapperMaxHeight }) => ({
+    .create(({ filterWrapperMaxHeight }) => ({
         "root": {
             "&:before": {
                 "content": "none"

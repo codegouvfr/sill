@@ -96,7 +96,7 @@ export default function Terms(
     );
 }
 
-const useStyles = tss.withName({ Terms }).createUseStyles({
+const useStyles = tss.withName({ Terms }).create({
     "formActions": {
         "display": "flex",
         "gap": fr.spacing("4v")

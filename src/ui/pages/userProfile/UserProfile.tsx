@@ -181,7 +181,7 @@ export const { i18n } = declareComponentKeys<
       }
 >()({ UserProfile });
 
-const useStyles = tss.withName({ UserProfile }).createUseStyles({
+const useStyles = tss.withName({ UserProfile }).create({
     "header": {
         "display": "flex",
         "alignItems": "center",

@@ -256,7 +256,7 @@ export default function SoftwareForm(props: Props) {
 const useStyles = tss
     .withName({ SoftwareForm })
     .withParams<{ step: number | undefined }>()
-    .createUseStyles(({ step }) => ({
+    .create(({ step }) => ({
         "step1": {
             "display": step !== 1 ? "none" : undefined
         },

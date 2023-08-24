@@ -99,7 +99,7 @@ export const ReferencedInstancesTab = (props: Props) => {
     );
 };
 
-const useStyles = tss.withName({ ReferencedInstancesTab }).createUseStyles({
+const useStyles = tss.withName({ ReferencedInstancesTab }).create({
     "accordionGrid": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,

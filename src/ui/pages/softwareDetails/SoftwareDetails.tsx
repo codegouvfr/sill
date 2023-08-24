@@ -275,7 +275,7 @@ export default function SoftwareDetails(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ SoftwareDetails }).createUseStyles({
+const useStyles = tss.withName({ SoftwareDetails }).create({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
     },

@@ -263,7 +263,7 @@ export const PreviewTab = (props: Props) => {
     );
 };
 
-const useStyles = tss.withName({ PreviewTab }).createUseStyles({
+const useStyles = tss.withName({ PreviewTab }).create({
     "tabContainer": {
         "display": "grid",
         "gridTemplateColumns": `repeat(2, 1fr)`,

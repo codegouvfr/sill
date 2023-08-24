@@ -339,7 +339,7 @@ function AccountReady(props: { className?: string }) {
     );
 }
 
-const useStyles = tss.withName({ Account }).createUseStyles({
+const useStyles = tss.withName({ Account }).create({
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,

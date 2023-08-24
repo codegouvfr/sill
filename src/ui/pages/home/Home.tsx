@@ -212,7 +212,7 @@ function AnimatedMetric(props: { className?: string; metricValue: number }) {
     );
 }
 
-const useStyles = tss.withName({ Home }).createUseStyles({
+const useStyles = tss.withName({ Home }).create({
     "section": {
         ...fr.spacing("padding", {
             "topBottom": "30v"
@@ -347,7 +347,7 @@ const { HeroSection } = (() => {
         );
     }
 
-    const useStyles = tss.withName({ HeroSection }).createUseStyles({
+    const useStyles = tss.withName({ HeroSection }).create({
         "root": {
             "display": "flex",
             [fr.breakpoints.down("md")]: {
@@ -412,7 +412,7 @@ const { WhatIsTheSillSection } = (() => {
     const useStyles = tss
         .withName({ WhatIsTheSillSection })
         .withParams<{ isVisible: boolean }>()
-        .createUseStyles(({ isVisible }) => ({
+        .create(({ isVisible }) => ({
             "root": {
                 "textAlign": "center",
                 "opacity": isVisible ? undefined : 0,

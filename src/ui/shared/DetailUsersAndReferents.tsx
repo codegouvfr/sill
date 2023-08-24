@@ -43,7 +43,7 @@ export function DetailUsersAndReferents(props: Props) {
     );
 }
 
-const useStyles = tss.withName({ DetailUsersAndReferents }).createUseStyles({
+const useStyles = tss.withName({ DetailUsersAndReferents }).create({
     "root": {
         "display": "flex",
         "alignItems": "center",

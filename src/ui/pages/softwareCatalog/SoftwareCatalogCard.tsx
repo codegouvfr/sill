@@ -217,7 +217,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
 const useStyles = tss
     .withName({ SoftwareCatalogCard })
     .withParams<{ isSearchHighlighted: boolean }>()
-    .createUseStyles(({ isSearchHighlighted }) => ({
+    .create(({ isSearchHighlighted }) => ({
         "root": {
             "backgroundColor": fr.colors.decisions.background.default.grey.default,
             "&&&": {
