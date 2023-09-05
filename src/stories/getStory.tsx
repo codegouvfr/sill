@@ -31,7 +31,10 @@ const { CoreProvider } = createCoreProvider({
     "transformUrlBeforeRedirectToLogin": () => {
         assert(false);
     },
-    "getCurrentLang": () => "fr"
+    "getCurrentLang": () => "fr",
+    "onMoved": () => {
+        assert(false);
+    }
 });
 
 export const { createMockRoute } = createMockRouteFactory({

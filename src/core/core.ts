@@ -20,6 +20,7 @@ export async function createCore(params: {
         termsOfServiceUrl: LocalizedString<Language>;
     }) => string;
     getCurrentLang: () => Language;
+    onMoved: (params: { redirectUrl: string }) => void;
 }) {
     const {
         apiUrl,
@@ -52,6 +53,14 @@ export async function createCore(params: {
 
         return sillApi;
     })();
+
+    const redirectUrl = await sillApi.getRedirectUrl();
+
+    if (redirectUrl !== undefined) {
+        params.onMoved({ redirectUrl });
+
+        await new Promise(() => {});
+    }
 
     const [{ keycloakParams, jwtClaimByUserKey }, termsOfServiceUrl] = await Promise.all([
         sillApi.getOidcParams(),

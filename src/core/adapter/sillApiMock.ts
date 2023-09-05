@@ -9,6 +9,7 @@ import { assert } from "tsafe/assert";
 import type { ApiTypes } from "@codegouvfr/sill";
 
 export const sillApi: SillApi = {
+    "getRedirectUrl": async () => undefined,
     "getApiVersion": memoize(async () => "0.0.0", { "promise": true }),
     "getOidcParams": memoize(
         async () => ({

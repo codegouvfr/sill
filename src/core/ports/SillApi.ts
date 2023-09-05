@@ -2,6 +2,9 @@ import { assert, type Equals } from "tsafe/assert";
 import type { TrpcRouterInput, TrpcRouterOutput } from "@codegouvfr/sill";
 
 export type SillApi = {
+    getRedirectUrl: (
+        params: TrpcRouterInput["getRedirectUrl"]
+    ) => Promise<TrpcRouterOutput["getRedirectUrl"]>;
     getApiVersion: {
         (params: TrpcRouterInput["getApiVersion"]): Promise<
             TrpcRouterOutput["getApiVersion"]

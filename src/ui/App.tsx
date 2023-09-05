@@ -24,7 +24,7 @@ import { useIsDark } from "@codegouvfr/react-dsfr/useIsDark";
 import { keyframes } from "tss-react";
 import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFallback";
 import { useDomRect } from "powerhooks/useDomRect";
-import { apiUrl, appUrl } from "urls";
+import { apiUrl, appUrl, appPath } from "urls";
 
 let keycloakIsDark: boolean;
 
@@ -40,18 +40,28 @@ const { CoreProvider } = createCoreProvider({
             .map(url => addTermsOfServiceUrlToQueryParams({ url, "value": termsOfServiceUrl }))
             .map(url => addAppLocationOriginToQueryParams({ url, "value": window.location.origin }))
         [0],
-    "getCurrentLang": () => evtLang.state
+    "getCurrentLang": () => evtLang.state,
+    "onMoved": ({ redirectUrl }) => {
+        const currentUrlObj = new URL(window.location.href);
+
+        const newPathname = currentUrlObj.pathname.replace(appPath, "");
+
+        const targetUrlObj = new URL(redirectUrl);
+
+        const newUrl = new URL(
+            targetUrlObj.pathname +
+                newPathname +
+                currentUrlObj.search +
+                currentUrlObj.hash,
+            targetUrlObj.origin
+        );
+
+        window.location.href = newUrl.toString();
+    }
 });
 
 export default function App() {
     const { css } = useCss();
-
-    if (window.location.host === "sill.etalab.gouv.fr") {
-        const newUrl = new URL(window.location.href);
-        newUrl.host = "sill.code.gouv.fr";
-        window.location.href = newUrl.href;
-        return null;
-    }
 
     return (
         <CoreProvider
