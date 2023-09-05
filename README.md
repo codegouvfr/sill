@@ -1,11 +1,11 @@
 <p align="center">
-    <i><a href="https://sill.code.gouv.fr">sill.code.gouv.fr</a> frontend</i>
+    <i><a href="https://code.gouv.fr/sill">code.gouv.fr/sill</a> frontend</i>
     <br>
     <br>
-    <a href="https://github.com/etalab/sill-web/actions">
-      <img src="https://github.com/etalab/sill-web/workflows/ci/badge.svg?branch=main">
+    <a href="https://github.com/codegouvfr/sill-web/actions">
+      <img src="https://github.com/codegouvfr/sill-web/workflows/ci/badge.svg?branch=main">
     </a>
-    <a href="https://github.com/etalab/sill-web/blob/main/LICENSE">
+    <a href="https://github.com/codegouvfr/sill-web/blob/main/LICENSE">
       <img src="https://img.shields.io/npm/l/sill-api">
     </a>
     </br>

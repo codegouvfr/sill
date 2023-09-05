@@ -2,7 +2,7 @@
 
 ## Mentions légales
 
-Le site sill.code.gouv.fr est édité par la mission logiciels libres de la direction interministérielle du numérique (DINUM).
+Le site code.gouv.fr/sill est édité par la mission logiciels libres de la direction interministérielle du numérique (DINUM).
 
 L’hébergement du SILL est assuré par l'Insee.
 

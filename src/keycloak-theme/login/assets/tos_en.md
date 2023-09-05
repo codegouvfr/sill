@@ -2,7 +2,7 @@
 
 ## Legal Notice
 
-sill.code.gouv.fr is published by the Free Software unit at DINUM.
+code.gouv.fr/sill is published by the Free Software unit at DINUM.
 
 Hosting is provided by INSEE.
 

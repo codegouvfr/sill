@@ -4,11 +4,11 @@
 
 ## Présentation et fonctionnalités
 
-[Le site du SILL](https://sill.code.gouv.fr) est un service mis en
+[Le site du SILL](https://code.gouv.fr/sill) est un service mis en
 œuvre la direction interministérielle du numérique (DINUM).  Ces
 services sont hébergés sur les serveurs de l'Insee.
 
-Le [SILL](https://sill.code.gouv.fr) est le catalogue de référence des
+Le [SILL](https://code.gouv.fr/sill) est le catalogue de référence des
 logiciels libres dont une utilisation significative est avérée au sein
 d'une administration.  Une plus grande partie des informations
 affichées sont extraites de [Wikidata](https://www.wikidata.org), une
@@ -31,7 +31,7 @@ pas accepté dans le formulaire d'inscription vous pouvez nous écrire à
 ### Licence des données du SILL
 
 Les données du SILL sont
-[téléchargeables](https://sill.code.gouv.fr/api/sill.json) au format
+[téléchargeables](https://code.gouv.fr/sill/api/sill.json) au format
 `json` et sont publiées sous [licence Ouverte
 2.0](https://github.com/etalab/licence-ouverte/blob/master/LO.md).
 
