@@ -1225,17 +1225,17 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@codegouvfr/react-dsfr@^0.74.2":
-  version "0.74.2"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/react-dsfr/-/react-dsfr-0.74.2.tgz#81ebfcccbc9a26d97f9044b6b831c8611e6d4ad1"
-  integrity sha512-QVfo/4xaqAq7ynDKLV/VmXV1pyOeDx2NdP+8kspE6eOeEO+DkwvDgDl2sT+iPmKIUw4+X7rNr5m03BDtG8AAeQ==
+"@codegouvfr/react-dsfr@^0.75.8":
+  version "0.75.8"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/react-dsfr/-/react-dsfr-0.75.8.tgz#b9caa3c47bf278e82379a8f78f89d99759c39f97"
+  integrity sha512-PhAciu4KaNTYjQQgjBE1EZnypqdc+qHurZFMuepC97KeARhxKW3Kl7sQkXDvqr+FKFgXkYn+jkFISwlbSh8kYQ==
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.16.3":
-  version "1.16.3"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.16.3.tgz#1c4d9e8a26bf024d0bd890fef9c74f48e1c007ce"
-  integrity sha512-8sxw2SbUbXKsCn64KnkIz17HC2iyvm372GS+zO8Api7NgnbyBArUPu6+RsjDpA7T/BgmjaINkg7vJdKXPluq/A==
+"@codegouvfr/sill@^1.16.7":
+  version "1.16.7"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.16.7.tgz#8673f7a9640e0825b4a49ca406287de9d99a903f"
+  integrity sha512-9QIq7yezSP/nrCjT5OeytnVz4Nu5CmO/W65k02ouxyy6jb6MiJpGwVoB2+4CD1ssmZkMF9EK3UQDPM/1G/iYaA==
   dependencies:
     "@trpc/server" "^10.18.0"
     jwt-decode "^3.1.2"
@@ -9089,10 +9089,10 @@ husky@^4.3.8:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
-i18nifty@^1.5.12:
-  version "1.5.12"
-  resolved "https://registry.yarnpkg.com/i18nifty/-/i18nifty-1.5.12.tgz#285b863adcab4aa5c7b22250ecf45bf9974211d1"
-  integrity sha512-PlBZnOMrDMAYAfY/8IzQWG248Ey+HaTKQ/JMtJtGnYbLZ3kC2tAN2VxqdErBKeegYXYXyVinF6JeepafSy+OUQ==
+i18nifty@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/i18nifty/-/i18nifty-1.6.1.tgz#5c30ea51a84e816a7f3c1c298f08bb9e5feb9c24"
+  integrity sha512-J4EgG6CNMtLbOqMtHBa82ZaxvQLNUBHXlmjtYtW29y49J6E59BpsvKtxoiz4xiefk6dK6YoT2oSjh0TX5Vyt3Q==
   dependencies:
     powerhooks "^0.27.0"
     tsafe "^1.6.4"
@@ -10551,10 +10551,10 @@ keycloak-js@^21.0.2:
     base64-js "^1.5.1"
     js-sha256 "^0.9.0"
 
-keycloakify@^7.15.5:
-  version "7.15.5"
-  resolved "https://registry.yarnpkg.com/keycloakify/-/keycloakify-7.15.5.tgz#5e29cff153799c9e7da7e6f2671f4dc919c9ac29"
-  integrity sha512-Nt6P/z0+QD+KNhnSFsh+b2wLG1RfVZwleAaxi67TGR08Wh80mRPKA/ebl1X+VnJZiRYWP+TICZoza1q7Pf/N/Q==
+keycloakify@^7.15.10:
+  version "7.15.10"
+  resolved "https://registry.yarnpkg.com/keycloakify/-/keycloakify-7.15.10.tgz#967737d04ed5059ecbef48a8f1a1f0140f62f096"
+  integrity sha512-IKxFMEDW1hOHsjmZbzaYqguoT/Tyu7dmsz9drRHrH/rmv2e91qttl5IX0tXt8BN4Dx2ocBniTVkpwg0wrcRlaw==
   dependencies:
     "@babel/generator" "^7.22.9"
     "@babel/parser" "^7.22.7"
@@ -13999,10 +13999,10 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux-clean-architecture@^3.5.6:
-  version "3.5.6"
-  resolved "https://registry.yarnpkg.com/redux-clean-architecture/-/redux-clean-architecture-3.5.6.tgz#c9e67033222705e292c4f6db35a192df5ccba8ac"
-  integrity sha512-HGrc2dubTySoIfkojUBJYp3rLQk4CRi3ZG58VuLXFpsj94Eql/6gUWo2iJl9XaAftIlymRssHkuN8GkYU9emjQ==
+redux-clean-architecture@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/redux-clean-architecture/-/redux-clean-architecture-3.7.2.tgz#b153e940bc4d239483e9f1bb6c75cc78923365ff"
+  integrity sha512-QLbZwex8+m8dmqXeAekE9Uzern3YVV1KBLYoPSt+R6z9hoNRACHEMjQaemXiAzlezRfqxLFeot9byK5SGfGxjw==
   dependencies:
     minimal-polyfills "^2.2.3"
     tsafe "^1.6.4"
