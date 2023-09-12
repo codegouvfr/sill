@@ -451,9 +451,7 @@ export const thunks = {
 
             const [, , { sillApi }] = args;
 
-            return (await sillApi.getWikidataOptions({ queryString, language })).filter(
-                option => option.isLibreSoftware
-            ); //TODO: Make sure we have all the license API side
+            return await sillApi.getWikidataOptions({ queryString, language });
         },
     "getWikidataOptions":
         (props: { queryString: string; language: Language }) =>
