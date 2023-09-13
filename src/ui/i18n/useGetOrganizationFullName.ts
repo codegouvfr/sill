@@ -447,7 +447,7 @@ const organizationFullNameByAcronym: Record<string, LocalizedString> = {
         "en": "National Office for Veterans and War Victims"
     },
     "other": {
-        "fr": "Autre organization publique",
+        "fr": "Autre organisation publique",
         "en": "Other public organization"
     }
     /* spell-checker: enable */
