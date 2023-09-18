@@ -294,7 +294,7 @@ export const thunks = {
                                     },
                                     "step2": {
                                         "wikidataId": software.wikidataId,
-                                        "comptoirDuLibreId": software.compotoirDuLibreId,
+                                        "comptoirDuLibreId": software.comptoirDuLibreId,
                                         "softwareDescription":
                                             software.softwareDescription,
                                         "softwareLicense": software.license,

@@ -320,7 +320,7 @@ function apiSoftwareToSoftware(params: {
         dereferencing,
         prerogatives,
         comptoirDuLibreServiceProviderCount,
-        compotoirDuLibreId,
+        comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
         wikidataId,
         license,
@@ -380,14 +380,14 @@ function apiSoftwareToSoftware(params: {
         parentSoftware,
         addedTime,
         "comptoirDuLibreServiceProviderUrl":
-            compotoirDuLibreId === undefined
+            comptoirDuLibreId === undefined
                 ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${compotoirDuLibreId}`,
+                : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${comptoirDuLibreId}`,
         "annuaireCnllServiceProviders": annuaireCnllServiceProviders ?? [],
         "compotoirDuLibreUrl":
-            compotoirDuLibreId === undefined
+            comptoirDuLibreId === undefined
                 ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/${compotoirDuLibreId}`,
+                : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
         "wikidataUrl":
             wikidataId === undefined
                 ? undefined
