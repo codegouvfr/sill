@@ -96,7 +96,7 @@ export default function SoftwareDetails(props: Props) {
                                     <PreviewTab
                                         softwareName={software.softwareName}
                                         wikiDataUrl={software.wikidataUrl}
-                                        comptoireDuLibreUrl={software.compotoirDuLibreUrl}
+                                        comptoireDuLibreUrl={software.comptoirDuLibreUrl}
                                         comptoirDuLibreServiceProvidersUrl={
                                             software.comptoirDuLibreServiceProviderUrl
                                         }

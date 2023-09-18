@@ -67,7 +67,7 @@ export namespace State {
                   lastRecommendedVersion?: string;
               }
             | undefined;
-        compotoirDuLibreUrl: string | undefined;
+        comptoirDuLibreUrl: string | undefined;
         wikidataUrl: string | undefined;
         prerogatives: Record<SoftwareCatalogState.Prerogative, boolean | undefined>;
         userCount: number;
@@ -384,7 +384,7 @@ function apiSoftwareToSoftware(params: {
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${comptoirDuLibreId}`,
         "annuaireCnllServiceProviders": annuaireCnllServiceProviders ?? [],
-        "compotoirDuLibreUrl":
+        "comptoirDuLibreUrl":
             comptoirDuLibreId === undefined
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
