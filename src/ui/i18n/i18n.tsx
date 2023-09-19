@@ -330,7 +330,7 @@ const {
                     "Operating system on which the software can be installed"
             },
             "SoftwareFormStep2": {
-                "wikidata id": "Wikidata ID",
+                "wikidata id": "Wikidata item",
                 "wikidata id hint": ({
                     wikidataUrl,
                     exampleSoftwareName,
@@ -338,14 +338,17 @@ const {
                     softwareSillUrl
                 }) => (
                     <>
-                        Associate the software with an existing entry{" "}
+                        Fill up a name or directly the id (of the form <code>Qxxxxx</code>
+                        ) to associate the software with an existing entry{" "}
                         <a href={wikidataUrl} target="_blank" rel="noreferrer">
                             Wikidata
                         </a>
-                        . Most general information, such as the logo or the URL of the
-                        code repository, is extracted from Wikidata. If the software you
-                        want to add does not have a Wikidata entry yet, you can create one{" "}
-                        . Find here an{" "}
+                        .
+                        <br />
+                        Most general information, such as the logo or the URL of the code
+                        repository, is extracted from Wikidata. If the software you want
+                        to add does not have a Wikidata entry yet, you can create one .
+                        Find here an{" "}
                         <a href={wikidataPageExampleUrl} target="_blank" rel="noreferrer">
                             example of a Wikidata entry
                         </a>
@@ -1015,7 +1018,7 @@ const {
                     "Système d'exploitation sur lequel le logiciel peut être installé"
             },
             "SoftwareFormStep2": {
-                "wikidata id": "Identifiant Wikidata",
+                "wikidata id": "Fiche Wikidata",
                 "wikidata id hint": ({
                     wikidataUrl,
                     wikidataPageExampleUrl,
@@ -1023,18 +1026,22 @@ const {
                     softwareSillUrl
                 }) => (
                     <>
-                        Associez le logiciel à une fiche existante{" "}
+                        Renségniez le nom du logiciel ou directement l'identifiant (de la
+                        forme <code>QXXXXX</code>) pour associez le logiciel à une fiche
+                        existante{" "}
                         <a href={wikidataUrl} target="_blank" rel="noreferrer">
                             Wikidata
                         </a>
-                        . La plupart des informations générales, telles que le logo ou
-                        l'URL du dépôt de code, sont extraites de Wikidata. Si le logiciel
-                        que vous souhaitez ajouter ne possède pas encore de fiche sur
+                        .
+                        <br />
+                        La plupart des informations générales, telles que le logo ou l'URL
+                        du dépôt de code, sont extraites de Wikidata. Si le logiciel que
+                        vous souhaitez ajouter ne possède pas encore de fiche sur
                         Wikidata, vous pouvez en créer une. Vous trouverez ici un{" "}
                         <a href={wikidataPageExampleUrl} target="_blank" rel="noreferrer">
                             exemple de fiche Wikidata
                         </a>
-                        &nbsp; pour le logiciel&nbsp;
+                        pour le logiciel&nbsp;
                         <a href={softwareSillUrl} target="_blank" rel="noreferrer">
                             {exampleSoftwareName}
                         </a>{" "}
