@@ -33,6 +33,7 @@ export namespace State {
                   isUser: boolean;
               }
             | undefined;
+        isUnreferencingOngoing: boolean;
     };
     export type Software = {
         softwareName: string;
@@ -140,13 +141,28 @@ export const { reducer, actions } = createSlice({
                         : {
                               ...userDeclaration,
                               "isRemovingRole": false
-                          }
+                          },
+                "isUnreferencingOngoing": false
             };
         },
         "cleared": () => ({
             "stateDescription": "not ready" as const,
             "isInitializing": false
-        })
+        }),
+        "unreferencingStarted": state => {
+            assert(state.stateDescription === "ready");
+            state.isUnreferencingOngoing = true;
+        },
+        "unreferencingCompleted": (
+            state,
+            { payload }: PayloadAction<{ reason: string; time: number }>
+        ) => {
+            const { reason, time } = payload;
+
+            assert(state.stateDescription === "ready");
+            state.software.dereferencing = { reason, time };
+            state.isUnreferencingOngoing = false;
+        }
     }
 });
 
@@ -268,6 +284,28 @@ export const thunks = {
             }
 
             dispatch(actions.cleared());
+        },
+    "unreference":
+        (params: { reason: string }) =>
+        async (...args) => {
+            const { reason } = params;
+
+            const [dispatch, getState, { sillApi }] = args;
+
+            const state = getState()[name];
+
+            assert(state.stateDescription === "ready");
+
+            dispatch(actions.unreferencingStarted());
+
+            const time = Date.now();
+
+            await sillApi.unreferenceSoftware({
+                "softwareName": state.software.softwareName,
+                reason
+            });
+
+            dispatch(actions.unreferencingCompleted({ reason, time }));
         }
 } satisfies Thunks;
 
@@ -290,7 +328,12 @@ export const selectors = (() => {
 
     const userDeclaration = createSelector(readyState, state => state?.userDeclaration);
 
-    return { software, userDeclaration };
+    const isUnreferencingOngoing = createSelector(
+        readyState,
+        state => state?.isUnreferencingOngoing
+    );
+
+    return { software, userDeclaration, isUnreferencingOngoing };
 })();
 
 function apiSoftwareToSoftware(params: {

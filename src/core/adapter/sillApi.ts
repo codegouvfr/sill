@@ -167,6 +167,11 @@ export function createSillApi(params: {
                 .catch(errorHandler);
 
             sillApi.getAgents.clear();
+        },
+        "unreferenceSoftware": async params => {
+            await trpcClient.unreferenceSoftware.mutate(params).catch(errorHandler);
+
+            sillApi.getSoftwares.clear();
         }
     };
 

@@ -114,6 +114,9 @@ export type SillApi = {
     updateIsAgentProfilePublic: (
         params: TrpcRouterInput["updateIsAgentProfilePublic"]
     ) => Promise<TrpcRouterOutput["updateIsAgentProfilePublic"]>;
+    unreferenceSoftware: (
+        params: TrpcRouterInput["unreferenceSoftware"]
+    ) => Promise<TrpcRouterOutput["unreferenceSoftware"]>;
 };
 
 //NOTE: We make sure we don't forget queries

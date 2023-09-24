@@ -510,7 +510,10 @@ const {
                 "edit software": "Edit software",
                 "stop being user/referent": ({ declarationType }) =>
                     `Stop being ${declarationType}`,
-                "become referent": "Become referent"
+                "become referent": "Become referent",
+                "please provide a reason for unreferencing this software": `Please
+                provide a reason why you think this software should not be in the SILL anymore`,
+                "unreference software": "Dereference the software"
             },
             "HeaderDetailCard": {
                 "authors": "Authors : ",
@@ -1209,7 +1212,9 @@ const {
                 "edit software": "Éditer la fiche logiciel",
                 "stop being user/referent": ({ declarationType }) =>
                     `Ne plus être ${declarationType}`,
-                "become referent": "Devenir référent"
+                "become referent": "Devenir référent",
+                "please provide a reason for unreferencing this software": `Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le SILL`,
+                "unreference software": "Dé-référencer le logiciel"
             },
             "HeaderDetailCard": {
                 "authors": "Auteurs : ",

@@ -224,6 +224,9 @@ export const sillApi: SillApi = {
     }),
     "updateIsAgentProfilePublic": async ({ isPublic }) => {
         console.log(`Update isPublic ${isPublic}`);
+    },
+    "unreferenceSoftware": async ({ reason }) => {
+        console.log(`Unreference software ${reason}`);
     }
 };
 

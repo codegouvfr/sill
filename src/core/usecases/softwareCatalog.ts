@@ -380,7 +380,9 @@ export const privateThunks = {
                         action.actionName === "triggerRedirect" &&
                         action.payload.isFormSubmitted) ||
                     (action.sliceName === "declarationRemoval" &&
-                        action.actionName === "userOrReferentRemoved"),
+                        action.actionName === "userOrReferentRemoved") ||
+                    (action.sliceName === "softwareDetails" &&
+                        action.actionName === "unreferencingCompleted"),
                 () => initialize()
             );
         }

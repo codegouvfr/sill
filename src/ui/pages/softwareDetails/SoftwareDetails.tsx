@@ -21,6 +21,7 @@ import {
     openDeclarationRemovalModal,
     DeclarationRemovalModal
 } from "ui/shared/DeclarationRemovalModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Props = {
     className?: string;
@@ -30,7 +31,7 @@ type Props = {
 export default function SoftwareDetails(props: Props) {
     const { route, className } = props;
 
-    const { softwareDetails } = useCoreFunctions();
+    const { softwareDetails, userAuthentication } = useCoreFunctions();
 
     const { cx, classes } = useStyles();
 
@@ -38,6 +39,9 @@ export default function SoftwareDetails(props: Props) {
 
     const { software } = useCoreState(selectors.softwareDetails.software);
     const { userDeclaration } = useCoreState(selectors.softwareDetails.userDeclaration);
+    const { isUnreferencingOngoing } = useCoreState(
+        selectors.softwareDetails.isUnreferencingOngoing
+    );
 
     useEffect(() => {
         softwareDetails.initialize({
@@ -206,6 +210,41 @@ export default function SoftwareDetails(props: Props) {
                         userCount={software.userCount ?? 0}
                     />
                     <div className={classes.buttons}>
+                        {software.dereferencing === undefined && (
+                            <Button
+                                priority="secondary"
+                                disabled={isUnreferencingOngoing}
+                                onClick={() => {
+                                    if (!userAuthentication.getIsUserLoggedIn()) {
+                                        userAuthentication.login({
+                                            "doesCurrentHrefRequiresAuth": false
+                                        });
+                                        return;
+                                    }
+
+                                    const userInput = window.prompt(
+                                        t(
+                                            "please provide a reason for unreferencing this software"
+                                        )
+                                    );
+
+                                    if (userInput === null || userInput === "") {
+                                        return;
+                                    }
+
+                                    softwareDetails.unreference({
+                                        "reason": userInput
+                                    });
+                                }}
+                            >
+                                {isUnreferencingOngoing ? (
+                                    <CircularProgress size={17} />
+                                ) : (
+                                    t("unreference software")
+                                )}
+                            </Button>
+                        )}
+
                         <Button
                             priority="secondary"
                             linkProps={
@@ -281,7 +320,7 @@ const useStyles = tss.withName({ SoftwareDetails }).create({
     },
     "container": {
         "display": "grid",
-        "gridTemplateColumns": `repeat(2, 1fr)`,
+        "gridTemplateColumns": `1fr 2fr`,
         "columnGap": fr.spacing("6v"),
         "marginBottom": fr.spacing("6v"),
         [fr.breakpoints.down("md")]: {
@@ -326,4 +365,6 @@ export const { i18n } = declareComponentKeys<
     | "edit software"
     | { K: "stop being user/referent"; P: { declarationType: "user" | "referent" } }
     | "become referent"
+    | "please provide a reason for unreferencing this software"
+    | "unreference software"
 >()({ SoftwareDetails });
