@@ -1029,7 +1029,7 @@ const {
                     softwareSillUrl
                 }) => (
                     <>
-                        Renségniez le nom du logiciel ou directement l'identifiant (de la
+                        Renseignez le nom du logiciel ou directement l'identifiant (de la
                         forme <code>QXXXXX</code>) pour associez le logiciel à une fiche
                         existante{" "}
                         <a href={wikidataUrl} target="_blank" rel="noreferrer">
