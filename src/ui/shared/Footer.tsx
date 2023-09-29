@@ -49,19 +49,25 @@ export const Footer = memo(
                             }
                         },
                         {
-                            "text": "sill.json",
+                            "text": "XML feed",
+                            "linkProps": {
+                                "href": `https://code.gouv.fr/data/latest-sill.xml`
+                            }
+                        },
+                        {
+                            "text": "json",
                             "linkProps": {
                                 "href": `${apiUrl}/sill.json`
                             }
                         },
                         {
-                            "text": "sill.pdf",
+                            "text": "pdf",
                             "linkProps": {
                                 "href": "https://code.gouv.fr/data/sill.pdf"
                             }
                         },
                         {
-                            "text": "sill.tsv",
+                            "text": "tsv",
                             "linkProps": {
                                 "href": "https://code.gouv.fr/data/sill.tsv"
                             }
