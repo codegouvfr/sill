@@ -43,7 +43,7 @@ export const Footer = memo(
                             }
                         },
                         {
-                            "text": t("bug report and suggestions"),
+                            "text": t("contribute"),
                             "linkProps": {
                                 "href": "https://github.com/codegouvfr/sill-web/issues/new"
                             }
@@ -74,4 +74,4 @@ export const Footer = memo(
     })
 );
 
-export const { i18n } = declareComponentKeys<"bug report and suggestions">()({ Footer });
+export const { i18n } = declareComponentKeys<"contribute">()({ Footer });

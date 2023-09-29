@@ -706,7 +706,7 @@ const {
                 "select language": "Select language"
             },
             "Footer": {
-                "bug report and suggestions": "Bug report and suggestions"
+                "contribute": "Contribute"
             },
             "DeclarationRemovalModal": {
                 "confirm": "Confirm",
@@ -1411,7 +1411,7 @@ const {
                 "select language": "Sélectionner une langue"
             },
             "Footer": {
-                "bug report and suggestions": "Remontez un bug ou une suggestion"
+                "contribute": "Contribuez"
             },
             "DeclarationRemovalModal": {
                 "confirm": "Confirmer",
