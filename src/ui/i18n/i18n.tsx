@@ -489,7 +489,6 @@ const {
                     `Referenced instance (${instanceCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Alike or equivalent proprietary software (${alikeSoftwareCount})`,
-                "use full links": "Use full links",
                 "prerogatives": "Prerogatives",
                 "last version": "Last version",
                 "last version date": ({ date }) => `in ${date}`,
@@ -1191,7 +1190,6 @@ const {
                     `Instances référencées (${instanceCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Logiciels similaires ou équivalents propriétaires (${alikeSoftwareCount})`,
-                "use full links": "Liens utiles",
                 "prerogatives": "Prérogatives",
                 "last version": "Dernière version : ",
                 "last version date": ({ date }) => `en ${date}`,

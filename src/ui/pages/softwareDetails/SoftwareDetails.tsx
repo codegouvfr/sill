@@ -344,7 +344,6 @@ export const { i18n } = declareComponentKeys<
     | "tab title overview"
     | { K: "tab title instance"; P: { instanceCount: number } }
     | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
-    | "use full links"
     | "prerogatives"
     | "last version"
     | { K: "last version date"; P: { date: string } }
