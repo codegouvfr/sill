@@ -215,6 +215,7 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
         "alignItems": "center"
     },
     "logoWrapper": {
+        "min-width": 65,
         "width": fr.spacing("14v"),
         "height": fr.spacing("14v"),
         "marginRight": fr.spacing("3v"),
