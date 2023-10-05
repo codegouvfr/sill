@@ -43,6 +43,7 @@ export type FormData = {
     step3: {
         isPresentInSupportContract: boolean | undefined;
         isFromFrenchPublicService: boolean;
+        doRespectRgaa: boolean | undefined;
     };
     step4: {
         similarSoftwares: {
@@ -309,7 +310,9 @@ export const thunks = {
                                                 .isPresentInSupportContract,
                                         "isFromFrenchPublicService":
                                             software.prerogatives
-                                                .isFromFrenchPublicServices
+                                                .isFromFrenchPublicServices,
+                                        "doRespectRgaa":
+                                            software.prerogatives.doRespectRgaa
                                     },
                                     "step4": {
                                         "similarSoftwares": software.similarSoftwares
@@ -417,6 +420,7 @@ export const thunks = {
                 "softwareMinimalVersion": step2.softwareMinimalVersion,
                 "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
                 "isFromFrenchPublicService": step3.isFromFrenchPublicService,
+                "doRespectRgaa": step3.doRespectRgaa ?? false,
                 "similarSoftwareWikidataIds": formDataStep4.similarSoftwares.map(
                     ({ wikidataId }) => wikidataId
                 ),

@@ -27,6 +27,7 @@ export function SoftwareFormStep3(props: Step2Props) {
         formState: { errors }
     } = useForm<{
         isPresentInSupportContractInputValue: "true" | "false" | undefined;
+        doRespectRgaaInputValue: "true" | "false" | undefined;
         isFromFrenchPublicServiceInputValue: "true" | "false";
         isPublicInstanceInputValue: "true" | "false";
         targetAudience: string;
@@ -36,14 +37,23 @@ export function SoftwareFormStep3(props: Step2Props) {
                 return undefined;
             }
 
-            const { isFromFrenchPublicService, isPresentInSupportContract } =
-                initialFormData;
+            const {
+                isFromFrenchPublicService,
+                isPresentInSupportContract,
+                doRespectRgaa
+            } = initialFormData;
 
             return {
                 "isPresentInSupportContractInputValue":
                     isPresentInSupportContract === undefined
                         ? undefined
                         : isPresentInSupportContract
+                        ? "true"
+                        : "false",
+                "doRespectRgaaInputValue":
+                    doRespectRgaa === undefined
+                        ? undefined
+                        : doRespectRgaa
                         ? "true"
                         : "false",
                 "isFromFrenchPublicServiceInputValue":
@@ -76,11 +86,22 @@ export function SoftwareFormStep3(props: Step2Props) {
             onSubmit={handleSubmit(
                 ({
                     isPresentInSupportContractInputValue,
-                    isFromFrenchPublicServiceInputValue
+                    isFromFrenchPublicServiceInputValue,
+                    doRespectRgaaInputValue
                 }) =>
                     onSubmit({
                         "isPresentInSupportContract": (() => {
                             switch (isPresentInSupportContractInputValue) {
+                                case undefined:
+                                    return undefined;
+                                case "true":
+                                    return true;
+                                case "false":
+                                    return false;
+                            }
+                        })(),
+                        "doRespectRgaa": (() => {
+                            switch (doRespectRgaaInputValue) {
                                 case undefined:
                                     return undefined;
                                 case "true":
@@ -148,6 +169,25 @@ export function SoftwareFormStep3(props: Step2Props) {
                 }
                 stateRelatedMessage={tCommon("required")}
             />
+            <RadioButtons
+                legend={t("do respect RGAA")}
+                options={[
+                    {
+                        "label": tCommon("yes"),
+                        "nativeInputProps": {
+                            ...register("doRespectRgaaInputValue"),
+                            "value": "true"
+                        }
+                    },
+                    {
+                        "label": tCommon("no"),
+                        "nativeInputProps": {
+                            ...register("doRespectRgaaInputValue"),
+                            "value": "false"
+                        }
+                    }
+                ]}
+            />
             <button
                 style={{ "display": "none" }}
                 ref={setSubmitButtonElement}
@@ -158,5 +198,5 @@ export function SoftwareFormStep3(props: Step2Props) {
 }
 
 export const { i18n } = declareComponentKeys<
-    "is present in support market" | "is from french public service"
+    "is present in support market" | "is from french public service" | "do respect RGAA"
 >()({ SoftwareFormStep3 });

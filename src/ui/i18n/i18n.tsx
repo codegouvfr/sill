@@ -389,7 +389,8 @@ const {
                 "is present in support market":
                     "Is the software present in the support market?",
                 "is from french public service":
-                    "Is the software developed by the French public service?"
+                    "Is the software developed by the French public service?",
+                "do respect RGAA": "Is the software compliant with RGAA rules?"
             },
             "SoftwareFormStep4": {
                 "similar software": "This software is an alternative to ...",
@@ -1082,7 +1083,8 @@ const {
                 "is present in support market":
                     "Le logiciel est-il présent dans le marché de support ?",
                 "is from french public service":
-                    "Le logiciel est-il développé par le service public français ?"
+                    "Le logiciel est-il développé par le service public français ?",
+                "do respect RGAA": "Le logiciel respecte-il les normes RGAA?"
             },
             "SoftwareFormStep4": {
                 "similar software": "Ce logiciel est une alternative à ...",
