@@ -24,12 +24,11 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { isReady } = usePrepareTemplate({
         "doFetchDefaultThemeResources": doUseDefaultCss,
-        url,
-        "stylesCommon": [
-            "node_modules/patternfly/dist/css/patternfly.min.css",
-            "node_modules/patternfly/dist/css/patternfly-additions.min.css"
+        "styles": [
+            `${url.resourcesCommonPath}/node_modules/patternfly/dist/css/patternfly.min.css`,
+            `${url.resourcesCommonPath}/node_modules/patternfly/dist/css/patternfly-additions.min.css`,
+            `${url.resourcesPath}/css/account.css`
         ],
-        "styles": ["css/account.css"],
         "htmlClassName": undefined,
         "bodyClassName": clsx("admin-console", "user", getClassName("kcBodyClass"))
     });

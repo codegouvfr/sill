@@ -22,15 +22,8 @@ export default function Login(
         "classes": classes_props
     });
 
-    const {
-        social,
-        realm,
-        url,
-        usernameEditDisabled,
-        login,
-        auth,
-        registrationDisabled
-    } = kcContext;
+    const { social, realm, url, usernameHidden, login, auth, registrationDisabled } =
+        kcContext;
 
     const { msg, msgStr } = i18n;
     const { classes, cx } = useStyles();
@@ -163,7 +156,7 @@ export default function Login(
                                                 "name": autoCompleteHelper,
                                                 "type": "email",
                                                 "defaultValue": login.username ?? "",
-                                                ...(usernameEditDisabled
+                                                ...(usernameHidden
                                                     ? { "disabled": true }
                                                     : {
                                                           "autoFocus": true,
@@ -191,7 +184,7 @@ export default function Login(
                                     )}
                                 >
                                     <div id="kc-form-options">
-                                        {realm.rememberMe && !usernameEditDisabled && (
+                                        {realm.rememberMe && !usernameHidden && (
                                             <Checkbox
                                                 className={classes.rememberMe}
                                                 options={[

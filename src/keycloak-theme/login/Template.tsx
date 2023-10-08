@@ -50,11 +50,12 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 
     const { isReady } = usePrepareTemplate({
         "doFetchDefaultThemeResources": doUseDefaultCss,
-        url,
-        "stylesCommon": ["lib/zocial/zocial.css"],
-        "styles": ["css/login.css"],
+        "styles": [
+            `${url.resourcesCommonPath}/lib/zocial/zocial.css`,
+            `${url.resourcesPath}/css/login.css`
+        ],
         "htmlClassName": getClassName("kcHtmlClass"),
-        "bodyClassName": undefined
+        "bodyClassName": getClassName("kcBodyClass")
     });
 
     const { classes, cx, css } = useStyles({ "contentWidth": breakpointsValues.sm });

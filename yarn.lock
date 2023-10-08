@@ -10602,10 +10602,10 @@ keycloak-js@^21.0.2:
     base64-js "^1.5.1"
     js-sha256 "^0.9.0"
 
-keycloakify@^7.15.5:
-  version "7.15.5"
-  resolved "https://registry.yarnpkg.com/keycloakify/-/keycloakify-7.15.5.tgz#5e29cff153799c9e7da7e6f2671f4dc919c9ac29"
-  integrity sha512-Nt6P/z0+QD+KNhnSFsh+b2wLG1RfVZwleAaxi67TGR08Wh80mRPKA/ebl1X+VnJZiRYWP+TICZoza1q7Pf/N/Q==
+keycloakify@^8.1.2:
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/keycloakify/-/keycloakify-8.1.2.tgz#ecd8e07980bed17d2a585455c704fbc198657fe6"
+  integrity sha512-JKhwPJndmC5tADW4+XcxoYb3dyQClvO6HGS1szt3iFfmppYEHi/PFyQ4I4cpFzLL/IvQMR4beufDJkni3xYRyA==
   dependencies:
     "@babel/generator" "^7.22.9"
     "@babel/parser" "^7.22.7"
