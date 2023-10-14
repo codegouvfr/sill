@@ -1330,9 +1330,6 @@ const { filterBySearchMemoized } = (() => {
         return highlights;
     }
 
-    // NOTE: Here we are using flexsearch, it enables to search synchronously
-    // but we keep this function async in case we'd like to switch to another
-    // search library that would be async.
     const filterBySearchMemoized = memoize(
         async (
             softwares: State.Software.Internal[],
@@ -1345,7 +1342,7 @@ const { filterBySearchMemoized } = (() => {
         > => {
             const index = getFlexSearch(softwares);
 
-            const searchResult = index.search(search, undefined, {
+            const searchResult = await index.searchAsync(search, {
                 "bool": "or",
                 "suggest": true,
                 "enrich": true
