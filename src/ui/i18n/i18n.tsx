@@ -1305,13 +1305,13 @@ const {
                 )
             },
             "SoftwareUserAndReferent": {
-                "catalog breadcrumb": "Software catalog",
+                "catalog breadcrumb": "Catalogue",
                 "user and referent breadcrumb": "Utilisateurs et référents",
                 "title": "Utilisateurs et référents",
                 "tab user title": "Utilisateurs",
                 "tab referent title": "Référents",
                 "category": "Catégorie",
-                "softwareDetails": "Voir la fiche logiciel",
+                "softwareDetails": "Voir la fiche du logiciel",
                 "declare user": "Se déclarer utilisateur",
                 "declare referent": "Se déclarer référent",
                 "is technical expert": "Expert technique",
