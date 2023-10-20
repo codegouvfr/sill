@@ -1,5 +1,11 @@
 import { createGetKcContext, type PageId } from "keycloakify/login";
 
+const properties = {
+    "brandTop": "",
+    "homeUrl": "https://code.gouv.fr",
+    "serviceTitle": "CodeGouv"
+};
+
 export const { getKcContext } = createGetKcContext<{
     pageId: PageId;
     properties: {
@@ -28,7 +34,8 @@ export const { getKcContext } = createGetKcContext<{
             "realm": {
                 "loginWithEmailAllowed": true,
                 "registrationEmailAsUsername": true
-            }
+            },
+            properties
         },
         {
             "pageId": "register-user-profile.ftl",
@@ -70,7 +77,8 @@ export const { getKcContext } = createGetKcContext<{
                         "name": "agencyName"
                     }
                 ]
-            }
+            },
+            properties
         }
     ]
 });
