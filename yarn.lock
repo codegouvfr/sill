@@ -1232,14 +1232,15 @@
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.18.0":
-  version "1.18.0"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.18.0.tgz#b6f76b892904745f4ecdd1c2fb8129d932d47566"
-  integrity sha512-v80htzcrl3ZGBnMM/XR/DVtKdpTHtPF1Q6cjWZJxmVx18pm0b9tiQiRohIXWOEjo1pD10blA4es6q16R4gvh3w==
+"@codegouvfr/sill@^1.18.3":
+  version "1.18.3"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.18.3.tgz#ae501a6ea42bbeff009cae362202e6ea5b85d9bd"
+  integrity sha512-Ytvmfp6BsZXkGLPHAEUc/HvsTtnu7o82gWL/RaR1VgZzBeMrD9BnXvytd4AdHDumYS56ZTZTngRLZFkSIn/b3g==
   dependencies:
     "@octokit/graphql" "^7.0.2"
     "@trpc/server" "^10.18.0"
     jwt-decode "^3.1.2"
+    semver "^7.5.4"
     tsafe "^1.6.0"
     zod "^3.21.4"
 
@@ -14791,6 +14792,13 @@ semver@^7.3.2, semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.3.8:
   version "7.3.8"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.3.8.tgz#07a78feafb3f7b32347d725e33de7e2a2df67798"
   integrity sha512-NB1ctGL5rlHrPJtFDVIVzTyQylMLu9N9VICA6HSFJo8MCGVTMW6gfpicwKmmK/dAjTOrqu5l63JJOpDSrAis3A==
+  dependencies:
+    lru-cache "^6.0.0"
+
+semver@^7.5.4:
+  version "7.5.4"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.5.4.tgz#483986ec4ed38e1c6c48c34894a9182dbff68a6e"
+  integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
 
