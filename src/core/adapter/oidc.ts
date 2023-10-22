@@ -1,12 +1,6 @@
-import type { Oidc } from "../ports/Oidc";
-import keycloak_js from "keycloak-js";
-import { id } from "tsafe/id";
-import { createKeycloakAdapter } from "keycloakify";
-import { decodeJwt } from "core/tools/jwt";
-import type { Param0, ReturnType } from "tsafe";
+import { Oidc } from "core/ports/Oidc";
+import { createOidc as createOidcSpa } from "oidc-spa";
 import { addParamToUrl } from "powerhooks/tools/urlSearchParams";
-import { assert } from "tsafe/assert";
-import { Evt } from "evt";
 
 export async function createOidc(params: {
     url: string;
@@ -15,138 +9,26 @@ export async function createOidc(params: {
     appUrl: string;
     transformUrlBeforeRedirect: (url: string) => string;
     getUiLocales: () => string;
-    log?: typeof console.log;
 }): Promise<Oidc> {
-    const {
-        url,
-        realm,
+    const { url, realm, clientId, appUrl, transformUrlBeforeRedirect, getUiLocales } =
+        params;
+
+    return createOidcSpa({
+        "issuerUri": `${url}/realms/${realm}`,
         clientId,
-        appUrl,
-        transformUrlBeforeRedirect,
-        getUiLocales,
-        log
-    } = params;
-
-    const keycloakInstance = keycloak_js({ url, realm, clientId });
-
-    let redirectMethod: ReturnType<
-        Param0<typeof createKeycloakAdapter>["getRedirectMethod"]
-    > = "overwrite location.href";
-
-    const isAuthenticated = await keycloakInstance
-        .init({
-            "onLoad": "check-sso",
-            "silentCheckSsoRedirectUri": `${appUrl}/silent-sso.html`,
-            "responseMode": "query",
-            "checkLoginIframe": false,
-            "adapter": createKeycloakAdapter({
-                "transformUrlBeforeRedirect": url =>
-                    // prettier-ignore
-                    [url]
-                        .map(transformUrlBeforeRedirect)
-                        .map(
-                            url =>
-                                addParamToUrl({
-                                    url,
-                                    "name": "ui_locales",
-                                    "value": getUiLocales()
-                                }).newUrl
-                        )
-                    [0],
-                keycloakInstance,
-                "getRedirectMethod": () => redirectMethod
-            })
-        })
-        .catch((error: Error) => error);
-
-    //TODO: Make sure that result is always an object.
-    if (isAuthenticated instanceof Error) {
-        throw isAuthenticated;
-    }
-
-    const login: Oidc.NotLoggedIn["login"] = async ({ doesCurrentHrefRequiresAuth }) => {
-        if (doesCurrentHrefRequiresAuth) {
-            redirectMethod = "location.replace";
-        }
-
-        await keycloakInstance.login({ "redirectUri": window.location.href });
-
-        return new Promise<never>(() => {});
-    };
-
-    if (!isAuthenticated) {
-        return id<Oidc.NotLoggedIn>({
-            "isUserLoggedIn": false,
-            login
-        });
-    }
-
-    assert(keycloakInstance.token !== undefined);
-
-    let currentAccessToken = keycloakInstance.token;
-
-    const oidc = id<Oidc.LoggedIn>({
-        "isUserLoggedIn": true,
-        "getAccessToken": () => currentAccessToken,
-        "logout": async ({ redirectTo }) => {
-            await keycloakInstance.logout({
-                "redirectUri": (() => {
-                    switch (redirectTo) {
-                        case "current page":
-                            return window.location.href;
-                        case "home":
-                            return appUrl;
-                    }
-                })()
-            });
-
-            return new Promise<never>(() => {});
-        },
-        "updateTokenInfo": async () => {
-            await keycloakInstance.updateToken(-1);
-
-            assert(keycloakInstance.token !== undefined);
-
-            currentAccessToken = keycloakInstance.token;
-        }
+        "transformUrlBeforeRedirect": url =>
+            // prettier-ignore
+            [url]
+                .map(transformUrlBeforeRedirect)
+                .map(
+                    url =>
+                        addParamToUrl({
+                            url,
+                            "name": "ui_locales",
+                            "value": getUiLocales()
+                        }).newUrl
+                )
+            [0],
+        "silentSsoUrl": `${appUrl}/silent-sso.html`
     });
-
-    (function callee() {
-        const msBeforeExpiration =
-            decodeJwt<{ exp: number }>(currentAccessToken)["exp"] * 1000 - Date.now();
-
-        setTimeout(async () => {
-            log?.(
-                `OIDC access token will expire in ${minValiditySecond} seconds, waiting for user activity before renewing`
-            );
-
-            await Evt.merge([
-                Evt.from(document, "mousemove"),
-                Evt.from(document, "keydown")
-            ]).waitFor();
-
-            log?.("User activity detected. Refreshing access token now");
-
-            const error = await keycloakInstance.updateToken(-1).then(
-                () => undefined,
-                (error: Error) => error
-            );
-
-            if (error) {
-                log?.("Can't refresh OIDC access token, getting a new one");
-                //NOTE: Never resolves
-                await login({ "doesCurrentHrefRequiresAuth": true });
-            }
-
-            assert(keycloakInstance.token !== undefined);
-
-            currentAccessToken = keycloakInstance.token;
-
-            callee();
-        }, msBeforeExpiration - minValiditySecond * 1000);
-    })();
-
-    return oidc;
 }
-
-const minValiditySecond = 25;

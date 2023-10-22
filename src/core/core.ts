@@ -47,7 +47,7 @@ export async function createCore(params: {
                 if (oidc === undefined || !oidc.isUserLoggedIn) {
                     return undefined;
                 }
-                return oidc.getAccessToken();
+                return oidc.getTokens().accessToken;
             }
         });
 
@@ -101,9 +101,11 @@ export async function createCore(params: {
             return createObjectThatThrowsIfAccessed<GetUser>();
         }
 
+        const oidcLoggedIn = oidc;
+
         const { getUser } = createGetUser({
             jwtClaimByUserKey,
-            "getOidcAccessToken": oidc.getAccessToken
+            "getOidcAccessToken": () => oidcLoggedIn.getTokens().accessToken
         });
 
         return getUser;

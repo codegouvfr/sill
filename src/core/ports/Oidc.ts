@@ -8,8 +8,8 @@ export declare namespace Oidc {
 
     export type LoggedIn = {
         isUserLoggedIn: true;
-        getAccessToken: () => string;
+        renewTokens(): Promise<void>;
+        getTokens: () => { accessToken: string };
         logout: (params: { redirectTo: "home" | "current page" }) => Promise<never>;
-        updateTokenInfo: () => Promise<void>;
     };
 }

@@ -234,11 +234,11 @@ export const thunks = {
                     await sillApi.changeAgentOrganization({
                         "newOrganization": params.value
                     });
-                    await oidc.updateTokenInfo();
+                    await oidc.renewTokens();
                     break;
                 case "email":
                     await sillApi.updateEmail({ "newEmail": params.value });
-                    await oidc.updateTokenInfo();
+                    await oidc.renewTokens();
                     break;
                 case "aboutAndIsPublic":
                     await Promise.all([

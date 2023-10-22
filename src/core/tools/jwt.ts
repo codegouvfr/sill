@@ -1,4 +1,4 @@
-import jwt_decode from "jwt-decode";
+import { decodeJwt as decodeJwt_vanilla } from "oidc-spa";
 
 export function encodeJwt(obj: Record<string, unknown>) {
     return `mock_${JSON.stringify(obj)}`;
@@ -15,5 +15,5 @@ export function decodeJwt<T extends Record<string, unknown>>(token: string): T {
         return JSON.parse(match[1]);
     }
 
-    return jwt_decode(token);
+    return decodeJwt_vanilla(token);
 }
