@@ -85,7 +85,9 @@ export async function createCore(params: {
         const { createOidc } = await import("core/adapter/oidc");
 
         return createOidc({
-            ...keycloakParams,
+            "keycloakUrl": keycloakParams.url,
+            "keycloakRealm": keycloakParams.realm,
+            "clientId": keycloakParams.clientId,
             appUrl,
             "transformUrlBeforeRedirect": url =>
                 transformUrlBeforeRedirectToLogin({

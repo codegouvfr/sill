@@ -3,18 +3,24 @@ import { createOidc as createOidcSpa } from "oidc-spa";
 import { addParamToUrl } from "powerhooks/tools/urlSearchParams";
 
 export async function createOidc(params: {
-    url: string;
-    realm: string;
+    keycloakUrl: string;
+    keycloakRealm: string;
     clientId: string;
     appUrl: string;
     transformUrlBeforeRedirect: (url: string) => string;
     getUiLocales: () => string;
 }): Promise<Oidc> {
-    const { url, realm, clientId, appUrl, transformUrlBeforeRedirect, getUiLocales } =
-        params;
+    const {
+        keycloakUrl,
+        keycloakRealm,
+        clientId,
+        appUrl,
+        transformUrlBeforeRedirect,
+        getUiLocales
+    } = params;
 
     return createOidcSpa({
-        "issuerUri": `${url}/realms/${realm}`,
+        "issuerUri": `${keycloakUrl}/realms/${keycloakRealm}`,
         clientId,
         "transformUrlBeforeRedirect": url =>
             // prettier-ignore
@@ -29,6 +35,6 @@ export async function createOidc(params: {
                         }).newUrl
                 )
             [0],
-        "silentSsoUrl": `${appUrl}/silent-sso.html`
+        "publicUrl": appUrl
     });
 }
