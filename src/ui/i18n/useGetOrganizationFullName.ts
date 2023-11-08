@@ -26,7 +26,7 @@ const organizationFullNameByAcronym: Record<string, LocalizedString> = {
     "MI": { "fr": "Ministère de l'Intérieur", "en": "Ministry of the Interior" },
     "MJ": { "fr": "Ministère de la Justice", "en": "Ministry of Justice" },
     "MC": { "fr": "Ministère de la Culture", "en": "Ministry of Culture" },
-    "MESRI": {
+    "MESR": {
         "fr": "Ministère de l'Enseignement Supérieur, de la Recherche et de l'Innovation",
         "en": "Ministry of Higher Education, Research and Innovation"
     },
