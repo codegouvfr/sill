@@ -496,6 +496,8 @@ const {
                 "tab title overview": "Overview",
                 "tab title instance": ({ instanceCount }) =>
                     `Referenced instance (${instanceCount})`,
+                "tab service providers": ({ serviceProvidersCount }) =>
+                    `Service providers (${serviceProvidersCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Alike or equivalent proprietary software (${alikeSoftwareCount})`,
                 "prerogatives": "Prerogatives",
@@ -1194,6 +1196,8 @@ const {
                 "tab title overview": "Aperçu",
                 "tab title instance": ({ instanceCount }) =>
                     `Instances référencées (${instanceCount})`,
+                "tab service providers": ({ serviceProvidersCount }) =>
+                    `Prestataires de services (${serviceProvidersCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Logiciels similaires ou équivalents propriétaires (${alikeSoftwareCount})`,
                 "prerogatives": "Prérogatives",

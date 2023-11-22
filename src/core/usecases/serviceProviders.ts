@@ -1,7 +1,8 @@
-import { RootState } from "@codegouvfr/sill/core/core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector } from "redux-clean-architecture";
 import { id } from "tsafe/id";
-import { Thunks } from "../core";
+import type { State as RootState, Thunks } from "core/bootstrap";
+import { selectors as softwareDetailsSelectors } from "core/usecases/softwareDetails/selectors";
 
 export type ServiceProvider = {
     name: string;
@@ -11,7 +12,7 @@ export type ServiceProvider = {
     siren?: string;
 };
 
-export type ServiceProvidersBySillId = Partial<Record<number, ServiceProvider[]>>;
+export type ServiceProvidersBySillId = Partial<Record<string, ServiceProvider[]>>;
 
 export type State = {
     serviceProvidersBySillId: ServiceProvidersBySillId;
@@ -40,12 +41,12 @@ export const { reducer, actions } = createSlice({
     }
 });
 
-export const thunks = {} satisfies Thunks;
+export const thunks = {} as Thunks;
 
-export const privateThunks = {
-    "retrieveServiceProviders": () => async (dispatch, _, extraArg) => {
+export const protectedThunks = {
+    "retrieveServiceProviders": () => async (dispatch, _, context) => {
         dispatch(actions.serviceProvidersRequested());
-        extraArg
+        context
             .getServiceProviders()
             .then(serviceProviders => {
                 dispatch(actions.serviceProvidersReceived(serviceProviders));
@@ -55,3 +56,23 @@ export const privateThunks = {
             );
     }
 } satisfies Thunks;
+
+const serviceProvidersBySillId = (state: RootState) =>
+    state[name].serviceProvidersBySillId;
+
+export const selectors = {
+    main: createSelector(
+        serviceProvidersBySillId,
+        softwareDetailsSelectors.main,
+        (serviceProvidersBySillId, { software }): ServiceProvider[] => {
+            console.log("YO >", {
+                software,
+                providers: software
+                    ? serviceProvidersBySillId[software.softwareName]
+                    : "pas de software"
+            });
+            if (!software) return [];
+            return serviceProvidersBySillId[software.softwareName] ?? [];
+        }
+    )
+};

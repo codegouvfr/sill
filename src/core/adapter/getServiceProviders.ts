@@ -1,7 +1,7 @@
 import { GetServiceProviders } from "../ports/GetServiceProviders";
 import { ServiceProvidersBySillId } from "../usecases/serviceProviders";
 
-type SillWithServiceProviderFromApi = {
+type SillIdAndPrestataireFromApi = {
     sill_id: number;
     prestataires: Array<{
         nom: string;
@@ -14,7 +14,7 @@ type SillWithServiceProviderFromApi = {
 export const getServiceProviders: GetServiceProviders = () =>
     fetch("https://code.gouv.fr/data/sill-prestataires.json")
         .then(response => response.json())
-        .then((serviceProvidersFromApi: SillWithServiceProviderFromApi[]) =>
+        .then((serviceProvidersFromApi: SillIdAndPrestataireFromApi[]) =>
             serviceProvidersFromApi.reduce(
                 (acc, { sill_id, prestataires }) => ({
                     ...acc,

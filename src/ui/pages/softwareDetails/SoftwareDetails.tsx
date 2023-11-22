@@ -42,6 +42,11 @@ export default function SoftwareDetails(props: Props) {
         "main"
     );
 
+    const serviceProviders = useCoreState("serviceProviders", "main");
+    // access the selector
+    // I would expect to do : const serviceProviders = useSelector(serviceProvidersForSelectedSoftwareSelector)
+    // but not sure how to do it with redux-clean-architecture
+
     useEffect(() => {
         softwareDetails.initialize({
             "softwareName": route.params.name
@@ -155,6 +160,33 @@ export default function SoftwareDetails(props: Props) {
                                                       }).link
                                                   }
                                               />
+                                          )
+                                      }
+                                  ]),
+                            ...(false
+                                ? []
+                                : [
+                                      {
+                                          "label": t("tab service providers", {
+                                              "serviceProvidersCount": 10
+                                          }),
+                                          "content": (
+                                              <div>
+                                                  Ceci est un contenu bidon
+                                                  <ul>
+                                                      {serviceProviders.map(
+                                                          serviceProvider => (
+                                                              <li
+                                                                  key={
+                                                                      serviceProvider.siren
+                                                                  }
+                                                              >
+                                                                  {serviceProvider.name}
+                                                              </li>
+                                                          )
+                                                      )}
+                                                  </ul>
+                                              </div>
                                           )
                                       }
                                   ]),
@@ -342,6 +374,7 @@ export const { i18n } = declareComponentKeys<
     | "catalog breadcrumb"
     | "tab title overview"
     | { K: "tab title instance"; P: { instanceCount: number } }
+    | { K: "tab service providers"; P: { serviceProvidersCount: number } }
     | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
     | "prerogatives"
     | "last version"

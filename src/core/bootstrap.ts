@@ -1,4 +1,5 @@
 import { getServiceProviders } from "./adapter/getServiceProviders";
+import { GetServiceProviders } from "./ports/GetServiceProviders";
 import { usecases } from "./usecases";
 import type { LocalizedString } from "i18nifty";
 import type { Language } from "@codegouvfr/sill";
@@ -31,6 +32,7 @@ type Context = {
     sillApi: SillApi;
     oidc: Oidc;
     getUser: GetUser;
+    getServiceProviders: GetServiceProviders;
 };
 
 type Core = GenericCore<typeof usecases, Context>;
@@ -138,8 +140,8 @@ export async function bootstrapCore(
         sillApi,
         oidc,
         getUser,
-        getServiceProviders,
-        };
+        getServiceProviders
+    };
 
     const { core, dispatch } = createCore({
         usecases,
@@ -151,7 +153,7 @@ export async function bootstrapCore(
         dispatch(usecases.softwareCatalog.protectedThunks.initialize()),
         dispatch(usecases.generalStats.protectedThunks.initialize()),
         dispatch(usecases.redirect.protectedThunks.initialize()),
-        core.dispatch(usecases.serviceProviders.privateThunks.retrieveServiceProviders())
+        dispatch(usecases.serviceProviders.protectedThunks.retrieveServiceProviders())
     ]);
 
     return { core };
