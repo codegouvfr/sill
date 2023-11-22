@@ -15,7 +15,8 @@
         "prepare": "copy-dsfr-to-public && copy-keycloak-resources-to-public",
         "prestorybook": "only-include-used-icons",
         "prestart": "only-include-used-icons",
-        "prebuild": "only-include-used-icons"
+        "prebuild": "only-include-used-icons",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@codegouvfr/react-dsfr": "^1.0.0",

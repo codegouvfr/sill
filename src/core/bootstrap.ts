@@ -1,3 +1,4 @@
+import { getServiceProviders } from "./adapter/getServiceProviders";
 import { usecases } from "./usecases";
 import type { LocalizedString } from "i18nifty";
 import type { Language } from "@codegouvfr/sill";
@@ -136,8 +137,9 @@ export async function bootstrapCore(
         "paramsOfBootstrapCore": params,
         sillApi,
         oidc,
-        getUser
-    };
+        getUser,
+        getServiceProviders,
+        };
 
     const { core, dispatch } = createCore({
         usecases,
@@ -148,7 +150,8 @@ export async function bootstrapCore(
         dispatch(usecases.sillApiVersion.protectedThunks.initialize()),
         dispatch(usecases.softwareCatalog.protectedThunks.initialize()),
         dispatch(usecases.generalStats.protectedThunks.initialize()),
-        dispatch(usecases.redirect.protectedThunks.initialize())
+        dispatch(usecases.redirect.protectedThunks.initialize()),
+        core.dispatch(usecases.serviceProviders.privateThunks.retrieveServiceProviders())
     ]);
 
     return { core };
