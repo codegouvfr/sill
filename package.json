@@ -1,7 +1,7 @@
 {
     "homepage": "https://xxx.yy/sill",
     "name": "sill-web",
-    "version": "1.37.7",
+    "version": "1.37.8",
     "license": "MIT",
     "scripts": {
         "start": "react-app-rewired start",
@@ -18,7 +18,7 @@
         "prebuild": "only-include-used-icons"
     },
     "dependencies": {
-        "@codegouvfr/react-dsfr": "^0.74.2",
+        "@codegouvfr/react-dsfr": "^1.0.0",
         "@codegouvfr/sill": "^1.18.3",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
