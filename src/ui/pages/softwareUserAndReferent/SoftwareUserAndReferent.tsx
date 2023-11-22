@@ -73,6 +73,8 @@ export default function SoftwareUserAndReferent(props: Props) {
         }
     ];
 
+    const referentEmails = referents.map(({ email }) => email);
+
     const contentReferent = () => {
         return referents.map(referent => {
             const {
@@ -220,14 +222,29 @@ export default function SoftwareUserAndReferent(props: Props) {
                                     )}
                                     id="fr-sidemenu-title"
                                 >
-                                    <div className={classes.logoWrapper}>
-                                        <img
-                                            className={classes.logo}
-                                            src={logoUrl ?? softwareLogoPlaceholder}
-                                            alt="Logo du logiciel"
-                                        />
+                                    <div className={classes.sidemenuTitleWithLogo}>
+                                        <div className={classes.logoWrapper}>
+                                            <img
+                                                className={classes.logo}
+                                                src={logoUrl ?? softwareLogoPlaceholder}
+                                                alt="Logo du logiciel"
+                                            />
+                                        </div>
+                                        <span>{softwareName}</span>
                                     </div>
-                                    {softwareName}
+                                    {referentEmails.length > 0 && (
+                                        <div>
+                                            <a
+                                                href={`mailto:${referentEmails.join(
+                                                    ","
+                                                )}`}
+                                            >
+                                                <i
+                                                    className={fr.cx("fr-icon-mail-line")}
+                                                />
+                                            </a>
+                                        </div>
+                                    )}
                                 </div>
                                 <ul className={fr.cx("fr-sidemenu__list")}>
                                     {menuTabs.map(tab => {
@@ -330,6 +347,12 @@ const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
         "flex": 1
     },
     "sidemenuTitle": {
+        "display": "flex",
+        "alignItems": "center",
+        "justifyContent": "space-between",
+        "with": "100%"
+    },
+    "sidemenuTitleWithLogo": {
         "display": "flex",
         "alignItems": "center"
     },
