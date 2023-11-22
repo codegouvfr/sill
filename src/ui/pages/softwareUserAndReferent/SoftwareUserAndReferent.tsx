@@ -65,10 +65,12 @@ export default function SoftwareUserAndReferent(props: Props) {
     const menuTabs = [
         {
             "id": 0,
+            "name": "referents" as const,
             "label": `${t("tab referent title")} (${referents.length})`
         },
         {
             "id": 1,
+            "name": "users" as const,
             "label": `${t("tab user title")} (${users.length})`
         }
     ];
@@ -222,29 +224,14 @@ export default function SoftwareUserAndReferent(props: Props) {
                                     )}
                                     id="fr-sidemenu-title"
                                 >
-                                    <div className={classes.sidemenuTitleWithLogo}>
-                                        <div className={classes.logoWrapper}>
-                                            <img
-                                                className={classes.logo}
-                                                src={logoUrl ?? softwareLogoPlaceholder}
-                                                alt="Logo du logiciel"
-                                            />
-                                        </div>
-                                        <span>{softwareName}</span>
+                                    <div className={classes.logoWrapper}>
+                                        <img
+                                            className={classes.logo}
+                                            src={logoUrl ?? softwareLogoPlaceholder}
+                                            alt="Logo du logiciel"
+                                        />
                                     </div>
-                                    {referentEmails.length > 0 && (
-                                        <div>
-                                            <a
-                                                href={`mailto:${referentEmails.join(
-                                                    ","
-                                                )}`}
-                                            >
-                                                <i
-                                                    className={fr.cx("fr-icon-mail-line")}
-                                                />
-                                            </a>
-                                        </div>
-                                    )}
+                                    {softwareName}
                                 </div>
                                 <ul className={fr.cx("fr-sidemenu__list")}>
                                     {menuTabs.map(tab => {
@@ -270,13 +257,29 @@ export default function SoftwareUserAndReferent(props: Props) {
                                             >
                                                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                                                 <a
-                                                    className={fr.cx("fr-sidemenu__link")}
+                                                    className={cx(
+                                                        fr.cx("fr-sidemenu__link"),
+                                                        classes.sidemenuItemFlex
+                                                    )}
                                                     href="#"
                                                     target="_self"
                                                     {...ariaCurrent}
                                                     onClick={() => setActiveMenu(tab.id)}
                                                 >
-                                                    {tab.label}
+                                                    <div>{tab.label}</div>
+                                                    {tab.name === "referents" &&
+                                                        referentEmails.length > 0 && (
+                                                            <div>
+                                                                <a
+                                                                    className={fr.cx(
+                                                                        "fr-icon-mail-line"
+                                                                    )}
+                                                                    href={`mailto:${referentEmails.join(
+                                                                        ","
+                                                                    )}`}
+                                                                />
+                                                            </div>
+                                                        )}
                                                 </a>
                                             </li>
                                         );
@@ -348,13 +351,11 @@ const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
     },
     "sidemenuTitle": {
         "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "space-between",
-        "with": "100%"
-    },
-    "sidemenuTitleWithLogo": {
-        "display": "flex",
         "alignItems": "center"
+    },
+    "sidemenuItemFlex": {
+        "display": "flex",
+        "justifyContent": "space-between"
     },
     "logoWrapper": {
         "height": fr.spacing("10v"),
