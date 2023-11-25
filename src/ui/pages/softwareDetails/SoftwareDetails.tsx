@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { selectors, useCoreState, useCoreFunctions } from "core";
+import { useCoreState, useCore } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -31,16 +31,15 @@ type Props = {
 export default function SoftwareDetails(props: Props) {
     const { route, className } = props;
 
-    const { softwareDetails, userAuthentication } = useCoreFunctions();
+    const { softwareDetails, userAuthentication } = useCore().functions;
 
     const { cx, classes } = useStyles();
 
     const { t } = useTranslation({ SoftwareDetails });
 
-    const { software } = useCoreState(selectors.softwareDetails.software);
-    const { userDeclaration } = useCoreState(selectors.softwareDetails.userDeclaration);
-    const { isUnreferencingOngoing } = useCoreState(
-        selectors.softwareDetails.isUnreferencingOngoing
+    const { isReady, software, userDeclaration, isUnreferencingOngoing } = useCoreState(
+        "softwareDetails",
+        "main"
     );
 
     useEffect(() => {
@@ -51,7 +50,7 @@ export default function SoftwareDetails(props: Props) {
         return () => softwareDetails.clear();
     }, [route.params.name]);
 
-    if (software === undefined) {
+    if (!isReady) {
         return <LoadingFallback />;
     }
 

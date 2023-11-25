@@ -2,7 +2,7 @@ import { useEffect, type MouseEvent } from "react";
 import { routes, session } from "ui/routes";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@codegouvfr/react-dsfr/Button";
-import { useCoreFunctions, useCoreState, useCoreEvts, selectors } from "core";
+import { useCore, useCoreState } from "core";
 import { useEvt } from "evt/hooks";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
@@ -36,13 +36,13 @@ export default function DeclarationForm(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { step } = useCoreState(selectors.declarationForm.step);
-    const { declarationType } = useCoreState(selectors.declarationForm.declarationType);
-    const { isSubmitting } = useCoreState(selectors.declarationForm.isSubmitting);
-    const { software } = useCoreState(selectors.declarationForm.software);
-    const { evtDeclarationForm } = useCoreEvts();
+    const { declarationForm } = useCore().functions;
+    const { evtDeclarationForm } = useCore().evts;
 
-    const { declarationForm } = useCoreFunctions();
+    const { isReady, step, declarationType, isSubmitting, software } = useCoreState(
+        "declarationForm",
+        "main"
+    );
 
     useEffect(() => {
         declarationForm.initialize({ "softwareName": route.params.name });
@@ -81,8 +81,8 @@ export default function DeclarationForm(props: Props) {
     const { t } = useTranslation({ DeclarationForm });
     const { t: tCommon } = useTranslation({ "App": "App" });
 
-    if (step === undefined) {
-        return <CircularProgress />;
+    if (!isReady) {
+        return <LoadingFallback />;
     }
 
     const onBackStep = (event: MouseEvent<HTMLButtonElement>) => {
@@ -94,10 +94,6 @@ export default function DeclarationForm(props: Props) {
         event.preventDefault();
         evtActionSubmitStep.post();
     };
-
-    if (software === undefined) {
-        return <LoadingFallback />;
-    }
 
     return (
         <div className={className}>
@@ -178,7 +174,6 @@ export default function DeclarationForm(props: Props) {
                                             case 1:
                                                 return t("title step 1");
                                             case 2:
-                                                assert(declarationType !== undefined);
                                                 return t(
                                                     `title step 2 ${declarationType}`
                                                 );

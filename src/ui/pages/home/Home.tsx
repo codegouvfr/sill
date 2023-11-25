@@ -11,7 +11,7 @@ import { Button } from "@codegouvfr/react-dsfr/Button";
 import Tile from "@codegouvfr/react-dsfr/Tile";
 import Card from "@codegouvfr/react-dsfr/Card";
 import illustration_sill from "ui/assets/illustration_sill.svg";
-import { useCoreState, selectors } from "core";
+import { useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { useMetricCountUpAnimation } from "ui/tools/useMetricCountUpAnimation";
 import { Waypoint } from "react-waypoint";
@@ -33,7 +33,7 @@ export default function Home(props: Props) {
     const { cx, classes, css } = useStyles();
     const { t } = useTranslation({ Home });
 
-    const { stats } = useCoreState(selectors.generalStats.stats);
+    const stats = useCoreState("generalStats", "main");
 
     const softwareSelectionList = [
         {

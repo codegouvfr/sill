@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { selectors, useCoreState, useCoreFunctions } from "core";
+import { useCore, useCoreState } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -7,7 +7,6 @@ import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useGetOrganizationFullName } from "ui/i18n";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { Button } from "@codegouvfr/react-dsfr/Button";
-import { assert } from "tsafe/assert";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
@@ -22,7 +21,12 @@ export type Props = {
 export default function SoftwareUserAndReferent(props: Props) {
     const { route, className } = props;
 
-    const { softwareDetails, softwareUserAndReferent } = useCoreFunctions();
+    const { softwareDetails, softwareUserAndReferent } = useCore().functions;
+
+    const { isReady, logoUrl, referents, users } = useCoreState(
+        "softwareUserAndReferent",
+        "main"
+    );
 
     useEffect(() => {
         softwareUserAndReferent.initialize({ "softwareName": route.params.name });
@@ -46,11 +50,6 @@ export default function SoftwareUserAndReferent(props: Props) {
 
     const [activeMenu, setActiveMenu] = useState(0);
 
-    const { isReady } = useCoreState(selectors.softwareUserAndReferent.isReady);
-    const { users } = useCoreState(selectors.softwareUserAndReferent.users);
-    const { referents } = useCoreState(selectors.softwareUserAndReferent.referents);
-    const { logoUrl } = useCoreState(selectors.softwareUserAndReferent.logoUrl);
-
     const softwareName = route.params.name;
 
     const { getOrganizationFullName } = useGetOrganizationFullName();
@@ -58,9 +57,6 @@ export default function SoftwareUserAndReferent(props: Props) {
     if (!isReady) {
         return <LoadingFallback />;
     }
-
-    assert(users !== undefined);
-    assert(referents !== undefined);
 
     const menuTabs = [
         {

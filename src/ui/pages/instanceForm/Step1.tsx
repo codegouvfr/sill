@@ -6,7 +6,7 @@ import { assert } from "tsafe/assert";
 import type { WikidataEntry } from "core/usecases/instanceForm";
 import { AutocompleteInput } from "ui/shared/AutocompleteInput";
 import { SearchMultiInput } from "ui/shared/SearchMultiInput";
-import type { useCoreFunctions } from "core";
+import type { useCore } from "core";
 import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useResolveLocalizedString } from "ui/i18n";
@@ -31,8 +31,8 @@ export type Step1Props = {
         queryString: string
     ) => ReturnType<
         ReturnType<
-            typeof useCoreFunctions
-        >["softwareForm"]["getLibreSoftwareWikidataOptions"]
+            typeof useCore
+        >["functions"]["softwareForm"]["getLibreSoftwareWikidataOptions"]
     >;
 };
 

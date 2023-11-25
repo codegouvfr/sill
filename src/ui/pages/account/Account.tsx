@@ -5,7 +5,7 @@ import { useTranslation, useGetOrganizationFullName, evtLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useCoreFunctions, useCoreState, selectors } from "core";
+import { useCore, useCoreState } from "core";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { z } from "zod";
 import { AutocompleteFreeSoloInput } from "ui/shared/AutocompleteFreeSoloInput";
@@ -36,14 +36,14 @@ export default function Account(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { userAccountManagement } = useCoreFunctions();
-    const { readyState } = useCoreState(selectors.userAccountManagement.readyState);
+    const { userAccountManagement } = useCore().functions;
+    const isReady = useCoreState("userAccountManagement", "main") !== undefined;
 
     useEffect(() => {
         userAccountManagement.initialize();
     }, []);
 
-    if (readyState === undefined) {
+    if (!isReady) {
         return <LoadingFallback />;
     }
 
@@ -63,11 +63,11 @@ function AccountReady(props: { className?: string }) {
         doSupportPasswordReset,
         allowedEmailRegExp
     } = (function useClosure() {
-        const { readyState } = useCoreState(selectors.userAccountManagement.readyState);
+        const state = useCoreState("userAccountManagement", "main");
 
-        assert(readyState !== undefined);
+        assert(state !== undefined);
 
-        const { allowedEmailRegexpStr, ...rest } = readyState;
+        const { allowedEmailRegexpStr, ...rest } = state;
 
         const allowedEmailRegExp = useMemo(
             () => new RegExp(allowedEmailRegexpStr),
@@ -82,7 +82,7 @@ function AccountReady(props: { className?: string }) {
 
     const { isDark } = useIsDark();
 
-    const { userAccountManagement } = useCoreFunctions();
+    const { userAccountManagement } = useCore().functions;
 
     const [emailInputValue, setEmailInputValue] = useState(email.value);
     /* prettier-ignore */

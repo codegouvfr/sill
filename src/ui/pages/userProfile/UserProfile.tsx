@@ -3,7 +3,7 @@ import { useTranslation } from "ui/i18n";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useCoreFunctions, useCoreState, selectors } from "core";
+import { useCore, useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import { tss } from "tss-react/dsfr";
@@ -25,8 +25,8 @@ export default function UserProfile(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { userProfile } = useCoreFunctions();
-    const { profile } = useCoreState(selectors.userProfile.profile);
+    const { userProfile } = useCore().functions;
+    const { isReady, profile, softwares } = useCoreState("userProfile", "main");
 
     useEffect(() => {
         userProfile.initialize({ "email": route.params.email });
@@ -36,25 +36,13 @@ export default function UserProfile(props: Props) {
         };
     }, [route.params.email]);
 
-    if (profile === undefined) {
-        return <LoadingFallback />;
-    }
-
-    return <UserProfileReady className={className} />;
-}
-
-function UserProfileReady(props: { className?: string }) {
-    const { className } = props;
-
     const { t } = useTranslation({ UserProfile });
 
-    const { profile } = useCoreState(selectors.userProfile.profile);
-    const { softwares } = useCoreState(selectors.userProfile.softwares);
-
-    assert(profile !== undefined);
-    assert(softwares !== undefined);
-
     const { cx, classes } = useStyles();
+
+    if (!isReady) {
+        return <LoadingFallback />;
+    }
 
     return (
         <div className={cx(fr.cx("fr-container"), className)}>

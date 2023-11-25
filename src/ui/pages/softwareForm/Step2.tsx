@@ -7,7 +7,7 @@ import { CircularProgressWrapper } from "ui/shared/CircularProgressWrapper";
 import { assert } from "tsafe/assert";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
-import type { useCoreFunctions } from "core";
+import type { useCore } from "core";
 import type { FormData } from "core/usecases/softwareForm";
 import type { ReturnType } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -21,15 +21,15 @@ export type Step2Props = {
     onSubmit: (formData: FormData["step2"]) => void;
     evtActionSubmit: NonPostableEvt<void>;
     getAutofillDataFromWikidata: ReturnType<
-        typeof useCoreFunctions
-    >["softwareForm"]["getAutofillData"];
+        typeof useCore
+    >["functions"]["softwareForm"]["getAutofillData"];
     getLibreSoftwareWikidataOptions: (
         queryString: string
     ) => Promise<
         ReturnType<
             ReturnType<
-                typeof useCoreFunctions
-            >["softwareForm"]["getLibreSoftwareWikidataOptions"]
+                typeof useCore
+            >["functions"]["softwareForm"]["getLibreSoftwareWikidataOptions"]
         >
     >;
 };

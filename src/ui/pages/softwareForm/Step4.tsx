@@ -5,7 +5,7 @@ import { useEvt } from "evt/hooks";
 import { fr } from "@codegouvfr/react-dsfr";
 import { SearchMultiInput } from "ui/shared/SearchMultiInput";
 import type { FormData } from "core/usecases/softwareForm";
-import type { useCoreFunctions } from "core";
+import type { useCore } from "core";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import type { ReturnType } from "tsafe";
@@ -19,7 +19,7 @@ export type Step4Props = {
         queryString: string
     ) => Promise<
         ReturnType<
-            ReturnType<typeof useCoreFunctions>["softwareForm"]["getWikidataOptions"]
+            ReturnType<typeof useCore>["functions"]["softwareForm"]["getWikidataOptions"]
         >
     >;
 };

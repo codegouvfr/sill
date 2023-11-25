@@ -8,7 +8,7 @@ import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
 import { Evt } from "evt";
-import { useCoreFunctions, useCoreState, useCoreEvts, selectors } from "core";
+import { useCoreState, useCore } from "core";
 import { useEvt } from "evt/hooks";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { useTranslation } from "ui/i18n";
@@ -32,19 +32,21 @@ export default function InstanceForm(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { step } = useCoreState(selectors.instanceForm.step);
-    const { initializationData } = useCoreState(
-        selectors.instanceForm.initializationData
-    );
-    const { allSillSoftwares } = useCoreState(selectors.instanceForm.allSillSoftwares);
-    const { isSubmitting } = useCoreState(selectors.instanceForm.isSubmitting);
-    const { isLastStep } = useCoreState(selectors.instanceForm.isLastStep);
-    const { evtInstanceForm } = useCoreEvts();
+    const { evtInstanceForm } = useCore().evts;
 
     const {
         instanceForm,
         softwareForm: { getLibreSoftwareWikidataOptions }
-    } = useCoreFunctions();
+    } = useCore().functions;
+
+    const {
+        isReady,
+        step,
+        initializationData,
+        allSillSoftwares,
+        isSubmitting,
+        isLastStep
+    } = useCoreState("instanceForm", "main");
 
     useEffect(() => {
         instanceForm.initialize(
@@ -88,12 +90,9 @@ export default function InstanceForm(props: Props) {
 
     const { lang } = useLang();
 
-    if (step === undefined) {
+    if (!isReady) {
         return <LoadingFallback className={className} showAfterMs={150} />;
     }
-
-    assert(initializationData !== undefined);
-    assert(allSillSoftwares !== undefined);
 
     return (
         <div className={className}>

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Markdown } from "keycloakify/tools/Markdown";
-import { useCoreFunctions, useCoreState, selectors } from "core";
+import { useCoreState, useCore } from "core";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
@@ -15,19 +15,21 @@ type Props = {
 export default function Readme(props: Props) {
     const { className } = props;
 
-    const { readme } = useCoreFunctions();
+    const {
+        readme: { initialize }
+    } = useCore().functions;
 
     const { lang } = useLang();
 
     useEffect(() => {
-        readme.initialize({ lang });
+        initialize({ lang });
     }, [lang]);
 
-    const { markdown } = useCoreState(selectors.readme.markdown);
+    const { isReady, markdown } = useCoreState("readme", "main");
 
     const { classes, cx } = useStyles();
 
-    if (markdown === undefined) {
+    if (!isReady) {
         return <LoadingFallback />;
     }
 

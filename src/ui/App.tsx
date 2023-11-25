@@ -4,7 +4,7 @@ import { useRoute } from "ui/routes";
 import { Header } from "ui/shared/Header";
 import { Footer } from "ui/shared/Footer";
 import { declareComponentKeys } from "i18nifty";
-import { useCoreFunctions } from "core";
+import { useCore } from "core";
 import { RouteProvider } from "ui/routes";
 import { injectGlobalStatesInSearchParams } from "powerhooks/useGlobalState";
 import { evtLang } from "ui/i18n";
@@ -79,7 +79,7 @@ function ContextualizedApp() {
 
     const route = useRoute();
 
-    const { userAuthentication, sillApiVersion } = useCoreFunctions();
+    const { userAuthentication, sillApiVersion } = useCore().functions;
 
     const headerUserAuthenticationApi = useConst(() =>
         userAuthentication.getIsUserLoggedIn()

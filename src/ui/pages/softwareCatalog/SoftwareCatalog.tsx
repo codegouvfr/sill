@@ -1,7 +1,7 @@
 import { useEffect, useTransition, useMemo } from "react";
 import { createUseDebounce } from "powerhooks/useDebounce";
 import { routes } from "ui/routes";
-import { selectors, useCoreState, useCoreFunctions, useCoreEvts } from "core";
+import { useCore, useCoreState } from "core";
 import { SoftwareCatalogControlled } from "ui/pages/softwareCatalog/SoftwareCatalogControlled";
 import { useConstCallback } from "powerhooks/useConstCallback";
 import { type PageRoute } from "./route";
@@ -20,22 +20,17 @@ const { useDebounce } = createUseDebounce({ "delay": 400 });
 export default function SoftwareCatalog(props: Props) {
     const { className, route } = props;
 
-    const { softwareCatalog } = useCoreFunctions();
+    const {
+        categoryOptions,
+        environmentOptions,
+        organizationOptions,
+        prerogativeFilterOptions,
+        softwares,
+        sortOptions
+    } = useCoreState("softwareCatalog", "main");
 
-    /* prettier-ignore */
-    const { softwares } = useCoreState(selectors.softwareCatalog.softwares);
-    /* prettier-ignore */
-    const { organizationOptions } = useCoreState( selectors.softwareCatalog.organizationOptions);
-    /* prettier-ignore */
-    const { categoryOptions } = useCoreState(selectors.softwareCatalog.categoryOptions);
-    /* prettier-ignore */
-    const { environmentOptions } = useCoreState(selectors.softwareCatalog.environmentOptions);
-    /* prettier-ignore */
-    const { prerogativeFilterOptions } = useCoreState(selectors.softwareCatalog.prerogativeFilterOptions);
-    /* prettier-ignore */
-    const { sortOptions } = useCoreState(selectors.softwareCatalog.sortOptions);
-
-    const { evtSoftwareCatalog } = useCoreEvts();
+    const { softwareCatalog } = useCore().functions;
+    const { evtSoftwareCatalog } = useCore().evts;
 
     const [, startTransition] = useTransition();
 

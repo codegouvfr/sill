@@ -1,0 +1,409 @@
+import type { Thunks } from "core/bootstrap";
+import { objectKeys } from "tsafe/objectKeys";
+import memoize from "memoizee";
+import { assert } from "tsafe/assert";
+import type { Equals } from "tsafe";
+import { exclude } from "tsafe/exclude";
+import FlexSearch from "flexsearch";
+import type { ApiTypes } from "@codegouvfr/sill";
+import { createResolveLocalizedString } from "i18nifty";
+import { UpdateFilterParams } from "./state";
+import { name, actions, type State } from "./state";
+
+export const thunks = {
+    "updateFilter":
+        <K extends UpdateFilterParams.Key>(params: UpdateFilterParams<K>) =>
+        async (...args) => {
+            const [dispatch, getState] = args;
+
+            if (params.key === "search") {
+                const { search: currentSearch, sortBackup } = getState()[name];
+
+                const newSearch = params.value;
+
+                if (currentSearch === "" && newSearch !== "") {
+                    dispatch(
+                        actions.notifyRequestChangeSort({
+                            "sort": "best_match"
+                        })
+                    );
+                }
+
+                if (newSearch === "" && currentSearch !== "") {
+                    dispatch(
+                        actions.notifyRequestChangeSort({
+                            "sort": sortBackup
+                        })
+                    );
+                }
+            }
+
+            dispatch(actions.filterUpdated(params));
+
+            update_search_results: {
+                if (params.key !== "search") {
+                    break update_search_results;
+                }
+
+                const newSearch = params.value;
+
+                assert(typeof newSearch === "string");
+
+                if (newSearch === "") {
+                    dispatch(
+                        actions.searchResultUpdated({
+                            "searchResults": undefined
+                        })
+                    );
+
+                    break update_search_results;
+                }
+
+                const { softwares } = getState()[name];
+
+                const searchResults = await filterBySearchMemoized(softwares, newSearch);
+
+                dispatch(
+                    actions.searchResultUpdated({
+                        searchResults
+                    })
+                );
+            }
+        },
+    "getDefaultSort":
+        () =>
+        (...args) => {
+            const [, getState] = args;
+
+            return getDefaultSort({
+                "userEmail": getState()[name].userEmail
+            });
+        }
+} satisfies Thunks;
+
+export const protectedThunks = {
+    "initialize":
+        () =>
+        async (...args) => {
+            const [dispatch, , { sillApi, evtAction, getUser, oidc }] = args;
+
+            const initialize = async () => {
+                const [apiSoftwares, { email: userEmail }] = await Promise.all([
+                    sillApi.getSoftwares(),
+                    oidc.isUserLoggedIn ? getUser() : { "email": undefined }
+                ] as const);
+
+                const { agents } =
+                    userEmail === undefined
+                        ? { "agents": undefined }
+                        : await sillApi.getAgents();
+
+                const softwares = apiSoftwares
+                    .filter(({ dereferencing }) => dereferencing === undefined)
+                    .map(({ softwareName }) => {
+                        const software = apiSoftwareToInternalSoftware({
+                            apiSoftwares,
+                            "softwareRef": {
+                                "type": "name",
+                                softwareName
+                            },
+                            "userDeclaration":
+                                agents === undefined
+                                    ? undefined
+                                    : (() => {
+                                          const agent = agents.find(
+                                              agent => agent.email === userEmail
+                                          );
+
+                                          if (agent === undefined) {
+                                              return undefined;
+                                          }
+
+                                          return {
+                                              "isReferent":
+                                                  agent.declarations.find(
+                                                      declaration =>
+                                                          declaration.declarationType ===
+                                                              "referent" &&
+                                                          declaration.softwareName ===
+                                                              softwareName
+                                                  ) !== undefined,
+                                              "isUser":
+                                                  agent.declarations.find(
+                                                      declaration =>
+                                                          declaration.declarationType ===
+                                                              "user" &&
+                                                          declaration.softwareName ===
+                                                              softwareName
+                                                  ) !== undefined
+                                          };
+                                      })()
+                        });
+
+                        assert(software !== undefined);
+
+                        return software;
+                    });
+
+                dispatch(
+                    actions.initialized({
+                        softwares,
+                        userEmail,
+                        "defaultSort": getDefaultSort({ userEmail })
+                    })
+                );
+            };
+
+            await initialize();
+
+            evtAction.attach(
+                action =>
+                    (action.usecaseName === "softwareForm" &&
+                        action.actionName === "formSubmitted") ||
+                    (action.usecaseName === "declarationForm" &&
+                        action.actionName === "triggerRedirect" &&
+                        action.payload.isFormSubmitted) ||
+                    (action.usecaseName === "declarationRemoval" &&
+                        action.actionName === "userOrReferentRemoved") ||
+                    (action.usecaseName === "softwareDetails" &&
+                        action.actionName === "unreferencingCompleted"),
+                () => initialize()
+            );
+        }
+} satisfies Thunks;
+
+function getDefaultSort(params: { userEmail: string | undefined }): State.Sort {
+    const { userEmail } = params;
+
+    return userEmail === undefined ? "referent_count" : "my_software";
+}
+
+function apiSoftwareToInternalSoftware(params: {
+    apiSoftwares: ApiTypes.Software[];
+    softwareRef:
+        | {
+              type: "wikidataId";
+              wikidataId: string;
+          }
+        | {
+              type: "name";
+              softwareName: string;
+          };
+    userDeclaration:
+        | {
+              isUser: boolean;
+              isReferent: boolean;
+          }
+        | undefined;
+}): State.Software.Internal | undefined {
+    const { apiSoftwares, softwareRef, userDeclaration } = params;
+
+    // eslint-disable-next-line array-callback-return
+    const apiSoftware = apiSoftwares.find(apiSoftware => {
+        switch (softwareRef.type) {
+            case "name":
+                return apiSoftware.softwareName === softwareRef.softwareName;
+            case "wikidataId":
+                return apiSoftware.wikidataId === softwareRef.wikidataId;
+        }
+    });
+
+    if (apiSoftware === undefined) {
+        return undefined;
+    }
+
+    const {
+        softwareName,
+        logoUrl,
+        softwareDescription,
+        latestVersion,
+        parentWikidataSoftware,
+        testUrl,
+        addedTime,
+        updateTime,
+        categories,
+        prerogatives,
+        softwareType,
+        userAndReferentCountByOrganization,
+        similarSoftwares,
+        keywords
+    } = apiSoftware;
+
+    assert<
+        Equals<ApiTypes.Software["prerogatives"], State.Software.Internal["prerogatives"]>
+    >();
+
+    const { resolveLocalizedString } = createResolveLocalizedString({
+        "currentLanguage": "fr",
+        "fallbackLanguage": "en"
+    });
+
+    const parentSoftware: State.Software.Internal["parentSoftware"] = (() => {
+        if (parentWikidataSoftware === undefined) {
+            return undefined;
+        }
+
+        in_sill: {
+            const software = apiSoftwares.find(
+                software => software.wikidataId === parentWikidataSoftware.wikidataId
+            );
+
+            if (software === undefined) {
+                break in_sill;
+            }
+
+            return {
+                "softwareName": software.softwareName,
+                "isInSill": true
+            };
+        }
+
+        return {
+            "isInSill": false,
+            "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.wikidataId}`
+        };
+    })();
+
+    return {
+        logoUrl,
+        softwareName,
+        softwareDescription,
+        latestVersion,
+        "referentCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ referentCount }) => referentCount)
+            .reduce((prev, curr) => prev + curr, 0),
+        "userCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ userCount }) => userCount)
+            .reduce((prev, curr) => prev + curr, 0),
+        testUrl,
+        addedTime,
+        updateTime,
+        categories,
+        "organizations": objectKeys(userAndReferentCountByOrganization),
+        parentSoftware,
+        softwareType,
+        prerogatives,
+        "search": (() => {
+            const search =
+                softwareName +
+                " (" +
+                [
+                    ...keywords,
+                    ...similarSoftwares
+                        .map(similarSoftware =>
+                            similarSoftware.isInSill
+                                ? similarSoftware.softwareName
+                                : resolveLocalizedString(similarSoftware.label)
+                        )
+                        .map(name =>
+                            name === "VSCodium"
+                                ? ["vscode", "tVisual Studio Code", "VSCodium"]
+                                : name
+                        )
+                        .flat(),
+                    parentSoftware === undefined ? undefined : parentSoftware.softwareName
+                ]
+                    .filter(exclude(undefined))
+                    .join(", ") +
+                ")";
+
+            return search;
+        })(),
+        userDeclaration
+    };
+}
+
+const { filterBySearchMemoized } = (() => {
+    const getFlexSearch = memoize(
+        (softwares: State.Software.Internal[]) => {
+            const index = new FlexSearch.Document<State.Software.Internal>({
+                "document": {
+                    "id": "softwareName",
+                    "field": ["search"]
+                },
+                "cache": 100,
+                "tokenize": "full",
+                "context": {
+                    "resolution": 9,
+                    "depth": 2,
+                    "bidirectional": true
+                }
+            });
+
+            softwares.forEach(software => index.add(software));
+
+            return index;
+        },
+        { "max": 1 }
+    );
+
+    function highlightMatches(params: { text: string; search: string }) {
+        const { text, search } = params;
+
+        const escapedSearch = search.trim().replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
+        const regexp = RegExp("(" + escapedSearch.replaceAll(" ", "|") + ")", "ig");
+        let result;
+        const highlights: number[] = [];
+
+        if (text) {
+            while ((result = regexp.exec(text)) !== null) {
+                for (let i = result.index; i < regexp.lastIndex; i++) {
+                    highlights.push(i);
+                }
+            }
+        }
+
+        return highlights;
+    }
+
+    const filterBySearchMemoized = memoize(
+        async (
+            softwares: State.Software.Internal[],
+            search: string
+        ): Promise<
+            {
+                softwareName: string;
+                positions: number[];
+            }[]
+        > => {
+            const index = getFlexSearch(softwares);
+
+            const searchResult = await index.searchAsync(search, {
+                "bool": "or",
+                "suggest": true,
+                "enrich": true
+            });
+
+            if (searchResult.length === 0) {
+                return [];
+            }
+
+            const [{ result: softwareNames }] = searchResult;
+
+            return softwareNames.map(
+                softwareName => (
+                    assert(typeof softwareName === "string"),
+                    {
+                        softwareName,
+                        "positions": highlightMatches({
+                            "text": (() => {
+                                const software = softwares.find(
+                                    software => software.softwareName === softwareName
+                                );
+
+                                assert(software !== undefined);
+
+                                return software.search;
+                            })(),
+                            search
+                        })
+                    }
+                )
+            );
+        },
+        { "max": 1, "promise": true }
+    );
+
+    return { filterBySearchMemoized };
+})();

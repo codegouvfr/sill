@@ -1,5 +1,5 @@
 import { createModal } from "@codegouvfr/react-dsfr/Modal";
-import { useCoreFunctions, useCoreEvts, selectors, useCoreState } from "core";
+import { useCoreState, useCore } from "core";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { useRerenderOnStateChange } from "evt/hooks";
@@ -26,10 +26,11 @@ export function openDeclarationRemovalModal(params: Params) {
 }
 
 export function DeclarationRemovalModal() {
-    const { declarationRemoval } = useCoreFunctions();
-    const { evtDeclarationRemoval } = useCoreEvts();
-    const { isRemovingUserDeclaration } = useCoreState(
-        selectors.declarationRemoval.isRemovingUserDeclaration
+    const { declarationRemoval } = useCore().functions;
+    const { evtDeclarationRemoval } = useCore().evts;
+    const isRemovingUserDeclaration = useCoreState(
+        "declarationRemoval",
+        "isRemovingUserDeclaration"
     );
 
     const { t } = useTranslation({ DeclarationRemovalModal });

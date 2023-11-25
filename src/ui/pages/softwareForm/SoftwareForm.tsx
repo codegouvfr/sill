@@ -10,7 +10,7 @@ import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useConst } from "powerhooks/useConst";
 import { Evt } from "evt";
-import { useCoreFunctions, useCoreState, useCoreEvts, selectors } from "core";
+import { useCoreState, useCore } from "core";
 import { useEvt } from "evt/hooks";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { useTranslation } from "ui/i18n";
@@ -36,13 +36,13 @@ export default function SoftwareForm(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { step } = useCoreState(selectors.softwareForm.step);
-    const { formData } = useCoreState(selectors.softwareForm.formData);
-    const { isSubmitting } = useCoreState(selectors.softwareForm.isSubmitting);
-    const { isLastStep } = useCoreState(selectors.softwareForm.isLastStep);
-    const { evtSoftwareForm } = useCoreEvts();
+    const { isReady, step, formData, isSubmitting, isLastStep } = useCoreState(
+        "softwareForm",
+        "main"
+    );
 
-    const { softwareForm } = useCoreFunctions();
+    const { evtSoftwareForm } = useCore().evts;
+    const { softwareForm } = useCore().functions;
 
     useEffect(() => {
         softwareForm.initialize(
@@ -84,11 +84,9 @@ export default function SoftwareForm(props: Props) {
 
     const { lang } = useLang();
 
-    if (formData === undefined) {
+    if (!isReady) {
         return <LoadingFallback className={className} showAfterMs={150} />;
     }
-
-    assert(step !== undefined);
 
     return (
         <div className={className}>

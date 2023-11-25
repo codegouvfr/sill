@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { declareComponentKeys } from "i18nifty";
-import { useCoreFunctions, useCoreState, selectors } from "core";
+import { useCoreState, useCore } from "core";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { useLang } from "ui/i18n";
 import { tss } from "tss-react/dsfr";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
+import { LoadingFallback } from "ui/shared/LoadingFallback";
 
 type Props = {
     className?: string;
@@ -17,7 +18,7 @@ export default function Terms(props: Props) {
 
     const { classes, cx } = useStyles();
 
-    const { termsOfServices } = useCoreFunctions();
+    const { termsOfServices } = useCore().functions;
 
     const { lang } = useLang();
 
@@ -25,10 +26,10 @@ export default function Terms(props: Props) {
         termsOfServices.initialize({ lang });
     }, [lang]);
 
-    const { markdown } = useCoreState(selectors.termsOfServices.markdown);
+    const { isReady, markdown } = useCoreState("termsOfServices", "main");
 
-    if (markdown === undefined) {
-        return null;
+    if (!isReady) {
+        return <LoadingFallback />;
     }
 
     return (
