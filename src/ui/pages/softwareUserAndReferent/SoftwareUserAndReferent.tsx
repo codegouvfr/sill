@@ -277,7 +277,9 @@ export default function SoftwareUserAndReferent(props: Props) {
                                                                     href={`mailto:${referentEmails.join(
                                                                         ","
                                                                     )}`}
-                                                                />
+                                                                >
+                                                                    &nbsp;
+                                                                </a>
                                                             </div>
                                                         )}
                                                 </a>
