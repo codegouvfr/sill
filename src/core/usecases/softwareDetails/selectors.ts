@@ -37,7 +37,6 @@ const main = createSelector(
         }
 
         assert(software !== undefined);
-        assert(userDeclaration !== undefined);
         assert(isUnreferencingOngoing !== undefined);
 
         return {
