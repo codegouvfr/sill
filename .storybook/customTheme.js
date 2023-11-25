@@ -1,6 +1,6 @@
 import { create } from "@storybook/theming";
 
-const brandImage= "Preview-france.png";
+const brandImage= "social-preview.png";
 const brandTitle= "sill-web";
 const brandUrl= "https://github.com/codegouvfr/sill-web";
 const fontBase= '"Marianne", arial, sans-serif';

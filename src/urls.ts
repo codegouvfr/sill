@@ -3,7 +3,18 @@
  * '/sill'
  * ''
  **/
-export const appPath = process.env["PUBLIC_URL"];
+export const appPath = (() => {
+    const envValue = process.env["PUBLIC_URL"];
+
+    if (envValue === ".") {
+        // Storybook
+        return "";
+    }
+
+    return envValue;
+})();
+
+console.log({ appPath });
 
 /**
  * Without trailing slash.
