@@ -203,4 +203,4 @@ export const { i18n } = declareComponentKeys<
     | "search"
     | "validate"
     | "not provided"
->()({ "App": null });
+>()("App");

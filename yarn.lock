@@ -7730,6 +7730,15 @@ evt@^2.5.2:
     run-exclusive "^2.2.19"
     tsafe "^1.6.4"
 
+evt@^2.5.3:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/evt/-/evt-2.5.3.tgz#eda564afdda6dfe1da687bb54933706af3f844d6"
+  integrity sha512-wZKx0JgXaTOVOXI2saNVxINU6VToOHDowMwb3NRcU6l+C59eW3w9dZgNxjokiM8rvMgc7/11yFG0cSDxn4qxgA==
+  dependencies:
+    minimal-polyfills "^2.2.3"
+    run-exclusive "^2.2.19"
+    tsafe "^1.6.5"
+
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/exec-sh/-/exec-sh-0.3.6.tgz#ff264f9e325519a60cb5e273692943483cca63bc"
@@ -9146,13 +9155,13 @@ husky@^4.3.8:
     slash "^3.0.0"
     which-pm-runs "^1.0.0"
 
-i18nifty@^1.5.12:
-  version "1.5.12"
-  resolved "https://registry.yarnpkg.com/i18nifty/-/i18nifty-1.5.12.tgz#285b863adcab4aa5c7b22250ecf45bf9974211d1"
-  integrity sha512-PlBZnOMrDMAYAfY/8IzQWG248Ey+HaTKQ/JMtJtGnYbLZ3kC2tAN2VxqdErBKeegYXYXyVinF6JeepafSy+OUQ==
+i18nifty@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/i18nifty/-/i18nifty-3.1.2.tgz#f82bdb9b6b40a038997790d82492db7d4cc72b67"
+  integrity sha512-QsHrFzH0DEEW2WPXKLyVjFEnEaL3n1W+9P9Ul7jCiyrRxdY1tGaBxNjZSoOYCoaZOMP5t2a6KRCuYa50gNUI/A==
   dependencies:
-    powerhooks "^0.27.0"
-    tsafe "^1.6.4"
+    powerhooks "^1.0.5"
+    tsafe "^1.6.5"
 
 iconv-lite@0.4.24:
   version "0.4.24"
@@ -13380,16 +13389,6 @@ postcss@^8.0.9, postcss@^8.2.15, postcss@^8.3.5, postcss@^8.4.19, postcss@^8.4.4
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-powerhooks@^0.27.0:
-  version "0.27.0"
-  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-0.27.0.tgz#600e750fae6c42682639634e80e1b12f59cfea4d"
-  integrity sha512-oA5t6jFI5wqxs5PSJrp5Q3DK51Z8k4/htlD6Hdpqzstth25wT44MOuBlEJITZnNMpOVWLpEzQnakSC4vV0Eaew==
-  dependencies:
-    evt "^2.4.22"
-    memoizee "^0.4.15"
-    resize-observer-polyfill "^1.5.1"
-    tsafe "^1.6.4"
-
 powerhooks@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-1.0.0.tgz#d569ce581b36b206ce5201f5f20b6519417bc118"
@@ -13398,6 +13397,15 @@ powerhooks@^1.0.0:
     evt "^2.5.2"
     memoizee "^0.4.15"
     tsafe "^1.6.4"
+
+powerhooks@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/powerhooks/-/powerhooks-1.0.5.tgz#750a31856b079675e79dfbd462e569cb6ea4a996"
+  integrity sha512-Hy8OuHI+Ky3SIPtjcWCcUFqakdJjJB5Lnh26AHuoofUbO/G6LLe4h3jrFKQlbilY1DgpbJJzJOAyHEFmdp6byQ==
+  dependencies:
+    evt "^2.5.3"
+    memoizee "^0.4.15"
+    tsafe "^1.6.5"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -14435,11 +14443,6 @@ reselect@^4.1.8:
   version "4.1.8"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.1.8.tgz#3f5dc671ea168dccdeb3e141236f69f02eaec524"
   integrity sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==
-
-resize-observer-polyfill@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"
