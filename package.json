@@ -1,7 +1,7 @@
 {
     "homepage": "https://xxx.yy/sill",
     "name": "sill-web",
-    "version": "1.37.7",
+    "version": "1.37.8",
     "license": "MIT",
     "scripts": {
         "start": "react-app-rewired start",
