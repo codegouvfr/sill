@@ -1,7 +1,7 @@
 {
     "homepage": "https://xxx.yy/sill",
     "name": "sill-web",
-    "version": "1.37.7",
+    "version": "1.37.8",
     "license": "MIT",
     "scripts": {
         "start": "react-app-rewired start",
@@ -45,7 +45,7 @@
         "react-markdown": "^5.0.3",
         "react-scripts": "5.0.1",
         "react-waypoint": "^10.3.0",
-        "redux-clean-architecture": "^3.5.6",
+        "redux-clean-architecture": "^4.1.1",
         "run-exclusive": "^2.2.19",
         "superjson": "^1.12.2",
         "tsafe": "^1.6.4",
