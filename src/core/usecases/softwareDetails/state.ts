@@ -10,6 +10,14 @@ export const name = "softwareDetails";
 export type State = State.NotReady | State.Ready;
 
 export namespace State {
+    export type SimilarSoftwareNotInSill = {
+        isInSill: false;
+        isLibreSoftware: boolean;
+        wikidataId: string;
+        label: LocalizedString<Language>;
+        description: LocalizedString<Language>;
+    };
+
     export type NotReady = {
         stateDescription: "not ready";
         isInitializing: boolean;
@@ -27,6 +35,7 @@ export namespace State {
             | undefined;
         isUnreferencingOngoing: boolean;
     };
+
     export type Software = {
         softwareName: string;
         softwareDescription: string;
@@ -84,13 +93,7 @@ export namespace State {
                   isInSill: true;
                   software: SoftwareCatalogState.Software.External;
               }
-            | {
-                  isInSill: false;
-                  isLibreSoftware: boolean;
-                  wikidataId: string;
-                  label: LocalizedString<Language>;
-                  description: LocalizedString<Language>;
-              }
+            | SimilarSoftwareNotInSill
         )[];
     };
 }

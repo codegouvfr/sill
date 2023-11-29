@@ -42,6 +42,11 @@ export const SimilarSoftwareTab = (props: Props) => {
 
     const { resolveLocalizedString } = useResolveLocalizedString();
 
+    const similarSoftwaresNotInSill = similarSoftwares.filter(
+        (similarSoftware): similarSoftware is softwareDetails.SimilarSoftwareNotInSill =>
+            !similarSoftware.isInSill
+    );
+
     return (
         <section className={className}>
             <p className={fr.cx("fr-text--bold")}>
@@ -98,63 +103,70 @@ export const SimilarSoftwareTab = (props: Props) => {
                         />
                     );
                 })}
-            <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
-                {t("similar software not in sill")} (
-                {similarSoftwares.filter(({ isInSill }) => !isInSill).length}) :
-            </p>
-            <ul>
-                {similarSoftwares
-                    .map(similarSoftware =>
-                        similarSoftware.isInSill ? undefined : similarSoftware
-                    )
-                    .filter(exclude(undefined))
-                    .sort(
-                        (
-                            { isLibreSoftware: isLibreSoftwareA },
-                            { isLibreSoftware: isLibreSoftwareB }
-                        ) => {
-                            if (isLibreSoftwareA && !isLibreSoftwareB) {
-                                return -1;
-                            }
-                            if (!isLibreSoftwareA && isLibreSoftwareB) {
-                                return 1;
-                            }
-                            return 0;
-                        }
-                    )
-                    .map(({ wikidataId, label, description, isLibreSoftware }) => {
-                        return (
-                            <li key={wikidataId}>
-                                <p
-                                    className={css({
-                                        "display": "inline-block",
-                                        "marginRight": fr.spacing("4v")
-                                    })}
-                                >
-                                    <a
-                                        href={`https://www.wikidata.org/wiki/${wikidataId}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        {resolveLocalizedString(label)}
-                                    </a>
-                                    :&nbsp;&nbsp;
-                                    {capitalize(resolveLocalizedString(description))}
-                                </p>
-                                {isLibreSoftware ? (
-                                    <Tag
-                                        iconId="ri-check-fill"
-                                        linkProps={getAddWikipediaSoftwareToSillLink({
-                                            wikidataId
-                                        })}
-                                    >
-                                        {t("libre software")}
-                                    </Tag>
-                                ) : null}
-                            </li>
-                        );
-                    })}
-            </ul>
+
+            {similarSoftwaresNotInSill.length === 0 ? null : (
+                <>
+                    <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
+                        {t("similar software not in sill")} (
+                        {similarSoftwaresNotInSill.length}) :
+                    </p>
+                    <ul>
+                        {similarSoftwaresNotInSill
+                            .sort(
+                                (
+                                    { isLibreSoftware: isLibreSoftwareA },
+                                    { isLibreSoftware: isLibreSoftwareB }
+                                ) => {
+                                    if (isLibreSoftwareA && !isLibreSoftwareB) {
+                                        return -1;
+                                    }
+                                    if (!isLibreSoftwareA && isLibreSoftwareB) {
+                                        return 1;
+                                    }
+                                    return 0;
+                                }
+                            )
+                            .map(
+                                ({ wikidataId, label, description, isLibreSoftware }) => {
+                                    return (
+                                        <li key={wikidataId}>
+                                            <p
+                                                className={css({
+                                                    "display": "inline-block",
+                                                    "marginRight": fr.spacing("4v")
+                                                })}
+                                            >
+                                                <a
+                                                    href={`https://www.wikidata.org/wiki/${wikidataId}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                >
+                                                    {resolveLocalizedString(label)}
+                                                </a>
+                                                :&nbsp;&nbsp;
+                                                {capitalize(
+                                                    resolveLocalizedString(description)
+                                                )}
+                                            </p>
+                                            {isLibreSoftware ? (
+                                                <Tag
+                                                    iconId="ri-check-fill"
+                                                    linkProps={getAddWikipediaSoftwareToSillLink(
+                                                        {
+                                                            wikidataId
+                                                        }
+                                                    )}
+                                                >
+                                                    {t("libre software")}
+                                                </Tag>
+                                            ) : null}
+                                        </li>
+                                    );
+                                }
+                            )}
+                    </ul>
+                </>
+            )}
         </section>
     );
 };
