@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "redux-clean-architecture";
+import { assert } from "tsafe/assert";
 import { id } from "tsafe/id";
 import type { State as RootState, Thunks } from "core/bootstrap";
 import { selectors as softwareDetailsSelectors } from "core/usecases/softwareDetails/selectors";
@@ -14,30 +15,44 @@ export type ServiceProvider = {
 
 export type ServiceProvidersBySillId = Partial<Record<string, ServiceProvider[]>>;
 
-export type State = {
-    serviceProvidersBySillId: ServiceProvidersBySillId;
-    errorMessage: string | null;
-};
+export type State = State.NotReady | State.Ready | State.Errored;
+
+export namespace State {
+    export type NotReady = {
+        stateDescription: "not ready";
+    };
+
+    export type Ready = {
+        stateDescription: "ready";
+        serviceProvidersBySillId: ServiceProvidersBySillId;
+    };
+
+    export type Errored = {
+        stateDescription: "errored";
+        errorMessage: string;
+    };
+}
 
 export const name = "serviceProviders" as const;
 
 export const { reducer, actions } = createSlice({
     name,
     "initialState": id<State>({
-        serviceProvidersBySillId: {},
-        errorMessage: null
+        stateDescription: "not ready"
     }),
     "reducers": {
         "serviceProvidersRequested": state => state,
         "serviceProvidersReceived": (
-            state,
+            _,
             action: PayloadAction<ServiceProvidersBySillId>
-        ) => {
-            state.serviceProvidersBySillId = action.payload;
-        },
-        "serviceProvidersRequestFailed": (state, action: PayloadAction<string>) => {
-            state.errorMessage = action.payload;
-        }
+        ) => ({
+            stateDescription: "ready",
+            serviceProvidersBySillId: action.payload
+        }),
+        "serviceProvidersRequestFailed": (_, action: PayloadAction<string>) => ({
+            stateDescription: "errored",
+            errorMessage: action.payload
+        })
     }
 });
 
@@ -57,22 +72,18 @@ export const protectedThunks = {
     }
 } satisfies Thunks;
 
-const serviceProvidersBySillId = (state: RootState) =>
-    state[name].serviceProvidersBySillId;
+const serviceProvidersBySillId = (state: RootState) => {
+    assert(state[name].stateDescription === "ready");
+    return state[name].serviceProvidersBySillId;
+};
 
 export const selectors = {
     main: createSelector(
         serviceProvidersBySillId,
         softwareDetailsSelectors.main,
         (serviceProvidersBySillId, { software }): ServiceProvider[] => {
-            console.log("YO >", {
-                software,
-                providers: software
-                    ? serviceProvidersBySillId[software.softwareName]
-                    : "pas de software"
-            });
             if (!software) return [];
-            return serviceProvidersBySillId[software.softwareName] ?? [];
+            return serviceProvidersBySillId[software.softwareId] ?? [];
         }
     )
 };
