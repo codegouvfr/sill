@@ -226,6 +226,7 @@ function apiSoftwareToSoftware(params: {
     })();
 
     return {
+        softwareId,
         logoUrl,
         authors,
         officialWebsiteUrl,

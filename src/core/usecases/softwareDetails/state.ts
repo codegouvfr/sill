@@ -37,6 +37,7 @@ export namespace State {
     };
 
     export type Software = {
+        softwareId: number;
         softwareName: string;
         softwareDescription: string;
         logoUrl: string | undefined;
