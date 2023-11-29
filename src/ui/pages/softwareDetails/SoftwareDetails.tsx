@@ -355,17 +355,17 @@ const ServiceProviderRow = ({
     <li>
         <span className={fr.cx("fr-text--bold")}>{name}</span>{" "}
         {website && cdlUrl !== website && (
-            <a href={website} target="_blank">
+            <a href={website} target="_blank" rel="noreferrer">
                 Site
             </a>
         )}{" "}
         {cdlUrl && (
-            <a href={website} target="_blank">
+            <a href={website} target="_blank" rel="noreferrer">
                 Comptoire du libre
             </a>
         )}{" "}
         {cnllUrl && cnllUrl !== website && (
-            <a href={cnllUrl} target="_blank">
+            <a href={cnllUrl} target="_blank" rel="noreferrer">
                 CNLL
             </a>
         )}
