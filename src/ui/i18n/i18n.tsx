@@ -500,6 +500,7 @@ const {
                     `Service providers (${serviceProvidersCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Alike or equivalent proprietary software (${alikeSoftwareCount})`,
+                "list of service providers": "List of service providers",
                 "prerogatives": "Prerogatives",
                 "last version": "Last version",
                 "last version date": ({ date }) => `in ${date}`,
@@ -1200,6 +1201,7 @@ const {
                     `Prestataires de services (${serviceProvidersCount})`,
                 "tab title alike software": ({ alikeSoftwareCount }) =>
                     `Logiciels similaires ou équivalents propriétaires (${alikeSoftwareCount})`,
+                "list of service providers": "La liste des prestaires de services",
                 "prerogatives": "Prérogatives",
                 "last version": "Dernière version : ",
                 "last version date": ({ date }) => `en ${date}`,

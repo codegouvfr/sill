@@ -6,10 +6,7 @@ import { tss } from "tss-react/dsfr";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
-import {
-    CnllServiceProviderModal,
-    openCnllServiceProviderModal
-} from "./CnllServiceProviderModal";
+import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead

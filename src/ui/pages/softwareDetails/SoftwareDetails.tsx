@@ -13,6 +13,7 @@ import { SimilarSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Button } from "@codegouvfr/react-dsfr/Button";
+import { ServiceProvider } from "../../../core/usecases/serviceProviders";
 import type { PageRoute } from "./route";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
@@ -43,9 +44,6 @@ export default function SoftwareDetails(props: Props) {
     );
 
     const serviceProviders = useCoreState("serviceProviders", "main");
-    // access the selector
-    // I would expect to do : const serviceProviders = useSelector(serviceProvidersForSelectedSoftwareSelector)
-    // but not sure how to do it with redux-clean-architecture
 
     useEffect(() => {
         softwareDetails.initialize({
@@ -163,26 +161,30 @@ export default function SoftwareDetails(props: Props) {
                                           )
                                       }
                                   ]),
-                            ...(false
+                            ...(serviceProviders.length === 0
                                 ? []
                                 : [
                                       {
                                           "label": t("tab service providers", {
-                                              "serviceProvidersCount": 10
+                                              "serviceProvidersCount":
+                                                  serviceProviders.length
                                           }),
                                           "content": (
                                               <div>
-                                                  Ceci est un contenu bidon
+                                                  <p className={fr.cx("fr-text--bold")}>
+                                                      {t("list of service providers")}
+                                                  </p>
                                                   <ul>
                                                       {serviceProviders.map(
                                                           serviceProvider => (
-                                                              <li
+                                                              <ServiceProviderRow
                                                                   key={
-                                                                      serviceProvider.siren
+                                                                      serviceProvider.name
                                                                   }
-                                                              >
-                                                                  {serviceProvider.name}
-                                                              </li>
+                                                                  serviceProvider={
+                                                                      serviceProvider
+                                                                  }
+                                                              />
                                                           )
                                                       )}
                                                   </ul>
@@ -345,6 +347,31 @@ export default function SoftwareDetails(props: Props) {
     );
 }
 
+const ServiceProviderRow = ({
+    serviceProvider: { website, cdlUrl, cnllUrl, name }
+}: {
+    serviceProvider: ServiceProvider;
+}) => (
+    <li>
+        <span className={fr.cx("fr-text--bold")}>{name}</span>{" "}
+        {website && cdlUrl !== website && (
+            <a href={website} target="_blank">
+                Site
+            </a>
+        )}{" "}
+        {cdlUrl && (
+            <a href={website} target="_blank">
+                Comptoire du libre
+            </a>
+        )}{" "}
+        {cnllUrl && cnllUrl !== website && (
+            <a href={cnllUrl} target="_blank">
+                CNLL
+            </a>
+        )}
+    </li>
+);
+
 const useStyles = tss.withName({ SoftwareDetails }).create({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
@@ -376,6 +403,7 @@ export const { i18n } = declareComponentKeys<
     | { K: "tab title instance"; P: { instanceCount: number } }
     | { K: "tab service providers"; P: { serviceProvidersCount: number } }
     | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
+    | "list of service providers"
     | "prerogatives"
     | "last version"
     | { K: "last version date"; P: { date: string } }

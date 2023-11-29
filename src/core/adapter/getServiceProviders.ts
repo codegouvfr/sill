@@ -7,10 +7,11 @@ type SillIdAndPrestataireFromApi = {
         nom: string;
         website?: string;
         cdl_url?: string;
-        url?: string;
+        cnll_url?: string;
         siren?: string;
     }>;
 };
+
 export const getServiceProviders: GetServiceProviders = () =>
     fetch("https://code.gouv.fr/data/sill-prestataires.json")
         .then(response => response.json())
@@ -22,7 +23,7 @@ export const getServiceProviders: GetServiceProviders = () =>
                         name: prestataire.nom,
                         website: prestataire.website,
                         cdlUrl: prestataire.cdl_url,
-                        cnllUrl: prestataire.url,
+                        cnllUrl: prestataire.cnll_url,
                         siren: prestataire.siren
                     }))
                 }),
