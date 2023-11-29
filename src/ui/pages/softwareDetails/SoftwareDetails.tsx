@@ -13,7 +13,6 @@ import { SimilarSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Button } from "@codegouvfr/react-dsfr/Button";
-import { ServiceProvider } from "../../../core/usecases/serviceProviders";
 import type { PageRoute } from "./route";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
@@ -23,6 +22,7 @@ import {
     DeclarationRemovalModal
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
+import type { ApiTypes } from "@codegouvfr/sill";
 
 type Props = {
     className?: string;
@@ -42,8 +42,6 @@ export default function SoftwareDetails(props: Props) {
         "softwareDetails",
         "main"
     );
-
-    const serviceProviders = useCoreState("serviceProviders", "main");
 
     useEffect(() => {
         softwareDetails.initialize({
@@ -161,13 +159,13 @@ export default function SoftwareDetails(props: Props) {
                                           )
                                       }
                                   ]),
-                            ...(serviceProviders.length === 0
+                            ...(software.serviceProviders.length === 0
                                 ? []
                                 : [
                                       {
                                           "label": t("tab service providers", {
                                               "serviceProvidersCount":
-                                                  serviceProviders.length
+                                                  software.serviceProviders.length
                                           }),
                                           "content": (
                                               <div>
@@ -175,7 +173,7 @@ export default function SoftwareDetails(props: Props) {
                                                       {t("list of service providers")}
                                                   </p>
                                                   <ul>
-                                                      {serviceProviders.map(
+                                                      {software.serviceProviders.map(
                                                           serviceProvider => (
                                                               <ServiceProviderRow
                                                                   key={
@@ -350,10 +348,11 @@ export default function SoftwareDetails(props: Props) {
 const ServiceProviderRow = ({
     serviceProvider: { website, cdlUrl, cnllUrl, name }
 }: {
-    serviceProvider: ServiceProvider;
+    serviceProvider: ApiTypes.ServiceProvider;
 }) => (
     <li>
-        <span className={fr.cx("fr-text--bold")}>{name}</span>{" "}
+        <span className={fr.cx("fr-text--bold")}>{name}</span>
+        {" - "}
         {website && cdlUrl !== website && (
             <a href={website} target="_blank" rel="noreferrer">
                 Site
@@ -361,7 +360,7 @@ const ServiceProviderRow = ({
         )}{" "}
         {cdlUrl && (
             <a href={website} target="_blank" rel="noreferrer">
-                Comptoire du libre
+                Comptoir du libre
             </a>
         )}{" "}
         {cnllUrl && cnllUrl !== website && (
