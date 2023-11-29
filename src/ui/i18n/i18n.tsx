@@ -5,6 +5,7 @@ import type { Equals } from "tsafe";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 import { z } from "zod";
 import { createUnionSchema } from "ui/tools/zod/createUnionSchema";
+import { DeclarationType } from "../shared/DeclarationRemovalModal";
 
 export { declareComponentKeys };
 export { languages };
@@ -509,7 +510,7 @@ const {
                 "declare referent": "Declare yourself referent / user",
                 "edit software": "Edit software",
                 "stop being user/referent": ({ declarationType }) =>
-                    `Stop being ${declarationType}`,
+                    `Stop being ${declarationTypeToEnglish[declarationType]}`,
                 "become referent": "Become referent",
                 "please provide a reason for unreferencing this software": `Please
                 provide a reason why you think this software should not be in the SILL anymore`,
@@ -721,14 +722,7 @@ const {
                         }
                     })()} ${softwareName}?`,
                 "stop being user/referent": ({ declarationType, softwareName }) =>
-                    `Stop being ${(() => {
-                        switch (declarationType) {
-                            case "referent":
-                                return "referent";
-                            case "user":
-                                return "an user";
-                        }
-                    })()} of ${softwareName}`
+                    `Stop being a ${declarationTypeToEnglish[declarationType]} of ${softwareName}`
             },
             "SmartLogo": {
                 "software logo": "Software logo"
@@ -1211,7 +1205,7 @@ const {
                 "declare referent": "Se déclarer référent ou utilisateur",
                 "edit software": "Éditer la fiche logiciel",
                 "stop being user/referent": ({ declarationType }) =>
-                    `Ne plus être ${declarationType}`,
+                    `Ne plus être ${declarationTypeToFrench[declarationType]}`,
                 "become referent": "Devenir référent",
                 "please provide a reason for unreferencing this software": `Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le SILL`,
                 "unreference software": "Dé-référencer le logiciel"
@@ -1426,14 +1420,7 @@ const {
                         }
                     })()} ${softwareName}?`,
                 "stop being user/referent": ({ declarationType, softwareName }) =>
-                    `Ne plus être ${(() => {
-                        switch (declarationType) {
-                            case "referent":
-                                return "référent";
-                            case "user":
-                                return "utilisateur";
-                        }
-                    })()} of ${softwareName}`
+                    `Ne plus être ${declarationTypeToFrench[declarationType]} de ${softwareName}`
             },
             "SmartLogo": {
                 "software logo": "Logo du logiciel"
@@ -1486,4 +1473,14 @@ export const softwareCategoriesFrBySoftwareCategoryEn: Record<string, string> = 
     "Other Development Tools": "Autres outils de développement",
     "Miscellaneous": "Divers"
     /* spell-checker: enable */
+};
+
+const declarationTypeToFrench: Record<DeclarationType, string> = {
+    user: "utilisateur",
+    referent: "référent"
+};
+
+const declarationTypeToEnglish: Record<DeclarationType, string> = {
+    user: "user",
+    referent: "referent"
 };

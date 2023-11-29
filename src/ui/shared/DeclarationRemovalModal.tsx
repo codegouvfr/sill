@@ -86,15 +86,16 @@ export function DeclarationRemovalModal() {
     );
 }
 
+export type DeclarationType = "user" | "referent";
 export const { i18n } = declareComponentKeys<
     | "cancel"
     | "confirm"
     | {
           K: "stop being user/referent";
-          P: { softwareName: string; declarationType: "user" | "referent" };
+          P: { softwareName: string; declarationType: DeclarationType };
       }
     | {
           K: "do you confirm";
-          P: { softwareName: string; declarationType: "user" | "referent" };
+          P: { softwareName: string; declarationType: DeclarationType };
       }
 >()({ DeclarationRemovalModal });
