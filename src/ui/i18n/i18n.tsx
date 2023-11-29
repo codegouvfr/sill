@@ -103,45 +103,52 @@ const {
                 "the sill in a few words": "The SILL in a nutshell",
                 "the sill in a few words paragraph": ({ accentColor }) => (
                     <>
-                        The{" "}
-                        <span style={{ "color": accentColor }}>
-                            Interministerial Free Software Catalog (SILL)
-                        </span>{" "}
-                        is the{" "}
-                        <span style={{ "color": accentColor }}>reference catalog</span> of
-                        free software recommended by DINUM for the{" "}
-                        <span style={{ "color": accentColor }}>
-                            French administration
-                        </span>
-                        .<br />
-                        <br />
-                        It is used to help administrations navigate and select the{" "}
-                        <span style={{ "color": accentColor }}>free software</span> to
-                        use, in accordance with{" "}
-                        <span style={{ "color": accentColor }}>
-                            Article 16 of the Digital Republic Act
-                        </span>
-                        .<br />
-                        <br />
-                        The <span style={{ "color": accentColor }}>
-                            entry criteria
-                        </span>{" "}
-                        for software in the SILL include the publication of its source
-                        code under an{" "}
-                        <span style={{ "color": accentColor }}>
-                            accepted free software license
-                        </span>{" "}
-                        and its deployment by a public institution or installation by a
-                        public agent.
-                        <br />
-                        <br />
-                        The <span style={{ "color": accentColor }}>
-                            SILL referents
-                        </span>{" "}
-                        are public agents who volunteer to manage and update information
-                        on the software included in the catalog.
-                        <br />
-                        <br />
+                        <p>
+                            The Interministerial Free Software Catalog (SILL) is the
+                            reference catalog of free software recommended by DINUM for
+                            the French administration.
+                        </p>
+                        <p>
+                            It is used to help administrations navigate and select the{" "}
+                            <a
+                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
+                                style={{ "color": accentColor }}
+                            >
+                                free software
+                            </a>{" "}
+                            to use, in accordance with{" "}
+                            <a
+                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
+                                style={{ "color": accentColor }}
+                            >
+                                Article 16 of the Digital Republic Act
+                            </a>
+                            .
+                        </p>
+                        <p>
+                            The{" "}
+                            <a
+                                href="https://code.gouv.fr/sill/readme"
+                                style={{ "color": accentColor }}
+                            >
+                                entry criteria
+                            </a>{" "}
+                            for software in the SILL include the publication of its source
+                            code under an{" "}
+                            <a
+                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
+                                style={{ "color": accentColor }}
+                            >
+                                accepted free software license
+                            </a>{" "}
+                            and its deployment by a public institution or installation by
+                            a public agent.
+                        </p>
+                        <p>
+                            The SILL referents are public agents who volunteer to manage
+                            and update information on the software included in the
+                            catalog.
+                        </p>
                     </>
                 ),
                 "illustration image": "Illustration image",
@@ -779,50 +786,53 @@ const {
                 "the sill in a few words": "Le SILL en quelques mots",
                 "the sill in a few words paragraph": ({ accentColor }) => (
                     <>
-                        Le{" "}
-                        <span style={{ "color": accentColor }}>
-                            Socle Interministériel de Logiciels Libres (SILL)
-                        </span>{" "}
-                        est un{" "}
-                        <span style={{ "color": accentColor }}>
-                            catalogue de référence
-                        </span>{" "}
-                        des logiciels libres recommandés pour l'
-                        <span style={{ "color": accentColor }}>
-                            administration française
-                        </span>
-                        .<br />
-                        <br />
-                        Il est utilisé pour aider les administrations à naviguer et
-                        sélectionner les{" "}
-                        <span style={{ "color": accentColor }}>logiciels libres</span> à
-                        utiliser, conformément à l'
-                        <span style={{ "color": accentColor }}>
-                            article 16 de la loi pour une République numérique
-                        </span>
-                        .<br />
-                        <br />
-                        Les{" "}
-                        <span style={{ "color": accentColor }}>
-                            critères d'entrée
-                        </span>{" "}
-                        d'un logiciel dans le SILL comprennent la publication de son code
-                        source sous une{" "}
-                        <span style={{ "color": accentColor }}>
-                            licence libre acceptée
-                        </span>{" "}
-                        et son déploiement par un établissement public ou son installation
-                        par un agent public.
-                        <br />
-                        <br />
-                        Les <span style={{ "color": accentColor }}>
-                            référents SILL
-                        </span>{" "}
-                        sont des agents publics qui se portent volontaires pour gérer et
-                        mettre à jour les informations sur les logiciels inclus dans le
-                        catalogue.
-                        <br />
-                        <br />
+                        <p>
+                            Le Socle Interministériel de Logiciels Libres (SILL) est un
+                            catalogue de référence des logiciels libres recommandés pour
+                            l' administration française.
+                        </p>
+                        <p>
+                            Il est utilisé pour aider les administrations à naviguer et
+                            sélectionner les{" "}
+                            <a
+                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
+                                style={{ "color": accentColor }}
+                            >
+                                logiciels libres
+                            </a>{" "}
+                            à utiliser, conformément à l'
+                            <a
+                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
+                                style={{ "color": accentColor }}
+                            >
+                                article 16 de la loi pour une République numérique
+                            </a>
+                            .
+                        </p>
+                        <p>
+                            Les{" "}
+                            <a
+                                href="https://code.gouv.fr/sill/readme"
+                                style={{ "color": accentColor }}
+                            >
+                                critères d'entrée
+                            </a>{" "}
+                            d'un logiciel dans le SILL comprennent la publication de son
+                            code source sous une{" "}
+                            <a
+                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
+                                style={{ "color": accentColor }}
+                            >
+                                licence libre acceptée
+                            </a>{" "}
+                            et son déploiement par un établissement public ou son
+                            installation par un agent public.
+                        </p>
+                        <p>
+                            Les référents SILL sont des agents publics qui se portent
+                            volontaires pour gérer et mettre à jour les informations sur
+                            les logiciels inclus dans le catalogue.
+                        </p>
                     </>
                 ),
                 "illustration image": "Image d'illustration",
