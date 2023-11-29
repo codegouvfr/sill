@@ -208,17 +208,6 @@ export const PreviewTab = (props: Props) => {
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("use full links")}
                         </p>
-                        {comptoirDuLibreServiceProvidersUrl !== undefined && (
-                            <a
-                                href={comptoirDuLibreServiceProvidersUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={t("service provider")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("service provider")}
-                            </a>
-                        )}
                         {comptoireDuLibreUrl !== undefined && (
                             <a
                                 href={comptoireDuLibreUrl}
@@ -228,19 +217,6 @@ export const PreviewTab = (props: Props) => {
                                 className={cx(classes.externalLink, classes.item)}
                             >
                                 {t("comptoire du libre sheet")}
-                            </a>
-                        )}
-                        {annuaireCnllServiceProviders.length !== 0 && (
-                            // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                            <a
-                                onClick={() => openCnllServiceProviderModal()}
-                                href="#"
-                                title={t("CNLL service providers title")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("CNLL service providers", {
-                                    "count": annuaireCnllServiceProviders.length
-                                })}
                             </a>
                         )}
                         {wikiDataUrl !== undefined && (
@@ -327,7 +303,6 @@ export const { i18n } = declareComponentKeys<
     | "isPresentInSupportMarket"
     | "isFromFrenchPublicService"
     | "isRGAACompliant"
-    | "service provider"
     | "comptoire du libre sheet"
     | "CNLL service providers title"
     | { K: "CNLL service providers"; P: { count: number } }

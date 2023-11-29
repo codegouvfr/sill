@@ -513,7 +513,6 @@ const {
                 "isPresentInSupportMarket": "Present in support market",
                 "isFromFrenchPublicService": "From French public service",
                 "isRGAACompliant": "Is compliant with RGAA rules",
-                "service provider": "See service providers",
                 "comptoire du libre sheet": "Open Comptoir du libre sheet",
                 "wikiData sheet": "Open Wikidata sheet",
                 "share software": "Share the software",
@@ -559,7 +558,6 @@ const {
                 "isPresentInSupportMarket": "Present in support market",
                 "isFromFrenchPublicService": "From French public service",
                 "isRGAACompliant": "Is compliant with RGAA rules",
-                "service provider": "See service providers",
                 "comptoire du libre sheet": "Open Comptoir du libre sheet",
                 "wikiData sheet": "Open Wikidata sheet",
                 "what is the support market": ({ url }) => (
@@ -1214,7 +1212,7 @@ const {
                 "isPresentInSupportMarket": "Présent dans le marché de support",
                 "isFromFrenchPublicService": "Développé par le service public",
                 "isRGAACompliant": "Respecte les normes RGAA",
-                "service provider": "Voir les prestataires de services",
+                // "service provider": "Voir les prestataires de services",
                 "comptoire du libre sheet": "Consulter la fiche du Comptoir du Libre",
                 "wikiData sheet": "Consulter la fiche de Wikidata",
                 "share software": "Partager la fiche",
@@ -1259,7 +1257,6 @@ const {
                 "isPresentInSupportMarket": "Présent dans le marché de support",
                 "isFromFrenchPublicService": "Développé par le service public",
                 "isRGAACompliant": "Respecte les normes RGAA",
-                "service provider": "Voir les prestataires de services",
                 "comptoire du libre sheet": "Consulter la fiche du Comptoir du Libre",
                 "wikiData sheet": "Consulter la fiche de Wikidata",
                 "what is the support market": ({ url }) => (

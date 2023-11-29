@@ -416,7 +416,6 @@ export const { i18n } = declareComponentKeys<
     | "isPresentInSupportMarket"
     | "isFromFrenchPublicService"
     | "isRGAACompliant"
-    | "service provider"
     | "comptoire du libre sheet"
     | "wikiData sheet"
     | "share software"
