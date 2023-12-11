@@ -1365,8 +1365,8 @@ const {
                 "not a valid email": "Ceci ne semble pas être une adresse e-mail valide",
                 "email domain not allowed": ({ domain }) =>
                     `Le domaine ${domain} n'est pas autorisé pour le moment`,
-                "about title": "Profil Open Source",
-                "about description": `Dressez un panorama de votre parcours et de vos engagements envers l'open source. 
+                "about title": "Profil Logiciels Libres",
+                "about description": `Dressez un panorama de votre parcours et de vos engagements envers les logiciels libres.
                 Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations 
                 que vous souhaitez mettre en avant au sein de la communauté du SILL.`,
                 "isPublic label": "Profil Public",
@@ -1377,14 +1377,14 @@ const {
                         accessible.
                     </>
                 ),
-                "go to profile": "Voir mon profile public"
+                "go to profile": "Voir mon profil public"
             },
             "UserProfile": {
                 "agent profile": ({ email, organization }) =>
                     `Profile de ${email} - ${organization}`,
-                "send email": "Envoyer un e-mail a l'agent",
+                "send email": "Envoyer un courrier à l'agent",
                 "no description":
-                    "Cette agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
+                    "Cet agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
                 "edit my profile": "Modifier mon profil",
                 "badge text": ({ isReferent, isTechnicalExpert, isUser }) => {
                     if (isReferent && isTechnicalExpert) {
