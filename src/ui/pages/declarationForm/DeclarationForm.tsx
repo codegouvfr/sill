@@ -174,6 +174,7 @@ export default function DeclarationForm(props: Props) {
                                             case 1:
                                                 return t("title step 1");
                                             case 2:
+                                                assert(declarationType !== undefined);
                                                 return t(
                                                     `title step 2 ${declarationType}`
                                                 );

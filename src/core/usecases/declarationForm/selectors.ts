@@ -41,7 +41,6 @@ const main = createSelector(
 
         assert(step !== undefined);
         assert(isSubmitting !== undefined);
-        assert(declarationType !== undefined);
         assert(software !== undefined);
 
         return {
