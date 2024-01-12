@@ -62,12 +62,12 @@ export default function SoftwareUserAndReferent(props: Props) {
         {
             "id": 0,
             "name": "referents" as const,
-            "label": `${t("tab referent title")} (${referents.length})`
+            "label": `${t("tab referent title", { count: referents.length })}`
         },
         {
             "id": 1,
             "name": "users" as const,
-            "label": `${t("tab user title")} (${users.length})`
+            "label": `${t("tab user title", { count: users.length })}`
         }
     ];
 
@@ -205,8 +205,10 @@ export default function SoftwareUserAndReferent(props: Props) {
                             >
                                 {t("category")} (
                                 {activeMenu === 0
-                                    ? t("tab referent title")
-                                    : t("tab user title")}
+                                    ? t("tab referent title", {
+                                          "count": referents.length
+                                      })
+                                    : t("tab user title", { "count": users.length })}
                                 )
                             </button>
                             <div
@@ -392,8 +394,16 @@ export const { i18n } = declareComponentKeys<
     | "catalog breadcrumb"
     | "user and referent breadcrumb"
     | "title"
-    | "tab user title"
-    | "tab referent title"
+    | {
+          K: "tab user title";
+          P: { count: number };
+          R: string;
+      }
+    | {
+          K: "tab referent title";
+          P: { count: number };
+          R: string;
+      }
     | "category"
     | "softwareDetails"
     | "declare referent"

@@ -615,8 +615,10 @@ const {
                 "catalog breadcrumb": "Software catalog",
                 "user and referent breadcrumb": "Users and referents",
                 "title": "Users and referents",
-                "tab user title": "Users",
-                "tab referent title": "Referents",
+                "tab user title": ({ count }) =>
+                    `Users${count > 1 ? "s" : ""} (${count})`,
+                "tab referent title": ({ count }) =>
+                    `Referent${count > 1 ? "s" : ""} (${count})`,
                 "category": "Category",
                 "softwareDetails": "See the software sheet",
                 "declare user": "Declare yourself as a user",
@@ -1302,21 +1304,29 @@ const {
                 "modal title": "Fournisseur de service de l'anuaire CNLL"
             },
             "DetailUsersAndReferents": {
-                "userAndReferentCount": ({ userCount, referentCount, referentColor }) => (
-                    <>
-                        {userCount !== 0 && <>{userCount} utilisateurs et </>}
-                        <span style={{ "color": referentColor }}>
-                            {referentCount} référents
-                        </span>
-                    </>
-                )
+                "userAndReferentCount": ({ userCount, referentCount, referentColor }) => {
+                    return (
+                        <>
+                            {userCount !== 0 && (
+                                <>
+                                    {userCount} utilisateur{userCount > 1 ? "s" : ""} et{" "}
+                                </>
+                            )}
+                            <span style={{ "color": referentColor }}>
+                                {referentCount} référent{referentCount > 1 ? "s" : ""}
+                            </span>
+                        </>
+                    );
+                }
             },
             "SoftwareUserAndReferent": {
                 "catalog breadcrumb": "Catalogue",
                 "user and referent breadcrumb": "Utilisateurs et référents",
                 "title": "Utilisateurs et référents",
-                "tab user title": "Utilisateurs",
-                "tab referent title": "Référents",
+                "tab user title": ({ count }) =>
+                    `Utilisateur${count > 1 ? "s" : ""} (${count})`,
+                "tab referent title": ({ count }) =>
+                    `Référent${count > 1 ? "s" : ""} (${count})`,
                 "category": "Catégorie",
                 "softwareDetails": "Voir la fiche du logiciel",
                 "declare user": "Se déclarer utilisateur",
