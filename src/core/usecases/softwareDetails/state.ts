@@ -3,7 +3,7 @@ import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import { type State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
 import { LocalizedString } from "i18nifty";
-import { Language } from "@codegouvfr/sill";
+import type { Language, ApiTypes } from "@codegouvfr/sill";
 
 export const name = "softwareDetails";
 
@@ -37,8 +37,10 @@ export namespace State {
     };
 
     export type Software = {
+        softwareId: number;
         softwareName: string;
         softwareDescription: string;
+        serviceProviders: ApiTypes.ServiceProvider[];
         logoUrl: string | undefined;
         authors: {
             authorName: string;

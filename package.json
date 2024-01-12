@@ -15,11 +15,12 @@
         "prepare": "copy-dsfr-to-public && copy-keycloak-resources-to-public",
         "prestorybook": "only-include-used-icons",
         "prestart": "only-include-used-icons",
-        "prebuild": "only-include-used-icons"
+        "prebuild": "only-include-used-icons",
+        "typecheck": "tsc --noEmit"
     },
     "dependencies": {
         "@codegouvfr/react-dsfr": "^1.0.0",
-        "@codegouvfr/sill": "^1.18.6",
+        "@codegouvfr/sill": "^1.18.13",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.0.4",

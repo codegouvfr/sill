@@ -22,6 +22,7 @@ import {
     DeclarationRemovalModal
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
+import type { ApiTypes } from "@codegouvfr/sill";
 
 type Props = {
     className?: string;
@@ -155,6 +156,37 @@ export default function SoftwareDetails(props: Props) {
                                                       }).link
                                                   }
                                               />
+                                          )
+                                      }
+                                  ]),
+                            ...(software.serviceProviders.length === 0
+                                ? []
+                                : [
+                                      {
+                                          "label": t("tab service providers", {
+                                              "serviceProvidersCount":
+                                                  software.serviceProviders.length
+                                          }),
+                                          "content": (
+                                              <div>
+                                                  <p className={fr.cx("fr-text--bold")}>
+                                                      {t("list of service providers")}
+                                                  </p>
+                                                  <ul>
+                                                      {software.serviceProviders.map(
+                                                          serviceProvider => (
+                                                              <ServiceProviderRow
+                                                                  key={
+                                                                      serviceProvider.name
+                                                                  }
+                                                                  serviceProvider={
+                                                                      serviceProvider
+                                                                  }
+                                                              />
+                                                          )
+                                                      )}
+                                                  </ul>
+                                              </div>
                                           )
                                       }
                                   ]),
@@ -313,6 +345,32 @@ export default function SoftwareDetails(props: Props) {
     );
 }
 
+const ServiceProviderRow = ({
+    serviceProvider: { website, cdlUrl, cnllUrl, name }
+}: {
+    serviceProvider: ApiTypes.ServiceProvider;
+}) => (
+    <li>
+        <span className={fr.cx("fr-text--bold")}>{name}</span>
+        {" - "}
+        {website && cdlUrl !== website && (
+            <a href={website} target="_blank" rel="noreferrer">
+                Site
+            </a>
+        )}{" "}
+        {cdlUrl && (
+            <a href={website} target="_blank" rel="noreferrer">
+                Comptoir du libre
+            </a>
+        )}{" "}
+        {cnllUrl && cnllUrl !== website && (
+            <a href={cnllUrl} target="_blank" rel="noreferrer">
+                CNLL
+            </a>
+        )}
+    </li>
+);
+
 const useStyles = tss.withName({ SoftwareDetails }).create({
     "breadcrumb": {
         "marginBottom": fr.spacing("4v")
@@ -342,7 +400,9 @@ export const { i18n } = declareComponentKeys<
     | "catalog breadcrumb"
     | "tab title overview"
     | { K: "tab title instance"; P: { instanceCount: number } }
+    | { K: "tab service providers"; P: { serviceProvidersCount: number } }
     | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
+    | "list of service providers"
     | "prerogatives"
     | "last version"
     | { K: "last version date"; P: { date: string } }
@@ -355,7 +415,6 @@ export const { i18n } = declareComponentKeys<
     | "isPresentInSupportMarket"
     | "isFromFrenchPublicService"
     | "isRGAACompliant"
-    | "service provider"
     | "comptoire du libre sheet"
     | "wikiData sheet"
     | "share software"

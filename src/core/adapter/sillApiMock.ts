@@ -73,6 +73,7 @@ export const sillApi: SillApi = {
 
         const software: ApiTypes.Software = {
             "logoUrl": undefined,
+            "serviceProviders": [],
             "softwareId":
                 softwares
                     .map(({ softwareId }) => softwareId)
@@ -123,6 +124,7 @@ export const sillApi: SillApi = {
         softwares[index] = {
             ...softwares[index],
             ...id<ApiTypes.Software>({
+                "serviceProviders": [],
                 "logoUrl": undefined,
                 "softwareId":
                     softwares
@@ -278,6 +280,7 @@ const options = [
 
 const softwares = [
     id<ApiTypes.Software>({
+        "serviceProviders": [],
         "logoUrl": LogoNextCloud,
         "softwareId": 0,
         "softwareName": "NextCloud",
@@ -326,6 +329,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 1,
         "softwareName": "LibreOffice",
         "codeRepositoryUrl": undefined,
@@ -387,6 +391,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 2,
+        "serviceProviders": [],
         "softwareName": "ARX Data Anonymization Tool",
         "codeRepositoryUrl": "https://core.trac.wordpress.org/browser",
         "authors": [
@@ -440,6 +445,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 3,
+        "serviceProviders": [],
         "softwareName": "VLC",
         "codeRepositoryUrl": "https://code.videolan.org/videolan/vlc",
         "authors": [
@@ -492,6 +498,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 4,
+        "serviceProviders": [],
         "softwareName": "Debian",
         "codeRepositoryUrl": "https://sources.debian.org/",
         "authors": [
@@ -546,6 +553,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 5,
+        "serviceProviders": [],
         "softwareName": "Thunderbird",
         "codeRepositoryUrl": "https://hg.mozilla.org/comm-central",
         "authors": [
@@ -615,6 +623,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 6,
+        "serviceProviders": [],
         "softwareName": "Qgis",
         "codeRepositoryUrl": "https://github.com/qgis/QGIS",
         "authors": [
@@ -666,6 +675,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": undefined,
         "softwareId": 7,
+        "serviceProviders": [],
         "softwareName": "Mozilla Firefox",
         "codeRepositoryUrl": "https://hg.mozilla.org/mozilla-central/",
         "authors": [
@@ -732,6 +742,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": LogoNeovim,
         "softwareId": 8,
+        "serviceProviders": [],
         "softwareName": "PostgreSQL",
         "codeRepositoryUrl": "https://git.postgresql.org/gitweb/?p=postgresql.git",
         "authors": [
@@ -779,6 +790,7 @@ const softwares = [
     id<ApiTypes.Software>({
         "logoUrl": LogoWordpress,
         "softwareId": 9,
+        "serviceProviders": [],
         "softwareName": "Peertube",
         "codeRepositoryUrl": "https://github.com/Chocobozzz/PeerTube",
         "authors": [
@@ -824,6 +836,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 10,
         "softwareName": "Archifiltre",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -867,6 +880,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 11,
         "softwareName": "Synfig",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -910,6 +924,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 12,
         "softwareName": "StackStorm",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -953,6 +968,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 13,
         "softwareName": "restic",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -996,6 +1012,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 14,
         "softwareName": "Khartis",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -1039,6 +1056,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 15,
         "softwareName": "Penpot",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -1082,6 +1100,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 16,
         "softwareName": "Zabbix",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
@@ -1125,6 +1144,7 @@ const softwares = [
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
+        "serviceProviders": [],
         "softwareId": 17,
         "softwareName": "CodeIgniter",
         "codeRepositoryUrl": "https://github.com/SocialGouv/archifiltre-docs",
