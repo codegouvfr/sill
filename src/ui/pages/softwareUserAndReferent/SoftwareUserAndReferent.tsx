@@ -120,10 +120,10 @@ export default function SoftwareUserAndReferent(props: Props) {
     };
 
     const contentUsers = () => {
-        return users.map(user => {
+        return users.map((user, index) => {
             const { organization, usecaseDescription, serviceUrl } = user;
             return (
-                <li key={organization}>
+                <li key={`${organization}-${index}`}>
                     <p>
                         <span className={classes.infoLegend}>{t("organization")}</span>:{" "}
                         {getOrganizationFullName(organization)}{" "}
