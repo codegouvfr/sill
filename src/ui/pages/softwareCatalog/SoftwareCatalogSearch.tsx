@@ -216,16 +216,24 @@ export function SoftwareCatalogSearch(props: Props) {
                             "label": tCommon("allFeminine"),
                             "value": ""
                         },
-                        ...categoryOptions.map(({ category, softwareCount }) => ({
-                            "value": category,
-                            "label": `${
-                                lang === "fr"
-                                    ? softwareCategoriesFrBySoftwareCategoryEn[
-                                          category
-                                      ] ?? category
-                                    : category
-                            } (${softwareCount})`
-                        }))
+                        ...categoryOptions
+                            .map(({ category, softwareCount }) => ({
+                                "value": category,
+                                "label": `${
+                                    lang === "fr"
+                                        ? softwareCategoriesFrBySoftwareCategoryEn[
+                                              category
+                                          ] ?? category
+                                        : category
+                                } (${softwareCount})`
+                            }))
+                            .sort((a, b) => {
+                                const labelA = a.label.toLowerCase();
+                                const labelB = b.label.toLowerCase();
+                                if (labelA < labelB) return -1;
+                                if (labelA > labelB) return 1;
+                                return 0;
+                            })
                     ]}
                 />
 
