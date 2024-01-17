@@ -8,15 +8,24 @@ import { Accordion } from "@codegouvfr/react-dsfr/Accordion";
 import { groupBy } from "lodash";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import type { Link } from "type-route";
+import { useCore } from "../../../core";
+import { routes } from "../../routes";
 
 export type Props = {
     className?: string;
-    instanceList: { organization: string; instanceUrl: string; targetAudience: string }[];
+    instanceList: {
+        id: number;
+        organization: string;
+        instanceUrl: string;
+        targetAudience: string;
+    }[];
     createInstanceLink: Link;
 };
 
 export const ReferencedInstancesTab = (props: Props) => {
     const { className, instanceList, createInstanceLink, ...rest } = props;
+    const { userAuthentication } = useCore().functions;
+    const isUserLoggedIn = userAuthentication.getIsUserLoggedIn();
 
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
@@ -73,6 +82,21 @@ export const ReferencedInstancesTab = (props: Props) => {
                                             {targetAudience}
                                         </p>
                                         <div className={classes.footer}>
+                                            {isUserLoggedIn && (
+                                                <Button
+                                                    className={fr.cx("fr-mr-3w")}
+                                                    onClick={() =>
+                                                        routes
+                                                            .instanceUpdateForm({
+                                                                id: instance.id
+                                                            })
+                                                            .push()
+                                                    }
+                                                >
+                                                    {t("edit instance")}
+                                                </Button>
+                                            )}
+
                                             <a
                                                 className={cx(
                                                     fr.cx("fr-btn", "fr-btn--secondary")
@@ -139,4 +163,5 @@ export const { i18n } = declareComponentKeys<
     | "concerned public"
     | "go to instance"
     | "add instance"
+    | "edit instance"
 >()({ ReferencedInstancesTab });

@@ -267,6 +267,7 @@ function apiSoftwareToSoftware(params: {
                           instance.publicUrl === undefined
                               ? undefined
                               : {
+                                    "id": instance.id,
                                     "instanceUrl": instance.publicUrl,
                                     "organization": instance.organization,
                                     "targetAudience": instance.targetAudience

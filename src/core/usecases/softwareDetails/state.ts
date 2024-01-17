@@ -79,6 +79,7 @@ export namespace State {
         testUrl: string | undefined;
         instances:
             | {
+                  id: number;
                   organization: string;
                   instanceUrl: string;
                   targetAudience: string;

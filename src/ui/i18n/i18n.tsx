@@ -67,6 +67,7 @@ const {
                 "update software": "Update Software",
                 "add software or service": "Add Software or Service",
                 "add instance": "Add Instance",
+                "update instance": "Update Instance",
                 "required": "This field is required",
                 "invalid url": 'Invalid URL. It must start with "http"',
                 "invalid version": "The value must be numeric (e.g., 2.0.1)",
@@ -580,7 +581,8 @@ const {
                     `${instanceCount} maintained instance by ${publicOrganizationCount} public organisation`,
                 "concerned public": "Concerned public : ",
                 "go to instance": "Open the instance",
-                "add instance": "Reference new instance"
+                "add instance": "Reference new instance",
+                "edit instance": "Edit instance"
             },
             "SimilarSoftwareTab": {
                 "similar software in sill": "Alike software in the SILL",
@@ -749,6 +751,7 @@ const {
                 "update software": "Mettre à jour un logiciel",
                 "add software or service": "Ajouter un logiciel ou un service",
                 "add instance": "Ajouter une instance",
+                "update instance": "Modifier une instance",
                 "required": "Ce champ est requis",
                 "invalid url": 'URL invalide. Elle doit commencer par "http"',
                 "invalid version": "La valeur doit être numérique (Exemple : 2.0.1)",
@@ -1281,7 +1284,8 @@ const {
                     `${instanceCount} instances maintenues par ${publicOrganizationCount} organisations publiques`,
                 "concerned public": "Public concerné : ",
                 "go to instance": "Accéder à l'instance",
-                "add instance": "Référencer une nouvelle instance"
+                "add instance": "Référencer une nouvelle instance",
+                "edit instance": "Éditer l'instance"
             },
             "SimilarSoftwareTab": {
                 "similar software in sill": "Logiciels similaires dans le SILL",

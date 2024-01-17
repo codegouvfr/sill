@@ -193,6 +193,7 @@ export const { i18n } = declareComponentKeys<
     | "update software"
     | "add software or service"
     | "add instance"
+    | "update instance"
     | "required"
     | "invalid url"
     | "invalid version"

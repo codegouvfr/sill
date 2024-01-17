@@ -86,6 +86,24 @@ export default function InstanceForm(props: Props) {
     const { t } = useTranslation({ InstanceForm });
     const { t: tCommon } = useTranslation({ "App": null });
 
+    const translationByRoute: Record<
+        PageRoute["name"],
+        { title: string; submitLabel: string; breadcrumbs: string }
+    > = {
+        instanceCreationForm: {
+            title: t("title add instance form"),
+            breadcrumbs: t("breadcrumb add instance"),
+            submitLabel: tCommon("add instance")
+        },
+        instanceUpdateForm: {
+            title: t("title update instance form"),
+            breadcrumbs: t("breadcrumb update instance"),
+            submitLabel: tCommon("update instance")
+        }
+    };
+
+    const translations = translationByRoute[route.name];
+
     const evtActionSubmitStep = useConst(() => Evt.create());
 
     const { lang } = useLang();
@@ -106,14 +124,7 @@ export default function InstanceForm(props: Props) {
                             "label": tCommon("add software or service")
                         }
                     ]}
-                    currentPageLabel={(() => {
-                        switch (route.name) {
-                            case "instanceCreationForm":
-                                return t("breadcrumb add instance");
-                            case "instanceUpdateForm":
-                                return t("breadcrumb update instance");
-                        }
-                    })()}
+                    currentPageLabel={translations.breadcrumbs}
                     className={classes.breadcrumb}
                 />
                 <div className={classes.headerDeclareUserOrReferent}>
@@ -125,16 +136,7 @@ export default function InstanceForm(props: Props) {
                     >
                         <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                     </a>
-                    <h4 className={classes.title}>
-                        {(() => {
-                            switch (route.name) {
-                                case "instanceCreationForm":
-                                    return t("title add instance form");
-                                case "instanceUpdateForm":
-                                    return t("title update instance form");
-                            }
-                        })()}
-                    </h4>
+                    <h4 className={classes.title}>{translations.title}</h4>
                 </div>
                 <Stepper
                     currentStep={step}
@@ -193,7 +195,7 @@ export default function InstanceForm(props: Props) {
                 >
                     {isLastStep ? (
                         <>
-                            {tCommon("add instance")}
+                            {translations.submitLabel}
                             {isSubmitting && (
                                 <CircularProgress
                                     size={20}
