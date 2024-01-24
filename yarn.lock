@@ -1232,10 +1232,10 @@
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.18.13":
-  version "1.18.13"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.18.13.tgz#ad393f9db1b01754a5b47017239faf8c4be4bdde"
-  integrity sha512-/deEiocHQmGCWoYgaO2g35kr8rkN84Bf6+WbrWqVSAntWYP3/wdW3LKpmP0Mbdo5CF7BGJxcS/RAYmHO8vAwuQ==
+"@codegouvfr/sill@^1.19.0":
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.19.0.tgz#eec603f499b1865a3ca17e67a81a94ba0fa5c487"
+  integrity sha512-yal1d/gHOBQ+XkGll89PrrPBSdwCzf2G0MATLjMyC8+qMUs5DyDrU8nSBFBd+yXvssihDnS6pdPQbh4un3o46g==
   dependencies:
     "@octokit/graphql" "^7.0.2"
     "@trpc/server" "^10.18.0"
