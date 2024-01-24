@@ -149,7 +149,8 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 "fr-icon-global-line",
                                 "fr-btn",
                                 "fr-btn--secondary",
-                                "fr-btn--icon-left"
+                                "fr-btn--icon-left",
+                                "fr-my-2v"
                             )
                         )}
                     >
@@ -167,7 +168,8 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 "fr-btn",
                                 "fr-btn--secondary",
                                 "fr-btn--icon-left",
-                                "fr-ml-4v"
+                                "fr-ml-4v",
+                                "fr-my-2v"
                             )
                         )}
                     >
@@ -184,7 +186,8 @@ export const HeaderDetailCard = memo((props: Props) => {
                             "fr-btn",
                             "fr-btn--secondary",
                             "fr-btn--icon-left",
-                            "fr-ml-4v"
+                            "fr-ml-4v",
+                            "fr-my-2v"
                         )}
                     >
                         {t("repository")}
