@@ -47,6 +47,7 @@ export namespace State {
             authorUrl: string;
         }[];
         officialWebsiteUrl: string | undefined;
+        documentationUrl: string | undefined;
         codeRepositoryUrl: string | undefined;
         latestVersion:
             | {

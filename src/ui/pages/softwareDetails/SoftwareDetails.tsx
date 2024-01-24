@@ -77,6 +77,7 @@ export default function SoftwareDetails(props: Props) {
                         softwareDereferencing={software.dereferencing}
                         authors={software.authors}
                         officialWebsite={software.officialWebsiteUrl}
+                        documentationWebsite={software.documentationUrl}
                         sourceCodeRepository={software.codeRepositoryUrl}
                         onGoBackClick={() => {
                             const previousRouteName = getPreviousRouteName();

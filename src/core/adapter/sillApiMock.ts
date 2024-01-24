@@ -89,6 +89,7 @@ export const sillApi: SillApi = {
             "wikidataId": formData.wikidataId,
             "license": formData.softwareLicense,
             "officialWebsiteUrl": undefined,
+            "documentationUrl": undefined,
             "softwareDescription": formData.softwareDescription,
             "latestVersion": undefined,
             "parentWikidataSoftware": undefined,
@@ -141,6 +142,7 @@ export const sillApi: SillApi = {
                 "wikidataId": formData.wikidataId,
                 "license": formData.softwareLicense,
                 "officialWebsiteUrl": undefined,
+                "documentationUrl": undefined,
                 "softwareDescription": formData.softwareDescription,
                 "latestVersion": undefined,
                 "parentWikidataSoftware": undefined,
@@ -303,6 +305,7 @@ const softwares = [
         "wikidataId": "Q25874683",
         "license": "AGPL-3.0-or-later",
         "officialWebsiteUrl": undefined,
+        "documentationUrl": undefined,
         "softwareDescription":
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras feugiat, ex sit amet pretium blandit, tortor eros dapibus sem, ultricies tempor nunc magna in dolor. Curabitur non tincidunt ex. Nulla facilisi. Integer vestibulum ultricies risus eu blandit. Duis accumsan dolor sit amet arcu semper ultrices. Cras tincidunt commodo mauris quis iaculis. Morbi iaculis massa sit amet nunc porttitor malesuada. Sed venenatis congue dolor eu posuere. Praesent nec pulvinar massa. Ut id diam congue, elementum nulla in, varius mi.",
         "latestVersion": undefined,
@@ -356,6 +359,7 @@ const softwares = [
         "wikidataId": "Q10135",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.libreoffice.org/",
+        "documentationUrl": "https://www.libreoffice.org/",
         "softwareDescription":
             "LibreOffice, Suite bureautique (logiciel de traitement de texte, tableur ect)",
         "latestVersion": {
@@ -419,6 +423,7 @@ const softwares = [
         },
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://wordpress.org/",
+        "documentationUrl": "https://wordpress.org/",
         "softwareDescription": "Wordpress, Système de gestion de contenus web",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -466,6 +471,7 @@ const softwares = [
         "wikidataId": "Q171477",
         "license": "GPL-2.0-only",
         "officialWebsiteUrl": "https://www.wikidata.org/wiki/Q171477",
+        "documentationUrl": undefined,
         "softwareDescription": "VLC, Lecteur multimédia",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -524,6 +530,7 @@ const softwares = [
         "wikidataId": "Q7715973",
         "license": "N/A",
         "officialWebsiteUrl": "https://www.debian.org/",
+        "documentationUrl": undefined,
         "softwareDescription": "Debian, Distribution GNU/LINUX",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -577,6 +584,7 @@ const softwares = [
         "wikidataId": "Q483604",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.thunderbird.net/",
+        "documentationUrl": undefined,
         "softwareDescription": "Thunderbird, Courrielleur",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -640,6 +648,7 @@ const softwares = [
         "wikidataId": "Q1329181",
         "license": "GPL-2.0-or-later",
         "officialWebsiteUrl": "https://qgis.org/fr/site/",
+        "documentationUrl": undefined,
         "softwareDescription": "Qgis, Système d'information géographique",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -707,6 +716,7 @@ const softwares = [
         "wikidataId": "Q698",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.mozilla.org/fr/firefox/new/",
+        "documentationUrl": undefined,
         "softwareDescription": "Mozilla Firefox (Extended Support Release), Navigateur",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -763,6 +773,7 @@ const softwares = [
         "wikidataId": "Q192490",
         "license": "PostgreSQL",
         "officialWebsiteUrl": "https://www.postgresql.org/",
+        "documentationUrl": undefined,
         "softwareDescription": "PostgreSQL, Base de données transactionnelle",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -807,6 +818,7 @@ const softwares = [
         "wikidataId": "Q50938515",
         "license": "AGPL-3.0-or-later",
         "officialWebsiteUrl": "https://joinpeertube.org/",
+        "documentationUrl": undefined,
         "softwareDescription":
             "Peertube, Plateforme d'hébergement décentralisée de vidéos",
         "latestVersion": {
@@ -848,6 +860,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -892,6 +905,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -936,6 +950,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -980,6 +995,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -1024,6 +1040,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -1068,6 +1085,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -1112,6 +1130,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",
@@ -1156,6 +1175,7 @@ const softwares = [
         "wikidataId": "Q77064547",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
+        "documentationUrl": undefined,
         "softwareDescription": "Archifiltre, Système d'aide à l'archivage de fichiers",
         "latestVersion": {
             "semVer": "Dernière stable",

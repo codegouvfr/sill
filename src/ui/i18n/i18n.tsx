@@ -530,6 +530,7 @@ const {
             "HeaderDetailCard": {
                 "authors": "Authors : ",
                 "website": "Official website",
+                "documentation": "Documentation",
                 "repository": "Source code repository",
                 "software logo": "Software logo",
                 "you are user": "You're using it",
@@ -1234,6 +1235,7 @@ const {
             "HeaderDetailCard": {
                 "authors": "Auteurs : ",
                 "website": "Site web officiel",
+                "documentation": "Documentation",
                 "repository": "Dépôt du code source",
                 "software logo": "Logo du logiciel",
                 "you are user": "Vous l'utilisez",

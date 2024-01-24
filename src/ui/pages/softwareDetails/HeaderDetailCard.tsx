@@ -23,6 +23,7 @@ export type Props = {
         authorUrl: string;
     }[];
     officialWebsite?: string;
+    documentationWebsite?: string;
     sourceCodeRepository?: string;
     onGoBackClick: () => void;
     userDeclaration:
@@ -40,6 +41,7 @@ export const HeaderDetailCard = memo((props: Props) => {
         softwareName,
         authors,
         officialWebsite,
+        documentationWebsite,
         sourceCodeRepository,
         onGoBackClick,
         userDeclaration,
@@ -148,11 +150,28 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 "fr-btn",
                                 "fr-btn--secondary",
                                 "fr-btn--icon-left"
-                            ),
-                            classes.officialWebsiteButton
+                            )
                         )}
                     >
                         {t("website")}
+                    </a>
+                )}
+                {documentationWebsite && (
+                    <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={documentationWebsite}
+                        className={cx(
+                            fr.cx(
+                                "fr-icon-global-line",
+                                "fr-btn",
+                                "fr-btn--secondary",
+                                "fr-btn--icon-left",
+                                "fr-ml-4v"
+                            )
+                        )}
+                    >
+                        {t("documentation")}
                     </a>
                 )}
                 {sourceCodeRepository && (
@@ -164,7 +183,8 @@ export const HeaderDetailCard = memo((props: Props) => {
                             "fr-icon-code-s-slash-line",
                             "fr-btn",
                             "fr-btn--secondary",
-                            "fr-btn--icon-left"
+                            "fr-btn--icon-left",
+                            "fr-ml-4v"
                         )}
                     >
                         {t("repository")}
@@ -237,10 +257,8 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
     "externalLinkButtons": {
         "display": "flex",
         "alignItems": "center",
-        "justifyContent": "end"
-    },
-    "officialWebsiteButton": {
-        "marginRight": fr.spacing("4v")
+        "justifyContent": "end",
+        "flexWrap": "wrap"
     },
     "dereferencedText": {
         "color": fr.colors.decisions.text.default.error.default
@@ -250,6 +268,7 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
 export const { i18n } = declareComponentKeys<
     | "authors"
     | "website"
+    | "documentation"
     | "repository"
     | "software logo"
     | "you are user"
