@@ -187,6 +187,7 @@ const useStyles = tss
 export const { i18n } = declareComponentKeys<
     | "yes"
     | "no"
+    | "not applicable"
     | "previous"
     | "next"
     | "add software"

@@ -216,7 +216,7 @@ export const thunks = {
                 "softwareMinimalVersion": step2.softwareMinimalVersion,
                 "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
                 "isFromFrenchPublicService": step3.isFromFrenchPublicService,
-                "doRespectRgaa": step3.doRespectRgaa ?? false,
+                "doRespectRgaa": step3.doRespectRgaa,
                 "similarSoftwareWikidataIds": formDataStep4.similarSoftwares.map(
                     ({ wikidataId }) => wikidataId
                 ),

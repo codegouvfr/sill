@@ -15,6 +15,8 @@ export type Step2Props = {
     evtActionSubmit: NonPostableEvt<void>;
 };
 
+type DoRespectRgaaInputValue = "true" | "false" | "not applicable";
+
 export function SoftwareFormStep3(props: Step2Props) {
     const { className, initialFormData, onSubmit, evtActionSubmit } = props;
 
@@ -27,7 +29,7 @@ export function SoftwareFormStep3(props: Step2Props) {
         formState: { errors }
     } = useForm<{
         isPresentInSupportContractInputValue: "true" | "false" | undefined;
-        doRespectRgaaInputValue: "true" | "false" | undefined;
+        doRespectRgaaInputValue: DoRespectRgaaInputValue;
         isFromFrenchPublicServiceInputValue: "true" | "false";
         isPublicInstanceInputValue: "true" | "false";
         targetAudience: string;
@@ -50,12 +52,10 @@ export function SoftwareFormStep3(props: Step2Props) {
                         : isPresentInSupportContract
                         ? "true"
                         : "false",
-                "doRespectRgaaInputValue":
-                    doRespectRgaa === undefined
-                        ? undefined
-                        : doRespectRgaa
-                        ? "true"
-                        : "false",
+                "doRespectRgaaInputValue": ((): DoRespectRgaaInputValue => {
+                    if (doRespectRgaa === null) return "not applicable";
+                    return doRespectRgaa ? "true" : "false";
+                })(),
                 "isFromFrenchPublicServiceInputValue":
                     isFromFrenchPublicService === undefined
                         ? undefined
@@ -102,8 +102,8 @@ export function SoftwareFormStep3(props: Step2Props) {
                         })(),
                         "doRespectRgaa": (() => {
                             switch (doRespectRgaaInputValue) {
-                                case undefined:
-                                    return undefined;
+                                case "not applicable":
+                                    return null;
                                 case "true":
                                     return true;
                                 case "false":
@@ -184,6 +184,13 @@ export function SoftwareFormStep3(props: Step2Props) {
                         "nativeInputProps": {
                             ...register("doRespectRgaaInputValue"),
                             "value": "false"
+                        }
+                    },
+                    {
+                        "label": tCommon("not applicable"),
+                        "nativeInputProps": {
+                            ...register("doRespectRgaaInputValue"),
+                            "value": "not applicable"
                         }
                     }
                 ]}

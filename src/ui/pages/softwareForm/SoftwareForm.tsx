@@ -182,11 +182,12 @@ export default function SoftwareForm(props: Props) {
                 <SoftwareFormStep3
                     className={classes.step3}
                     initialFormData={formData.step3}
-                    onSubmit={formData =>
+                    onSubmit={formData => {
+                        console.log("formData : ", formData);
                         softwareForm.setStep3Data({
                             "formDataStep3": formData
-                        })
-                    }
+                        });
+                    }}
                     isCloudNativeSoftware={formData.step1?.softwareType.type === "cloud"}
                     evtActionSubmit={evtActionSubmitStep.pipe(() => step === 3)}
                 />

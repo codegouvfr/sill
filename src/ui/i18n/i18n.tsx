@@ -61,6 +61,7 @@ const {
             "App": {
                 "yes": "Yes",
                 "no": "No",
+                "not applicable": "Not applicable",
                 "previous": "Previous",
                 "next": "Next",
                 "add software": "Add Software",
@@ -745,6 +746,7 @@ const {
             "App": {
                 "yes": "Oui",
                 "no": "Non",
+                "not applicable": "Non applicable",
                 "previous": "Précédent",
                 "next": "Suivant",
                 "add software": "Ajouter un logiciel",

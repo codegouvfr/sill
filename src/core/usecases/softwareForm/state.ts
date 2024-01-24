@@ -39,7 +39,7 @@ export type FormData = {
     step3: {
         isPresentInSupportContract: boolean | undefined;
         isFromFrenchPublicService: boolean;
-        doRespectRgaa: boolean | undefined;
+        doRespectRgaa: boolean | null;
     };
     step4: {
         similarSoftwares: {

@@ -4,6 +4,8 @@ import {
 } from "redux-clean-architecture";
 import type { ApiTypes } from "@codegouvfr/sill";
 
+type OmitFromExisting<T, K extends keyof T> = Omit<T, K>;
+
 export const name = "softwareCatalog" as const;
 
 export type State = {
@@ -48,13 +50,15 @@ export namespace State {
         | "android"
         | "ios";
 
-    export type Prerogative =
-        | "isPresentInSupportContract"
-        | "isFromFrenchPublicServices"
-        | "doRespectRgaa"
-        | "isInstallableOnUserComputer"
-        | "isAvailableAsMobileApp"
-        | "isTestable";
+    type Prerogatives = {
+        isPresentInSupportContract: boolean;
+        isFromFrenchPublicServices: boolean;
+        doRespectRgaa: boolean | null;
+        isInstallableOnUserComputer: boolean;
+        isAvailableAsMobileApp: boolean;
+        isTestable: boolean;
+    };
+    export type Prerogative = keyof Prerogatives;
 
     export namespace Software {
         type Common = {
@@ -85,7 +89,7 @@ export namespace State {
         };
 
         export type External = Common & {
-            prerogatives: Record<Prerogative, boolean>;
+            prerogatives: Prerogatives;
             searchHighlight:
                 | {
                       searchChars: string[];
@@ -99,14 +103,9 @@ export namespace State {
             updateTime: number;
             categories: string[];
             organizations: string[];
-            prerogatives: Record<
-                Exclude<
-                    Prerogative,
-                    | "isInstallableOnUserComputer"
-                    | "isTestable"
-                    | "isAvailableAsMobileApp"
-                >,
-                boolean
+            prerogatives: OmitFromExisting<
+                Prerogatives,
+                "isInstallableOnUserComputer" | "isTestable" | "isAvailableAsMobileApp"
             >;
             softwareType: ApiTypes.SoftwareType;
             search: string;

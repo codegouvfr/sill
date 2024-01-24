@@ -317,7 +317,7 @@ function apiSoftwareToSoftware(params: {
                 (softwareType.os.android || softwareType.os.ios),
             "isPresentInSupportContract": prerogatives.isPresentInSupportContract,
             "isFromFrenchPublicServices": prerogatives.isFromFrenchPublicServices,
-            "doRespectRgaa": prerogatives.doRespectRgaa
+            "doRespectRgaa": prerogatives.doRespectRgaa ?? undefined
         },
         comptoirDuLibreServiceProviderCount,
         testUrl,
