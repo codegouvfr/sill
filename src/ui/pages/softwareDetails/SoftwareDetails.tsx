@@ -359,7 +359,7 @@ const ServiceProviderRow = ({
             </a>
         )}{" "}
         {cdlUrl && (
-            <a href={website} target="_blank" rel="noreferrer">
+            <a href={cdlUrl} target="_blank" rel="noreferrer">
                 Comptoir du libre
             </a>
         )}{" "}
