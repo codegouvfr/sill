@@ -34,7 +34,7 @@
         "flexsearch": "0.7.21",
         "i18nifty": "^3.1.2",
         "oidc-spa": "^2.2.0",
-        "keycloakify": "^8.4.1",
+        "keycloakify": "^9.2.0",
         "memoizee": "^0.4.14",
         "moment": "^2.29.1",
         "path": "^0.12.7",

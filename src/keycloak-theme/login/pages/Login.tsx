@@ -49,7 +49,11 @@ export default function Login(
     return (
         <Template
             {...{ kcContext, i18n, doUseDefaultCss, "classes": classes_props }}
-            displayInfo={social.displayInfo}
+            displayInfo={
+                realm.password &&
+                (realm.resetPasswordAllowed ||
+                    (realm.registrationAllowed && !registrationDisabled))
+            }
             displayWide={realm.password && social.providers !== undefined}
             headerNode={msg("connect")}
             infoNode={
