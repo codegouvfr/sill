@@ -1,7 +1,7 @@
 {
     "homepage": "https://xxx.yy/sill",
     "name": "sill-web",
-    "version": "1.40.2",
+    "version": "1.40.3",
     "license": "MIT",
     "scripts": {
         "start": "react-app-rewired start",
@@ -34,7 +34,7 @@
         "flexsearch": "0.7.21",
         "i18nifty": "^3.1.2",
         "oidc-spa": "^2.2.0",
-        "keycloakify": "^8.4.1",
+        "keycloakify": "^9.1.12",
         "memoizee": "^0.4.14",
         "moment": "^2.29.1",
         "path": "^0.12.7",
