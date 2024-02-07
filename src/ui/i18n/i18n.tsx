@@ -1043,7 +1043,7 @@ const {
                 }) => (
                     <>
                         Renseignez le nom du logiciel ou directement l'identifiant (de la
-                        forme <code>QXXXXX</code>) pour associez le logiciel à une fiche
+                        forme <code>QXXXXX</code>) pour associer le logiciel à une fiche
                         existante{" "}
                         <a href={wikidataUrl} target="_blank" rel="noreferrer">
                             Wikidata
@@ -1056,11 +1056,11 @@ const {
                         Wikidata, vous pouvez en créer une. Vous trouverez ici un{" "}
                         <a href={wikidataPageExampleUrl} target="_blank" rel="noreferrer">
                             exemple de fiche Wikidata
-                        </a>
-                        pour le logiciel&nbsp;
+                        </a>{" "}
+			pour le logiciel&nbsp;
                         <a href={softwareSillUrl} target="_blank" rel="noreferrer">
                             {exampleSoftwareName}
-                        </a>{" "}
+                        </a>.{" "}
                     </>
                 ),
                 "wikidata id information":
