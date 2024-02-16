@@ -3,7 +3,7 @@ import { appPath } from "urls";
 
 export const routeDefs = {
     "softwareCreationForm": defineRoute(
-        { "wikidataId": param.query.optional.string },
+        { "externalId": param.query.optional.string },
         () => appPath + "/add"
     ),
     "softwareUpdateForm": defineRoute(

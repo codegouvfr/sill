@@ -33,13 +33,13 @@ export type SillApi = {
         (): Promise<TrpcRouterOutput["getInstances"]>;
         clear: () => void;
     };
-    getWikidataOptions: (
-        params: TrpcRouterInput["getWikidataOptions"]
-    ) => Promise<TrpcRouterOutput["getWikidataOptions"]>;
-    getSoftwareFormAutoFillDataFromWikidataAndOtherSources: (
-        params: TrpcRouterInput["getSoftwareFormAutoFillDataFromWikidataAndOtherSources"]
+    getExternalSoftwareOptions: (
+        params: TrpcRouterInput["getExternalSoftwareOptions"]
+    ) => Promise<TrpcRouterOutput["getExternalSoftwareOptions"]>;
+    getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources: (
+        params: TrpcRouterInput["getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources"]
     ) => Promise<
-        TrpcRouterOutput["getSoftwareFormAutoFillDataFromWikidataAndOtherSources"]
+        TrpcRouterOutput["getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources"]
     >;
     createSoftware: (
         params: TrpcRouterInput["createSoftware"]

@@ -11,7 +11,7 @@ export default meta;
 
 export const VueCreation = getStory({
     "route": createMockRoute("softwareCreationForm", {
-        "wikidataId": undefined
+        "externalId": undefined
     })
 });
 

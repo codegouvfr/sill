@@ -51,7 +51,7 @@ export default function SoftwareForm(props: Props) {
                     case "softwareCreationForm":
                         return {
                             "scenario": "create",
-                            "wikidataId": route.params.wikidataId
+                            "externalId": route.params.externalId
                         };
                     case "softwareUpdateForm":
                         return {
@@ -172,7 +172,7 @@ export default function SoftwareForm(props: Props) {
                     }
                     getAutofillDataFromWikidata={softwareForm.getAutofillData}
                     getLibreSoftwareWikidataOptions={queryString =>
-                        softwareForm.getLibreSoftwareWikidataOptions({
+                        softwareForm.getExternalSoftwareOptions({
                             "language": lang,
                             queryString
                         })
@@ -200,8 +200,11 @@ export default function SoftwareForm(props: Props) {
                             "formDataStep4": formData
                         })
                     }
-                    getWikidataOptions={queryString =>
-                        softwareForm.getWikidataOptions({ "language": lang, queryString })
+                    getExternalSoftwareOptions={queryString =>
+                        softwareForm.getExternalSoftwareOptions({
+                            "language": lang,
+                            queryString
+                        })
                     }
                 />
             </div>

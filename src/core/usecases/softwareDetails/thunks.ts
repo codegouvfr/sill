@@ -186,7 +186,7 @@ function apiSoftwareToSoftware(params: {
         comptoirDuLibreServiceProviderCount,
         comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
-        wikidataId,
+        externalId,
         license,
         versionMin,
         softwareType,
@@ -207,7 +207,7 @@ function apiSoftwareToSoftware(params: {
 
         in_sill: {
             const software = apiSoftwares.find(
-                software => software.wikidataId === parentWikidataSoftware_api.wikidataId
+                software => software.externalId === parentWikidataSoftware_api.externalId
             );
 
             if (software === undefined) {
@@ -223,7 +223,7 @@ function apiSoftwareToSoftware(params: {
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware_api.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.wikidataId}`
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.externalId}`
         };
     })();
 
@@ -257,9 +257,9 @@ function apiSoftwareToSoftware(params: {
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
         "wikidataUrl":
-            wikidataId === undefined
+            externalId === undefined
                 ? undefined
-                : `https://www.wikidata.org/wiki/${wikidataId}`,
+                : `https://www.wikidata.org/wiki/${externalId}`,
         "instances":
             softwareType.type !== "cloud"
                 ? undefined
@@ -285,8 +285,9 @@ function apiSoftwareToSoftware(params: {
                           "softwareName": similarSoftware.softwareName
                       }
                     : {
-                          "type": "wikidataId",
-                          "wikidataId": similarSoftware.wikidataId
+                          "type": "externalId",
+                          "externalId": similarSoftware.externalId,
+                          "externalDataOrigin": similarSoftware.externalDataOrigin
                       }
             });
 
@@ -295,7 +296,7 @@ function apiSoftwareToSoftware(params: {
 
                 return {
                     "isInSill": false,
-                    "wikidataId": similarSoftware.wikidataId,
+                    "wikidataId": similarSoftware.externalId,
                     "label": similarSoftware.label,
                     "description": similarSoftware.description,
                     "isLibreSoftware": similarSoftware.isLibreSoftware

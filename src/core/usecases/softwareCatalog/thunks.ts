@@ -204,7 +204,7 @@ function apiSoftwareToInternalSoftware(params: {
             case "name":
                 return apiSoftware.softwareName === softwareRef.softwareName;
             case "wikidataId":
-                return apiSoftware.wikidataId === softwareRef.wikidataId;
+                return apiSoftware.externalId === softwareRef.wikidataId;
         }
     });
 
@@ -245,7 +245,7 @@ function apiSoftwareToInternalSoftware(params: {
 
         in_sill: {
             const software = apiSoftwares.find(
-                software => software.wikidataId === parentWikidataSoftware.wikidataId
+                software => software.externalId === parentWikidataSoftware.externalId
             );
 
             if (software === undefined) {
@@ -261,7 +261,7 @@ function apiSoftwareToInternalSoftware(params: {
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.wikidataId}`
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
         };
     })();
 

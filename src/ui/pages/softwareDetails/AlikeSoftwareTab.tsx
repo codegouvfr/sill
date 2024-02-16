@@ -21,7 +21,7 @@ export type Props = {
         "declarationForm" | "softwareDetails" | "softwareUsersAndReferents",
         Link
     >;
-    getAddWikipediaSoftwareToSillLink: (params: { wikidataId: string }) => Link;
+    getAddWikipediaSoftwareToSillLink: (params: { externalId: string }) => Link;
 };
 
 export const SimilarSoftwareTab = (props: Props) => {
@@ -153,7 +153,7 @@ export const SimilarSoftwareTab = (props: Props) => {
                                                     iconId="ri-check-fill"
                                                     linkProps={getAddWikipediaSoftwareToSillLink(
                                                         {
-                                                            wikidataId
+                                                            externalId: wikidataId
                                                         }
                                                     )}
                                                 >

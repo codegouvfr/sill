@@ -59,9 +59,10 @@ export function createSillApi(params: {
         "getInstances": memoize(() => trpcClient.getInstances.query(), {
             "promise": true
         }),
-        "getWikidataOptions": params => trpcClient.getWikidataOptions.query(params),
-        "getSoftwareFormAutoFillDataFromWikidataAndOtherSources": params =>
-            trpcClient.getSoftwareFormAutoFillDataFromWikidataAndOtherSources.query(
+        "getExternalSoftwareOptions": params =>
+            trpcClient.getExternalSoftwareOptions.query(params),
+        "getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources": params =>
+            trpcClient.getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources.query(
                 params
             ),
         "createSoftware": async params => {

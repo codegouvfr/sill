@@ -1,3 +1,4 @@
+import { SoftwareExternalDataOption } from "@codegouvfr/sill/core/ports/GetSoftwareExternalDataOptions";
 import memoize from "memoizee";
 import type { SillApi } from "../ports/SillApi";
 import { id } from "tsafe/id";
@@ -45,7 +46,7 @@ export const sillApi: SillApi = {
         },
         { "promise": true }
     ),
-    "getWikidataOptions": async ({ queryString }) => {
+    "getExternalSoftwareOptions": async ({ queryString }) => {
         if (queryString === "") {
             return [];
         }
@@ -54,15 +55,17 @@ export const sillApi: SillApi = {
 
         return options;
     },
-    "getSoftwareFormAutoFillDataFromWikidataAndOtherSources": async ({ wikidataId }) => {
+    "getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources": async ({
+        externalId
+    }) => {
         await new Promise(resolve => setTimeout(resolve, 1));
 
         return {
-            wikidataId,
+            externalId,
             "comptoirDuLibreId": 123,
-            "softwareName": `Software ${wikidataId}`,
-            "softwareDescription": `Software ${wikidataId} description`,
-            "softwareLicense": `Software ${wikidataId} license`,
+            "softwareName": `Software ${externalId}`,
+            "softwareDescription": `Software ${externalId} description`,
+            "softwareLicense": `Software ${externalId} license`,
             "softwareMinimalVersion": `1.3.4`,
             "softwareLogoUrl": undefined,
             "keywords": []
@@ -86,7 +89,8 @@ export const sillApi: SillApi = {
             "versionMin": "3.9.0",
             "comptoirDuLibreServiceProviderCount": 0,
             "comptoirDuLibreId": formData.comptoirDuLibreId,
-            "wikidataId": formData.wikidataId,
+            "externalId": formData.externalId,
+            "externalDataOrigin": "wikidata",
             "license": formData.softwareLicense,
             "officialWebsiteUrl": undefined,
             "documentationUrl": undefined,
@@ -139,7 +143,8 @@ export const sillApi: SillApi = {
                 "versionMin": "3.9.0",
                 "comptoirDuLibreServiceProviderCount": 0,
                 "comptoirDuLibreId": formData.comptoirDuLibreId,
-                "wikidataId": formData.wikidataId,
+                "externalId": formData.externalId,
+                "externalDataOrigin": "wikidata",
                 "license": formData.softwareLicense,
                 "officialWebsiteUrl": undefined,
                 "documentationUrl": undefined,
@@ -234,49 +239,55 @@ export const sillApi: SillApi = {
     }
 };
 
-const options = [
+const options: (SoftwareExternalDataOption & { isInSill: boolean })[] = [
     {
-        "wikidataId": "Q110492908",
+        "externalId": "Q110492908",
         "label": "Onyxia",
         "description": "A data science oriented container launcher",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     },
     {
-        "wikidataId": "Q107693197",
+        "externalId": "Q107693197",
         "label": "Keycloakify",
         "description": "Build tool for creating Keycloak themes using React",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     },
     {
-        "wikidataId": "Q8038",
+        "externalId": "Q8038",
         "description": "image retouching and editing tool",
         "label": "GIMP",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     },
     {
-        "wikidataId": "Q10135",
+        "externalId": "Q10135",
         "description": "office suite supported by the free software community",
         "label": "LibreOffice",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     },
     {
-        "wikidataId": "Q19841877",
+        "externalId": "Q19841877",
         "description": "source code editor developed by Microsoft",
         "label": "Visual Studio Code",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     },
     {
-        "wikidataId": "Q50938515",
+        "externalId": "Q50938515",
         "description":
             "decentralized video hosting network, based on free/libre software",
         "label": "PeerTube",
-        "isInSill": true,
-        "isLibreSoftware": true
+        "isLibreSoftware": true,
+        "externalDataOrigin": "wikidata",
+        "isInSill": true
     }
 ];
 
@@ -296,13 +307,15 @@ const softwares = [
             {
                 "description":
                     "team collaboration and videoconferencing application developed by Microsoft",
-                "wikidataId": "Q28406404",
+                "externalId": "Q28406404",
                 "label": "Microsoft Teams",
                 "isLibreSoftware": false,
-                "isInSill": false
+                "isInSill": false,
+                "externalDataOrigin": "wikidata"
             }
         ],
-        "wikidataId": "Q25874683",
+        "externalId": "Q25874683",
+        "externalDataOrigin": "wikidata",
         "license": "AGPL-3.0-or-later",
         "officialWebsiteUrl": undefined,
         "documentationUrl": undefined,
@@ -350,13 +363,15 @@ const softwares = [
             {
                 "description":
                     "team collaboration and videoconferencing application developed by Microsoft",
-                "wikidataId": "Q28406404",
+                "externalId": "Q28406404",
                 "label": "Microsoft Teams",
                 "isLibreSoftware": false,
-                "isInSill": false
+                "isInSill": false,
+                "externalDataOrigin": "wikidata"
             }
         ],
-        "wikidataId": "Q10135",
+        "externalId": "Q10135",
+        "externalDataOrigin": "wikidata",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.libreoffice.org/",
         "documentationUrl": "https://www.libreoffice.org/",
@@ -417,7 +432,8 @@ const softwares = [
         "comptoirDuLibreId": 38,
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [],
-        "wikidataId": "Q10135",
+        "externalId": "Q10135",
+        "externalDataOrigin": "wikidata",
         "softwareType": {
             "type": "cloud"
         },
@@ -468,7 +484,8 @@ const softwares = [
         "comptoirDuLibreId": 62,
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [],
-        "wikidataId": "Q171477",
+        "externalId": "Q171477",
+        "externalDataOrigin": "wikidata",
         "license": "GPL-2.0-only",
         "officialWebsiteUrl": "https://www.wikidata.org/wiki/Q171477",
         "documentationUrl": undefined,
@@ -521,13 +538,15 @@ const softwares = [
             {
                 "description":
                     "team collaboration and videoconferencing application developed by Microsoft",
-                "wikidataId": "Q28406404",
+                "externalId": "Q28406404",
                 "label": "Microsoft Teams",
                 "isLibreSoftware": false,
-                "isInSill": false
+                "isInSill": false,
+                "externalDataOrigin": "wikidata"
             }
         ],
-        "wikidataId": "Q7715973",
+        "externalId": "Q7715973",
+        "externalDataOrigin": "wikidata",
         "license": "N/A",
         "officialWebsiteUrl": "https://www.debian.org/",
         "documentationUrl": undefined,
@@ -581,7 +600,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 9,
         "comptoirDuLibreId": 80,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q483604",
+        "externalId": "Q483604",
+        "externalDataOrigin": "wikidata",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.thunderbird.net/",
         "documentationUrl": undefined,
@@ -605,7 +625,8 @@ const softwares = [
             {
                 "description":
                     "team collaboration and videoconferencing application developed by Microsoft",
-                "wikidataId": "Q28406404",
+                "externalId": "Q28406404",
+                "externalDataOrigin": "wikidata",
                 "label": "Microsoft Teams",
                 "isLibreSoftware": false,
                 "isInSill": false
@@ -645,7 +666,8 @@ const softwares = [
         "comptoirDuLibreId": 60,
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [],
-        "wikidataId": "Q1329181",
+        "externalId": "Q1329181",
+        "externalDataOrigin": "wikidata",
         "license": "GPL-2.0-or-later",
         "officialWebsiteUrl": "https://qgis.org/fr/site/",
         "documentationUrl": undefined,
@@ -713,7 +735,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 3,
         "comptoirDuLibreId": 82,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q698",
+        "externalId": "Q698",
+        "externalDataOrigin": "wikidata",
         "license": "MPL-2.0",
         "officialWebsiteUrl": "https://www.mozilla.org/fr/firefox/new/",
         "documentationUrl": undefined,
@@ -770,7 +793,8 @@ const softwares = [
         "comptoirDuLibreId": 123,
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [],
-        "wikidataId": "Q192490",
+        "externalId": "Q192490",
+        "externalDataOrigin": "wikidata",
         "license": "PostgreSQL",
         "officialWebsiteUrl": "https://www.postgresql.org/",
         "documentationUrl": undefined,
@@ -815,7 +839,8 @@ const softwares = [
         "comptoirDuLibreId": 140,
         "annuaireCnllServiceProviders": [],
         "similarSoftwares": [],
-        "wikidataId": "Q50938515",
+        "externalId": "Q50938515",
+        "externalDataOrigin": "wikidata",
         "license": "AGPL-3.0-or-later",
         "officialWebsiteUrl": "https://joinpeertube.org/",
         "documentationUrl": undefined,
@@ -857,7 +882,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -902,7 +928,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -947,7 +974,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -992,7 +1020,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -1037,7 +1066,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -1082,7 +1112,8 @@ const softwares = [
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
         "annuaireCnllServiceProviders": [],
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -1127,7 +1158,8 @@ const softwares = [
         "annuaireCnllServiceProviders": [],
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,
@@ -1172,7 +1204,8 @@ const softwares = [
         "annuaireCnllServiceProviders": [],
         "comptoirDuLibreServiceProviderCount": 1,
         "comptoirDuLibreId": 368,
-        "wikidataId": "Q77064547",
+        "externalId": "Q77064547",
+        "externalDataOrigin": "wikidata",
         "license": "MIT",
         "officialWebsiteUrl": "https://archifiltre.fabrique.social.gouv.fr/",
         "documentationUrl": undefined,

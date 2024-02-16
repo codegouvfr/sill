@@ -7,7 +7,7 @@ import type { Language } from "@codegouvfr/sill";
 export type WikidataEntry = {
     label: LocalizedString<Language>;
     description: LocalizedString<Language>;
-    wikidataId: string;
+    externalId: string;
 };
 
 type State = State.NotInitialized | State.Ready;
