@@ -36,7 +36,7 @@ export default function InstanceForm(props: Props) {
 
     const {
         instanceForm,
-        softwareForm: { getLibreSoftwareWikidataOptions }
+        softwareForm: { getExternalSoftwareOptions }
     } = useCore().functions;
 
     const {
@@ -151,7 +151,7 @@ export default function InstanceForm(props: Props) {
                         "otherWikidataSoftwares": initializationData.otherSoftwares
                     }}
                     getLibreSoftwareWikidataOptions={queryString =>
-                        getLibreSoftwareWikidataOptions({ queryString, "language": lang })
+                        getExternalSoftwareOptions({ queryString, "language": lang })
                     }
                     onSubmit={({ mainSoftwareSillId, otherWikidataSoftwares }) =>
                         instanceForm.completeStep1({

@@ -1150,6 +1150,14 @@
   resolved "https://registry.yarnpkg.com/@babel/regjsgen/-/regjsgen-0.8.0.tgz#f0ba69b075e1f05fb2825b7fad991e7adbb18310"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
+"@babel/runtime-corejs3@^7.16.5":
+  version "7.23.9"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs3/-/runtime-corejs3-7.23.9.tgz#1b43062a13ecb60158aecdd81bc3fab4108b7cbc"
+  integrity sha512-oeOFTrYWdWXCvXGB5orvMTJ6gCZ9I6FBjR+M38iKNXCsPxr4xT0RTdg5uz1H7QP8pp74IzPtwritEr+JscqHXQ==
+  dependencies:
+    core-js-pure "^3.30.2"
+    regenerator-runtime "^0.14.0"
+
 "@babel/runtime@^7.0.0", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.17.8", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.7", "@babel/runtime@^7.21.0", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.21.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.21.0.tgz#5b55c9d394e5fcf304909a8b00c07dc217b56673"
@@ -1232,16 +1240,17 @@
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.19.1":
-  version "1.19.1"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.19.1.tgz#b2e7b966c2098ba0de10c165f82f6f209f4b3a51"
-  integrity sha512-JI8h0qqY5TNdYJHNRHlqmGSfyLM0GpSbJiMFaNVOLUEO89tZDQgz/+sYmfw7XfUsbegby4JYtNwhlcyWUj11OQ==
+"@codegouvfr/sill@^1.20.0":
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.20.0.tgz#19508b5a58b86d6151f71bc78c7f34140d51e765"
+  integrity sha512-73fLogw9K1cEHQqwurgfq8peobJoJlz5lrSQAxhF759gm6sCQym4N/srOCJiGKE5xwqaDroQ8LvTKpGtjihdpQ==
   dependencies:
     "@octokit/graphql" "^7.0.2"
+    "@retorquere/bibtex-parser" "^7.0.11"
     "@trpc/server" "^10.18.0"
     jwt-decode "^3.1.2"
     semver "^7.5.4"
-    tsafe "^1.6.0"
+    tsafe "^1.6.6"
     zod "^3.21.4"
 
 "@colors/colors@1.5.0":
@@ -2278,6 +2287,14 @@
     redux "^4.2.1"
     redux-thunk "^2.4.2"
     reselect "^4.1.8"
+
+"@retorquere/bibtex-parser@^7.0.11":
+  version "7.0.12"
+  resolved "https://registry.yarnpkg.com/@retorquere/bibtex-parser/-/bibtex-parser-7.0.12.tgz#2cfd463555f51fe3c63e72df761711c30a9ac1cd"
+  integrity sha512-Eb8o7Nyk1gAZ2qeZS3Ur5YyjMzqUXf+rqsH3EauJxTQYbeQXyx+tpv0QGraGxtMAelKDDJY8fTYYsdNRKhdgQA==
+  dependencies:
+    unicode2latex "^4.0.42"
+    xregexp "^5.1.1"
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -6193,6 +6210,11 @@ core-js-pure@^3.23.3:
   version "3.29.1"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.29.1.tgz#1be6ca2b8772f6b4df7fc4621743286e676c6162"
   integrity sha512-4En6zYVi0i0XlXHVz/bi6l1XDjCqkKRq765NXuX+SnaIatlE96Odt5lMLjdxUiNI1v9OXI5DSLWYPlmTfkTktg==
+
+core-js-pure@^3.30.2:
+  version "3.36.0"
+  resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.36.0.tgz#ffb34330b14e594d6a9835cf5843b4123f1d95db"
+  integrity sha512-cN28qmhRNgbMZZMc/RFu5w8pK9VJzpb2rJVR/lHuZJKwmXnoWOpXmMkxqBB514igkp1Hu8WGROsiOAzUcKdHOQ==
 
 core-js@^3.0.4, core-js@^3.19.2, core-js@^3.6.5, core-js@^3.8.2:
   version "3.29.1"
@@ -14089,6 +14111,11 @@ regenerator-runtime@^0.13.11, regenerator-runtime@^0.13.7, regenerator-runtime@^
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.11.tgz#f6dca3e7ceec20590d07ada785636a90cdca17f9"
   integrity sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==
 
+regenerator-runtime@^0.14.0:
+  version "0.14.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.14.1.tgz#356ade10263f685dda125100cd862c1db895327f"
+  integrity sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==
+
 regenerator-transform@^0.15.1:
   version "0.15.1"
   resolved "https://registry.yarnpkg.com/regenerator-transform/-/regenerator-transform-0.15.1.tgz#f6c4e99fc1b4591f780db2586328e4d9a9d8dc56"
@@ -16066,6 +16093,11 @@ tsafe@^1.6.5:
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.6.5.tgz#74943b69190069168a53d2accd6d07891cf1cce8"
   integrity sha512-895zss8xqqHKTc28sHGIfZKnt3C5jrstB1DyPr/h3/flK0zojsZUMQL1/W4ytdDW6KI4Oth62nb9rrxmA3s3Iw==
 
+tsafe@^1.6.6:
+  version "1.6.6"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.6.6.tgz#fd93e64d6eb13ef83ed1650669cc24bad4f5df9f"
+  integrity sha512-gzkapsdbMNwBnTIjgO758GujLCj031IgHK/PKr2mrmkCSJMhSOR5FeOuSxKLMUoYc0vAA4RGEYYbjt/v6afD3g==
+
 tsconfig-paths@^3.14.1:
   version "3.14.2"
   resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.14.2.tgz#6e32f1f79412decd261f92d633a9dc1cfa99f088"
@@ -16252,6 +16284,11 @@ unicode-property-aliases-ecmascript@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/unicode-property-aliases-ecmascript/-/unicode-property-aliases-ecmascript-2.1.0.tgz#43d41e3be698bd493ef911077c9b131f827e8ccd"
   integrity sha512-6t3foTQI9qne+OZoVQB/8x8rk2k1eVy1gRXhV3oFQ5T6R1dqQ1xtin3XqSlx3+ATBkliTaR/hHyJBm+LVPNM8w==
+
+unicode2latex@^4.0.42:
+  version "4.0.44"
+  resolved "https://registry.yarnpkg.com/unicode2latex/-/unicode2latex-4.0.44.tgz#047ed4030b889a5cb6c51aacaa8aad19d0a88b04"
+  integrity sha512-5Usk2xJw+2a/o37E7qkcwIfLpZfPYzURPEnlqpf26er/K2mXB1ucUO+oJnhoPsGyQYYqSub7p5cTpkKDbkleoA==
 
 unified@9.2.0:
   version "9.2.0"
@@ -17387,6 +17424,13 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
+
+xregexp@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-5.1.1.tgz#6d3fe18819e3143aaf52f9284d34f49a59583ebb"
+  integrity sha512-fKXeVorD+CzWvFs7VBuKTYIW63YD1e1osxwQ8caZ6o1jg6pDAbABDG54LCIq0j5cy7PjRvGIq6sef9DYPXpncg==
+  dependencies:
+    "@babel/runtime-corejs3" "^7.16.5"
 
 xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.2"

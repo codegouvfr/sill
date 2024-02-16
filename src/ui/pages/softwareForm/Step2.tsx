@@ -29,7 +29,7 @@ export type Step2Props = {
         ReturnType<
             ReturnType<
                 typeof useCore
-            >["functions"]["softwareForm"]["getLibreSoftwareWikidataOptions"]
+            >["functions"]["softwareForm"]["getExternalSoftwareOptions"]
         >
     >;
 };
@@ -73,16 +73,16 @@ export function SoftwareFormStep2(props: Step2Props) {
                 return undefined;
             }
 
-            const { comptoirDuLibreId, wikidataId, softwareKeywords, ...rest } =
+            const { comptoirDuLibreId, externalId, softwareKeywords, ...rest } =
                 initialFormData ?? {};
 
             return {
                 ...rest,
                 "wikidataEntry":
-                    wikidataId === undefined
+                    externalId === undefined
                         ? undefined
                         : {
-                              wikidataId,
+                              externalId,
                               "description": "",
                               "label": rest.softwareName
                           },
@@ -134,7 +134,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                     softwareMinimalVersion,
                     softwareLogoUrl
                 } = await getAutofillDataFromWikidata({
-                    "wikidataId": wikiDataEntry.wikidataId
+                    "externalId": wikiDataEntry.externalId
                 });
 
                 if (!isActive) {
@@ -214,7 +214,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 : comptoirDuLibreInputValueToComptoirDuLibreId(
                                       comptoirDuLibreIdInputValue
                                   ),
-                        "wikidataId": wikidataEntry?.wikidataId
+                        "externalId": wikidataEntry?.externalId
                     })
             )}
         >
@@ -233,7 +233,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                             resolveLocalizedString(wikidataEntry.label)
                         }
                         renderOption={(liProps, wikidataEntity) => (
-                            <li {...liProps} key={wikidataEntity.wikidataId}>
+                            <li {...liProps} key={wikidataEntity.externalId}>
                                 <div>
                                     <span>
                                         {resolveLocalizedString(wikidataEntity.label)}

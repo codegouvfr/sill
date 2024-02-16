@@ -156,7 +156,7 @@ export const thunks = {
                 "mainSoftwareSillId": step1Data.mainSoftwareSillId,
                 organization,
                 "otherSoftwareWikidataIds": step1Data.otherWikidataSoftwares.map(
-                    ({ wikidataId }) => wikidataId
+                    ({ externalId }) => externalId
                 ),
                 publicUrl,
                 targetAudience

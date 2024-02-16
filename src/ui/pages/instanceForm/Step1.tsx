@@ -32,7 +32,7 @@ export type Step1Props = {
     ) => ReturnType<
         ReturnType<
             typeof useCore
-        >["functions"]["softwareForm"]["getLibreSoftwareWikidataOptions"]
+        >["functions"]["softwareForm"]["getExternalSoftwareOptions"]
     >;
 };
 

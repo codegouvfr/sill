@@ -1,3 +1,4 @@
+import { ExternalDataOrigin } from "@codegouvfr/sill/core/ports/GetSoftwareExternalData";
 import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
@@ -27,7 +28,7 @@ export type FormData = {
         softwareType: ApiTypes.SoftwareType;
     };
     step2: {
-        wikidataId: string | undefined;
+        externalId: string | undefined;
         comptoirDuLibreId: number | undefined;
         softwareName: string;
         softwareDescription: string;
@@ -45,7 +46,8 @@ export type FormData = {
         similarSoftwares: {
             label: LocalizedString<Language>;
             description: LocalizedString<Language>;
-            wikidataId: string;
+            externalId: string;
+            externalDataOrigin: ExternalDataOrigin | undefined;
         }[];
     };
 };
@@ -73,7 +75,7 @@ export const { reducer, actions } = createUsecaseActions({
                 payload
             }: {
                 payload: {
-                    wikidataId: string;
+                    externalId: string;
                     comptoirDuLibreId: number | undefined;
                     softwareName: string;
                     softwareDescription: string;
@@ -85,7 +87,7 @@ export const { reducer, actions } = createUsecaseActions({
             }
         ) => {
             const {
-                wikidataId,
+                externalId,
                 comptoirDuLibreId,
                 softwareName,
                 softwareDescription,
@@ -99,7 +101,7 @@ export const { reducer, actions } = createUsecaseActions({
                 "stateDescription": "ready",
                 "formData": {
                     "step2": {
-                        wikidataId,
+                        externalId,
                         comptoirDuLibreId,
                         softwareName,
                         softwareDescription,

@@ -15,18 +15,25 @@ export type Step4Props = {
     initialFormData: FormData["step4"] | undefined;
     onSubmit: (formData: FormData["step4"]) => void;
     evtActionSubmit: NonPostableEvt<void>;
-    getWikidataOptions: (
+    getExternalSoftwareOptions: (
         queryString: string
     ) => Promise<
         ReturnType<
-            ReturnType<typeof useCore>["functions"]["softwareForm"]["getWikidataOptions"]
+            ReturnType<
+                typeof useCore
+            >["functions"]["softwareForm"]["getExternalSoftwareOptions"]
         >
     >;
 };
 
 export function SoftwareFormStep4(props: Step4Props) {
-    const { className, initialFormData, onSubmit, evtActionSubmit, getWikidataOptions } =
-        props;
+    const {
+        className,
+        initialFormData,
+        onSubmit,
+        evtActionSubmit,
+        getExternalSoftwareOptions
+    } = props;
 
     const { t } = useTranslation({ SoftwareFormStep4 });
     const { handleSubmit, control } = useForm<FormData["step4"]>({
@@ -70,7 +77,7 @@ export function SoftwareFormStep4(props: Step4Props) {
                 render={({ field }) => (
                     <SearchMultiInput
                         debounceDelay={400}
-                        getOptions={getWikidataOptions}
+                        getOptions={getExternalSoftwareOptions}
                         value={field.value}
                         onValueChange={value => field.onChange(value)}
                         getOptionLabel={wikidataEntry =>

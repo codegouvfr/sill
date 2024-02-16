@@ -11,7 +11,7 @@ export const thunks = {
             params:
                 | {
                       scenario: "create";
-                      wikidataId: string | undefined;
+                      externalId: string | undefined;
                   }
                 | {
                       scenario: "update";
@@ -34,7 +34,7 @@ export const thunks = {
                 }
             }
 
-            if (params.scenario === "create" && params.wikidataId === undefined) {
+            if (params.scenario === "create" && params.externalId === undefined) {
                 dispatch(actions.initializedForCreate());
                 return;
             }
@@ -44,9 +44,9 @@ export const thunks = {
             switch (params.scenario) {
                 case "create":
                     {
-                        const { wikidataId } = params;
+                        const { externalId } = params;
 
-                        assert(wikidataId !== undefined);
+                        assert(externalId !== undefined);
 
                         const {
                             comptoirDuLibreId,
@@ -56,11 +56,11 @@ export const thunks = {
                             softwareLogoUrl,
                             softwareMinimalVersion,
                             softwareName
-                        } = await dispatch(thunks.getAutofillData({ wikidataId }));
+                        } = await dispatch(thunks.getAutofillData({ externalId }));
 
                         dispatch(
                             actions.initializedForCreateWithPreSelectedSoftware({
-                                wikidataId,
+                                externalId,
                                 comptoirDuLibreId,
                                 "softwareName": softwareName ?? "",
                                 "softwareDescription": softwareDescription ?? "",
@@ -90,7 +90,7 @@ export const thunks = {
                                         "softwareType": software.softwareType
                                     },
                                     "step2": {
-                                        "wikidataId": software.wikidataId,
+                                        "externalId": software.externalId,
                                         "comptoirDuLibreId": software.comptoirDuLibreId,
                                         "softwareDescription":
                                             software.softwareDescription,
@@ -124,7 +124,7 @@ export const thunks = {
 
                                                     if (
                                                         software === undefined ||
-                                                        software.wikidataId === undefined
+                                                        software.externalId === undefined
                                                     ) {
                                                         return undefined;
                                                     }
@@ -133,8 +133,10 @@ export const thunks = {
                                                         "label": software.softwareName,
                                                         "description":
                                                             software.softwareDescription,
-                                                        "wikidataId": software.wikidataId,
-                                                        "isLibreSoftware": true
+                                                        "isLibreSoftware": true,
+                                                        "externalId": software.externalId,
+                                                        "externalDataOrigin":
+                                                            software.externalDataOrigin
                                                     };
                                                 }
                                             })
@@ -208,7 +210,7 @@ export const thunks = {
 
             const formData: ApiTypes.SoftwareFormData = {
                 "softwareType": step1.softwareType,
-                "wikidataId": step2.wikidataId,
+                "externalId": step2.externalId,
                 "comptoirDuLibreId": step2.comptoirDuLibreId,
                 "softwareName": step2.softwareName,
                 "softwareDescription": step2.softwareDescription,
@@ -217,8 +219,8 @@ export const thunks = {
                 "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
                 "isFromFrenchPublicService": step3.isFromFrenchPublicService,
                 "doRespectRgaa": step3.doRespectRgaa,
-                "similarSoftwareWikidataIds": formDataStep4.similarSoftwares.map(
-                    ({ wikidataId }) => wikidataId
+                "similarSoftwareExternalDataIds": formDataStep4.similarSoftwares.map(
+                    ({ externalId }) => externalId
                 ),
                 "softwareLogoUrl": step2.softwareLogoUrl,
                 "softwareKeywords": step2.softwareKeywords
@@ -244,33 +246,24 @@ export const thunks = {
 
             dispatch(actions.navigatedToPreviousStep());
         },
-    "getLibreSoftwareWikidataOptions":
+    "getExternalSoftwareOptions":
         (props: { queryString: string; language: Language }) =>
         async (...args) => {
             const { queryString, language } = props;
 
             const [, , { sillApi }] = args;
 
-            return await sillApi.getWikidataOptions({ queryString, language });
-        },
-    "getWikidataOptions":
-        (props: { queryString: string; language: Language }) =>
-        async (...args) => {
-            const { queryString, language } = props;
-
-            const [, , { sillApi }] = args;
-
-            return await sillApi.getWikidataOptions({ queryString, language });
+            return await sillApi.getExternalSoftwareOptions({ queryString, language });
         },
     "getAutofillData":
-        (props: { wikidataId: string }) =>
+        (props: { externalId: string }) =>
         (...args) => {
-            const { wikidataId } = props;
+            const { externalId } = props;
 
             const [, , extraArg] = args;
 
-            return extraArg.sillApi.getSoftwareFormAutoFillDataFromWikidataAndOtherSources(
-                { wikidataId }
+            return extraArg.sillApi.getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources(
+                { externalId }
             );
         }
 } satisfies Thunks;

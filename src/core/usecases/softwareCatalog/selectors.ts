@@ -1,4 +1,5 @@
 import "minimal-polyfills/Object.fromEntries";
+import type { ExternalDataOrigin } from "@codegouvfr/sill/core/ports/GetSoftwareExternalData";
 import { createCompareFn } from "core/tools/compareFn";
 import type { State as RootState } from "core/bootstrap";
 import { createSelector } from "redux-clean-architecture";
@@ -684,15 +685,7 @@ function filterByPrerogative(params: {
 
 function apiSoftwareToInternalSoftware(params: {
     apiSoftwares: ApiTypes.Software[];
-    softwareRef:
-        | {
-              type: "wikidataId";
-              wikidataId: string;
-          }
-        | {
-              type: "name";
-              softwareName: string;
-          };
+    softwareRef: SoftwareRef;
     userDeclaration:
         | {
               isUser: boolean;
@@ -707,8 +700,8 @@ function apiSoftwareToInternalSoftware(params: {
         switch (softwareRef.type) {
             case "name":
                 return apiSoftware.softwareName === softwareRef.softwareName;
-            case "wikidataId":
-                return apiSoftware.wikidataId === softwareRef.wikidataId;
+            case "externalId":
+                return apiSoftware.externalId === softwareRef.externalId;
         }
     });
 
@@ -749,7 +742,7 @@ function apiSoftwareToInternalSoftware(params: {
 
         in_sill: {
             const software = apiSoftwares.find(
-                software => software.wikidataId === parentWikidataSoftware.wikidataId
+                software => software.externalId === parentWikidataSoftware.externalId
             );
 
             if (software === undefined) {
@@ -765,7 +758,7 @@ function apiSoftwareToInternalSoftware(params: {
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.wikidataId}`
+            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
         };
     })();
 
@@ -882,17 +875,20 @@ function internalSoftwareToExternalSoftware(params: {
     };
 }
 
+type SoftwareRef =
+    | {
+          type: "externalId";
+          externalDataOrigin: ExternalDataOrigin;
+          externalId: string;
+      }
+    | {
+          type: "name";
+          softwareName: string;
+      };
+
 export function apiSoftwareToExternalCatalogSoftware(params: {
     apiSoftwares: ApiTypes.Software[];
-    softwareRef:
-        | {
-              type: "wikidataId";
-              wikidataId: string;
-          }
-        | {
-              type: "name";
-              softwareName: string;
-          };
+    softwareRef: SoftwareRef;
 }): State.Software.External | undefined {
     const { apiSoftwares, softwareRef } = params;
 

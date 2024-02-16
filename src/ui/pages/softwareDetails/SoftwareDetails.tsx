@@ -213,10 +213,10 @@ export default function SoftwareDetails(props: Props) {
                                                 }).link
                                         })}
                                         getAddWikipediaSoftwareToSillLink={({
-                                            wikidataId
+                                            externalId
                                         }) =>
                                             routes.softwareCreationForm({
-                                                wikidataId
+                                                externalId: externalId
                                             }).link
                                         }
                                     />
