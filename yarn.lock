@@ -1240,10 +1240,10 @@
   dependencies:
     tsafe "^1.6.3"
 
-"@codegouvfr/sill@^1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.20.0.tgz#19508b5a58b86d6151f71bc78c7f34140d51e765"
-  integrity sha512-73fLogw9K1cEHQqwurgfq8peobJoJlz5lrSQAxhF759gm6sCQym4N/srOCJiGKE5xwqaDroQ8LvTKpGtjihdpQ==
+"@codegouvfr/sill@^1.20.1":
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/sill/-/sill-1.20.1.tgz#4f6c57b398e8d05b0cdc5ab23d33d64001e78765"
+  integrity sha512-lJJK179/+zOxMnP9hJN97mNoJkJhtbAKkulWcuLTtgGqJ/cfwa9mgd353HJTKiNqOroI/DFjbOiWQjn+Dj8DpQ==
   dependencies:
     "@octokit/graphql" "^7.0.2"
     "@retorquere/bibtex-parser" "^7.0.11"
