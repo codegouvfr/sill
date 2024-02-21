@@ -40,6 +40,10 @@ export function createSillApi(params: {
     };
 
     const sillApi: SillApi = {
+        "getExternalSoftwareDataOrigin": memoize(
+            () => trpcClient.getExternalSoftwareDataOrigin.query(),
+            { "promise": true }
+        ),
         "getRedirectUrl": params => trpcClient.getRedirectUrl.query(params),
         "getApiVersion": memoize(() => trpcClient.getApiVersion.query(), {
             "promise": true

@@ -1,11 +1,12 @@
 import { createI18nApi, declareComponentKeys } from "i18nifty";
-import { languages, type Language } from "@codegouvfr/sill";
+import { languages, type Language, type ExternalDataOrigin } from "@codegouvfr/sill";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 import { z } from "zod";
 import { createUnionSchema } from "ui/tools/zod/createUnionSchema";
 import { DeclarationType } from "../shared/DeclarationRemovalModal";
+import { ReactNode } from "react";
 
 export { declareComponentKeys };
 export { languages };
@@ -340,36 +341,10 @@ const {
                     "Operating system on which the software can be installed"
             },
             "SoftwareFormStep2": {
-                "wikidata id": "Wikidata item",
-                "wikidata id hint": ({
-                    wikidataUrl,
-                    exampleSoftwareName,
-                    wikidataPageExampleUrl,
-                    softwareSillUrl
-                }) => (
-                    <>
-                        Fill up a name or directly the id (of the form <code>Qxxxxx</code>
-                        ) to associate the software with an existing entry{" "}
-                        <a href={wikidataUrl} target="_blank" rel="noreferrer">
-                            Wikidata
-                        </a>
-                        .
-                        <br />
-                        Most general information, such as the logo or the URL of the code
-                        repository, is extracted from Wikidata. If the software you want
-                        to add does not have a Wikidata entry yet, you can create one .
-                        Find here an{" "}
-                        <a href={wikidataPageExampleUrl} target="_blank" rel="noreferrer">
-                            example of a Wikidata entry
-                        </a>
-                        &nbsp; for the software&nbsp;
-                        <a href={softwareSillUrl} target="_blank" rel="noreferrer">
-                            {exampleSoftwareName}
-                        </a>{" "}
-                    </>
-                ),
-                "wikidata id information":
-                    "This information will automatically populate other fields",
+                "external id": externalId("en"),
+                "external id hint": externalIdHint("en"),
+                // "wikidata id information":
+                //     "This information will automatically populate other fields",
                 "comptoir du libre id": "Comptoir du Libre identifier (optional)",
                 "comptoir du libre id hint":
                     "If you the software is listed in the Comptoir du Libre you can add its identifier here. The identifier is either a numeric id or the url of the product page.",
@@ -1034,37 +1009,8 @@ const {
                     "Système d'exploitation sur lequel le logiciel peut être installé"
             },
             "SoftwareFormStep2": {
-                "wikidata id": "Fiche Wikidata",
-                "wikidata id hint": ({
-                    wikidataUrl,
-                    wikidataPageExampleUrl,
-                    exampleSoftwareName,
-                    softwareSillUrl
-                }) => (
-                    <>
-                        Renseignez le nom du logiciel ou directement l'identifiant (de la
-                        forme <code>QXXXXX</code>) pour associer le logiciel à une fiche
-                        existante{" "}
-                        <a href={wikidataUrl} target="_blank" rel="noreferrer">
-                            Wikidata
-                        </a>
-                        .
-                        <br />
-                        La plupart des informations générales, telles que le logo ou l'URL
-                        du dépôt de code, sont extraites de Wikidata. Si le logiciel que
-                        vous souhaitez ajouter ne possède pas encore de fiche sur
-                        Wikidata, vous pouvez en créer une. Vous trouverez ici un{" "}
-                        <a href={wikidataPageExampleUrl} target="_blank" rel="noreferrer">
-                            exemple de fiche Wikidata
-                        </a>{" "}
-			pour le logiciel&nbsp;
-                        <a href={softwareSillUrl} target="_blank" rel="noreferrer">
-                            {exampleSoftwareName}
-                        </a>.{" "}
-                    </>
-                ),
-                "wikidata id information":
-                    "Cette information remplira automatiquement d'autres champs",
+                "external id": externalId("fr"),
+                "external id hint": externalIdHint("fr"),
                 "comptoir du libre id": "Identifiant Comptoir du Libre (Optionnel)",
                 "comptoir du libre id hint":
                     "Si le logiciel est présent sur le comptoir du libre vous pouvez renseigner son identifiant ou l'URL de sa fiche",
@@ -1515,3 +1461,175 @@ const declarationTypeToEnglish: Record<DeclarationType, string> = {
     user: "user",
     referent: "referent"
 };
+
+type I18nTextByExternalSourceByLanguage = Record<
+    Language,
+    Record<ExternalDataOrigin, ReactNode>
+>;
+
+const linksByExternalDataSource: Record<
+    ExternalDataOrigin,
+    {
+        externalSourceUrl: string;
+        externalSourcePageExampleUrl: string;
+        softwareSillUrl: string;
+        exampleSoftwareName: string;
+    }
+> = {
+    wikidata: {
+        "externalSourceUrl": "https://www.wikidata.org/wiki",
+        "externalSourcePageExampleUrl": "https://www.wikidata.org/wiki/Q107693197",
+        "softwareSillUrl": "https://code.gouv.fr/sill/detail?name=Keycloakify",
+        "exampleSoftwareName": "Keycloakify"
+    },
+    HAL: {
+        "externalSourceUrl": "https://hal.science",
+        "externalSourcePageExampleUrl": "https://hal.science/hal-02818886v1",
+        "softwareSillUrl": "",
+        "exampleSoftwareName": ""
+    }
+};
+
+function externalId(language: Language) {
+    return (externalDataOrigin: ExternalDataOrigin) => {
+        const externalIdBySource: I18nTextByExternalSourceByLanguage = {
+            fr: {
+                wikidata: "Fiche Wikidata",
+                HAL: "Fiche HAL"
+            },
+            en: {
+                wikidata: "Wikidata item",
+                HAL: "HAL item"
+            }
+        };
+
+        return externalIdBySource[language][externalDataOrigin];
+    };
+}
+
+function externalIdHint(language: Language) {
+    return (externalDataOrigin: ExternalDataOrigin) => {
+        const {
+            exampleSoftwareName,
+            externalSourcePageExampleUrl,
+            externalSourceUrl,
+            softwareSillUrl
+        } = linksByExternalDataSource[externalDataOrigin];
+
+        const externalIdHintByExternalSourceByLanguage: I18nTextByExternalSourceByLanguage =
+            {
+                fr: {
+                    wikidata: (
+                        <>
+                            Renseignez le nom du logiciel ou directement l'identifiant (de
+                            la forme <code>QXXXXX</code>) pour associer le logiciel à une
+                            fiche existante{" "}
+                            <a href={externalSourceUrl} target="_blank" rel="noreferrer">
+                                Wikidata
+                            </a>
+                            .
+                            <br />
+                            La plupart des informations générales, telles que le logo ou
+                            l'URL du dépôt de code, sont extraites de Wikidata. Si le
+                            logiciel que vous souhaitez ajouter ne possède pas encore de
+                            fiche sur Wikidata, vous pouvez en créer une. Vous trouverez
+                            ici un{" "}
+                            <a
+                                href={externalSourcePageExampleUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                exemple de fiche Wikidata
+                            </a>{" "}
+                            pour le logiciel&nbsp;
+                            <a href={softwareSillUrl} target="_blank" rel="noreferrer">
+                                {exampleSoftwareName}
+                            </a>
+                            .{" "}
+                        </>
+                    ),
+                    HAL: (
+                        <>
+                            Renseignez le nom du logiciel ou directement l'identifiant
+                            (attention, les identifiants HAL sont de la forme
+                            hal-123123v1, il faut fournir uniquement le numéro (sans
+                            'hal-' et sans version), dans ce cas '123123') pour associer
+                            le logiciel à une fiche existante{" "}
+                            <a href={externalSourceUrl} target="_blank" rel="noreferrer">
+                                HAL
+                            </a>
+                            .
+                            <br />
+                            La plupart des informations générales, telles que l'URL du
+                            dépôt de code, sont extraites de HAL. Si le logiciel que vous
+                            souhaitez ajouter ne possède pas encore de fiche sur HAL, vous
+                            pouvez en créer une. Vous trouverez ici un{" "}
+                            <a
+                                href={externalSourcePageExampleUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                exemple de fiche HAL
+                            </a>
+                            .
+                        </>
+                    )
+                },
+                en: {
+                    wikidata: (
+                        <>
+                            Fill up a name or directly the id (of the form{" "}
+                            <code>Qxxxxx</code>) to associate the software with an
+                            existing entry{" "}
+                            <a href={externalSourceUrl} target="_blank" rel="noreferrer">
+                                Wikidata
+                            </a>
+                            .
+                            <br />
+                            Most general information, such as the logo or the URL of the
+                            code repository, is extracted from Wikidata. If the software
+                            you want to add does not have a Wikidata entry yet, you can
+                            create one . Find here an{" "}
+                            <a
+                                href={externalSourcePageExampleUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                example of a Wikidata entry
+                            </a>
+                            &nbsp; for the software&nbsp;
+                            <a href={softwareSillUrl} target="_blank" rel="noreferrer">
+                                {exampleSoftwareName}
+                            </a>{" "}
+                        </>
+                    ),
+                    HAL: (
+                        <>
+                            Fill up a name or directly the id (careful, HAL ids look like
+                            'hal-123123v1', but only the number should be provided
+                            (without 'hal-' or the version), in this case it should be
+                            '123123') to associate the software with an existing entry{" "}
+                            <a href={externalSourceUrl} target="_blank" rel="noreferrer">
+                                Wikidata
+                            </a>
+                            .
+                            <br />
+                            Most general information, such as the URL of the code
+                            repository, is extracted from HAL. If the software you want to
+                            add does not have a Hal entry yet, you can create one. Find
+                            here an{" "}
+                            <a
+                                href={externalSourcePageExampleUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                            >
+                                example of an HAL entry
+                            </a>
+                        </>
+                    )
+                }
+            };
+
+        return externalIdHintByExternalSourceByLanguage[language][externalDataOrigin];
+    };
+}

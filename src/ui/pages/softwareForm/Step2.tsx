@@ -1,4 +1,4 @@
-import { useEffect, useState, useId } from "react";
+import React, { useEffect, useState, useId } from "react";
 import { SearchInput } from "ui/shared/SearchInput";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useForm, Controller } from "react-hook-form";
@@ -7,12 +7,13 @@ import { CircularProgressWrapper } from "ui/shared/CircularProgressWrapper";
 import { assert } from "tsafe/assert";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
-import type { useCore } from "core";
+import { useCore } from "core";
 import type { FormData } from "core/usecases/softwareForm";
 import type { ReturnType } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import { useStyles } from "tss-react/dsfr";
+import { ExternalDataOrigin } from "@codegouvfr/sill";
 
 export type Step2Props = {
     className?: string;
@@ -35,6 +36,8 @@ export type Step2Props = {
 };
 
 export function SoftwareFormStep2(props: Step2Props) {
+    const { externalDataOrigin: externalDataOriginCore } = useCore().functions;
+    const externalDataOrigin = externalDataOriginCore.getExternalDataOrigin();
     const {
         className,
         isUpdateForm,
@@ -250,15 +253,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                         noOptionText={tCommon("no result")}
                         loadingText={tCommon("loading")}
                         dsfrInputProps={{
-                            "label": t("wikidata id"),
-                            "hintText": t("wikidata id hint", {
-                                "wikidataUrl": "https://www.wikidata.org/wiki",
-                                "wikidataPageExampleUrl":
-                                    "https://www.wikidata.org/wiki/Q107693197",
-                                "softwareSillUrl":
-                                    "https://code.gouv.fr/sill/detail?name=Keycloakify",
-                                "exampleSoftwareName": "Keycloakify"
-                            }),
+                            "label": t("external id")(externalDataOrigin),
+                            "hintText": t("external id hint")(externalDataOrigin),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,
@@ -491,18 +487,14 @@ function comptoirDuLibreInputValueToComptoirDuLibreId(comptoirDuLibreInputValue:
 }
 
 export const { i18n } = declareComponentKeys<
-    | "wikidata id"
     | {
-          K: "wikidata id hint";
-          P: {
-              wikidataUrl: string;
-              wikidataPageExampleUrl: string;
-              exampleSoftwareName: string;
-              softwareSillUrl: string;
-          };
-          R: JSX.Element;
+          K: "external id";
+          R: (origin: ExternalDataOrigin) => React.ReactNode;
       }
-    | "wikidata id information"
+    | {
+          K: "external id hint";
+          R: (origin: ExternalDataOrigin) => React.ReactNode;
+      }
     | "comptoir du libre id"
     | "comptoir du libre id hint"
     | "software name"

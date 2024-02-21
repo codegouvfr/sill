@@ -13,6 +13,7 @@ import * as readme from "./readme";
 import * as redirect from "./redirect";
 import * as declarationRemoval from "./declarationRemoval";
 import * as userProfile from "./userProfile";
+import * as externalDataOrigin from "./externalDataOrigin";
 
 export const usecases = {
     softwareCatalog,
@@ -22,6 +23,7 @@ export const usecases = {
     instanceForm,
     userAccountManagement,
     sillApiVersion,
+    externalDataOrigin,
     softwareUserAndReferent,
     generalStats,
     userAuthentication,
