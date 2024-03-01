@@ -1,0 +1,174 @@
+name: ci
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+
+  test_lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3.0.0
+    - uses: actions/setup-node@v2.1.3
+    - uses: bahmutov/npm-install@v1
+    # TODO: Uncomment once prettier support 'satisfies' from TS4.9
+    - name: If this step fails run 'yarn format' then commit again.
+      run: |
+        PACKAGE_MANAGER=npm
+        if [ -f "./yarn.lock" ]; then
+            PACKAGE_MANAGER=yarn
+        fi
+        $PACKAGE_MANAGER run format:check
+  test:
+    needs: test_lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3.0.0
+    - uses: actions/setup-node@v2.1.3
+    - uses: bahmutov/npm-install@v1
+    - run: yarn build
+
+  check_if_version_upgraded:
+    name: Check if version upgrade
+    # When someone forks the repo and opens a PR we want to enables the tests to be run (the previous jobs)
+    # but obviously only us should be allowed to release.
+    # In the following check we make sure that we own the branch this CI workflow is running on before continuing.
+    # Without this check, trying to release would fail anyway because only us have the correct secret.NPM_TOKEN but
+    # it's cleaner to stop the execution instead of letting the CI crash.
+    if: |
+      github.event_name == 'push' || 
+      github.event.pull_request.head.repo.owner.login == github.event.pull_request.base.repo.owner.login 
+    runs-on: ubuntu-latest
+    needs: test
+    outputs:
+      from_version: ${{ steps.step1.outputs.from_version }}
+      to_version: ${{ steps.step1.outputs.to_version }}
+      is_upgraded_version: ${{ steps.step1.outputs.is_upgraded_version }}
+      is_pre_release: ${{steps.step1.outputs.is_pre_release }}
+    steps:
+    - uses: garronej/ts-ci@v2.1.0
+      id: step1
+      with: 
+        action_name: is_package_json_version_upgraded
+
+  docker:
+    needs: 
+      - check_if_version_upgraded
+    runs-on: ubuntu-latest
+    # We publish the the docker image only if it's a push on the default branch or if it's a PR from a 
+    # branch (meaning not a PR from a fork). It would be more straightforward to test if secrets.DOCKERHUB_TOKEN is 
+    # defined but GitHub Action don't allow it.
+    if: |
+      github.event_name == 'push' || 
+      github.event.pull_request.head.repo.owner.login == github.event.pull_request.base.repo.owner.login 
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
+      - uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Computing Docker image tags
+        id: step1
+        env: 
+          IS_UPGRADED_VERSION: ${{ needs.check_if_version_upgraded.outputs.is_upgraded_version }}
+          TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+        run: |
+          OUT=$GITHUB_REPOSITORY:$(
+          [ "$GITHUB_EVENT_NAME" == "pull_request" ] &&
+            echo "$GITHUB_HEAD_REF" ||
+            echo "${GITHUB_REF#refs/*/}"
+          )
+          if [ "$IS_UPGRADED_VERSION" = "true" ]; then
+            OUT=$OUT,$GITHUB_REPOSITORY:$TO_VERSION,$GITHUB_REPOSITORY:latest
+          fi
+          OUT=$(echo "$OUT" | awk '{print tolower($0)}') 
+          echo ::set-output name=docker_tags::$OUT
+      - uses: docker/build-push-action@v2
+        with:
+          push: true
+          context: .
+          tags: ${{ steps.step1.outputs.docker_tags }}
+
+  create_github_release:
+    runs-on: ubuntu-latest
+    # We create a release only if the version have been upgraded and we are on a default branch
+    # PR on the default branch can release beta but not real release
+    if: |
+      needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' &&
+      (
+        github.event_name == 'push' ||
+        needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
+      )
+    needs: 
+      - check_if_version_upgraded
+    steps:
+    - uses: softprops/action-gh-release@v1
+      with:
+        name: Release v${{ needs.check_if_version_upgraded.outputs.to_version }}
+        tag_name: v${{ needs.check_if_version_upgraded.outputs.to_version }}
+        target_commitish: ${{ github.head_ref || github.ref }}
+        generate_release_notes: true
+        draft: false
+        prerelease: ${{ needs.check_if_version_upgraded.outputs.is_release_beta == 'true' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+
+
+  publish_on_npm:
+    runs-on: ubuntu-latest
+    needs: 
+      - create_github_release
+      - check_if_version_upgraded
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.ref }}
+    - uses: actions/setup-node@v3
+      with:
+        registry-url: https://registry.npmjs.org/
+    - uses: bahmutov/npm-install@v1
+    - run: yarn build
+    - run: npx -y -p denoify@1.3.0 enable_short_npm_import_path
+      env:
+        DRY_RUN: "0"
+    - uses: garronej/ts-ci@v2.1.0
+      with: 
+        action_name: remove_dark_mode_specific_images_from_readme
+    - name: Publishing on NPM
+      run: |
+        if [ "$(npm show . version)" = "$VERSION" ]; then
+          echo "This version is already published"
+          exit 0
+        fi
+        if [ "$NODE_AUTH_TOKEN" = "" ]; then
+          echo "Can't publish on NPM, You must first create a secret called NPM_TOKEN that contains your NPM auth token. https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets"
+          false
+        fi
+        EXTRA_ARGS=""
+        if [ "$IS_PRE_RELEASE" = "true" ]; then
+            EXTRA_ARGS="--tag next"
+        fi
+        npm publish $EXTRA_ARGS
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+        IS_PRE_RELEASE: ${{ needs.check_if_version_upgraded.outputs.is_pre_release }}
+
+  poke_gitops:
+    runs-on: ubuntu-latest
+    needs: 
+      - create_github_release
+      - publish_on_npm
+      - docker
+    steps:
+    - uses: peter-evans/repository-dispatch@v1
+      with:
+        token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
+        event-type: update_sill_api
+        repository: codegouvfr/paris-sspcloud

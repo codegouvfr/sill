@@ -1,0 +1,28 @@
+{
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "baseBranches": ["main"],
+    "extends": ["config:base"],
+    "dependencyDashboard": false,
+    "bumpVersion": "patch",
+    "rangeStrategy": "bump",
+    "ignorePaths": [".github/**", "Dockerfile"],
+    "branchPrefix": "renovate_",
+    "vulnerabilityAlerts": {
+        "enabled": false
+    },
+    "packageRules": [
+        {
+            "packagePatterns": ["*"],
+            "excludePackagePatterns": ["keycloakify", "run-exclusive", "i18nifty", "tsafe", "evt"],
+            "enabled": false
+        },
+        {
+            "packagePatterns": ["keycloakify", "run-exclusive", "i18nifty", "tsafe", "evt"],
+            "matchUpdateTypes": ["minor", "patch"],
+            "automerge": false,
+            "automergeType": "pr",
+            "platformAutomerge": false,
+            "groupName": "garronej_modules_update"
+        }
+    ]
+}
