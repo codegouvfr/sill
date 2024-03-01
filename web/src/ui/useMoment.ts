@@ -3,7 +3,7 @@ import moment from "moment";
 import "moment/locale/fr";
 import { useLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 import { capitalize } from "tsafe/capitalize";
 
 export const { getFormattedDate } = (() => {

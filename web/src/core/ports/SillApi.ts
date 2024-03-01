@@ -1,5 +1,5 @@
 import { assert, type Equals } from "tsafe/assert";
-import type { TrpcRouterInput, TrpcRouterOutput } from "@codegouvfr/sill";
+import type { TrpcRouterInput, TrpcRouterOutput } from "api";
 
 export type SillApi = {
     getExternalSoftwareDataOrigin: {

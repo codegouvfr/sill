@@ -3,7 +3,7 @@ import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import { type State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
 import { LocalizedString } from "i18nifty";
-import type { Language, ApiTypes } from "@codegouvfr/sill";
+import type { Language, ApiTypes } from "api";
 
 export const name = "softwareDetails";
 

@@ -1,5 +1,5 @@
 import type { Thunks } from "core/bootstrap";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 import { name, actions } from "./state";
 
 export const thunks = {

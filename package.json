@@ -1,0 +1,16 @@
+{
+  "name": "sill",
+  "version": "1.41.2",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "node": "^20"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5"
+  },
+  "workspaces": [
+    "api",
+    "web"
+  ]
+}

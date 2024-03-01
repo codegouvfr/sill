@@ -2,7 +2,7 @@ import {
     createUsecaseActions,
     createObjectThatThrowsIfAccessed
 } from "redux-clean-architecture";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 
 type OmitFromExisting<T, K extends keyof T> = Omit<T, K>;
 

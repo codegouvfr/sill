@@ -5,7 +5,7 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { exclude } from "tsafe/exclude";
 import FlexSearch from "flexsearch";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import { createResolveLocalizedString } from "i18nifty";
 import { UpdateFilterParams } from "./state";
 import { name, actions, type State } from "./state";

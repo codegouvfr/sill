@@ -1,5 +1,5 @@
 import type { GetUser, User } from "core/ports/GetUser";
-import { createAccessTokenToUser } from "@codegouvfr/sill";
+import { createAccessTokenToUser } from "api";
 import { decodeJwt } from "core/tools/jwt";
 
 export function createGetUser(params: {

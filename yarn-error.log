@@ -1,0 +1,41 @@
+Arguments: 
+  /Users/jeromeburkard/.nvm/versions/node/v20.11.1/bin/node /Users/jeromeburkard/.nvm/versions/node/v18.16.0/bin/yarn
+
+PATH: 
+  /Users/jeromeburkard/.nvm/versions/node/v20.11.1/bin:/Users/jeromeburkard/.nvm/versions/node/v18.16.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Users/jeromeburkard/.nvm/versions/node/v18.16.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  20.11.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: EEXIST: file already exists, mkdir '/Users/jeromeburkard/code/codegouvfr/sill/node_modules/@typescript-eslint/utils/node_modules/@typescript-eslint'
+
+npm manifest: 
+  {
+    "name": "sill",
+    "version": "1.41.2",
+    "license": "MIT",
+    "private": true,
+    "engines": {
+      "node": "^20"
+    },
+    "devDependencies": {
+      "prettier": "^3.2.5"
+    },
+    "workspaces": [
+      "api",
+      "web"
+    ]
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

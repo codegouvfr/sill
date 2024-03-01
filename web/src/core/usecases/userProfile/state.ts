@@ -1,6 +1,6 @@
 import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 
 export type State = State.NotReady | State.Ready;
 

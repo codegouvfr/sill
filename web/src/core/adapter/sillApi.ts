@@ -1,6 +1,6 @@
 import type { SillApi } from "../ports/SillApi";
 import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
-import type { TrpcRouter } from "@codegouvfr/sill";
+import type { TrpcRouter } from "api";
 import superjson from "superjson";
 import memoize from "memoizee";
 

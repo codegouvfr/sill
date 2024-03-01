@@ -1,4 +1,3 @@
-import { SoftwareExternalDataOption } from "@codegouvfr/sill/core/ports/GetSoftwareExternalDataOptions";
 import memoize from "memoizee";
 import type { SillApi } from "../ports/SillApi";
 import { id } from "tsafe/id";
@@ -7,7 +6,7 @@ import LogoLibreOffice from "ui/assets/logo_libreoffice.png";
 import LogoWordpress from "ui/assets/logo_wordpress.png";
 import LogoNeovim from "ui/assets/logo_neovim.png";
 import { assert } from "tsafe/assert";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 
 export const sillApi: SillApi = {
     "getExternalSoftwareDataOrigin": memoize(async () => "wikidata", { "promise": true }),
@@ -240,7 +239,7 @@ export const sillApi: SillApi = {
     }
 };
 
-const options: (SoftwareExternalDataOption & { isInSill: boolean })[] = [
+const options: (ApiTypes.SoftwareExternalDataOption & { isInSill: boolean })[] = [
     {
         "externalId": "Q110492908",
         "label": "Onyxia",

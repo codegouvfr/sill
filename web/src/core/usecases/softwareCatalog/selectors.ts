@@ -1,5 +1,4 @@
 import "minimal-polyfills/Object.fromEntries";
-import type { ExternalDataOrigin } from "@codegouvfr/sill/core/ports/GetSoftwareExternalData";
 import { createCompareFn } from "core/tools/compareFn";
 import type { State as RootState } from "core/bootstrap";
 import { createSelector } from "redux-clean-architecture";
@@ -9,7 +8,7 @@ import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { exclude } from "tsafe/exclude";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import { createResolveLocalizedString } from "i18nifty";
 import { name, type State } from "./state";
 
@@ -878,7 +877,7 @@ function internalSoftwareToExternalSoftware(params: {
 type SoftwareRef =
     | {
           type: "externalId";
-          externalDataOrigin: ExternalDataOrigin;
+          externalDataOrigin: ApiTypes.ExternalDataOrigin;
           externalId: string;
       }
     | {

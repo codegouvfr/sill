@@ -1,10 +1,9 @@
-import { ExternalDataOrigin } from "@codegouvfr/sill/core/ports/GetSoftwareExternalData";
 import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import type { LocalizedString } from "i18nifty";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 
 type SoftwareFormState = SoftwareFormState.NotInitialized | SoftwareFormState.Ready;
 
@@ -47,7 +46,7 @@ export type FormData = {
             label: LocalizedString<Language>;
             description: LocalizedString<Language>;
             externalId: string;
-            externalDataOrigin: ExternalDataOrigin | undefined;
+            externalDataOrigin: ApiTypes.ExternalDataOrigin | undefined;
         }[];
     };
 };

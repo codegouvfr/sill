@@ -22,7 +22,7 @@ import {
     DeclarationRemovalModal
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 
 type Props = {
     className?: string;

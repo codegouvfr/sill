@@ -1,7 +1,7 @@
 import type { Thunks } from "core/bootstrap";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import { createUsecaseContextApi } from "redux-clean-architecture";
 import { Evt } from "evt";
 import { createResolveLocalizedString } from "i18nifty";

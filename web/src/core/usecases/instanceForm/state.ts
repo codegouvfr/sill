@@ -2,7 +2,7 @@ import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import type { LocalizedString } from "i18nifty";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 
 export type WikidataEntry = {
     label: LocalizedString<Language>;

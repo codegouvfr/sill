@@ -1,8 +1,8 @@
 import type { Thunks } from "core/bootstrap";
 import { assert } from "tsafe/assert";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import { exclude } from "tsafe/exclude";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 import { name, actions, type FormData } from "./state";
 
 export const thunks = {

@@ -13,7 +13,7 @@ import type { ReturnType } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import { useStyles } from "tss-react/dsfr";
-import { ExternalDataOrigin } from "@codegouvfr/sill";
+import { ExternalDataOrigin } from "api";
 
 export type Step2Props = {
     className?: string;

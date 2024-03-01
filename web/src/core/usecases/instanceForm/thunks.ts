@@ -1,6 +1,6 @@
 import type { Thunks } from "core/bootstrap";
 import { assert } from "tsafe/assert";
-import type { ApiTypes } from "@codegouvfr/sill";
+import type { ApiTypes } from "api";
 import { name, actions, type WikidataEntry } from "./state";
 
 export const thunks = {

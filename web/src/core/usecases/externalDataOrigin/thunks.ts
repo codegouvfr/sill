@@ -1,4 +1,4 @@
-import { ExternalDataOrigin } from "@codegouvfr/sill";
+import { ExternalDataOrigin } from "api";
 import type { Thunks } from "core/bootstrap";
 import { createUsecaseContextApi } from "redux-clean-architecture";
 

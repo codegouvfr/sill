@@ -1,5 +1,5 @@
 import { createI18nApi, declareComponentKeys } from "i18nifty";
-import { languages, type Language, type ExternalDataOrigin } from "@codegouvfr/sill";
+import { languages, type Language, type ExternalDataOrigin } from "api";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";

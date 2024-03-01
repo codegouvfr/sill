@@ -1,6 +1,6 @@
 import { usecases } from "./usecases";
 import type { LocalizedString } from "i18nifty";
-import type { Language } from "@codegouvfr/sill";
+import type { Language } from "api";
 import type { Oidc } from "./ports/Oidc";
 import {
     createCore,

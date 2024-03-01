@@ -1,5 +1,5 @@
 {
-    "name": "@codegouvfr/sill",
+    "name": "api",
     "version": "1.20.5",
     "description": "The backend of code.gouv.fr/sill",
     "repository": {
@@ -20,16 +20,6 @@
         "reset-data-test": "ts-node --skipProject scripts/reset-data-test.ts",
         "compile-data": "./.env.local.sh ts-node --skipProject scripts/compile-data.ts",
         "typecheck": "tsc --noEmit"
-    },
-    "lint-staged": {
-        "*.{ts,tsx,json,md}": [
-            "prettier --write"
-        ]
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged -v"
-        }
     },
     "author": "DINUM",
     "license": "MIT",
@@ -63,12 +53,10 @@
         "evt": "^2.5.7",
         "express": "^4.17.2",
         "forever": "^4.0.3",
-        "husky": "^4.3.8",
         "i18nifty": "^3.2.0",
         "jwt-simple": "^0.5.6",
         "keycloak-backend": "^2.0.1",
         "keycloakify": "^9.2.0",
-        "lint-staged": "^11.1.1",
         "memoizee": "^0.4.15",
         "node-fetch": "^2.6.7",
         "prettier": "^2.8.2",

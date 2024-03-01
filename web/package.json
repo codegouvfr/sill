@@ -1,6 +1,6 @@
 {
     "homepage": "https://xxx.yy/sill",
-    "name": "sill-web",
+    "name": "web",
     "version": "1.41.2",
     "license": "MIT",
     "scripts": {
@@ -20,7 +20,6 @@
     },
     "dependencies": {
         "@codegouvfr/react-dsfr": "^1.0.0",
-        "@codegouvfr/sill": "^1.20.5",
         "@emotion/react": "^11.11.0",
         "@emotion/styled": "^11.11.0",
         "@mui/icons-material": "^5.0.4",
@@ -30,6 +29,7 @@
         "@trpc/client": "^10.18.0",
         "@types/react-form": "^4.0.2",
         "@uiw/react-md-editor": "^3.23.5",
+        "api": "*",
         "evt": "^2.5.3",
         "flexsearch": "0.7.21",
         "i18nifty": "^3.1.2",
@@ -72,8 +72,6 @@
         "circular-dependency-plugin": "^5.2.2",
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-tss-unused-classes": "^1.0.1",
-        "husky": "^4.3.8",
-        "lint-staged": "^11.0.0",
         "minimal-polyfills": "^2.2.3",
         "node-fetch": "^2.6.1",
         "prettier": "^2.3.0",
@@ -110,16 +108,6 @@
             "tss-unused-classes/unused-classes": "warn",
             "no-sequences": "off"
         }
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged -v"
-        }
-    },
-    "lint-staged": {
-        "*.{ts,tsx,json,md}": [
-            "prettier --write"
-        ]
     },
     "browserslist": {
         "production": [
