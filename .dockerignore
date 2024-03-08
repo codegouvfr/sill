@@ -39,3 +39,6 @@ kubernetes
 /web/node_modules
 /web/build
 /web/.storybook
+
+/docs
+.git

@@ -2,27 +2,26 @@
 # to take advantage of docker cache
 
 # build step
-FROM node:18 as build
-RUN npm install -g pnpm@8
+FROM node:20-alpine as build
 RUN npm install -g @vercel/ncc@0.36.1
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json yarn.lock ./
 COPY api/package.json api/
 COPY api/.env.sh api/
 COPY web/package.json web/
 COPY web/public/ web/public/
 
-RUN pnpm install --frozen-lockfile
+RUN yarn install --frozen-lockfile
 
 COPY api/ api/
 COPY web/ web/
+COPY turbo.json ./
 
-RUN pnpm --dir=api build
-RUN pnpm --dir=web build
+RUN yarn build
 
 WORKDIR /app/api
 RUN rm -r src
-RUN cp dist src
+RUN cp dist -r src/
 RUN npx ncc build src/main.js
 
 
@@ -30,7 +29,7 @@ RUN npx ncc build src/main.js
 # ----- api only ------
 # to build only back run
 # docker build . --target api --tag my-api-tag`
-FROM node:18-alpine as api
+FROM node:20-alpine as api
 RUN npm install -g forever@4.0.3
 RUN apk add --no-cache \
   git \
