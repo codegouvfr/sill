@@ -3,11 +3,20 @@
   "version": "1.41.2",
   "license": "MIT",
   "private": true,
-  "engines": {
-    "node": "^20"
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "format": "turbo format",
+    "format:check": "turbo format:check",
+    "fullcheck": "turbo typecheck format:check test"
   },
   "devDependencies": {
-    "prettier": "^3.2.5"
+    "turbo": "^1.12.5"
+  },
+  "engines": {
+    "node": "^20"
   },
   "workspaces": [
     "api",

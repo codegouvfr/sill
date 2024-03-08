@@ -10,7 +10,8 @@
     "types": "dist/lib/index.d.ts",
     "scripts": {
         "prepare": "[ ! -f .env.local.sh ] && cp .env.sh .env.local.sh || true",
-        "test": "vitest",
+        "test": "vitest --watch=false",
+        "dev": "yarn build && yarn start",
         "build": "tsc",
         "start": "./.env.local.sh forever dist/main.js",
         "_format": "prettier \"**/*.{ts,tsx,json,md}\"",
