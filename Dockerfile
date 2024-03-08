@@ -50,11 +50,3 @@ COPY --from=build /app/web/nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx
 COPY --from=build /app/web ./html
 ENTRYPOINT sh -c "nginx -g 'daemon off;'"
-
-
-
-
-
-
-
-
