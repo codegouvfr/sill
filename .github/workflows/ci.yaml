@@ -11,15 +11,15 @@ jobs:
   validations:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    - uses: bahmutov/npm-install@v1
-    - name: Build back
-      run: cd api && yarn build
-    - name: Fullcheck
-      run: yarn fullcheck
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: bahmutov/npm-install@v1
+      - name: Build back
+        run: cd api && yarn build
+      - name: Fullcheck
+        run: yarn fullcheck
 
   check_if_version_upgraded:
     name: Check if version upgrade
@@ -31,16 +31,40 @@ jobs:
       to_version: ${{ steps.step1.outputs.to_version }}
       is_upgraded_version: ${{ steps.step1.outputs.is_upgraded_version }}
     steps:
-    - uses: garronej/ts-ci@v2.1.0
-      id: step1
-      with: 
-        action_name: is_package_json_version_upgraded
+      - uses: garronej/ts-ci@v2.1.0
+        id: step1
+        with:
+          action_name: is_package_json_version_upgraded
+
+  # create_github_release:
+  #   runs-on: ubuntu-latest
+  #   # We create a release only if the version have been upgraded and we are on a default branch
+  #   # PR on the default branch can release beta but not real release
+  #   if: |
+  #     needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' &&
+  #     (
+  #       github.event_name == 'push' ||
+  #       needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
+  #     )
+  #   needs:
+  #     - check_if_version_upgraded
+  #   steps:
+  #   - uses: softprops/action-gh-release@v1
+  #     with:
+  #       name: Release v${{ needs.check_if_version_upgraded.outputs.to_version }}
+  #       tag_name: v${{ needs.check_if_version_upgraded.outputs.to_version }}
+  #       target_commitish: ${{ github.head_ref || github.ref }}
+  #       generate_release_notes: true
+  #       draft: false
+  #       prerelease: ${{ needs.check_if_version_upgraded.outputs.is_release_beta == 'true' }}
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   docker:
     runs-on: ubuntu-latest
-    # needs: 
-    #   - check_if_version_upgraded
-      # - create_github_release
+    needs:
+      - check_if_version_upgraded
+    #   - create_github_release
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -51,34 +75,54 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Computing Docker image tags
         id: step1
-        env: 
-          IS_UPGRADED_VERSION: ${{ needs.check_if_version_upgraded.outputs.is_upgraded_version }}
-          TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+        env:
+          # IS_UPGRADED_VERSION: ${{ needs.check_if_version_upgraded.outputs.is_upgraded_version }}
+          IS_UPGRADED_VERSION: true
+          # TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+          TO_VERSION: test1
         run: |
-          OUT=$GITHUB_REPOSITORY:$TO_VERSION,$GITHUB_REPOSITORY:latest
-          OUT=$(echo "$OUT" | awk '{print tolower($0)}') 
-          echo ::set-output name=docker_tags::$OUT
+          OUT_API=codegouvfr/sill-api:$TO_VERSION
+          OUT_API=$(echo "$OUT_API" | awk '{print tolower($0)}') 
+          echo ::set-output name=docker_api_tags::$OUT_API
+
+          OUT_WEB=codegouvfr/sill-web:$TO_VERSION
+          OUT_WEB=$(echo "$OUT_WEB" | awk '{print tolower($0)}') 
+          echo ::set-output name=docker_web_tags::$OUT_WEB
+
       - uses: docker/build-push-action@v5
         with:
           push: true
           context: .
           target: api
-          tags: ${{ steps.step1.outputs.docker_tags }}
+          tags: ${{ steps.step1.outputs.docker_api_tags }}
       - uses: docker/build-push-action@v5
         with:
           push: true
           context: .
           target: web
-          tags: ${{ steps.step1.outputs.docker_tags }}
+          tags: ${{ steps.step1.outputs.docker_web_tags }}
+
+  # poke_gitops:
+  #   runs-on: ubuntu-latest
+  #   needs:
+  #     - create_github_release
+  #     - publish_on_npm
+  #     - docker
+  #   steps:
+  #   - uses: peter-evans/repository-dispatch@v1
+  #     with:
+  #       token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
+  #       event-type: update_sill_api
+  #       repository: codegouvfr/paris-sspcloud
 
   # build_docker_images:
-  #   # needs: 
+  #   # needs:
   #   #   - check_if_version_upgraded
   #   runs-on: ubuntu-latest
   #   steps:
   #   - name: Checkout repository
   #     uses: actions/checkout@v4
-    
+
   #   - uses: docker/setup-buildx-action@v3
   #   - uses: docker/login-action@v3
   #     with:
@@ -89,7 +133,7 @@ jobs:
   #     run: |
   #       docker build . --target api --tag api:latest
   #       docker save api:latest -o api.tar
-    
+
   #   - name: Build Web Docker image
   #     run: |
   #       docker build . --target web --tag web:latest
@@ -106,44 +150,3 @@ jobs:
   #     with:
   #       name: web-image
   #       path: web.tar
-
-  # push_docker_images_to_docker_hub:
-  #   needs: 
-  #     - build_docker_images
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v4
-
-  #   - name: Download API Image Artifact
-  #     uses: actions/download-artifact@v4
-  #     with:
-  #       name: api-image
-  #       path: .
-
-  #   - name: Download Web Image Artifact
-  #     uses: actions/download-artifact@v4
-  #     with:
-  #       name: web-image
-  #       path: .
-
-  #   - name: Load API Image
-  #     run: docker load -i api.tar
-
-  #   - name: Load Web Image
-  #     run: docker load -i web.tar
-
-  #   - name: Push API Image to Docker Hub
-  #     run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-  #     env:
-  #       DOCKER_HUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  #       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
-  #     run: docker push api:latest
-
-  #   - name: Push Web Image to Docker Hub
-  #     run: echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-  #     env:
-  #       DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-  #       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-  #     run: docker push web:latest
-

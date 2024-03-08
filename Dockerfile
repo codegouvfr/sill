@@ -13,9 +13,12 @@ COPY web/public/ web/public/
 
 RUN yarn install --frozen-lockfile
 
-COPY api/ api/
-COPY web/ web/
 COPY turbo.json ./
+COPY api/ api/
+COPY web/src/ web/src/
+COPY web/config-overrides.js web/tsconfig.json web/
+
+RUN sed -i '/"homepage":/d' web/package.json
 
 RUN yarn build
 
@@ -24,6 +27,8 @@ RUN rm -r src
 RUN cp dist -r src/
 RUN npx ncc build src/main.js
 
+WORKDIR /app
+COPY web/nginx.conf web/
 
 
 # ----- api only ------
@@ -48,5 +53,5 @@ ENTRYPOINT sh -c "forever index.js"
 FROM nginx:stable-alpine as web
 COPY --from=build /app/web/nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx
-COPY --from=build /app/web ./html
+COPY --from=build /app/web/build ./html
 ENTRYPOINT sh -c "nginx -g 'daemon off;'"
