@@ -1,4 +1,4 @@
-# this aggregates the sill-web and sill-api into a single file
+# this aggregates the web and api into a single file
 # to take advantage of docker cache
 
 # build step
