@@ -14,3 +14,14 @@ services:
       dockerfile: Dockerfile
       target: web
     restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "4000:80" # Map port 80 on the host to port 80 in the NGINX container
+    volumes:
+      - ./nginx/etc/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
