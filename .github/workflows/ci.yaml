@@ -20,7 +20,7 @@ jobs:
         run: cd api && yarn build
       - name: Fullcheck
         run: yarn fullcheck
-
+#
   check_if_version_upgraded:
     name: Check if version upgrade
     if: github.event_name == 'push'
@@ -35,6 +35,18 @@ jobs:
         id: step1
         with:
           action_name: is_package_json_version_upgraded
+
+  create_tag:
+    name: Create version tag
+    runs-on: ubuntu-latest
+    needs:
+      - check_if_version_upgraded
+    if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
+    steps:
+      - name: Create tag
+        run: git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Version v${{ needs.check_if_version_upgraded.outputs.to_version }}"
+      - name: Push tag
+        run: git push origin v${{ needs.check_if_version_upgraded.outputs.to_version }}
 
   docker:
     runs-on: ubuntu-latest
@@ -51,15 +63,14 @@ jobs:
       - name: Computing Docker image tags
         id: step1
         env:
-          IS_UPGRADED_VERSION: ${{ needs.check_if_version_upgraded.outputs.is_upgraded_version }}
           TO_VERSION: test-${{ needs.check_if_version_upgraded.outputs.to_version }}
         run: |
           OUT_API=codegouvfr/sill-api:$TO_VERSION
-          OUT_API=$(echo "$OUT_API" | awk '{print tolower($0)}') 
+          OUT_API=$(echo "$OUT_API" | awk '{print tolower($0)}')
           echo ::set-output name=docker_api_tags::$OUT_API
 
           OUT_WEB=codegouvfr/sill-web:$TO_VERSION
-          OUT_WEB=$(echo "$OUT_WEB" | awk '{print tolower($0)}') 
+          OUT_WEB=$(echo "$OUT_WEB" | awk '{print tolower($0)}')
           echo ::set-output name=docker_web_tags::$OUT_WEB
 
       - uses: docker/build-push-action@v5
@@ -108,6 +119,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - trigger_production_deploy
+      - check_if_version_upgraded
+      - create_tag
     # We create a release only when all of the above are validated:
     # - we are on default branch
     # - version has been upgraded
@@ -118,8 +131,11 @@ jobs:
         github.event_name == 'push' ||
         needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
       )
+    env:
+      TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
       - name: Get tag of latest release
+        id: get-latest-release-tag
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -128,12 +144,13 @@ jobs:
             return latestRelease.data.tag_name
           result-encoding: string
       - name: Generate release notes content from latest release
+        id: generate-release-notes
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const releaseNotes = await github.request(`POST /repos/${{ github.repository }}/releases/generate-notes`, {
-              tag_name: `v${{ github.run_number }}`,
+              tag_name: `v${{ env.TO_VERSION }}`,
               previous_tag_name: `${{steps.get-latest-release-tag.outputs.result}}` })
             return releaseNotes.data
       - name: Create release notes on github
@@ -141,7 +158,12 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const tag = `v${{ env.TO_VERSION }}`;
+
+            console.log('name : ', `${{fromJson(needs.generate-release-notes.outputs.release-notes).name}}`)
+            console.log('body : ', `${{fromJson(needs.generate-release-notes.outputs.release-notes).body}}`)
+            console.log('tag : ', tag )
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: `v${{ github.run_number }}`,
+              tag_name: `v${{ env.TO_VERSION }}`,
               name: `${{fromJson(needs.generate-release-notes.outputs.release-notes).name}}`,
               body: `${{fromJson(needs.generate-release-notes.outputs.release-notes).body}}`})
