@@ -43,10 +43,14 @@ jobs:
       - check_if_version_upgraded
     if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Create tag
-        run: git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Version v${{ needs.check_if_version_upgraded.outputs.to_version }}"
-      - name: Push tag
-        run: git push origin v${{ needs.check_if_version_upgraded.outputs.to_version }}
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+           git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Deployment tag for v${{ needs.check_if_version_upgraded.outputs.to_version }}"
+          git push --tags        
 
   docker:
     runs-on: ubuntu-latest
