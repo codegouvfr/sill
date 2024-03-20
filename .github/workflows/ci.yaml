@@ -111,6 +111,9 @@ jobs:
     name: "Trigger production deploy"
     runs-on: ubuntu-latest
     environment: production
+    concurrency:
+      group: deploy-to-production
+      cancel-in-progress: true
     needs:
       - docker
       - poke_gitops
