@@ -1,0 +1,125 @@
+{
+    "homepage": "https://xxx.yy/sill",
+    "name": "web",
+    "version": "1.41.2",
+    "license": "MIT",
+    "scripts": {
+        "dev": "react-app-rewired start",
+        "build": "react-app-rewired build && rimraf build/keycloak-resources",
+        "build-keycloak-theme": "yarn build && keycloakify",
+        "storybook": "start-storybook -p 6006",
+        "_format": "prettier '**/*.{ts,tsx,json,md}'",
+        "format": "yarn _format --write",
+        "format:check": "yarn _format --list-different",
+        "analyze": "source-map-explorer 'build/static/js/*.js'",
+        "prepare": "copy-dsfr-to-public && copy-keycloak-resources-to-public",
+        "prestorybook": "only-include-used-icons",
+        "prestart": "only-include-used-icons",
+        "prebuild": "only-include-used-icons",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {
+        "@codegouvfr/react-dsfr": "^1.0.0",
+        "@emotion/react": "^11.11.0",
+        "@emotion/styled": "^11.11.0",
+        "@mui/icons-material": "^5.15.14",
+        "@mui/material": "^5.13.3",
+        "@storybook/addon-docs": "^6.5.15",
+        "@tanstack/react-virtual": "3.0.0-beta.39",
+        "@trpc/client": "^10.18.0",
+        "@types/react-form": "^4.0.2",
+        "@uiw/react-md-editor": "^3.23.5",
+        "api": "*",
+        "evt": "^2.5.3",
+        "flexsearch": "0.7.21",
+        "i18nifty": "^3.1.2",
+        "keycloakify": "^9.2.0",
+        "memoizee": "^0.4.14",
+        "moment": "^2.29.1",
+        "oidc-spa": "^4.0.0",
+        "path": "^0.12.7",
+        "powerhooks": "^1.0.5",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-hook-form": "^7.43.0",
+        "react-markdown": "^5.0.3",
+        "react-scripts": "5.0.1",
+        "react-waypoint": "^10.3.0",
+        "redux-clean-architecture": "^4.1.1",
+        "run-exclusive": "^2.2.19",
+        "superjson": "^1.12.2",
+        "tsafe": "^1.6.5",
+        "tss-react": "^4.9.3",
+        "type-route": "^1.0.1",
+        "zod": "^3.21.4"
+    },
+    "devDependencies": {
+        "@storybook/addon-actions": "^6.5.10",
+        "@storybook/addon-essentials": "^6.5.10",
+        "@storybook/addon-links": "^6.5.10",
+        "@storybook/builder-webpack5": "^6.5.0-rc.1",
+        "@storybook/manager-webpack5": "^6.5.0-rc.1",
+        "@storybook/node-logger": "^6.5.10",
+        "@storybook/preset-create-react-app": "^4.1.2",
+        "@storybook/react": "^6.5.10",
+        "@types/flexsearch": "^0.7.3",
+        "@types/memoizee": "^0.4.4",
+        "@types/node": "^18.15.5",
+        "@types/react": "^18.0.18",
+        "@types/react-dom": "^18.0.6",
+        "@typescript-eslint/eslint-plugin": "^4.24.0",
+        "@typescript-eslint/parser": "^4.24.0",
+        "circular-dependency-plugin": "^5.2.2",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-tss-unused-classes": "^1.0.1",
+        "minimal-polyfills": "^2.2.3",
+        "node-fetch": "^2.6.1",
+        "prettier": "^2.3.0",
+        "react-app-rewired": "^2.2.1",
+        "rimraf": "^5.0.5",
+        "source-map-explorer": "^2.5.2",
+        "storybook-dark-mode": "^2.0.5",
+        "ts-node": "^10.2.1",
+        "typescript": "^4.1.6"
+    },
+    "keycloakify": {
+        "themeName": "dsfr",
+        "extraThemeProperties": [
+            "homeUrl=${env.DSFR_THEME_HOME_URL:}",
+            "serviceTitle=${env.DSFR_THEME_SERVICE_TITLE:}",
+            "brandTop=${env.DSFR_THEME_BRAND_TOP:}"
+        ]
+    },
+    "eslintConfig": {
+        "plugins": [
+            "tss-unused-classes"
+        ],
+        "extends": [
+            "react-app",
+            "prettier"
+        ],
+        "rules": {
+            "@typescript-eslint/no-redeclare": "off",
+            "import/no-anonymous-default-export": "off",
+            "react-hooks/rules-of-hooks": "off",
+            "react-hooks/exhaustive-deps": "off",
+            "no-labels": "off",
+            "prefer-const": "off",
+            "no-lone-blocks": "off",
+            "tss-unused-classes/unused-classes": "warn",
+            "no-sequences": "off"
+        }
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}

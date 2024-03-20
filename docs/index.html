@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html data-fr-scheme="system" lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+  <meta content="telephone=no" name="format-detection">
+  <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0" name="viewport">
+  <link href="//cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet">
+  <link href="assets/style.css" rel="stylesheet">
+
+  <meta content="#000091" name="theme-color"><!-- Défini la couleur de thème du navigateur (Safari/Android) -->
+  <link href="assets/favicon/apple-touch-icon.png" rel="apple-touch-icon"><!-- 180×180 -->
+  <link href="assets/favicon/favicon.svg" rel="icon" type="image/svg+xml">
+  <link href="assets/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon"><!-- 32×32 -->
+  <link crossorigin="use-credentials" href="assets/favicon/manifest.webmanifest" rel="manifest">
+
+  <title>Site de documentation du SILL</title>
+</head>
+<body>
+<header class="fr-header" role="banner">
+  <div class="fr-header__body">
+    <div class="fr-container">
+      <div class="fr-header__body-row">
+        <div class="fr-header__brand fr-enlarge-link">
+          <div class="fr-header__brand-top">
+            <div class="fr-header__logo">
+              <p class="fr-logo"> République <br>française </p>
+            </div>
+          </div>
+          <div class="fr-header__service"><a href="/"
+                                             title="Accueil - [À MODIFIER - Nom du site / service] - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)">
+            <p class="fr-header__service-title"> Site de documentation du Socle Interministériel des Logiciels Libres </p>
+          </a>
+            <p class="fr-header__service-tagline">Publié par la mission logiciels libres de la DINUM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<div id="app"></div>
+<footer class="fr-footer" id="footer" role="contentinfo">
+  <div class="fr-container">
+    <div class="fr-footer__body">
+      <div class="fr-footer__brand fr-enlarge-link"><a href="/"
+                                                       title="Retour à l’accueil du site - Nom de l’entité (ministère, secrétariat d‘état, gouvernement)">
+        <p class="fr-logo"> Intitulé <br>officiel </p>
+      </a></div>
+      <div class="fr-footer__content">
+        <p class="fr-footer__content-desc">Lorem [...] elit ut.</p>
+        <ul class="fr-footer__content-list">
+          <li class="fr-footer__content-item"><a class="fr-footer__content-link" href="https://legifrance.gouv.fr"
+                                                 target="_blank">legifrance.gouv.fr</a></li>
+          <li class="fr-footer__content-item"><a class="fr-footer__content-link" href="https://gouvernement.fr"
+                                                 target="_blank">gouvernement.fr</a></li>
+          <li class="fr-footer__content-item"><a class="fr-footer__content-link" href="https://service-public.fr"
+                                                 target="_blank">service-public.fr</a></li>
+          <li class="fr-footer__content-item"><a class="fr-footer__content-link" href="https://data.gouv.fr"
+                                                 target="_blank">data.gouv.fr</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fr-footer__bottom">
+      <ul class="fr-footer__bottom-list">
+        <li class="fr-footer__bottom-item"><a class="fr-footer__bottom-link" href="#">Accessibilité :
+          non/partiellement/totalement conforme</a></li>
+        <li class="fr-footer__bottom-item"><a class="fr-footer__bottom-link" href="#">Mentions légales</a></li>
+      </ul>
+      <div class="fr-footer__bottom-copy">
+        <p>Sauf mention explicite de propriété intellectuelle détenue par des tiers, les contenus de ce site sont
+          proposés sous <a href="https://github.com/etalab/licence-ouverte/blob/master/LO.md"
+                           target="_blank">licence
+            etalab-2.0</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+    window.$docsify = {
+        autoHeader: true,
+        loadSidebar: true,
+        name: 'The SILL documentation website',
+        repo: 'https://github.com/codegouvfr/sill-docs',
+        search: {
+            paths: 'auto',
+            placeholder: 'Rechercher',
+            noData: 'Pas de résultat.',
+            hideOtherSidebarContent: true,
+            namespace: 'doc'
+        },
+        subMaxLevel: 3
+    }
+</script>
+<!-- Docsify v4 -->
+<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+<script src="//cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# bundle analysis
+/bundle-report
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.zip
+
+android
+# We ignore package-lock.json as we recommend yarn
+package-lock.json
+.eslintcache
+
+/build_keycloak
+/src/env.ts
+/.yarn_home
+
+/public/dsfr/
+/storybook-static/
