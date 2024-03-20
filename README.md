@@ -14,12 +14,14 @@
     <a href="https://sill-preprod.lab.sspcloud.fr">Pre prod</a>
 </p>
 
-# Maintenance et contribution
+# Maintenance
 
 Ce dépôt et l'ensemble des dépôts liés à l'application [SILL](https://code.gouv.fr/sill) sont maintenus par la mission logiciels libres ([code.gouv.fr](https://code.gouv.fr)), qui a le dernier mot sur les choix techniques.
 
 [jeromeBu](https://github.com/jeromeBu) intervient comme prestataire sur des évolutions et [garronej](https://github.com/garronej) intervient en contributeur bénévole extérieur.
 
-# License
+# [Contribuer](CONTRIBUTING.md) 🧢
 
-[MIT](LICENSE), Direction interministérielle du numérique, mission logiciels libres.
+# Licence
+
+2021-2024 [MIT](LICENSE) Direction interministérielle du numérique, mission logiciels libres.
