@@ -49,8 +49,8 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-           git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Deployment tag for v${{ needs.check_if_version_upgraded.outputs.to_version }}"
-          git push --tags        
+          git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Deployment tag for v${{ needs.check_if_version_upgraded.outputs.to_version }}"
+          git push --tags
 
   docker:
     runs-on: ubuntu-latest
@@ -111,6 +111,9 @@ jobs:
     name: "Trigger production deploy"
     runs-on: ubuntu-latest
     environment: production
+    concurrency:
+      group: deploy-to-production
+      cancel-in-progress: true
     needs:
       - docker
       - poke_gitops
@@ -125,16 +128,16 @@ jobs:
       - trigger_production_deploy
       - check_if_version_upgraded
       - create_tag
-    # We create a release only when all of the above are validated:
-    # - we are on default branch
-    # - version has been upgraded
-    # - we push to production
     if: |
       needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' &&
       (
         github.event_name == 'push' ||
         needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
       )
+#     We create a release only when all of the above are validated:
+#     - we are on default branch
+#     - version has been upgraded
+#     - we push to production
     env:
       TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
@@ -156,18 +159,14 @@ jobs:
             const releaseNotes = await github.request(`POST /repos/${{ github.repository }}/releases/generate-notes`, {
               tag_name: `v${{ env.TO_VERSION }}`,
               previous_tag_name: `${{steps.get-latest-release-tag.outputs.result}}` })
-            return releaseNotes.data
+            core.setOutput("name", releaseNotes.data.name);
+            core.setOutput("body", releaseNotes.data.body);
       - name: Create release notes on github
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const tag = `v${{ env.TO_VERSION }}`;
-
-            console.log('name : ', `${{fromJson(needs.generate-release-notes.outputs.release-notes).name}}`)
-            console.log('body : ', `${{fromJson(needs.generate-release-notes.outputs.release-notes).body}}`)
-            console.log('tag : ', tag )
             await github.request(`POST /repos/${{ github.repository }}/releases`, {
               tag_name: `v${{ env.TO_VERSION }}`,
-              name: `${{fromJson(needs.generate-release-notes.outputs.release-notes).name}}`,
-              body: `${{fromJson(needs.generate-release-notes.outputs.release-notes).body}}`})
+              name: `${{ steps.generate-release-notes.outputs.name }}`,
+              body: `${{ steps.generate-release-notes.outputs.body }}`})
