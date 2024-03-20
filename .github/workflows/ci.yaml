@@ -70,11 +70,11 @@ jobs:
         env:
           TO_VERSION: test-${{ needs.check_if_version_upgraded.outputs.to_version }}
         run: |
-          OUT_API=codegouvfr/sill-api:$TO_VERSION
+          OUT_API=$GITHUB_REPOSITORY-api:$TO_VERSION
           OUT_API=$(echo "$OUT_API" | awk '{print tolower($0)}')
           echo ::set-output name=docker_api_tags::$OUT_API
 
-          OUT_WEB=codegouvfr/sill-web:$TO_VERSION
+          OUT_WEB=$GITHUB_REPOSITORY-web:$TO_VERSION
           OUT_WEB=$(echo "$OUT_WEB" | awk '{print tolower($0)}')
           echo ::set-output name=docker_web_tags::$OUT_WEB
 
