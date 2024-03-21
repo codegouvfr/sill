@@ -18,8 +18,11 @@ COPY api/ api/
 COPY web/src/ web/src/
 COPY web/config-overrides.js web/tsconfig.json web/
 
-RUN sed -i '/"homepage":/d' web/package.json
+WORKDIR /app/web
+RUN yarn prepare
+RUN sed -i '/"homepage":/d' package.json
 
+WORKDIR /app
 RUN yarn build
 
 WORKDIR /app/api
