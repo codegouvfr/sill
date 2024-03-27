@@ -109,7 +109,7 @@ jobs:
         repository: codegouvfr/paris-sspcloud
 
   trigger_production_deploy:
-    name: "Trigger production deploy (TODO)"
+    name: "Trigger production deploy"
     runs-on: ubuntu-latest
     environment: production
 #    concurrency:
