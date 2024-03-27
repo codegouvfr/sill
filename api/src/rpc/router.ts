@@ -1,29 +1,27 @@
-import type { ReturnType } from "tsafe";
-import { TRPCError } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
+import * as fs from "fs";
+import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless";
+import memoize from "memoizee";
+import fetch from "node-fetch";
+import { join as pathJoin } from "path";
+import superjson from "superjson";
+import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
-import * as fs from "fs";
-import { join as pathJoin } from "path";
-import { getProjectRoot } from "../tools/getProjectRoot";
-import fetch from "node-fetch";
-import type { Core, Context as CoreContext } from "../core";
-import type { Context } from "./context";
-import type { User } from "./user";
-import type { KeycloakParams } from "../tools/createValidateKeycloakSignature";
-import memoize from "memoizee";
+import type { Context as CoreContext, Core } from "../core";
+import { ExternalDataOrigin, Language, languages, type LocalizedString } from "../core/ports/GetSoftwareExternalData";
 import type {
-    SoftwareType,
+    DeclarationFormData,
+    InstanceFormData,
     Os,
     SoftwareFormData,
-    DeclarationFormData,
-    InstanceFormData
+    SoftwareType
 } from "../core/usecases/readWriteSillData";
-import type { Equals } from "tsafe";
+import type { KeycloakParams } from "../tools/createValidateKeycloakSignature";
+import { getMonorepoRootPackageJson } from "../tools/getMonorepoRootPackageJson";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
-import { initTRPC } from "@trpc/server";
-import superjson from "superjson";
-import { type LocalizedString, Language, languages, ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
-import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless";
+import type { Context } from "./context";
+import type { User } from "./user";
 
 export function createRouter(params: {
     core: Core;
@@ -75,7 +73,7 @@ export function createRouter(params: {
         "getApiVersion": loggedProcedure.query(
             (() => {
                 const out: string = JSON.parse(
-                    fs.readFileSync(pathJoin(getProjectRoot(), "package.json")).toString("utf8")
+                    fs.readFileSync(pathJoin(getMonorepoRootPackageJson(), "package.json")).toString("utf8")
                 )["version"];
 
                 return () => out;

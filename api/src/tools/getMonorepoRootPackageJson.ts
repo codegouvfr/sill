@@ -8,12 +8,11 @@ function getProjectRootRec(dirPath: string): string {
     return getProjectRootRec(path.join(dirPath, ".."));
 }
 
-let result: string | undefined = undefined;
-
-export function getProjectRoot(): string {
-    if (result !== undefined) {
-        return result;
+let monorepoRoot: string | undefined = undefined;
+export function getMonorepoRootPackageJson(): string {
+    if (monorepoRoot !== undefined) {
+        return monorepoRoot;
     }
-
-    return (result = getProjectRootRec(__dirname));
+    monorepoRoot = getProjectRootRec(path.join(__dirname, "../../.."));
+    return monorepoRoot;
 }
