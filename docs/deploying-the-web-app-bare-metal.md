@@ -48,8 +48,10 @@ sudo apt-get install git
 git clone https://github.com/codegouvfr/sill-api
 git clone https://github.com/codegouvfr/sill-web
 
-# Don't forget to replace by the correct values! 
-# (or at least everywhere there is "xxxx")
+# You can look at 
+# https://github.com/codegouvfr/sill-api/blob/main/.env.sh
+# and https://github.com/codegouvfr/sill-api/blob/main/src/env.ts  
+# For more info on the configuration available.  
 cat << EOF > sill-api/.env.local
 export SILL_KEYCLOAK_URL=https://auth.code.gouv.fr/auth
 export SILL_KEYCLOAK_REALM=codegouv
@@ -68,6 +70,8 @@ export SILL_GITHUB_TOKEN=ghp_xxxxxx
 export SILL_WEBHOOK_SECRET=xxxxxxx
 export SILL_API_PORT=3084
 export SILL_IS_DEV_ENVIRONNEMENT=false
+# Can be "wikidata" or "HAL" (See: https://hal.science/)
+export SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN=wikidata 
 EOF
 ```
 

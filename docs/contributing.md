@@ -1,5 +1,5 @@
-Thank you for you willingnes to contribute, all PRs are welcome!
+Vous pouvez contribuer à ce dépôt de documentation en envoyant des [pull requests](https://github.com/codegouvfr/sill-docs/pulls) ou en remontant des [issues](https://github.com/codegouvfr/sill-docs/issues).
 
-If you don't know where to start, go ahead an try to run the WebApp locally you can start hacking from here.
+Pour contribuer à l'interface, voir le dépôt [sill-web](https://github.com/codegouvfr/sill-web/.)
 
-Here are the [issues](https://github.com/codegouvfr/sill-web/issues) for which your help are welcome.
+Pour contribuer au *backend*, voir le dépôt [sill-api](https://github.com/codegouvfr/sill-api/.)

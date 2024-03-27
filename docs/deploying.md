@@ -85,6 +85,15 @@ https://github.com/codegouvfr/paris-sspcloud/tree/main/cert-manager
 
 ## Installing Keycloak
 
+> UPDATE: Note in this guide we give the instructions for installing Keycloak version 18.  
+> Today it's quite outdated, the latest version ok Keycloak at the time of writing this lines
+> is 23. 
+> I won't update this instruction by fear of making an error if I don't test thoroughly.  
+> You can however refer to the installation guide of Onyxia and adapt the instruction
+> for the SILL: https://docs.onyxia.sh/admin-doc/readme/user-authentication  
+> If you install Keycloak 23 or up don't forget to use `keycloak-theme.jar` instead of `retrocompat-keycloak-theme.jar`
+> (See note below)  
+
 ```bash
 helm repo add codecentric https://codecentric.github.io/helm-charts
 
@@ -131,7 +140,8 @@ extraInitContainers: |
       - |
         curl -L -f -S -o /extensions/keycloak-franceconnect-4.2.0.jar https://github.com/InseeFr/Keycloak-FranceConnect/releases/download/4.2.0/keycloak-franceconnect-4.2.0.jar
         # Here be carefull, the version number should match the version of sill-web in production.
-        curl -L -f -S -o /extensions/sill-web.jar https://github.com/codegouvfr/sill-web/releases/download/v0.0.1/keycloak-theme.jar
+        # Also note that if you are deploying Keycloak 23 or later you should remove the "retrocompat-" in the url below. Keycloak 22 is not supported.  
+        curl -L -f -S -o /extensions/sill-web.jar https://github.com/codegouvfr/sill-web/releases/download/v1.40.3/retrocompat-keycloak-theme.jar
     volumeMounts:
       - name: extensions
         mountPath: /extensions
@@ -242,7 +252,7 @@ You can now login to the **administration console** of **https://sill-auth.my-do
       2. _Email theme_: **dsfr**
       3. _Internationalization_: **Enabled**
       4. _Supported locales_: **en fr**
-    5. On the tab Token
+    5. On the tab Session
        1. SSO Session Idle: 14 days - This setting and the following two are so that when the user click "remember me" when he logs in, he dosen't have to loggin again for the next two weeks.
        2. SSO Session Idle Remember Me: 14 days
        3. SSO Session Max Remember Me: 14 days
@@ -367,6 +377,10 @@ DATA_REPO_SSH_URL="git@github.com:codegouvfr/sill-data.git" # Replace by the rep
 KEYCLOAK_PASSWORD=yyyyyy # Make sure it's the same that the one you defined earlyer
 WEBHOOK_SECRET=dSdSPxxxxxx # (optional) Some random caracters 
 GITHUB_TOKEN=ghp_xxxxxx # A token, just for the GitHub API rate limit.  
+SOFTWARE_DATA_ORIGIN=wikidata # Can be "wikidata" or "HAL" (See: https://hal.science/)
+
+WEB_VERSION="1.41.2" # To keep up to date with https://github.com/codegouvfr/sill-web/releases/
+API_VERSION="1.20.5" # To keep up to date with https://github.com/codegouvfr/sill-api/releases/
 
 cat << EOF > ./sill-values.yaml
 ingress:
@@ -381,7 +395,7 @@ ingress:
 web:
   replicaCount: 2
   image:
-    version: 0.0.1
+    version: $WEB_VERSION
   nodeSelector:
     infra: "true"
   tolerations:
@@ -391,13 +405,14 @@ web:
 api:
   replicaCount: 1
   image:
-    version: 0.0.1
+    version: $API_VERSION
   nodeSelector:
     infra: "true"
   tolerations:
     - key: "infra"
       operator: "Exists"
   env:
+    # For seeing all what's available: https://github.com/codegouvfr/sill-api/blob/main/src/env.ts
     CONFIGURATION: |
       {
         "keycloakParams": {
@@ -419,6 +434,7 @@ api:
         "sshPrivateKeyForGit": "$SSH_PRIVATE_KEY",
         "githubWebhookSecret": "$WEBHOOK_SECRET",
         "githubPersonalAccessTokenForApiRateLimit": "$GITHUB_TOKEN",
+        "externalSoftwareDataOrigin": "$SOFTWARE_DATA_ORIGIN"
       }
 
 EOF
@@ -434,6 +450,6 @@ If you want, and if you data repo is hosted on GitHub you can enable a Webhook t
 
 ![](./assets/webhook.png)
 
-Type some random string as secret. You then need to provide it to `sill-api` so it know it can trust the ping to be genuin (you can do that later, for now just write down the secret).
+Type some random string as secret. You then need to provide it to `sill-api` so it know it can trust the ping to be genuine (you can do that later, for now just write down the secret).
 
 ![](./assets/webhook-2.png)
