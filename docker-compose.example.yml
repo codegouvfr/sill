@@ -2,13 +2,13 @@ version: "3.8"
 services:
   api:
     platform: linux/amd64
-    image: codegouvfr/api
+    image: codegouvfr/sill-api:latest
     env_file: .env
     restart: unless-stopped
 
   web:
     platform: linux/amd64
-    image: codegouvfr/web
+    image: codegouvfr/sill-web:latest
     restart: unless-stopped
 
   nginx:
