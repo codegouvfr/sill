@@ -112,8 +112,9 @@ jobs:
             console.log(`Found ${oldPrereleases.length} old prereleases`);
 
             for (const release of oldPrereleases) {
-              console.log(`Deleting prerelease: ${release.tag_name}`);
+              console.log(`Deleting prerelease: ${release.tag_name} and the corresponding tag`);
               await github.request(`DELETE /repos/${{ github.repository }}/releases/${release.id}`);
+              await github.request(`DELETE /repos/${{ github.repository }}/git/refs/tags/${release.tag_name}`);
             }
 
   docker:
@@ -235,11 +236,3 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Delete prerelease with same version and corresponding -rc tag
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const releaseCandidateTag = `v${{ env.TO_VERSION }}-rc`;
-            await github.request(`DELETE /repos/${{ github.repository }}/releases/${releaseCandidateTag}`);
-            await github.request(`DELETE /repos/${{ github.repository }}/git/refs/tags/${releaseCandidateTag}`);
