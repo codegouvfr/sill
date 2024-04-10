@@ -42,6 +42,8 @@ jobs:
     needs:
       - check_if_version_upgraded
     if: needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true'
+    env:
+      TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -49,7 +51,7 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-          git tag -a v${{ needs.check_if_version_upgraded.outputs.to_version }} -m "Deployment tag for v${{ needs.check_if_version_upgraded.outputs.to_version }}"
+          git tag -a v${{ env.TO_VERSION }} -m "Deployment tag for v${{ env.TO_VERSION }}"
           git push --tags
           
 
@@ -175,12 +177,12 @@ jobs:
     name: "Trigger production deploy"
     runs-on: ubuntu-latest
     environment: production
-#    concurrency:
-#      group: deploy-to-production
-#      cancel-in-progress: true
-#    needs:
-#      - docker
-#      - poke_gitops
+    concurrency:
+      group: deploy-to-production
+      cancel-in-progress: true
+    needs:
+      - docker
+      - poke_gitops
     steps:
     - run: echo "Triggering production deploy"
     - name: Set up SSH
@@ -223,23 +225,21 @@ jobs:
             const latestRelease = await github.request(`GET /repos/${{ github.repository }}/releases/latest`)
             return latestRelease.data.tag_name
           result-encoding: string
-      - name: Generate release notes content from latest release
-        id: generate-release-notes
+      - name: "Generate release candidate on github"
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release v${{ env.TO_VERSION }}
+          prerelease: false
+          tag_name: v${{ env.TO_VERSION }}
+          target_commitish: ${{ steps.get-latest-release-tag.outputs.name }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Delete prerelease with same version and corresponding -rc tag
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const releaseNotes = await github.request(`POST /repos/${{ github.repository }}/releases/generate-notes`, {
-              tag_name: `v${{ env.TO_VERSION }}`,
-              previous_tag_name: `${{steps.get-latest-release-tag.outputs.result}}` })
-            core.setOutput("name", releaseNotes.data.name);
-            core.setOutput("body", releaseNotes.data.body);
-      - name: Create release notes on github
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.request(`POST /repos/${{ github.repository }}/releases`, {
-              tag_name: `v${{ env.TO_VERSION }}`,
-              name: `${{ steps.generate-release-notes.outputs.name }}`,
-              body: `${{ steps.generate-release-notes.outputs.body }}`})
+            const releaseCandidateTag = `v${{ env.TO_VERSION }}-rc`;
+            await github.request(`DELETE /repos/${{ github.repository }}/releases/${releaseCandidateTag}`);
+            await github.request(`DELETE /repos/${{ github.repository }}/git/refs/tags/${releaseCandidateTag}`);
