@@ -10,10 +10,16 @@ Via [codegouvfr/paris-sspcloud](https://github.com/codegouvfr/paris-sspcloud)
 
 ## Source code
 
-* [codegouvfr/sill-docs](https://github.com/codegouvfr/sill-docs): This documentation website.
-* [codegouvfr/sill-web](https://github.com/codegouvfr/sill-web): The web application, runs in the browser.
-* [codegouvfr/sill-api](https://github.com/codegouvfr/sill-api): The RPC API consumed by the web application.
-* [codegouvfr/sill-data](https://github.com/codegouvfr/sill-data): Production database.
+All the source code is hosted on this repository.
+
+The repository is the source code for 3 differents apps :
+
+* `/web`: The web application, runs in the browser. The site is here : [https://code.gouv.fr/sill](https://code.gouv.fr/sill)
+* `/api`: The RPC API consumed by the web application.
+* `/docs`: The documentation. It is hosted on [https://codegouvfr.github.io/sill](https://codegouvfr.github.io/sill)
+
+The data is hosted on separate repositories:
+* [codegouvfr/sill-data](https://github.com/codegouvfr/sill-data): Production database (private repository).
 * [codegouvfr/sill-data-test](https://github.com/codegouvfr/sill-data-test): Preprod database
 * [codegouvfr/sill-data-template](https://github.com/codegouvfr/sill-data-template): Template for creating new database.
 

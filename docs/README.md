@@ -22,7 +22,7 @@ En 2022, le SILL a été repensé pour permettre aux agents publics de référen
 
 [Summary](_sidebar.md)
 
-Ce site de documentation utilise [docsify-dsfr-template](https://github.com/codegouvfr/docsify-dsfr-template).
+La documentation (dossier `/doc`) utilise [docsify-dsfr-template](https://github.com/codegouvfr/docsify-dsfr-template).
 
 # Contribuer
 
