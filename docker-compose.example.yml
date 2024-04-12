@@ -16,7 +16,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/etc/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/:/etc/nginx/conf.d/
     depends_on:
       - api
       - web

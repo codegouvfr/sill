@@ -18,9 +18,9 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80" # Map port 80 on the host to port 80 in the NGINX container
+      - "80:80"
     volumes:
-      - ./nginx/etc/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/:/etc/nginx/conf.d/
     depends_on:
       - api
       - web
