@@ -192,7 +192,7 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
         ssh-keyscan code.gouv.fr >> ~/.ssh/known_hosts
-        ssh -o StrictHostKeyChecking=no web@code.gouv.fr "ls -la websites"
+        ssh -o StrictHostKeyChecking=no web@code.gouv.fr "cat websites/sill/docker-compose.yml && node update-sill.js && cat websites/sill/docker-compose.yml"
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
