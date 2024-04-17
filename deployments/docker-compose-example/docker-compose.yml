@@ -14,10 +14,229 @@ services:
   nginx:
     image: nginx:alpine
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx/:/etc/nginx/conf.d/
     depends_on:
       - api
       - web
     restart: unless-stopped
+
+#  server {
+#  server_name code.etalab.gouv.fr;
+#  listen 443 ssl; # managed by Certbot
+#  rewrite ^/ https://code.gouv.fr;
+#  ssl_certificate /etc/letsencrypt/live/code.etalab.gouv.fr-0002/fullchain.pem; # managed by Certbot
+#  ssl_certificate_key /etc/letsencrypt/live/code.etalab.gouv.fr-0002/privkey.pem; # managed by Certbot
+#  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+#  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+#}
+#
+#  server {
+#  server_name sill.code.gouv.fr;
+#  listen 80;
+#  return 301 $scheme://code.gouv.fr$request_uri;
+#}
+#
+#  server {
+#  server_name sill.code.gouv.fr;
+#  listen 443 ssl; # managed by Cerbot
+#  return 301 $scheme://code.gouv.fr$request_uri;
+#  ssl_certificate /etc/letsencrypt/live/sill.code.gouv.fr/fullchain.pem; # managed by Certbot
+#  ssl_certificate_key /etc/letsencrypt/live/sill.code.gouv.fr/privkey.pem; # managed by Certbot
+#  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+#  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+#}
+#
+#  server {
+#  if ($host = code.etalab.gouv.fr) {
+#  return 301 https://$host$request_uri;
+#  } # managed by Certbot
+#
+#  listen 80;
+#  server_name code.etalab.gouv.fr;
+#  rewrite ^/ https://code.gouv.fr;
+## return 404; # managed by Certbot
+#}
+#
+#  server {
+#  listen 80;
+#  server_name code.gouv.fr;
+#  location / {
+#  return 301 https://$host$request_uri;
+#}
+#}
+#
+#  server {
+#  server_name code.gouv.fr;
+#  root /home/web/websites/code.gouv.fr_home/production;
+#
+#  index index.html;
+#  autoindex off;
+#  log_not_found off;
+#  access_log off;
+#  error_log off;
+#  error_page 404 500 501 /404.html;
+#  charset utf-8;
+#  gzip on;
+#  gzip_min_length 1000;
+#  gzip_comp_level 5;
+#  gzip_proxied any;
+#  gzip_vary on;
+#  gzip_types text/plain text/css application/javascript image/gif image/png image/jpeg image/svg+xml image/x-icon;
+#
+#  listen 443 ssl; # managed by Certbot
+#  ssl_certificate /etc/letsencrypt/live/code.gouv.fr/fullchain.pem; # managed by Certbot
+#  ssl_certificate_key /etc/letsencrypt/live/code.gouv.fr/privkey.pem; # managed by Certbot
+#  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+#  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+#
+#  location = /robots.txt {
+#  allow all;
+#  log_not_found off;
+#  access_log off;
+#  error_log off;
+#}
+#
+#  rewrite ^/bluehats/?$ https://code.gouv.fr/fr/bluehats permanent;
+#  rewrite ^/gazette/?$ https://code.gouv.fr/fr/bluehats/tags/gazette/ permanent;
+#  rewrite ^/plan-action-logiciels-libres-et-communs-numeriques/ https://code.gouv.fr/fr/plan-action-logiciels-libres-et-communs-numeriques/ permanent;
+#  rewrite ^/utiliser/marches-interministeriels-support-expertise-logiciels-libres/ https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/ permanent;
+#  rewrite ^/blog/?$ https://code.gouv.fr/fr/blog/ permanent;
+#  rewrite ^/utiliser/?$ https://code.gouv.fr/fr/utiliser/ permanent;
+#  rewrite ^/rencontres/?$ https://code.gouv.fr/fr/bluehats/tags/rencontre/ permanent;
+#  rewrite ^/ateliers/?$ https://code.gouv.fr/fr/bluehats/tags/atelier/ permanent;
+#  rewrite ^/mission/?$ https://code.gouv.fr/fr/mission/ permanent;
+#  rewrite ^/dev/?$ https://code.gouv.fr/fr/devs/ permanent;
+#  rewrite ^/doc/?$ https://code.gouv.fr/fr/doc/ permanent;
+#  rewrite ^/ateliers/metaverse/?$ https://code.gouv.fr/ateliers/metavers/ permanent;
+#  rewrite ^/newsletters/subscribe/bluehats@mail.etalab.studio https://code.gouv.fr/newsletters/subscribe/bluehats@mail.codegouv.fr permanent;
+#  rewrite ^/newsletters/unsubscribe/bluehats@mail.etalab.studio https://code.gouv.fr/newsletters/unsubscribe/bluehats@mail.codegouv.fr permanent;
+#  rewrite ^/newsletters/subscribe/logiciels-libres-dsi@mail.etalab.studio https://code.gouv.fr/newsletters/subscribe/logiciels-libres-dsi@mail.codegouv.fr permanent;
+#  rewrite ^/newsletters/unsubscribe/logiciels-libres-dsi@mail.etalab.studio https://code.gouv.fr/newsletters/unsubscribe/logiciels-libres-dsi@mail.codegouv.fr permanent;
+#  # rewrite ^/demos/catala/ https://code.gouv.fr/demos/catala/index.html permanent;
+#  rewrite ^/rsrc/(.*)$ https://code.gouv.fr/docs/$1 permanent;
+#  rewrite ^/fr/blog/sauvez-la-date-hackathon-bluehats-2024/ https://code.gouv.fr/fr/blog/sauvez-la-date-garagethon-bluehats-2024/ permanent;
+#
+#  location /mimo {
+#  alias /home/gcf/MIMO_Libreoffice/;
+#  autoindex on;
+#}
+#
+#  location /demos/catala {
+#  alias /home/emilerolley/catala-dsfr/;
+#  index index.html;
+#  try_files $uri $uri/ $uri.html /index.html =404;
+#  autoindex off;
+#}
+#
+#  location /data/ {
+#  alias /home/web/codegouvfr_data/;
+#  add_header Access-Control-Allow-Origin *;
+#}
+#
+#  location /newsletters/ {
+#  proxy_pass http://localhost:5000/;
+#}
+#
+#  location /public {
+#  alias /home/web/websites/code.gouv.fr_public/production/;
+#  charset utf-8;
+#}
+#
+#  location /public/sitemap.xml {
+#  alias /home/web/codegouvfr_data/sitemap.xml;
+#}
+#
+#  location /documentation {
+#  alias /home/web/websites/documentation/;
+#  charset utf-8;
+#}
+#
+#  location /guides/juridique {
+#  alias /home/web/websites/guide-juridique-logiciel-libre/;
+#  charset utf-8;
+#}
+#
+## # Quatre blocs suivants à décommenter quand on relance le SILL
+#
+## https://github.com/codegouvfr/sill-docs/blob/main/deploying-the-web-app-bare-metal.md#ngnix-configuration
+#  location ~ ^/sill/api {
+#  proxy_pass http://localhost:3084;
+#  proxy_set_header X-Real-IP $remote_addr;
+#  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#}
+#
+## Cache assets in the static directory for 1 year
+#  location ~ ^/sill/static/(.+\..+)$ {
+#  expires 1y;
+#  access_log off;
+#  add_header Cache-Control "public";
+#  root /home/web/websites/sill/sill-web/build;
+#  try_files /static/$1 =404;
+#}
+#
+## Serve other asset files directly
+#  location ~ ^/sill/(.+\..+)$ {
+#  root /home/web/websites/sill/sill-web/build;
+#  try_files /$1 =404;
+#}
+#
+## Match /sill and any subpaths, and always serve the index.html file
+#  location ~ ^/sill(/.*)?$ {
+#  root /home/web/websites/sill/sill-web/build;
+#  try_files /index.html =404;
+#}
+#
+## # A commenter quand on relance le SILL:
+## rewrite ^/sill(/.*)?$ https://code.gouv.fr/fr/sill/ permanent;
+#
+#  rewrite ^/fr/sill(/.*)?$ https://code.gouv.fr/sill/ permanent;
+#  rewrite ^/$ https://code.gouv.fr/fr permanent;
+#}
+#
+#  server {
+#  if ($host = code.gouv.fr) {
+#  return 301 https://$host$request_uri;
+#  } # managed by Certbot
+#
+#  listen 80;
+#  server_name code.gouv.fr;
+#  return 404; # managed by Certbot
+#}
+#
+#  server {
+#  server_name communs.numerique.gouv.fr;
+#  root /home/web/websites/communs.numerique.gouv.fr;
+#
+#  log_not_found off;
+#  access_log off;
+#  error_log off;
+#  # error_page 404 500 501 /404.html;
+#
+#  location = /robots.txt {
+#  allow all;
+#  log_not_found off;
+#  access_log off;
+#  error_log off;
+#}
+#
+#  listen 443 ssl; # managed by Certbot
+#  ssl_certificate /etc/letsencrypt/live/communs.numerique.gouv.fr/fullchain.pem; # managed by Certbot
+#  ssl_certificate_key /etc/letsencrypt/live/communs.numerique.gouv.fr/privkey.pem; # managed by Certbot
+#  include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+#  ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+#
+#  rewrite ^/(.*) https://code.gouv.fr/$1 permanent;
+#
+#}
+#
+#  server {
+#  if ($host = communs.numerique.gouv.fr) {
+#  return 301 https://$host$request_uri;
+#  } # managed by Certbot
+#
+#  listen 80;
+#  server_name communs.numerique.gouv.fr;
+#  return 404; # managed by Certbot
+#}
