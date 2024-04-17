@@ -83,7 +83,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const latestRelease = await github.request(`GET /repos/${{ github.repository }}/releases/latest`)
-            return latestRelease.data.tag_name
+            core.setOutput('name', latestRelease.data.tag_name)
           result-encoding: string
       - name: "Generate release candidate on github"
         uses: softprops/action-gh-release@v2
@@ -166,12 +166,7 @@ jobs:
     - uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
-        event-type: update_sill_api
-        repository: codegouvfr/paris-sspcloud
-    - uses: peter-evans/repository-dispatch@v3
-      with:
-        token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
-        event-type: update_sill_web
+        event-type: update_sill
         repository: codegouvfr/paris-sspcloud
 
   trigger_production_deploy:
@@ -208,11 +203,7 @@ jobs:
       - check_if_version_upgraded
       - create_tag
     if: |
-      needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' &&
-      (
-        github.event_name == 'push' ||
-        needs.check_if_version_upgraded.outputs.is_release_beta == 'true'
-      )
+      needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' && github.event_name == 'push'
 #     We create a release only when all of the above are validated:
 #     - we are on default branch
 #     - version has been upgraded
