@@ -2,3 +2,4 @@
 node_modules
 .turbo
 .env
+deploy_sill.js
