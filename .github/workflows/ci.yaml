@@ -59,6 +59,8 @@ jobs:
     needs:
       - check_if_version_upgraded
       - create_tag
+    permissions:
+      contents: write
     env:
       PRE_RELEASE_TAG: v${{ needs.check_if_version_upgraded.outputs.to_version }}-rc
     steps:
@@ -75,22 +77,12 @@ jobs:
           XDG_CACHE_HOME: "/home/runner/.cache/yarn"
       - run: mv web/build_keycloak/target/retrocompat-*.jar retrocompat-keycloak-theme.jar
       - run: mv web/build_keycloak/target/*.jar keycloak-theme.jar
-      - name: Get tag of latest release
-        id: get-latest-release-tag
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const latestRelease = await github.request(`GET /repos/${{ github.repository }}/releases/latest`)
-            return latestRelease.data.tag_name
-          result-encoding: string
       - name: "Generate release candidate on github"
         uses: softprops/action-gh-release@v2
         with:
           name: Release candidate ${{ env.PRE_RELEASE_TAG }}
           prerelease: true
           tag_name: ${{ env.PRE_RELEASE_TAG }}
-#          target_commitish: ${{ steps.get-latest-release-tag.outputs.result }}
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
@@ -208,21 +200,11 @@ jobs:
     env:
       TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
-      - name: Get tag of latest release
-        id: get-latest-release-tag
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const latestRelease = await github.request(`GET /repos/${{ github.repository }}/releases/latest`)
-            return latestRelease.data.tag_name
-          result-encoding: string
       - name: "Generate release candidate on github"
         uses: softprops/action-gh-release@v2
         with:
           name: Release v${{ env.TO_VERSION }}
           prerelease: false
           tag_name: v${{ env.TO_VERSION }}
-          target_commitish: ${{ steps.get-latest-release-tag.outputs.name }}
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
