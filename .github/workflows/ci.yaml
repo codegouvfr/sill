@@ -90,7 +90,7 @@ jobs:
           name: Release candidate ${{ env.PRE_RELEASE_TAG }}
           prerelease: true
           tag_name: ${{ env.PRE_RELEASE_TAG }}
-          target_commitish: ${{ steps.get-latest-release-tag.outputs.result }}
+#          target_commitish: ${{ steps.get-latest-release-tag.outputs.result }}
           generate_release_notes: true
           token: ${{ secrets.GITHUB_TOKEN }}
           files: |
