@@ -69,6 +69,7 @@ jobs:
         with:
           node-version: "20"
       - uses: bahmutov/npm-install@v1
+      - run: cd web && yarn prepare
       - run: cd web && npx keycloakify && cd ..
       - name: Build
         run: yarn build

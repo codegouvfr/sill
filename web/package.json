@@ -33,7 +33,7 @@
         "evt": "^2.5.3",
         "flexsearch": "0.7.21",
         "i18nifty": "^3.1.2",
-        "keycloakify": "^9.2.0",
+        "keycloakify": "^9.6.6",
         "memoizee": "^0.4.14",
         "moment": "^2.29.1",
         "oidc-spa": "^4.0.0",

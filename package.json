@@ -10,8 +10,7 @@
     "test": "turbo test",
     "format": "turbo format",
     "format:check": "turbo format:check",
-    "fullcheck": "turbo typecheck format:check test",
-    "prepare": "yarn --cwd web prepare"
+    "fullcheck": "turbo typecheck format:check test"
   },
   "devDependencies": {
     "turbo": "^1.12.5"
