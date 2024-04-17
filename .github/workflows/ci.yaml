@@ -20,7 +20,7 @@ jobs:
         run: cd api && yarn build
       - name: Fullcheck
         run: yarn fullcheck
-#
+  #
   check_if_version_upgraded:
     name: Check if version upgrade
     if: github.event_name == 'push'
@@ -53,7 +53,6 @@ jobs:
           git config --local user.name "GitHub Actions"
           git tag -a v${{ env.TO_VERSION }} -m "Deployment tag for v${{ env.TO_VERSION }}"
           git push --tags
-          
 
   pre-release:
     runs-on: ubuntu-latest
@@ -83,7 +82,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const latestRelease = await github.request(`GET /repos/${{ github.repository }}/releases/latest`)
-            core.setOutput('name', latestRelease.data.tag_name)
+            return latestRelease.data.tag_name
           result-encoding: string
       - name: "Generate release candidate on github"
         uses: softprops/action-gh-release@v2
@@ -91,7 +90,7 @@ jobs:
           name: Release candidate ${{ env.PRE_RELEASE_TAG }}
           prerelease: true
           tag_name: ${{ env.PRE_RELEASE_TAG }}
-          target_commitish: ${{ steps.get-latest-release-tag.outputs.name }}
+          target_commitish: ${{ steps.get-latest-release-tag.outputs.result }}
           generate_release_notes: true
           files: |
             retrocompat-keycloak-theme.jar
@@ -108,7 +107,7 @@ jobs:
 
             const oldPrereleases = releases.data
               .filter(release => release.prerelease && release.tag_name !== excludeTagName);
-            
+
             console.log(`Found ${oldPrereleases.length} old prereleases`);
 
             for (const release of oldPrereleases) {
@@ -120,9 +119,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     needs:
-     - check_if_version_upgraded
-     - create_tag
-     - pre-release
+      - check_if_version_upgraded
+      - create_tag
+      - pre-release
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3
@@ -163,11 +162,11 @@ jobs:
     needs:
       - docker
     steps:
-    - uses: peter-evans/repository-dispatch@v3
-      with:
-        token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
-        event-type: update_sill
-        repository: codegouvfr/paris-sspcloud
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT_PRIVATE_REPO_DISPATCH }}
+          event-type: update_sill
+          repository: codegouvfr/paris-sspcloud
 
   trigger_production_deploy:
     name: "Trigger production deploy"
@@ -183,17 +182,16 @@ jobs:
     env:
       TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
-    - run: echo "Triggering production deploy"
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan code.gouv.fr >> ~/.ssh/known_hosts
-        ssh -o StrictHostKeyChecking=no web@code.gouv.fr "/home/web/.nvm/versions/node/v17.1.0/bin/node update-sill.js ${{ env.TO_VERSION }}"
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
+      - run: echo "Triggering production deploy"
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan code.gouv.fr >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no web@code.gouv.fr "/home/web/.nvm/versions/node/v17.1.0/bin/node update-sill.js ${{ env.TO_VERSION }}"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
   create_github_release:
     name: "Create release notes"
@@ -204,10 +202,10 @@ jobs:
       - create_tag
     if: |
       needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' && github.event_name == 'push'
-#     We create a release only when all of the above are validated:
-#     - we are on default branch
-#     - version has been upgraded
-#     - we have pushed to production
+    #     We create a release only when all of the above are validated:
+    #     - we are on default branch
+    #     - version has been upgraded
+    #     - we have pushed to production
     env:
       TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
