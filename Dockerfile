@@ -19,7 +19,6 @@ COPY web/src/ web/src/
 COPY web/config-overrides.js web/tsconfig.json web/
 
 WORKDIR /app/web
-RUN yarn prepare
 RUN sed -i '/"homepage":/d' package.json
 
 WORKDIR /app
