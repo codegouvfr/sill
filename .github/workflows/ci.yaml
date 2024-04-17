@@ -92,11 +92,10 @@ jobs:
           tag_name: ${{ env.PRE_RELEASE_TAG }}
           target_commitish: ${{ steps.get-latest-release-tag.outputs.result }}
           generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
           files: |
             retrocompat-keycloak-theme.jar
             keycloak-theme.jar
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Delete old prereleases
         uses: actions/github-script@v7
         with:
@@ -226,5 +225,4 @@ jobs:
           tag_name: v${{ env.TO_VERSION }}
           target_commitish: ${{ steps.get-latest-release-tag.outputs.name }}
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
