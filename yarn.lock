@@ -6246,7 +6246,7 @@ cheerio-select@^2.1.0:
     domhandler "^5.0.3"
     domutils "^3.0.1"
 
-cheerio@^1.0.0-rc.12, cheerio@^1.0.0-rc.5:
+cheerio@1.0.0-rc.12, cheerio@^1.0.0-rc.12, cheerio@^1.0.0-rc.5:
   version "1.0.0-rc.12"
   resolved "https://registry.yarnpkg.com/cheerio/-/cheerio-1.0.0-rc.12.tgz#788bf7466506b1c6bf5fae51d24a2c4d62e47683"
   integrity sha512-VqR8m68vM46BNnuZ5NtnGBKIE/DfN0cRIzg9n40EIq9NOv90ayxLBXA8fXC5gquFRGJSTRqBq25Jt2ECLR431Q==
@@ -6828,6 +6828,17 @@ cpy@^8.1.2:
     p-all "^2.1.0"
     p-filter "^2.1.0"
     p-map "^3.0.0"
+
+cra-envs@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/cra-envs/-/cra-envs-2.1.2.tgz#727c6ba09eca021c627b084870f9977d584eea14"
+  integrity sha512-7iDIcpGHhobDVKlFNIdiJEiGjBNmpmxDuZ9nIHP4L59DFni4WfX3AGSDZOcHegbxHWrFtfTKfaCuHYwv7QqZ1Q==
+  dependencies:
+    cheerio "1.0.0-rc.12"
+    dotenv "^8.2.0"
+    ejs "^3.1.6"
+    minimal-polyfills "^2.2.3"
+    scripting-tools "^0.19.14"
 
 create-ecdh@^4.0.0:
   version "4.0.4"
@@ -7672,7 +7683,7 @@ dotenv@^16.3.0:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
   integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
-dotenv@^8.0.0:
+dotenv@^8.0.0, dotenv@^8.2.0:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
   integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
@@ -15961,6 +15972,11 @@ schema-utils@^4.0.0:
     ajv "^8.9.0"
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
+
+scripting-tools@^0.19.14:
+  version "0.19.15"
+  resolved "https://registry.yarnpkg.com/scripting-tools/-/scripting-tools-0.19.15.tgz#6b6bce272681b2e171c2bf92b1499eceddd064b4"
+  integrity sha512-9PW93z7BTFSma1zPcv/n3r2c+VJDcMsxzLdA924kMDav6ua1io8dv+h9aeIJvwKLcS+Y4hDKsX6NRyfq5eLNwQ==
 
 select-hose@^2.0.0:
   version "2.0.0"

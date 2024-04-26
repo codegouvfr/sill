@@ -13,6 +13,8 @@ services:
       context: "."
       dockerfile: Dockerfile
       target: web
+    environment:
+      PUBLIC_URL: "/sill-docker-compose"
     restart: unless-stopped
 
   nginx:

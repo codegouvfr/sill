@@ -1,10 +1,12 @@
+import { getEnv } from "./env";
+
 /**
  * Examples:
  * '/sill'
  * ''
  **/
 export const appPath = (() => {
-    const envValue = process.env["PUBLIC_URL"];
+    const envValue = getEnv().PUBLIC_URL;
 
     if (envValue === ".") {
         // Storybook

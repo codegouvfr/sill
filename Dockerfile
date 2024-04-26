@@ -17,6 +17,7 @@ COPY turbo.json ./
 COPY api/ api/
 COPY web/src/ web/src/
 COPY web/config-overrides.js web/tsconfig.json web/
+COPY web/.env web/
 
 WORKDIR /app/web
 RUN yarn prepare
@@ -54,7 +55,11 @@ ENTRYPOINT sh -c "forever index.js"
 # to build only front run
 # docker build . --target web --tag my-web-tag
 FROM nginx:stable-alpine as web
+RUN apk add --update nodejs npm
 COPY --from=build /app/web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/node_modules/cra-envs/package.json ./cra-envs-package.json
+RUN npm i -g cra-envs@`node -e 'console.log(require("./cra-envs-package.json")["version"])'`
 WORKDIR /usr/share/nginx
+COPY --from=build /app/web/.env .
 COPY --from=build /app/web/build ./html
-ENTRYPOINT sh -c "nginx -g 'daemon off;'"
+ENTRYPOINT sh -c "npx embed-environnement-variables && nginx -g 'daemon off;'"

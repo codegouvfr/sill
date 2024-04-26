@@ -10,6 +10,8 @@ services:
     platform: linux/amd64
     image: codegouvfr/sill-web:1.42.7
     restart: unless-stopped
+    environment:
+      PUBLIC_URL: "/sill-docker-compose"
 
   nginx:
     image: nginx:alpine

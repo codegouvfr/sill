@@ -30,6 +30,7 @@
         "@types/react-form": "^4.0.2",
         "@uiw/react-md-editor": "^3.23.5",
         "api": "*",
+        "cra-envs": "^2.1.2",
         "evt": "^2.5.3",
         "flexsearch": "0.7.21",
         "i18nifty": "^3.1.2",
