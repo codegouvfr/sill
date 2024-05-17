@@ -24,4 +24,4 @@ Ce dépôt et l'ensemble des dépôts liés à l'application [SILL](https://code
 
 # Licence
 
-2021-2024 [MIT](LICENSE) Direction interministérielle du numérique, mission logiciels libres.
+

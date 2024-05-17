@@ -11,10 +11,3 @@
     <br/>
     <a href="https://github.com/codegouvfr/sill-docs/">Documentation</a>
 </p>
-
-# Licences
-
-DINUM and contributors of the repository, 2022.
-
--   The data are licensed under the [licence Ouverte 2.0](LICENSES/LICENSE.Etalab-2.0.md).
--   The source code is licensed under the [MIT license](LICENSES/LICENSE.MIT.md).

@@ -1,8 +1,8 @@
 # LICENCE OUVERTE 2.0/OPEN LICENCE 2.0
 
-## Réutilisation de l’« Information » sous cette licence
+## Réutilisation de l’« Information » sous  cette licence
 
-Le « Concédant » concède au « Réutilisateur » un droit non exclusif et gratuit de libre « Réutilisation » de l’« Information » objet de la présente licence, à des fins commerciales ou non, dans le monde entier et pour une durée illimitée, dans les conditions exprimées ci-dessous.
+Le « Concédant » concède au « Réutilisateur » un droit non exclusif et gratuit de libre  « Réutilisation » de l’« Information » objet de la présente licence, à des fins commerciales ou non, dans le monde entier et pour une durée illimitée, dans les conditions exprimées ci-dessous.
 
 **Le « Réutilisateur » est libre de réutiliser l’« Information » :**
 
@@ -12,7 +12,7 @@ Le « Concédant » concède au « Réutilisateur » un droit non exclusif et gr
 
 **Sous réserve de :**
 
--   mentionner la paternité de l’«Information» : sa source (a minima le nom du « Concédant ») et la date de la dernière mise à jour de l’« Information » réutilisée.
+-   mentionner la paternité de l’«Information» : sa source (a minima le nom du  « Concédant ») et la date de la dernière mise à jour de l’« Information » réutilisée.
 
 Le « Réutilisateur » peut notamment s’ acquitter de cette condition en indiquant l’adresse (URL) renvoyant vers « l’Information » et assurant une mention effective de sa paternité.
 
@@ -28,9 +28,9 @@ L’« Information » mise à disposition peut contenir des « Données à carac
 
 ## Droits de propriété intellectuelle
 
-Il est garanti au « Réutilisateur » que l’ « Information » ne contient pas de « Droits de propriété intellectuelle » appartenant à des tiers qui pourraient faire obstacle aux libertés qui lui sont accordées par la présente licence.
+Il est garanti au « Réutilisateur » que l’ « Information » ne contient pas de « Droits de propriété intellectuelle »  appartenant à des tiers qui pourraient faire obstacle aux libertés qui lui sont accordées par la présente licence.
 
-Les éventuels « Droits de propriété intellectuelle » détenus par le « Concédant » sur l’ « Information » ne font pas obstacle aux libertés qui sont accordées par la présente licence. Lorsque le « Concédant » détient des « Droits de propriété intellectuelle » » sur l’ « Information », il les cède au « Réutilisateur » de façon non exclusive, à titre gracieux, pour le monde entier, pour toute la durée des « Droits de propriété intellectuelle », et le « Réutilisateur » peut en faire tout usage conformément aux libertés et aux conditions définies par la présente licence.
+Les éventuels « Droits de propriété intellectuelle » détenus par le « Concédant » sur l’ « Information » ne font pas obstacle aux libertés qui sont accordées par la présente licence. Lorsque le « Concédant » détient des « Droits de propriété intellectuelle » » sur l’ « Information », il les cède au « Réutilisateur » de façon non exclusive, à titre gracieux, pour le monde entier, pour toute la durée des « Droits de propriété intellectuelle », et le « Réutilisateur »  peut en faire tout usage conformément aux libertés et aux conditions définies par la présente licence.
 
 ## Responsabilité
 
@@ -57,9 +57,9 @@ Sont considérés, au sens de la présente licence comme :
     -   toute information publique figurant dans des documents communiqués ou publiés par une administration mentionnée au premier alinéa de l’article L.300-2 du CRPA ;
     -   toute information mise à disposition par toute personne selon les termes et conditions de la présente licence.
 -   La « **Réutilisation** » : l’utilisation de l’« Information » à d’autres fins que celles pour lesquelles elle a été produite ou reçue.
--   Le « **Réutilisateur** » : toute personne qui réutilise les « Informations » conformément aux conditions de la présente licence.
+-   Le « **Réutilisateur** » : toute personne qui réutilise les « Informations »  conformément aux conditions de la présente licence.
 -   Des « **Données à caractère personnel** » : toute information se rapportant à une personne physique identifiée ou identifiable, pouvant être identifiée directement ou indirectement. Leur « Réutilisation » est subordonnée au respect du cadre juridique en vigueur.
--   Une « **Information dérivée** » : toute nouvelle donnée ou information créées directement à partir de l’« Information » ou à partir d’une combinaison de l’ « Information » et d’autres données ou informations non soumises à cette licence.
+-   Une « **Information dérivée** » : toute nouvelle donnée ou information créées directement à partir de l’« Information » ou à partir d’une combinaison  de l’ « Information » et d’autres données ou informations non  soumises à cette licence.
 -   Les « **Droits de propriété intellectuelle** » : tous droits identifiés comme tels par le Code de la propriété intellectuelle (droit d’auteur, droits voisins au droit d’auteur, droit sui generis des producteurs de bases de données).
 
 ## À propos de cette licence
