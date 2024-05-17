@@ -20,9 +20,26 @@ La documentation est en cours de mise à jour pour refléter ces changements.
 
 Voir le fichier [CONTRIBUTING.md].
 
+# Gouvernance
+
+Les fonctionnalités implémentées dans l'application du SILL sont
+décidées par la mission logiciels libres de la DINUM, première
+utilisatrice de l'application pour le [Socle interministériel de
+logiciels libres](https://code.gouv.fr/sill).
+
+Dans l'objectif de créer un catalogue pour les logiciels de la
+recherche, des chercheurs échangent avec la mission logiciels libres
+pour rendre l'application assez générique pour cet autre catalogue.
+
+Ces échanges informelles n'exigent pas de gouvernance particulière.
+Néanmoins, par souci de transparence, toutes les décisions sur les
+évolutions de l'application seront discutées publiquement dans des
+issues.
+
 # Licence
 
-2021-2024 Direction interministérielle du numérique, mission logiciels libres.
+2021-2024 Direction interministérielle du numérique, mission logiciels
+libres.
 
 Le code de ce dépôt est publié sous [licence MIT](LICENSES/MIT.txt).
 
