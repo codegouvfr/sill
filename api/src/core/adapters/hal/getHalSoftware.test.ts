@@ -1,10 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { describe, it } from "vitest";
+import { expectToEqual } from "../../../tools/test.helpers";
 import { getHalSoftware } from "./getHalSoftware";
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
-
-const expectToEqual = <T>(actual: T, expected: T) => {
-    expect(actual).toEqual(expected);
-};
 
 describe("HAL", () => {
     describe("getHalSoftware", () => {
