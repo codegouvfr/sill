@@ -10,7 +10,7 @@ import { assert } from "tsafe/assert";
 import { z } from "zod";
 import type { Context as CoreContext, Core } from "../core";
 import { ExternalDataOrigin, Language, languages, type LocalizedString } from "../core/ports/GetSoftwareExternalData";
-import type {
+import {
     DeclarationFormData,
     InstanceFormData,
     Os,
@@ -373,8 +373,8 @@ export function createRouter(params: {
 
                 return { agent };
             }),
-        "getAllowedEmailRegexp": loggedProcedure.query(coreContext.userApi.getAllowedEmailRegexp),
-        "getAllOrganizations": loggedProcedure.query(coreContext.userApi.getAllOrganizations),
+        "getAllowedEmailRegexp": loggedProcedure.query(() => coreContext.userApi.getAllowedEmailRegexp()),
+        "getAllOrganizations": loggedProcedure.query(() => coreContext.userApi.getAllOrganizations()),
         "changeAgentOrganization": loggedProcedure
             .input(
                 z.object({

@@ -1,7 +1,8 @@
 import { createCore, createObjectThatThrowsIfAccessed, type GenericCore } from "redux-clean-architecture";
 import { createCompileData } from "./adapters/compileData";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
-import { createGitDbApi, type GitDbApiParams } from "./adapters/dbApi";
+import { createGitDbApi, type GitDbApiParams } from "./adapters/dbApi/createGitDbApi";
+import { InMemoryDbApi } from "./adapters/dbApi/InMemoryDbApi";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
 import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVersion";
@@ -12,15 +13,20 @@ import { getHalSoftwareOptions } from "./adapters/hal/getHalSoftwareOptions";
 import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
 import type { CompileData } from "./ports/CompileData";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
-import type { DbApi } from "./ports/DbApi";
+import { DbApi, Db } from "./ports/DbApi";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
 import type { UserApi } from "./ports/UserApi";
 import { usecases } from "./usecases";
 
+type GitDbConfig = { dbKind: "git" } & GitDbApiParams;
+type InMemoryDbConfig = { dbKind: "inMemory" };
+
+type DbConfig = GitDbConfig | InMemoryDbConfig;
+
 type ParamsOfBootstrapCore = {
-    gitDbApiParams: GitDbApiParams;
+    dbConfig: DbConfig;
     keycloakUserApiParams: KeycloakUserApiParams | undefined;
     githubPersonalAccessTokenForApiRateLimit: string;
     doPerPerformPeriodicalCompilation: boolean;
@@ -45,9 +51,20 @@ export type State = Core["types"]["State"];
 export type Thunks = Core["types"]["Thunks"];
 export type CreateEvt = Core["types"]["CreateEvt"];
 
+const getDbApiAndInitializeCache = (dbConfig: DbConfig): Db.DbApiAndInitializeCache => {
+    if (dbConfig.dbKind === "git") return createGitDbApi(dbConfig);
+    if (dbConfig.dbKind === "inMemory")
+        return {
+            dbApi: new InMemoryDbApi(),
+            initializeDbApiCache: async () => {}
+        };
+    const shouldNotBeReached: never = dbConfig;
+    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+};
+
 export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ core: Core; context: Context }> {
     const {
-        gitDbApiParams,
+        dbConfig,
         keycloakUserApiParams,
         githubPersonalAccessTokenForApiRateLimit,
         doPerPerformPeriodicalCompilation,
@@ -70,7 +87,7 @@ export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ co
         getServiceProviders
     });
 
-    const { dbApi, initializeDbApiCache } = createGitDbApi(gitDbApiParams);
+    const { dbApi, initializeDbApiCache } = getDbApiAndInitializeCache(dbConfig);
 
     const { userApi, initializeUserApiCache } =
         keycloakUserApiParams === undefined

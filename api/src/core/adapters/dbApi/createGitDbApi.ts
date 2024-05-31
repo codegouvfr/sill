@@ -1,7 +1,7 @@
-import type { DbApi, Db } from "../ports/DbApi";
-import { gitSsh } from "../../tools/gitSsh";
+import type { DbApi, Db } from "../../ports/DbApi";
+import { gitSsh } from "../../../tools/gitSsh";
 import { Deferred } from "evt/tools/Deferred";
-import { type CompiledData, compiledDataPrivateToPublic } from "../ports/CompileData";
+import { type CompiledData, compiledDataPrivateToPublic } from "../../ports/CompileData";
 import * as fs from "fs";
 import { join as pathJoin } from "path";
 import type { ReturnType } from "tsafe";
@@ -24,7 +24,7 @@ export type GitDbApiParams = {
     sshPrivateKey: string;
 };
 
-export function createGitDbApi(params: GitDbApiParams): { dbApi: DbApi; initializeDbApiCache: () => Promise<void> } {
+export function createGitDbApi(params: GitDbApiParams): Db.DbApiAndInitializeCache {
     const { dataRepoSshUrl, sshPrivateKeyName, sshPrivateKey } = params;
 
     const dbApi: DbApi = {

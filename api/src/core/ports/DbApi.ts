@@ -95,6 +95,8 @@ export namespace Db {
         referencedSinceTime: number;
         updateTime: number;
     };
+
+    export type DbApiAndInitializeCache = { dbApi: DbApi; initializeDbApiCache: () => Promise<void> };
 }
 
 export type Os = "windows" | "linux" | "mac" | "android" | "ios";

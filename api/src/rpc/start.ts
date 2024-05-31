@@ -55,7 +55,8 @@ export async function startRpcService(params: {
     console.log({ isDevEnvironnement });
 
     const { core, context: coreContext } = await bootstrapCore({
-        "gitDbApiParams": {
+        "dbConfig": {
+            "dbKind": "git",
             dataRepoSshUrl,
             "sshPrivateKeyName": sshPrivateKeyForGitName,
             "sshPrivateKey": sshPrivateKeyForGit
