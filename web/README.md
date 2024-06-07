@@ -23,5 +23,3 @@ Ce dépôt et l'ensemble des dépôts liés à l'application [SILL](https://code
 # [Contribuer](CONTRIBUTING.md) 🧢
 
 # Licence
-
-
