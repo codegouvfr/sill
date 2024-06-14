@@ -64,6 +64,20 @@ Pour devenir référent ou utilisateur SILL, créez un compte sur
 soit ajouter un nouveau logiciel libre, soit vous ajouter comme
 référent ou utilisateur d'un logiciel libre déjà présent.
 
+## Comment ajouter un prestataire dans le SILL ?
+
+Vous représentez une entreprise proposant des services autour d'un
+logiciel libre du SILL mais vous n'êtes pas référencés comme
+prestataires ?
+
+Vous pouvez contacter l'ADULLACT ou le CNLL pour rejoindre soit le
+[Comptoir du libre](https://comptoir-du-libre.org/fr/) comme
+prestataire soit l'[annuaire du CNLL](https://annuaire.cnll.fr/).
+
+Les agents publics peuvent ouvrir un compte et contribuer au SILL,
+mais ils ne peuvent pas ajouter eux-mêmes un prestataire, inutile de
+les solliciter pour cela.
+
 ## Que signifie être « référent » d'un logiciel ?
 
 ### Qui peut être « référent SILL » ?
