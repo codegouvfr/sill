@@ -77,7 +77,7 @@ Les référents doivent s'inscrire avec leur adresse mail nominative :
 les adresses fonctionnelles (du type sill@ministere.gouv.fr) ne sont
 pas admises.
 
-### Quels sont les tâches du référent ?
+### Quelles sont les tâches du référent ?
 
 **Le référent :**
 
