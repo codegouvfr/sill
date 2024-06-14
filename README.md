@@ -31,7 +31,7 @@ Dans l'objectif de créer un catalogue pour les logiciels de la
 recherche, des chercheurs échangent avec la mission logiciels libres
 pour rendre l'application assez générique pour cet autre catalogue.
 
-Ces échanges informelles n'exigent pas de gouvernance particulière.
+Ces échanges informels n'exigent pas de gouvernance particulière.
 Néanmoins, par souci de transparence, toutes les décisions sur les
 évolutions de l'application seront discutées publiquement dans des
 issues.
