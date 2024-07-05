@@ -194,7 +194,7 @@ const softwares = createSelector(compiledData, similarSoftwarePartition, (compil
             "versionMin": o.versionMin,
             "license": o.license,
             "comptoirDuLibreServiceProviderCount": o.comptoirDuLibreSoftware?.providers.length ?? 0,
-            "annuaireCnllServiceProviders": o.annuaireCnllServiceProviders,
+            "annuaireCnllServiceProviders": o.annuaireCnllServiceProviders ?? [],
             "comptoirDuLibreId": o.comptoirDuLibreSoftware?.id,
             "externalId": o.softwareExternalData?.externalId,
             "externalDataOrigin": o.softwareExternalData?.externalDataOrigin,

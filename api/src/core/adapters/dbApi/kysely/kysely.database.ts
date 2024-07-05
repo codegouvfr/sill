@@ -97,43 +97,44 @@ type SoftwaresTable = {
 
 // ---------- compiled data ----------
 
-type ComptoirDuLibreProvider = {
-    id: number;
-    url: string;
-    name: string;
-    type: string;
-    external_resources: {
-        website: string | null;
+export namespace PgComptoirDuLibre {
+    type Provider = {
+        id: number;
+        url: string;
+        name: string;
+        type: string;
+        external_resources: {
+            website: string | null;
+        };
     };
-};
 
-type ComptoirDuLibreUser = {
-    id: number;
-    url: string;
-    name: string;
-    type: string;
-    external_resources: {
-        website: string | null;
+    type User = {
+        id: number;
+        url: string;
+        name: string;
+        type: string;
+        external_resources: {
+            website: string | null;
+        };
     };
-};
 
-type ComptoirDuLibreSoftware = {
-    softwareId: number;
-    comptoirDuLibreId: number;
-    logoUrl: string | undefined;
-    keywords: string[] | undefined;
-    created: string;
-    modified: string;
-    url: string;
-    name: string;
-    licence: string;
-    external_resources: {
-        website: string | null;
-        repository: string | null;
+    export type Software = {
+        id: number;
+        logoUrl: string | undefined;
+        keywords: string[] | undefined;
+        created: string;
+        modified: string;
+        url: string;
+        name: string;
+        licence: string;
+        external_resources: {
+            website: string | null;
+            repository: string | null;
+        };
+        providers: Provider[];
+        users: User[];
     };
-    providers: ComptoirDuLibreProvider[];
-    users: ComptoirDuLibreUser[];
-};
+}
 
 type ServiceProvider = {
     name: string;
@@ -174,7 +175,7 @@ type CompiledSoftwaresTable = {
         Pick<SoftwareExternalData, "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin">[]
     >;
     parentWikidataSoftware: JSONColumnType<Pick<SoftwareExternalData, "externalId" | "label" | "description">> | null;
-    comptoirDuLibreSoftware: JSONColumnType<ComptoirDuLibreSoftware> | null;
+    comptoirDuLibreSoftware: JSONColumnType<PgComptoirDuLibre.Software> | null;
     annuaireCnllServiceProviders: JSONColumnType<
         {
             name: string;

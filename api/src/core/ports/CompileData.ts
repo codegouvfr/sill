@@ -28,6 +28,11 @@ export type CompiledData<T extends "private" | "public"> = CompiledData.Software
 
 export namespace CompiledData {
     export type Software<T extends "private" | "public"> = T extends "private" ? Software.Private : Software.Public;
+
+    export type SimilarSoftware = Pick<
+        SoftwareExternalData,
+        "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
+    >;
     export namespace Software {
         export type Common = Pick<
             Db.SoftwareRow,
