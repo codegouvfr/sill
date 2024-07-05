@@ -1,4 +1,4 @@
-import { Expression, FunctionModule, RawBuilder, Simplify, sql } from "kysely";
+import { Expression, FunctionModule, RawBuilder, SelectExpression, Simplify, sql } from "kysely";
 
 export const jsonBuildObject = <O extends Record<string, Expression<unknown>>>(
     obj: O
@@ -20,3 +20,8 @@ export const jsonAggOrEmptyArray = <Db, E extends Expression<unknown>>(fn: Funct
 
 export const emptyArrayIfNull = <Db, E extends Expression<unknown>>(fn: FunctionModule<Db, keyof Db>, value: E) =>
     fn.coalesce(value, sql`'[]'`);
+
+export const castSql = <Db>(
+    expression: SelectExpression<Db, keyof Db>,
+    type: "int" | "text" | "bool" | "uuid"
+): SelectExpression<Db, keyof Db> => sql`CAST(${expression} AS ${sql.raw(type)})` as any;

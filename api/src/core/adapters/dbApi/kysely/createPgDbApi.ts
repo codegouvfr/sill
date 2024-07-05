@@ -1,133 +1,309 @@
 import { Kysely } from "kysely";
 import { CompiledData } from "../../../ports/CompileData";
-import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
-import { ServiceProvider } from "../../../usecases/readWriteSillData";
+import { Db } from "../../../ports/DbApi";
+import { Software, SoftwareFormData } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
-import { createPgDialect } from "./kysely.dialect";
-import { emptyArrayIfNull, jsonAggOrEmptyArray, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
+import { castSql, jsonBuildObject } from "./kysely.utils";
+import SimilarSoftware = Software.SimilarSoftware;
 
-export const createKyselyPgDbApi = (dbUrl: string) => {
-    const db = new Kysely<Database>({ dialect: createPgDialect(dbUrl) });
+type Agent = { id: number; email: string; organization: string };
+type WithAgent = { agent: Agent };
 
+type NewDbApi = {
+    software: {
+        create: (params: { formData: SoftwareFormData } & WithAgent) => Promise<void>;
+        update: (params: { softwareSillId: number; formData: SoftwareFormData } & WithAgent) => Promise<void>;
+        getAll: () => Promise<Software[]>;
+        unreference: () => {};
+    };
+    instance: {
+        create: () => {};
+        update: () => {};
+        getAll: () => {};
+    };
+    agent: {
+        createUserOrReferent: () => {};
+        removeUserOrReferent: () => {};
+        updateIsProfilePublic: () => {};
+        updateAbout: () => {};
+        getIsProfilePublic: () => {};
+        getByEmail: () => {};
+        getAll: () => {};
+        changeOrganization: () => {};
+        updateEmail: () => {};
+        getTotalReferentCount: () => {};
+    };
+    getCompiledDataPrivate: () => Promise<CompiledData<"private">>;
+};
+
+export type PgDbApi = ReturnType<typeof createKyselyPgDbApi>;
+export const createKyselyPgDbApi = (db: Kysely<Database>): NewDbApi => {
     return {
-        // getSoftwareById: async (id: number): Promise<Db.SoftwareRow | undefined> => {
-        //     const result = await db.selectFrom("softwares").selectAll().where("id", "=", id).executeTakeFirst();
-        //     if (!result) return;
-        //
-        //     return {
-        //         ...result,
-        //         parentSoftwareWikidataId: result?.parentSoftwareWikidataId ?? undefined,
-        //         dereferencing: result?.dereferencing ?? undefined,
-        //         externalId: result?.externalId ?? undefined,
-        //         externalDataOrigin: result?.externalDataOrigin ?? "wikidata",
-        //         comptoirDuLibreId: result?.comptoirDuLibreId ?? undefined,
-        //         catalogNumeriqueGouvFrId: result?.catalogNumeriqueGouvFrId ?? undefined,
-        //         generalInfoMd: result?.generalInfoMd ?? undefined,
-        //         logoUrl: result?.logoUrl ?? undefined
-        //     };
-        // },
-        getCompiledDataPrivate: (): Promise<CompiledData<"private">> => {
-            return db
+        software: {
+            create: async ({ formData, agent }) => {
+                const now = Date.now();
+                await db
+                    .insertInto("softwares")
+                    .values({
+                        name: formData.softwareName,
+                        description: formData.softwareDescription,
+                        license: formData.softwareLicense,
+                        logoUrl: formData.softwareLogoUrl,
+                        versionMin: formData.softwareMinimalVersion,
+                        referencedSinceTime: now,
+                        updateTime: now,
+                        dereferencing: undefined,
+                        isStillInObservation: false,
+                        parentSoftwareWikidataId: undefined,
+                        doRespectRgaa: formData.doRespectRgaa,
+                        isFromFrenchPublicService: formData.isFromFrenchPublicService,
+                        isPresentInSupportContract: formData.isPresentInSupportContract,
+                        similarSoftwareExternalDataIds: JSON.stringify(formData.similarSoftwareExternalDataIds),
+                        externalId: formData.externalId,
+                        comptoirDuLibreId: formData.comptoirDuLibreId,
+                        softwareType: JSON.stringify(formData.softwareType),
+                        catalogNumeriqueGouvFrId: undefined,
+                        workshopUrls: JSON.stringify([]),
+                        testUrls: JSON.stringify([]),
+                        categories: JSON.stringify([]),
+                        generalInfoMd: undefined,
+                        addedByAgentEmail: agent.email,
+                        keywords: JSON.stringify(formData.softwareKeywords)
+                    })
+                    .execute();
+            },
+            update: async ({ formData, softwareSillId, agent }) => {},
+            getAll: (): Promise<Software[]> =>
+                db
+                    .selectFrom("softwares as s")
+                    .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
+                    .select([
+                        "s.logoUrl",
+                        "s.id as softwareId",
+                        "s.name as softwareName",
+                        "s.description as softwareDescription",
+                        "cs.serviceProviders",
+                        "cs.latestVersion",
+                        "s.testUrls",
+                        "s.referencedSinceTime as addedTime",
+                        "s.updateTime",
+                        "s.dereferencing",
+                        "s.categories",
+                        ({ ref }) =>
+                            jsonBuildObject({
+                                isPresentInSupportContract: ref("isPresentInSupportContract"),
+                                isFromFrenchPublicServices: ref("isFromFrenchPublicService"),
+                                doRespectRgaa: ref("doRespectRgaa")
+                            }).as("prerogatives"),
+                        "s.comptoirDuLibreId",
+                        "cs.comptoirDuLibreSoftware",
+                        "s.versionMin",
+                        "s.license",
+                        "annuaireCnllServiceProviders",
+                        "s.externalId",
+                        "s.externalDataOrigin",
+                        "s.softwareType",
+                        "cs.parentWikidataSoftware",
+                        "cs.similarExternalSoftwares as similarSoftwares",
+                        "s.keywords",
+                        "softwareExternalData"
+                    ])
+                    .execute()
+                    .then(softwares =>
+                        softwares.map(
+                            ({
+                                testUrls,
+                                serviceProviders,
+                                similarSoftwares,
+                                softwareExternalData,
+                                updateTime,
+                                addedTime,
+                                ...software
+                            }): Software => ({
+                                ...convertNullValuesToUndefined(software),
+                                updateTime: new Date(+updateTime).getTime(),
+                                addedTime: new Date(+addedTime).getTime(),
+                                serviceProviders: serviceProviders ?? [],
+                                similarSoftwares:
+                                    (similarSoftwares ?? []).map(
+                                        (s): SimilarSoftware => ({
+                                            softwareName:
+                                                typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                                            softwareDescription:
+                                                typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                                            isInSill: true // TODO: check if this is true
+                                        })
+                                    ) ?? [],
+                                userAndReferentCountByOrganization: {},
+                                authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                    authorName: dev.name,
+                                    authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                                })),
+                                officialWebsiteUrl:
+                                    softwareExternalData?.websiteUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.website ??
+                                    undefined,
+                                codeRepositoryUrl:
+                                    softwareExternalData?.sourceUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                    undefined,
+                                documentationUrl: softwareExternalData?.documentationUrl,
+                                comptoirDuLibreServiceProviderCount:
+                                    software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                                testUrl: testUrls[0]?.url
+                            })
+                        )
+                    ),
+            unreference: async () => {}
+        },
+        instance: {
+            create: async () => {},
+            update: async () => {},
+            getAll: async () => {}
+        },
+        agent: {
+            createUserOrReferent: async () => {},
+            removeUserOrReferent: async () => {},
+            updateIsProfilePublic: async () => {},
+            updateAbout: async () => {},
+            getIsProfilePublic: async () => {},
+            getByEmail: async () => {},
+            getAll: async () => {},
+            changeOrganization: async () => {},
+            updateEmail: async () => {},
+            getTotalReferentCount: async () => {}
+        },
+        getCompiledDataPrivate: async (): Promise<CompiledData<"private">> => {
+            const builder = getQueryBuilder(db);
+            console.log(builder.compile().sql);
+
+            console.time("agentById query");
+            const agentById: Record<number, Db.AgentRow> = await db
+                .selectFrom("agents")
+                .selectAll()
+                .execute()
+                .then(agents => agents.reduce((acc, agent) => ({ ...acc, [agent.id]: agent }), {}));
+            console.timeEnd("agentById query");
+
+            console.time("softwares query");
+            const compliedSoftwares = await db
                 .selectFrom("softwares as s")
                 .leftJoin("compiled_softwares as csft", "csft.softwareId", "s.id")
                 .leftJoin("software_referents as referents", "s.id", "referents.softwareId")
                 .leftJoin("software_users as users", "s.id", "users.softwareId")
-                .leftJoin("agents as ar", "referents.agentId", "ar.id")
-                .leftJoin("agents as au", "referents.agentId", "au.id")
                 .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
-                .select(({ ref, fn }) =>
-                    // jsonStripNulls(
-                    jsonStripNulls(
-                        jsonBuildObject({
-                            addedByAgentEmail: ref("s.addedByAgentEmail"),
-                            annuaireCnllServiceProviders: ref("annuaireCnllServiceProviders"),
-                            catalogNumeriqueGouvFrId: ref("s.catalogNumeriqueGouvFrId"),
-                            categories: ref("s.categories"),
-                            comptoirDuLibreSoftware: ref("csft.comptoirDuLibreSoftware"),
-                            dereferencing: ref("s.dereferencing"),
-                            description: ref("s.description"),
-                            doRespectRgaa: ref("s.doRespectRgaa"),
-                            externalDataOrigin: ref("s.externalDataOrigin"),
-                            externalId: ref("s.externalId"),
-                            generalInfoMd: ref("s.generalInfoMd"),
-                            id: ref("s.id"),
-                            isFromFrenchPublicService: ref("s.isFromFrenchPublicService"),
-                            isPresentInSupportContract: ref("s.isPresentInSupportContract"),
-                            isStillInObservation: ref("s.isStillInObservation"),
-                            keywords: ref("s.keywords"),
-                            latestVersion: ref("csft.latestVersion"),
-                            license: ref("s.license"),
-                            logoUrl: ref("s.logoUrl"),
-                            name: ref("s.name"),
-                            parentWikidataSoftware: ref("csft.parentWikidataSoftware"),
-                            referencedSinceTime: ref("s.referencedSinceTime"),
-                            serviceProviders: emptyArrayIfNull(fn, ref("csft.serviceProviders")).$castTo<
-                                ServiceProvider[]
-                            >(),
-                            similarExternalSoftwares: emptyArrayIfNull(
-                                fn,
-                                ref("csft.similarExternalSoftwares")
-                            ).$castTo<CompiledData.SimilarSoftware[]>(),
-                            softwareExternalData: ref("csft.softwareExternalData"),
-                            softwareType: ref("s.softwareType"),
-                            testUrls: ref("s.testUrls"),
-                            updateTime: ref("s.updateTime"),
-                            versionMin: ref("s.versionMin"),
-                            workshopUrls: ref("s.workshopUrls"),
-                            referents: jsonAggOrEmptyArray(
-                                fn,
-                                jsonStripNulls(
-                                    jsonBuildObject({
-                                        email: ref("ar.email").$castTo<string>(),
-                                        organization: ref("ar.organization").$castTo<string>(),
-                                        isExpert: ref("referents.isExpert").$castTo<boolean>(),
-                                        serviceUrl: ref("referents.serviceUrl"),
-                                        useCaseDescription: ref("referents.useCaseDescription").$castTo<string>()
-                                    })
-                                )
-                            ),
-                            users: jsonAggOrEmptyArray(
-                                fn,
-                                jsonStripNulls(
-                                    jsonBuildObject({
-                                        os: ref("users.os"),
-                                        serviceUrl: ref("users.serviceUrl"),
-                                        useCaseDescription: ref("users.useCaseDescription").$castTo<string>(),
-                                        version: ref("users.version").$castTo<string>(),
-                                        organization: ref("au.organization").$castTo<string>()
-                                    })
-                                )
-                            ),
-                            instances: jsonAggOrEmptyArray(
-                                fn,
-                                jsonStripNulls(
-                                    jsonBuildObject({
-                                        id: ref("instances.id").$castTo<number>(),
-                                        organization: ref("instances.organization").$castTo<string>(),
-                                        targetAudience: ref("instances.targetAudience").$castTo<string>(),
-                                        publicUrl: ref("instances.publicUrl"),
-                                        otherWikidataSoftwares: ref("instances.otherSoftwareWikidataIds").$castTo<
-                                            SoftwareExternalData[]
-                                        >(), // todo fetch the corresponding softwares,
-                                        addedByAgentEmail: ref("instances.addedByAgentEmail").$castTo<string>()
-                                    })
-                                )
-                            )
-                        })
-                    ).as("compliedSoftware")
-                )
+                .groupBy([
+                    "s.id",
+                    "csft.softwareId",
+                    "csft.annuaireCnllServiceProviders",
+                    "csft.comptoirDuLibreSoftware",
+                    "csft.latestVersion",
+                    "csft.parentWikidataSoftware",
+                    "csft.serviceProviders",
+                    "csft.similarExternalSoftwares",
+                    "csft.softwareExternalData"
+                ])
+                .select([
+                    "s.id",
+                    "s.addedByAgentEmail",
+                    "s.catalogNumeriqueGouvFrId",
+                    "s.categories",
+                    "s.dereferencing",
+                    "s.description",
+                    "s.doRespectRgaa",
+                    "s.externalDataOrigin",
+                    "s.externalId",
+                    "s.generalInfoMd",
+                    "s.isFromFrenchPublicService",
+                    "s.isPresentInSupportContract",
+                    "s.isStillInObservation",
+                    "s.keywords",
+                    "s.license",
+                    "s.logoUrl",
+                    "s.name",
+                    "s.referencedSinceTime",
+                    "s.softwareType",
+                    "s.testUrls",
+                    "s.updateTime",
+                    "s.versionMin",
+                    "s.workshopUrls",
+                    "csft.softwareId as externalDataSoftwareId",
+                    "csft.annuaireCnllServiceProviders",
+                    "csft.comptoirDuLibreSoftware",
+                    "csft.latestVersion",
+                    "csft.parentWikidataSoftware",
+                    "csft.serviceProviders",
+                    "csft.similarExternalSoftwares",
+                    "csft.softwareExternalData",
+                    ({ fn }) => fn.jsonAgg("users").distinct().as("users"),
+                    ({ fn }) => fn.jsonAgg("referents").distinct().as("referents"),
+                    ({ fn }) => fn.jsonAgg("instances").distinct().as("instances")
+                ])
                 .execute()
-                .then(results =>
-                    results.map(
-                        ({ compliedSoftware }): CompiledData.Software<"private"> => ({
-                            ...compliedSoftware,
-                            doRespectRgaa: compliedSoftware.doRespectRgaa ?? null
-                        })
-                    )
-                );
+                .then(results => {
+                    console.timeEnd("softwares query");
+                    console.time("software processing");
+                    const processedSoftwares = results.map(
+                        ({
+                            externalDataSoftwareId,
+                            annuaireCnllServiceProviders,
+                            comptoirDuLibreSoftware,
+                            latestVersion,
+                            parentWikidataSoftware,
+                            serviceProviders,
+                            similarExternalSoftwares,
+                            dereferencing,
+                            doRespectRgaa,
+                            users,
+                            referents,
+                            instances,
+                            softwareExternalData,
+                            updateTime,
+                            referencedSinceTime,
+                            ...software
+                        }): CompiledData.Software<"private"> => {
+                            return {
+                                ...convertNullValuesToUndefined(software),
+                                updateTime: new Date(+updateTime).getTime(),
+                                referencedSinceTime: new Date(+referencedSinceTime).getTime(),
+                                doRespectRgaa,
+                                softwareExternalData: softwareExternalData ?? undefined,
+                                annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? undefined,
+                                comptoirDuLibreSoftware: comptoirDuLibreSoftware ?? undefined,
+                                latestVersion: latestVersion ?? undefined,
+                                parentWikidataSoftware: parentWikidataSoftware ?? undefined,
+                                dereferencing: dereferencing ?? undefined,
+                                serviceProviders: serviceProviders ?? [],
+                                similarExternalSoftwares: similarExternalSoftwares ?? [],
+                                users: users.filter(isNotNull).map(user => ({
+                                    ...(user as any),
+                                    organization: agentById[user.agentId!]?.organization
+                                })),
+                                referents: referents.filter(isNotNull).map(referent => ({
+                                    ...(referent as any),
+                                    organization: agentById[referent.agentId!]?.organization
+                                })),
+                                instances: instances.filter(isNotNull).map(instance => ({
+                                    ...(instance as any)
+                                }))
+                            };
+                        }
+                    );
+                    console.timeEnd("software processing");
+                    return processedSoftwares;
+                });
+
+            return compliedSoftwares;
         }
     };
 };
+
+const isNotNull = <T>(value: T | null): value is T => value !== null;
+
+const convertNullValuesToUndefined = <T extends Record<string, unknown>>(
+    obj: T
+): { [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K] } =>
+    Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, value === null ? undefined : value])) as any;
 
 // ----------- common -----------
 // annuaireCnllServiceProviders
@@ -170,3 +346,58 @@ export const createKyselyPgDbApi = (dbUrl: string) => {
 // userAndReferentCountByOrganization
 // hasExpertReferent
 // instances
+
+const getQueryBuilder = (db: Kysely<Database>) =>
+    db
+        .selectFrom("softwares as s")
+        .leftJoin("compiled_softwares as csft", "csft.softwareId", "s.id")
+        .leftJoin("software_referents as referents", "s.id", "referents.softwareId")
+        .leftJoin("software_users as users", "s.id", "users.softwareId")
+        .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
+        .groupBy([
+            "s.id",
+            "csft.softwareId",
+            "csft.annuaireCnllServiceProviders",
+            "csft.comptoirDuLibreSoftware",
+            "csft.latestVersion",
+            "csft.parentWikidataSoftware",
+            "csft.serviceProviders",
+            "csft.similarExternalSoftwares",
+            "csft.softwareExternalData"
+        ])
+        .select([
+            "s.id",
+            "s.addedByAgentEmail",
+            "s.catalogNumeriqueGouvFrId",
+            "s.categories",
+            "s.dereferencing",
+            "s.description",
+            "s.doRespectRgaa",
+            "s.externalDataOrigin",
+            "s.externalId",
+            "s.generalInfoMd",
+            "s.isFromFrenchPublicService",
+            "s.isPresentInSupportContract",
+            "s.isStillInObservation",
+            "s.keywords",
+            "s.license",
+            "s.logoUrl",
+            "s.name",
+            "s.referencedSinceTime",
+            "s.softwareType",
+            "s.testUrls",
+            "s.updateTime",
+            "s.versionMin",
+            "s.workshopUrls",
+            "csft.softwareId as externalDataSoftwareId",
+            "csft.annuaireCnllServiceProviders",
+            "csft.comptoirDuLibreSoftware",
+            "csft.latestVersion",
+            "csft.parentWikidataSoftware",
+            "csft.serviceProviders",
+            "csft.similarExternalSoftwares",
+            "csft.softwareExternalData",
+            ({ fn }) => fn.jsonAgg("users").distinct().as("users"),
+            ({ fn }) => fn.jsonAgg("referents").distinct().as("referents"),
+            ({ fn }) => fn.jsonAgg("instances").distinct().as("instances")
+        ]);

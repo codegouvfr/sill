@@ -58,7 +58,7 @@ type SoftwareType =
       };
 
 type SoftwaresTable = {
-    id: number;
+    id: Generated<number>;
     name: string;
     description: string;
     referencedSinceTime: number;
