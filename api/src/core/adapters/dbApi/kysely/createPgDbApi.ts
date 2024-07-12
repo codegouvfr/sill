@@ -1,4 +1,6 @@
 import { Kysely } from "kysely";
+import type { Equals } from "tsafe";
+import { assert } from "tsafe/assert";
 import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
 import { Software, SoftwareFormData } from "../../../usecases/readWriteSillData";
@@ -41,38 +43,106 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): NewDbApi => {
     return {
         software: {
             create: async ({ formData, agent }) => {
+                const {
+                    softwareName,
+                    softwareDescription,
+                    softwareLicense,
+                    softwareLogoUrl,
+                    softwareMinimalVersion,
+                    isPresentInSupportContract,
+                    isFromFrenchPublicService,
+                    doRespectRgaa,
+                    similarSoftwareExternalDataIds,
+                    softwareType,
+                    externalId,
+                    comptoirDuLibreId,
+                    softwareKeywords,
+                    ...rest
+                } = formData;
+
+                assert<Equals<typeof rest, {}>>();
+
                 const now = Date.now();
                 await db
                     .insertInto("softwares")
                     .values({
-                        name: formData.softwareName,
-                        description: formData.softwareDescription,
-                        license: formData.softwareLicense,
-                        logoUrl: formData.softwareLogoUrl,
-                        versionMin: formData.softwareMinimalVersion,
+                        name: softwareName,
+                        description: softwareDescription,
+                        license: softwareLicense,
+                        logoUrl: softwareLogoUrl,
+                        versionMin: softwareMinimalVersion,
                         referencedSinceTime: now,
                         updateTime: now,
                         dereferencing: undefined,
                         isStillInObservation: false,
                         parentSoftwareWikidataId: undefined,
-                        doRespectRgaa: formData.doRespectRgaa,
-                        isFromFrenchPublicService: formData.isFromFrenchPublicService,
-                        isPresentInSupportContract: formData.isPresentInSupportContract,
-                        similarSoftwareExternalDataIds: JSON.stringify(formData.similarSoftwareExternalDataIds),
-                        externalId: formData.externalId,
-                        comptoirDuLibreId: formData.comptoirDuLibreId,
-                        softwareType: JSON.stringify(formData.softwareType),
+                        doRespectRgaa: doRespectRgaa,
+                        isFromFrenchPublicService: isFromFrenchPublicService,
+                        isPresentInSupportContract: isPresentInSupportContract,
+                        similarSoftwareExternalDataIds: JSON.stringify(similarSoftwareExternalDataIds),
+                        externalId: externalId,
+                        comptoirDuLibreId: comptoirDuLibreId,
+                        softwareType: JSON.stringify(softwareType),
                         catalogNumeriqueGouvFrId: undefined,
                         workshopUrls: JSON.stringify([]),
                         testUrls: JSON.stringify([]),
                         categories: JSON.stringify([]),
                         generalInfoMd: undefined,
                         addedByAgentEmail: agent.email,
-                        keywords: JSON.stringify(formData.softwareKeywords)
+                        keywords: JSON.stringify(softwareKeywords)
                     })
                     .execute();
             },
-            update: async ({ formData, softwareSillId, agent }) => {},
+            update: async ({ formData, softwareSillId, agent }) => {
+                const {
+                    softwareName,
+                    softwareDescription,
+                    softwareLicense,
+                    softwareLogoUrl,
+                    softwareMinimalVersion,
+                    isPresentInSupportContract,
+                    isFromFrenchPublicService,
+                    doRespectRgaa,
+                    similarSoftwareExternalDataIds,
+                    softwareType,
+                    externalId,
+                    comptoirDuLibreId,
+                    softwareKeywords,
+                    ...rest
+                } = formData;
+
+                assert<Equals<typeof rest, {}>>();
+
+                const now = Date.now();
+                await db
+                    .updateTable("softwares")
+                    .set({
+                        name: softwareName,
+                        description: softwareDescription,
+                        license: softwareLicense,
+                        logoUrl: softwareLogoUrl,
+                        versionMin: softwareMinimalVersion,
+                        updateTime: now,
+                        isStillInObservation: false,
+                        parentSoftwareWikidataId: undefined,
+                        doRespectRgaa: doRespectRgaa,
+                        isFromFrenchPublicService: isFromFrenchPublicService,
+                        isPresentInSupportContract: isPresentInSupportContract,
+                        similarSoftwareExternalDataIds: JSON.stringify(similarSoftwareExternalDataIds),
+                        externalId: externalId,
+                        comptoirDuLibreId: comptoirDuLibreId,
+                        softwareType: JSON.stringify(softwareType),
+                        catalogNumeriqueGouvFrId: undefined,
+                        workshopUrls: JSON.stringify([]),
+                        testUrls: JSON.stringify([]),
+                        categories: JSON.stringify([]),
+                        generalInfoMd: undefined,
+                        addedByAgentEmail: agent.email,
+                        keywords: JSON.stringify(softwareKeywords)
+                    })
+                    .where("id", "=", softwareSillId)
+                    .execute();
+            },
             getAll: (): Promise<Software[]> =>
                 db
                     .selectFrom("softwares as s")
