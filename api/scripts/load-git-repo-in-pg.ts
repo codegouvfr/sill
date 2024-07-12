@@ -1,10 +1,11 @@
-import { Kysely } from "kysely";
+import { InsertObject, Kysely } from "kysely";
 import { z } from "zod";
 import { createGitDbApi, GitDbApiParams } from "../src/core/adapters/dbApi/createGitDbApi";
 import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
 import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
+import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
 import SoftwareRow = Db.SoftwareRow;
 
 export type Params = {
@@ -39,7 +40,7 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     });
 
     const compiledSoftwares = await gitDbApi.fetchCompiledData();
-    await insertCompiledSoftwares(compiledSoftwares, pgDb);
+    await insertCompiledSoftwaresAndSoftwareExternalData(compiledSoftwares, pgDb);
 };
 
 const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>) => {
@@ -135,19 +136,15 @@ const insertInstances = async ({ instanceRows, db }: { instanceRows: Db.Instance
     console.info("Number of instances to insert : ", instanceRows.length);
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("instances").execute();
+
         await trx
             .insertInto("instances")
-            .values(
-                instanceRows.map(row => ({
-                    ...row,
-                    otherSoftwareWikidataIds: JSON.stringify(row.otherSoftwareWikidataIds)
-                }))
-            )
+            .values(instanceRows.map(({ otherSoftwareWikidataIds, ...row }) => row))
             .executeTakeFirst();
     });
 };
 
-const insertCompiledSoftwares = async (
+const insertCompiledSoftwaresAndSoftwareExternalData = async (
     compiledSoftwares: CompiledData.Software<"private">[],
     pgDb: Kysely<Database>
 ) => {
@@ -158,16 +155,51 @@ const insertCompiledSoftwares = async (
         await trx
             .insertInto("compiled_softwares")
             .values(
-                compiledSoftwares.map(software => ({
-                    softwareId: software.id,
-                    serviceProviders: JSON.stringify(software.serviceProviders),
-                    softwareExternalData: JSON.stringify(software.softwareExternalData),
-                    similarExternalSoftwares: JSON.stringify(software.similarExternalSoftwares),
-                    parentWikidataSoftware: JSON.stringify(software.parentWikidataSoftware),
-                    comptoirDuLibreSoftware: JSON.stringify(software.comptoirDuLibreSoftware),
-                    annuaireCnllServiceProviders: JSON.stringify(software.annuaireCnllServiceProviders),
-                    latestVersion: JSON.stringify(software.latestVersion)
-                }))
+                compiledSoftwares.map(
+                    (software): InsertObject<Database, "compiled_softwares"> => ({
+                        softwareId: software.id,
+                        serviceProviders: JSON.stringify(software.serviceProviders),
+                        comptoirDuLibreSoftware: JSON.stringify(software.comptoirDuLibreSoftware),
+                        annuaireCnllServiceProviders: JSON.stringify(software.annuaireCnllServiceProviders),
+                        latestVersion: JSON.stringify(software.latestVersion)
+                    })
+                )
+            )
+            .executeTakeFirst();
+
+        await trx.deleteFrom("software_external_datas").execute();
+        await trx
+            .insertInto("software_external_datas")
+            .values(
+                compiledSoftwares
+                    .filter(
+                        (
+                            software
+                        ): software is CompiledData.Software.Private & {
+                            softwareExternalData: {
+                                externalId: string;
+                                externalDataOrigin: ExternalDataOrigin;
+                            };
+                        } =>
+                            software.softwareExternalData?.externalId !== undefined &&
+                            software.softwareExternalData?.externalDataOrigin !== undefined
+                    )
+                    .map(
+                        (software): InsertObject<Database, "software_external_datas"> => ({
+                            externalId: software.softwareExternalData.externalId,
+                            externalDataOrigin: software.softwareExternalData.externalDataOrigin,
+                            developers: JSON.stringify(software.softwareExternalData?.developers ?? []),
+                            label: JSON.stringify(software.softwareExternalData?.label ?? {}),
+                            description: JSON.stringify(software.softwareExternalData?.description ?? {}),
+                            isLibreSoftware: software.softwareExternalData?.isLibreSoftware ?? false,
+                            logoUrl: software.softwareExternalData?.logoUrl ?? null,
+                            framaLibreId: software.softwareExternalData?.framaLibreId ?? null,
+                            websiteUrl: software.softwareExternalData?.websiteUrl ?? null,
+                            sourceUrl: software.softwareExternalData?.sourceUrl ?? null,
+                            documentationUrl: software.softwareExternalData?.documentationUrl ?? null,
+                            license: software.softwareExternalData?.license ?? null
+                        })
+                    )
             )
             .executeTakeFirst();
     });

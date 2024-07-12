@@ -1,6 +1,10 @@
 import { ServiceProvider } from "../usecases/readWriteSillData";
 import type { Db } from "./DbApi";
-import type { SoftwareExternalData } from "./GetSoftwareExternalData";
+import {
+    ParentSoftwareExternalData,
+    SimilarSoftwareExternalData,
+    SoftwareExternalData
+} from "./GetSoftwareExternalData";
 import type { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
 export type CompileData = (params: {
@@ -57,11 +61,8 @@ export namespace CompiledData {
         > & {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
-            similarExternalSoftwares: Pick<
-                SoftwareExternalData,
-                "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
-            >[];
-            parentWikidataSoftware: Pick<SoftwareExternalData, "externalId" | "label" | "description"> | undefined;
+            similarExternalSoftwares: SimilarSoftwareExternalData[];
+            parentWikidataSoftware: ParentSoftwareExternalData | undefined;
             comptoirDuLibreSoftware:
                 | (ComptoirDuLibre.Software & { logoUrl: string | undefined; keywords: string[] | undefined })
                 | undefined;

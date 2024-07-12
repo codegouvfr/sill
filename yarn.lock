@@ -11857,10 +11857,10 @@ kuler@^2.0.0:
   resolved "https://registry.yarnpkg.com/kuler/-/kuler-2.0.0.tgz#e2c570a3800388fb44407e851531c1d670b061b3"
   integrity sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==
 
-kysely-ctl@^0.8.7:
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/kysely-ctl/-/kysely-ctl-0.8.7.tgz#2eb2487b14b13e4caa52786e97ff4fedc59d7623"
-  integrity sha512-I69bTRzcTNh7XvHQdlPZuzCq0utNBMnWSZ3IZVI0ORpjnI0YPxeaM23Jt2OOeZCl+mnrO4ror7OjtjJNQb/OPA==
+kysely-ctl@^0.8.10:
+  version "0.8.10"
+  resolved "https://registry.yarnpkg.com/kysely-ctl/-/kysely-ctl-0.8.10.tgz#799d9df83badbb88c3adc0cd4b0ab949e13376d6"
+  integrity sha512-uDfYhG2AJwJ1/kVRUvHewHvcvI6F8Aqnoiyx9cOzr2RZ+mip2sm5YngCJi4S/rb4/1fICIL2MuIdAGizVgpbzg==
   dependencies:
     c12 "^1.8.0"
     citty "^0.1.4"
@@ -11872,10 +11872,10 @@ kysely-ctl@^0.8.7:
     std-env "^3.4.0"
     tsx "^4.9.0"
 
-kysely@^0.27.3:
-  version "0.27.3"
-  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.27.3.tgz#6cc6c757040500b43c4ac596cdbb12be400ee276"
-  integrity sha512-lG03Ru+XyOJFsjH3OMY6R/9U38IjDPfnOfDgO3ynhbDr+Dz8fak+X6L62vqu3iybQnj+lG84OttBuU9KY3L9kA==
+kysely@^0.27.4:
+  version "0.27.4"
+  resolved "https://registry.yarnpkg.com/kysely/-/kysely-0.27.4.tgz#96a0285467b380948b4de03b20d87e82d797449b"
+  integrity sha512-dyNKv2KRvYOQPLCAOCjjQuCk4YFd33BvGdf/o5bC7FiW+BB6snA81Zt+2wT9QDFzKqxKa5rrOmvlK/anehCcgA==
 
 language-subtag-registry@^0.3.20:
   version "0.3.22"

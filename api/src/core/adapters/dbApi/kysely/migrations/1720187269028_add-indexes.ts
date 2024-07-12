@@ -1,5 +1,6 @@
 import type { Kysely } from "kysely";
 
+const softwares_externalIdIdx = "softwares__externalId_idx";
 const compiledSoftwares_SoftwareIdIdx = "compiled_softwares__softwareId_idx";
 const compiledSoftwares_GroupByIdx = "compiled_softwares_group_by_idx";
 const softwareReferents_softwareIdIdx = "softwareReferents_software_idx";
@@ -7,6 +8,7 @@ const softwareUsers_softwareIdIdx = "softwareUsers_software_idx";
 const instances_mainSoftwareSillIdIdx = "instances_mainSoftwareSillId_idx";
 
 export async function up(db: Kysely<any>): Promise<void> {
+    await db.schema.createIndex(softwares_externalIdIdx).on("softwares").column("externalId").execute();
     await db.schema
         .createIndex(compiledSoftwares_SoftwareIdIdx)
         .on("compiled_softwares")
@@ -30,14 +32,12 @@ export async function up(db: Kysely<any>): Promise<void> {
         .column("annuaireCnllServiceProviders")
         .column("comptoirDuLibreSoftware")
         .column("latestVersion")
-        .column("parentWikidataSoftware")
         .column("serviceProviders")
-        .column("similarExternalSoftwares")
-        .column("softwareExternalData")
         .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+    await db.schema.dropIndex(softwares_externalIdIdx).execute();
     await db.schema.dropIndex(compiledSoftwares_SoftwareIdIdx).execute();
     await db.schema.dropIndex(softwareReferents_softwareIdIdx).execute();
     await db.schema.dropIndex(softwareUsers_softwareIdIdx).execute();

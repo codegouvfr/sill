@@ -1,19 +1,20 @@
-import { Kysely, sql } from "kysely";
-import { beforeEach, describe, it, expect } from "vitest";
+import { Kysely } from "kysely";
+import { beforeEach, describe, expect, it } from "vitest";
 import { expectToEqual } from "../../../../tools/test.helpers";
-import { CompiledData } from "../../../ports/CompileData";
+import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { SoftwareFormData } from "../../../usecases/readWriteSillData";
 import { createKyselyPgDbApi, PgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 
+const externalId = "external-id-111";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalId: "external-id-111",
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: ["external-id-222"],
+    similarSoftwareExternalDataIds: [externalId],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -40,30 +41,63 @@ describe("pgDbApi", () => {
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
         await db.deleteFrom("softwares").execute();
+        await db.deleteFrom("software_external_datas").execute();
     });
 
     describe("getCompiledDataPrivate", () => {
         it("gets private compiled data", async () => {
             const compiledDataPrivate = await dbApi.getCompiledDataPrivate();
             const { users, referents, instances, ...firstSoftware } = compiledDataPrivate[0];
-            // console.log(firstSoftware);
+            console.log(firstSoftware);
             //
-            // console.log(`Users n = ${users?.length} : `, users);
-            // console.log(`Referents n = ${referents?.length} : `, referents);
-            // console.log(`Instances n = ${instances?.length} : `, instances);
+            console.log(`Users n = ${users?.length} : `, users);
+            console.log(`Referents n = ${referents?.length} : `, referents);
+            console.log(`Instances n = ${instances?.length} : `, instances);
             expect(compiledDataPrivate).toHaveLength(100);
         });
     });
 
     describe("software", () => {
         it("creates a software, than gets it with getAll", async () => {
+            const softwareExternalData: SoftwareExternalData = {
+                externalId,
+                externalDataOrigin: "wikidata",
+                developers: [{ name: "Bob", id: "bob" }],
+                label: { en: "Some software" },
+                description: { en: "Some software description" },
+                isLibreSoftware: true,
+                logoUrl: "https://example.com/logo.png",
+                framaLibreId: "",
+                websiteUrl: "https://example.com",
+                sourceUrl: "https://example.com/source",
+                documentationUrl: "https://example.com/documentation",
+                license: "MIT"
+            };
+
+            await db
+                .insertInto("software_external_datas")
+                .values({
+                    ...softwareExternalData,
+                    developers: JSON.stringify(softwareExternalData.developers),
+                    label: JSON.stringify(softwareExternalData.label),
+                    description: JSON.stringify(softwareExternalData.description),
+                    isLibreSoftware: softwareExternalData.isLibreSoftware,
+                    framaLibreId: softwareExternalData.framaLibreId,
+                    websiteUrl: softwareExternalData.websiteUrl,
+                    sourceUrl: softwareExternalData.sourceUrl,
+                    documentationUrl: softwareExternalData.documentationUrl,
+                    license: softwareExternalData.license
+                })
+                .execute();
+
             await dbApi.software.create({
                 formData: softwareFormData,
                 agent: {
                     id: 1,
                     email: "test@test.com",
                     organization: "test-orga"
-                }
+                },
+                externalDataOrigin: "wikidata"
             });
 
             const softwares = await dbApi.software.getAll();
@@ -72,20 +106,23 @@ describe("pgDbApi", () => {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
-                authors: [],
+                authors: softwareExternalData.developers.map(dev => ({
+                    authorName: dev.name,
+                    authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                })),
                 categories: [],
-                codeRepositoryUrl: undefined,
+                codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,
                 comptoirDuLibreServiceProviderCount: 0,
                 dereferencing: undefined,
-                documentationUrl: undefined,
-                externalDataOrigin: undefined,
-                externalId: "external-id-111",
+                documentationUrl: softwareExternalData.documentationUrl,
+                externalDataOrigin: "wikidata",
+                externalId,
                 keywords: ["bob", "l'éponge"],
                 latestVersion: undefined,
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
-                officialWebsiteUrl: undefined,
+                officialWebsiteUrl: softwareExternalData.websiteUrl,
                 parentWikidataSoftware: undefined,
                 prerogatives: {
                     doRespectRgaa: true,
@@ -96,7 +133,7 @@ describe("pgDbApi", () => {
                 similarSoftwares: [],
                 softwareDescription: "Super software",
                 softwareId: expect.any(Number),
-                softwareName: "",
+                softwareName: softwareFormData.softwareName,
                 softwareType: {
                     os: {
                         android: true,
