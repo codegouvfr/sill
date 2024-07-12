@@ -243,7 +243,6 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): NewDbApi => {
                                 sourceUrl: ref("ext.sourceUrl"),
                                 documentationUrl: ref("ext.documentationUrl")
                             }).as("softwareExternalData"),
-                        // ({ fn }) => fn.jsonAgg("similarExt").distinct().as("similarExternalSoftwares")
                         ({ ref, fn }) =>
                             fn
                                 .coalesce(
@@ -329,18 +328,33 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): NewDbApi => {
                 assert<Equals<typeof rest, {}>>();
 
                 const now = Date.now();
-                await db
-                    .insertInto("instances")
-                    .values({
-                        addedByAgentEmail: agent.email,
-                        updateTime: now,
-                        referencedSinceTime: now,
-                        mainSoftwareSillId,
-                        organization,
-                        targetAudience,
-                        publicUrl
-                    })
-                    .execute();
+
+                await db.transaction().execute(async trx => {
+                    const { instanceId } = await trx
+                        .insertInto("instances")
+                        .values({
+                            addedByAgentEmail: agent.email,
+                            updateTime: now,
+                            referencedSinceTime: now,
+                            mainSoftwareSillId,
+                            organization,
+                            targetAudience,
+                            publicUrl
+                        })
+                        .returning("id as instanceId")
+                        .executeTakeFirstOrThrow();
+
+                    if (otherSoftwareWikidataIds.length === 0) return;
+                    await trx
+                        .insertInto("instances__other_external_softwares")
+                        .values(
+                            otherSoftwareWikidataIds.map(externalId => ({
+                                instanceId,
+                                externalId
+                            }))
+                        )
+                        .execute();
+                });
             },
             update: async ({ fromData, instanceId }) => {
                 const {
@@ -372,28 +386,31 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): NewDbApi => {
                     .selectFrom("instances as i")
                     .leftJoin("instances__other_external_softwares as ioes", "ioes.instanceId", "i.id")
                     .leftJoin("software_external_datas as ext", "ext.externalId", "ioes.externalId")
+                    .groupBy(["i.id"])
                     .select([
                         "i.id",
                         "i.mainSoftwareSillId",
                         "i.organization",
                         "i.targetAudience",
                         "i.publicUrl",
-                        ({ fn }) =>
-                            fn
-                                .jsonAgg("ext")
-                                .distinct()
-                                .$castTo<ParentSoftwareExternalData[]>()
-                                .as("otherWikidataSoftwares")
-                        // ({ ref, fn }) =>
+                        // ({ fn }) =>
                         //     fn
-                        //         .jsonAgg(
-                        //             jsonBuildObject({
-                        //                 externalId: ref("ext.externalId"),
-                        //                 label: ref("ext.label"),
-                        //                 description: ref("ext.description")
-                        //             }).$castTo<ParentSoftwareExternalData>()
-                        //         )
+                        //         .jsonAgg("ext")
+                        //         .filterWhere("ext.externalId", "is not", null)
+                        //         .distinct()
+                        //         .$castTo<ParentSoftwareExternalData[]>()
                         //         .as("otherWikidataSoftwares")
+                        ({ ref, fn }) =>
+                            fn
+                                .jsonAgg(
+                                    jsonBuildObject({
+                                        externalId: ref("ext.externalId"),
+                                        label: ref("ext.label"),
+                                        description: ref("ext.description")
+                                    }).$castTo<ParentSoftwareExternalData>()
+                                )
+                                .filterWhere("ext.externalId", "is not", null)
+                                .as("otherWikidataSoftwares")
                     ])
                     .execute()
                     .then(instances =>

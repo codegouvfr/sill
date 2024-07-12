@@ -96,10 +96,17 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("referencedSinceTime", "bigint", col => col.notNull())
         .addColumn("updateTime", "bigint", col => col.notNull())
         .execute();
+
+    await db.schema
+        .createTable("instances__other_external_softwares")
+        .addColumn("instanceId", "integer", col => col.notNull().references("instances.id").onDelete("cascade"))
+        .addColumn("externalId", "text", col => col.notNull())
+        .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable("softwares__similar_software_external_datas").execute();
+    await db.schema.dropTable("instances__other_external_softwares").execute();
     await db.schema.dropTable("software_external_datas").execute();
     await db.schema.dropTable("instances").execute();
     await db.schema.dropTable("software_referents").execute();

@@ -7,6 +7,11 @@ import { createKyselyPgDbApi, PgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 
+const agent = {
+    id: 1,
+    email: "test@test.com",
+    organization: "test-orga"
+};
 const externalId = "external-id-111";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
@@ -32,6 +37,20 @@ const softwareFormData: SoftwareFormData = {
         }
     }
 };
+const softwareExternalData: SoftwareExternalData = {
+    externalId,
+    externalDataOrigin: "wikidata",
+    developers: [{ name: "Bob", id: "bob" }],
+    label: { en: "Some software" },
+    description: { en: "Some software description" },
+    isLibreSoftware: true,
+    logoUrl: "https://example.com/logo.png",
+    framaLibreId: "",
+    websiteUrl: "https://example.com",
+    sourceUrl: "https://example.com/source",
+    documentationUrl: "https://example.com/documentation",
+    license: "MIT"
+};
 
 const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5433/sill") });
 
@@ -42,6 +61,7 @@ describe("pgDbApi", () => {
         dbApi = createKyselyPgDbApi(db);
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
+        await db.deleteFrom("instances").execute();
     });
 
     describe("getCompiledDataPrivate", () => {
@@ -59,21 +79,6 @@ describe("pgDbApi", () => {
 
     describe("software", () => {
         it("creates a software, than gets it with getAll", async () => {
-            const softwareExternalData: SoftwareExternalData = {
-                externalId,
-                externalDataOrigin: "wikidata",
-                developers: [{ name: "Bob", id: "bob" }],
-                label: { en: "Some software" },
-                description: { en: "Some software description" },
-                isLibreSoftware: true,
-                logoUrl: "https://example.com/logo.png",
-                framaLibreId: "",
-                websiteUrl: "https://example.com",
-                sourceUrl: "https://example.com/source",
-                documentationUrl: "https://example.com/documentation",
-                license: "MIT"
-            };
-
             await db
                 .insertInto("software_external_datas")
                 .values({
@@ -92,11 +97,7 @@ describe("pgDbApi", () => {
 
             await dbApi.software.create({
                 formData: softwareFormData,
-                agent: {
-                    id: 1,
-                    email: "test@test.com",
-                    organization: "test-orga"
-                },
+                agent,
                 externalDataOrigin: "wikidata"
             });
 
@@ -147,6 +148,63 @@ describe("pgDbApi", () => {
                 testUrl: undefined,
                 userAndReferentCountByOrganization: {},
                 versionMin: ""
+            });
+        });
+    });
+
+    describe("instance", () => {
+        it("creates an instance, than gets it with getAll", async () => {
+            await db
+                .insertInto("software_external_datas")
+                .values({
+                    ...softwareExternalData,
+                    developers: JSON.stringify(softwareExternalData.developers),
+                    label: JSON.stringify(softwareExternalData.label),
+                    description: JSON.stringify(softwareExternalData.description),
+                    isLibreSoftware: softwareExternalData.isLibreSoftware,
+                    framaLibreId: softwareExternalData.framaLibreId,
+                    websiteUrl: softwareExternalData.websiteUrl,
+                    sourceUrl: softwareExternalData.sourceUrl,
+                    documentationUrl: softwareExternalData.documentationUrl,
+                    license: softwareExternalData.license
+                })
+                .execute();
+
+            await dbApi.software.create({
+                formData: softwareFormData,
+                agent,
+                externalDataOrigin: "wikidata"
+            });
+            const softwares = await dbApi.software.getAll();
+            const softwareId = softwares[0].softwareId;
+            console.log("saving instance");
+            await dbApi.instance.create({
+                agent,
+                fromData: {
+                    mainSoftwareSillId: softwareId,
+                    organization: "test-orga",
+                    targetAudience: "test-audience",
+                    publicUrl: "https://example.com",
+                    otherSoftwareWikidataIds: [externalId]
+                }
+            });
+
+            console.log("getting instance");
+            const instances = await dbApi.instance.getAll();
+
+            expectToEqual(instances[0], {
+                id: expect.any(Number),
+                mainSoftwareSillId: softwareId,
+                organization: "test-orga",
+                targetAudience: "test-audience",
+                publicUrl: "https://example.com",
+                otherWikidataSoftwares: [
+                    {
+                        externalId,
+                        label: softwareExternalData.label,
+                        description: softwareExternalData.description
+                    }
+                ]
             });
         });
     });
