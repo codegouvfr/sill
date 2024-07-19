@@ -3,8 +3,10 @@ import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
 import { DbApiV2 } from "../../../ports/DbApiV2";
 import { ParentSoftwareExternalData, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import { createPgAgentRepository } from "./createPgAgentRepository";
 import { createPgInstanceRepository } from "./createPgInstanceRepository";
 import { createPgSoftwareRepository } from "./createPgSoftwareRepository";
+import { createPgReferentRepository, createPgUserRepository } from "./createPgUserAndReferentRepository";
 import { Database } from "./kysely.database";
 import { convertNullValuesToUndefined, isNotNull, jsonBuildObject } from "./kysely.utils";
 
@@ -12,18 +14,9 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
     return {
         software: createPgSoftwareRepository(db),
         instance: createPgInstanceRepository(db),
-        agent: {
-            createUserOrReferent: async () => {},
-            removeUserOrReferent: async () => {},
-            updateIsProfilePublic: async () => {},
-            updateAbout: async () => {},
-            getIsProfilePublic: async () => {},
-            getByEmail: async () => {},
-            getAll: async () => {},
-            changeOrganization: async () => {},
-            updateEmail: async () => {},
-            getTotalReferentCount: async () => {}
-        },
+        agent: createPgAgentRepository(db),
+        softwareReferent: createPgReferentRepository(db),
+        softwareUser: createPgUserRepository(db),
         getCompiledDataPrivate: async (): Promise<CompiledData<"private">> => {
             console.time("agentById query");
             const agentById: Record<number, Db.AgentRow> = await db

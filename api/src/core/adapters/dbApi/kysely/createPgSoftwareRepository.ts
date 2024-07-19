@@ -8,7 +8,7 @@ import { Database } from "./kysely.database";
 import { convertNullValuesToUndefined, jsonBuildObject } from "./kysely.utils";
 
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => ({
-    create: async ({ formData, externalDataOrigin, agent }) => {
+    create: async ({ formData, externalDataOrigin, agentEmail }) => {
         const {
             softwareName,
             softwareDescription,
@@ -55,12 +55,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 testUrls: JSON.stringify([]),
                 categories: JSON.stringify([]),
                 generalInfoMd: undefined,
-                addedByAgentEmail: agent.email,
+                addedByAgentEmail: agentEmail,
                 keywords: JSON.stringify(softwareKeywords)
             })
             .execute();
     },
-    update: async ({ formData, softwareSillId, agent }) => {
+    update: async ({ formData, softwareSillId, agentEmail }) => {
         const {
             softwareName,
             softwareDescription,
@@ -104,7 +104,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 testUrls: JSON.stringify([]),
                 categories: JSON.stringify([]),
                 generalInfoMd: undefined,
-                addedByAgentEmail: agent.email,
+                addedByAgentEmail: agentEmail,
                 keywords: JSON.stringify(softwareKeywords)
             })
             .where("id", "=", softwareSillId)

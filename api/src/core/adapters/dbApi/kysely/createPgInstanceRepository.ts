@@ -8,7 +8,7 @@ import { Database } from "./kysely.database";
 import { jsonBuildObject } from "./kysely.utils";
 
 export const createPgInstanceRepository = (db: Kysely<Database>): InstanceRepository => ({
-    create: async ({ fromData, agent }) => {
+    create: async ({ fromData, agentEmail }) => {
         const { mainSoftwareSillId, organization, targetAudience, publicUrl, otherSoftwareWikidataIds, ...rest } =
             fromData;
         assert<Equals<typeof rest, {}>>();
@@ -19,7 +19,7 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
             const { instanceId } = await trx
                 .insertInto("instances")
                 .values({
-                    addedByAgentEmail: agent.email,
+                    addedByAgentEmail: agentEmail,
                     updateTime: now,
                     referencedSinceTime: now,
                     mainSoftwareSillId,
@@ -52,7 +52,6 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
             .updateTable("instances")
             .set({
                 updateTime: now,
-                referencedSinceTime: now,
                 mainSoftwareSillId,
                 organization,
                 targetAudience,

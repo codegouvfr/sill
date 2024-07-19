@@ -20,14 +20,6 @@ type AgentsTable = {
     isPublic: boolean;
 };
 
-type SoftwareReferentsTable = {
-    softwareId: number;
-    agentId: number;
-    isExpert: boolean;
-    useCaseDescription: string;
-    serviceUrl: string | null;
-};
-
 type Os = "windows" | "linux" | "mac" | "android" | "ios";
 
 type SoftwareUsersTable = {
@@ -36,6 +28,14 @@ type SoftwareUsersTable = {
     useCaseDescription: string;
     os: Os | null;
     version: string;
+    serviceUrl: string | null;
+};
+
+type SoftwareReferentsTable = {
+    softwareId: number;
+    agentId: number;
+    isExpert: boolean;
+    useCaseDescription: string;
     serviceUrl: string | null;
 };
 
