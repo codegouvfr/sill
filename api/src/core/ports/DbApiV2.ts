@@ -1,9 +1,9 @@
-import { Database } from "../adapters/dbApi/kysely/kysely.database";
-import { Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
-import { OmitFromExisting } from "../utils";
-import { CompiledData } from "./CompileData";
+import type { Database } from "../adapters/dbApi/kysely/kysely.database";
+import type { Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
+import type { OmitFromExisting } from "../utils";
+import type { CompiledData } from "./CompileData";
 
-import { ExternalDataOrigin } from "./GetSoftwareExternalData";
+import type { ExternalDataOrigin } from "./GetSoftwareExternalData";
 
 type WithAgentEmail = { agentEmail: string };
 
@@ -21,6 +21,7 @@ export interface SoftwareRepository {
         } & WithAgentEmail
     ) => Promise<void>;
     getAll: () => Promise<Software[]>;
+    getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: () => {};
 }
 

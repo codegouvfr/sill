@@ -263,5 +263,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     }
                 )
             ),
+    getAllSillSoftwareExternalIds: async externalDataOrigin =>
+        db
+            .selectFrom("softwares")
+            .select("externalId")
+            .where("externalDataOrigin", "=", externalDataOrigin)
+            .execute()
+            .then(rows => rows.map(row => row.externalId!)),
     unreference: async () => {}
 });

@@ -38,6 +38,7 @@ const softwareFormData: SoftwareFormData = {
         }
     }
 };
+
 const softwareExternalData: SoftwareExternalData = {
     externalId,
     externalDataOrigin: "wikidata",
@@ -88,27 +89,7 @@ describe("pgDbApi", () => {
     describe("software", () => {
         it("creates a software, than gets it with getAll", async () => {
             console.log("------ software scenario ------");
-            await db
-                .insertInto("software_external_datas")
-                .values({
-                    ...softwareExternalData,
-                    developers: JSON.stringify(softwareExternalData.developers),
-                    label: JSON.stringify(softwareExternalData.label),
-                    description: JSON.stringify(softwareExternalData.description),
-                    isLibreSoftware: softwareExternalData.isLibreSoftware,
-                    framaLibreId: softwareExternalData.framaLibreId,
-                    websiteUrl: softwareExternalData.websiteUrl,
-                    sourceUrl: softwareExternalData.sourceUrl,
-                    documentationUrl: softwareExternalData.documentationUrl,
-                    license: softwareExternalData.license
-                })
-                .execute();
-
-            await dbApi.software.create({
-                formData: softwareFormData,
-                agentEmail: agent.email,
-                externalDataOrigin: "wikidata"
-            });
+            await insertSoftwareExternalDataAndSoftware();
 
             const softwares = await dbApi.software.getAll();
 
@@ -158,33 +139,17 @@ describe("pgDbApi", () => {
                 userAndReferentCountByOrganization: {},
                 versionMin: ""
             });
+
+            console.log("getting all sill software external ids");
+            const softwareExternalIds = await dbApi.software.getAllSillSoftwareExternalIds("wikidata");
+            expectToEqual(softwareExternalIds, [externalId]);
         });
     });
 
     describe("instance", () => {
         it("creates an instance, than gets it with getAll", async () => {
             console.log("------ instance scenario ------");
-            await db
-                .insertInto("software_external_datas")
-                .values({
-                    ...softwareExternalData,
-                    developers: JSON.stringify(softwareExternalData.developers),
-                    label: JSON.stringify(softwareExternalData.label),
-                    description: JSON.stringify(softwareExternalData.description),
-                    isLibreSoftware: softwareExternalData.isLibreSoftware,
-                    framaLibreId: softwareExternalData.framaLibreId,
-                    websiteUrl: softwareExternalData.websiteUrl,
-                    sourceUrl: softwareExternalData.sourceUrl,
-                    documentationUrl: softwareExternalData.documentationUrl,
-                    license: softwareExternalData.license
-                })
-                .execute();
-
-            await dbApi.software.create({
-                formData: softwareFormData,
-                agentEmail: agent.email,
-                externalDataOrigin: "wikidata"
-            });
+            await insertSoftwareExternalDataAndSoftware();
             const softwares = await dbApi.software.getAll();
             const softwareId = softwares[0].softwareId;
             console.log("saving instance");
@@ -264,27 +229,7 @@ describe("pgDbApi", () => {
         let agentId: number;
         beforeEach(async () => {
             console.log("before -- setting up test with software and agent");
-            await db
-                .insertInto("software_external_datas")
-                .values({
-                    ...softwareExternalData,
-                    developers: JSON.stringify(softwareExternalData.developers),
-                    label: JSON.stringify(softwareExternalData.label),
-                    description: JSON.stringify(softwareExternalData.description),
-                    isLibreSoftware: softwareExternalData.isLibreSoftware,
-                    framaLibreId: softwareExternalData.framaLibreId,
-                    websiteUrl: softwareExternalData.websiteUrl,
-                    sourceUrl: softwareExternalData.sourceUrl,
-                    documentationUrl: softwareExternalData.documentationUrl,
-                    license: softwareExternalData.license
-                })
-                .execute();
-
-            await dbApi.software.create({
-                formData: softwareFormData,
-                agentEmail: agent.email,
-                externalDataOrigin: "wikidata"
-            });
+            await insertSoftwareExternalDataAndSoftware();
 
             await dbApi.agent.add({
                 email: "test@test.com",
@@ -362,4 +307,28 @@ describe("pgDbApi", () => {
             expectToEqual(referentsAfterDelete, []);
         });
     });
+
+    const insertSoftwareExternalDataAndSoftware = async () => {
+        await db
+            .insertInto("software_external_datas")
+            .values({
+                ...softwareExternalData,
+                developers: JSON.stringify(softwareExternalData.developers),
+                label: JSON.stringify(softwareExternalData.label),
+                description: JSON.stringify(softwareExternalData.description),
+                isLibreSoftware: softwareExternalData.isLibreSoftware,
+                framaLibreId: softwareExternalData.framaLibreId,
+                websiteUrl: softwareExternalData.websiteUrl,
+                sourceUrl: softwareExternalData.sourceUrl,
+                documentationUrl: softwareExternalData.documentationUrl,
+                license: softwareExternalData.license
+            })
+            .execute();
+
+        await dbApi.software.create({
+            formData: softwareFormData,
+            agentEmail: agent.email,
+            externalDataOrigin: "wikidata"
+        });
+    };
 });
