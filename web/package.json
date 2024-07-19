@@ -1,6 +1,6 @@
 {
     "name": "web",
-    "version": "1.41.2",
+    "version": "1.41.3",
     "license": "MIT",
     "scripts": {
         "dev": "react-app-rewired start",
