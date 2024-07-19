@@ -1287,12 +1287,12 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@codegouvfr/react-dsfr@^1.0.0":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@codegouvfr/react-dsfr/-/react-dsfr-1.9.1.tgz#3746b3b6ccd2f7995d172792474c66e1ff7934bf"
-  integrity sha512-o8PEDsM/5b4bW3FgZNvZ04mkvxS9hNCW9CsKoK0svVnOG+YUQc6Z8GBrYcYf207RzFBor8YL+Avdiq9aqPNSeQ==
+"@codegouvfr/react-dsfr@^1.10.9":
+  version "1.10.9"
+  resolved "https://registry.yarnpkg.com/@codegouvfr/react-dsfr/-/react-dsfr-1.10.9.tgz#49175522bad37b647f27d5126ceee3e9ee50314a"
+  integrity sha512-+y+ptvsiFcnTxIVjtoqNTKChEDIQiuvM3btt0FE3LF1ArP/KeNFb+5GFOX8E6fIvkV54DiX+qBc1VWfjfsmeqg==
   dependencies:
-    tsafe "^1.6.3"
+    tsafe "^1.7.2"
     yargs-parser "^21.1.1"
 
 "@colors/colors@1.5.0":
@@ -17377,10 +17377,15 @@ ts-pnp@^1.1.6:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
-tsafe@^1.6.0, tsafe@^1.6.3, tsafe@^1.6.5, tsafe@^1.6.6:
+tsafe@^1.6.0, tsafe@^1.6.5, tsafe@^1.6.6:
   version "1.6.6"
   resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.6.6.tgz#fd93e64d6eb13ef83ed1650669cc24bad4f5df9f"
   integrity sha512-gzkapsdbMNwBnTIjgO758GujLCj031IgHK/PKr2mrmkCSJMhSOR5FeOuSxKLMUoYc0vAA4RGEYYbjt/v6afD3g==
+
+tsafe@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/tsafe/-/tsafe-1.7.2.tgz#0f63d414876287ad01b135f832722f93e22da374"
+  integrity sha512-dAPfQLhCfCRre5qs+Z5Q2a7s2CV7RxffZUmvj7puGaePYjECzWREJFd3w4XSFe/T5tbxgowfItA/JSSZ6Ma3dA==
 
 tsconfig-paths@^3.15.0:
   version "3.15.0"
