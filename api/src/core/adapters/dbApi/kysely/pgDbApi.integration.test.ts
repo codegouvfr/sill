@@ -1,9 +1,10 @@
 import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it } from "vitest";
 import { expectToEqual } from "../../../../tools/test.helpers";
+import { DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { SoftwareFormData } from "../../../usecases/readWriteSillData";
-import { createKyselyPgDbApi, PgDbApi } from "./createPgDbApi";
+import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 
@@ -55,7 +56,7 @@ const softwareExternalData: SoftwareExternalData = {
 const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5433/sill") });
 
 describe("pgDbApi", () => {
-    let dbApi: PgDbApi;
+    let dbApi: DbApiV2;
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
