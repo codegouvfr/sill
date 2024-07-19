@@ -18,9 +18,6 @@ COPY api/ api/
 COPY web/src/ web/src/
 COPY web/config-overrides.js web/tsconfig.json web/
 
-WORKDIR /app/web
-RUN yarn prepare
-
 WORKDIR /app
 RUN yarn build
 
