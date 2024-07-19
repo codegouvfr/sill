@@ -61,12 +61,12 @@ describe("pgDbApi", () => {
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
-        await db.deleteFrom("software_referents").execute();
-        await db.deleteFrom("software_users").execute();
-        await db.deleteFrom("softwares").execute();
-        await db.deleteFrom("software_external_datas").execute();
-        await db.deleteFrom("instances").execute();
-        await db.deleteFrom("agents").execute();
+        // await db.deleteFrom("software_referents").execute();
+        // await db.deleteFrom("software_users").execute();
+        // await db.deleteFrom("softwares").execute();
+        // await db.deleteFrom("software_external_datas").execute();
+        // await db.deleteFrom("instances").execute();
+        // await db.deleteFrom("agents").execute();
     });
 
     afterEach(() => {
@@ -76,7 +76,7 @@ describe("pgDbApi", () => {
     describe("getCompiledDataPrivate", () => {
         it("gets private compiled data", async () => {
             const compiledDataPrivate = await dbApi.getCompiledDataPrivate();
-            const { users, referents, instances, ...firstSoftware } = compiledDataPrivate[0];
+            const { users, referents, instances, ...firstSoftware } = compiledDataPrivate.find(s => s.id === 42)!;
             console.log(firstSoftware);
             //
             console.log(`Users n = ${users?.length} : `, users);

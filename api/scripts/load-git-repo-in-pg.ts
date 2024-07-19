@@ -185,22 +185,23 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
                             software.softwareExternalData?.externalDataOrigin !== undefined
                     )
                     .map(
-                        (software): InsertObject<Database, "software_external_datas"> => ({
-                            externalId: software.softwareExternalData.externalId,
-                            externalDataOrigin: software.softwareExternalData.externalDataOrigin,
-                            developers: JSON.stringify(software.softwareExternalData?.developers ?? []),
-                            label: JSON.stringify(software.softwareExternalData?.label ?? {}),
-                            description: JSON.stringify(software.softwareExternalData?.description ?? {}),
-                            isLibreSoftware: software.softwareExternalData?.isLibreSoftware ?? false,
-                            logoUrl: software.softwareExternalData?.logoUrl ?? null,
-                            framaLibreId: software.softwareExternalData?.framaLibreId ?? null,
-                            websiteUrl: software.softwareExternalData?.websiteUrl ?? null,
-                            sourceUrl: software.softwareExternalData?.sourceUrl ?? null,
-                            documentationUrl: software.softwareExternalData?.documentationUrl ?? null,
-                            license: software.softwareExternalData?.license ?? null
+                        ({ softwareExternalData }): InsertObject<Database, "software_external_datas"> => ({
+                            externalId: softwareExternalData.externalId,
+                            externalDataOrigin: softwareExternalData.externalDataOrigin,
+                            developers: JSON.stringify(softwareExternalData?.developers ?? []),
+                            label: JSON.stringify(softwareExternalData?.label ?? {}),
+                            description: JSON.stringify(softwareExternalData?.description ?? {}),
+                            isLibreSoftware: softwareExternalData?.isLibreSoftware ?? false,
+                            logoUrl: softwareExternalData?.logoUrl ?? null,
+                            framaLibreId: softwareExternalData?.framaLibreId ?? null,
+                            websiteUrl: softwareExternalData?.websiteUrl ?? null,
+                            sourceUrl: softwareExternalData?.sourceUrl ?? null,
+                            documentationUrl: softwareExternalData?.documentationUrl ?? null,
+                            license: softwareExternalData?.license ?? null
                         })
                     )
             )
+            .onConflict(conflict => conflict.column("externalId").doNothing())
             .executeTakeFirst();
     });
 };
