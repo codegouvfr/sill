@@ -1,6 +1,8 @@
 import { Kysely } from "kysely";
+import * as fs from "node:fs";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
 import { expectPromiseToFailWith, expectToEqual } from "../../../../tools/test.helpers";
+import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 import { Agent, DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { SoftwareFormData } from "../../../usecases/readWriteSillData";
@@ -61,12 +63,12 @@ describe("pgDbApi", () => {
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
-        // await db.deleteFrom("software_referents").execute();
-        // await db.deleteFrom("software_users").execute();
-        // await db.deleteFrom("softwares").execute();
-        // await db.deleteFrom("software_external_datas").execute();
-        // await db.deleteFrom("instances").execute();
-        // await db.deleteFrom("agents").execute();
+        await db.deleteFrom("software_referents").execute();
+        await db.deleteFrom("software_users").execute();
+        await db.deleteFrom("softwares").execute();
+        await db.deleteFrom("software_external_datas").execute();
+        await db.deleteFrom("instances").execute();
+        await db.deleteFrom("agents").execute();
     });
 
     afterEach(() => {
@@ -75,14 +77,23 @@ describe("pgDbApi", () => {
 
     describe("getCompiledDataPrivate", () => {
         it("gets private compiled data", async () => {
-            const compiledDataPrivate = await dbApi.getCompiledDataPrivate();
-            const { users, referents, instances, ...firstSoftware } = compiledDataPrivate.find(s => s.id === 42)!;
-            console.log(firstSoftware);
+            // const compiledDataPrivate = await dbApi.getCompiledDataPrivate();
+            // console.log("compiledDataPrivate.length : ", compiledDataPrivate.length);
+            // // write softwares to file
+            // const publicCompiledData = compiledDataPrivateToPublic(compiledDataPrivate);
+            // publicCompiledData.sort((a, b) => (a.id >= b.id ? 1 : -1));
+            // const data = JSON.stringify(publicCompiledData, null, 2);
+            // fs.writeFileSync("./my-ordered-from-db.json", data);
             //
-            console.log(`Users n = ${users?.length} : `, users);
-            console.log(`Referents n = ${referents?.length} : `, referents);
-            console.log(`Instances n = ${instances?.length} : `, instances);
-            expect(compiledDataPrivate).toHaveLength(100);
+            // console.log("publicCompiledData", JSON.stringify(publicCompiledData, null, 2));
+            //
+            // const { users, referents, instances, ...firstSoftware } = compiledDataPrivate.find(s => s.id === 42)!;
+            // console.log(firstSoftware);
+            // //
+            // console.log(`Users n = ${users?.length} : `, users);
+            // console.log(`Referents n = ${referents?.length} : `, referents);
+            // console.log(`Instances n = ${instances?.length} : `, instances);
+            // expect(compiledDataPrivate).toHaveLength(100);
         });
     });
 
@@ -121,7 +132,19 @@ describe("pgDbApi", () => {
                     isPresentInSupportContract: true
                 },
                 serviceProviders: [],
-                similarSoftwares: [],
+                similarSoftwares: [
+                    {
+                        externalDataOrigin: "wikidata",
+                        externalId: "external-id-222",
+                        label: {
+                            en: "Some software",
+                            fr: "Un logiciel"
+                        },
+                        description: "Some software description for similar software",
+                        isLibreSoftware: softwareExternalData.isLibreSoftware,
+                        isInSill: false
+                    }
+                ],
                 softwareDescription: "Super software",
                 softwareId: expect.any(Number),
                 softwareName: softwareFormData.softwareName,

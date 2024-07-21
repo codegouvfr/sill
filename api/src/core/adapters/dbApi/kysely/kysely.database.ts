@@ -107,7 +107,6 @@ type SoftwaresTable = {
     doRespectRgaa: boolean | null;
     isFromFrenchPublicService: boolean;
     isPresentInSupportContract: boolean;
-    similarSoftwareExternalDataIds: JSONColumnType<string[]>;
     parentSoftwareWikidataId: string | null;
     externalId: string | null;
     externalDataOrigin: "wikidata" | "HAL" | null;

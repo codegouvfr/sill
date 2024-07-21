@@ -30,7 +30,6 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("doRespectRgaa", "boolean")
         // from ???
         .addColumn("isStillInObservation", "boolean", col => col.notNull())
-        .addColumn("similarSoftwareExternalDataIds", "jsonb")
         .addColumn("parentSoftwareWikidataId", "text")
         .addColumn("catalogNumeriqueGouvFrId", "text")
         .addColumn("workshopUrls", "jsonb", col => col.notNull())

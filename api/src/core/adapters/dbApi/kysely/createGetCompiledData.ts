@@ -3,7 +3,7 @@ import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
 import { ParentSoftwareExternalData, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Database } from "./kysely.database";
-import { convertNullValuesToUndefined, isNotNull, jsonBuildObject } from "./kysely.utils";
+import { convertNullValuesToUndefined, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
 
 export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise<CompiledData<"private">> => {
     console.time("agentById query");
@@ -90,35 +90,26 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     .case()
                     .when("ext.externalId", "is not", null)
                     .then(
-                        jsonBuildObject({
-                            externalId: ref("ext.externalId"),
-                            externalDataOrigin: ref("ext.externalDataOrigin"),
-                            developers: ref("ext.developers"),
-                            label: ref("ext.label"),
-                            description: ref("ext.description"),
-                            isLibreSoftware: ref("ext.isLibreSoftware"),
-                            logoUrl: ref("ext.logoUrl"),
-                            framaLibreId: ref("ext.framaLibreId"),
-                            websiteUrl: ref("ext.websiteUrl"),
-                            sourceUrl: ref("ext.sourceUrl"),
-                            documentationUrl: ref("ext.documentationUrl")
-                        }).$castTo<SoftwareExternalData>()
+                        jsonStripNulls(
+                            jsonBuildObject({
+                                externalId: ref("ext.externalId"),
+                                externalDataOrigin: ref("ext.externalDataOrigin"),
+                                developers: ref("ext.developers"),
+                                label: ref("ext.label"),
+                                description: ref("ext.description"),
+                                isLibreSoftware: ref("ext.isLibreSoftware"),
+                                logoUrl: ref("ext.logoUrl"),
+                                framaLibreId: ref("ext.framaLibreId"),
+                                websiteUrl: ref("ext.websiteUrl"),
+                                sourceUrl: ref("ext.sourceUrl"),
+                                documentationUrl: ref("ext.documentationUrl"),
+                                license: ref("ext.license")
+                            })
+                        ).$castTo<SoftwareExternalData>()
                     )
                     .end()
                     .as("softwareExternalData"),
-            ({ ref, fn }) =>
-                fn
-                    .jsonAgg(
-                        jsonBuildObject({
-                            externalId: ref("similarExt.externalId"),
-                            label: ref("similarExt.label"),
-                            description: ref("similarExt.description"),
-                            isLibreSoftware: ref("similarExt.isLibreSoftware"),
-                            externalDataOrigin: ref("similarExt.externalDataOrigin")
-                        }).$castTo<SoftwareExternalData>()
-                    )
-                    .filterWhere("similarExt.externalId", "is not", null)
-                    .as("similarExternalSoftwares"),
+            ({ fn }) => fn.jsonAgg("similarExt").distinct().as("similarExternalSoftwares"),
             ({ fn }) => fn.jsonAgg("users").distinct().as("users"),
             ({ fn }) => fn.jsonAgg("referents").distinct().as("referents"),
             ({ fn }) => fn.jsonAgg("instances").distinct().as("instances")
@@ -158,7 +149,16 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         parentWikidataSoftware: parentWikidataSoftware ?? undefined,
                         dereferencing: dereferencing ?? undefined,
                         serviceProviders: serviceProviders ?? [],
-                        similarExternalSoftwares: similarExternalSoftwares ?? [],
+                        similarExternalSoftwares: (similarExternalSoftwares ?? [])
+                            .filter(isNotNull)
+                            .map(similar => ({
+                                "externalId": similar.externalId!,
+                                "externalDataOrigin": similar.externalDataOrigin!,
+                                "label": similar.label!,
+                                "description": similar.description!,
+                                "isLibreSoftware": similar.isLibreSoftware!
+                            }))
+                            .sort((a, b) => a.externalId.localeCompare(b.externalId)),
                         users: users.filter(isNotNull).map(user => ({
                             ...(user as any),
                             organization: agentById[user.agentId!]?.organization
@@ -167,8 +167,13 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             ...(referent as any),
                             organization: agentById[referent.agentId!]?.organization
                         })),
-                        instances: instances.filter(isNotNull).map(instance => ({
-                            ...(instance as any)
+                        instances: (instances ?? []).filter(isNotNull).map(instance => ({
+                            id: instance.id!,
+                            organization: instance.organization!,
+                            targetAudience: instance.targetAudience!,
+                            publicUrl: instance.publicUrl ?? undefined,
+                            addedByAgentEmail: instance.addedByAgentEmail!,
+                            otherWikidataSoftwares: []
                         }))
                     };
                 }
@@ -177,5 +182,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             return processedSoftwares;
         });
 
+    console.log("numberOfCompiledSoftwares : ", compliedSoftwares.length);
     return compliedSoftwares;
 };

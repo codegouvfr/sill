@@ -29,36 +29,44 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
-        await db
-            .insertInto("softwares")
-            .values({
-                name: softwareName,
-                description: softwareDescription,
-                license: softwareLicense,
-                logoUrl: softwareLogoUrl,
-                versionMin: softwareMinimalVersion,
-                referencedSinceTime: now,
-                updateTime: now,
-                dereferencing: undefined,
-                isStillInObservation: false,
-                parentSoftwareWikidataId: undefined,
-                doRespectRgaa: doRespectRgaa,
-                isFromFrenchPublicService: isFromFrenchPublicService,
-                isPresentInSupportContract: isPresentInSupportContract,
-                similarSoftwareExternalDataIds: JSON.stringify(similarSoftwareExternalDataIds),
-                externalId: externalId,
-                externalDataOrigin: externalDataOrigin,
-                comptoirDuLibreId: comptoirDuLibreId,
-                softwareType: JSON.stringify(softwareType),
-                catalogNumeriqueGouvFrId: undefined,
-                workshopUrls: JSON.stringify([]),
-                testUrls: JSON.stringify([]),
-                categories: JSON.stringify([]),
-                generalInfoMd: undefined,
-                addedByAgentEmail: agentEmail,
-                keywords: JSON.stringify(softwareKeywords)
-            })
-            .execute();
+
+        await db.transaction().execute(async trx => {
+            const { softwareId } = await trx
+                .insertInto("softwares")
+                .values({
+                    name: softwareName,
+                    description: softwareDescription,
+                    license: softwareLicense,
+                    logoUrl: softwareLogoUrl,
+                    versionMin: softwareMinimalVersion,
+                    referencedSinceTime: now,
+                    updateTime: now,
+                    dereferencing: undefined,
+                    isStillInObservation: false,
+                    parentSoftwareWikidataId: undefined,
+                    doRespectRgaa: doRespectRgaa,
+                    isFromFrenchPublicService: isFromFrenchPublicService,
+                    isPresentInSupportContract: isPresentInSupportContract,
+                    externalId: externalId,
+                    externalDataOrigin: externalDataOrigin,
+                    comptoirDuLibreId: comptoirDuLibreId,
+                    softwareType: JSON.stringify(softwareType),
+                    catalogNumeriqueGouvFrId: undefined,
+                    workshopUrls: JSON.stringify([]),
+                    testUrls: JSON.stringify([]),
+                    categories: JSON.stringify([]),
+                    generalInfoMd: undefined,
+                    addedByAgentEmail: agentEmail,
+                    keywords: JSON.stringify(softwareKeywords)
+                })
+                .returning("id as softwareId")
+                .executeTakeFirstOrThrow();
+
+            await trx
+                .insertInto("softwares__similar_software_external_datas")
+                .values(similarSoftwareExternalDataIds.map(similarExternalId => ({ softwareId, similarExternalId })))
+                .execute();
+        });
     },
     update: async ({ formData, softwareSillId, agentEmail }) => {
         const {
@@ -95,7 +103,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 doRespectRgaa: doRespectRgaa,
                 isFromFrenchPublicService: isFromFrenchPublicService,
                 isPresentInSupportContract: isPresentInSupportContract,
-                similarSoftwareExternalDataIds: JSON.stringify(similarSoftwareExternalDataIds),
                 externalId: externalId,
                 comptoirDuLibreId: comptoirDuLibreId,
                 softwareType: JSON.stringify(softwareType),
@@ -176,7 +183,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         .else(null)
                         .end()
                         .as("parentExternalData"),
-                "s.similarSoftwareExternalDataIds",
                 "s.keywords",
 
                 ({ ref }) =>
@@ -218,7 +224,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     ({
                         testUrls,
                         serviceProviders,
-                        similarSoftwareExternalDataIds,
                         parentExternalData,
                         updateTime,
                         addedTime,

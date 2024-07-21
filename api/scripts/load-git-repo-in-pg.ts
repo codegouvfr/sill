@@ -48,13 +48,13 @@ const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>
     console.info("Number of softwares to insert : ", softwareRows.length);
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("softwares").execute();
+        await trx.deleteFrom("softwares__similar_software_external_datas").execute();
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(row => ({
+                softwareRows.map(({ similarSoftwareExternalDataIds: _, ...row }) => ({
                     ...row,
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
-                    similarSoftwareExternalDataIds: JSON.stringify(row.similarSoftwareExternalDataIds),
                     softwareType: JSON.stringify(row.softwareType),
                     workshopUrls: JSON.stringify(row.workshopUrls),
                     testUrls: JSON.stringify(row.testUrls),
@@ -63,6 +63,18 @@ const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>
                 }))
             )
             .executeTakeFirst();
+
+        await trx
+            .insertInto("softwares__similar_software_external_datas")
+            .values(
+                softwareRows.flatMap(row =>
+                    Array.from(new Set(row.similarSoftwareExternalDataIds)).map(externalId => ({
+                        softwareId: row.id,
+                        similarExternalId: externalId
+                    }))
+                )
+            )
+            .execute();
     });
 };
 
@@ -168,6 +180,7 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
             .executeTakeFirst();
 
         await trx.deleteFrom("software_external_datas").execute();
+
         await trx
             .insertInto("software_external_datas")
             .values(
@@ -199,6 +212,25 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
                             documentationUrl: softwareExternalData?.documentationUrl ?? null,
                             license: softwareExternalData?.license ?? null
                         })
+                    )
+            )
+            .onConflict(conflict => conflict.column("externalId").doNothing())
+            .executeTakeFirst();
+
+        await trx
+            .insertInto("software_external_datas")
+            .values(
+                compiledSoftwares
+                    .filter(s => s.similarExternalSoftwares.length > 0)
+                    .flatMap(s =>
+                        (s.similarExternalSoftwares ?? []).map(similarExternalSoftware => ({
+                            externalId: similarExternalSoftware.externalId,
+                            externalDataOrigin: similarExternalSoftware.externalDataOrigin,
+                            developers: JSON.stringify([]),
+                            label: JSON.stringify(similarExternalSoftware?.label ?? {}),
+                            description: JSON.stringify(similarExternalSoftware?.description ?? {}),
+                            isLibreSoftware: similarExternalSoftware?.isLibreSoftware ?? false
+                        }))
                     )
             )
             .onConflict(conflict => conflict.column("externalId").doNothing())
