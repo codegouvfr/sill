@@ -14,13 +14,14 @@ const agent = {
     organization: "test-orga"
 };
 const externalId = "external-id-111";
+const similarExternalId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
-    externalId: "external-id-111",
+    externalId,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: [externalId],
+    similarSoftwareExternalDataIds: [similarExternalId],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -51,6 +52,21 @@ const softwareExternalData: SoftwareExternalData = {
     websiteUrl: "https://example.com",
     sourceUrl: "https://example.com/source",
     documentationUrl: "https://example.com/documentation",
+    license: "MIT"
+};
+
+const similarSoftwareExternalData: SoftwareExternalData = {
+    externalId: similarExternalId,
+    externalDataOrigin: "wikidata",
+    developers: [{ name: "Bobby", id: "similar-bob" }],
+    label: "Some similar software",
+    description: { en: "Some similar software description" },
+    isLibreSoftware: true,
+    logoUrl: "https://example.com/similar-logo.png",
+    framaLibreId: "",
+    websiteUrl: "https://example.similar.com",
+    sourceUrl: "https://example.similar.com/source",
+    documentationUrl: "https://example.similar.com/documentation",
     license: "MIT"
 };
 
@@ -133,13 +149,10 @@ describe("pgDbApi", () => {
                 similarSoftwares: [
                     {
                         externalDataOrigin: "wikidata",
-                        externalId: "external-id-222",
-                        label: {
-                            en: "Some software",
-                            fr: "Un logiciel"
-                        },
-                        description: "Some software description for similar software",
-                        isLibreSoftware: softwareExternalData.isLibreSoftware,
+                        externalId: similarSoftwareExternalData.externalId,
+                        label: similarSoftwareExternalData.label,
+                        description: similarSoftwareExternalData.description,
+                        isLibreSoftware: similarSoftwareExternalData.isLibreSoftware,
                         isInSill: false
                     }
                 ],
@@ -324,18 +337,14 @@ describe("pgDbApi", () => {
     const insertSoftwareExternalDataAndSoftware = async () => {
         await db
             .insertInto("software_external_datas")
-            .values({
-                ...softwareExternalData,
-                developers: JSON.stringify(softwareExternalData.developers),
-                label: JSON.stringify(softwareExternalData.label),
-                description: JSON.stringify(softwareExternalData.description),
-                isLibreSoftware: softwareExternalData.isLibreSoftware,
-                framaLibreId: softwareExternalData.framaLibreId,
-                websiteUrl: softwareExternalData.websiteUrl,
-                sourceUrl: softwareExternalData.sourceUrl,
-                documentationUrl: softwareExternalData.documentationUrl,
-                license: softwareExternalData.license
-            })
+            .values(
+                [softwareExternalData, similarSoftwareExternalData].map(softExtData => ({
+                    ...softExtData,
+                    developers: JSON.stringify(softExtData.developers),
+                    label: JSON.stringify(softExtData.label),
+                    description: JSON.stringify(softExtData.description)
+                }))
+            )
             .execute();
 
         await dbApi.software.create({
