@@ -31,6 +31,13 @@ export type SoftwareExternalData = {
     license: string;
 }>;
 
+export type SimilarSoftwareExternalData = Pick<
+    SoftwareExternalData,
+    "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
+>;
+
+export type ParentSoftwareExternalData = Pick<SoftwareExternalData, "externalId" | "label" | "description">;
+
 export const languages = ["fr", "en"] as const;
 
 export type Language = (typeof languages)[number];

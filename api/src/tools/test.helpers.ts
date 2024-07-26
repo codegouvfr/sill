@@ -2,6 +2,10 @@ import { expect } from "vitest";
 import { Db } from "../core/ports/DbApi";
 import { DeclarationFormData, InstanceFormData, SoftwareFormData } from "../core/usecases/readWriteSillData";
 
+export const expectPromiseToFailWith = (promise: Promise<any>, errorMessage: string) => {
+    return expect(promise).rejects.toThrow(errorMessage);
+};
+
 export const expectToEqual = <T>(actual: T, expected: T) => {
     expect(actual).toEqual(expected);
 };

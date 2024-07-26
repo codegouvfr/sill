@@ -33,13 +33,13 @@ export const Footer = memo(
                         {
                             "text": `sill-api: v${apiVersion}`,
                             "linkProps": {
-                                "href": `https://github.com/codegouvfr/sill-api/tree/v${apiVersion}`
+                                "href": `https://github.com/codegouvfr/sill/tree/v${apiVersion}`
                             }
                         },
                         {
                             "text": `sill-web: v${webVersion}`,
                             "linkProps": {
-                                "href": `https://github.com/codegouvfr/sill-web/tree/v${webVersion}`
+                                "href": `https://github.com/codegouvfr/sill/tree/v${webVersion}`
                             }
                         },
                         {

@@ -85,7 +85,7 @@ describe("RPC e2e tests", () => {
             const expectedSoftware: Partial<CompiledData.Software<"public">> = {
                 "description": softwareFormData.softwareDescription,
                 "externalId": softwareFormData.externalId,
-                "doRespectRgaa": softwareFormData.doRespectRgaa,
+                "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
                 "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
                 "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
                 "keywords": softwareFormData.softwareKeywords,
