@@ -10,7 +10,7 @@
     "test": "turbo test",
     "format": "turbo format",
     "format:check": "turbo format:check",
-    "fullcheck": "turbo typecheck format:check test"
+    "fullcheck": "turbo typecheck format:check lint test"
   },
   "devDependencies": {
     "turbo": "^1.12.5"

@@ -157,5 +157,4 @@ export type InstanceFormData = {
     organization: string;
     targetAudience: string;
     publicUrl: string | undefined;
-    otherSoftwareWikidataIds: string[];
 };

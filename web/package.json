@@ -7,6 +7,7 @@
         "build": "react-app-rewired build && rimraf build/keycloak-resources",
         "build-keycloak-theme": "yarn build && keycloakify",
         "storybook": "start-storybook -p 6006",
+        "lint": "eslint --ext .ts,.tsx,.js,.jsx src",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
         "format": "yarn _format --write",
         "format:check": "yarn _format --list-different",

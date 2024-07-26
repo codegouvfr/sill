@@ -18,7 +18,6 @@ import { declareComponentKeys } from "i18nifty";
 import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
-import { useLang } from "ui/i18n";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 
 export type Props = {
@@ -34,10 +33,7 @@ export default function InstanceForm(props: Props) {
 
     const { evtInstanceForm } = useCore().evts;
 
-    const {
-        instanceForm,
-        softwareForm: { getExternalSoftwareOptions }
-    } = useCore().functions;
+    const { instanceForm } = useCore().functions;
 
     const {
         isReady,
@@ -106,8 +102,6 @@ export default function InstanceForm(props: Props) {
 
     const evtActionSubmitStep = useConst(() => Evt.create());
 
-    const { lang } = useLang();
-
     if (!isReady) {
         return <LoadingFallback className={className} showAfterMs={150} />;
     }
@@ -147,16 +141,11 @@ export default function InstanceForm(props: Props) {
                 <InstanceFormStep1
                     className={cx(classes.step, classes.step1)}
                     initialFormData={{
-                        "mainSoftwareSillId": initializationData.mainSoftwareSillId,
-                        "otherWikidataSoftwares": initializationData.otherSoftwares
+                        "mainSoftwareSillId": initializationData.mainSoftwareSillId
                     }}
-                    getLibreSoftwareWikidataOptions={queryString =>
-                        getExternalSoftwareOptions({ queryString, "language": lang })
-                    }
-                    onSubmit={({ mainSoftwareSillId, otherWikidataSoftwares }) =>
+                    onSubmit={({ mainSoftwareSillId }) =>
                         instanceForm.completeStep1({
-                            mainSoftwareSillId,
-                            otherWikidataSoftwares
+                            mainSoftwareSillId
                         })
                     }
                     allSillSoftwares={allSillSoftwares}
