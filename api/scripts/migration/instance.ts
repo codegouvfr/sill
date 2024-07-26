@@ -15,7 +15,6 @@ const zInstanceRow = z.object({
     "organization": z.string(),
     "targetAudience": z.string(),
     "publicUrl": z.string().optional(),
-    "otherSoftwareWikidataIds": z.array(z.string()),
     "addedByAgentEmail": z.string(),
     "referencedSinceTime": z.number(),
     "updateTime": z.number()
@@ -43,7 +42,6 @@ fs.writeFileSync(
                     id,
                     mainSoftwareSillId,
                     organization,
-                    otherSoftwareWikidataIds,
                     publicUrl,
                     targetAudience,
                     addedByAgentEmail,
@@ -58,7 +56,6 @@ fs.writeFileSync(
                     id,
                     mainSoftwareSillId,
                     organization,
-                    otherSoftwareWikidataIds,
                     publicUrl,
                     targetAudience,
                     addedByAgentEmail,
