@@ -5,7 +5,6 @@ export type Database = {
     software_referents: SoftwareReferentsTable;
     software_users: SoftwareUsersTable;
     instances: InstancesTable;
-    instances__other_external_softwares: InstancesOtherExternalSoftwaresTable;
     softwares: SoftwaresTable;
     software_external_datas: SoftwareExternalDatasTable;
     softwares__similar_software_external_datas: SimilarExternalSoftwareExternalDataTable;
@@ -48,11 +47,6 @@ type InstancesTable = {
     addedByAgentEmail: string;
     referencedSinceTime: number;
     updateTime: number;
-};
-
-type InstancesOtherExternalSoftwaresTable = {
-    instanceId: number;
-    externalId: ExternalId;
 };
 
 type ExternalId = string;

@@ -1,8 +1,7 @@
 import type {
     ExternalDataOrigin,
     ParentSoftwareExternalData,
-    SimilarSoftwareExternalData,
-    SoftwareExternalData
+    SimilarSoftwareExternalData
 } from "../../ports/GetSoftwareExternalData";
 
 export type ServiceProvider = {

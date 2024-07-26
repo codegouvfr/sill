@@ -148,11 +148,7 @@ const insertInstances = async ({ instanceRows, db }: { instanceRows: Db.Instance
     console.info("Number of instances to insert : ", instanceRows.length);
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("instances").execute();
-
-        await trx
-            .insertInto("instances")
-            .values(instanceRows.map(({ otherSoftwareWikidataIds, ...row }) => row))
-            .executeTakeFirst();
+        await trx.insertInto("instances").values(instanceRows).executeTakeFirst();
     });
 };
 

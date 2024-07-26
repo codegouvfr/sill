@@ -1,8 +1,6 @@
 import { Kysely } from "kysely";
-import * as fs from "node:fs";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
 import { expectPromiseToFailWith, expectToEqual } from "../../../../tools/test.helpers";
-import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 import { Agent, DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { SoftwareFormData } from "../../../usecases/readWriteSillData";
@@ -182,8 +180,7 @@ describe("pgDbApi", () => {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
                     targetAudience: "test-audience",
-                    publicUrl: "https://example.com",
-                    otherSoftwareWikidataIds: [externalId]
+                    publicUrl: "https://example.com"
                 }
             });
 
@@ -195,14 +192,7 @@ describe("pgDbApi", () => {
                 mainSoftwareSillId: softwareId,
                 organization: "test-orga",
                 targetAudience: "test-audience",
-                publicUrl: "https://example.com",
-                otherWikidataSoftwares: [
-                    {
-                        externalId,
-                        label: softwareExternalData.label,
-                        description: softwareExternalData.description
-                    }
-                ]
+                publicUrl: "https://example.com"
             });
         });
     });
