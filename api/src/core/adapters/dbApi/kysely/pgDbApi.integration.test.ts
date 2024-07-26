@@ -70,7 +70,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     license: "MIT"
 };
 
-const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5433/sill") });
+const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5432/sill") });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
