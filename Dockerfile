@@ -23,7 +23,7 @@ RUN yarn build
 
 WORKDIR /app/api
 RUN rm -r src
-RUN cp dist -r src/
+RUN cp dist/src -r src/
 RUN npx ncc build src/main.js
 
 WORKDIR /app
@@ -39,7 +39,7 @@ RUN apk add --no-cache \
   git \
   openssh-client \
   ca-certificates
-COPY --from=build /app/api/dist/src/index.js .
+COPY --from=build /app/api/dist/src/lib/index.js .
 # For reading the version number
 COPY --from=build /app/package.json .
 ENTRYPOINT sh -c "forever index.js"
