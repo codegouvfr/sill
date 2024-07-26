@@ -90,7 +90,6 @@ export namespace Db {
         organization: string;
         targetAudience: string;
         publicUrl: string | undefined;
-        otherSoftwareWikidataIds: string[];
         addedByAgentEmail: string;
         referencedSinceTime: number;
         updateTime: number;

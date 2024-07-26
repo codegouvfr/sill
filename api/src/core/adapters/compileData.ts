@@ -192,41 +192,7 @@ export function createCompileData(params: {
                             };
                         })
                     ).then(similarWikidataSoftwares => similarWikidataSoftwares.filter(exclude(undefined))),
-                    Promise.all(
-                        instanceRows
-                            .filter(({ mainSoftwareSillId }) => mainSoftwareSillId === sillId)
-                            .map(async ({ id, otherSoftwareWikidataIds }) => {
-                                const instance_cache = cache?.instances.find(instance => instance.id === id);
-
-                                return {
-                                    "id": id,
-                                    "otherWikidataSoftwares": await Promise.all(
-                                        otherSoftwareWikidataIds.map(async wikidataId => {
-                                            const otherWikidataSoftware_cache =
-                                                instance_cache?.otherWikidataSoftwares.find(
-                                                    wikidataSoftware => wikidataSoftware.externalId === wikidataId
-                                                );
-
-                                            if (otherWikidataSoftware_cache !== undefined) {
-                                                return otherWikidataSoftware_cache;
-                                            }
-
-                                            const wikidataSoftware = await getExternalSoftware(wikidataId);
-
-                                            if (wikidataSoftware === undefined) {
-                                                return undefined;
-                                            }
-
-                                            return {
-                                                "externalId": wikidataSoftware.externalId,
-                                                "label": wikidataSoftware.label,
-                                                "description": wikidataSoftware.description
-                                            };
-                                        })
-                                    ).then(otherWikidataSoftwares => otherWikidataSoftwares.filter(exclude(undefined)))
-                                };
-                            })
-                    )
+                    instanceRows.filter(({ mainSoftwareSillId }) => mainSoftwareSillId === sillId)
                 ] as const);
 
                 partialSoftwareBySillId[sillId] = {
@@ -380,15 +346,6 @@ export function createCompileData(params: {
                             organization,
                             targetAudience,
                             publicUrl,
-                            "otherWikidataSoftwares": (() => {
-                                const instance = partialSoftwareBySillId[sillId].instances.find(
-                                    ({ id }) => id === instanceId
-                                );
-
-                                assert(instance !== undefined);
-
-                                return instance.otherWikidataSoftwares;
-                            })(),
                             addedByAgentEmail
                         }))
                 })

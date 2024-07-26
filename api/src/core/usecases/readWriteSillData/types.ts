@@ -86,7 +86,6 @@ export type Instance = {
     organization: string;
     targetAudience: string;
     publicUrl: string | undefined;
-    otherWikidataSoftwares: Pick<SoftwareExternalData, "externalId" | "label" | "description">[];
 };
 
 export type SoftwareType = SoftwareType.Desktop | SoftwareType.CloudNative | SoftwareType.Stack;

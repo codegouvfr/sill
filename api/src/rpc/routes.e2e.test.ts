@@ -159,7 +159,6 @@ describe("RPC e2e tests", () => {
                 "addedByAgentEmail": defaultUser.email,
                 "mainSoftwareSillId": expectedSoftwareId,
                 "organization": instanceFormData.organization,
-                "otherSoftwareWikidataIds": instanceFormData.otherSoftwareWikidataIds,
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
             });
@@ -172,7 +171,6 @@ describe("RPC e2e tests", () => {
                 "id": 1,
                 "mainSoftwareSillId": expectedSoftwareId,
                 "organization": instanceFormData.organization,
-                "otherWikidataSoftwares": [],
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
             });

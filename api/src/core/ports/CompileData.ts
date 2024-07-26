@@ -20,7 +20,7 @@ export namespace CompileData {
                   keywords: string[] | undefined;
               }
             | undefined;
-        instances: Pick<CompiledData.Instance, "id" | "otherWikidataSoftwares">[];
+        instances: Pick<CompiledData.Instance, "id">[];
     };
 }
 
@@ -100,7 +100,6 @@ export namespace CompiledData {
         organization: string;
         targetAudience: string;
         publicUrl: string | undefined;
-        otherWikidataSoftwares: Pick<SoftwareExternalData, "externalId" | "label" | "description">[];
     };
 }
 
