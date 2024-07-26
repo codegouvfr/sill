@@ -604,8 +604,7 @@ const zInstanceFormData = (() => {
         "mainSoftwareSillId": z.number(),
         "organization": z.string(),
         "targetAudience": z.string(),
-        "publicUrl": z.string().optional(),
-        "otherSoftwareWikidataIds": z.array(z.string())
+        "publicUrl": z.string().optional()
     });
 
     {

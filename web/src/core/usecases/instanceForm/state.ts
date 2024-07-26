@@ -27,7 +27,6 @@ namespace State {
                   type: "update";
                   instanceId: number;
                   mainSoftwareSillId: number;
-                  otherWikidataSoftwares: WikidataEntry[];
                   organization: string;
                   publicUrl: string | undefined;
                   targetAudience: string;
@@ -41,7 +40,6 @@ namespace State {
         step1Data:
             | {
                   mainSoftwareSillId: number;
-                  otherWikidataSoftwares: WikidataEntry[];
               }
             | undefined;
         isSubmitting: boolean;

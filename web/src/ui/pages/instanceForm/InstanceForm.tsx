@@ -147,16 +147,14 @@ export default function InstanceForm(props: Props) {
                 <InstanceFormStep1
                     className={cx(classes.step, classes.step1)}
                     initialFormData={{
-                        "mainSoftwareSillId": initializationData.mainSoftwareSillId,
-                        "otherWikidataSoftwares": initializationData.otherSoftwares
+                        "mainSoftwareSillId": initializationData.mainSoftwareSillId
                     }}
                     getLibreSoftwareWikidataOptions={queryString =>
                         getExternalSoftwareOptions({ queryString, "language": lang })
                     }
-                    onSubmit={({ mainSoftwareSillId, otherWikidataSoftwares }) =>
+                    onSubmit={({ mainSoftwareSillId }) =>
                         instanceForm.completeStep1({
-                            mainSoftwareSillId,
-                            otherWikidataSoftwares
+                            mainSoftwareSillId
                         })
                     }
                     allSillSoftwares={allSillSoftwares}

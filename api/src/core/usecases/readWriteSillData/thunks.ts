@@ -494,14 +494,7 @@ export const thunks = {
 
                     assert(index !== -1, "Can't update instance, it doesn't exist");
 
-                    const {
-                        mainSoftwareSillId,
-                        organization,
-                        otherSoftwareWikidataIds,
-                        publicUrl,
-                        targetAudience,
-                        ...rest
-                    } = formData;
+                    const { mainSoftwareSillId, organization, publicUrl, targetAudience, ...rest } = formData;
 
                     assert<Equals<typeof rest, {}>>();
 

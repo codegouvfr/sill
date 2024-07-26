@@ -59,7 +59,6 @@ export const thunks = {
                                 "type": "update",
                                 "instanceId": instance.id,
                                 "mainSoftwareSillId": instance.mainSoftwareSillId,
-                                "otherWikidataSoftwares": instance.otherWikidataSoftwares,
                                 "organization": instance.organization,
                                 "publicUrl": instance.publicUrl,
                                 "targetAudience": instance.targetAudience
@@ -115,21 +114,15 @@ export const thunks = {
             dispatch(actions.cleared());
         },
     "completeStep1":
-        (props: {
-            mainSoftwareSillId: number;
-            otherWikidataSoftwares: WikidataEntry[];
-        }) =>
+        (props: { mainSoftwareSillId: number }) =>
         (...args) => {
-            const { mainSoftwareSillId, otherWikidataSoftwares } = props;
+            const { mainSoftwareSillId } = props;
 
             const [dispatch] = args;
 
             dispatch(
                 actions.step1Completed({
-                    "step1Data": {
-                        mainSoftwareSillId,
-                        otherWikidataSoftwares
-                    }
+                    "step1Data": { mainSoftwareSillId }
                 })
             );
         },
@@ -155,9 +148,6 @@ export const thunks = {
             const formData: ApiTypes.InstanceFormData = {
                 "mainSoftwareSillId": step1Data.mainSoftwareSillId,
                 organization,
-                "otherSoftwareWikidataIds": step1Data.otherWikidataSoftwares.map(
-                    ({ externalId }) => externalId
-                ),
                 publicUrl,
                 targetAudience
             };

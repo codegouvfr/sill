@@ -14,12 +14,8 @@ export type Step1Props = {
     className?: string;
     initialFormData: {
         mainSoftwareSillId: number | undefined;
-        otherWikidataSoftwares: WikidataEntry[];
     };
-    onSubmit: (formData: {
-        mainSoftwareSillId: number;
-        otherWikidataSoftwares: WikidataEntry[];
-    }) => void;
+    onSubmit: (formData: { mainSoftwareSillId: number }) => void;
     allSillSoftwares: {
         softwareName: string;
         softwareSillId: number;
@@ -77,8 +73,7 @@ export function InstanceFormStep1(props: Step1Props) {
                 assert(mainSoftware !== undefined);
 
                 return mainSoftware;
-            })(),
-            "otherWikidataSoftwares": initialFormData.otherWikidataSoftwares
+            })()
         }
     });
 
@@ -101,8 +96,7 @@ export function InstanceFormStep1(props: Step1Props) {
             className={className}
             onSubmit={handleSubmit(data =>
                 onSubmit({
-                    "mainSoftwareSillId": data.mainSoftware.softwareSillId,
-                    "otherWikidataSoftwares": data.otherWikidataSoftwares
+                    "mainSoftwareSillId": data.mainSoftware.softwareSillId
                 })
             )}
         >
