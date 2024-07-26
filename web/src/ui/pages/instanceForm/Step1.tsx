@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { fr } from "@codegouvfr/react-dsfr";
+import type { useCore } from "core";
+import type { WikidataEntry } from "core/usecases/instanceForm";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
-import { assert } from "tsafe/assert";
-import type { WikidataEntry } from "core/usecases/instanceForm";
-import { AutocompleteInput } from "ui/shared/AutocompleteInput";
-import { SearchMultiInput } from "ui/shared/SearchMultiInput";
-import type { useCore } from "core";
-import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useResolveLocalizedString } from "ui/i18n";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { assert } from "tsafe/assert";
+import { useResolveLocalizedString, useTranslation } from "ui/i18n";
+import { AutocompleteInput } from "ui/shared/AutocompleteInput";
 
 export type Step1Props = {
     className?: string;
@@ -139,47 +138,6 @@ export function InstanceFormStep1(props: Step1Props) {
                             "state":
                                 errors.mainSoftware === undefined ? undefined : "error",
                             "stateRelatedMessage": tCommon("required")
-                        }}
-                    />
-                )}
-            />
-
-            <Controller
-                name="otherWikidataSoftwares"
-                control={control}
-                render={({ field }) => (
-                    <SearchMultiInput
-                        debounceDelay={400}
-                        getOptions={getLibreSoftwareWikidataOptions}
-                        value={field.value}
-                        onValueChange={value => field.onChange(value)}
-                        getOptionLabel={wikidataEntry =>
-                            resolveLocalizedString(wikidataEntry.label)
-                        }
-                        renderOption={(liProps, wikidataEntity) => (
-                            <li {...liProps}>
-                                <div>
-                                    <span>
-                                        {resolveLocalizedString(wikidataEntity.label)}
-                                    </span>
-                                    <br />
-                                    <span className={fr.cx("fr-text--xs")}>
-                                        {resolveLocalizedString(
-                                            wikidataEntity.description
-                                        )}
-                                    </span>
-                                </div>
-                            </li>
-                        )}
-                        noOptionText={tCommon("no result")}
-                        loadingText={tCommon("loading")}
-                        dsfrInputProps={{
-                            "label": t("other software"),
-                            "nativeInputProps": {
-                                "ref": field.ref,
-                                "onBlur": field.onBlur,
-                                "name": field.name
-                            }
                         }}
                     />
                 )}
