@@ -39,7 +39,7 @@ RUN apk add --no-cache \
   git \
   openssh-client \
   ca-certificates
-COPY --from=build /app/api/dist/src/lib/index.js .
+COPY --from=build /app/api/dist/index.js .
 # For reading the version number
 COPY --from=build /app/package.json .
 ENTRYPOINT sh -c "forever index.js"
