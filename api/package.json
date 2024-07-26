@@ -4,7 +4,7 @@
     "description": "The backend of code.gouv.fr/sill",
     "repository": {
         "type": "git",
-        "url": "git://github.com/codegouvfr/sill-api.git"
+        "url": "git://github.com/codegouvfr/sill.git"
     },
     "main": "dist/lib/index.js",
     "types": "dist/lib/index.d.ts",
