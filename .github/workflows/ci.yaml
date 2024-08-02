@@ -152,13 +152,13 @@ jobs:
         with:
           push: true
           context: .
-          target: api
+          file: ./Dockerfile.api
           tags: ${{ steps.step1.outputs.docker_api_tags }}
       - uses: docker/build-push-action@v5
         with:
           push: true
           context: .
-          target: web
+          file: ./Dockerfile.web
           tags: ${{ steps.step1.outputs.docker_web_tags }}
 
   poke_gitops:
