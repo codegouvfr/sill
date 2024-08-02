@@ -33,7 +33,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - ./docker-data/test-postgresql:/var/lib/postgresql/data
+      - ./docker-data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
+    ports:
+      - "8081:8080"
