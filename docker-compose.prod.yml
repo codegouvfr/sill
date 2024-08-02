@@ -3,22 +3,20 @@ services:
   api:
     build:
       context: "."
-      dockerfile: Dockerfile
-      target: api
+      dockerfile: Dockerfile.api
     env_file: .env
     restart: unless-stopped
 
   web:
     build:
       context: "."
-      dockerfile: Dockerfile
-      target: web
+      dockerfile: Dockerfile.web
     restart: unless-stopped
 
   nginx:
     image: nginx:alpine
     ports:
-      - "3000:80"
+      - "8080:80"
     volumes:
       - ./nginx/:/etc/nginx/conf.d/
     depends_on:
