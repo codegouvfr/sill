@@ -1,6 +1,5 @@
 # build step
 FROM node:20-alpine as build
-RUN npm install -g @vercel/ncc@0.36.1
 WORKDIR /app
 COPY package.json yarn.lock ./
 COPY api/package.json api/
