@@ -1,3 +1,5 @@
+[![img](https://img.shields.io/badge/code.gouv.fr-contributif-blue.svg)](https://code.gouv.fr/documentation/#/publier)
+
 # SILL
 
 Ceci est le projet SILL : Socle Interministériel de Logiciels Libres.
