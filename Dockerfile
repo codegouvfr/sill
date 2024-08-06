@@ -18,15 +18,12 @@ COPY api/ api/
 COPY web/src/ web/src/
 COPY web/config-overrides.js web/tsconfig.json web/
 
-WORKDIR /app/web
-RUN yarn prepare
-
 WORKDIR /app
 RUN yarn build
 
 WORKDIR /app/api
 RUN rm -r src
-RUN cp dist -r src/
+RUN cp dist/src -r src/
 RUN npx ncc build src/main.js
 
 WORKDIR /app

@@ -194,7 +194,7 @@ const softwares = createSelector(compiledData, similarSoftwarePartition, (compil
             "versionMin": o.versionMin,
             "license": o.license,
             "comptoirDuLibreServiceProviderCount": o.comptoirDuLibreSoftware?.providers.length ?? 0,
-            "annuaireCnllServiceProviders": o.annuaireCnllServiceProviders,
+            "annuaireCnllServiceProviders": o.annuaireCnllServiceProviders ?? [],
             "comptoirDuLibreId": o.comptoirDuLibreSoftware?.id,
             "externalId": o.softwareExternalData?.externalId,
             "externalDataOrigin": o.softwareExternalData?.externalDataOrigin,
@@ -225,25 +225,14 @@ const instances = createSelector(compiledData, (compiledData): Instance[] =>
     compiledData
         .map(software => software.instances.map(instance => ({ ...instance, "mainSoftwareSillId": software.id })))
         .flat()
-        .map(
-            ({
-                id,
-                organization,
-                targetAudience,
-                publicUrl,
-                otherWikidataSoftwares,
-                addedByAgentEmail,
-                mainSoftwareSillId
-            }) => ({
-                id,
-                mainSoftwareSillId,
-                organization,
-                targetAudience,
-                publicUrl,
-                otherWikidataSoftwares,
-                addedByAgentEmail
-            })
-        )
+        .map(({ id, organization, targetAudience, publicUrl, addedByAgentEmail, mainSoftwareSillId }) => ({
+            id,
+            mainSoftwareSillId,
+            organization,
+            targetAudience,
+            publicUrl,
+            addedByAgentEmail
+        }))
 );
 
 const agents = createSelector(sliceState, state =>

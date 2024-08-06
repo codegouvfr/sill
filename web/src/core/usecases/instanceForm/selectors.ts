@@ -1,6 +1,6 @@
 import type { State as RootState } from "core/bootstrap";
 import { createSelector } from "redux-clean-architecture";
-import { name, type WikidataEntry } from "./state";
+import { name } from "./state";
 import { assert } from "tsafe/assert";
 
 const readyState = (rootState: RootState) => {
@@ -23,7 +23,6 @@ const initializationData = createSelector(
         | undefined
         | {
               mainSoftwareSillId: number | undefined;
-              otherSoftwares: WikidataEntry[];
               organization: string | undefined;
               publicUrl: string | undefined;
               targetAudience: string | undefined;
@@ -37,7 +36,6 @@ const initializationData = createSelector(
         if (preFillData === undefined) {
             return {
                 "mainSoftwareSillId": undefined,
-                "otherSoftwares": [],
                 "organization": undefined,
                 "publicUrl": undefined,
                 "targetAudience": undefined
@@ -48,7 +46,6 @@ const initializationData = createSelector(
             case "update":
                 return {
                     "mainSoftwareSillId": preFillData.mainSoftwareSillId,
-                    "otherSoftwares": preFillData.otherWikidataSoftwares,
                     "organization": preFillData.organization,
                     "publicUrl": preFillData.publicUrl,
                     "targetAudience": preFillData.targetAudience
@@ -56,7 +53,6 @@ const initializationData = createSelector(
             case "navigated from software form":
                 return {
                     "mainSoftwareSillId": preFillData.justRegisteredSoftwareSillId,
-                    "otherSoftwares": [],
                     "organization": undefined,
                     "publicUrl": undefined,
                     "targetAudience": undefined

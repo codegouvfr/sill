@@ -1,4 +1,8 @@
-import type { ExternalDataOrigin, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import type {
+    ExternalDataOrigin,
+    ParentSoftwareExternalData,
+    SimilarSoftwareExternalData
+} from "../../ports/GetSoftwareExternalData";
 
 export type ServiceProvider = {
     name: string;
@@ -54,7 +58,7 @@ export type Software = {
     externalId: string | undefined;
     externalDataOrigin: ExternalDataOrigin | undefined;
     softwareType: SoftwareType;
-    parentWikidataSoftware: Pick<SoftwareExternalData, "externalId" | "label" | "description"> | undefined;
+    parentWikidataSoftware: ParentSoftwareExternalData | undefined;
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
 };
@@ -63,10 +67,7 @@ export namespace Software {
     export type SimilarSoftware = SimilarSoftware.ExternalSoftwareData | SimilarSoftware.Sill;
 
     export namespace SimilarSoftware {
-        export type ExternalSoftwareData = { isInSill: false } & Pick<
-            SoftwareExternalData,
-            "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
-        >;
+        export type ExternalSoftwareData = { isInSill: false } & SimilarSoftwareExternalData;
 
         export type Sill = { isInSill: true; softwareName: string; softwareDescription: string };
     }
@@ -86,7 +87,6 @@ export type Instance = {
     organization: string;
     targetAudience: string;
     publicUrl: string | undefined;
-    otherWikidataSoftwares: Pick<SoftwareExternalData, "externalId" | "label" | "description">[];
 };
 
 export type SoftwareType = SoftwareType.Desktop | SoftwareType.CloudNative | SoftwareType.Stack;
@@ -158,5 +158,4 @@ export type InstanceFormData = {
     organization: string;
     targetAudience: string;
     publicUrl: string | undefined;
-    otherSoftwareWikidataIds: string[];
 };

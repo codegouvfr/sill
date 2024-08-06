@@ -1,0 +1,20 @@
+FROM node:20-alpine as build
+RUN apk add --no-cache \
+      git \
+      openssh-client \
+      ca-certificates
+
+WORKDIR /app
+COPY package.json yarn.lock ./
+COPY api/package.json api/
+COPY api/.env.sh api/
+
+RUN yarn install --frozen-lockfile
+
+COPY turbo.json ./
+COPY api/ api/
+
+WORKDIR /app/api
+RUN yarn build-prod
+
+CMD ["yarn", "start-prod"]

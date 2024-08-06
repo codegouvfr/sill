@@ -85,7 +85,7 @@ describe("RPC e2e tests", () => {
             const expectedSoftware: Partial<CompiledData.Software<"public">> = {
                 "description": softwareFormData.softwareDescription,
                 "externalId": softwareFormData.externalId,
-                "doRespectRgaa": softwareFormData.doRespectRgaa,
+                "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
                 "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
                 "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
                 "keywords": softwareFormData.softwareKeywords,
@@ -159,7 +159,6 @@ describe("RPC e2e tests", () => {
                 "addedByAgentEmail": defaultUser.email,
                 "mainSoftwareSillId": expectedSoftwareId,
                 "organization": instanceFormData.organization,
-                "otherSoftwareWikidataIds": instanceFormData.otherSoftwareWikidataIds,
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
             });
@@ -172,7 +171,6 @@ describe("RPC e2e tests", () => {
                 "id": 1,
                 "mainSoftwareSillId": expectedSoftwareId,
                 "organization": instanceFormData.organization,
-                "otherWikidataSoftwares": [],
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
             });

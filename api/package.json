@@ -4,22 +4,26 @@
     "description": "The backend of code.gouv.fr/sill",
     "repository": {
         "type": "git",
-        "url": "git://github.com/codegouvfr/sill-api.git"
+        "url": "git://github.com/codegouvfr/sill.git"
     },
-    "main": "dist/lib/index.js",
-    "types": "dist/lib/index.d.ts",
+    "main": "dist/src/lib/index.js",
+    "types": "dist/src/lib/index.d.ts",
     "scripts": {
+        "migrate": "dotenv -e ../.env -- kysely migrate",
         "prepare": "[ ! -f .env.local.sh ] && cp .env.sh .env.local.sh || true",
         "test": "vitest --watch=false",
         "dev": "yarn build && yarn start",
         "build": "tsc",
-        "start": "dotenv -e ../.env -- forever dist/main.js",
+        "start": "dotenv -e ../.env -- forever dist/src/main.js",
+        "build-prod": "esbuild src/main.ts --bundle --platform=node --target=node20 --outfile=dist/index.js",
+        "start-prod": "dotenv -e ../.env -- forever dist/index.js",
         "_format": "prettier \"**/*.{ts,tsx,json,md}\"",
         "format": "yarn run _format --write",
         "format:check": "yarn run _format --list-different",
         "link-in-web": "ts-node --skipProject scripts/link-in-app.ts sill-web",
         "reset-data-test": "ts-node --skipProject scripts/reset-data-test.ts",
         "compile-data": "./.env.local.sh ts-node --skipProject scripts/compile-data.ts",
+        "load-git-repo-in-pg": "dotenv -e ../.env -- ts-node --skipProject scripts/load-git-repo-in-pg.ts",
         "typecheck": "tsc --noEmit"
     },
     "author": "DINUM",
@@ -30,7 +34,7 @@
         "!dist/tsconfig.tsbuildinfo"
     ],
     "keywords": [],
-    "homepage": "https://github.com/codegouvfr/sill-api",
+    "homepage": "https://github.com/codegouvfr/sill",
     "devDependencies": {
         "@octokit/rest": "^18.12.0",
         "@types/compression": "^1.7.2",
@@ -52,6 +56,7 @@
         "csv-parse": "^5.0.4",
         "deepmerge": "^4.2.2",
         "dotenv-cli": "^7.4.1",
+        "esbuild": "^0.23.0",
         "evt": "^2.5.7",
         "express": "^4.17.2",
         "forever": "^4.0.3",
@@ -74,7 +79,11 @@
         "@octokit/graphql": "^7.0.2",
         "@retorquere/bibtex-parser": "^7.0.11",
         "@trpc/server": "^10.18.0",
+        "@types/pg": "^8.11.6",
         "jwt-decode": "^3.1.2",
+        "kysely": "^0.27.4",
+        "kysely-ctl": "^0.8.10",
+        "pg": "^8.11.5",
         "semver": "^7.5.4",
         "tsafe": "^1.6.6",
         "zod": "^3.21.4"

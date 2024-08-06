@@ -1,0 +1,265 @@
+import { InsertObject, Kysely } from "kysely";
+import { z } from "zod";
+import { createGitDbApi, GitDbApiParams } from "../src/core/adapters/dbApi/createGitDbApi";
+import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
+import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
+import { CompiledData } from "../src/core/ports/CompileData";
+import { Db } from "../src/core/ports/DbApi";
+import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
+import SoftwareRow = Db.SoftwareRow;
+
+export type Params = {
+    pgConfig: { dbUrl: string };
+    gitDbConfig: GitDbApiParams;
+};
+
+const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
+    const { dbApi: gitDbApi } = createGitDbApi(gitDbConfig);
+    if (!pgConfig.dbUrl) throw new Error("Missing PG database url, please set the DATABASE_URL environnement variable");
+    const pgDb = new Kysely<Database>({ dialect: createPgDialect(pgConfig.dbUrl) });
+
+    const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
+
+    await insertSoftwares(softwareRows, pgDb);
+    await insertAgents(agentRows, pgDb);
+
+    const agentIdByEmail = await makeGetAgentIdByEmail(pgDb);
+    await insertSoftwareReferents({
+        softwareReferentRows: softwareReferentRows,
+        agentIdByEmail: agentIdByEmail,
+        db: pgDb
+    });
+    await insertSoftwareUsers({
+        softwareUserRows: softwareUserRows,
+        agentIdByEmail: agentIdByEmail,
+        db: pgDb
+    });
+    await insertInstances({
+        instanceRows: instanceRows,
+        db: pgDb
+    });
+
+    const compiledSoftwares = await gitDbApi.fetchCompiledData();
+    await insertCompiledSoftwaresAndSoftwareExternalData(compiledSoftwares, pgDb);
+};
+
+const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>) => {
+    console.info("Deleting than Inserting softwares");
+    console.info("Number of softwares to insert : ", softwareRows.length);
+    await db.transaction().execute(async trx => {
+        await trx.deleteFrom("softwares").execute();
+        await trx.deleteFrom("softwares__similar_software_external_datas").execute();
+        await trx
+            .insertInto("softwares")
+            .values(
+                softwareRows.map(({ similarSoftwareExternalDataIds: _, ...row }) => ({
+                    ...row,
+                    dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
+                    softwareType: JSON.stringify(row.softwareType),
+                    workshopUrls: JSON.stringify(row.workshopUrls),
+                    testUrls: JSON.stringify(row.testUrls),
+                    categories: JSON.stringify(row.categories),
+                    keywords: JSON.stringify(row.keywords)
+                }))
+            )
+            .executeTakeFirst();
+
+        await trx
+            .insertInto("softwares__similar_software_external_datas")
+            .values(
+                softwareRows.flatMap(row =>
+                    Array.from(new Set(row.similarSoftwareExternalDataIds)).map(externalId => ({
+                        softwareId: row.id,
+                        similarExternalId: externalId
+                    }))
+                )
+            )
+            .execute();
+    });
+};
+
+const insertAgents = async (agentRows: Db.AgentRow[], db: Kysely<Database>) => {
+    console.log("Deleting than Inserting agents");
+    console.info("Number of agents to insert : ", agentRows.length);
+    await db.transaction().execute(async trx => {
+        await trx.deleteFrom("agents").execute();
+        await trx.insertInto("agents").values(agentRows).executeTakeFirst();
+    });
+};
+
+const makeGetAgentIdByEmail = async (db: Kysely<Database>): Promise<Record<string, number>> => {
+    console.info("Fetching agents, to map email to id");
+    const agents = await db.selectFrom("agents").select(["email", "id"]).execute();
+    return agents.reduce((acc, agent) => ({ ...acc, [agent.email]: agent.id }), {});
+};
+
+const insertSoftwareReferents = async ({
+    softwareReferentRows,
+    agentIdByEmail,
+    db
+}: {
+    softwareReferentRows: Db.SoftwareReferentRow[];
+    agentIdByEmail: Record<string, number>;
+    db: Kysely<Database>;
+}) => {
+    console.info("Deleting than Inserting software referents");
+    console.info("Number of software referents to insert : ", softwareReferentRows.length);
+    await db.transaction().execute(async trx => {
+        await trx.deleteFrom("software_referents").execute();
+        await trx
+            .insertInto("software_referents")
+            .values(
+                softwareReferentRows.map(({ agentEmail, ...rest }) => ({
+                    ...rest,
+                    agentId: agentIdByEmail[agentEmail]
+                }))
+            )
+            .executeTakeFirst();
+    });
+};
+
+const insertSoftwareUsers = async ({
+    softwareUserRows,
+    agentIdByEmail,
+    db
+}: {
+    softwareUserRows: Db.SoftwareUserRow[];
+    agentIdByEmail: Record<string, number>;
+    db: Kysely<Database>;
+}) => {
+    console.info("Deleting than Inserting software users");
+    console.info("Number of software users to insert : ", softwareUserRows.length);
+    await db.transaction().execute(async trx => {
+        await trx.deleteFrom("software_users").execute();
+        await trx
+            .insertInto("software_users")
+            .values(
+                softwareUserRows.map(({ agentEmail, ...rest }) => ({
+                    ...rest,
+                    agentId: agentIdByEmail[agentEmail]
+                }))
+            )
+            .executeTakeFirst();
+    });
+};
+
+const insertInstances = async ({ instanceRows, db }: { instanceRows: Db.InstanceRow[]; db: Kysely<Database> }) => {
+    console.info("Deleting than Inserting instances");
+    console.info("Number of instances to insert : ", instanceRows.length);
+    await db.transaction().execute(async trx => {
+        await trx.deleteFrom("instances").execute();
+        await trx.insertInto("instances").values(instanceRows).executeTakeFirst();
+    });
+};
+
+const insertCompiledSoftwaresAndSoftwareExternalData = async (
+    compiledSoftwares: CompiledData.Software<"private">[],
+    pgDb: Kysely<Database>
+) => {
+    console.info("Deleting than Inserting compiled softwares");
+    console.info("Number of compiled softwares to insert : ", compiledSoftwares.length);
+    await pgDb.transaction().execute(async trx => {
+        await trx.deleteFrom("compiled_softwares").execute();
+        await trx
+            .insertInto("compiled_softwares")
+            .values(
+                compiledSoftwares.map(
+                    (software): InsertObject<Database, "compiled_softwares"> => ({
+                        softwareId: software.id,
+                        serviceProviders: JSON.stringify(software.serviceProviders),
+                        comptoirDuLibreSoftware: JSON.stringify(software.comptoirDuLibreSoftware),
+                        annuaireCnllServiceProviders: JSON.stringify(software.annuaireCnllServiceProviders),
+                        latestVersion: JSON.stringify(software.latestVersion)
+                    })
+                )
+            )
+            .executeTakeFirst();
+
+        await trx.deleteFrom("software_external_datas").execute();
+
+        await trx
+            .insertInto("software_external_datas")
+            .values(
+                compiledSoftwares
+                    .filter(
+                        (
+                            software
+                        ): software is CompiledData.Software.Private & {
+                            softwareExternalData: {
+                                externalId: string;
+                                externalDataOrigin: ExternalDataOrigin;
+                            };
+                        } =>
+                            software.softwareExternalData?.externalId !== undefined &&
+                            software.softwareExternalData?.externalDataOrigin !== undefined
+                    )
+                    .map(
+                        ({ softwareExternalData }): InsertObject<Database, "software_external_datas"> => ({
+                            externalId: softwareExternalData.externalId,
+                            externalDataOrigin: softwareExternalData.externalDataOrigin,
+                            developers: JSON.stringify(softwareExternalData?.developers ?? []),
+                            label: JSON.stringify(softwareExternalData?.label ?? {}),
+                            description: JSON.stringify(softwareExternalData?.description ?? {}),
+                            isLibreSoftware: softwareExternalData?.isLibreSoftware ?? false,
+                            logoUrl: softwareExternalData?.logoUrl ?? null,
+                            framaLibreId: softwareExternalData?.framaLibreId ?? null,
+                            websiteUrl: softwareExternalData?.websiteUrl ?? null,
+                            sourceUrl: softwareExternalData?.sourceUrl ?? null,
+                            documentationUrl: softwareExternalData?.documentationUrl ?? null,
+                            license: softwareExternalData?.license ?? null
+                        })
+                    )
+            )
+            .onConflict(conflict => conflict.column("externalId").doNothing())
+            .executeTakeFirst();
+
+        await trx
+            .insertInto("software_external_datas")
+            .values(
+                compiledSoftwares
+                    .filter(s => s.similarExternalSoftwares.length > 0)
+                    .flatMap(s =>
+                        (s.similarExternalSoftwares ?? []).map(similarExternalSoftware => ({
+                            externalId: similarExternalSoftware.externalId,
+                            externalDataOrigin: similarExternalSoftware.externalDataOrigin,
+                            developers: JSON.stringify([]),
+                            label: JSON.stringify(similarExternalSoftware?.label ?? {}),
+                            description: JSON.stringify(similarExternalSoftware?.description ?? {}),
+                            isLibreSoftware: similarExternalSoftware?.isLibreSoftware ?? false
+                        }))
+                    )
+            )
+            .onConflict(conflict => conflict.column("externalId").doNothing())
+            .executeTakeFirst();
+    });
+};
+
+const paramsSchema: z.Schema<Params> = z.object({
+    pgConfig: z.object({
+        dbUrl: z.string()
+    }),
+    gitDbConfig: z.object({
+        dataRepoSshUrl: z.string(),
+        sshPrivateKey: z.string(),
+        sshPrivateKeyName: z.string()
+    })
+});
+
+const timerName = "Script duration";
+console.time(timerName);
+
+saveGitDbInPostgres(
+    paramsSchema.parse({
+        pgConfig: { dbUrl: process.env.DATABASE_URL },
+        gitDbConfig: {
+            dataRepoSshUrl: process.env.SILL_DATA_REPO_SSH_URL,
+            sshPrivateKey: process.env.SILL_SSH_PRIVATE_KEY,
+            sshPrivateKeyName: process.env.SILL_SSH_NAME
+        }
+    })
+)
+    .then(() => {
+        console.log("Load git db in postgres with success");
+        process.exit(0);
+    })
+    .finally(() => console.timeEnd(timerName));

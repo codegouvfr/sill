@@ -10,6 +10,17 @@ on:
 jobs:
   validations:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://sill:pg_password@localhost:5432/sill
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: sill
+          POSTGRES_PASSWORD: pg_password
+          POSTGRES_DB: sill
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -18,6 +29,8 @@ jobs:
       - uses: bahmutov/npm-install@v1
       - name: Build back
         run: cd api && yarn build
+      - name: Migrate db
+        run: cd api && yarn migrate latest
       - name: Fullcheck
         run: yarn fullcheck
   #
@@ -69,7 +82,7 @@ jobs:
         with:
           node-version: "20"
       - uses: bahmutov/npm-install@v1
-      - run: cd web && yarn prepare
+      - run: cd web
       - name: Build
         run: yarn build
       - name: Keycloakify
@@ -139,13 +152,13 @@ jobs:
         with:
           push: true
           context: .
-          target: api
+          file: ./Dockerfile.api
           tags: ${{ steps.step1.outputs.docker_api_tags }}
       - uses: docker/build-push-action@v5
         with:
           push: true
           context: .
-          target: web
+          file: ./Dockerfile.web
           tags: ${{ steps.step1.outputs.docker_web_tags }}
 
   poke_gitops:

@@ -139,8 +139,8 @@ export const thunks = {
                         "comptoirDuLibreId": formData.comptoirDuLibreId,
                         "license": formData.softwareLicense,
                         "softwareType": formData.softwareType,
-                        "catalogNumeriqueGouvFrId": undefined,
                         "versionMin": formData.softwareMinimalVersion,
+                        "catalogNumeriqueGouvFrId": undefined,
                         "workshopUrls": [],
                         "testUrls": [],
                         "categories": [],
@@ -464,7 +464,6 @@ export const thunks = {
                         "addedByAgentEmail": agent.email,
                         "organization": formData.organization,
                         "mainSoftwareSillId": formData.mainSoftwareSillId,
-                        "otherSoftwareWikidataIds": formData.otherSoftwareWikidataIds,
                         "publicUrl": formData.publicUrl,
                         "targetAudience": formData.targetAudience,
                         "referencedSinceTime": now,
@@ -495,14 +494,7 @@ export const thunks = {
 
                     assert(index !== -1, "Can't update instance, it doesn't exist");
 
-                    const {
-                        mainSoftwareSillId,
-                        organization,
-                        otherSoftwareWikidataIds,
-                        publicUrl,
-                        targetAudience,
-                        ...rest
-                    } = formData;
+                    const { mainSoftwareSillId, organization, publicUrl, targetAudience, ...rest } = formData;
 
                     assert<Equals<typeof rest, {}>>();
 
@@ -513,7 +505,6 @@ export const thunks = {
                         addedByAgentEmail,
                         mainSoftwareSillId,
                         organization,
-                        otherSoftwareWikidataIds,
                         publicUrl,
                         targetAudience,
                         referencedSinceTime,

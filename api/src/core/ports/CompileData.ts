@@ -1,6 +1,10 @@
 import { ServiceProvider } from "../usecases/readWriteSillData";
 import type { Db } from "./DbApi";
-import type { SoftwareExternalData } from "./GetSoftwareExternalData";
+import {
+    ParentSoftwareExternalData,
+    SimilarSoftwareExternalData,
+    SoftwareExternalData
+} from "./GetSoftwareExternalData";
 import type { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
 export type CompileData = (params: {
@@ -20,7 +24,7 @@ export namespace CompileData {
                   keywords: string[] | undefined;
               }
             | undefined;
-        instances: Pick<CompiledData.Instance, "id" | "otherWikidataSoftwares">[];
+        instances: Pick<CompiledData.Instance, "id">[];
     };
 }
 
@@ -28,6 +32,7 @@ export type CompiledData<T extends "private" | "public"> = CompiledData.Software
 
 export namespace CompiledData {
     export type Software<T extends "private" | "public"> = T extends "private" ? Software.Private : Software.Public;
+
     export namespace Software {
         export type Common = Pick<
             Db.SoftwareRow,
@@ -56,11 +61,8 @@ export namespace CompiledData {
         > & {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
-            similarExternalSoftwares: Pick<
-                SoftwareExternalData,
-                "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
-            >[];
-            parentWikidataSoftware: Pick<SoftwareExternalData, "externalId" | "label" | "description"> | undefined;
+            similarExternalSoftwares: SimilarSoftwareExternalData[];
+            parentWikidataSoftware: ParentSoftwareExternalData | undefined;
             comptoirDuLibreSoftware:
                 | (ComptoirDuLibre.Software & { logoUrl: string | undefined; keywords: string[] | undefined })
                 | undefined;
@@ -100,7 +102,6 @@ export namespace CompiledData {
         organization: string;
         targetAudience: string;
         publicUrl: string | undefined;
-        otherWikidataSoftwares: Pick<SoftwareExternalData, "externalId" | "label" | "description">[];
     };
 }
 

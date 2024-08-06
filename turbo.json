@@ -14,6 +14,7 @@
     },
     "dev": {},
     "format:check": {},
-    "format": {}
+    "format": {},
+    "lint": {}
   }
 }

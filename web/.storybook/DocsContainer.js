@@ -5,9 +5,8 @@ import { useDarkMode } from "storybook-dark-mode";
 import { darkTheme, lightTheme } from "./customTheme";
 import { useIsDark } from "@codegouvfr/react-dsfr/useIsDark";
 import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
-import { useColors } from "@codegouvfr/react-dsfr/useColors";
-import "../public/dsfr/dsfr.css";
-import "../public/dsfr/utility/icons/icons.min.css";
+import { fr } from "@codegouvfr/react-dsfr";
+import "@codegouvfr/react-dsfr/main.css";
 
 startReactDsfr({
     "defaultColorScheme": "system",
@@ -25,7 +24,7 @@ export const DocsContainer = ({ children, context }) => {
         [isStorybookUiDark]
     );
 
-    const backgroundColor = useColors().decisions.background.default.grey.default;
+    const backgroundColor = fr.colors.decisions.background.default.grey.default;
 
     return (
         <>

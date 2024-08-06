@@ -161,6 +161,9 @@ export function createRouter(params: {
 
                 const { formData } = input;
 
+                // TODO : there is some logic with logoUrl that should be moved here
+                //  from readWriteSillData/thunks/getStorableLogo
+
                 try {
                     await core.functions.readWriteSillData.createSoftware({
                         formData,
@@ -604,8 +607,7 @@ const zInstanceFormData = (() => {
         "mainSoftwareSillId": z.number(),
         "organization": z.string(),
         "targetAudience": z.string(),
-        "publicUrl": z.string().optional(),
-        "otherSoftwareWikidataIds": z.array(z.string())
+        "publicUrl": z.string().optional()
     });
 
     {
