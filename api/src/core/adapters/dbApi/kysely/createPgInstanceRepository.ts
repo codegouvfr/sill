@@ -6,12 +6,12 @@ import { Instance } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 
 export const createPgInstanceRepository = (db: Kysely<Database>): InstanceRepository => ({
-    create: async ({ fromData, agentEmail }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = fromData;
+    create: async ({ formData, agentEmail }) => {
+        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
-        await db
+        const { instanceId } = await db
             .insertInto("instances")
             .values({
                 addedByAgentEmail: agentEmail,
@@ -22,10 +22,12 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 targetAudience,
                 publicUrl
             })
+            .returning("id as instanceId")
             .executeTakeFirstOrThrow();
+        return instanceId;
     },
-    update: async ({ fromData, instanceId }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = fromData;
+    update: async ({ formData, instanceId }) => {
+        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();

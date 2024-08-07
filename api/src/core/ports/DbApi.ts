@@ -1,4 +1,5 @@
 import type { CompiledData } from "./CompileData";
+import { DbApiV2 } from "./DbApiV2";
 
 export type DbApi = {
     fetchCompiledData: () => Promise<CompiledData<"private">>;
@@ -95,7 +96,7 @@ export namespace Db {
         updateTime: number;
     };
 
-    export type DbApiAndInitializeCache = { dbApi: DbApi; initializeDbApiCache: () => Promise<void> };
+    export type DbApiAndInitializeCache = { dbApi: DbApiV2; initializeDbApiCache: () => Promise<void> };
 }
 
 export type Os = "windows" | "linux" | "mac" | "android" | "ios";

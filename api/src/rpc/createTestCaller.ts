@@ -1,6 +1,11 @@
+import { Kysely } from "kysely";
 import { bootstrapCore } from "../core";
-import { InMemoryDbApi } from "../core/adapters/dbApi/InMemoryDbApi";
+import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
+import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
+import { getWikidataSoftware } from "../core/adapters/wikidata/getWikidataSoftware";
+import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidataSoftwareOptions";
 import { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
+import { testPgUrl } from "../tools/test.helpers";
 import { createRouter } from "./router";
 import { User } from "./user";
 
@@ -18,9 +23,10 @@ export type ApiCaller = Awaited<ReturnType<typeof createTestCaller>>["apiCaller"
 
 export const createTestCaller = async ({ user }: TestCallerConfig = { user: defaultUser }) => {
     const externalSoftwareDataOrigin: ExternalDataOrigin = "wikidata";
+    const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
-    const { core, context } = await bootstrapCore({
-        "dbConfig": { dbKind: "inMemory" },
+    const { core, context, dbApi } = await bootstrapCore({
+        "dbConfig": { dbKind: "kysely", kyselyDb },
         "keycloakUserApiParams": undefined,
         "githubPersonalAccessTokenForApiRateLimit": "fake-token",
         "doPerPerformPeriodicalCompilation": false,
@@ -36,14 +42,17 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
 
     const { router } = createRouter({
         core,
+        dbApi,
         coreContext: context,
         keycloakParams: undefined,
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
         readmeUrl: "http://readme.url",
         termsOfServiceUrl: "http://terms.url",
-        jwtClaimByUserKey
+        jwtClaimByUserKey,
+        getSoftwareExternalDataOptions: getWikidataSoftwareOptions,
+        getSoftwareExternalData: getWikidataSoftware
     });
 
-    return { apiCaller: router.createCaller({ user }), inMemoryDb: context.dbApi as InMemoryDbApi };
+    return { apiCaller: router.createCaller({ user }), kyselyDb };
 };
