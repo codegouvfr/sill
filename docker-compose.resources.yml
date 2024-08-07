@@ -1,6 +1,5 @@
 # this is for local use only
 
-version: '3.9'
 services:
   postgres:
     image: postgres:16
@@ -13,7 +12,7 @@ services:
       POSTGRES_USER: sill
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_password}
     volumes:
-      - ./docker-data/test-postgresql:/var/lib/postgresql/data
+      - ./docker-data:/var/lib/postgresql/data
 
 #  To create an easy-to-use interface for PostgreSQL administration,
 #  you can use the Adminer web interface.
