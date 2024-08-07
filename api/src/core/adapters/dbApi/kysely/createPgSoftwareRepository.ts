@@ -30,7 +30,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
         const now = Date.now();
 
-        await db.transaction().execute(async trx => {
+        return db.transaction().execute(async trx => {
             const { softwareId } = await trx
                 .insertInto("softwares")
                 .values({
@@ -66,6 +66,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .insertInto("softwares__similar_software_external_datas")
                 .values(similarSoftwareExternalDataIds.map(similarExternalId => ({ softwareId, similarExternalId })))
                 .execute();
+
+            return softwareId;
         });
     },
     update: async ({ formData, softwareSillId, agentEmail }) => {
@@ -117,107 +119,51 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             .where("id", "=", softwareSillId)
             .execute();
     },
+    getById: async (softwareId: number): Promise<Software | undefined> => {
+        console.log("getById : ", softwareId);
+        return makeGetSoftwareBuilder(db)
+            .where("id", "=", softwareId)
+            .executeTakeFirst()
+            .then((result): Software | undefined => {
+                if (!result) return;
+                const {
+                    testUrls,
+                    serviceProviders,
+                    parentExternalData,
+                    updateTime,
+                    addedTime,
+                    softwareExternalData,
+                    similarExternalSoftwares,
+                    ...software
+                } = result;
+                return {
+                    ...convertNullValuesToUndefined(software),
+                    updateTime: new Date(+updateTime).getTime(),
+                    addedTime: new Date(+addedTime).getTime(),
+                    serviceProviders: serviceProviders ?? [],
+                    similarSoftwares: similarExternalSoftwares,
+                    userAndReferentCountByOrganization: {},
+                    authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                        authorName: dev.name,
+                        authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                    })),
+                    officialWebsiteUrl:
+                        softwareExternalData?.websiteUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.website ??
+                        undefined,
+                    codeRepositoryUrl:
+                        softwareExternalData?.sourceUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.repository ??
+                        undefined,
+                    documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                    comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                    testUrl: testUrls[0]?.url,
+                    parentWikidataSoftware: parentExternalData ?? undefined
+                };
+            });
+    },
     getAll: (): Promise<Software[]> =>
-        db
-            .selectFrom("softwares as s")
-            .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
-            .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
-            .leftJoin("software_external_datas as parentExt", "s.parentSoftwareWikidataId", "parentExt.externalId")
-            .leftJoin(
-                "softwares__similar_software_external_datas",
-                "softwares__similar_software_external_datas.softwareId",
-                "s.id"
-            )
-            .leftJoin(
-                "software_external_datas as similarExt",
-                "softwares__similar_software_external_datas.similarExternalId",
-                "similarExt.externalId"
-            )
-            .groupBy([
-                "s.id",
-                "cs.softwareId",
-                "cs.annuaireCnllServiceProviders",
-                "cs.comptoirDuLibreSoftware",
-                "cs.latestVersion",
-                "cs.serviceProviders",
-                "ext.externalId",
-                "parentExt.externalId"
-            ])
-            .select([
-                "s.id as softwareId",
-                "s.logoUrl",
-                "s.name as softwareName",
-                "s.description as softwareDescription",
-                "cs.serviceProviders",
-                "cs.latestVersion",
-                "s.testUrls",
-                "s.referencedSinceTime as addedTime",
-                "s.updateTime",
-                "s.dereferencing",
-                "s.categories",
-                ({ ref }) =>
-                    jsonBuildObject({
-                        isPresentInSupportContract: ref("isPresentInSupportContract"),
-                        isFromFrenchPublicServices: ref("isFromFrenchPublicService"),
-                        doRespectRgaa: ref("doRespectRgaa")
-                    }).as("prerogatives"),
-                "s.comptoirDuLibreId",
-                "cs.comptoirDuLibreSoftware",
-                "s.versionMin",
-                "s.license",
-                "annuaireCnllServiceProviders",
-                "s.externalId",
-                "s.externalDataOrigin",
-                "s.softwareType",
-                ({ ref, ...qb }) =>
-                    qb
-                        .case()
-                        .when("parentExt.externalId", "is not", null)
-                        .then(
-                            jsonBuildObject({
-                                externalId: ref("ext.externalId"),
-                                label: ref("ext.label"),
-                                description: ref("ext.description")
-                            }).$castTo<ParentSoftwareExternalData>()
-                        )
-                        .else(null)
-                        .end()
-                        .as("parentExternalData"),
-                "s.keywords",
-
-                ({ ref }) =>
-                    jsonBuildObject({
-                        externalId: ref("ext.externalId"),
-                        externalDataOrigin: ref("ext.externalDataOrigin"),
-                        developers: ref("ext.developers"),
-                        label: ref("ext.label"),
-                        description: ref("ext.description"),
-                        isLibreSoftware: ref("ext.isLibreSoftware"),
-                        logoUrl: ref("ext.logoUrl"),
-                        framaLibreId: ref("ext.framaLibreId"),
-                        websiteUrl: ref("ext.websiteUrl"),
-                        sourceUrl: ref("ext.sourceUrl"),
-                        documentationUrl: ref("ext.documentationUrl")
-                    }).as("softwareExternalData"),
-                ({ ref, fn }) =>
-                    fn
-                        .coalesce(
-                            fn
-                                .jsonAgg(
-                                    jsonBuildObject({
-                                        isInSill: sql<false>`false`,
-                                        externalId: ref("similarExt.externalId"),
-                                        label: ref("similarExt.label"),
-                                        description: ref("similarExt.description"),
-                                        isLibreSoftware: ref("similarExt.isLibreSoftware"),
-                                        externalDataOrigin: ref("similarExt.externalDataOrigin")
-                                    }).$castTo<Software.SimilarSoftware>()
-                                )
-                                .filterWhere("similarExt.externalId", "is not", null),
-                            sql<[]>`'[]'`
-                        )
-                        .as("similarExternalSoftwares")
-            ])
+        makeGetSoftwareBuilder(db)
             .execute()
             .then(softwares =>
                 softwares.map(
@@ -230,42 +176,39 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
-                    }): Software => {
-                        return {
-                            ...convertNullValuesToUndefined(software),
-                            updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
-                            serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
-                            // (similarSoftwares ?? []).map(
-                            //     (s): SimilarSoftware => ({
-                            //         softwareName:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         softwareDescription:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         isInSill: true // TODO: check if this is true
-                            //     })
-                            // ) ?? [],
-                            userAndReferentCountByOrganization: {},
-                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                authorName: dev.name,
-                                authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                            })),
-                            officialWebsiteUrl:
-                                softwareExternalData?.websiteUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.website ??
-                                undefined,
-                            codeRepositoryUrl:
-                                softwareExternalData?.sourceUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.repository ??
-                                undefined,
-                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                            comptoirDuLibreServiceProviderCount:
-                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            testUrl: testUrls[0]?.url,
-                            parentWikidataSoftware: parentExternalData ?? undefined
-                        };
-                    }
+                    }): Software => ({
+                        ...convertNullValuesToUndefined(software),
+                        updateTime: new Date(+updateTime).getTime(),
+                        addedTime: new Date(+addedTime).getTime(),
+                        serviceProviders: serviceProviders ?? [],
+                        similarSoftwares: similarExternalSoftwares,
+                        // (similarSoftwares ?? []).map(
+                        //     (s): SimilarSoftware => ({
+                        //         softwareName:
+                        //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                        //         softwareDescription:
+                        //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                        //         isInSill: true // TODO: check if this is true
+                        //     })
+                        // ) ?? [],
+                        userAndReferentCountByOrganization: {},
+                        authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                            authorName: dev.name,
+                            authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                        })),
+                        officialWebsiteUrl:
+                            softwareExternalData?.websiteUrl ??
+                            software.comptoirDuLibreSoftware?.external_resources.website ??
+                            undefined,
+                        codeRepositoryUrl:
+                            softwareExternalData?.sourceUrl ??
+                            software.comptoirDuLibreSoftware?.external_resources.repository ??
+                            undefined,
+                        documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                        comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                        testUrl: testUrls[0]?.url,
+                        parentWikidataSoftware: parentExternalData ?? undefined
+                    })
                 )
             ),
     getAllSillSoftwareExternalIds: async externalDataOrigin =>
@@ -275,5 +218,133 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             .where("externalDataOrigin", "=", externalDataOrigin)
             .execute()
             .then(rows => rows.map(row => row.externalId!)),
-    unreference: async () => {}
+    countAddedByAgent: async ({ agentEmail }) => {
+        const { count } = await db
+            .selectFrom("softwares")
+            .select(qb => qb.fn.countAll<string>().as("count"))
+            .where("addedByAgentEmail", "=", agentEmail)
+            .executeTakeFirstOrThrow();
+        return +count;
+    },
+    unreference: async ({ softwareId, reason, time }) => {
+        const { versionMin } = await db
+            .selectFrom("softwares")
+            .select("versionMin")
+            .where("id", "=", softwareId)
+            .executeTakeFirstOrThrow();
+
+        await db
+            .updateTable("softwares")
+            .set({
+                dereferencing: JSON.stringify({
+                    reason,
+                    time,
+                    lastRecommendedVersion: versionMin
+                })
+            })
+            .where("id", "=", softwareId)
+            .executeTakeFirstOrThrow();
+    }
 });
+
+const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
+    db
+        .selectFrom("softwares as s")
+        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
+        .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
+        .leftJoin("software_external_datas as parentExt", "s.parentSoftwareWikidataId", "parentExt.externalId")
+        .leftJoin(
+            "softwares__similar_software_external_datas",
+            "softwares__similar_software_external_datas.softwareId",
+            "s.id"
+        )
+        .leftJoin(
+            "software_external_datas as similarExt",
+            "softwares__similar_software_external_datas.similarExternalId",
+            "similarExt.externalId"
+        )
+        .groupBy([
+            "s.id",
+            "cs.softwareId",
+            "cs.annuaireCnllServiceProviders",
+            "cs.comptoirDuLibreSoftware",
+            "cs.latestVersion",
+            "cs.serviceProviders",
+            "ext.externalId",
+            "parentExt.externalId"
+        ])
+        .select([
+            "s.id as softwareId",
+            "s.logoUrl",
+            "s.name as softwareName",
+            "s.description as softwareDescription",
+            "cs.serviceProviders",
+            "cs.latestVersion",
+            "s.testUrls",
+            "s.referencedSinceTime as addedTime",
+            "s.updateTime",
+            "s.dereferencing",
+            "s.categories",
+            ({ ref }) =>
+                jsonBuildObject({
+                    isPresentInSupportContract: ref("isPresentInSupportContract"),
+                    isFromFrenchPublicServices: ref("isFromFrenchPublicService"),
+                    doRespectRgaa: ref("doRespectRgaa")
+                }).as("prerogatives"),
+            "s.comptoirDuLibreId",
+            "cs.comptoirDuLibreSoftware",
+            "s.versionMin",
+            "s.license",
+            "annuaireCnllServiceProviders",
+            "s.externalId",
+            "s.externalDataOrigin",
+            "s.softwareType",
+            ({ ref, ...qb }) =>
+                qb
+                    .case()
+                    .when("parentExt.externalId", "is not", null)
+                    .then(
+                        jsonBuildObject({
+                            externalId: ref("ext.externalId"),
+                            label: ref("ext.label"),
+                            description: ref("ext.description")
+                        }).$castTo<ParentSoftwareExternalData>()
+                    )
+                    .else(null)
+                    .end()
+                    .as("parentExternalData"),
+            "s.keywords",
+
+            ({ ref }) =>
+                jsonBuildObject({
+                    externalId: ref("ext.externalId"),
+                    externalDataOrigin: ref("ext.externalDataOrigin"),
+                    developers: ref("ext.developers"),
+                    label: ref("ext.label"),
+                    description: ref("ext.description"),
+                    isLibreSoftware: ref("ext.isLibreSoftware"),
+                    logoUrl: ref("ext.logoUrl"),
+                    framaLibreId: ref("ext.framaLibreId"),
+                    websiteUrl: ref("ext.websiteUrl"),
+                    sourceUrl: ref("ext.sourceUrl"),
+                    documentationUrl: ref("ext.documentationUrl")
+                }).as("softwareExternalData"),
+            ({ ref, fn }) =>
+                fn
+                    .coalesce(
+                        fn
+                            .jsonAgg(
+                                jsonBuildObject({
+                                    isInSill: sql<false>`false`,
+                                    externalId: ref("similarExt.externalId"),
+                                    label: ref("similarExt.label"),
+                                    description: ref("similarExt.description"),
+                                    isLibreSoftware: ref("similarExt.isLibreSoftware"),
+                                    externalDataOrigin: ref("similarExt.externalDataOrigin")
+                                }).$castTo<Software.SimilarSoftware>()
+                            )
+                            .filterWhere("similarExt.externalId", "is not", null),
+                        sql<[]>`'[]'`
+                    )
+                    .as("similarExternalSoftwares")
+        ]);

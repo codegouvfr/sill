@@ -1,6 +1,6 @@
 import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
-import { expectPromiseToFailWith, expectToEqual } from "../../../../tools/test.helpers";
+import { expectPromiseToFailWith, expectToEqual, testPgUrl } from "../../../../tools/test.helpers";
 import { Agent, DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { SoftwareFormData } from "../../../usecases/readWriteSillData";
@@ -70,7 +70,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     license: "MIT"
 };
 
-const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5432/sill") });
+const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
@@ -189,7 +189,7 @@ describe("pgDbApi", () => {
             console.log("saving instance");
             await dbApi.instance.create({
                 agentEmail: agent.email,
-                fromData: {
+                formData: {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
                     targetAudience: "test-audience",

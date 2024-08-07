@@ -9,7 +9,15 @@ import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
 import type { Context as CoreContext, Core } from "../core";
-import { ExternalDataOrigin, Language, languages, type LocalizedString } from "../core/ports/GetSoftwareExternalData";
+import { DbApiV2 } from "../core/ports/DbApiV2";
+import {
+    ExternalDataOrigin,
+    GetSoftwareExternalData,
+    Language,
+    languages,
+    type LocalizedString
+} from "../core/ports/GetSoftwareExternalData";
+import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import {
     DeclarationFormData,
     InstanceFormData,
@@ -24,6 +32,7 @@ import type { Context } from "./context";
 import type { User } from "./user";
 
 export function createRouter(params: {
+    dbApi: DbApiV2;
     core: Core;
     coreContext: CoreContext;
     keycloakParams:
@@ -36,16 +45,20 @@ export function createRouter(params: {
     readmeUrl: LocalizedString;
     redirectUrl: string | undefined;
     externalSoftwareDataOrigin: ExternalDataOrigin;
+    getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
+    getSoftwareExternalData: GetSoftwareExternalData;
 }) {
     const {
         core,
+        dbApi,
         coreContext,
         keycloakParams,
         jwtClaimByUserKey,
         termsOfServiceUrl,
         readmeUrl,
         redirectUrl,
-        externalSoftwareDataOrigin
+        externalSoftwareDataOrigin: externalDataOrigin,
+        getSoftwareExternalDataOptions
     } = params;
 
     const t = initTRPC.context<Context>().create({
@@ -69,7 +82,7 @@ export function createRouter(params: {
 
     const router = t.router({
         "getRedirectUrl": loggedProcedure.query(() => redirectUrl),
-        "getExternalSoftwareDataOrigin": loggedProcedure.query(() => externalSoftwareDataOrigin),
+        "getExternalSoftwareDataOrigin": loggedProcedure.query(() => externalDataOrigin),
         "getApiVersion": loggedProcedure.query(
             (() => {
                 const out: string = JSON.parse(
@@ -108,8 +121,8 @@ export function createRouter(params: {
                 return () => organizationUserProfileAttributeName;
             })()
         ),
-        "getSoftwares": loggedProcedure.query(() => core.states.readWriteSillData.getSoftwares()),
-        "getInstances": loggedProcedure.query(() => core.states.readWriteSillData.getInstances()),
+        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
+        "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
             .input(
                 z.object({
@@ -117,7 +130,7 @@ export function createRouter(params: {
                     "language": zLanguage
                 })
             )
-            .query(({ ctx: { user }, input }) => {
+            .query(async ({ ctx: { user }, input }) => {
                 if (user === undefined) {
                     //To prevent abuse.
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
@@ -125,10 +138,19 @@ export function createRouter(params: {
 
                 const { queryString, language } = input;
 
-                return core.functions.suggestionAndAutoFill.getSoftwareExternalDataOptionsWithPresenceInSill({
-                    queryString,
-                    language
-                });
+                const [queryResults, softwareExternalDataIds] = await Promise.all([
+                    getSoftwareExternalDataOptions({ queryString, language }),
+                    dbApi.software.getAllSillSoftwareExternalIds(externalDataOrigin)
+                ]);
+
+                return queryResults.map(({ externalId, description, label, isLibreSoftware, externalDataOrigin }) => ({
+                    "externalId": externalId,
+                    "description": description,
+                    "label": label,
+                    "isInSill": softwareExternalDataIds.includes(externalId),
+                    isLibreSoftware,
+                    "externalDataOrigin": externalDataOrigin
+                }));
             }),
         "getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources": loggedProcedure
             .input(
@@ -165,13 +187,20 @@ export function createRouter(params: {
                 //  from readWriteSillData/thunks/getStorableLogo
 
                 try {
-                    await core.functions.readWriteSillData.createSoftware({
+                    await dbApi.software.create({
                         formData,
-                        "agent": {
-                            "email": user.email,
-                            "organization": user.organization
-                        }
+                        agentEmail: user.email,
+                        externalDataOrigin
                     });
+                    const agent = await dbApi.agent.getByEmail(user.email);
+                    if (!agent) {
+                        await dbApi.agent.add({
+                            email: user.email,
+                            organization: user.organization,
+                            about: undefined,
+                            isPublic: false
+                        });
+                    }
                 } catch (e) {
                     throw new TRPCError({ "code": "INTERNAL_SERVER_ERROR", "message": String(e) });
                 }
@@ -190,43 +219,72 @@ export function createRouter(params: {
 
                 const { softwareSillId, formData } = input;
 
-                await core.functions.readWriteSillData.updateSoftware({
+                await dbApi.software.update({
                     softwareSillId,
                     formData,
-                    "agent": {
-                        "email": user.email,
-                        "organization": user.organization
-                    }
+                    agentEmail: user.email
                 });
             }),
         "createUserOrReferent": loggedProcedure
             .input(
                 z.object({
                     "formData": zDeclarationFormData,
-                    "softwareName": z.string()
+                    "softwareId": z.number()
                 })
             )
             .mutation(async ({ ctx: { user }, input }) => {
+                console.log("createUserOrReferent, user :", user);
                 if (user === undefined) {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
-                const { formData, softwareName } = input;
+                const { formData, softwareId } = input;
 
-                await core.functions.readWriteSillData.createUserOrReferent({
-                    formData,
-                    softwareName,
-                    "agent": {
-                        "email": user.email,
-                        "organization": user.organization
-                    }
-                });
+                console.log("createUserOrReferent, softwareId :", softwareId);
+                console.log("createUserOrReferent, formData :", formData);
+                const software = await dbApi.software.getById(softwareId);
+                console.log("software", software);
+                if (!software) throw new TRPCError({ "code": "NOT_FOUND", message: "Software not found in SILL" });
+                console.log("reached ?");
+
+                const agent = await dbApi.agent.getByEmail(user.email);
+                let agentId = agent?.id as number;
+                if (!agent) {
+                    agentId = await dbApi.agent.add({
+                        email: user.email,
+                        organization: user.organization,
+                        about: undefined,
+                        isPublic: false
+                    });
+                }
+
+                switch (formData.declarationType) {
+                    case "user":
+                        await dbApi.softwareUser.add({
+                            softwareId,
+                            agentId,
+                            os: formData.os ?? null,
+                            serviceUrl: formData.serviceUrl ?? null,
+                            useCaseDescription: formData.usecaseDescription,
+                            version: formData.version
+                        });
+                        break;
+                    case "referent":
+                        await dbApi.softwareReferent.add({
+                            softwareId,
+                            agentId,
+                            isExpert: formData.isTechnicalExpert,
+                            useCaseDescription: formData.usecaseDescription,
+                            serviceUrl: formData.serviceUrl ?? null
+                        });
+                        break;
+                }
             }),
 
         "removeUserOrReferent": loggedProcedure
             .input(
                 z.object({
-                    "softwareName": z.string(),
+                    "softwareId": z.number(),
                     "declarationType": z.enum(["user", "referent"])
                 })
             )
@@ -235,13 +293,49 @@ export function createRouter(params: {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
-                const { softwareName, declarationType } = input;
+                const { softwareId, declarationType } = input;
 
-                await core.functions.readWriteSillData.removeUserOrReferent({
-                    softwareName,
-                    "agentEmail": user.email,
-                    declarationType
-                });
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+
+                const software = await dbApi.software.getById(softwareId);
+                if (!software) throw new TRPCError({ "code": "NOT_FOUND", message: "Software not found" });
+
+                switch (declarationType) {
+                    case "user": {
+                        await dbApi.softwareUser.remove({
+                            softwareId,
+                            agentId: agent.id
+                        });
+                        break;
+                    }
+
+                    case "referent": {
+                        await dbApi.softwareReferent.remove({
+                            softwareId,
+                            agentId: agent.id
+                        });
+                        break;
+                    }
+                }
+
+                const [
+                    numberOfSoftwareWhereThisAgentIsUser,
+                    numberOfSoftwareWhereThisAgentIsReferent,
+                    numberOfSoftwareAddedByThisAgent
+                ] = await Promise.all([
+                    dbApi.softwareUser.countSoftwaresForAgent({ agentId: agent.id }),
+                    dbApi.softwareReferent.countSoftwaresForAgent({ agentId: agent.id }),
+                    dbApi.software.countAddedByAgent({ agentEmail: agent.email })
+                ]);
+
+                if (
+                    numberOfSoftwareWhereThisAgentIsReferent === 0 &&
+                    numberOfSoftwareWhereThisAgentIsUser === 0 &&
+                    numberOfSoftwareAddedByThisAgent === 0
+                ) {
+                    await dbApi.agent.remove(agent.id);
+                }
             }),
 
         "createInstance": loggedProcedure
@@ -257,12 +351,9 @@ export function createRouter(params: {
 
                 const { formData } = input;
 
-                const { instanceId } = await core.functions.readWriteSillData.createInstance({
+                const instanceId = await dbApi.instance.create({
                     formData,
-                    "agent": {
-                        "email": user.email,
-                        "organization": user.organization
-                    }
+                    agentEmail: user.email
                 });
 
                 return { instanceId };
@@ -281,19 +372,16 @@ export function createRouter(params: {
 
                 const { instanceId, formData } = input;
 
-                await core.functions.readWriteSillData.updateInstance({
-                    instanceId,
+                await dbApi.instance.update({
                     formData,
-                    "agentEmail": user.email
+                    instanceId
                 });
             }),
         "getAgents": loggedProcedure.query(async ({ ctx: { user } }) => {
             if (user === undefined) {
                 throw new TRPCError({ "code": "UNAUTHORIZED" });
             }
-
-            const agents = core.states.readWriteSillData.getAgents();
-
+            const agents = await dbApi.agent.getAll();
             return { agents };
         }),
         "updateIsAgentProfilePublic": loggedProcedure
@@ -309,13 +397,9 @@ export function createRouter(params: {
 
                 const { isPublic } = input;
 
-                await core.functions.readWriteSillData.updateIsAgentProfilePublic({
-                    "agent": {
-                        "email": user.email,
-                        "organization": user.organization
-                    },
-                    isPublic
-                });
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                await dbApi.agent.update({ ...agent, isPublic });
             }),
         "updateAgentAbout": loggedProcedure
             .input(
@@ -330,13 +414,9 @@ export function createRouter(params: {
 
                 const { about } = input;
 
-                await core.functions.readWriteSillData.updateAgentAbout({
-                    "agent": {
-                        "email": user.email,
-                        "organization": user.organization
-                    },
-                    about
-                });
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                await dbApi.agent.update({ ...agent, about });
             }),
         "getIsAgentProfilePublic": loggedProcedure
             .input(
@@ -347,11 +427,9 @@ export function createRouter(params: {
             .query(async ({ input }) => {
                 const { email } = input;
 
-                const isPublic = core.functions.readWriteSillData.getAgentIsPublic({
-                    email
-                });
+                const agent = await dbApi.agent.getByEmail(email);
 
-                return { isPublic };
+                return { isPublic: agent?.isPublic ?? false };
             }),
         "getAgent": loggedProcedure
             .input(
@@ -362,17 +440,11 @@ export function createRouter(params: {
             .query(async ({ ctx: { user }, input }) => {
                 const { email } = input;
 
-                const isPublic = core.functions.readWriteSillData.getAgentIsPublic({
-                    email
-                });
+                const agent = await dbApi.agent.getByEmail(email);
 
-                if (!isPublic && user === undefined) {
+                if (!agent?.isPublic && user === undefined) {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
-
-                const agent = await core.functions.readWriteSillData.getAgent({
-                    email
-                });
 
                 return { agent };
             }),
@@ -393,11 +465,10 @@ export function createRouter(params: {
 
                 const { newOrganization } = input;
 
-                await core.functions.readWriteSillData.changeAgentOrganization({
-                    "email": user.email,
-                    newOrganization,
-                    "userId": user.id
-                });
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+
+                await dbApi.agent.update({ ...agent, organization: newOrganization });
             }),
         "updateEmail": loggedProcedure
             .input(
@@ -414,15 +485,13 @@ export function createRouter(params: {
 
                 assert(keycloakParams !== undefined);
 
-                await core.functions.readWriteSillData.updateUserEmail({
-                    "userId": user.id,
-                    "email": user.email,
-                    newEmail
-                });
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                await dbApi.agent.update({ ...agent, email: newEmail });
             }),
         "getRegisteredUserCount": loggedProcedure.query(async () => coreContext.userApi.getUserCount()),
         "getTotalReferentCount": loggedProcedure.query(() => {
-            const referentCount = core.states.readWriteSillData.getReferentCount();
+            const referentCount = dbApi.softwareReferent.getTotalCount();
             return { referentCount };
         }),
         "getTermsOfServiceUrl": loggedProcedure.query(() => termsOfServiceUrl),
@@ -484,7 +553,7 @@ export function createRouter(params: {
         "unreferenceSoftware": loggedProcedure
             .input(
                 z.object({
-                    "softwareName": z.string(),
+                    "softwareId": z.number(),
                     "reason": z.string()
                 })
             )
@@ -493,11 +562,12 @@ export function createRouter(params: {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
-                const { softwareName, reason } = input;
+                const { softwareId, reason } = input;
 
-                await core.functions.readWriteSillData.unreferenceSoftware({
-                    softwareName,
-                    reason
+                await dbApi.software.unreference({
+                    softwareId,
+                    reason,
+                    time: Date.now()
                 });
             })
     });
