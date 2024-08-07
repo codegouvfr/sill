@@ -4,7 +4,8 @@ import type { Database } from "./kysely.database";
 
 export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository => ({
     add: async agent => {
-        await db.insertInto("agents").values(agent).execute();
+        const { id } = await db.insertInto("agents").values(agent).returning("id").executeTakeFirstOrThrow();
+        return id;
     },
     update: async agent => {
         await db.updateTable("agents").set(agent).where("id", "=", agent.id).execute();

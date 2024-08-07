@@ -1,16 +1,28 @@
-import express from "express";
 import * as trpcExpress from "@trpc/server/adapters/express";
-import cors from "cors";
-import { createValidateGitHubWebhookSignature } from "../tools/validateGithubWebhookSignature";
 import compression from "compression";
-import { bootstrapCore } from "../core";
-import type { ExternalDataOrigin, LocalizedString } from "../core/ports/GetSoftwareExternalData";
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
-import { createContextFactory } from "./context";
-import type { User } from "./user";
-import { createRouter } from "./router";
+import cors from "cors";
+import express from "express";
+import { Kysely } from "kysely";
 import { basename as pathBasename } from "path";
+import type { Equals } from "tsafe";
+import { assert } from "tsafe/assert";
+import { bootstrapCore } from "../core";
+import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
+import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
+import { getHalSoftware } from "../core/adapters/hal/getHalSoftware";
+import { getHalSoftwareOptions } from "../core/adapters/hal/getHalSoftwareOptions";
+import { getWikidataSoftware } from "../core/adapters/wikidata/getWikidataSoftware";
+import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidataSoftwareOptions";
+import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
+import type {
+    ExternalDataOrigin,
+    GetSoftwareExternalData,
+    LocalizedString
+} from "../core/ports/GetSoftwareExternalData";
+import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { createContextFactory } from "./context";
+import { createRouter } from "./router";
+import type { User } from "./user";
 
 export async function startRpcService(params: {
     keycloakParams?: {
@@ -32,6 +44,7 @@ export async function startRpcService(params: {
     isDevEnvironnement: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
     redirectUrl?: string;
+    databaseUrl: string;
 }) {
     const {
         redirectUrl,
@@ -47,6 +60,7 @@ export async function startRpcService(params: {
         githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
         externalSoftwareDataOrigin,
+        databaseUrl,
         ...rest
     } = params;
 
@@ -54,12 +68,16 @@ export async function startRpcService(params: {
 
     console.log({ isDevEnvironnement });
 
-    const { core, context: coreContext } = await bootstrapCore({
+    const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
+
+    const {
+        dbApi,
+        context: coreContext,
+        core
+    } = await bootstrapCore({
         "dbConfig": {
-            "dbKind": "git",
-            dataRepoSshUrl,
-            "sshPrivateKeyName": sshPrivateKeyForGitName,
-            "sshPrivateKey": sshPrivateKeyForGit
+            "dbKind": "kysely",
+            "kyselyDb": kyselyDb
         },
         "keycloakUserApiParams":
             keycloakParams === undefined
@@ -90,7 +108,13 @@ export async function startRpcService(params: {
                   }
     });
 
+    const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
+        getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
+
     const { router } = createRouter({
+        dbApi,
+        getSoftwareExternalDataOptions,
+        getSoftwareExternalData,
         core,
         coreContext,
         jwtClaimByUserKey,
@@ -114,48 +138,13 @@ export async function startRpcService(params: {
         .use(compression())
         .use((req, _res, next) => (console.log("⬅", req.method, req.path, req.body ?? req.query), next()))
         .use("/public/healthcheck", (...[, res]) => res.sendStatus(200))
-        .post(
-            `*/ondataupdated`,
-            (() => {
-                if (githubWebhookSecret === undefined) {
-                    return async (...[, res]) => res.sendStatus(410);
-                }
-
-                const { validateGitHubWebhookSignature } = createValidateGitHubWebhookSignature({
-                    githubWebhookSecret
-                });
-
-                return async (req, res) => {
-                    const reqBody = await validateGitHubWebhookSignature(req, res);
-
-                    console.log("Webhook signature OK");
-
-                    if (redirectUrl !== undefined) {
-                        console.log("Doing nothing with the webhook, this instance is effectively disabled");
-                    }
-
-                    if (reqBody.ref !== `refs/heads/main`) {
-                        console.log(`Not a push on the main branch, doing nothing`);
-                        res.sendStatus(200);
-                        return;
-                    }
-
-                    console.log("Push on main branch of data repo");
-
-                    core.functions.readWriteSillData.notifyPushOnMainBranch({
-                        "commitMessage": reqBody.head_commit.message
-                    });
-
-                    res.sendStatus(200);
-                };
-            })()
-        )
-        .get(`*/sill.json`, (req, res) => {
+        .get(`*/sill.json`, async (req, res) => {
             if (redirectUrl !== undefined) {
                 return res.redirect(redirectUrl + req.originalUrl);
             }
 
-            const compiledDataPublicJson = core.states.readWriteSillData.getCompiledDataPublicJson();
+            const privateCompiledData = await dbApi.getCompiledDataPrivate();
+            const compiledDataPublicJson = JSON.stringify(compiledDataPrivateToPublic(privateCompiledData));
 
             res.setHeader("Content-Type", "application/json").send(Buffer.from(compiledDataPublicJson, "utf8"));
         })
@@ -178,4 +167,25 @@ export async function startRpcService(params: {
             })()
         )
         .listen(port, () => console.log(`Listening on port ${port}`));
+}
+
+function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
+    "getSoftwareExternalDataOptions": GetSoftwareExternalDataOptions;
+    "getSoftwareExternalData": GetSoftwareExternalData;
+} {
+    switch (externalSoftwareDataOrigin) {
+        case "wikidata":
+            return {
+                "getSoftwareExternalDataOptions": getWikidataSoftwareOptions,
+                "getSoftwareExternalData": getWikidataSoftware
+            };
+        case "HAL":
+            return {
+                "getSoftwareExternalDataOptions": getHalSoftwareOptions,
+                "getSoftwareExternalData": getHalSoftware
+            };
+        default:
+            const unreachableCase: never = externalSoftwareDataOrigin;
+            throw new Error(`Unreachable case: ${unreachableCase}`);
+    }
 }

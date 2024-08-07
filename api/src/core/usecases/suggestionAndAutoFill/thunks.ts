@@ -4,29 +4,8 @@ import { assert } from "tsafe/assert";
 import type { Language } from "../../ports/GetSoftwareExternalData";
 import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless";
 import { id } from "tsafe/id";
-import { privateSelectors } from "./selectors";
 
 export const thunks = {
-    "getSoftwareExternalDataOptionsWithPresenceInSill":
-        (params: { queryString: string; language: Language }) =>
-        async (...args) => {
-            const { queryString, language } = params;
-
-            const [, getState, { getSoftwareExternalDataOptions }] = args;
-
-            const queryResults = await getSoftwareExternalDataOptions({ queryString, language });
-
-            const sillWikidataIds = privateSelectors.sillWikidataIds(getState());
-
-            return queryResults.map(({ externalId, description, label, isLibreSoftware, externalDataOrigin }) => ({
-                "externalId": externalId,
-                "description": description,
-                "label": label,
-                "isInSill": sillWikidataIds.includes(externalId),
-                isLibreSoftware,
-                "externalDataOrigin": externalDataOrigin
-            }));
-        },
     "getSoftwareFormAutoFillDataFromExternalAndOtherSources":
         (params: { externalId: string }) =>
         async (...args): Promise<AutoFillData> => {
