@@ -34,7 +34,8 @@ const zConfiguration = z.object({
     "isDevEnvironnement": z.boolean().optional(),
     // Completely disable this instance and redirect to another url
     "redirectUrl": z.string().optional(),
-    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional()
+    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
+    "databaseUrl": z.string()
 });
 
 const getJsonConfiguration = () => {
@@ -73,7 +74,9 @@ const getJsonConfiguration = () => {
         "githubWebhookSecret": process.env.SILL_WEBHOOK_SECRET,
         "port": parseInt(process.env.SILL_API_PORT ?? ""),
         "isDevEnvironnement": process.env.SILL_IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
-        "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN
+        "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
+        "redirectUrl": process.env.SILL_REDIRECT_URL,
+        "databaseUrl": process.env.DATABASE_URL
     };
 };
 

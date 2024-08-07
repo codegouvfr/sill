@@ -24,7 +24,7 @@ export type GitDbApiParams = {
     sshPrivateKey: string;
 };
 
-export function createGitDbApi(params: GitDbApiParams): Db.DbApiAndInitializeCache {
+export function createGitDbApi(params: GitDbApiParams): { dbApi: DbApi; initializeDbApiCache: () => Promise<void> } {
     const { dataRepoSshUrl, sshPrivateKeyName, sshPrivateKey } = params;
 
     const dbApi: DbApi = {

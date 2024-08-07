@@ -1,8 +1,9 @@
+import { Kysely } from "kysely";
 import { createCore, createObjectThatThrowsIfAccessed, type GenericCore } from "redux-clean-architecture";
 import { createCompileData } from "./adapters/compileData";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
-import { createGitDbApi, type GitDbApiParams } from "./adapters/dbApi/createGitDbApi";
-import { InMemoryDbApi } from "./adapters/dbApi/InMemoryDbApi";
+import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
+import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
 import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVersion";
@@ -13,17 +14,17 @@ import { getHalSoftwareOptions } from "./adapters/hal/getHalSoftwareOptions";
 import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
 import type { CompileData } from "./ports/CompileData";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
-import { DbApi, Db } from "./ports/DbApi";
+import { Db } from "./ports/DbApi";
+import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
 import type { UserApi } from "./ports/UserApi";
 import { usecases } from "./usecases";
 
-type GitDbConfig = { dbKind: "git" } & GitDbApiParams;
-type InMemoryDbConfig = { dbKind: "inMemory" };
+type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
-type DbConfig = GitDbConfig | InMemoryDbConfig;
+type DbConfig = PgDbConfig;
 
 type ParamsOfBootstrapCore = {
     dbConfig: DbConfig;
@@ -36,11 +37,10 @@ type ParamsOfBootstrapCore = {
 
 export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
-    dbApi: DbApi;
+    dbApi: DbApiV2;
     userApi: UserApi;
     compileData: CompileData;
     comptoirDuLibreApi: ComptoirDuLibreApi;
-    getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
     getSoftwareExternalData: GetSoftwareExternalData;
     getSoftwareLatestVersion: GetSoftwareLatestVersion;
 };
@@ -52,17 +52,20 @@ export type Thunks = Core["types"]["Thunks"];
 export type CreateEvt = Core["types"]["CreateEvt"];
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): Db.DbApiAndInitializeCache => {
-    if (dbConfig.dbKind === "git") return createGitDbApi(dbConfig);
-    if (dbConfig.dbKind === "inMemory")
+    if (dbConfig.dbKind === "kysely") {
         return {
-            dbApi: new InMemoryDbApi(),
+            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb),
             initializeDbApiCache: async () => {}
         };
-    const shouldNotBeReached: never = dbConfig;
+    }
+
+    const shouldNotBeReached: never = dbConfig.dbKind;
     throw new Error(`Unsupported case: ${shouldNotBeReached}`);
 };
 
-export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ core: Core; context: Context }> {
+export async function bootstrapCore(
+    params: ParamsOfBootstrapCore
+): Promise<{ dbApi: DbApiV2; context: Context; core: Core }> {
     const {
         dbConfig,
         keycloakUserApiParams,
@@ -76,8 +79,7 @@ export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ co
         githubPersonalAccessTokenForApiRateLimit
     });
 
-    const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
-        getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
+    const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
     const { compileData } = createCompileData({
         getSoftwareExternalData,
@@ -105,21 +107,23 @@ export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ co
         userApi,
         compileData,
         comptoirDuLibreApi,
-        getSoftwareExternalDataOptions,
         getSoftwareExternalData,
         getSoftwareLatestVersion
     };
 
-    const { core, dispatch } = createCore({
+    const { core } = createCore({
         context,
         usecases
     });
 
-    await dispatch(
-        usecases.readWriteSillData.protectedThunks.initialize({
-            doPerPerformPeriodicalCompilation
-        })
-    );
+    if (doPerPerformPeriodicalCompilation) {
+        console.log("TODO: doPerPerformPeriodicalCompilation");
+    }
+    // await dispatch(
+    //     usecases.readWriteSillData.protectedThunks.initialize({
+    //         doPerPerformPeriodicalCompilation
+    //     })
+    // );
 
     if (doPerformCacheInitialization) {
         console.log("Performing cache initialization...");
@@ -127,7 +131,7 @@ export async function bootstrapCore(params: ParamsOfBootstrapCore): Promise<{ co
         await Promise.all([initializeDbApiCache(), initializeUserApiCache()]);
     }
 
-    return { core, context };
+    return { dbApi, context, core };
 }
 
 function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
