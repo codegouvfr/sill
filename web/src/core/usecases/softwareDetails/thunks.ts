@@ -220,6 +220,12 @@ function apiSoftwareToSoftware(params: {
             };
         }
 
+        console.log(
+            "resolving localized string in SOFTWARE DETAILS : ",
+            parentWikidataSoftware_api.label,
+            ` ( for software ${softwareId} - ${softwareName})`
+        );
+
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware_api.label),
