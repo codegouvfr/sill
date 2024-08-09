@@ -273,6 +273,16 @@ function apiSoftwareToInternalSoftware(params: {
         };
     })();
 
+    console.log({
+        userAndReferentCountByOrganization,
+        "referentCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ referentCount }) => referentCount)
+            .reduce((prev, curr) => prev + curr, 0),
+        "userCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ userCount }) => userCount)
+            .reduce((prev, curr) => prev + curr, 0)
+    });
+
     return {
         logoUrl,
         softwareName,
