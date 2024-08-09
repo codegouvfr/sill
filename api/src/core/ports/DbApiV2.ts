@@ -41,7 +41,7 @@ export type DbAgent = {
     isPublic: boolean;
 };
 
-type AgentWithAllDbFields = Agent & Pick<DbAgent, "id" | "email">;
+type AgentWithAllDbFields = Agent & Pick<DbAgent, "id">;
 
 export interface AgentRepository {
     add: (agent: OmitFromExisting<DbAgent, "id">) => Promise<number>;
