@@ -258,6 +258,14 @@ function apiSoftwareToInternalSoftware(params: {
             };
         }
 
+        console.log(
+            "resolving localized string in SOFTWARE CATALOG : ",
+            parentWikidataSoftware.label,
+            ` ( for software  ${softwareName})`
+        );
+
+        console.log(parentWikidataSoftware);
+
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware.label),

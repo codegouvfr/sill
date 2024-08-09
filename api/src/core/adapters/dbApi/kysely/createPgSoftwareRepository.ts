@@ -5,7 +5,7 @@ import { SoftwareRepository } from "../../../ports/DbApiV2";
 import { ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
-import { convertNullValuesToUndefined, jsonBuildObject } from "./kysely.utils";
+import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
 
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => ({
     create: async ({ formData, externalDataOrigin, agentEmail }) => {
@@ -136,8 +136,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     similarExternalSoftwares,
                     ...software
                 } = result;
-                return {
-                    ...convertNullValuesToUndefined(software),
+                return stripNullOrUndefinedValues({
+                    ...software,
                     updateTime: new Date(+updateTime).getTime(),
                     addedTime: new Date(+addedTime).getTime(),
                     serviceProviders: serviceProviders ?? [],
@@ -149,17 +149,15 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     })),
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.website ??
-                        undefined,
+                        software.comptoirDuLibreSoftware?.external_resources.website,
                     codeRepositoryUrl:
                         softwareExternalData?.sourceUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.repository ??
-                        undefined,
-                    documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                        software.comptoirDuLibreSoftware?.external_resources.repository,
+                    documentationUrl: softwareExternalData?.documentationUrl,
                     comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                     testUrl: testUrls[0]?.url,
-                    parentWikidataSoftware: parentExternalData ?? undefined
-                };
+                    parentWikidataSoftware: parentExternalData
+                });
             });
     },
     getAll: (): Promise<Software[]> =>
@@ -176,39 +174,41 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
-                    }): Software => ({
-                        ...convertNullValuesToUndefined(software),
-                        updateTime: new Date(+updateTime).getTime(),
-                        addedTime: new Date(+addedTime).getTime(),
-                        serviceProviders: serviceProviders ?? [],
-                        similarSoftwares: similarExternalSoftwares,
-                        // (similarSoftwares ?? []).map(
-                        //     (s): SimilarSoftware => ({
-                        //         softwareName:
-                        //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                        //         softwareDescription:
-                        //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                        //         isInSill: true // TODO: check if this is true
-                        //     })
-                        // ) ?? [],
-                        userAndReferentCountByOrganization: {},
-                        authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                            authorName: dev.name,
-                            authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                        })),
-                        officialWebsiteUrl:
-                            softwareExternalData?.websiteUrl ??
-                            software.comptoirDuLibreSoftware?.external_resources.website ??
-                            undefined,
-                        codeRepositoryUrl:
-                            softwareExternalData?.sourceUrl ??
-                            software.comptoirDuLibreSoftware?.external_resources.repository ??
-                            undefined,
-                        documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                        comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                        testUrl: testUrls[0]?.url,
-                        parentWikidataSoftware: parentExternalData ?? undefined
-                    })
+                    }): Software =>
+                        stripNullOrUndefinedValues({
+                            ...software,
+                            updateTime: new Date(+updateTime).getTime(),
+                            addedTime: new Date(+addedTime).getTime(),
+                            serviceProviders: serviceProviders ?? [],
+                            similarSoftwares: similarExternalSoftwares,
+                            // (similarSoftwares ?? []).map(
+                            //     (s): SimilarSoftware => ({
+                            //         softwareName:
+                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                            //         softwareDescription:
+                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                            //         isInSill: true // TODO: check if this is true
+                            //     })
+                            // ) ?? [],
+                            userAndReferentCountByOrganization: {},
+                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                authorName: dev.name,
+                                authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                            })),
+                            officialWebsiteUrl:
+                                softwareExternalData?.websiteUrl ??
+                                software.comptoirDuLibreSoftware?.external_resources.website ??
+                                undefined,
+                            codeRepositoryUrl:
+                                softwareExternalData?.sourceUrl ??
+                                software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                undefined,
+                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                            comptoirDuLibreServiceProviderCount:
+                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                            testUrl: testUrls[0]?.url,
+                            parentWikidataSoftware: parentExternalData ?? undefined
+                        })
                 )
             ),
     getAllSillSoftwareExternalIds: async externalDataOrigin =>
@@ -273,6 +273,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "ext.externalId",
             "parentExt.externalId"
         ])
+        .orderBy("s.id", "asc")
         .select([
             "s.id as softwareId",
             "s.logoUrl",
@@ -305,9 +306,9 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     .when("parentExt.externalId", "is not", null)
                     .then(
                         jsonBuildObject({
-                            externalId: ref("ext.externalId"),
-                            label: ref("ext.label"),
-                            description: ref("ext.description")
+                            externalId: ref("parentExt.externalId"),
+                            label: ref("parentExt.label"),
+                            description: ref("parentExt.description")
                         }).$castTo<ParentSoftwareExternalData>()
                     )
                     .else(null)

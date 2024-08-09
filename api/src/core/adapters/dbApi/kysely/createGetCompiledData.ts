@@ -3,7 +3,7 @@ import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
 import { ParentSoftwareExternalData, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Database } from "./kysely.database";
-import { convertNullValuesToUndefined, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
+import { stripNullOrUndefinedValues, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
 
 export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise<CompiledData<"private">> => {
     console.time("agentById query");
@@ -138,7 +138,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     ...software
                 }): CompiledData.Software<"private"> => {
                     return {
-                        ...convertNullValuesToUndefined(software),
+                        ...stripNullOrUndefinedValues(software),
                         updateTime: new Date(+updateTime).getTime(),
                         referencedSinceTime: new Date(+referencedSinceTime).getTime(),
                         doRespectRgaa,

@@ -70,6 +70,13 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     license: "MIT"
 };
 
+const parentSoftwareExternalData: SoftwareExternalData = {
+    ...similarSoftwareExternalData,
+    externalId: "Q-parent-external-id",
+    label: "Some parent software label",
+    description: { en: "Some parent software description" }
+};
+
 const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
@@ -112,13 +119,21 @@ describe("pgDbApi", () => {
     });
 
     describe("software", () => {
-        it("creates a software, than gets it with getAll", async () => {
+        it("creates a software, than gets it with getAll, than updates adding a parent", async () => {
             console.log("------ software scenario ------");
-            await insertSoftwareExternalDataAndSoftware();
+            const softwareId = await insertSoftwareExternalDataAndSoftware();
+
+            await db
+                .updateTable("softwares")
+                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId)
+                .where("id", "=", softwareId)
+                .execute();
 
             const softwares = await dbApi.software.getAll();
 
-            expectToEqual(softwares[0], {
+            const actualSoftware = softwares[0];
+
+            expectToEqual(actualSoftware, {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
@@ -139,7 +154,11 @@ describe("pgDbApi", () => {
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
-                parentWikidataSoftware: undefined,
+                parentWikidataSoftware: {
+                    label: parentSoftwareExternalData.label,
+                    description: parentSoftwareExternalData.description,
+                    externalId: parentSoftwareExternalData.externalId
+                },
                 prerogatives: {
                     doRespectRgaa: true,
                     isFromFrenchPublicServices: false,
@@ -384,7 +403,7 @@ describe("pgDbApi", () => {
         await db
             .insertInto("software_external_datas")
             .values(
-                [softwareExternalData, similarSoftwareExternalData].map(softExtData => ({
+                [softwareExternalData, similarSoftwareExternalData, parentSoftwareExternalData].map(softExtData => ({
                     ...softExtData,
                     developers: JSON.stringify(softExtData.developers),
                     label: JSON.stringify(softExtData.label),
@@ -393,7 +412,7 @@ describe("pgDbApi", () => {
             )
             .execute();
 
-        await dbApi.software.create({
+        return dbApi.software.create({
             formData: softwareFormData,
             agentEmail: agent.email,
             externalDataOrigin: "wikidata"
