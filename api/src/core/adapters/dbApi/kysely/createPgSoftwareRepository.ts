@@ -163,8 +163,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
     getAll: (): Promise<Software[]> =>
         makeGetSoftwareBuilder(db)
             .execute()
-            .then(softwares =>
-                softwares.map(
+            .then(async softwares => {
+                const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
+                return softwares.map(
                     ({
                         testUrls,
                         serviceProviders,
@@ -174,8 +175,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
-                    }): Software =>
-                        stripNullOrUndefinedValues({
+                    }): Software => {
+                        return stripNullOrUndefinedValues({
                             ...software,
                             updateTime: new Date(+updateTime).getTime(),
                             addedTime: new Date(+addedTime).getTime(),
@@ -190,7 +191,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             //         isInSill: true // TODO: check if this is true
                             //     })
                             // ) ?? [],
-                            userAndReferentCountByOrganization: {},
+                            userAndReferentCountByOrganization:
+                                userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
                                 authorName: dev.name,
                                 authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
@@ -208,9 +210,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
                             testUrl: testUrls[0]?.url,
                             parentWikidataSoftware: parentExternalData ?? undefined
-                        })
-                )
-            ),
+                        });
+                    }
+                );
+            }),
     getAllSillSoftwareExternalIds: async externalDataOrigin =>
         db
             .selectFrom("softwares")
@@ -315,7 +318,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     .end()
                     .as("parentExternalData"),
             "s.keywords",
-
             ({ ref }) =>
                 jsonBuildObject({
                     externalId: ref("ext.externalId"),
@@ -349,3 +351,62 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     )
                     .as("similarExternalSoftwares")
         ]);
+
+type CountForOrganisationAndSoftwareId = {
+    organization: string;
+    softwareId: number;
+    type: "user" | "referent";
+    count: string;
+};
+
+type UserAndReferentCountByOrganizationBySoftwareId = Record<
+    string,
+    Record<string, { userCount: number; referentCount: number }>
+>;
+
+const defaultCount = {
+    userCount: 0,
+    referentCount: 0
+};
+
+const getUserAndReferentCountByOrganizationBySoftwareId = async (
+    db: Kysely<Database>
+): Promise<UserAndReferentCountByOrganizationBySoftwareId> => {
+    const softwareUserCountBySoftwareId: CountForOrganisationAndSoftwareId[] = await db
+        .selectFrom("software_users as u")
+        .innerJoin("agents as a", "a.id", "u.agentId")
+        .select([
+            "u.softwareId",
+            "a.organization",
+            ({ fn }) => fn.countAll<string>().as("count"),
+            sql<"user">`'userCount'`.as("type")
+        ])
+        .groupBy(["a.organization", "u.softwareId"])
+        .execute();
+
+    const softwareReferentCountBySoftwareId: CountForOrganisationAndSoftwareId[] = await db
+        .selectFrom("software_referents as r")
+        .innerJoin("agents as a", "a.id", "r.agentId")
+        .select([
+            "r.softwareId",
+            "a.organization",
+            ({ fn }) => fn.countAll<string>().as("count"),
+            sql<"referent">`'referentCount'`.as("type")
+        ])
+        .groupBy(["a.organization", "r.softwareId"])
+        .execute();
+
+    return [...softwareReferentCountBySoftwareId, ...softwareUserCountBySoftwareId].reduce(
+        (acc, { organization, softwareId, type, count }): UserAndReferentCountByOrganizationBySoftwareId => ({
+            ...acc,
+            [softwareId]: {
+                ...(acc[softwareId] ?? {}),
+                [organization]: {
+                    ...(acc[softwareId]?.[organization] ?? defaultCount),
+                    [type]: +count
+                }
+            }
+        }),
+        {} as UserAndReferentCountByOrganizationBySoftwareId
+    );
+};
