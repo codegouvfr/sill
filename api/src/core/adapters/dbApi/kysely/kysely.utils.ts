@@ -28,7 +28,7 @@ export const castSql = <Db>(
 
 export const isNotNull = <T>(value: T | null): value is T => value !== null;
 
-export const convertNullValuesToUndefined = <T extends Record<string, unknown>>(
+export const stripNullOrUndefinedValues = <T extends Record<string, unknown>>(
     obj: T
 ): { [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K] } =>
-    Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, value === null ? undefined : value])) as any;
+    Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)) as any;

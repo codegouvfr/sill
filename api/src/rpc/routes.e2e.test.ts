@@ -1,6 +1,7 @@
 import { Kysely } from "kysely";
 import { beforeAll, describe, expect, it } from "vitest";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
+import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
 import { CompiledData } from "../core/ports/CompileData";
 import { InstanceFormData } from "../core/usecases/readWriteSillData";
 import {
@@ -14,6 +15,22 @@ import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 
 const softwareFormData = createSoftwareFormData();
 const declarationFormData = createDeclarationFormData();
+
+describe("stripNullOrUndefined", () => {
+    it("removes null and undefined values", () => {
+        const stripped = stripNullOrUndefinedValues({
+            "a": null,
+            "b": undefined,
+            "c": 0,
+            "d": 1,
+            "e": "",
+            "f": "yolo"
+        });
+        expect(stripped.hasOwnProperty("a")).toBe(false);
+        expect(stripped.hasOwnProperty("b")).toBe(false);
+        expect(stripped).toStrictEqual({ "c": 0, "d": 1, "e": "", "f": "yolo" });
+    });
+});
 
 describe("RPC e2e tests", () => {
     let apiCaller: ApiCaller;
