@@ -1,9 +1,9 @@
 import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
 import { expectPromiseToFailWith, expectToEqual, testPgUrl } from "../../../../tools/test.helpers";
-import { Agent, DbApiV2 } from "../../../ports/DbApiV2";
+import { DbAgent, DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
-import { SoftwareFormData } from "../../../usecases/readWriteSillData";
+import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWriteSillData";
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
@@ -220,13 +220,59 @@ describe("pgDbApi", () => {
                 about: "test about"
             };
             console.log("inserting agent");
-            await dbApi.agent.add(insertedAgent);
+            const agentId = await dbApi.agent.add(insertedAgent);
+            const softwareId = await dbApi.software.create({
+                formData: softwareFormData,
+                agentEmail: insertedAgent.email,
+                externalDataOrigin: "wikidata"
+            });
+            await db
+                .insertInto("software_users")
+                .values({
+                    agentId,
+                    softwareId,
+                    os: "mac",
+                    useCaseDescription: "des trucs de user",
+                    version: "1",
+                    serviceUrl: "https://example.com"
+                })
+                .execute();
+
+            await db
+                .insertInto("software_referents")
+                .values({ agentId, softwareId, useCaseDescription: "des trucs de référent", isExpert: true })
+                .execute();
 
             console.log("getting agent by email");
             const agent = await dbApi.agent.getByEmail(insertedAgent.email);
-            expectToEqual(agent, { id: expect.any(Number), ...insertedAgent });
+            const expectedDeclarations: (DeclarationFormData & { softwareName: string })[] = [
+                {
+                    declarationType: "user",
+                    softwareName: softwareFormData.softwareName,
+                    os: "mac",
+                    version: "1",
+                    serviceUrl: "https://example.com",
+                    usecaseDescription: "des trucs de user"
+                },
+                {
+                    declarationType: "referent",
+                    softwareName: softwareFormData.softwareName,
+                    isTechnicalExpert: true,
+                    usecaseDescription: "des trucs de référent",
+                    serviceUrl: undefined
+                }
+            ];
 
-            const updatedAgent: Agent = {
+            expectToEqual(agent, {
+                id: expect.any(Number),
+                email: insertedAgent.email,
+                organization: insertedAgent.organization,
+                about: insertedAgent.about,
+                isPublic: insertedAgent.isPublic,
+                declarations: expectedDeclarations
+            });
+
+            const updatedAgent: DbAgent = {
                 id: agent!.id,
                 organization: "updated-test-organization",
                 about: "updated about",
@@ -239,7 +285,7 @@ describe("pgDbApi", () => {
 
             console.log("getting all agents");
             const allAgents = await dbApi.agent.getAll();
-            expectToEqual(allAgents, [updatedAgent]);
+            expectToEqual(allAgents, [{ ...updatedAgent, declarations: expectedDeclarations }]);
 
             console.log("removing agent");
             await dbApi.agent.remove(updatedAgent.id);

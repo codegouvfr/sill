@@ -1,5 +1,5 @@
 import type { Database } from "../adapters/dbApi/kysely/kysely.database";
-import type { Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
+import type { Agent, Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 
@@ -33,7 +33,7 @@ export interface InstanceRepository {
     getAll: () => Promise<Instance[]>;
 }
 
-export type Agent = {
+export type DbAgent = {
     id: number;
     email: string;
     organization: string;
@@ -41,12 +41,14 @@ export type Agent = {
     isPublic: boolean;
 };
 
+type AgentWithAllDbFields = Agent & Pick<DbAgent, "id" | "email">;
+
 export interface AgentRepository {
-    add: (agent: OmitFromExisting<Agent, "id">) => Promise<number>;
-    update: (agent: Agent) => Promise<void>;
+    add: (agent: OmitFromExisting<DbAgent, "id">) => Promise<number>;
+    update: (agent: DbAgent) => Promise<void>;
     remove: (agentId: number) => Promise<void>;
-    getByEmail: (email: string) => Promise<Agent | undefined>;
-    getAll: () => Promise<Agent[]>;
+    getByEmail: (email: string) => Promise<AgentWithAllDbFields | undefined>;
+    getAll: () => Promise<AgentWithAllDbFields[]>;
 }
 
 export interface SoftwareReferentRepository {

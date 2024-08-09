@@ -19,6 +19,7 @@ import {
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import {
+    Agent,
     DeclarationFormData,
     InstanceFormData,
     Os,
@@ -437,14 +438,12 @@ export function createRouter(params: {
                     "email": z.string()
                 })
             )
-            .query(async ({ ctx: { user }, input }) => {
+            .query(async ({ ctx: { user }, input }): Promise<{ agent: Agent }> => {
                 const { email } = input;
 
                 const agent = await dbApi.agent.getByEmail(email);
-
-                if (!agent?.isPublic && user === undefined) {
-                    throw new TRPCError({ "code": "UNAUTHORIZED" });
-                }
+                if (agent === undefined) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent?.isPublic && user === undefined) throw new TRPCError({ "code": "UNAUTHORIZED" });
 
                 return { agent };
             }),
