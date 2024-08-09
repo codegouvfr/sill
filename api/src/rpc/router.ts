@@ -489,8 +489,8 @@ export function createRouter(params: {
                 await dbApi.agent.update({ ...agent, email: newEmail });
             }),
         "getRegisteredUserCount": loggedProcedure.query(async () => coreContext.userApi.getUserCount()),
-        "getTotalReferentCount": loggedProcedure.query(() => {
-            const referentCount = dbApi.softwareReferent.getTotalCount();
+        "getTotalReferentCount": loggedProcedure.query(async () => {
+            const referentCount = await dbApi.softwareReferent.getTotalCount();
             return { referentCount };
         }),
         "getTermsOfServiceUrl": loggedProcedure.query(() => termsOfServiceUrl),

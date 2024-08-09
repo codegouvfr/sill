@@ -144,7 +144,7 @@ export const thunks = {
             const time = Date.now();
 
             await sillApi.unreferenceSoftware({
-                "softwareName": state.software.softwareName,
+                "softwareId": state.software.softwareId,
                 reason
             });
 

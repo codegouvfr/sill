@@ -175,10 +175,10 @@ export const sillApi: SillApi = {
     "createUserOrReferent": async ({ formData }) => {
         console.log(`User or referent updated ${JSON.stringify(formData, null, 2)}`);
     },
-    "removeUserOrReferent": async ({ declarationType, softwareName }) => {
+    "removeUserOrReferent": async ({ declarationType, softwareId }) => {
         console.log(
             `removed user or referent ${JSON.stringify(
-                { declarationType, softwareName },
+                { declarationType, softwareId },
                 null,
                 2
             )}`
@@ -193,9 +193,14 @@ export const sillApi: SillApi = {
     "updateInstance": async params => {
         console.log(`Updating instance ${JSON.stringify(params)}`);
     },
-    "getAgents": memoize(async () => ({ "agents": id<ApiTypes.Agent[]>([...agents]) }), {
-        "promise": true
-    }),
+    "getAgents": memoize(
+        async () => ({
+            "agents": agents.map((agent, index) => ({ id: index, ...agent }))
+        }),
+        {
+            "promise": true
+        }
+    ),
     "changeAgentOrganization": async ({ newOrganization }) => {
         console.log(`Update organization -> ${newOrganization}`);
     },
@@ -1244,6 +1249,8 @@ const agents: ApiTypes.Agent[] = [
     {
         "organization": "Développement durable",
         "email": "agent1@codegouv.fr",
+        "isPublic": true,
+        "about": undefined,
         "declarations": [
             {
                 "serviceUrl": "",
@@ -1258,6 +1265,8 @@ const agents: ApiTypes.Agent[] = [
     {
         "organization": "Babel",
         "email": "agent2@codegouv.fr",
+        "isPublic": true,
+        "about": undefined,
         "declarations": [
             {
                 "serviceUrl": "",
@@ -1271,6 +1280,8 @@ const agents: ApiTypes.Agent[] = [
     {
         "organization": "Éducation nationale",
         "email": "agent3@codegouv.fr",
+        "isPublic": true,
+        "about": undefined,
         "declarations": [
             {
                 "serviceUrl": "",

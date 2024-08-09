@@ -315,7 +315,8 @@ export default function SoftwareDetails(props: Props) {
                                         onClick={() =>
                                             openDeclarationRemovalModal({
                                                 declarationType,
-                                                "softwareName": software.softwareName
+                                                "softwareName": software.softwareName,
+                                                "softwareId": software.softwareId
                                             })
                                         }
                                     >
