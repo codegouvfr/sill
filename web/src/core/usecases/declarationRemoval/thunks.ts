@@ -3,9 +3,9 @@ import { actions } from "./state";
 
 export const thunks = {
     "removeAgentAsReferentOrUserFromSoftware":
-        (params: { softwareName: string; declarationType: "user" | "referent" }) =>
+        (params: { softwareId: number; declarationType: "user" | "referent" }) =>
         async (...args) => {
-            const { declarationType, softwareName } = params;
+            const { declarationType, softwareId } = params;
 
             const [dispatch, , { sillApi }] = args;
 
@@ -13,7 +13,7 @@ export const thunks = {
 
             await sillApi.removeUserOrReferent({
                 declarationType,
-                softwareName
+                softwareId
             });
 
             dispatch(actions.userOrReferentRemoved());

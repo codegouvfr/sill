@@ -13,6 +13,7 @@ const modal = createModal({
 });
 
 type Params = {
+    softwareId: number;
     softwareName: string;
     declarationType: "user" | "referent";
 };
@@ -47,7 +48,11 @@ export function DeclarationRemovalModal() {
 
     const params = evtParams.state;
 
-    const { softwareName = "", declarationType = "referent" } = params ?? {};
+    const {
+        softwareName = "",
+        softwareId = 0,
+        declarationType = "referent"
+    } = params ?? {};
 
     return (
         <modal.Component
@@ -61,7 +66,7 @@ export function DeclarationRemovalModal() {
                     "doClosesModal": false,
                     "onClick": () =>
                         declarationRemoval.removeAgentAsReferentOrUserFromSoftware({
-                            softwareName,
+                            softwareId,
                             declarationType
                         }),
                     "nativeButtonProps": {
