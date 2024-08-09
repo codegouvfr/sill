@@ -79,6 +79,8 @@ export type Agent = {
     email: string | undefined;
     organization: string;
     declarations: (DeclarationFormData & { softwareName: string })[];
+    isPublic: boolean;
+    about: string | undefined;
 };
 
 export type Instance = {
