@@ -1,4 +1,4 @@
-import { InsertObject, Kysely } from "kysely";
+import { InsertObject, Kysely, sql } from "kysely";
 import { z } from "zod";
 import { createGitDbApi, GitDbApiParams } from "../src/core/adapters/dbApi/createGitDbApi";
 import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
@@ -63,6 +63,7 @@ const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>
                 }))
             )
             .executeTakeFirst();
+        await sql`SELECT setval('softwares_id_seq', (SELECT MAX(id) FROM softwares))`.execute(trx);
 
         await trx
             .insertInto("softwares__similar_software_external_datas")
@@ -84,6 +85,7 @@ const insertAgents = async (agentRows: Db.AgentRow[], db: Kysely<Database>) => {
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("agents").execute();
         await trx.insertInto("agents").values(agentRows).executeTakeFirst();
+        await sql`SELECT setval('agents_id_seq', (SELECT MAX(id) FROM agents))`.execute(trx);
     });
 };
 
@@ -149,6 +151,7 @@ const insertInstances = async ({ instanceRows, db }: { instanceRows: Db.Instance
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("instances").execute();
         await trx.insertInto("instances").values(instanceRows).executeTakeFirst();
+        await sql`SELECT setval('instances_id_seq', (SELECT MAX(id) FROM instances))`.execute(trx);
     });
 };
 

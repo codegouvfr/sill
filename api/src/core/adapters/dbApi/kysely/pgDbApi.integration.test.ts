@@ -8,11 +8,6 @@ import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 
-const agent = {
-    id: 1,
-    email: "test@test.com",
-    organization: "test-orga"
-};
 const externalId = "external-id-111";
 const similarExternalId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
@@ -228,7 +223,7 @@ describe("pgDbApi", () => {
             const softwareId = softwares[0].softwareId;
             console.log("saving instance");
             await dbApi.instance.create({
-                agentEmail: agent.email,
+                agentEmail: insertedAgent.email,
                 formData: {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
@@ -424,7 +419,7 @@ describe("pgDbApi", () => {
 
         const softwareId = await dbApi.software.create({
             formData: softwareFormData,
-            agentEmail: agent.email,
+            agentEmail: insertedAgent.email,
             externalDataOrigin: "wikidata"
         });
 
