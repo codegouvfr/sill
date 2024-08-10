@@ -19,7 +19,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("externalId", "text")
         .addColumn("externalDataOrigin", sql`external_data_origin_type`)
         .addColumn("comptoirDuLibreId", "integer")
-        .addColumn("name", "text", col => col.notNull())
+        .addColumn("name", "text", col => col.unique().notNull())
         .addColumn("description", "text", col => col.notNull())
         .addColumn("license", "text", col => col.notNull())
         .addColumn("versionMin", "text", col => col.notNull())
