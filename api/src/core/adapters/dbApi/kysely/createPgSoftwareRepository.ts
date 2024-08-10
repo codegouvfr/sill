@@ -62,10 +62,21 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .returning("id as softwareId")
                 .executeTakeFirstOrThrow();
 
-            await trx
-                .insertInto("softwares__similar_software_external_datas")
-                .values(similarSoftwareExternalDataIds.map(similarExternalId => ({ softwareId, similarExternalId })))
-                .execute();
+            console.log(
+                `inserted software correctly, softwareId is : ${softwareId}, about to insert similars : `,
+                similarSoftwareExternalDataIds
+            );
+
+            if (similarSoftwareExternalDataIds.length > 0) {
+                await trx
+                    .insertInto("softwares__similar_software_external_datas")
+                    .values(
+                        similarSoftwareExternalDataIds.map(similarExternalId => ({ softwareId, similarExternalId }))
+                    )
+                    .execute();
+            }
+
+            console.log("all good");
 
             return softwareId;
         });
@@ -221,6 +232,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             .where("externalDataOrigin", "=", externalDataOrigin)
             .execute()
             .then(rows => rows.map(row => row.externalId!)),
+
     countAddedByAgent: async ({ agentEmail }) => {
         const { count } = await db
             .selectFrom("softwares")
