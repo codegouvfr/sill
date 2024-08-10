@@ -130,9 +130,47 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             .where("id", "=", softwareSillId)
             .execute();
     },
-    getById: async (softwareId: number): Promise<Software | undefined> => {
-        console.log("getById : ", softwareId);
-        return makeGetSoftwareBuilder(db)
+    getByName: async (softwareName: string): Promise<Software | undefined> =>
+        makeGetSoftwareBuilder(db)
+            .where("name", "=", softwareName)
+            .executeTakeFirst()
+            .then((result): Software | undefined => {
+                if (!result) return;
+                const {
+                    testUrls,
+                    serviceProviders,
+                    parentExternalData,
+                    updateTime,
+                    addedTime,
+                    softwareExternalData,
+                    similarExternalSoftwares,
+                    ...software
+                } = result;
+                return stripNullOrUndefinedValues({
+                    ...software,
+                    updateTime: new Date(+updateTime).getTime(),
+                    addedTime: new Date(+addedTime).getTime(),
+                    serviceProviders: serviceProviders ?? [],
+                    similarSoftwares: similarExternalSoftwares,
+                    userAndReferentCountByOrganization: {},
+                    authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                        authorName: dev.name,
+                        authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                    })),
+                    officialWebsiteUrl:
+                        softwareExternalData?.websiteUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.website,
+                    codeRepositoryUrl:
+                        softwareExternalData?.sourceUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.repository,
+                    documentationUrl: softwareExternalData?.documentationUrl,
+                    comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                    testUrl: testUrls[0]?.url,
+                    parentWikidataSoftware: parentExternalData
+                });
+            }),
+    getById: async (softwareId: number): Promise<Software | undefined> =>
+        makeGetSoftwareBuilder(db)
             .where("id", "=", softwareId)
             .executeTakeFirst()
             .then((result): Software | undefined => {
@@ -169,8 +207,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     testUrl: testUrls[0]?.url,
                     parentWikidataSoftware: parentExternalData
                 });
-            });
-    },
+            }),
     getAll: (): Promise<Software[]> =>
         makeGetSoftwareBuilder(db)
             .execute()
