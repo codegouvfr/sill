@@ -22,6 +22,7 @@ export interface SoftwareRepository {
     ) => Promise<void>;
     getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
+    getByName: (name: string) => Promise<Software | undefined>;
     countAddedByAgent: (params: { agentEmail: string }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;

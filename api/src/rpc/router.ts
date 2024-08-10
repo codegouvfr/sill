@@ -187,6 +187,15 @@ export function createRouter(params: {
                 // TODO : there is some logic with logoUrl that should be moved here
                 //  from readWriteSillData/thunks/getStorableLogo
 
+                const existingSoftware = await dbApi.software.getByName(formData.softwareName.trim());
+
+                if (existingSoftware) {
+                    throw new TRPCError({
+                        "code": "CONFLICT",
+                        "message": `Software already exists with name : ${formData.softwareName.trim()}`
+                    });
+                }
+
                 try {
                     await dbApi.software.create({
                         formData,
