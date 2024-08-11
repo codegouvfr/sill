@@ -6,7 +6,7 @@ import { Instance } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 
 export const createPgInstanceRepository = (db: Kysely<Database>): InstanceRepository => ({
-    create: async ({ formData, agentEmail }) => {
+    create: async ({ formData, agentId }) => {
         const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
@@ -14,7 +14,7 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
         const { instanceId } = await db
             .insertInto("instances")
             .values({
-                addedByAgentEmail: agentEmail,
+                addedByAgentId: agentId,
                 updateTime: now,
                 referencedSinceTime: now,
                 mainSoftwareSillId,
@@ -42,6 +42,14 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
             })
             .where("id", "=", instanceId)
             .execute();
+    },
+    countAddedByAgent: async ({ agentId }) => {
+        const { count } = await db
+            .selectFrom("instances")
+            .select(qb => qb.fn.countAll<string>().as("count"))
+            .where("addedByAgentId", "=", agentId)
+            .executeTakeFirstOrThrow();
+        return parseInt(count);
     },
     getAll: async () =>
         db

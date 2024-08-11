@@ -218,12 +218,12 @@ describe("pgDbApi", () => {
     describe("instance", () => {
         it("creates an instance, than gets it with getAll", async () => {
             console.log("------ instance scenario ------");
-            await insertSoftwareExternalDataAndSoftwareAndAgent();
+            const { agentId } = await insertSoftwareExternalDataAndSoftwareAndAgent();
             const softwares = await dbApi.software.getAll();
             const softwareId = softwares[0].softwareId;
             console.log("saving instance");
             await dbApi.instance.create({
-                agentEmail: insertedAgent.email,
+                agentId,
                 formData: {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
@@ -252,9 +252,10 @@ describe("pgDbApi", () => {
             const agentId = await dbApi.agent.add(insertedAgent);
             const softwareId = await dbApi.software.create({
                 formData: softwareFormData,
-                agentEmail: insertedAgent.email,
+                agentId,
                 externalDataOrigin: "wikidata"
             });
+
             await db
                 .insertInto("software_users")
                 .values({
@@ -315,6 +316,8 @@ describe("pgDbApi", () => {
             console.log("getting all agents");
             const allAgents = await dbApi.agent.getAll();
             expectToEqual(allAgents, [{ ...updatedAgent, declarations: expectedDeclarations }]);
+
+            await db.deleteFrom("softwares").where("addedByAgentId", "=", updatedAgent.id).execute();
 
             console.log("removing agent");
             await dbApi.agent.remove(updatedAgent.id);
@@ -419,7 +422,7 @@ describe("pgDbApi", () => {
 
         const softwareId = await dbApi.software.create({
             formData: softwareFormData,
-            agentEmail: insertedAgent.email,
+            agentId,
             externalDataOrigin: "wikidata"
         });
 
