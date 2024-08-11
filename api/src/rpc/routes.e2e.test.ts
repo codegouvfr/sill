@@ -3,7 +3,8 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
 import { CompiledData } from "../core/ports/CompileData";
-import { InstanceFormData } from "../core/usecases/readWriteSillData";
+import type { DbAgent } from "../core/ports/DbApiV2";
+import type { InstanceFormData } from "../core/usecases/readWriteSillData";
 import {
     createDeclarationFormData,
     createInstanceFormData,
@@ -82,14 +83,15 @@ describe("RPC e2e tests", () => {
     describe("Scenario - Add a new software then mark an agent as user of this software", () => {
         let actualSoftwareId: number;
         let instanceFormData: InstanceFormData;
+        let agent: DbAgent;
 
         beforeAll(async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller());
             await kyselyDb.deleteFrom("software_referents").execute();
             await kyselyDb.deleteFrom("software_users").execute();
-            await kyselyDb.deleteFrom("agents").execute();
-            await kyselyDb.deleteFrom("softwares").execute();
             await kyselyDb.deleteFrom("instances").execute();
+            await kyselyDb.deleteFrom("softwares").execute();
+            await kyselyDb.deleteFrom("agents").execute();
         });
 
         it("gets the list of agents, which is initially empty", async () => {
@@ -104,6 +106,15 @@ describe("RPC e2e tests", () => {
 
             await apiCaller.createSoftware({
                 formData: softwareFormData
+            });
+
+            const { agents } = await apiCaller.getAgents();
+            expect(agents).toHaveLength(1);
+            agent = agents[0];
+            expectToMatchObject(agent, {
+                id: expect.any(Number),
+                email: defaultUser.email,
+                organization: defaultUser.organization
             });
 
             const softwareRows = await getSoftwareRows();
@@ -131,7 +142,7 @@ describe("RPC e2e tests", () => {
 
             expectToMatchObject(softwareRows[0], {
                 ...expectedSoftware,
-                "addedByAgentEmail": defaultUser.email
+                "addedByAgentId": agent.id
             });
             const similars = await kyselyDb
                 .selectFrom("softwares__similar_software_external_datas")
@@ -198,7 +209,7 @@ describe("RPC e2e tests", () => {
             expect(instanceRows).toHaveLength(1);
             expectToMatchObject(instanceRows[0], {
                 "id": expect.any(Number),
-                "addedByAgentEmail": defaultUser.email,
+                "addedByAgentId": agent.id,
                 "mainSoftwareSillId": actualSoftwareId,
                 "organization": instanceFormData.organization,
                 "publicUrl": instanceFormData.publicUrl,

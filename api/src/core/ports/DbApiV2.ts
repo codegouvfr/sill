@@ -5,32 +5,33 @@ import type { CompiledData } from "./CompileData";
 
 import type { ExternalDataOrigin } from "./GetSoftwareExternalData";
 
-export type WithAgentEmail = { agentEmail: string };
+export type WithAgentId = { agentId: number };
 
 export interface SoftwareRepository {
     create: (
         params: {
             formData: SoftwareFormData;
             externalDataOrigin: ExternalDataOrigin;
-        } & WithAgentEmail
+        } & WithAgentId
     ) => Promise<number>;
     update: (
         params: {
             softwareSillId: number;
             formData: SoftwareFormData;
-        } & WithAgentEmail
+        } & WithAgentId
     ) => Promise<void>;
     getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
     getByName: (name: string) => Promise<Software | undefined>;
-    countAddedByAgent: (params: { agentEmail: string }) => Promise<number>;
+    countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
 }
 
 export interface InstanceRepository {
-    create: (params: { formData: InstanceFormData } & WithAgentEmail) => Promise<number>;
+    create: (params: { formData: InstanceFormData } & WithAgentId) => Promise<number>;
     update: (params: { formData: InstanceFormData; instanceId: number }) => Promise<void>;
+    countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAll: () => Promise<Instance[]>;
 }
 

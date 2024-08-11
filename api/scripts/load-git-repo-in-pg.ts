@@ -1,6 +1,7 @@
 import { InsertObject, Kysely, sql } from "kysely";
 import { z } from "zod";
 import { createGitDbApi, GitDbApiParams } from "../src/core/adapters/dbApi/createGitDbApi";
+import { makeGetAgentIdByEmail } from "../src/core/adapters/dbApi/kysely/createPgAgentRepository";
 import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
 import { CompiledData } from "../src/core/ports/CompileData";
@@ -20,22 +21,24 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 
     const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
 
-    await insertSoftwares(softwareRows, pgDb);
     await insertAgents(agentRows, pgDb);
 
     const agentIdByEmail = await makeGetAgentIdByEmail(pgDb);
+
+    await insertSoftwares(softwareRows, agentIdByEmail, pgDb);
     await insertSoftwareReferents({
         softwareReferentRows: softwareReferentRows,
-        agentIdByEmail: agentIdByEmail,
+        agentIdByEmail,
         db: pgDb
     });
     await insertSoftwareUsers({
         softwareUserRows: softwareUserRows,
-        agentIdByEmail: agentIdByEmail,
+        agentIdByEmail,
         db: pgDb
     });
     await insertInstances({
         instanceRows: instanceRows,
+        agentIdByEmail,
         db: pgDb
     });
 
@@ -43,7 +46,11 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     await insertCompiledSoftwaresAndSoftwareExternalData(compiledSoftwares, pgDb);
 };
 
-const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>) => {
+const insertSoftwares = async (
+    softwareRows: SoftwareRow[],
+    agentIdByEmail: Record<string, number>,
+    db: Kysely<Database>
+) => {
     console.info("Deleting than Inserting softwares");
     console.info("Number of softwares to insert : ", softwareRows.length);
     await db.transaction().execute(async trx => {
@@ -52,8 +59,9 @@ const insertSoftwares = async (softwareRows: SoftwareRow[], db: Kysely<Database>
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ similarSoftwareExternalDataIds: _, ...row }) => ({
+                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => ({
                     ...row,
+                    addedByAgentId: agentIdByEmail[addedByAgentEmail],
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
                     softwareType: JSON.stringify(row.softwareType),
                     workshopUrls: JSON.stringify(row.workshopUrls),
@@ -83,16 +91,12 @@ const insertAgents = async (agentRows: Db.AgentRow[], db: Kysely<Database>) => {
     console.log("Deleting than Inserting agents");
     console.info("Number of agents to insert : ", agentRows.length);
     await db.transaction().execute(async trx => {
+        await trx.deleteFrom("instances").execute();
+        await trx.deleteFrom("softwares").execute();
         await trx.deleteFrom("agents").execute();
         await trx.insertInto("agents").values(agentRows).executeTakeFirst();
         await sql`SELECT setval('agents_id_seq', (SELECT MAX(id) FROM agents))`.execute(trx);
     });
-};
-
-const makeGetAgentIdByEmail = async (db: Kysely<Database>): Promise<Record<string, number>> => {
-    console.info("Fetching agents, to map email to id");
-    const agents = await db.selectFrom("agents").select(["email", "id"]).execute();
-    return agents.reduce((acc, agent) => ({ ...acc, [agent.email]: agent.id }), {});
 };
 
 const insertSoftwareReferents = async ({
@@ -145,12 +149,28 @@ const insertSoftwareUsers = async ({
     });
 };
 
-const insertInstances = async ({ instanceRows, db }: { instanceRows: Db.InstanceRow[]; db: Kysely<Database> }) => {
+const insertInstances = async ({
+    instanceRows,
+    agentIdByEmail,
+    db
+}: {
+    instanceRows: Db.InstanceRow[];
+    agentIdByEmail: Record<string, number>;
+    db: Kysely<Database>;
+}) => {
     console.info("Deleting than Inserting instances");
     console.info("Number of instances to insert : ", instanceRows.length);
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("instances").execute();
-        await trx.insertInto("instances").values(instanceRows).executeTakeFirst();
+        await trx
+            .insertInto("instances")
+            .values(
+                instanceRows.map(({ addedByAgentEmail, ...instanceRow }) => ({
+                    ...instanceRow,
+                    addedByAgentId: agentIdByEmail[addedByAgentEmail]
+                }))
+            )
+            .executeTakeFirst();
         await sql`SELECT setval('instances_id_seq', (SELECT MAX(id) FROM instances))`.execute(trx);
     });
 };

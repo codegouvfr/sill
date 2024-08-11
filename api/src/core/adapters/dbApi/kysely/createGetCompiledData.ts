@@ -45,7 +45,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         ])
         .select([
             "s.id",
-            "s.addedByAgentEmail",
+            "s.addedByAgentId",
             "s.catalogNumeriqueGouvFrId",
             "s.categories",
             "s.dereferencing",
@@ -120,6 +120,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             console.time("software processing");
             const processedSoftwares = results.map(
                 ({
+                    addedByAgentId,
                     externalDataSoftwareId,
                     annuaireCnllServiceProviders,
                     comptoirDuLibreSoftware,
@@ -139,6 +140,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                 }): CompiledData.Software<"private"> => {
                     return {
                         ...stripNullOrUndefinedValues(software),
+                        addedByAgentEmail: agentById[addedByAgentId].email,
                         updateTime: new Date(+updateTime).getTime(),
                         referencedSinceTime: new Date(+referencedSinceTime).getTime(),
                         doRespectRgaa,
@@ -172,7 +174,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             organization: instance.organization!,
                             targetAudience: instance.targetAudience!,
                             publicUrl: instance.publicUrl ?? undefined,
-                            addedByAgentEmail: instance.addedByAgentEmail!,
+                            addedByAgentEmail: agentById[instance.addedByAgentId!].email,
                             otherWikidataSoftwares: []
                         }))
                     };

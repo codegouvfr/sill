@@ -197,20 +197,22 @@ export function createRouter(params: {
                 }
 
                 try {
-                    await dbApi.software.create({
-                        formData,
-                        agentEmail: user.email,
-                        externalDataOrigin
-                    });
                     const agent = await dbApi.agent.getByEmail(user.email);
+                    let agentId = agent?.id as number;
                     if (!agent) {
-                        await dbApi.agent.add({
+                        agentId = await dbApi.agent.add({
                             email: user.email,
                             organization: user.organization,
                             about: undefined,
                             isPublic: false
                         });
                     }
+
+                    await dbApi.software.create({
+                        formData,
+                        agentId,
+                        externalDataOrigin
+                    });
                 } catch (e) {
                     throw new TRPCError({ "code": "INTERNAL_SERVER_ERROR", "message": String(e) });
                 }
@@ -229,10 +231,13 @@ export function createRouter(params: {
 
                 const { softwareSillId, formData } = input;
 
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+
                 await dbApi.software.update({
                     softwareSillId,
                     formData,
-                    agentEmail: user.email
+                    agentId: agent.id
                 });
             }),
         "createUserOrReferent": loggedProcedure
@@ -332,17 +337,20 @@ export function createRouter(params: {
                 const [
                     numberOfSoftwareWhereThisAgentIsUser,
                     numberOfSoftwareWhereThisAgentIsReferent,
-                    numberOfSoftwareAddedByThisAgent
+                    numberOfSoftwareAddedByThisAgent,
+                    numberOfInstanceAddedByThisAgent
                 ] = await Promise.all([
                     dbApi.softwareUser.countSoftwaresForAgent({ agentId: agent.id }),
                     dbApi.softwareReferent.countSoftwaresForAgent({ agentId: agent.id }),
-                    dbApi.software.countAddedByAgent({ agentEmail: agent.email })
+                    dbApi.software.countAddedByAgent({ agentId: agent.id }),
+                    dbApi.instance.countAddedByAgent({ agentId: agent.id })
                 ]);
 
                 if (
                     numberOfSoftwareWhereThisAgentIsReferent === 0 &&
                     numberOfSoftwareWhereThisAgentIsUser === 0 &&
-                    numberOfSoftwareAddedByThisAgent === 0
+                    numberOfSoftwareAddedByThisAgent === 0 &&
+                    numberOfInstanceAddedByThisAgent === 0
                 ) {
                     await dbApi.agent.remove(agent.id);
                 }
@@ -359,11 +367,13 @@ export function createRouter(params: {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
+                const agent = await dbApi.agent.getByEmail(user.email);
+                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
                 const { formData } = input;
 
                 const instanceId = await dbApi.instance.create({
                     formData,
-                    agentEmail: user.email
+                    agentId: agent.id
                 });
 
                 return { instanceId };
