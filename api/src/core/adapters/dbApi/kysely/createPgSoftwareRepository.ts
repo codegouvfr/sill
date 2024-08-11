@@ -8,7 +8,7 @@ import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
 
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => ({
-    create: async ({ formData, externalDataOrigin, agentEmail }) => {
+    create: async ({ formData, externalDataOrigin, agentId }) => {
         const {
             softwareName,
             softwareDescription,
@@ -56,7 +56,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     testUrls: JSON.stringify([]),
                     categories: JSON.stringify([]),
                     generalInfoMd: undefined,
-                    addedByAgentEmail: agentEmail,
+                    addedByAgentId: agentId,
                     keywords: JSON.stringify(softwareKeywords)
                 })
                 .returning("id as softwareId")
@@ -81,7 +81,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             return softwareId;
         });
     },
-    update: async ({ formData, softwareSillId, agentEmail }) => {
+    update: async ({ formData, softwareSillId, agentId }) => {
         const {
             softwareName,
             softwareDescription,
@@ -124,7 +124,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 testUrls: JSON.stringify([]),
                 categories: JSON.stringify([]),
                 generalInfoMd: undefined,
-                addedByAgentEmail: agentEmail,
+                addedByAgentId: agentId,
                 keywords: JSON.stringify(softwareKeywords)
             })
             .where("id", "=", softwareSillId)
@@ -270,11 +270,11 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             .execute()
             .then(rows => rows.map(row => row.externalId!)),
 
-    countAddedByAgent: async ({ agentEmail }) => {
+    countAddedByAgent: async ({ agentId }) => {
         const { count } = await db
             .selectFrom("softwares")
             .select(qb => qb.fn.countAll<string>().as("count"))
-            .where("addedByAgentEmail", "=", agentEmail)
+            .where("addedByAgentId", "=", agentId)
             .executeTakeFirstOrThrow();
         return +count;
     },
