@@ -2,7 +2,7 @@ import React from "react";
 import { declareComponentKeys } from "i18nifty";
 import { useLang, useTranslation } from "ui/i18n";
 import { fr } from "@codegouvfr/react-dsfr";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";

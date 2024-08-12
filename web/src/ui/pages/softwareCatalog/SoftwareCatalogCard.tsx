@@ -3,7 +3,7 @@ import { declareComponentKeys } from "i18nifty";
 import { useTranslation, useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { useFromNow } from "ui/useMoment";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";

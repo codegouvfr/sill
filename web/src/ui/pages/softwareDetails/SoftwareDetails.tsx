@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useCoreState, useCore } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";

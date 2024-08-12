@@ -2,7 +2,7 @@ import { memo, ReactNode, useEffect, useRef, useState } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 
 export type Props = {
     className?: string;

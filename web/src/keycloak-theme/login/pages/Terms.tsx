@@ -7,7 +7,7 @@ import {
 import tos_en_url from "../assets/tos_en.md";
 import tos_fr_url from "../assets/tos_fr.md";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import type { KcContext } from "../kcContext";

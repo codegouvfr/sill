@@ -1,5 +1,5 @@
 import { useState, useId } from "react";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
