@@ -16,12 +16,10 @@ export const VueDefault = getStory({
         "login": () => {
             console.log("Logging in");
             return new Promise<never>(() => {});
-        }
-    },
-    "i18nApi": {
-        "lang": "fr",
-        "setLang": lang => {
-            alert(`Changing language to ${lang}`);
+        },
+        "register": () => {
+            console.log("Registering");
+            return new Promise<never>(() => {});
         }
     },
     "routeName": "home"

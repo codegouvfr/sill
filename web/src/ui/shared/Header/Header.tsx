@@ -5,11 +5,9 @@ import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "ui/i18n";
 import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
-import { fr } from "@codegouvfr/react-dsfr";
-import { tss } from "tss-react/dsfr";
 import { contactEmail } from "ui/shared/contactEmail";
-import { LanguageSelector } from "./LanguageSelector";
-import { Language } from "../i18n";
+import { LanguageSelect } from "./LanguageSelect";
+import { AuthButtons } from "./AuthButtons";
 
 type Props = {
     className?: string;
@@ -22,24 +20,23 @@ type Props = {
         | {
               isUserLoggedIn: false;
               login: () => Promise<never>;
+              register: () => Promise<never>;
           };
-    i18nApi: {
-        lang: Language;
-        setLang: (lang: Language) => void;
-    };
 };
 
 export const Header = memo(
     forwardRef<HTMLDivElement, Props>((props, ref) => {
-        const { className, routeName, userAuthenticationApi, i18nApi, ...rest } = props;
+        const { className, routeName, userAuthenticationApi, ...rest } = props;
 
         assert<Equals<typeof rest, {}>>();
 
         const { t } = useTranslation({ Header });
 
+        /*
         const { classes, cx } = useStyles({
             "isOnPageMyAccount": routeName === "account"
         });
+        */
 
         return (
             <HeaderDsfr
@@ -58,25 +55,7 @@ export const Header = memo(
                     "title": t("home title")
                 }}
                 quickAccessItems={[
-                    {
-                        "buttonProps": {
-                            "aria-controls": "translate-select",
-                            "aria-expanded": false,
-                            "title": t("select language"),
-                            "className": fr.cx(
-                                "fr-btn--tertiary",
-                                "fr-translate",
-                                "fr-nav"
-                            )
-                        },
-                        "iconId": "fr-icon-translate-2",
-                        "text": (
-                            <LanguageSelector
-                                lang={i18nApi.lang}
-                                setLang={i18nApi.setLang}
-                            />
-                        )
-                    },
+                    <LanguageSelect />,
                     {
                         "iconId": "fr-icon-bank-fill",
                         "linkProps": {
@@ -84,39 +63,10 @@ export const Header = memo(
                         },
                         "text": "Code Gouv"
                     },
-                    {
-                        "iconId": "fr-icon-lock-line",
-                        ...(userAuthenticationApi.isUserLoggedIn
-                            ? {
-                                  "linkProps": {
-                                      "onClick": userAuthenticationApi.logout,
-                                      "href": "#"
-                                  }
-                              }
-                            : {
-                                  "buttonProps": {
-                                      "onClick": userAuthenticationApi.login
-                                  }
-                              }),
-                        "text": userAuthenticationApi.isUserLoggedIn
-                            ? t("quick access logout")
-                            : t("quick access login")
-                    },
-                    ...(!userAuthenticationApi.isUserLoggedIn
-                        ? []
-                        : [
-                              {
-                                  "iconId": "fr-icon-account-fill",
-                                  "linkProps": {
-                                      "className": cx(
-                                          fr.cx("fr-btn--tertiary"),
-                                          classes.myAccountButton
-                                      ),
-                                      ...routes.account().link
-                                  },
-                                  "text": t("quick access account")
-                              } as const
-                          ])
+                    <AuthButtons
+                        isOnPageMyAccount={routeName === "account"}
+                        userAuthenticationApi={userAuthenticationApi}
+                    />
                 ]}
                 navigation={[
                     {
@@ -165,19 +115,6 @@ export const Header = memo(
     })
 );
 
-const useStyles = tss
-    .withName({ Header })
-    .withParams<{ isOnPageMyAccount: boolean }>()
-    .create(({ isOnPageMyAccount }) => ({
-        "myAccountButton": {
-            "&&": {
-                "backgroundColor": !isOnPageMyAccount
-                    ? undefined
-                    : fr.colors.decisions.background.default.grey.hover
-            }
-        }
-    }));
-
 export const { i18n } = declareComponentKeys<
     | "home title"
     | "title"
@@ -187,9 +124,4 @@ export const { i18n } = declareComponentKeys<
     | "navigation update software"
     | "navigation support request"
     | "navigation about"
-    | "quick access test"
-    | "quick access login"
-    | "quick access logout"
-    | "quick access account"
-    | "select language"
 >()({ Header });

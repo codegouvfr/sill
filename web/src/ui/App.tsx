@@ -18,7 +18,6 @@ import { createCoreProvider } from "core";
 import { pages } from "ui/pages";
 import { useConst } from "powerhooks/useConst";
 import { objectKeys } from "tsafe/objectKeys";
-import { useLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
 import { useIsDark } from "@codegouvfr/react-dsfr/useIsDark";
 import { keyframes } from "tss-react";
@@ -90,7 +89,8 @@ function ContextualizedApp() {
             : {
                   "isUserLoggedIn": false as const,
                   "login": () =>
-                      userAuthentication.login({ "doesCurrentHrefRequiresAuth": false })
+                      userAuthentication.login({ "doesCurrentHrefRequiresAuth": false }),
+                  "register": () => userAuthentication.register()
               }
     );
 
@@ -101,15 +101,12 @@ function ContextualizedApp() {
 
     const { classes } = useStyles({ headerHeight });
 
-    const i18nApi = useLang();
-
     return (
         <div className={classes.root}>
             <Header
                 ref={headerRef}
                 routeName={route.name}
                 userAuthenticationApi={headerUserAuthenticationApi}
-                i18nApi={i18nApi}
             />
             <main className={classes.main}>
                 <Suspense fallback={<LoadingFallback />}>
