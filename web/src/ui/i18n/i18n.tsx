@@ -626,16 +626,16 @@ const {
             },
             "DeclarationFormStep2User": {
                 "useCase": "Describe in a few words your use case",
-                "environment": "In which environment do you use your software ?",
-                "version": "Which version of the software do you use ? (Optional)",
-                "service": "More precisely, which service of the software do you use ?"
+                "environment": "In which environment do you use your software?",
+                "version": "Which version of the software do you use? (Optional)",
+                "service": "Which web instance of the software do you use?"
             },
             "DeclarationFormStep2Referent": {
                 "legend title": "Are you a technical expert of this software ?",
                 "legend hint": "You are able to answer to questions of agents and of CIO",
                 "useCase": "Describe in a few words the use case of your administration",
                 "service":
-                    "More precisely, which service of the software do you declare yourself referent"
+                    "Which web instance of the software do you declare yourself referent for"
             },
             "Account": {
                 "title": "My Account",
@@ -1320,7 +1320,7 @@ const {
                 "useCase":
                     "Décrivez en quelques mots le cas d'usage de votre administration",
                 "service":
-                    "Plus précisément, pour quel service du logiciel vous déclarez-vous référent ?"
+                    "Pour quelle instance web du logiciel vous déclarez-vous référent ?"
             },
             "Account": {
                 "title": "Mon compte",
