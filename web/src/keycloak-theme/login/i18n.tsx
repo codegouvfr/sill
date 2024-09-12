@@ -26,7 +26,7 @@ export const { useI18n } = createUseI18n({
         "login using": "Login using",
         "what is franceConnect": "What is FranceConnect ?",
         "what is franceConnect title": "What is FranceConnect - new window",
-        "organization": "Organization of attach"
+        "organization": "Organization of attachment"
     },
     "fr": {
         /* spell-checker: disable */
