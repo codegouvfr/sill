@@ -118,6 +118,9 @@ export async function bootstrapCore(
 
     if (doPerPerformPeriodicalCompilation) {
         console.log("TODO: doPerPerformPeriodicalCompilation");
+        // setTimeout(() => {
+        //     compileData();
+        // });
     }
     // await dispatch(
     //     usecases.readWriteSillData.protectedThunks.initialize({
