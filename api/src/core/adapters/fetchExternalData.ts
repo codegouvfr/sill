@@ -17,14 +17,16 @@ type FetchOtherExternalDataDependencies = {
     getServiceProviders: GetServiceProviders;
 };
 
+type FetchAndSaveSoftwareExtraDataDependencies = FetchOtherExternalDataDependencies & {
+    getSoftwareExternalData: GetSoftwareExternalData;
+    dbApi: DbApiV2;
+};
+
 export const makeFetchAndSaveSoftwareExtraData = ({
     getSoftwareExternalData,
     dbApi,
     ...otherExternalDataDeps
-}: FetchOtherExternalDataDependencies & {
-    getSoftwareExternalData: GetSoftwareExternalData;
-    dbApi: DbApiV2;
-}) => {
+}: FetchAndSaveSoftwareExtraDataDependencies) => {
     const getOtherExternalData = makeGetOtherExternalData(otherExternalDataDeps);
     const getSoftwareExternalDataAndSaveIt = makeGetSoftwareExternalData({ dbApi, getSoftwareExternalData });
 
@@ -33,18 +35,24 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         if (!data) return;
 
         const { software, similarSoftwaresExternalIds, parentSoftwareExternalId } = data;
+        console.log(`🚀${software.softwareName}`);
 
-        if (software.externalId) await getSoftwareExternalDataAndSaveIt(software.externalId, softwareExternalDataCache);
+        if (software.externalId) {
+            console.log("  • Soft: ", software.softwareName, " - Own wiki : ", software.externalId);
+            await getSoftwareExternalDataAndSaveIt(software.externalId, softwareExternalDataCache);
+        }
 
-        if (parentSoftwareExternalId)
+        if (parentSoftwareExternalId) {
+            console.log("  • Parent wiki : ", parentSoftwareExternalId);
             await getSoftwareExternalDataAndSaveIt(parentSoftwareExternalId, softwareExternalDataCache);
+        }
 
-        if (similarSoftwaresExternalIds.length > 0)
-            await Promise.all(
-                similarSoftwaresExternalIds.map(similarExternalId =>
-                    getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache)
-                )
-            );
+        if (similarSoftwaresExternalIds.length > 0) {
+            for (const similarExternalId of similarSoftwaresExternalIds) {
+                console.log("  • Similar wiki : ", similarExternalId);
+                await getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache);
+            }
+        }
 
         const existingOtherSoftwareExtraData = await dbApi.otherSoftwareExtraData.getBySoftwareId(software.softwareId);
         const newOtherSoftwareExtraData = await getOtherExternalData(software, existingOtherSoftwareExtraData);
@@ -135,4 +143,17 @@ const getNewComptoirDuLibre = async ({
               ]);
 
     return { ...comptoirDuLibreSoftware, logoUrl, keywords };
+};
+
+export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
+    const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
+    return async () => {
+        const softwares = await deps.dbApi.software.getAll();
+
+        const softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId = {};
+
+        for (const software of softwares) {
+            await fetchOtherExternalData(software.softwareId, softwareExternalDataCache);
+        }
+    };
 };

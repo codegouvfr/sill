@@ -89,7 +89,8 @@ export async function startRpcService(params: {
                       "organizationUserProfileAttributeName": keycloakParams.organizationUserProfileAttributeName
                   },
         githubPersonalAccessTokenForApiRateLimit,
-        "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
+        "doPerPerformPeriodicalCompilation": true,
+        // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
         "doPerformCacheInitialization": redirectUrl === undefined,
         "externalSoftwareDataOrigin": externalSoftwareDataOrigin
     });
