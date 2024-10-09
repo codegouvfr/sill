@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { UserProfileFormFields } from "./shared/UserProfileFormFields";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";

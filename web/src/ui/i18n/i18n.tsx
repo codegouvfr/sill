@@ -51,7 +51,8 @@ const {
     | typeof import("ui/pages/account/Account").i18n
     | typeof import("ui/pages/userProfile/UserProfile").i18n
     | typeof import("ui/shared/DetailUsersAndReferents").i18n
-    | typeof import("ui/shared/Header").i18n
+    | typeof import("ui/shared/Header/Header").i18n
+    | typeof import("ui/shared/Header/AuthButtons").i18n
     | typeof import("ui/shared/Footer").i18n
     | typeof import("ui/shared/DeclarationRemovalModal").i18n
     | typeof import("ui/shared/SmartLogo").i18n
@@ -688,12 +689,13 @@ const {
                 "navigation add software": "Add software or instance",
                 "navigation update software": "Update software or instance",
                 "navigation support request": "Support request",
-                "navigation about": "About the site",
-                "quick access test": "Immediate test",
-                "quick access login": "Sign in",
-                "quick access logout": "Sign out",
-                "quick access account": "My account",
-                "select language": "Select language"
+                "navigation about": "About the site"
+            },
+            "AuthButtons": {
+                "login": "Login",
+                "register": "Register",
+                "logout": "Logout",
+                "account": "My account"
             },
             "Footer": {
                 "contribute": "Contribute"
@@ -1374,12 +1376,13 @@ const {
                 "navigation add software": "Ajouter un logiciel ou une instance ",
                 "navigation update software": "Mettre à jour un logiciel ou une instance",
                 "navigation support request": "Demande d'accompagnement",
-                "navigation about": "À propos du site",
-                "quick access test": "Test immédiat",
-                "quick access login": "Se connecter",
-                "quick access logout": "Se déconnecter",
-                "quick access account": "Mon compte",
-                "select language": "Sélectionner une langue"
+                "navigation about": "À propos du site"
+            },
+            "AuthButtons": {
+                "login": "Se connecter",
+                "register": "Créer un compte",
+                "logout": "Se déconnecter",
+                "account": "Mon compte"
             },
             "Footer": {
                 "contribute": "Contribuez"

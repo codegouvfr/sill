@@ -7,7 +7,7 @@ import type { State as softwareDetails } from "core/usecases/softwareDetails";
 import { SoftwareCatalogCard } from "ui/pages/softwareCatalog/SoftwareCatalogCard";
 import type { Link } from "type-route";
 import { capitalize } from "tsafe/capitalize";
-import { useStyles } from "tss-react/dsfr";
+import { useStyles } from "tss-react";
 import { exclude } from "tsafe/exclude";
 import { useResolveLocalizedString } from "ui/i18n";
 import { Tag } from "@codegouvfr/react-dsfr/Tag";

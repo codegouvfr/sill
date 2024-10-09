@@ -20,6 +20,27 @@ export const thunks = {
 
             return oidc.login({ doesCurrentHrefRequiresAuth });
         },
+    "register":
+        () =>
+        (...args): Promise<never> => {
+            const [, , { oidc }] = args;
+
+            assert(!oidc.isUserLoggedIn);
+
+            return oidc.login({
+                "doesCurrentHrefRequiresAuth": false,
+                "transformUrlBeforeRedirect": url => {
+                    const urlObj = new URL(url);
+
+                    urlObj.pathname = urlObj.pathname.replace(
+                        /\/auth$/,
+                        "/registrations"
+                    );
+
+                    return urlObj.href;
+                }
+            });
+        },
     "logout":
         (params: { redirectTo: "home" | "current page" }) =>
         (...args): Promise<never> => {

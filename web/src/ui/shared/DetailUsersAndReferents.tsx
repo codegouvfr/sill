@@ -2,7 +2,7 @@ import { declareComponentKeys } from "i18nifty";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { Link } from "type-route";
 import { useTranslation } from "ui/i18n";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 

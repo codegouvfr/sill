@@ -1,4 +1,4 @@
-import { decodeJwt as decodeJwt_vanilla } from "oidc-spa";
+import { decodeJwt as decodeJwt_vanilla } from "oidc-spa/tools/decodeJwt";
 
 export function encodeJwt(obj: Record<string, unknown>) {
     return `mock_${JSON.stringify(obj)}`;

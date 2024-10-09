@@ -6,7 +6,7 @@ import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
-import { tss } from "tss-react/dsfr";
+import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Markdown } from "keycloakify/tools/Markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";

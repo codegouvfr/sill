@@ -3,7 +3,10 @@ export declare type Oidc = Oidc.LoggedIn | Oidc.NotLoggedIn;
 export declare namespace Oidc {
     export type NotLoggedIn = {
         isUserLoggedIn: false;
-        login: (params: { doesCurrentHrefRequiresAuth: boolean }) => Promise<never>;
+        login: (params: {
+            doesCurrentHrefRequiresAuth: boolean;
+            transformUrlBeforeRedirect?: (url: string) => string;
+        }) => Promise<never>;
     };
 
     export type LoggedIn = {
