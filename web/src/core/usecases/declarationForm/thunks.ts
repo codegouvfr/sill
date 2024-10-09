@@ -36,6 +36,7 @@ export const thunks = {
                     "software": {
                         "logoUrl": software.logoUrl,
                         softwareName,
+                        softwareId: software.softwareId,
                         "referentCount": Object.values(
                             software.userAndReferentCountByOrganization
                         )
@@ -143,7 +144,7 @@ export const thunks = {
 
             await sillApi.createUserOrReferent({
                 formData,
-                "softwareName": state.software.softwareName
+                "softwareId": state.software.softwareId
             });
 
             dispatch(actions.triggerRedirect({ "isFormSubmitted": true }));

@@ -144,7 +144,7 @@ export const thunks = {
             const time = Date.now();
 
             await sillApi.unreferenceSoftware({
-                "softwareName": state.software.softwareName,
+                "softwareId": state.software.softwareId,
                 reason
             });
 
@@ -219,6 +219,12 @@ function apiSoftwareToSoftware(params: {
                 "isInSill": true
             };
         }
+
+        console.log(
+            "resolving localized string in SOFTWARE DETAILS : ",
+            parentWikidataSoftware_api.label,
+            ` ( for software ${softwareId} - ${softwareName})`
+        );
 
         return {
             "isInSill": false,

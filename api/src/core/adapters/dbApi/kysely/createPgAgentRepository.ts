@@ -1,10 +1,13 @@
-import type { Kysely, Selectable } from "kysely";
-import { Agent, AgentRepository } from "../../../ports/DbApiV2";
+import { Kysely, sql } from "kysely";
+import { AgentRepository } from "../../../ports/DbApiV2";
+import { Os } from "../../../usecases/readWriteSillData";
 import type { Database } from "./kysely.database";
+import { jsonBuildObject, jsonStripNulls } from "./kysely.utils";
 
 export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository => ({
     add: async agent => {
-        await db.insertInto("agents").values(agent).execute();
+        const { id } = await db.insertInto("agents").values(agent).returning("id").executeTakeFirstOrThrow();
+        return id;
     },
     update: async agent => {
         await db.updateTable("agents").set(agent).where("id", "=", agent.id).execute();
@@ -13,19 +16,85 @@ export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository =
         await db.deleteFrom("agents").where("id", "=", agentId).execute();
     },
     getByEmail: async email => {
-        const dbAgent = await db.selectFrom("agents").selectAll().where("email", "=", email).executeTakeFirst();
+        const dbAgent = await makeGetAgentBuilder(db).where("email", "=", email).executeTakeFirst();
         if (!dbAgent) return;
-        return toAgent(dbAgent);
+
+        const { usersDeclarations, referentsDeclarations, ...rest } = dbAgent;
+
+        return {
+            ...rest,
+            about: rest.about ?? undefined,
+            declarations: [...usersDeclarations, ...referentsDeclarations]
+        };
     },
-    getAll: async () =>
-        db
-            .selectFrom("agents")
-            .selectAll()
+    getAll: () =>
+        makeGetAgentBuilder(db)
             .execute()
-            .then(dbAgent => dbAgent.map(toAgent))
+            .then(results =>
+                results.map(({ usersDeclarations, referentsDeclarations, about, ...rest }) => ({
+                    ...rest,
+                    about: about ?? undefined,
+                    declarations: [...usersDeclarations, ...referentsDeclarations]
+                }))
+            )
 });
 
-const toAgent = (row: Selectable<Database["agents"]>): Agent => ({
-    ...row,
-    about: row.about ?? undefined
-});
+const makeGetAgentBuilder = (db: Kysely<Database>) =>
+    db
+        .selectFrom("agents as a")
+        .leftJoin("software_users as u", "a.id", "u.agentId")
+        .leftJoin("softwares as us", "u.softwareId", "us.id")
+        .leftJoin("software_referents as r", "a.id", "r.agentId")
+        .leftJoin("softwares as rs", "r.softwareId", "rs.id")
+        .select([
+            "a.id",
+            "a.email",
+            "a.isPublic",
+            "a.about",
+            "a.organization",
+            ({ ref, fn }) =>
+                fn
+                    .coalesce(
+                        fn
+                            .jsonAgg(
+                                jsonStripNulls(
+                                    jsonBuildObject({
+                                        declarationType: sql<"user">`'user'`,
+                                        serviceUrl: ref("u.serviceUrl"),
+                                        usecaseDescription: ref("u.useCaseDescription").$castTo<string>(),
+                                        version: ref("u.version").$castTo<string>(),
+                                        os: ref("u.os").$castTo<Os>(),
+                                        softwareName: ref("us.name").$castTo<string>()
+                                    })
+                                )
+                            )
+                            .filterWhere("u.agentId", "is not", null),
+                        sql<[]>`'[]'`
+                    )
+                    .as("usersDeclarations"),
+            ({ ref, fn }) =>
+                fn
+                    .coalesce(
+                        fn
+                            .jsonAgg(
+                                jsonStripNulls(
+                                    jsonBuildObject({
+                                        declarationType: sql<"referent">`'referent'`,
+                                        isTechnicalExpert: ref("r.isExpert").$castTo<boolean>(),
+                                        usecaseDescription: ref("r.useCaseDescription").$castTo<string>(),
+                                        serviceUrl: ref("r.serviceUrl"),
+                                        softwareName: ref("rs.name").$castTo<string>()
+                                    })
+                                )
+                            )
+                            .filterWhere("r.agentId", "is not", null),
+                        sql<[]>`'[]'`
+                    )
+                    .as("referentsDeclarations")
+        ])
+        .groupBy("a.id");
+
+export const makeGetAgentIdByEmail = async (db: Kysely<Database>): Promise<Record<string, number>> => {
+    const agents = await db.selectFrom("agents").select(["email", "id"]).execute();
+    return agents.reduce((acc, agent) => ({ ...acc, [agent.email]: agent.id }), {});
+};

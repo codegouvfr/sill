@@ -1,6 +1,10 @@
+import { Kysely } from "kysely";
 import { beforeAll, describe, expect, it } from "vitest";
-import { InMemoryDbApi } from "../core/adapters/dbApi/InMemoryDbApi";
+import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
+import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
 import { CompiledData } from "../core/ports/CompileData";
+import type { DbAgent } from "../core/ports/DbApiV2";
+import type { InstanceFormData } from "../core/usecases/readWriteSillData";
 import {
     createDeclarationFormData,
     createInstanceFormData,
@@ -10,48 +14,61 @@ import {
 } from "../tools/test.helpers";
 import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 
-const expectedSoftwareId = 1;
-
 const softwareFormData = createSoftwareFormData();
 const declarationFormData = createDeclarationFormData();
-const instanceFormData = createInstanceFormData({ mainSoftwareSillId: expectedSoftwareId });
+
+describe("stripNullOrUndefined", () => {
+    it("removes null and undefined values", () => {
+        const stripped = stripNullOrUndefinedValues({
+            "a": null,
+            "b": undefined,
+            "c": 0,
+            "d": 1,
+            "e": "",
+            "f": "yolo"
+        });
+        expect(stripped.hasOwnProperty("a")).toBe(false);
+        expect(stripped.hasOwnProperty("b")).toBe(false);
+        expect(stripped).toStrictEqual({ "c": 0, "d": 1, "e": "", "f": "yolo" });
+    });
+});
 
 describe("RPC e2e tests", () => {
     let apiCaller: ApiCaller;
-    let inMemoryDb: InMemoryDbApi;
+    let kyselyDb: Kysely<Database>;
 
     describe("getAgents - wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
-            ({ apiCaller, inMemoryDb } = await createTestCaller({ user: undefined }));
+            ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
             expect(apiCaller.getAgents()).rejects.toThrow("UNAUTHORIZED");
         });
     });
 
     describe("createUserOrReferent - Wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
-            ({ apiCaller, inMemoryDb } = await createTestCaller({ user: undefined }));
+            ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
             expect(
                 apiCaller.createUserOrReferent({
                     formData: declarationFormData,
-                    softwareName: "Some software"
+                    softwareId: 123
                 })
             ).rejects.toThrow("UNAUTHORIZED");
         });
 
         it("fails when software is not found in SILL", async () => {
-            ({ apiCaller, inMemoryDb } = await createTestCaller());
+            ({ apiCaller, kyselyDb } = await createTestCaller());
             expect(
                 apiCaller.createUserOrReferent({
                     formData: declarationFormData,
-                    softwareName: "Some software"
+                    softwareId: 404
                 })
-            ).rejects.toThrow("Software not in SILL");
+            ).rejects.toThrow("Software not found in SILL");
         });
     });
 
     describe("createSoftware - Wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
-            ({ apiCaller, inMemoryDb } = await createTestCaller({ user: undefined }));
+            ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
             expect(
                 apiCaller.createSoftware({
                     formData: softwareFormData
@@ -64,8 +81,17 @@ describe("RPC e2e tests", () => {
     // because those tests are not isolated
     // (the order is important)⚠️
     describe("Scenario - Add a new software then mark an agent as user of this software", () => {
+        let actualSoftwareId: number;
+        let instanceFormData: InstanceFormData;
+        let agent: DbAgent;
+
         beforeAll(async () => {
-            ({ apiCaller, inMemoryDb } = await createTestCaller());
+            ({ apiCaller, kyselyDb } = await createTestCaller());
+            await kyselyDb.deleteFrom("software_referents").execute();
+            await kyselyDb.deleteFrom("software_users").execute();
+            await kyselyDb.deleteFrom("instances").execute();
+            await kyselyDb.deleteFrom("softwares").execute();
+            await kyselyDb.deleteFrom("agents").execute();
         });
 
         it("gets the list of agents, which is initially empty", async () => {
@@ -74,14 +100,25 @@ describe("RPC e2e tests", () => {
         });
 
         it("adds a new software", async () => {
-            expect(inMemoryDb.softwareRows).toHaveLength(0);
+            expect(await getSoftwareRows()).toHaveLength(0);
             const initialSoftwares = await apiCaller.getSoftwares();
             expectToEqual(initialSoftwares, []);
 
             await apiCaller.createSoftware({
                 formData: softwareFormData
             });
-            expect(inMemoryDb.softwareRows).toHaveLength(1);
+
+            const { agents } = await apiCaller.getAgents();
+            expect(agents).toHaveLength(1);
+            agent = agents[0];
+            expectToMatchObject(agent, {
+                id: expect.any(Number),
+                email: defaultUser.email,
+                organization: defaultUser.organization
+            });
+
+            const softwareRows = await getSoftwareRows();
+            expect(softwareRows).toHaveLength(1);
             const expectedSoftware: Partial<CompiledData.Software<"public">> = {
                 "description": softwareFormData.softwareDescription,
                 "externalId": softwareFormData.externalId,
@@ -98,13 +135,25 @@ describe("RPC e2e tests", () => {
                 "workshopUrls": [],
                 "categories": [],
                 "isStillInObservation": false,
-                "id": expectedSoftwareId
+                "id": expect.any(Number)
             };
 
-            expectToMatchObject(inMemoryDb.softwareRows[0], {
+            actualSoftwareId = softwareRows[0].id;
+
+            expectToMatchObject(softwareRows[0], {
                 ...expectedSoftware,
-                "addedByAgentEmail": defaultUser.email,
-                "similarSoftwareExternalDataIds": softwareFormData.similarSoftwareExternalDataIds
+                "addedByAgentId": agent.id
+            });
+            const similars = await kyselyDb
+                .selectFrom("softwares__similar_software_external_datas")
+                .selectAll()
+                .execute();
+            expect(similars).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
+            softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
+                expectToMatchObject(similars[0], {
+                    softwareId: actualSoftwareId,
+                    similarExternalId
+                });
             });
         });
 
@@ -124,40 +173,44 @@ describe("RPC e2e tests", () => {
         });
 
         it("adds an agent as user of the software", async () => {
-            expect(inMemoryDb.agentRows).toHaveLength(1);
-            expect(inMemoryDb.softwareRows).toHaveLength(1);
-            expect(inMemoryDb.softwareUserRows).toHaveLength(0);
+            expect(await getAgentRows()).toHaveLength(1);
+            expect(await getSoftwareRows()).toHaveLength(1);
+            expect(await getSoftwareUserRows()).toHaveLength(0);
+
             await apiCaller.createUserOrReferent({
                 formData: declarationFormData,
-                softwareName: "Some software"
+                softwareId: actualSoftwareId
             });
 
             if (declarationFormData.declarationType !== "user")
                 throw new Error("This test is only for user declaration");
 
-            expect(inMemoryDb.softwareUserRows).toHaveLength(1);
+            const softwareUserRows = await getSoftwareUserRows();
+            expect(softwareUserRows).toHaveLength(1);
 
-            expectToEqual(inMemoryDb.softwareUserRows[0], {
-                "agentEmail": defaultUser.email,
-                "softwareId": inMemoryDb.softwareRows[0].id,
-                "os": declarationFormData.os,
-                "serviceUrl": declarationFormData.serviceUrl,
+            expectToEqual(softwareUserRows[0], {
+                "agentId": expect.any(Number),
+                "softwareId": expect.any(Number),
+                "os": declarationFormData.os ?? null,
+                "serviceUrl": declarationFormData.serviceUrl ?? null,
                 "useCaseDescription": declarationFormData.usecaseDescription,
                 "version": declarationFormData.version
             });
         });
 
         it("adds an instance of the software", async () => {
-            expect(inMemoryDb.softwareRows).toHaveLength(1);
-            expect(inMemoryDb.instanceRows).toHaveLength(0);
+            instanceFormData = createInstanceFormData({ mainSoftwareSillId: actualSoftwareId });
+            expect(await getSoftwareRows()).toHaveLength(1);
+            expect(await getInstanceRows()).toHaveLength(0);
             await apiCaller.createInstance({
                 formData: instanceFormData
             });
-            expect(inMemoryDb.instanceRows).toHaveLength(1);
-            expectToMatchObject(inMemoryDb.instanceRows[0], {
-                "id": 1,
-                "addedByAgentEmail": defaultUser.email,
-                "mainSoftwareSillId": expectedSoftwareId,
+            const instanceRows = await getInstanceRows();
+            expect(instanceRows).toHaveLength(1);
+            expectToMatchObject(instanceRows[0], {
+                "id": expect.any(Number),
+                "addedByAgentId": agent.id,
+                "mainSoftwareSillId": actualSoftwareId,
                 "organization": instanceFormData.organization,
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
@@ -168,12 +221,17 @@ describe("RPC e2e tests", () => {
             const instances = await apiCaller.getInstances();
             expect(instances).toHaveLength(1);
             expectToMatchObject(instances[0], {
-                "id": 1,
-                "mainSoftwareSillId": expectedSoftwareId,
+                "id": expect.any(Number),
+                "mainSoftwareSillId": actualSoftwareId,
                 "organization": instanceFormData.organization,
                 "publicUrl": instanceFormData.publicUrl,
                 "targetAudience": instanceFormData.targetAudience
             });
         });
     });
+
+    const getSoftwareRows = async () => kyselyDb.selectFrom("softwares").selectAll().execute();
+    const getAgentRows = () => kyselyDb.selectFrom("agents").selectAll().execute();
+    const getSoftwareUserRows = () => kyselyDb.selectFrom("software_users").selectAll().execute();
+    const getInstanceRows = () => kyselyDb.selectFrom("instances").selectAll().execute();
 });
