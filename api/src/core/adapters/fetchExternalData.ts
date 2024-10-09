@@ -48,7 +48,6 @@ export const makeFetchAndSaveSoftwareExtraData = ({
 
         const existingOtherSoftwareExtraData = await dbApi.otherSoftwareExtraData.getBySoftwareId(software.softwareId);
         const newOtherSoftwareExtraData = await getOtherExternalData(software, existingOtherSoftwareExtraData);
-        console.log("newOtherSoftwareExtraData : ", newOtherSoftwareExtraData);
 
         if (newOtherSoftwareExtraData) await dbApi.otherSoftwareExtraData.save(newOtherSoftwareExtraData);
     };
@@ -82,12 +81,6 @@ const makeGetOtherExternalData =
             comptoirDuLibreApi: deps.comptoirDuLibreApi,
             software,
             otherSoftwareExtraDataInCache: existingOtherSoftwareExtraData
-        });
-
-        console.log("DATA GATHERED : ");
-        console.log({
-            softwareId: software.softwareId,
-            softwareName: software.softwareName
         });
 
         const otherSoftwareExtraData: OtherSoftwareExtraData = {
@@ -130,10 +123,7 @@ const getNewComptoirDuLibre = async ({
     const comptoirDuLibreSoftware = comptoirDuLibre.softwares.find(
         comptoirDuLibreSoftware => comptoirDuLibreSoftware.id === software.comptoirDuLibreId
     );
-    console.log("number of softwares in comptoir du libre : ", comptoirDuLibre.softwares.length);
-    console.log("comptoirDuLibreId : ", software.comptoirDuLibreId);
-    console.log("first : ", { name: comptoirDuLibre.softwares[0].name, id: comptoirDuLibre.softwares[0].id });
-    console.log("comptoirDuLibreSoftware : ", comptoirDuLibreSoftware);
+
     if (!comptoirDuLibreSoftware) return null;
 
     const [logoUrl, keywords] =

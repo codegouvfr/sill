@@ -242,6 +242,7 @@ export class WikidataFetchError extends Error {
 }
 
 async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
+    console.info(`Fetching wikidata, for wikidataId : ${wikidataId}`);
     const res = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`).catch(
         () => undefined
     );
@@ -262,6 +263,8 @@ async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
     const json = await res.json();
 
     const entity = Object.values(json["entities"])[0] as Entity;
+
+    console.info(`Fetching wikidata finished, for wikidataId : ${wikidataId}`);
 
     return { entity };
 }
