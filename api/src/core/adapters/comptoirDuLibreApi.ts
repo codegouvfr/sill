@@ -9,6 +9,7 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
     "getComptoirDuLibre": memoize(
         async () => {
             try {
+                console.info("Fetching comptoir du libre...");
                 const res = await fetch(url);
 
                 if (res.status !== 200) {
@@ -26,6 +27,8 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
                     "number_of_software": 0,
                     "softwares": []
                 };
+            } finally {
+                console.info("Fetching comptoir du libre finished");
             }
         },
         { "promise": true }
@@ -34,6 +37,7 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
         let imgSrc: string | undefined;
 
         try {
+            console.info(`Fetching comptoir du libre icon, for comptoirDuLibreId : ${comptoirDuLibreId}`);
             const body = await fetch(`https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`).then(r =>
                 r.text()
             );
@@ -55,6 +59,7 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
         let $: CheerioAPI;
 
         try {
+            console.info(`Fetching comptoir du libre keywords, for comptoirDuLibreId : ${comptoirDuLibreId}`);
             const body = await fetch(`https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`).then(r =>
                 r.text()
             );
