@@ -38,18 +38,18 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         console.log(`🚀${software.softwareName}`);
 
         if (software.externalId) {
-            console.log("  • Soft: ", software.softwareName, " - Own wiki : ", software.externalId);
+            console.log(" • Soft: ", software.softwareName, " - Own wiki : ", software.externalId);
             await getSoftwareExternalDataAndSaveIt(software.externalId, softwareExternalDataCache);
         }
 
         if (parentSoftwareExternalId) {
-            console.log("  • Parent wiki : ", parentSoftwareExternalId);
+            console.log(" • Parent wiki : ", parentSoftwareExternalId);
             await getSoftwareExternalDataAndSaveIt(parentSoftwareExternalId, softwareExternalDataCache);
         }
 
         if (similarSoftwaresExternalIds.length > 0) {
             for (const similarExternalId of similarSoftwaresExternalIds) {
-                console.log("  • Similar wiki : ", similarExternalId);
+                console.log(" • Similar wiki : ", similarExternalId);
                 await getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache);
             }
         }
@@ -58,6 +58,7 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         const newOtherSoftwareExtraData = await getOtherExternalData(software, existingOtherSoftwareExtraData);
 
         if (newOtherSoftwareExtraData) await dbApi.otherSoftwareExtraData.save(newOtherSoftwareExtraData);
+        await dbApi.software.updateLastExtraDataFetchAt({ softwareId: software.softwareId });
     };
 };
 
@@ -148,7 +149,9 @@ const getNewComptoirDuLibre = async ({
 export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
     const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {
-        const softwares = await deps.dbApi.software.getAll();
+        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+
+        console.info("About to update ${softwares.length} softwares");
 
         const softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId = {};
 

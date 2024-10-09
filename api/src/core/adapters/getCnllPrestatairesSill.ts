@@ -23,8 +23,6 @@ export const getCnllPrestatairesSill: GetCnllPrestatairesSill = memoize(
         } catch (error) {
             console.error(`Failed to fetch or parse ${url}: ${String(error)}`);
             return [];
-        } finally {
-            console.info("Fetching cnll prestataires sill finished");
         }
     },
     { "promise": true }

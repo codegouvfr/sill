@@ -9,7 +9,7 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
     "getComptoirDuLibre": memoize(
         async () => {
             try {
-                console.info("Fetching comptoir du libre...");
+                console.info("Fetching comptoir du libre");
                 const res = await fetch(url);
 
                 if (res.status !== 200) {
@@ -27,8 +27,6 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
                     "number_of_software": 0,
                     "softwares": []
                 };
-            } finally {
-                console.info("Fetching comptoir du libre finished");
             }
         },
         { "promise": true }

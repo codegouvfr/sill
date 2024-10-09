@@ -86,6 +86,13 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 return softwareId;
             });
         },
+        updateLastExtraDataFetchAt: async ({ softwareId }) => {
+            await db
+                .updateTable("softwares")
+                .set("lastExtraDataFetchAt", sql`now()`)
+                .where("id", "=", softwareId)
+                .executeTakeFirstOrThrow();
+        },
         update: async ({ formData, softwareSillId, agentId }) => {
             const {
                 softwareName,
@@ -201,62 +208,70 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
             };
         },
-        getAll: (): Promise<Software[]> =>
-            makeGetSoftwareBuilder(db)
-                .execute()
-                .then(async softwares => {
-                    const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(
-                        db
-                    );
-                    return softwares.map(
-                        ({
-                            testUrls,
-                            serviceProviders,
-                            parentExternalData,
-                            updateTime,
-                            addedTime,
-                            softwareExternalData,
-                            similarExternalSoftwares,
-                            ...software
-                        }): Software => {
-                            return stripNullOrUndefinedValues({
-                                ...software,
-                                updateTime: new Date(+updateTime).getTime(),
-                                addedTime: new Date(+addedTime).getTime(),
-                                serviceProviders: serviceProviders ?? [],
-                                similarSoftwares: similarExternalSoftwares,
-                                // (similarSoftwares ?? []).map(
-                                //     (s): SimilarSoftware => ({
-                                //         softwareName:
-                                //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                                //         softwareDescription:
-                                //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                                //         isInSill: true // TODO: check if this is true
-                                //     })
-                                // ) ?? [],
-                                userAndReferentCountByOrganization:
-                                    userAndReferentCountByOrganization[software.softwareId] ?? {},
-                                authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                    authorName: dev.name,
-                                    authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                                })),
-                                officialWebsiteUrl:
-                                    softwareExternalData?.websiteUrl ??
-                                    software.comptoirDuLibreSoftware?.external_resources.website ??
-                                    undefined,
-                                codeRepositoryUrl:
-                                    softwareExternalData?.sourceUrl ??
-                                    software.comptoirDuLibreSoftware?.external_resources.repository ??
-                                    undefined,
-                                documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                                comptoirDuLibreServiceProviderCount:
-                                    software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                                testUrl: testUrls[0]?.url,
-                                parentWikidataSoftware: parentExternalData ?? undefined
-                            });
-                        }
-                    );
-                }),
+        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
+            let builder = makeGetSoftwareBuilder(db);
+
+            builder = onlyIfUpdatedMoreThan3HoursAgo
+                ? builder.where(eb =>
+                      eb.or([
+                          eb("lastExtraDataFetchAt", "is", null),
+                          eb("lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
+                      ])
+                  )
+                : builder;
+
+            return builder.execute().then(async softwares => {
+                const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
+                return softwares.map(
+                    ({
+                        testUrls,
+                        serviceProviders,
+                        parentExternalData,
+                        updateTime,
+                        addedTime,
+                        softwareExternalData,
+                        similarExternalSoftwares,
+                        ...software
+                    }): Software => {
+                        return stripNullOrUndefinedValues({
+                            ...software,
+                            updateTime: new Date(+updateTime).getTime(),
+                            addedTime: new Date(+addedTime).getTime(),
+                            serviceProviders: serviceProviders ?? [],
+                            similarSoftwares: similarExternalSoftwares,
+                            // (similarSoftwares ?? []).map(
+                            //     (s): SimilarSoftware => ({
+                            //         softwareName:
+                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                            //         softwareDescription:
+                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                            //         isInSill: true // TODO: check if this is true
+                            //     })
+                            // ) ?? [],
+                            userAndReferentCountByOrganization:
+                                userAndReferentCountByOrganization[software.softwareId] ?? {},
+                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                authorName: dev.name,
+                                authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                            })),
+                            officialWebsiteUrl:
+                                softwareExternalData?.websiteUrl ??
+                                software.comptoirDuLibreSoftware?.external_resources.website ??
+                                undefined,
+                            codeRepositoryUrl:
+                                softwareExternalData?.sourceUrl ??
+                                software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                undefined,
+                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                            comptoirDuLibreServiceProviderCount:
+                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                            testUrl: testUrls[0]?.url,
+                            parentWikidataSoftware: parentExternalData ?? undefined
+                        });
+                    }
+                );
+            });
+        },
         getAllSillSoftwareExternalIds: async externalDataOrigin =>
             db
                 .selectFrom("softwares")
@@ -332,6 +347,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.testUrls",
             "s.referencedSinceTime as addedTime",
             "s.updateTime",
+            "s.lastExtraDataFetchAt",
             "s.dereferencing",
             "s.categories",
             ({ ref }) =>
