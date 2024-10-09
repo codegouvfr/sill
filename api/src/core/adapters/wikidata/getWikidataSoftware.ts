@@ -24,6 +24,7 @@ const { resolveLocalizedString } = createResolveLocalizedString({
 
 export const getWikidataSoftware: GetSoftwareExternalData = memoize(
     async (wikidataId): Promise<SoftwareExternalData | undefined> => {
+        console.info(`   -> fetching wiki soft : ${wikidataId}`);
         const { entity } =
             (await fetchEntity(wikidataId).catch(error => {
                 if (error instanceof WikidataFetchError) {
@@ -47,6 +48,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                 return undefined;
             }
 
+            console.info(`   -> fetching wiki license : ${licenseId}`);
             const { entity } = await fetchEntity(licenseId).catch(() => ({ "entity": undefined }));
 
             if (entity === undefined) {
@@ -144,6 +146,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
                 ].map(async ({ id }) => {
+                    console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {
                         return undefined;
@@ -242,7 +245,6 @@ export class WikidataFetchError extends Error {
 }
 
 async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
-    console.info(`Fetching wikidata, for wikidataId : ${wikidataId}`);
     const res = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`).catch(
         () => undefined
     );
@@ -252,7 +254,7 @@ async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
     }
 
     if (res.status === 429) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 300));
         return fetchEntity(wikidataId);
     }
 
@@ -263,8 +265,6 @@ async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
     const json = await res.json();
 
     const entity = Object.values(json["entities"])[0] as Entity;
-
-    console.info(`Fetching wikidata finished, for wikidataId : ${wikidataId}`);
 
     return { entity };
 }
