@@ -1,0 +1,40 @@
+services:
+  api:
+    build:
+      context: "."
+      dockerfile: Dockerfile.api
+    env_file: .env
+    restart: unless-stopped
+
+  web:
+    build:
+      context: "."
+      dockerfile: Dockerfile.web
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8090:80"
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/
+    depends_on:
+      - api
+      - web
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    shm_size: 256m
+    environment:
+      POSTGRES_LOG_STATEMENTS: all
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - ./docker-data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    ports:
+      - "8091:8080"
