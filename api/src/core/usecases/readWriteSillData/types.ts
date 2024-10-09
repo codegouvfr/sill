@@ -69,7 +69,12 @@ export namespace Software {
     export namespace SimilarSoftware {
         export type ExternalSoftwareData = { isInSill: false } & SimilarSoftwareExternalData;
 
-        export type Sill = { isInSill: true; softwareName: string; softwareDescription: string };
+        export type Sill = {
+            isInSill: true;
+            softwareId: number;
+            softwareName: string;
+            softwareDescription: string;
+        } & SimilarSoftwareExternalData;
     }
 }
 
