@@ -1,9 +1,9 @@
 import { Kysely } from "kysely";
 import { createCore, createObjectThatThrowsIfAccessed, type GenericCore } from "redux-clean-architecture";
-import { createCompileData } from "./adapters/compileData";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
+import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
 import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVersion";
@@ -12,9 +12,7 @@ import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftw
 import { getHalSoftware } from "./adapters/hal/getHalSoftware";
 import { getHalSoftwareOptions } from "./adapters/hal/getHalSoftwareOptions";
 import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
-import type { CompileData } from "./ports/CompileData";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
-import { Db } from "./ports/DbApi";
 import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
@@ -39,7 +37,7 @@ export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     dbApi: DbApiV2;
     userApi: UserApi;
-    compileData: CompileData;
+    // compileData: CompileData;
     comptoirDuLibreApi: ComptoirDuLibreApi;
     getSoftwareExternalData: GetSoftwareExternalData;
     getSoftwareLatestVersion: GetSoftwareLatestVersion;
@@ -51,11 +49,10 @@ export type State = Core["types"]["State"];
 export type Thunks = Core["types"]["Thunks"];
 export type CreateEvt = Core["types"]["CreateEvt"];
 
-const getDbApiAndInitializeCache = (dbConfig: DbConfig): Db.DbApiAndInitializeCache => {
+const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     if (dbConfig.dbKind === "kysely") {
         return {
-            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb),
-            initializeDbApiCache: async () => {}
+            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb)
         };
     }
 
@@ -81,15 +78,17 @@ export async function bootstrapCore(
 
     const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
-    const { compileData } = createCompileData({
+    const { dbApi } = getDbApiAndInitializeCache(dbConfig);
+
+    const fetchAndSaveExternalDataForAllSoftwares = makeFetchAndSaveExternalDataForAllSoftwares({
         getSoftwareExternalData,
         getCnllPrestatairesSill,
         comptoirDuLibreApi,
         getSoftwareLatestVersion,
-        getServiceProviders
+        getServiceProviders,
+        dbApi
     });
-
-    const { dbApi, initializeDbApiCache } = getDbApiAndInitializeCache(dbConfig);
+    // const { compileData } = createCompileData({});
 
     const { userApi, initializeUserApiCache } =
         keycloakUserApiParams === undefined
@@ -105,7 +104,6 @@ export async function bootstrapCore(
         "paramsOfBootstrapCore": params,
         dbApi,
         userApi,
-        compileData,
         comptoirDuLibreApi,
         getSoftwareExternalData,
         getSoftwareLatestVersion
@@ -116,11 +114,24 @@ export async function bootstrapCore(
         usecases
     });
 
+    console.log("doPerPerformPeriodicalCompilation : ", doPerPerformPeriodicalCompilation);
     if (doPerPerformPeriodicalCompilation) {
-        console.log("TODO: doPerPerformPeriodicalCompilation");
         // setTimeout(() => {
         //     compileData();
         // });
+
+        const frequencyOfUpdate = 1000 * 5; // 5 seconds
+
+        const updateSoftwareExternalData = async () => {
+            console.log("------ Updating software external data started ------");
+            await fetchAndSaveExternalDataForAllSoftwares();
+            console.log("------ Updating software external data finished ------");
+            setTimeout(async () => {
+                await updateSoftwareExternalData();
+            }, frequencyOfUpdate);
+        };
+
+        updateSoftwareExternalData();
     }
     // await dispatch(
     //     usecases.readWriteSillData.protectedThunks.initialize({
@@ -129,9 +140,9 @@ export async function bootstrapCore(
     // );
 
     if (doPerformCacheInitialization) {
-        console.log("Performing cache initialization...");
-
-        await Promise.all([initializeDbApiCache(), initializeUserApiCache()]);
+        console.log("Performing user cache initialization...");
+        await initializeUserApiCache();
+        // await Promise.all([initializeDbApiCache(), initializeUserApiCache()]);
     }
 
     return { dbApi, context, core };
