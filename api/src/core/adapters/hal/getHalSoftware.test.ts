@@ -18,7 +18,7 @@ describe("HAL", () => {
                         "name": "Gruenpeter, Morane"
                     }
                 ],
-                "documentationUrl": "https://inria.hal.science/hal-01715545",
+                "documentationUrl": "https://inria.hal.science/hal-01715545v1",
                 "externalId": "1715545",
                 "framaLibreId": "",
                 "isLibreSoftware": true,
