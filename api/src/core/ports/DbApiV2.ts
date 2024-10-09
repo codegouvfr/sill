@@ -1,9 +1,17 @@
 import type { Database } from "../adapters/dbApi/kysely/kysely.database";
-import type { Agent, Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
+import type {
+    Agent,
+    Instance,
+    InstanceFormData,
+    ServiceProvider,
+    Software,
+    SoftwareFormData
+} from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
+import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
-import type { ExternalDataOrigin } from "./GetSoftwareExternalData";
+import type { ExternalDataOrigin, SoftwareExternalData } from "./GetSoftwareExternalData";
 
 export type WithAgentId = { agentId: number };
 
@@ -22,14 +30,49 @@ export interface SoftwareRepository {
     ) => Promise<void>;
     getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
+    getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
+        | {
+              software: Software;
+              similarSoftwaresExternalIds: string[];
+              parentSoftwareExternalId: string | undefined;
+          }
+        | undefined
+    >;
     getByName: (name: string) => Promise<Software | undefined>;
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
 }
 
+export interface SoftwareExternalDataRepository {
+    save: (softwareExternalData: SoftwareExternalData) => Promise<void>;
+}
+
+type CnllPrestataire = {
+    name: string;
+    siren: string;
+    url: string;
+};
+
+export type OtherSoftwareExtraData = {
+    softwareId: number;
+    serviceProviders: ServiceProvider[];
+    comptoirDuLibreSoftware: ComptoirDuLibre.Software | null;
+    annuaireCnllServiceProviders: CnllPrestataire[] | null;
+    latestVersion: { semVer: string; publicationTime: number } | null;
+};
+
+export interface OtherSoftwareExtraDataRepository {
+    save: (otherSoftwareExtraData: OtherSoftwareExtraData) => Promise<void>;
+    getBySoftwareId: (softwareId: number) => Promise<OtherSoftwareExtraData | undefined>;
+}
+
 export interface InstanceRepository {
-    create: (params: { formData: InstanceFormData } & WithAgentId) => Promise<number>;
+    create: (
+        params: {
+            formData: InstanceFormData;
+        } & WithAgentId
+    ) => Promise<number>;
     update: (params: { formData: InstanceFormData; instanceId: number }) => Promise<void>;
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAll: () => Promise<Instance[]>;
@@ -68,6 +111,8 @@ export interface SoftwareUserRepository {
 
 export type DbApiV2 = {
     software: SoftwareRepository;
+    softwareExternalData: SoftwareExternalDataRepository;
+    otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;
     agent: AgentRepository;
     softwareReferent: SoftwareReferentRepository;

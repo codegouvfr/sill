@@ -7,48 +7,121 @@ import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
 
-export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => ({
-    create: async ({ formData, externalDataOrigin, agentId }) => {
-        const {
-            softwareName,
-            softwareDescription,
-            softwareLicense,
-            softwareLogoUrl,
-            softwareMinimalVersion,
-            isPresentInSupportContract,
-            isFromFrenchPublicService,
-            doRespectRgaa,
-            similarSoftwareExternalDataIds,
-            softwareType,
-            externalId,
-            comptoirDuLibreId,
-            softwareKeywords,
-            ...rest
-        } = formData;
+export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
+    const getBySoftwareId = makeGetSoftwareById(db);
+    return {
+        create: async ({ formData, externalDataOrigin, agentId }) => {
+            const {
+                softwareName,
+                softwareDescription,
+                softwareLicense,
+                softwareLogoUrl,
+                softwareMinimalVersion,
+                isPresentInSupportContract,
+                isFromFrenchPublicService,
+                doRespectRgaa,
+                similarSoftwareExternalDataIds,
+                softwareType,
+                externalId,
+                comptoirDuLibreId,
+                softwareKeywords,
+                ...rest
+            } = formData;
 
-        assert<Equals<typeof rest, {}>>();
+            assert<Equals<typeof rest, {}>>();
 
-        const now = Date.now();
+            const now = Date.now();
 
-        return db.transaction().execute(async trx => {
-            const { softwareId } = await trx
-                .insertInto("softwares")
-                .values({
+            return db.transaction().execute(async trx => {
+                const { softwareId } = await trx
+                    .insertInto("softwares")
+                    .values({
+                        name: softwareName,
+                        description: softwareDescription,
+                        license: softwareLicense,
+                        logoUrl: softwareLogoUrl,
+                        versionMin: softwareMinimalVersion,
+                        referencedSinceTime: now,
+                        updateTime: now,
+                        dereferencing: undefined,
+                        isStillInObservation: false,
+                        parentSoftwareWikidataId: undefined,
+                        doRespectRgaa: doRespectRgaa,
+                        isFromFrenchPublicService: isFromFrenchPublicService,
+                        isPresentInSupportContract: isPresentInSupportContract,
+                        externalId: externalId,
+                        externalDataOrigin: externalDataOrigin,
+                        comptoirDuLibreId: comptoirDuLibreId,
+                        softwareType: JSON.stringify(softwareType),
+                        catalogNumeriqueGouvFrId: undefined,
+                        workshopUrls: JSON.stringify([]),
+                        testUrls: JSON.stringify([]),
+                        categories: JSON.stringify([]),
+                        generalInfoMd: undefined,
+                        addedByAgentId: agentId,
+                        keywords: JSON.stringify(softwareKeywords)
+                    })
+                    .returning("id as softwareId")
+                    .executeTakeFirstOrThrow();
+
+                console.log(
+                    `inserted software correctly, softwareId is : ${softwareId}, about to insert similars : `,
+                    similarSoftwareExternalDataIds
+                );
+
+                if (similarSoftwareExternalDataIds.length > 0) {
+                    await trx
+                        .insertInto("softwares__similar_software_external_datas")
+                        .values(
+                            similarSoftwareExternalDataIds.map(similarExternalId => ({
+                                softwareId,
+                                similarExternalId
+                            }))
+                        )
+                        .execute();
+                }
+
+                console.log("all good");
+
+                return softwareId;
+            });
+        },
+        update: async ({ formData, softwareSillId, agentId }) => {
+            const {
+                softwareName,
+                softwareDescription,
+                softwareLicense,
+                softwareLogoUrl,
+                softwareMinimalVersion,
+                isPresentInSupportContract,
+                isFromFrenchPublicService,
+                doRespectRgaa,
+                similarSoftwareExternalDataIds,
+                softwareType,
+                externalId,
+                comptoirDuLibreId,
+                softwareKeywords,
+                ...rest
+            } = formData;
+
+            assert<Equals<typeof rest, {}>>();
+
+            const now = Date.now();
+            await db
+                .updateTable("softwares")
+                .set({
                     name: softwareName,
                     description: softwareDescription,
                     license: softwareLicense,
                     logoUrl: softwareLogoUrl,
                     versionMin: softwareMinimalVersion,
-                    referencedSinceTime: now,
                     updateTime: now,
-                    dereferencing: undefined,
                     isStillInObservation: false,
                     parentSoftwareWikidataId: undefined,
                     doRespectRgaa: doRespectRgaa,
                     isFromFrenchPublicService: isFromFrenchPublicService,
                     isPresentInSupportContract: isPresentInSupportContract,
                     externalId: externalId,
-                    externalDataOrigin: externalDataOrigin,
                     comptoirDuLibreId: comptoirDuLibreId,
                     softwareType: JSON.stringify(softwareType),
                     catalogNumeriqueGouvFrId: undefined,
@@ -59,162 +132,16 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     addedByAgentId: agentId,
                     keywords: JSON.stringify(softwareKeywords)
                 })
-                .returning("id as softwareId")
-                .executeTakeFirstOrThrow();
-
-            console.log(
-                `inserted software correctly, softwareId is : ${softwareId}, about to insert similars : `,
-                similarSoftwareExternalDataIds
-            );
-
-            if (similarSoftwareExternalDataIds.length > 0) {
-                await trx
-                    .insertInto("softwares__similar_software_external_datas")
-                    .values(
-                        similarSoftwareExternalDataIds.map(similarExternalId => ({ softwareId, similarExternalId }))
-                    )
-                    .execute();
-            }
-
-            console.log("all good");
-
-            return softwareId;
-        });
-    },
-    update: async ({ formData, softwareSillId, agentId }) => {
-        const {
-            softwareName,
-            softwareDescription,
-            softwareLicense,
-            softwareLogoUrl,
-            softwareMinimalVersion,
-            isPresentInSupportContract,
-            isFromFrenchPublicService,
-            doRespectRgaa,
-            similarSoftwareExternalDataIds,
-            softwareType,
-            externalId,
-            comptoirDuLibreId,
-            softwareKeywords,
-            ...rest
-        } = formData;
-
-        assert<Equals<typeof rest, {}>>();
-
-        const now = Date.now();
-        await db
-            .updateTable("softwares")
-            .set({
-                name: softwareName,
-                description: softwareDescription,
-                license: softwareLicense,
-                logoUrl: softwareLogoUrl,
-                versionMin: softwareMinimalVersion,
-                updateTime: now,
-                isStillInObservation: false,
-                parentSoftwareWikidataId: undefined,
-                doRespectRgaa: doRespectRgaa,
-                isFromFrenchPublicService: isFromFrenchPublicService,
-                isPresentInSupportContract: isPresentInSupportContract,
-                externalId: externalId,
-                comptoirDuLibreId: comptoirDuLibreId,
-                softwareType: JSON.stringify(softwareType),
-                catalogNumeriqueGouvFrId: undefined,
-                workshopUrls: JSON.stringify([]),
-                testUrls: JSON.stringify([]),
-                categories: JSON.stringify([]),
-                generalInfoMd: undefined,
-                addedByAgentId: agentId,
-                keywords: JSON.stringify(softwareKeywords)
-            })
-            .where("id", "=", softwareSillId)
-            .execute();
-    },
-    getByName: async (softwareName: string): Promise<Software | undefined> =>
-        makeGetSoftwareBuilder(db)
-            .where("name", "=", softwareName)
-            .executeTakeFirst()
-            .then((result): Software | undefined => {
-                if (!result) return;
-                const {
-                    testUrls,
-                    serviceProviders,
-                    parentExternalData,
-                    updateTime,
-                    addedTime,
-                    softwareExternalData,
-                    similarExternalSoftwares,
-                    ...software
-                } = result;
-                return stripNullOrUndefinedValues({
-                    ...software,
-                    updateTime: new Date(+updateTime).getTime(),
-                    addedTime: new Date(+addedTime).getTime(),
-                    serviceProviders: serviceProviders ?? [],
-                    similarSoftwares: similarExternalSoftwares,
-                    userAndReferentCountByOrganization: {},
-                    authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                        authorName: dev.name,
-                        authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                    })),
-                    officialWebsiteUrl:
-                        softwareExternalData?.websiteUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.website,
-                    codeRepositoryUrl:
-                        softwareExternalData?.sourceUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.repository,
-                    documentationUrl: softwareExternalData?.documentationUrl,
-                    comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                    testUrl: testUrls[0]?.url,
-                    parentWikidataSoftware: parentExternalData
-                });
-            }),
-    getById: async (softwareId: number): Promise<Software | undefined> =>
-        makeGetSoftwareBuilder(db)
-            .where("id", "=", softwareId)
-            .executeTakeFirst()
-            .then((result): Software | undefined => {
-                if (!result) return;
-                const {
-                    testUrls,
-                    serviceProviders,
-                    parentExternalData,
-                    updateTime,
-                    addedTime,
-                    softwareExternalData,
-                    similarExternalSoftwares,
-                    ...software
-                } = result;
-                return stripNullOrUndefinedValues({
-                    ...software,
-                    updateTime: new Date(+updateTime).getTime(),
-                    addedTime: new Date(+addedTime).getTime(),
-                    serviceProviders: serviceProviders ?? [],
-                    similarSoftwares: similarExternalSoftwares,
-                    userAndReferentCountByOrganization: {},
-                    authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                        authorName: dev.name,
-                        authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                    })),
-                    officialWebsiteUrl:
-                        softwareExternalData?.websiteUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.website,
-                    codeRepositoryUrl:
-                        softwareExternalData?.sourceUrl ??
-                        software.comptoirDuLibreSoftware?.external_resources.repository,
-                    documentationUrl: softwareExternalData?.documentationUrl,
-                    comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                    testUrl: testUrls[0]?.url,
-                    parentWikidataSoftware: parentExternalData
-                });
-            }),
-    getAll: (): Promise<Software[]> =>
-        makeGetSoftwareBuilder(db)
-            .execute()
-            .then(async softwares => {
-                const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
-                return softwares.map(
-                    ({
+                .where("id", "=", softwareSillId)
+                .execute();
+        },
+        getByName: async (softwareName: string): Promise<Software | undefined> =>
+            makeGetSoftwareBuilder(db)
+                .where("name", "=", softwareName)
+                .executeTakeFirst()
+                .then((result): Software | undefined => {
+                    if (!result) return;
+                    const {
                         testUrls,
                         serviceProviders,
                         parentExternalData,
@@ -223,81 +150,150 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
-                    }): Software => {
-                        return stripNullOrUndefinedValues({
-                            ...software,
-                            updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
-                            serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
-                            // (similarSoftwares ?? []).map(
-                            //     (s): SimilarSoftware => ({
-                            //         softwareName:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         softwareDescription:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         isInSill: true // TODO: check if this is true
-                            //     })
-                            // ) ?? [],
-                            userAndReferentCountByOrganization:
-                                userAndReferentCountByOrganization[software.softwareId] ?? {},
-                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                authorName: dev.name,
-                                authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
-                            })),
-                            officialWebsiteUrl:
-                                softwareExternalData?.websiteUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.website ??
-                                undefined,
-                            codeRepositoryUrl:
-                                softwareExternalData?.sourceUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.repository ??
-                                undefined,
-                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                            comptoirDuLibreServiceProviderCount:
-                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            testUrl: testUrls[0]?.url,
-                            parentWikidataSoftware: parentExternalData ?? undefined
-                        });
-                    }
-                );
-            }),
-    getAllSillSoftwareExternalIds: async externalDataOrigin =>
-        db
-            .selectFrom("softwares")
-            .select("externalId")
-            .where("externalDataOrigin", "=", externalDataOrigin)
-            .execute()
-            .then(rows => rows.map(row => row.externalId!)),
+                    } = result;
+                    return stripNullOrUndefinedValues({
+                        ...software,
+                        updateTime: new Date(+updateTime).getTime(),
+                        addedTime: new Date(+addedTime).getTime(),
+                        serviceProviders: serviceProviders ?? [],
+                        similarSoftwares: similarExternalSoftwares,
+                        userAndReferentCountByOrganization: {},
+                        authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                            authorName: dev.name,
+                            authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                        })),
+                        officialWebsiteUrl:
+                            softwareExternalData?.websiteUrl ??
+                            software.comptoirDuLibreSoftware?.external_resources.website,
+                        codeRepositoryUrl:
+                            softwareExternalData?.sourceUrl ??
+                            software.comptoirDuLibreSoftware?.external_resources.repository,
+                        documentationUrl: softwareExternalData?.documentationUrl,
+                        comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                        testUrl: testUrls[0]?.url,
+                        parentWikidataSoftware: parentExternalData
+                    });
+                }),
+        getById: getBySoftwareId,
+        getByIdWithLinkedSoftwaresExternalIds: async softwareId => {
+            const software = await getBySoftwareId(softwareId);
+            if (!software) return;
 
-    countAddedByAgent: async ({ agentId }) => {
-        const { count } = await db
-            .selectFrom("softwares")
-            .select(qb => qb.fn.countAll<string>().as("count"))
-            .where("addedByAgentId", "=", agentId)
-            .executeTakeFirstOrThrow();
-        return +count;
-    },
-    unreference: async ({ softwareId, reason, time }) => {
-        const { versionMin } = await db
-            .selectFrom("softwares")
-            .select("versionMin")
-            .where("id", "=", softwareId)
-            .executeTakeFirstOrThrow();
+            const { parentSoftwareExternalId, similarSoftwaresExternalIds } = await db
+                .selectFrom("softwares as s")
+                .leftJoin("softwares__similar_software_external_datas as sim", "sim.softwareId", "s.id")
+                .select([
+                    "s.parentSoftwareWikidataId as parentSoftwareExternalId",
+                    qb =>
+                        qb.fn
+                            .jsonAgg(qb.ref("sim.similarExternalId"))
+                            .filterWhere("sim.similarExternalId", "is not", null)
+                            .$castTo<string[]>()
+                            .as("similarSoftwaresExternalIds")
+                ])
+                .groupBy("s.id")
+                .where("id", "=", softwareId)
+                .executeTakeFirstOrThrow();
 
-        await db
-            .updateTable("softwares")
-            .set({
-                dereferencing: JSON.stringify({
-                    reason,
-                    time,
-                    lastRecommendedVersion: versionMin
+            return {
+                software,
+                similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? [],
+                parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
+            };
+        },
+        getAll: (): Promise<Software[]> =>
+            makeGetSoftwareBuilder(db)
+                .execute()
+                .then(async softwares => {
+                    const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(
+                        db
+                    );
+                    return softwares.map(
+                        ({
+                            testUrls,
+                            serviceProviders,
+                            parentExternalData,
+                            updateTime,
+                            addedTime,
+                            softwareExternalData,
+                            similarExternalSoftwares,
+                            ...software
+                        }): Software => {
+                            return stripNullOrUndefinedValues({
+                                ...software,
+                                updateTime: new Date(+updateTime).getTime(),
+                                addedTime: new Date(+addedTime).getTime(),
+                                serviceProviders: serviceProviders ?? [],
+                                similarSoftwares: similarExternalSoftwares,
+                                // (similarSoftwares ?? []).map(
+                                //     (s): SimilarSoftware => ({
+                                //         softwareName:
+                                //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                                //         softwareDescription:
+                                //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
+                                //         isInSill: true // TODO: check if this is true
+                                //     })
+                                // ) ?? [],
+                                userAndReferentCountByOrganization:
+                                    userAndReferentCountByOrganization[software.softwareId] ?? {},
+                                authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                    authorName: dev.name,
+                                    authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                                })),
+                                officialWebsiteUrl:
+                                    softwareExternalData?.websiteUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.website ??
+                                    undefined,
+                                codeRepositoryUrl:
+                                    softwareExternalData?.sourceUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                    undefined,
+                                documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                                comptoirDuLibreServiceProviderCount:
+                                    software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                                testUrl: testUrls[0]?.url,
+                                parentWikidataSoftware: parentExternalData ?? undefined
+                            });
+                        }
+                    );
+                }),
+        getAllSillSoftwareExternalIds: async externalDataOrigin =>
+            db
+                .selectFrom("softwares")
+                .select("externalId")
+                .where("externalDataOrigin", "=", externalDataOrigin)
+                .execute()
+                .then(rows => rows.map(row => row.externalId!)),
+
+        countAddedByAgent: async ({ agentId }) => {
+            const { count } = await db
+                .selectFrom("softwares")
+                .select(qb => qb.fn.countAll<string>().as("count"))
+                .where("addedByAgentId", "=", agentId)
+                .executeTakeFirstOrThrow();
+            return +count;
+        },
+        unreference: async ({ softwareId, reason, time }) => {
+            const { versionMin } = await db
+                .selectFrom("softwares")
+                .select("versionMin")
+                .where("id", "=", softwareId)
+                .executeTakeFirstOrThrow();
+
+            await db
+                .updateTable("softwares")
+                .set({
+                    dereferencing: JSON.stringify({
+                        reason,
+                        time,
+                        lastRecommendedVersion: versionMin
+                    })
                 })
-            })
-            .where("id", "=", softwareId)
-            .executeTakeFirstOrThrow();
-    }
-});
+                .where("id", "=", softwareId)
+                .executeTakeFirstOrThrow();
+        }
+    };
+};
 
 const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
     db
@@ -459,3 +455,45 @@ const getUserAndReferentCountByOrganizationBySoftwareId = async (
         {} as UserAndReferentCountByOrganizationBySoftwareId
     );
 };
+
+const makeGetSoftwareById =
+    (db: Kysely<Database>) =>
+    async (softwareId: number): Promise<Software | undefined> =>
+        makeGetSoftwareBuilder(db)
+            .where("id", "=", softwareId)
+            .executeTakeFirst()
+            .then((result): Software | undefined => {
+                if (!result) return;
+                const {
+                    testUrls,
+                    serviceProviders,
+                    parentExternalData,
+                    updateTime,
+                    addedTime,
+                    softwareExternalData,
+                    similarExternalSoftwares,
+                    ...software
+                } = result;
+                return stripNullOrUndefinedValues({
+                    ...software,
+                    updateTime: new Date(+updateTime).getTime(),
+                    addedTime: new Date(+addedTime).getTime(),
+                    serviceProviders: serviceProviders ?? [],
+                    similarSoftwares: similarExternalSoftwares,
+                    userAndReferentCountByOrganization: {},
+                    authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                        authorName: dev.name,
+                        authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                    })),
+                    officialWebsiteUrl:
+                        softwareExternalData?.websiteUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.website,
+                    codeRepositoryUrl:
+                        softwareExternalData?.sourceUrl ??
+                        software.comptoirDuLibreSoftware?.external_resources.repository,
+                    documentationUrl: softwareExternalData?.documentationUrl,
+                    comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                    testUrl: testUrls[0]?.url,
+                    parentWikidataSoftware: parentExternalData
+                });
+            });
