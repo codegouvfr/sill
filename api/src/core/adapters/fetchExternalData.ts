@@ -151,7 +151,7 @@ export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSo
     return async () => {
         const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
 
-        console.info("About to update ${softwares.length} softwares");
+        console.info(`About to update ${softwares.length} softwares`);
 
         const softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId = {};
 
