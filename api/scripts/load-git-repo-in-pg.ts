@@ -21,9 +21,6 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 
     const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
 
-    const reactSofts = softwareRows.filter(s => s.name.toLowerCase().includes("react"));
-    console.log("REACT SOFT from gitDB: ", reactSofts);
-
     await insertAgents(agentRows, pgDb);
 
     const agentIdByEmail = await makeGetAgentIdByEmail(pgDb);

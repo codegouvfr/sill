@@ -69,6 +69,8 @@ describe("fetches software extra data (from different providers)", () => {
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("agents").execute();
 
+        await sql`SELECT setval('softwares_id_seq', 11, false)`.execute(db);
+
         dbApi = createKyselyPgDbApi(db);
 
         const agentId = await dbApi.agent.add({
@@ -116,6 +118,13 @@ describe("fetches software extra data (from different providers)", () => {
             const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expect(softwareExternalDatas).toHaveLength(0);
 
+            const { lastExtraDataFetchAt: initialLastExtraDataFetchAt } = await db
+                .selectFrom("softwares")
+                .select("lastExtraDataFetchAt")
+                .where("id", "=", craSoftwareId)
+                .executeTakeFirstOrThrow();
+            expect(initialLastExtraDataFetchAt).toBe(null);
+
             await fetchAndSaveSoftwareExtraData(craSoftwareId, {});
 
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
@@ -158,6 +167,13 @@ describe("fetches software extra data (from different providers)", () => {
 
             const otherExtraData = await db.selectFrom("compiled_softwares").selectAll().execute();
             expectToEqual(otherExtraData, []);
+
+            const { lastExtraDataFetchAt } = await db
+                .selectFrom("softwares")
+                .select("lastExtraDataFetchAt")
+                .where("id", "=", craSoftwareId)
+                .executeTakeFirstOrThrow();
+            expect(lastExtraDataFetchAt).toBeTruthy();
         },
         { timeout: 10_000 }
     );

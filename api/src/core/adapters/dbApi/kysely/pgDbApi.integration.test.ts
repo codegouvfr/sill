@@ -140,7 +140,7 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll();
+            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
 
             const actualSoftware = softwares[0];
 

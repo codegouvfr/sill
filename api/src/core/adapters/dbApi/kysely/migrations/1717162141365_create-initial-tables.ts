@@ -40,6 +40,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("dereferencing", "jsonb")
         .addColumn("referencedSinceTime", "bigint", col => col.notNull())
         .addColumn("updateTime", "bigint", col => col.notNull())
+        .addColumn("lastExtraDataFetchAt", "timestamptz")
         .execute();
 
     await db.schema

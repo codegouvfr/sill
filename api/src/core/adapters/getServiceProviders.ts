@@ -62,8 +62,6 @@ export const getServiceProviders: GetServiceProviders = memoize(
         } catch (error) {
             console.error(`Failed to fetch or parse ${url}: ${String(error)}`);
             return {};
-        } finally {
-            console.info("Fetching service providers finished");
         }
     },
     { "promise": true }

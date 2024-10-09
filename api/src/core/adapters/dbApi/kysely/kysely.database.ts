@@ -92,6 +92,7 @@ type SoftwaresTable = {
     description: string;
     referencedSinceTime: number;
     updateTime: number;
+    lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{
         reason?: string;
         time: number;
