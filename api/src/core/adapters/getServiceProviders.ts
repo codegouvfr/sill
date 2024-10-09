@@ -36,6 +36,7 @@ const url = "https://code.gouv.fr/data/sill-prestataires.json";
 export const getServiceProviders: GetServiceProviders = memoize(
     async () => {
         try {
+            console.info("Fetching service providers");
             const res = await fetch(url);
 
             if (res.status !== 200) {
@@ -61,6 +62,8 @@ export const getServiceProviders: GetServiceProviders = memoize(
         } catch (error) {
             console.error(`Failed to fetch or parse ${url}: ${String(error)}`);
             return {};
+        } finally {
+            console.info("Fetching service providers finished");
         }
     },
     { "promise": true }
