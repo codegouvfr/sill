@@ -114,13 +114,14 @@ export async function bootstrapCore(
         usecases
     });
 
+    if (doPerformCacheInitialization) {
+        console.log("Performing user cache initialization...");
+        await initializeUserApiCache();
+    }
+
     console.log("doPerPerformPeriodicalCompilation : ", doPerPerformPeriodicalCompilation);
     if (doPerPerformPeriodicalCompilation) {
-        // setTimeout(() => {
-        //     compileData();
-        // });
-
-        const frequencyOfUpdate = 1000 * 5; // 5 seconds
+        const frequencyOfUpdate = 1000 * 60 * 60 * 4; // 4 hours
 
         const updateSoftwareExternalData = async () => {
             console.log("------ Updating software external data started ------");
@@ -131,18 +132,7 @@ export async function bootstrapCore(
             }, frequencyOfUpdate);
         };
 
-        updateSoftwareExternalData();
-    }
-    // await dispatch(
-    //     usecases.readWriteSillData.protectedThunks.initialize({
-    //         doPerPerformPeriodicalCompilation
-    //     })
-    // );
-
-    if (doPerformCacheInitialization) {
-        console.log("Performing user cache initialization...");
-        await initializeUserApiCache();
-        // await Promise.all([initializeDbApiCache(), initializeUserApiCache()]);
+        void updateSoftwareExternalData();
     }
 
     return { dbApi, context, core };

@@ -15,6 +15,10 @@ import type { ExternalDataOrigin, SoftwareExternalData } from "./GetSoftwareExte
 
 export type WithAgentId = { agentId: number };
 
+type GetSoftwareFilters = {
+    onlyIfUpdatedMoreThan3HoursAgo?: true;
+};
+
 export interface SoftwareRepository {
     create: (
         params: {
@@ -28,7 +32,8 @@ export interface SoftwareRepository {
             formData: SoftwareFormData;
         } & WithAgentId
     ) => Promise<void>;
-    getAll: () => Promise<Software[]>;
+    updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
+    getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
     getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
         | {
