@@ -33,8 +33,10 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - ./docker-data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   adminer:
     image: adminer
     ports:
       - "8091:8080"
+    restart: unless-stopped
