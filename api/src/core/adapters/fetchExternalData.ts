@@ -28,7 +28,10 @@ export const makeFetchAndSaveSoftwareExtraData = ({
     ...otherExternalDataDeps
 }: FetchAndSaveSoftwareExtraDataDependencies) => {
     const getOtherExternalData = makeGetOtherExternalData(otherExternalDataDeps);
-    const getSoftwareExternalDataAndSaveIt = makeGetSoftwareExternalData({ dbApi, getSoftwareExternalData });
+    const getSoftwareExternalDataAndSaveIt = makeGetSoftwareExternalData({
+        dbApi,
+        getSoftwareExternalData
+    });
 
     return async (softwareId: number, softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId) => {
         const data = await dbApi.software.getByIdWithLinkedSoftwaresExternalIds(softwareId);
@@ -135,9 +138,11 @@ const getNewComptoirDuLibre = async ({
 
     if (!comptoirDuLibreSoftware) return null;
 
+    const alreadySavedCdlSoftware = otherSoftwareExtraDataInCache?.comptoirDuLibreSoftware;
+
     const [logoUrl, keywords] =
-        otherSoftwareExtraDataInCache?.comptoirDuLibreSoftware?.id === comptoirDuLibreSoftware.id
-            ? []
+        alreadySavedCdlSoftware && alreadySavedCdlSoftware.id === comptoirDuLibreSoftware.id
+            ? [alreadySavedCdlSoftware.logoUrl, alreadySavedCdlSoftware.keywords]
             : await Promise.all([
                   comptoirDuLibreApi.getIconUrl({ comptoirDuLibreId: comptoirDuLibreSoftware.id }),
                   comptoirDuLibreApi.getKeywords({ comptoirDuLibreId: comptoirDuLibreSoftware.id })

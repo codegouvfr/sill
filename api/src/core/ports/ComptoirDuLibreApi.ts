@@ -44,6 +44,7 @@ export declare namespace ComptoirDuLibre {
         name: string;
         licence: string;
         logoUrl?: string;
+        keywords?: string[];
         external_resources: {
             website: string | null;
             repository: string | null;
