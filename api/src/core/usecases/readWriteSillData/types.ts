@@ -69,16 +69,23 @@ export namespace Software {
     export namespace SimilarSoftware {
         export type ExternalSoftwareData = { isInSill: false } & SimilarSoftwareExternalData;
 
-        export type Sill = { isInSill: true; softwareName: string; softwareDescription: string };
+        export type Sill = {
+            isInSill: true;
+            softwareId: number;
+            softwareName: string;
+            softwareDescription: string;
+        } & SimilarSoftwareExternalData;
     }
 }
 
 export type Agent = {
     //NOTE: Undefined if the agent isn't referent of at least one software
     // If it's the user the email is never undefined.
-    email: string | undefined;
+    email: string;
     organization: string;
     declarations: (DeclarationFormData & { softwareName: string })[];
+    isPublic: boolean;
+    about: string | undefined;
 };
 
 export type Instance = {

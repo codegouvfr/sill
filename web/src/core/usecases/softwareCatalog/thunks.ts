@@ -258,12 +258,30 @@ function apiSoftwareToInternalSoftware(params: {
             };
         }
 
+        console.log(
+            "resolving localized string in SOFTWARE CATALOG : ",
+            parentWikidataSoftware.label,
+            ` ( for software  ${softwareName})`
+        );
+
+        console.log(parentWikidataSoftware);
+
         return {
             "isInSill": false,
             "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
             "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
         };
     })();
+
+    console.log({
+        userAndReferentCountByOrganization,
+        "referentCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ referentCount }) => referentCount)
+            .reduce((prev, curr) => prev + curr, 0),
+        "userCount": Object.values(userAndReferentCountByOrganization)
+            .map(({ userCount }) => userCount)
+            .reduce((prev, curr) => prev + curr, 0)
+    });
 
     return {
         logoUrl,

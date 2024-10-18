@@ -44,7 +44,7 @@ type InstancesTable = {
     organization: string;
     targetAudience: string;
     publicUrl: string | null;
-    addedByAgentEmail: string;
+    addedByAgentId: number;
     referencedSinceTime: number;
     updateTime: number;
 };
@@ -92,6 +92,7 @@ type SoftwaresTable = {
     description: string;
     referencedSinceTime: number;
     updateTime: number;
+    lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{
         reason?: string;
         time: number;
@@ -118,7 +119,7 @@ type SoftwaresTable = {
     >;
     categories: JSONColumnType<string[]>;
     generalInfoMd: string | null;
-    addedByAgentEmail: string;
+    addedByAgentId: number;
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
 };

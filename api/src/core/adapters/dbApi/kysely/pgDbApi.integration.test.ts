@@ -1,18 +1,13 @@
 import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
-import { expectPromiseToFailWith, expectToEqual } from "../../../../tools/test.helpers";
-import { Agent, DbApiV2 } from "../../../ports/DbApiV2";
+import { expectPromiseToFailWith, expectToEqual, testPgUrl } from "../../../../tools/test.helpers";
+import { DbAgent, DbApiV2 } from "../../../ports/DbApiV2";
 import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
-import { SoftwareFormData } from "../../../usecases/readWriteSillData";
+import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWriteSillData";
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 
-const agent = {
-    id: 1,
-    email: "test@test.com",
-    organization: "test-orga"
-};
 const externalId = "external-id-111";
 const similarExternalId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
@@ -70,7 +65,21 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     license: "MIT"
 };
 
-const db = new Kysely<Database>({ dialect: createPgDialect("postgresql://sill:pg_password@localhost:5432/sill") });
+const parentSoftwareExternalData: SoftwareExternalData = {
+    ...similarSoftwareExternalData,
+    externalId: "Q-parent-external-id",
+    label: "Some parent software label",
+    description: { en: "Some parent software description" }
+};
+
+const insertedAgent = {
+    email: "test@test.com",
+    organization: "test-organization",
+    isPublic: true,
+    about: "test about"
+};
+
+const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
@@ -112,13 +121,30 @@ describe("pgDbApi", () => {
     });
 
     describe("software", () => {
-        it("creates a software, than gets it with getAll", async () => {
+        it("creates a software, than gets it with getAll, than updates adding a parent", async () => {
             console.log("------ software scenario ------");
-            await insertSoftwareExternalDataAndSoftware();
+            const { softwareId, agentId } = await insertSoftwareExternalDataAndSoftwareAndAgent();
 
-            const softwares = await dbApi.software.getAll();
+            await db
+                .updateTable("softwares")
+                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId)
+                .where("id", "=", softwareId)
+                .execute();
 
-            expectToEqual(softwares[0], {
+            await dbApi.softwareUser.add({
+                agentId,
+                softwareId,
+                useCaseDescription: "des trucs de user",
+                os: "windows",
+                version: "1.0.0",
+                serviceUrl: "https://example.com"
+            });
+
+            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+
+            const actualSoftware = softwares[0];
+
+            expectToEqual(actualSoftware, {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
@@ -139,7 +165,11 @@ describe("pgDbApi", () => {
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
-                parentWikidataSoftware: undefined,
+                parentWikidataSoftware: {
+                    label: parentSoftwareExternalData.label,
+                    description: parentSoftwareExternalData.description,
+                    externalId: parentSoftwareExternalData.externalId
+                },
                 prerogatives: {
                     doRespectRgaa: true,
                     isFromFrenchPublicServices: false,
@@ -170,7 +200,12 @@ describe("pgDbApi", () => {
                     type: "desktop/mobile"
                 },
                 testUrl: undefined,
-                userAndReferentCountByOrganization: {},
+                userAndReferentCountByOrganization: {
+                    [insertedAgent.organization]: {
+                        userCount: 1,
+                        referentCount: 0
+                    }
+                },
                 versionMin: ""
             });
 
@@ -183,13 +218,13 @@ describe("pgDbApi", () => {
     describe("instance", () => {
         it("creates an instance, than gets it with getAll", async () => {
             console.log("------ instance scenario ------");
-            await insertSoftwareExternalDataAndSoftware();
+            const { agentId } = await insertSoftwareExternalDataAndSoftwareAndAgent();
             const softwares = await dbApi.software.getAll();
             const softwareId = softwares[0].softwareId;
             console.log("saving instance");
             await dbApi.instance.create({
-                agentEmail: agent.email,
-                fromData: {
+                agentId,
+                formData: {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
                     targetAudience: "test-audience",
@@ -213,20 +248,61 @@ describe("pgDbApi", () => {
     describe("agents", () => {
         it("adds an agent, get it by email, updates it, getAll", async () => {
             console.log("------ agent scenario------");
-            const insertedAgent = {
-                email: "test@test.com",
-                organization: "test-organization",
-                isPublic: true,
-                about: "test about"
-            };
             console.log("inserting agent");
-            await dbApi.agent.add(insertedAgent);
+            const agentId = await dbApi.agent.add(insertedAgent);
+            const softwareId = await dbApi.software.create({
+                formData: softwareFormData,
+                agentId,
+                externalDataOrigin: "wikidata"
+            });
+
+            await db
+                .insertInto("software_users")
+                .values({
+                    agentId,
+                    softwareId,
+                    os: "mac",
+                    useCaseDescription: "des trucs de user",
+                    version: "1",
+                    serviceUrl: "https://example.com"
+                })
+                .execute();
+
+            await db
+                .insertInto("software_referents")
+                .values({ agentId, softwareId, useCaseDescription: "des trucs de référent", isExpert: true })
+                .execute();
 
             console.log("getting agent by email");
             const agent = await dbApi.agent.getByEmail(insertedAgent.email);
-            expectToEqual(agent, { id: expect.any(Number), ...insertedAgent });
+            const expectedDeclarations: (DeclarationFormData & { softwareName: string })[] = [
+                {
+                    declarationType: "user",
+                    softwareName: softwareFormData.softwareName,
+                    os: "mac",
+                    version: "1",
+                    serviceUrl: "https://example.com",
+                    usecaseDescription: "des trucs de user"
+                },
+                {
+                    declarationType: "referent",
+                    softwareName: softwareFormData.softwareName,
+                    isTechnicalExpert: true,
+                    usecaseDescription: "des trucs de référent",
+                    serviceUrl: undefined
+                }
+            ];
 
-            const updatedAgent: Agent = {
+            expectToEqual(agent, {
+                id: expect.any(Number),
+                email: insertedAgent.email,
+                organization: insertedAgent.organization,
+                about: insertedAgent.about,
+                isPublic: insertedAgent.isPublic,
+                declarations: expectedDeclarations
+            });
+
+            const updatedAgent: DbAgent = {
                 id: agent!.id,
                 organization: "updated-test-organization",
                 about: "updated about",
@@ -239,7 +315,9 @@ describe("pgDbApi", () => {
 
             console.log("getting all agents");
             const allAgents = await dbApi.agent.getAll();
-            expectToEqual(allAgents, [updatedAgent]);
+            expectToEqual(allAgents, [{ ...updatedAgent, declarations: expectedDeclarations }]);
+
+            await db.deleteFrom("softwares").where("addedByAgentId", "=", updatedAgent.id).execute();
 
             console.log("removing agent");
             await dbApi.agent.remove(updatedAgent.id);
@@ -255,14 +333,7 @@ describe("pgDbApi", () => {
         let agentId: number;
         beforeEach(async () => {
             console.log("before -- setting up test with software and agent");
-            await insertSoftwareExternalDataAndSoftware();
-
-            await dbApi.agent.add({
-                email: "test@test.com",
-                organization: "test-organization",
-                isPublic: true,
-                about: "test about"
-            });
+            await insertSoftwareExternalDataAndSoftwareAndAgent();
 
             softwareId = (await dbApi.software.getAll())[0].softwareId;
             agentId = (await dbApi.agent.getAll())[0].id;
@@ -334,11 +405,11 @@ describe("pgDbApi", () => {
         });
     });
 
-    const insertSoftwareExternalDataAndSoftware = async () => {
+    const insertSoftwareExternalDataAndSoftwareAndAgent = async () => {
         await db
             .insertInto("software_external_datas")
             .values(
-                [softwareExternalData, similarSoftwareExternalData].map(softExtData => ({
+                [softwareExternalData, similarSoftwareExternalData, parentSoftwareExternalData].map(softExtData => ({
                     ...softExtData,
                     developers: JSON.stringify(softExtData.developers),
                     label: JSON.stringify(softExtData.label),
@@ -347,10 +418,17 @@ describe("pgDbApi", () => {
             )
             .execute();
 
-        await dbApi.software.create({
+        const agentId = await dbApi.agent.add(insertedAgent);
+
+        const softwareId = await dbApi.software.create({
             formData: softwareFormData,
-            agentEmail: agent.email,
+            agentId,
             externalDataOrigin: "wikidata"
         });
+
+        return {
+            softwareId,
+            agentId
+        };
     };
 });

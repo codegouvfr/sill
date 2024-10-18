@@ -6,15 +6,15 @@ import { Instance } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 
 export const createPgInstanceRepository = (db: Kysely<Database>): InstanceRepository => ({
-    create: async ({ fromData, agentEmail }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = fromData;
+    create: async ({ formData, agentId }) => {
+        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
-        await db
+        const { instanceId } = await db
             .insertInto("instances")
             .values({
-                addedByAgentEmail: agentEmail,
+                addedByAgentId: agentId,
                 updateTime: now,
                 referencedSinceTime: now,
                 mainSoftwareSillId,
@@ -22,10 +22,12 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 targetAudience,
                 publicUrl
             })
+            .returning("id as instanceId")
             .executeTakeFirstOrThrow();
+        return instanceId;
     },
-    update: async ({ fromData, instanceId }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = fromData;
+    update: async ({ formData, instanceId }) => {
+        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
@@ -40,6 +42,14 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
             })
             .where("id", "=", instanceId)
             .execute();
+    },
+    countAddedByAgent: async ({ agentId }) => {
+        const { count } = await db
+            .selectFrom("instances")
+            .select(qb => qb.fn.countAll<string>().as("count"))
+            .where("addedByAgentId", "=", agentId)
+            .executeTakeFirstOrThrow();
+        return parseInt(count);
     },
     getAll: async () =>
         db

@@ -36,6 +36,7 @@ const url = "https://code.gouv.fr/data/sill-prestataires.json";
 export const getServiceProviders: GetServiceProviders = memoize(
     async () => {
         try {
+            console.info("Fetching service providers");
             const res = await fetch(url);
 
             if (res.status !== 200) {

@@ -18,6 +18,7 @@ export namespace State {
         isSubmitting: boolean;
         software: {
             logoUrl: string | undefined;
+            softwareId: number;
             softwareName: string;
             referentCount: number;
             userCount: number;

@@ -3,7 +3,7 @@ import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
 import { ParentSoftwareExternalData, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Database } from "./kysely.database";
-import { convertNullValuesToUndefined, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
+import { stripNullOrUndefinedValues, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
 
 export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise<CompiledData<"private">> => {
     console.time("agentById query");
@@ -45,7 +45,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         ])
         .select([
             "s.id",
-            "s.addedByAgentEmail",
+            "s.addedByAgentId",
             "s.catalogNumeriqueGouvFrId",
             "s.categories",
             "s.dereferencing",
@@ -120,6 +120,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             console.time("software processing");
             const processedSoftwares = results.map(
                 ({
+                    addedByAgentId,
                     externalDataSoftwareId,
                     annuaireCnllServiceProviders,
                     comptoirDuLibreSoftware,
@@ -138,7 +139,8 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     ...software
                 }): CompiledData.Software<"private"> => {
                     return {
-                        ...convertNullValuesToUndefined(software),
+                        ...stripNullOrUndefinedValues(software),
+                        addedByAgentEmail: agentById[addedByAgentId].email,
                         updateTime: new Date(+updateTime).getTime(),
                         referencedSinceTime: new Date(+referencedSinceTime).getTime(),
                         doRespectRgaa,
@@ -172,7 +174,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             organization: instance.organization!,
                             targetAudience: instance.targetAudience!,
                             publicUrl: instance.publicUrl ?? undefined,
-                            addedByAgentEmail: instance.addedByAgentEmail!,
+                            addedByAgentEmail: agentById[instance.addedByAgentId!].email,
                             otherWikidataSoftwares: []
                         }))
                     };

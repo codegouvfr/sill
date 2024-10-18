@@ -19,7 +19,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("externalId", "text")
         .addColumn("externalDataOrigin", sql`external_data_origin_type`)
         .addColumn("comptoirDuLibreId", "integer")
-        .addColumn("name", "text", col => col.notNull())
+        .addColumn("name", "text", col => col.unique().notNull())
         .addColumn("description", "text", col => col.notNull())
         .addColumn("license", "text", col => col.notNull())
         .addColumn("versionMin", "text", col => col.notNull())
@@ -36,10 +36,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("testUrls", "jsonb", col => col.notNull())
         .addColumn("categories", "jsonb", col => col.notNull())
         .addColumn("generalInfoMd", "text")
-        .addColumn("addedByAgentEmail", "text", col => col.notNull())
+        .addColumn("addedByAgentId", "integer", col => col.notNull().references("agents.id"))
         .addColumn("dereferencing", "jsonb")
         .addColumn("referencedSinceTime", "bigint", col => col.notNull())
         .addColumn("updateTime", "bigint", col => col.notNull())
+        .addColumn("lastExtraDataFetchAt", "timestamptz")
         .execute();
 
     await db.schema
@@ -88,7 +89,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .createTable("instances")
         .addColumn("id", "serial", col => col.primaryKey())
         .addColumn("mainSoftwareSillId", "integer", col => col.notNull().references("softwares.id").onDelete("cascade"))
-        .addColumn("addedByAgentEmail", "text", col => col.notNull())
+        .addColumn("addedByAgentId", "integer", col => col.notNull().references("agents.id"))
         .addColumn("organization", "text", col => col.notNull())
         .addColumn("targetAudience", "text", col => col.notNull())
         .addColumn("publicUrl", "text")

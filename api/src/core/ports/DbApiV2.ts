@@ -1,37 +1,89 @@
 import type { Database } from "../adapters/dbApi/kysely/kysely.database";
-import type { Instance, InstanceFormData, Software, SoftwareFormData } from "../usecases/readWriteSillData";
+import type {
+    Agent,
+    Instance,
+    InstanceFormData,
+    ServiceProvider,
+    Software,
+    SoftwareFormData
+} from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
+import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
-import type { ExternalDataOrigin } from "./GetSoftwareExternalData";
+import type { ExternalDataOrigin, SoftwareExternalData } from "./GetSoftwareExternalData";
 
-type WithAgentEmail = { agentEmail: string };
+export type WithAgentId = { agentId: number };
+
+type GetSoftwareFilters = {
+    onlyIfUpdatedMoreThan3HoursAgo?: true;
+};
 
 export interface SoftwareRepository {
     create: (
         params: {
             formData: SoftwareFormData;
             externalDataOrigin: ExternalDataOrigin;
-        } & WithAgentEmail
-    ) => Promise<void>;
+        } & WithAgentId
+    ) => Promise<number>;
     update: (
         params: {
             softwareSillId: number;
             formData: SoftwareFormData;
-        } & WithAgentEmail
+        } & WithAgentId
     ) => Promise<void>;
-    getAll: () => Promise<Software[]>;
+    updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
+    getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
+    getById: (id: number) => Promise<Software | undefined>;
+    getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
+        | {
+              software: Software;
+              similarSoftwaresExternalIds: string[];
+              parentSoftwareExternalId: string | undefined;
+          }
+        | undefined
+    >;
+    getByName: (name: string) => Promise<Software | undefined>;
+    countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
-    unreference: () => {};
+    unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
+}
+
+export interface SoftwareExternalDataRepository {
+    save: (softwareExternalData: SoftwareExternalData) => Promise<void>;
+}
+
+type CnllPrestataire = {
+    name: string;
+    siren: string;
+    url: string;
+};
+
+export type OtherSoftwareExtraData = {
+    softwareId: number;
+    serviceProviders: ServiceProvider[];
+    comptoirDuLibreSoftware: ComptoirDuLibre.Software | null;
+    annuaireCnllServiceProviders: CnllPrestataire[] | null;
+    latestVersion: { semVer: string; publicationTime: number } | null;
+};
+
+export interface OtherSoftwareExtraDataRepository {
+    save: (otherSoftwareExtraData: OtherSoftwareExtraData) => Promise<void>;
+    getBySoftwareId: (softwareId: number) => Promise<OtherSoftwareExtraData | undefined>;
 }
 
 export interface InstanceRepository {
-    create: (params: { fromData: InstanceFormData } & WithAgentEmail) => Promise<void>;
-    update: (params: { fromData: InstanceFormData; instanceId: number }) => Promise<void>;
+    create: (
+        params: {
+            formData: InstanceFormData;
+        } & WithAgentId
+    ) => Promise<number>;
+    update: (params: { formData: InstanceFormData; instanceId: number }) => Promise<void>;
+    countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAll: () => Promise<Instance[]>;
 }
 
-export type Agent = {
+export type DbAgent = {
     id: number;
     email: string;
     organization: string;
@@ -39,27 +91,33 @@ export type Agent = {
     isPublic: boolean;
 };
 
+type AgentWithAllDbFields = Agent & Pick<DbAgent, "id">;
+
 export interface AgentRepository {
-    add: (agent: OmitFromExisting<Agent, "id">) => Promise<void>;
-    update: (agent: Agent) => Promise<void>;
+    add: (agent: OmitFromExisting<DbAgent, "id">) => Promise<number>;
+    update: (agent: DbAgent) => Promise<void>;
     remove: (agentId: number) => Promise<void>;
-    getByEmail: (email: string) => Promise<Agent | undefined>;
-    getAll: () => Promise<Agent[]>;
+    getByEmail: (email: string) => Promise<AgentWithAllDbFields | undefined>;
+    getAll: () => Promise<AgentWithAllDbFields[]>;
 }
 
 export interface SoftwareReferentRepository {
     add: (params: Database["software_referents"]) => Promise<void>;
     remove: (params: { softwareId: number; agentId: number }) => Promise<void>;
+    countSoftwaresForAgent: (params: { agentId: number }) => Promise<number>;
     getTotalCount: () => Promise<number>;
 }
 
 export interface SoftwareUserRepository {
     add: (params: Database["software_users"]) => Promise<void>;
     remove: (params: { softwareId: number; agentId: number }) => Promise<void>;
+    countSoftwaresForAgent: (params: { agentId: number }) => Promise<number>;
 }
 
 export type DbApiV2 = {
     software: SoftwareRepository;
+    softwareExternalData: SoftwareExternalDataRepository;
+    otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;
     agent: AgentRepository;
     softwareReferent: SoftwareReferentRepository;

@@ -9,6 +9,7 @@ const url = "https://annuaire.cnll.fr/api/prestataires-sill.json";
 export const getCnllPrestatairesSill: GetCnllPrestatairesSill = memoize(
     async () => {
         try {
+            console.info("Fetching cnll prestataires sill");
             const res = await fetch(url, { "agent": new https.Agent({ "rejectUnauthorized": false }) });
 
             if (res.status !== 200) {
