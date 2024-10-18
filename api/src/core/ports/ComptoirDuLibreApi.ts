@@ -43,6 +43,7 @@ export declare namespace ComptoirDuLibre {
         url: string;
         name: string;
         licence: string;
+        logoUrl?: string;
         external_resources: {
             website: string | null;
             repository: string | null;
@@ -77,13 +78,14 @@ export const { zComptoirDuLibre } = (() => {
 
     assert<Equals<ComptoirDuLibre.User, z.infer<typeof zUser>>>();
 
-    const zSoftware = z.object({
+    const zSoftware: z.Schema<ComptoirDuLibre.Software> = z.object({
         "id": z.number(),
         "created": z.string(),
         "modified": z.string(),
         "url": z.string(),
         "name": z.string(),
         "licence": z.string(),
+        "logoUrl": z.string().optional(),
         "external_resources": z.object({
             "website": z.union([z.string(), z.null()]),
             "repository": z.union([z.string(), z.null()])
