@@ -1,6 +1,6 @@
 import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
-import { expectToEqual, testPgUrl } from "../../tools/test.helpers";
+import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
 import { DbApiV2 } from "../ports/DbApiV2";
 import { SoftwareFormData } from "../usecases/readWriteSillData";
 import { comptoirDuLibreApi } from "./comptoirDuLibreApi";
@@ -35,23 +35,53 @@ const apacheSoftwareId = 6;
 
 const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
     await sql`
-        INSERT INTO public.softwares
-        (id, "softwareType", "externalId", "externalDataOrigin",
-         "comptoirDuLibreId", name, description, license, "versionMin",
-         "isPresentInSupportContract", "isFromFrenchPublicService", "logoUrl",
-         keywords, "doRespectRgaa", "isStillInObservation",
-         "parentSoftwareWikidataId", "catalogNumeriqueGouvFrId", "workshopUrls",
-         "testUrls", categories, "generalInfoMd", "addedByAgentId",
-         dereferencing, "referencedSinceTime", "updateTime")
-        VALUES (${apacheSoftwareId},
-                '{"os": {"ios": false, "mac": false, "linux": true, "android": false, "windows": false}, "type": "desktop/mobile"}',
-                'Q11354', 'wikidata', 3737, 'Apache HTTP Server',
-                'Serveur Web & Reverse Proxy', 'Apache-2.0', '212', true, false,
-                'https://sill.code.gouv.fr/logo/apache-http.png',
-                '["serveur", "http", "web", "server", "apache"]', false, false,
-                null, null, '[]', '[]', '[]', null, ${agentId}, null, 1728462232094,
-                1728462232094);
-    `.execute(db);
+      INSERT INTO public.softwares
+      (id, "softwareType", "externalId", "externalDataOrigin",
+       "comptoirDuLibreId", name, description, license, "versionMin",
+       "isPresentInSupportContract", "isFromFrenchPublicService", "logoUrl",
+       keywords, "doRespectRgaa", "isStillInObservation",
+       "parentSoftwareWikidataId", "catalogNumeriqueGouvFrId", "workshopUrls",
+       "testUrls", categories, "generalInfoMd", "addedByAgentId",
+       dereferencing, "referencedSinceTime", "updateTime")
+      VALUES (${apacheSoftwareId},
+              '{"os": {"ios": false, "mac": false, "linux": true, "android": false, "windows": false}, "type": "desktop/mobile"}',
+              'Q11354', 'wikidata', 3737, 'Apache HTTP Server',
+              'Serveur Web & Reverse Proxy', 'Apache-2.0', '212', true, false,
+              'https://sill.code.gouv.fr/logo/apache-http.png',
+              '["serveur", "http", "web", "server", "apache"]', false, false,
+              null, null, '[]', '[]', '[]', null, ${agentId}, null,
+              1728462232094,
+              1728462232094);
+  `.execute(db);
+};
+
+const acceleroId = 2;
+const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
+    await sql`
+      INSERT INTO public.softwares (id, "softwareType", "externalId",
+                                    "externalDataOrigin", "comptoirDuLibreId",
+                                    name, description, license, "versionMin",
+                                    "isPresentInSupportContract",
+                                    "isFromFrenchPublicService", "logoUrl",
+                                    keywords, "doRespectRgaa",
+                                    "isStillInObservation",
+                                    "parentSoftwareWikidataId",
+                                    "catalogNumeriqueGouvFrId",
+                                    "workshopUrls", "testUrls", categories,
+                                    "generalInfoMd", "addedByAgentId",
+                                    dereferencing, "referencedSinceTime",
+                                    "updateTime")
+      VALUES (${acceleroId}, '{"type": "stack"}', 'Q2822666', 'wikidata', 304,
+              'Acceleo',
+              'Outil et/ou plugin de génération de tout ou partie du code',
+              'EPL-2.0', '3.7.8', false, false, null,
+              '["modélisation", "génération", "code", "modeling", "code generation"]',
+              false, false, null, null, '[]', '[]',
+              '["Other Development Tools"]', null, ${agentId}, null,
+              1514764800000,
+              1514764800000);
+  `.execute(db);
+    return acceleroId;
 };
 
 describe("fetches software extra data (from different providers)", () => {
@@ -87,6 +117,7 @@ describe("fetches software extra data (from different providers)", () => {
         });
 
         await insertApacheWithCorrectId(db, agentId);
+        await insertAcceleroWithCorrectId(db, agentId);
 
         const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
             githubPersonalAccessTokenForApiRateLimit: ""
@@ -110,6 +141,20 @@ describe("fetches software extra data (from different providers)", () => {
 
         const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
         expectToEqual(updatedSoftwareExternalDatas, []);
+    });
+
+    it("fetches correctly the logoUrl from comptoir du libre", async () => {
+        const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
+        expectToEqual(softwareExternalDatas, []);
+
+        await fetchAndSaveSoftwareExtraData(acceleroId, {});
+
+        const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
+        expect(results).toHaveLength(1);
+        expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
+            name: "Acceleo",
+            logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
+        });
     });
 
     it(
