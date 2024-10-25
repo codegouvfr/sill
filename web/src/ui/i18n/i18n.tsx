@@ -555,12 +555,16 @@ const {
                     `See the ${count} service providers on the CNLL index`
             },
             "ReferencedInstancesTab": {
-                "instanceCount": ({ instanceCount, publicOrganizationCount }) =>
-                    `${instanceCount} maintained instance by ${publicOrganizationCount} public organisation`,
+                "publicInstanceCount": ({ instanceCount, organizationCount }) =>
+                    `${instanceCount} maintained public instances by ${organizationCount} public organisations`,
+                "privateInstanceCount": ({ instanceCount, organizationCount }) =>
+                    `${instanceCount} maintained private instances by ${organizationCount} organisations`,
                 "concerned public": "Concerned public : ",
                 "go to instance": "Open the instance",
                 "add instance": "Reference new instance",
-                "edit instance": "Edit instance"
+                "edit instance": "Edit instance",
+                "connect to see private instances":
+                    "You must be logged in to see private instances"
             },
             "SimilarSoftwareTab": {
                 "similar software in sill": "Alike software in the SILL",
@@ -1232,12 +1236,16 @@ const {
                     `Voir les ${count} prestataires de l'annuaire CNLL`
             },
             "ReferencedInstancesTab": {
-                "instanceCount": ({ instanceCount, publicOrganizationCount }) =>
-                    `${instanceCount} instances maintenues par ${publicOrganizationCount} organisations publiques`,
+                "publicInstanceCount": ({ instanceCount, organizationCount }) =>
+                    `${instanceCount} instances publics maintenues par ${organizationCount} organisations publiques`,
+                "privateInstanceCount": ({ instanceCount, organizationCount }) =>
+                    `${instanceCount} instances privées maintenues par ${organizationCount} organisations`,
                 "concerned public": "Public concerné : ",
                 "go to instance": "Accéder à l'instance",
                 "add instance": "Référencer une nouvelle instance",
-                "edit instance": "Éditer l'instance"
+                "edit instance": "Éditer l'instance",
+                "connect to see private instances":
+                    "Vous devez vous connecter pour voir les instances privées"
             },
             "SimilarSoftwareTab": {
                 "similar software in sill": "Logiciels similaires dans le SILL",

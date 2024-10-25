@@ -82,8 +82,9 @@ export namespace State {
             | {
                   id: number;
                   organization: string;
-                  instanceUrl: string;
+                  instanceUrl: string | undefined;
                   targetAudience: string;
+                  isPublic: boolean;
               }[]
             | undefined;
         parentSoftware:

@@ -271,17 +271,13 @@ function apiSoftwareToSoftware(params: {
                 ? undefined
                 : apiInstances
                       .filter(instance => instance.mainSoftwareSillId === softwareId)
-                      .map(instance =>
-                          instance.publicUrl === undefined
-                              ? undefined
-                              : {
-                                    "id": instance.id,
-                                    "instanceUrl": instance.publicUrl,
-                                    "organization": instance.organization,
-                                    "targetAudience": instance.targetAudience
-                                }
-                      )
-                      .filter(exclude(undefined)),
+                      .map(instance => ({
+                          "id": instance.id,
+                          "instanceUrl": instance.publicUrl,
+                          "organization": instance.organization,
+                          "targetAudience": instance.targetAudience,
+                          "isPublic": instance.publicUrl !== undefined
+                      })),
         "similarSoftwares": similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
                 apiSoftwares,
