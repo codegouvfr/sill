@@ -184,9 +184,6 @@ export function createRouter(params: {
 
                 const { formData } = input;
 
-                // TODO : there is some logic with logoUrl that should be moved here
-                //  from readWriteSillData/thunks/getStorableLogo
-
                 const existingSoftware = await dbApi.software.getByName(formData.softwareName.trim());
 
                 if (existingSoftware) {
