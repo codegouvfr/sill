@@ -89,11 +89,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
         updateLastExtraDataFetchAt: async ({ softwareId }) => {
             await db
                 .updateTable("softwares")
-                .set(
-                    "lastExtraDataFetchAt",
-                    sql`now
-            ()`
-                )
+                .set("lastExtraDataFetchAt", sql`now()`)
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
         },
@@ -219,13 +215,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 ? builder.where(eb =>
                       eb.or([
                           eb("lastExtraDataFetchAt", "is", null),
-                          eb(
-                              "lastExtraDataFetchAt",
-                              "<",
-                              sql<Date>`now
-                ()
-                - interval '3 hours'`
-                          )
+                          eb("lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
                       ])
                   )
                 : builder;

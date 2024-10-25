@@ -251,23 +251,18 @@ export function createRouter(params: {
                 })
             )
             .mutation(async ({ ctx: { user }, input }) => {
-                console.log("createUserOrReferent, user :", user);
                 if (user === undefined) {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
                 const { formData, softwareId } = input;
 
-                console.log("createUserOrReferent, softwareId :", softwareId);
-                console.log("createUserOrReferent, formData :", formData);
                 const software = await dbApi.software.getById(softwareId);
-                console.log("software", software);
                 if (!software)
                     throw new TRPCError({
                         "code": "NOT_FOUND",
                         message: "Software not found in SILL"
                     });
-                console.log("reached ?");
 
                 const agent = await dbApi.agent.getByEmail(user.email);
                 let agentId = agent?.id as number;

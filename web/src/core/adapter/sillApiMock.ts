@@ -9,7 +9,9 @@ import { assert } from "tsafe/assert";
 import type { ApiTypes } from "api";
 
 export const sillApi: SillApi = {
-    "getExternalSoftwareDataOrigin": memoize(async () => "wikidata", { "promise": true }),
+    "getExternalSoftwareDataOrigin": memoize(async () => "wikidata" as const, {
+        "promise": true
+    }),
     "getRedirectUrl": async () => undefined,
     "getApiVersion": memoize(async () => "0.0.0", { "promise": true }),
     "getOidcParams": memoize(
