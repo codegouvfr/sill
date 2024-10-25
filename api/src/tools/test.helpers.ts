@@ -66,5 +66,6 @@ export const createInstanceFormData = makeObjectFactory<InstanceFormData>({
     organization: "Default organization",
     targetAudience: "Default audience",
     mainSoftwareSillId: 1,
-    publicUrl: "https://example.com"
+    instanceUrl: "https://example.com",
+    isPublic: true
 });

@@ -165,5 +165,6 @@ export type InstanceFormData = {
     mainSoftwareSillId: number;
     organization: string;
     targetAudience: string;
-    publicUrl: string | undefined;
+    instanceUrl: string | undefined;
+    isPublic: boolean;
 };

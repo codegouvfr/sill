@@ -11,13 +11,15 @@ export type Step1Props = {
     className?: string;
     initialFormData: {
         organization: string | undefined;
-        publicUrl: string | undefined;
         targetAudience: string | undefined;
+        instanceUrl: string | undefined;
+        isPublic: "true" | "false" | null;
     };
     onSubmit: (formData: {
         organization: string;
-        publicUrl: string | undefined;
         targetAudience: string;
+        instanceUrl: string | undefined;
+        isPublic: "true" | "false" | null;
     }) => void;
     evtActionSubmit: NonPostableEvt<void>;
 };
@@ -32,20 +34,15 @@ export function InstanceFormStep2(props: Step1Props) {
         watch
     } = useForm<{
         organization: string;
-        isPublicInstanceInputValue: "true" | "false" | null;
-        publicUrl: string | undefined;
         targetAudience: string;
+        instanceUrl: string | undefined;
+        isPublic: "true" | "false" | null;
     }>({
         "defaultValues": {
             "organization": initialFormData.organization,
-            "isPublicInstanceInputValue":
-                initialFormData.organization === undefined
-                    ? null
-                    : initialFormData.publicUrl !== undefined
-                    ? "true"
-                    : "false",
-            "publicUrl": initialFormData.publicUrl,
-            "targetAudience": initialFormData.targetAudience
+            "targetAudience": initialFormData.targetAudience,
+            "instanceUrl": initialFormData.instanceUrl,
+            "isPublic": initialFormData.isPublic
         }
     });
 
@@ -69,12 +66,14 @@ export function InstanceFormStep2(props: Step1Props) {
     return (
         <form
             className={className}
-            onSubmit={handleSubmit(({ organization, publicUrl, targetAudience }) =>
-                onSubmit({
-                    organization,
-                    "publicUrl": publicUrl || undefined,
-                    targetAudience
-                })
+            onSubmit={handleSubmit(
+                ({ organization, targetAudience, instanceUrl, isPublic }) =>
+                    onSubmit({
+                        organization,
+                        instanceUrl: instanceUrl || undefined,
+                        isPublic,
+                        targetAudience
+                    })
             )}
         >
             <RadioButtons
@@ -84,7 +83,7 @@ export function InstanceFormStep2(props: Step1Props) {
                     {
                         "label": tCommon("yes"),
                         "nativeInputProps": {
-                            ...register("isPublicInstanceInputValue", {
+                            ...register("isPublic", {
                                 "required": true
                             }),
                             "value": "true"
@@ -93,34 +92,31 @@ export function InstanceFormStep2(props: Step1Props) {
                     {
                         "label": tCommon("no"),
                         "nativeInputProps": {
-                            ...register("isPublicInstanceInputValue", {
+                            ...register("isPublic", {
                                 "required": true
                             }),
                             "value": "false"
                         }
                     }
                 ]}
-                state={
-                    errors.isPublicInstanceInputValue !== undefined ? "error" : undefined
-                }
+                state={errors.isPublic !== undefined ? "error" : undefined}
                 stateRelatedMessage={tCommon("required")}
             />
-            {watch("isPublicInstanceInputValue") === "true" && (
-                <Input
-                    label={t("instance url label")}
-                    hintText={t("instance url hint")}
-                    nativeInputProps={{
-                        ...register("publicUrl", {
-                            "required": true,
-                            "pattern": /^http/
-                        })
-                    }}
-                    state={errors.publicUrl !== undefined ? "error" : undefined}
-                    stateRelatedMessage={
-                        errors.publicUrl ? tCommon("invalid url") : tCommon("required")
-                    }
-                />
-            )}
+
+            <Input
+                label={t("instance url label")}
+                hintText={t("instance url hint")}
+                nativeInputProps={{
+                    ...register("instanceUrl", {
+                        "required": watch("isPublic") === "true",
+                        "pattern": /^http/
+                    })
+                }}
+                state={errors.instanceUrl !== undefined ? "error" : undefined}
+                stateRelatedMessage={
+                    errors.instanceUrl ? tCommon("invalid url") : tCommon("required")
+                }
+            />
 
             <Input
                 label={t("organization label")}

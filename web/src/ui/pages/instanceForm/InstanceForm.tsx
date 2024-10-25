@@ -155,14 +155,21 @@ export default function InstanceForm(props: Props) {
                     className={cx(classes.step, classes.step2)}
                     initialFormData={{
                         "organization": initializationData.organization,
-                        "publicUrl": initializationData.publicUrl,
-                        "targetAudience": initializationData.targetAudience
+                        "targetAudience": initializationData.targetAudience,
+                        "instanceUrl": initializationData.instanceUrl,
+                        "isPublic":
+                            initializationData.isPublic === null
+                                ? null
+                                : initializationData.isPublic
+                                ? "true"
+                                : "false"
                     }}
-                    onSubmit={({ organization, publicUrl, targetAudience }) =>
+                    onSubmit={({ organization, targetAudience, instanceUrl, isPublic }) =>
                         instanceForm.submit({
                             organization,
-                            publicUrl,
-                            targetAudience
+                            instanceUrl,
+                            targetAudience,
+                            isPublic: isPublic === "true"
                         })
                     }
                     evtActionSubmit={evtActionSubmitStep.pipe(() => step === 2)}

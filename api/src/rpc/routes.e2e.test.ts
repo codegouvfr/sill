@@ -212,8 +212,8 @@ describe("RPC e2e tests", () => {
                 "addedByAgentId": agent.id,
                 "mainSoftwareSillId": actualSoftwareId,
                 "organization": instanceFormData.organization,
-                "instanceUrl": instanceFormData.publicUrl,
-                "isPublic": !!instanceFormData.publicUrl,
+                "instanceUrl": instanceFormData.instanceUrl,
+                "isPublic": instanceFormData.isPublic,
                 "targetAudience": instanceFormData.targetAudience
             });
         });
@@ -225,8 +225,8 @@ describe("RPC e2e tests", () => {
                 "id": expect.any(Number),
                 "mainSoftwareSillId": actualSoftwareId,
                 "organization": instanceFormData.organization,
-                "instanceUrl": instanceFormData.publicUrl,
-                "isPublic": !!instanceFormData.publicUrl,
+                "instanceUrl": instanceFormData.instanceUrl,
+                "isPublic": instanceFormData.isPublic,
                 "targetAudience": instanceFormData.targetAudience
             });
         });
