@@ -16,6 +16,8 @@ export const fallbackLanguage = "en";
 
 export type LocalizedString = Parameters<typeof resolveLocalizedString>[0];
 
+const sIfMoreThanOne = (n: number) => (n > 1 ? "s" : "");
+
 const {
     useTranslation,
     resolveLocalizedString,
@@ -557,9 +559,17 @@ const {
             },
             "ReferencedInstancesTab": {
                 "publicInstanceCount": ({ instanceCount, organizationCount }) =>
-                    `${instanceCount} maintained public instances by ${organizationCount} public organisations`,
+                    `${instanceCount} maintained public instance${sIfMoreThanOne(
+                        instanceCount
+                    )} by ${organizationCount} public organisation${sIfMoreThanOne(
+                        organizationCount
+                    )}`,
                 "privateInstanceCount": ({ instanceCount, organizationCount }) =>
-                    `${instanceCount} maintained private instances by ${organizationCount} organisations`,
+                    `${instanceCount} maintained private instance${sIfMoreThanOne(
+                        instanceCount
+                    )} by ${organizationCount} organisation${sIfMoreThanOne(
+                        organizationCount
+                    )}`,
                 "concerned public": "Concerned public : ",
                 "go to instance": "Open the instance",
                 "add instance": "Reference new instance",
@@ -843,7 +853,7 @@ const {
                     <>
                         <span>Vous êtes agent public ? </span>Ajoutez des logiciels libres
                         ou des instances de logiciels libres utilisés ou déployés dans
-                        votre organisation !
+                        votre organisation !
                     </>
                 ),
                 "subtitle":
@@ -1238,10 +1248,17 @@ const {
                     `Voir les ${count} prestataires de l'annuaire CNLL`
             },
             "ReferencedInstancesTab": {
-                "publicInstanceCount": ({ instanceCount, organizationCount }) =>
-                    `${instanceCount} instances publics maintenues par ${organizationCount} organisations publiques`,
-                "privateInstanceCount": ({ instanceCount, organizationCount }) =>
-                    `${instanceCount} instances privées maintenues par ${organizationCount} organisations`,
+                "publicInstanceCount": ({ instanceCount, organizationCount }) => {
+                    const sInstances = sIfMoreThanOne(instanceCount);
+                    const sOrga = sIfMoreThanOne(organizationCount);
+                    return `${instanceCount} instance${sInstances} web${sInstances} maintenue${sInstances} par ${organizationCount} organisation${sOrga} publique${sOrga}`;
+                },
+                "privateInstanceCount": ({ instanceCount, organizationCount }) => {
+                    const s = sIfMoreThanOne(instanceCount);
+                    return `${instanceCount} instance${s} en accès restreint maintenue${s} par ${organizationCount} organisation${sIfMoreThanOne(
+                        organizationCount
+                    )}`;
+                },
                 "concerned public": "Public concerné : ",
                 "go to instance": "Accéder à l'instance",
                 "add instance": "Référencer une nouvelle instance",
