@@ -47,8 +47,8 @@ const initializationData = createSelector(
                 return {
                     "mainSoftwareSillId": preFillData.mainSoftwareSillId,
                     "organization": preFillData.organization,
-                    "publicUrl": preFillData.publicUrl,
-                    "targetAudience": preFillData.targetAudience
+                    "targetAudience": preFillData.targetAudience,
+                    "publicUrl": preFillData.instanceUrl
                 };
             case "navigated from software form":
                 return {

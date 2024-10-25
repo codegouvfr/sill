@@ -273,10 +273,10 @@ function apiSoftwareToSoftware(params: {
                       .filter(instance => instance.mainSoftwareSillId === softwareId)
                       .map(instance => ({
                           "id": instance.id,
-                          "instanceUrl": instance.publicUrl,
+                          "instanceUrl": instance.instanceUrl,
                           "organization": instance.organization,
                           "targetAudience": instance.targetAudience,
-                          "isPublic": instance.publicUrl !== undefined
+                          "isPublic": instance.isPublic
                       })),
         "similarSoftwares": similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
