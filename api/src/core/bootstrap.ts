@@ -111,7 +111,6 @@ export async function bootstrapCore(
         await initializeUserApiCache();
     }
 
-    console.log("doPerPerformPeriodicalCompilation : ", doPerPerformPeriodicalCompilation);
     if (doPerPerformPeriodicalCompilation) {
         const frequencyOfUpdate = 1000 * 60 * 60 * 4; // 4 hours
 

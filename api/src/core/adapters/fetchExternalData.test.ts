@@ -58,7 +58,7 @@ const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) 
 const acceleroId = 2;
 const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
     await sql`
-      INSERT INTO public.softwares (id, "softwareType", "externalId",
+      INSERT INTO softwares (id, "softwareType", "externalId",
                                     "externalDataOrigin", "comptoirDuLibreId",
                                     name, description, license, "versionMin",
                                     "isPresentInSupportContract",
@@ -336,11 +336,6 @@ describe("fetches software extra data (from different providers)", () => {
                             siren: "449989573"
                         },
                         {
-                            url: "https://annuaire.cnll.fr/societes/821345345",
-                            name: "Wiki Valley",
-                            siren: "821345345"
-                        },
-                        {
                             url: "https://annuaire.cnll.fr/societes/490932308",
                             name: "ALTER WAY",
                             siren: "490932308"
@@ -371,11 +366,6 @@ describe("fetches software extra data (from different providers)", () => {
                             name: "DEBAMAX",
                             siren: "813965662",
                             cnllUrl: "https://annuaire.cnll.fr/societes/813965662"
-                        },
-                        {
-                            name: "Wiki Valley",
-                            siren: "821345345",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/821345345"
                         },
                         {
                             name: "INNO3",
