@@ -25,7 +25,7 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
     const externalSoftwareDataOrigin: ExternalDataOrigin = "wikidata";
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
-    const { core, context, dbApi } = await bootstrapCore({
+    const { context, dbApi, useCases } = await bootstrapCore({
         "dbConfig": { dbKind: "kysely", kyselyDb },
         "keycloakUserApiParams": undefined,
         "githubPersonalAccessTokenForApiRateLimit": "fake-token",
@@ -41,7 +41,7 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
     };
 
     const { router } = createRouter({
-        core,
+        useCases,
         dbApi,
         coreContext: context,
         keycloakParams: undefined,

@@ -1,6 +1,7 @@
-import * as suggestionAndAutoFill from "./suggestionAndAutoFill";
+import type { FetchAndSaveExternalDataForAllSoftwares } from "../adapters/fetchExternalData";
+import type { GetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 
-export const usecases = {
-    // readWriteSillData,
-    suggestionAndAutoFill
+export type UseCases = {
+    getSoftwareFormAutoFillDataFromExternalAndOtherSources: GetSoftwareFormAutoFillDataFromExternalAndOtherSources;
+    fetchAndSaveExternalDataForAllSoftwares: FetchAndSaveExternalDataForAllSoftwares;
 };
