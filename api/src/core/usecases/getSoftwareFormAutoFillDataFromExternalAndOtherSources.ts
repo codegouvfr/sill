@@ -20,7 +20,7 @@ export type GetSoftwareFormAutoFillDataFromExternalAndOtherSources = ReturnType<
 >;
 export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
     (context: Context, autoFillDataCache: AutoFillDataCache) =>
-    async ({ externalId }: { externalId: string }) => {
+    async ({ externalId }: { externalId: string }): Promise<AutoFillData> => {
         const cachedAutoFillData = autoFillDataCache[externalId];
         if (cachedAutoFillData !== undefined) return cachedAutoFillData;
 
@@ -36,7 +36,15 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         const { label: externalSoftwareLabel } = softwareExternalData;
 
         if (externalSoftwareLabel === undefined) {
-            return { "comptoirDuLibreSoftware": undefined };
+            return {
+                comptoirDuLibreId: undefined,
+                keywords: [],
+                softwareDescription: undefined,
+                softwareLicense: undefined,
+                softwareLogoUrl: undefined,
+                softwareMinimalVersion: undefined,
+                softwareName: undefined
+            };
         }
 
         const comptoirDuLibreSoftware = comptoirDuLibre.softwares.find(software => {

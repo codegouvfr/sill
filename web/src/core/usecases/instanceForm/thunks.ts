@@ -60,7 +60,8 @@ export const thunks = {
                                 "instanceId": instance.id,
                                 "mainSoftwareSillId": instance.mainSoftwareSillId,
                                 "organization": instance.organization,
-                                "publicUrl": instance.publicUrl,
+                                "instanceUrl": instance.instanceUrl,
+                                "isPublic": instance.isPublic,
                                 "targetAudience": instance.targetAudience
                             }
                         })

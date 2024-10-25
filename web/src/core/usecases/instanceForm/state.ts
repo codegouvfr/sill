@@ -28,7 +28,8 @@ namespace State {
                   instanceId: number;
                   mainSoftwareSillId: number;
                   organization: string;
-                  publicUrl: string | undefined;
+                  instanceUrl: string | undefined;
+                  isPublic: boolean;
                   targetAudience: string;
               }
             | {
