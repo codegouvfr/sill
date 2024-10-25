@@ -43,7 +43,8 @@ type InstancesTable = {
     mainSoftwareSillId: number;
     organization: string;
     targetAudience: string;
-    publicUrl: string | null;
+    instanceUrl: string | null;
+    isPublic: boolean;
     addedByAgentId: number;
     referencedSinceTime: number;
     updateTime: number;

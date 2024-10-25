@@ -92,7 +92,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("addedByAgentId", "integer", col => col.notNull().references("agents.id"))
         .addColumn("organization", "text", col => col.notNull())
         .addColumn("targetAudience", "text", col => col.notNull())
-        .addColumn("publicUrl", "text")
+        .addColumn("instanceUrl", "text")
+        .addColumn("isPublic", "boolean", col => col.notNull())
         .addColumn("referencedSinceTime", "bigint", col => col.notNull())
         .addColumn("updateTime", "bigint", col => col.notNull())
         .execute();

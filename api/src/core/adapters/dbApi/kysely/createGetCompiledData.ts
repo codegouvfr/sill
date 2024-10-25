@@ -173,7 +173,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             id: instance.id!,
                             organization: instance.organization!,
                             targetAudience: instance.targetAudience!,
-                            publicUrl: instance.publicUrl ?? undefined,
+                            publicUrl: instance.instanceUrl ?? undefined,
                             addedByAgentEmail: agentById[instance.addedByAgentId!].email,
                             otherWikidataSoftwares: []
                         }))

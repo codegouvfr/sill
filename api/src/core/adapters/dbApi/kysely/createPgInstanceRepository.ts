@@ -20,7 +20,8 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 mainSoftwareSillId,
                 organization,
                 targetAudience,
-                publicUrl
+                instanceUrl: publicUrl,
+                isPublic: !!publicUrl
             })
             .returning("id as instanceId")
             .executeTakeFirstOrThrow();
@@ -38,7 +39,8 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 mainSoftwareSillId,
                 organization,
                 targetAudience,
-                publicUrl
+                instanceUrl: publicUrl,
+                isPublic: !!publicUrl
             })
             .where("id", "=", instanceId)
             .execute();
@@ -55,13 +57,21 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
         db
             .selectFrom("instances as i")
             .groupBy(["i.id"])
-            .select(["i.id", "i.mainSoftwareSillId", "i.organization", "i.targetAudience", "i.publicUrl"])
+            .select([
+                "i.id",
+                "i.mainSoftwareSillId",
+                "i.organization",
+                "i.targetAudience",
+                "i.instanceUrl",
+                "i.isPublic"
+            ])
             .execute()
             .then(instances =>
                 instances.map(
                     (instance): Instance => ({
                         ...instance,
-                        publicUrl: instance.publicUrl ?? undefined
+                        instanceUrl: instance.instanceUrl ?? undefined,
+                        isPublic: instance.isPublic
                     })
                 )
             )
