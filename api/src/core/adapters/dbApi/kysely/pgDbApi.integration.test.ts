@@ -228,7 +228,8 @@ describe("pgDbApi", () => {
                     mainSoftwareSillId: softwareId,
                     organization: "test-orga",
                     targetAudience: "test-audience",
-                    publicUrl: "https://example.com"
+                    instanceUrl: "https://example.com",
+                    isPublic: true
                 }
             });
 

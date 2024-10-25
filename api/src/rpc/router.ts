@@ -732,7 +732,8 @@ const zInstanceFormData = (() => {
         "mainSoftwareSillId": z.number(),
         "organization": z.string(),
         "targetAudience": z.string(),
-        "publicUrl": z.string().optional()
+        "instanceUrl": z.string().optional(),
+        "isPublic": z.boolean()
     });
 
     {

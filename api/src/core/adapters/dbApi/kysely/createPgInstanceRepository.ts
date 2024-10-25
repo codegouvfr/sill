@@ -7,7 +7,7 @@ import { Database } from "./kysely.database";
 
 export const createPgInstanceRepository = (db: Kysely<Database>): InstanceRepository => ({
     create: async ({ formData, agentId }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
+        const { mainSoftwareSillId, organization, targetAudience, instanceUrl, isPublic, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
@@ -20,15 +20,15 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 mainSoftwareSillId,
                 organization,
                 targetAudience,
-                instanceUrl: publicUrl,
-                isPublic: !!publicUrl
+                instanceUrl,
+                isPublic
             })
             .returning("id as instanceId")
             .executeTakeFirstOrThrow();
         return instanceId;
     },
     update: async ({ formData, instanceId }) => {
-        const { mainSoftwareSillId, organization, targetAudience, publicUrl, ...rest } = formData;
+        const { mainSoftwareSillId, organization, targetAudience, instanceUrl, isPublic, ...rest } = formData;
         assert<Equals<typeof rest, {}>>();
 
         const now = Date.now();
@@ -39,8 +39,8 @@ export const createPgInstanceRepository = (db: Kysely<Database>): InstanceReposi
                 mainSoftwareSillId,
                 organization,
                 targetAudience,
-                instanceUrl: publicUrl,
-                isPublic: !!publicUrl
+                instanceUrl,
+                isPublic
             })
             .where("id", "=", instanceId)
             .execute();

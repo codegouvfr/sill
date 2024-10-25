@@ -130,11 +130,12 @@ export const thunks = {
     "submit":
         (props: {
             targetAudience: string;
-            publicUrl: string | undefined;
             organization: string;
+            instanceUrl: string | undefined;
+            isPublic: boolean;
         }) =>
         async (...args) => {
-            const { targetAudience, publicUrl, organization } = props;
+            const { targetAudience, instanceUrl, organization, isPublic } = props;
 
             const [dispatch, getState, { sillApi }] = args;
 
@@ -149,8 +150,9 @@ export const thunks = {
             const formData: ApiTypes.InstanceFormData = {
                 "mainSoftwareSillId": step1Data.mainSoftwareSillId,
                 organization,
-                publicUrl,
-                targetAudience
+                instanceUrl,
+                targetAudience,
+                isPublic
             };
 
             let instanceId =

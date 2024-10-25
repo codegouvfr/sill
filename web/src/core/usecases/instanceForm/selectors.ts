@@ -24,8 +24,9 @@ const initializationData = createSelector(
         | {
               mainSoftwareSillId: number | undefined;
               organization: string | undefined;
-              publicUrl: string | undefined;
               targetAudience: string | undefined;
+              instanceUrl: string | undefined;
+              isPublic: boolean | null;
           } => {
         if (readyState === undefined) {
             return undefined;
@@ -37,8 +38,9 @@ const initializationData = createSelector(
             return {
                 "mainSoftwareSillId": undefined,
                 "organization": undefined,
-                "publicUrl": undefined,
-                "targetAudience": undefined
+                "targetAudience": undefined,
+                "instanceUrl": undefined,
+                "isPublic": null
             };
         }
 
@@ -48,14 +50,16 @@ const initializationData = createSelector(
                     "mainSoftwareSillId": preFillData.mainSoftwareSillId,
                     "organization": preFillData.organization,
                     "targetAudience": preFillData.targetAudience,
-                    "publicUrl": preFillData.instanceUrl
+                    "instanceUrl": preFillData.instanceUrl,
+                    "isPublic": preFillData.isPublic
                 };
             case "navigated from software form":
                 return {
                     "mainSoftwareSillId": preFillData.justRegisteredSoftwareSillId,
                     "organization": undefined,
-                    "publicUrl": undefined,
-                    "targetAudience": undefined
+                    "instanceUrl": undefined,
+                    "targetAudience": undefined,
+                    "isPublic": null
                 };
         }
     }

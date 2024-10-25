@@ -408,7 +408,8 @@ const {
             "InstanceFormStep2": {
                 "is in public access label": "Is your instance publicly accessible?*",
                 "is in public access hint": "*Within the public service",
-                "instance url label": "If so, what is the URL of the instance ?",
+                "instance url label":
+                    "What is the URL of the instance ? (mandatory in the case of a public instance)",
                 "instance url hint":
                     "In order to offer quick access to the service offered",
                 "organization label": "Which organization is involved?",
@@ -1083,7 +1084,8 @@ const {
                 "is in public access label":
                     "Votre instance est-elle accessible publiquement ?",
                 "is in public access hint": "*Au sein du service public",
-                "instance url label": "Si oui, quelle est l'URL de l'instance ?",
+                "instance url label":
+                    "Quelle est l'URL de l'instance ? (obligatoire dans le cas d'une instance public)",
                 "instance url hint":
                     "Afin de proposer un accès rapide au service proposé",
                 "organization label": "Quelle est l'organisation concernée ?",
