@@ -73,7 +73,7 @@ export async function startRpcService(params: {
     const {
         dbApi,
         context: coreContext,
-        core
+        useCases
     } = await bootstrapCore({
         "dbConfig": {
             "dbKind": "kysely",
@@ -113,10 +113,10 @@ export async function startRpcService(params: {
         getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
     const { router } = createRouter({
+        useCases,
         dbApi,
         getSoftwareExternalDataOptions,
         getSoftwareExternalData,
-        core,
         coreContext,
         jwtClaimByUserKey,
         "keycloakParams":

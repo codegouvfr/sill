@@ -6,7 +6,7 @@ import { env } from "../src/env";
 
 (async () => {
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(env.databaseUrl) });
-    const { core } = await bootstrapCore({
+    const { useCases } = await bootstrapCore({
         "keycloakUserApiParams": undefined,
         "dbConfig": {
             "dbKind": "kysely",
@@ -21,9 +21,7 @@ import { env } from "../src/env";
         "externalSoftwareDataOrigin": env.externalSoftwareDataOrigin
     });
 
-    console.log("core initialized, TODO TRIGGER INCREMENTAL compilation", core.functions);
-
-    // await core.functions.readWriteSillData.manuallyTriggerNonIncrementalCompilation();
+    await useCases.fetchAndSaveExternalDataForAllSoftwares();
 
     process.exit(0);
 })();

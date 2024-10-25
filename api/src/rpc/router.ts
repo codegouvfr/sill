@@ -8,7 +8,7 @@ import superjson from "superjson";
 import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
-import type { Context as CoreContext, Core } from "../core";
+import type { Context as CoreContext } from "../core";
 import { DbApiV2 } from "../core/ports/DbApiV2";
 import {
     ExternalDataOrigin,
@@ -18,6 +18,7 @@ import {
     type LocalizedString
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import type { UseCases } from "../core/usecases";
 import {
     Agent,
     DeclarationFormData,
@@ -34,7 +35,7 @@ import type { User } from "./user";
 
 export function createRouter(params: {
     dbApi: DbApiV2;
-    core: Core;
+    useCases: UseCases;
     coreContext: CoreContext;
     keycloakParams:
         | (KeycloakParams & {
@@ -50,9 +51,9 @@ export function createRouter(params: {
     getSoftwareExternalData: GetSoftwareExternalData;
 }) {
     const {
-        core,
-        dbApi,
+        useCases,
         coreContext,
+        dbApi,
         keycloakParams,
         jwtClaimByUserKey,
         termsOfServiceUrl,
@@ -165,10 +166,8 @@ export function createRouter(params: {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
-                const { externalId } = input;
-
-                return core.functions.suggestionAndAutoFill.getSoftwareFormAutoFillDataFromExternalAndOtherSources({
-                    externalId
+                return useCases.getSoftwareFormAutoFillDataFromExternalAndOtherSources({
+                    externalId: input.externalId
                 });
             }),
         "createSoftware": loggedProcedure
@@ -211,7 +210,10 @@ export function createRouter(params: {
                         externalDataOrigin
                     });
                 } catch (e) {
-                    throw new TRPCError({ "code": "INTERNAL_SERVER_ERROR", "message": String(e) });
+                    throw new TRPCError({
+                        "code": "INTERNAL_SERVER_ERROR",
+                        "message": String(e)
+                    });
                 }
             }),
         "updateSoftware": loggedProcedure
@@ -229,7 +231,11 @@ export function createRouter(params: {
                 const { softwareSillId, formData } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
 
                 await dbApi.software.update({
                     softwareSillId,
@@ -256,7 +262,11 @@ export function createRouter(params: {
                 console.log("createUserOrReferent, formData :", formData);
                 const software = await dbApi.software.getById(softwareId);
                 console.log("software", software);
-                if (!software) throw new TRPCError({ "code": "NOT_FOUND", message: "Software not found in SILL" });
+                if (!software)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Software not found in SILL"
+                    });
                 console.log("reached ?");
 
                 const agent = await dbApi.agent.getByEmail(user.email);
@@ -308,10 +318,18 @@ export function createRouter(params: {
                 const { softwareId, declarationType } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
 
                 const software = await dbApi.software.getById(softwareId);
-                if (!software) throw new TRPCError({ "code": "NOT_FOUND", message: "Software not found" });
+                if (!software)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Software not found"
+                    });
 
                 switch (declarationType) {
                     case "user": {
@@ -365,7 +383,11 @@ export function createRouter(params: {
                 }
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
                 const { formData } = input;
 
                 const instanceId = await dbApi.instance.create({
@@ -415,7 +437,11 @@ export function createRouter(params: {
                 const { isPublic } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
                 await dbApi.agent.update({ ...agent, isPublic });
             }),
         "updateAgentAbout": loggedProcedure
@@ -432,7 +458,11 @@ export function createRouter(params: {
                 const { about } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
                 await dbApi.agent.update({ ...agent, about });
             }),
         "getIsAgentProfilePublic": loggedProcedure
@@ -458,7 +488,11 @@ export function createRouter(params: {
                 const { email } = input;
 
                 const agent = await dbApi.agent.getByEmail(email);
-                if (agent === undefined) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (agent === undefined)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
                 if (!agent?.isPublic && user === undefined) throw new TRPCError({ "code": "UNAUTHORIZED" });
 
                 return { agent };
@@ -481,7 +515,11 @@ export function createRouter(params: {
                 const { newOrganization } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
 
                 await dbApi.agent.update({ ...agent, organization: newOrganization });
             }),
@@ -501,7 +539,11 @@ export function createRouter(params: {
                 assert(keycloakParams !== undefined);
 
                 const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent) throw new TRPCError({ "code": "NOT_FOUND", message: "Agent not found" });
+                if (!agent)
+                    throw new TRPCError({
+                        "code": "NOT_FOUND",
+                        message: "Agent not found"
+                    });
                 await dbApi.agent.update({ ...agent, email: newEmail });
             }),
         "getRegisteredUserCount": loggedProcedure.query(async () => coreContext.userApi.getUserCount()),
@@ -529,18 +571,21 @@ export function createRouter(params: {
 
                     // prettier-ignore
                     languages
-                        .map(lang => createResolveLocalizedString({ "currentLanguage": lang, "fallbackLanguage": "en" }))
-                        .map(({ resolveLocalizedString }) => [termsOfServiceUrl, readmeUrl].map(resolveLocalizedString))
-                        .flat()
-                        .forEach(async function callee(url) {
+            .map(lang => createResolveLocalizedString({
+              "currentLanguage": lang,
+              "fallbackLanguage": "en"
+            }))
+            .map(({resolveLocalizedString}) => [termsOfServiceUrl, readmeUrl].map(resolveLocalizedString))
+            .flat()
+            .forEach(async function callee(url) {
 
-                            memoizedFetch(url);
+              memoizedFetch(url);
 
-                            await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
+              await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
 
-                            callee(url);
+              callee(url);
 
-                        });
+            });
 
                     return async ({ input }) => {
                         const { language, name } = input;

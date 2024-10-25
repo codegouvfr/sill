@@ -151,6 +151,7 @@ const getNewComptoirDuLibre = async ({
     return { ...comptoirDuLibreSoftware, logoUrl, keywords };
 };
 
+export type FetchAndSaveExternalDataForAllSoftwares = ReturnType<typeof makeFetchAndSaveExternalDataForAllSoftwares>;
 export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
     const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {

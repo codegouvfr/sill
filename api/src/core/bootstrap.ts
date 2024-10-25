@@ -1,5 +1,5 @@
 import { Kysely } from "kysely";
-import { createCore, createObjectThatThrowsIfAccessed, type GenericCore } from "redux-clean-architecture";
+import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrowsIfAccessed";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
@@ -18,7 +18,8 @@ import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSof
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
 import type { UserApi } from "./ports/UserApi";
-import { usecases } from "./usecases";
+import { UseCases } from "./usecases";
+import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -37,17 +38,10 @@ export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     dbApi: DbApiV2;
     userApi: UserApi;
-    // compileData: CompileData;
     comptoirDuLibreApi: ComptoirDuLibreApi;
     getSoftwareExternalData: GetSoftwareExternalData;
     getSoftwareLatestVersion: GetSoftwareLatestVersion;
 };
-
-export type Core = GenericCore<typeof usecases, Context>;
-
-export type State = Core["types"]["State"];
-export type Thunks = Core["types"]["Thunks"];
-export type CreateEvt = Core["types"]["CreateEvt"];
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     if (dbConfig.dbKind === "kysely") {
@@ -62,7 +56,7 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
-): Promise<{ dbApi: DbApiV2; context: Context; core: Core }> {
+): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
     const {
         dbConfig,
         keycloakUserApiParams,
@@ -79,16 +73,6 @@ export async function bootstrapCore(
     const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
-
-    const fetchAndSaveExternalDataForAllSoftwares = makeFetchAndSaveExternalDataForAllSoftwares({
-        getSoftwareExternalData,
-        getCnllPrestatairesSill,
-        comptoirDuLibreApi,
-        getSoftwareLatestVersion,
-        getServiceProviders,
-        dbApi
-    });
-    // const { compileData } = createCompileData({});
 
     const { userApi, initializeUserApiCache } =
         keycloakUserApiParams === undefined
@@ -109,10 +93,18 @@ export async function bootstrapCore(
         getSoftwareLatestVersion
     };
 
-    const { core } = createCore({
-        context,
-        usecases
-    });
+    const useCases: UseCases = {
+        getSoftwareFormAutoFillDataFromExternalAndOtherSources:
+            makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
+        fetchAndSaveExternalDataForAllSoftwares: makeFetchAndSaveExternalDataForAllSoftwares({
+            getSoftwareExternalData,
+            getCnllPrestatairesSill,
+            comptoirDuLibreApi,
+            getSoftwareLatestVersion,
+            getServiceProviders,
+            dbApi
+        })
+    };
 
     if (doPerformCacheInitialization) {
         console.log("Performing user cache initialization...");
@@ -125,7 +117,7 @@ export async function bootstrapCore(
 
         const updateSoftwareExternalData = async () => {
             console.log("------ Updating software external data started ------");
-            await fetchAndSaveExternalDataForAllSoftwares();
+            await useCases.fetchAndSaveExternalDataForAllSoftwares();
             console.log("------ Updating software external data finished ------");
             setTimeout(async () => {
                 await updateSoftwareExternalData();
@@ -136,7 +128,7 @@ export async function bootstrapCore(
         void setTimeout(() => updateSoftwareExternalData(), 1000 * 60 * 2);
     }
 
-    return { dbApi, context, core };
+    return { dbApi, context, useCases };
 }
 
 function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
