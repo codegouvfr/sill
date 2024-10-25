@@ -165,8 +165,10 @@ const insertInstances = async ({
         await trx
             .insertInto("instances")
             .values(
-                instanceRows.map(({ addedByAgentEmail, ...instanceRow }) => ({
+                instanceRows.map(({ addedByAgentEmail, publicUrl, ...instanceRow }) => ({
                     ...instanceRow,
+                    instanceUrl: publicUrl,
+                    isPublic: !!publicUrl,
                     addedByAgentId: agentIdByEmail[addedByAgentEmail]
                 }))
             )

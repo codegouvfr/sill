@@ -93,7 +93,8 @@ export type Instance = {
     mainSoftwareSillId: number;
     organization: string;
     targetAudience: string;
-    publicUrl: string | undefined;
+    instanceUrl: string | undefined;
+    isPublic: boolean;
 };
 
 export type SoftwareType = SoftwareType.Desktop | SoftwareType.CloudNative | SoftwareType.Stack;
