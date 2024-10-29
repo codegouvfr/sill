@@ -4,7 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .createTable("compiled_softwares")
         .addColumn("softwareId", "integer", col =>
-            col.notNull().unique().references("softwares.id").onDelete("cascade")
+            col.notNull().primaryKey().references("softwares.id").onDelete("cascade")
         )
         .addColumn("serviceProviders", "jsonb", col => col.notNull())
         .addColumn("comptoirDuLibreSoftware", "jsonb")

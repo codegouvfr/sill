@@ -33,16 +33,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "softwares__similar_software_external_datas.similarExternalId",
             "similarExt.externalId"
         )
-        .groupBy([
-            "s.id",
-            "csft.softwareId",
-            "csft.annuaireCnllServiceProviders",
-            "csft.comptoirDuLibreSoftware",
-            "csft.latestVersion",
-            "csft.serviceProviders",
-            "parentExt.externalId",
-            "ext.externalId"
-        ])
+        .groupBy(["s.id", "csft.softwareId", "parentExt.externalId", "ext.externalId"])
         .select([
             "s.id",
             "s.addedByAgentId",
