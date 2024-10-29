@@ -7,6 +7,8 @@ import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWri
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+// import * as fs from "node:fs";
+// import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalId = "external-id-111";
 const similarExternalId = "external-id-222";
@@ -110,6 +112,7 @@ describe("pgDbApi", () => {
             //
             // console.log("publicCompiledData", JSON.stringify(publicCompiledData, null, 2));
             //
+            // expect(compiledDataPrivate.length > 0).toBe(true);
             // const { users, referents, instances, ...firstSoftware } = compiledDataPrivate.find(s => s.id === 42)!;
             // console.log(firstSoftware);
             // //
