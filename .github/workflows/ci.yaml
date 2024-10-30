@@ -124,8 +124,6 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     needs:
-      - check_if_version_upgraded
-      - create_tag
       - pre-release
     steps:
       - uses: actions/checkout@v4
@@ -173,6 +171,29 @@ jobs:
           event-type: update_sill
           repository: codegouvfr/paris-sspcloud
 
+  trigger_pre_production_deploy:
+    name: "Trigger pre-production deploy"
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-to-pre-production
+      cancel-in-progress: true
+    needs:
+      - pre-release
+    env:
+      TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
+    steps:
+      - run: echo "Triggering production deploy"
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan code.gouv.fr >> ~/.ssh/known_hosts
+          ssh -o StrictHostKeyChecking=no web@code.gouv.fr "bash -c 'eval \"\$(ssh-agent -s)\" && ssh-add ~/.ssh/sill-data && ./update-sill-preprod.sh v${{ env.TO_VERSION }}'"
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
   trigger_production_deploy:
     name: "Trigger production deploy"
     runs-on: ubuntu-latest
@@ -181,9 +202,7 @@ jobs:
       group: deploy-to-production
       cancel-in-progress: true
     needs:
-      - docker
-      - poke_gitops
-      - check_if_version_upgraded
+      - trigger_pre_production_deploy
     env:
       TO_VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
     steps:
@@ -203,8 +222,6 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - trigger_production_deploy
-      - check_if_version_upgraded
-      - create_tag
     if: |
       needs.check_if_version_upgraded.outputs.is_upgraded_version == 'true' && github.event_name == 'push'
     #     We create a release only when all of the above are validated:
