@@ -6,7 +6,6 @@ import { createUsecaseContextApi } from "redux-clean-architecture";
 import { Evt } from "evt";
 import { createResolveLocalizedString } from "i18nifty";
 import { apiSoftwareToExternalCatalogSoftware } from "core/usecases/softwareCatalog";
-import { exclude } from "tsafe/exclude";
 import { name, actions, type State } from "./state";
 
 export const thunks = {
