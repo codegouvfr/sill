@@ -67,11 +67,7 @@ const getJsonConfiguration = () => {
             "email": process.env.SILL_JWT_EMAIL,
             "organization": process.env.SILL_JWT_ORGANIZATION
         },
-        "dataRepoSshUrl": process.env.SILL_DATA_REPO_SSH_URL,
-        "sshPrivateKeyForGitName": process.env.SILL_SSH_NAME,
-        "sshPrivateKeyForGit": process.env.SILL_SSH_PRIVATE_KEY,
         "githubPersonalAccessTokenForApiRateLimit": process.env.SILL_GITHUB_TOKEN,
-        "githubWebhookSecret": process.env.SILL_WEBHOOK_SECRET,
         "port": parseInt(process.env.SILL_API_PORT ?? ""),
         "isDevEnvironnement": process.env.SILL_IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
         "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
