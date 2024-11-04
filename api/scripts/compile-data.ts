@@ -11,9 +11,6 @@ import { env } from "../src/env";
         "dbConfig": {
             "dbKind": "kysely",
             "kyselyDb": kyselyDb
-            // "dataRepoSshUrl": "git@github.com:codegouvfr/sill-data.git",
-            // "sshPrivateKey": env.sshPrivateKeyForGit,
-            // "sshPrivateKeyName": env.sshPrivateKeyForGitName
         },
         "githubPersonalAccessTokenForApiRateLimit": env.githubPersonalAccessTokenForApiRateLimit,
         "doPerPerformPeriodicalCompilation": false,

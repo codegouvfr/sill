@@ -38,7 +38,6 @@ export async function startRpcService(params: {
     dataRepoSshUrl: string;
     sshPrivateKeyForGitName: string;
     sshPrivateKeyForGit: string;
-    githubWebhookSecret?: string;
     githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
@@ -55,7 +54,6 @@ export async function startRpcService(params: {
         termsOfServiceUrl,
         readmeUrl,
         jwtClaimByUserKey,
-        githubWebhookSecret,
         port,
         githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
