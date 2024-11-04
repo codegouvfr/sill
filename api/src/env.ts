@@ -19,13 +19,6 @@ const zConfiguration = z.object({
         "email": z.string().nonempty(),
         "organization": z.string().nonempty()
     }),
-    "dataRepoSshUrl": z.string().nonempty(),
-    // Like id_ed25537
-    "sshPrivateKeyForGitName": z.string().nonempty(),
-    // Like -----BEGIN OPENSSH PRIVATE KEY-----\nxxx ... xxx\n-----END OPENSSH PRIVATE KEY-----\n
-    // You can a fake key in .env.local.sh for running yarn dev
-    "sshPrivateKeyForGit": z.string().nonempty(),
-    "githubWebhookSecret": z.string().nonempty().optional(),
     // Only for increasing the rate limit on GitHub API
     // we use the GitHub API for pre filling the version when adding a software
     "githubPersonalAccessTokenForApiRateLimit": z.string().nonempty(),
