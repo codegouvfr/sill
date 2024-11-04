@@ -35,9 +35,6 @@ export async function startRpcService(params: {
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
     jwtClaimByUserKey: Record<keyof User, string>;
-    dataRepoSshUrl: string;
-    sshPrivateKeyForGitName: string;
-    sshPrivateKeyForGit: string;
     githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
@@ -47,9 +44,6 @@ export async function startRpcService(params: {
 }) {
     const {
         redirectUrl,
-        dataRepoSshUrl,
-        sshPrivateKeyForGitName,
-        sshPrivateKeyForGit,
         keycloakParams,
         termsOfServiceUrl,
         readmeUrl,
