@@ -225,6 +225,7 @@ export const sillApi: SillApi = {
     "getMarkdown": async ({ language, name }) => `Markdown for ${language} and ${name}`,
     "getAgent": async ({ email }) => ({
         "agent": {
+            "id": 1,
             "about": "About",
             email,
             "organization": "organization",
