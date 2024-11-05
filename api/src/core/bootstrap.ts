@@ -123,8 +123,8 @@ export async function bootstrapCore(
             }, frequencyOfUpdate);
         };
 
-        // start the periodical compilation 2 min after api starts
-        void setTimeout(() => updateSoftwareExternalData(), 1000 * 60 * 2);
+        // start the periodical compilation 15 secondes after api starts
+        void setTimeout(() => updateSoftwareExternalData(), 1000 * 15);
     }
 
     return { dbApi, context, useCases };
