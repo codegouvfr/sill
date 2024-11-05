@@ -19,6 +19,7 @@ import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternal
 import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
 import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
+import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
@@ -103,7 +104,8 @@ export async function bootstrapCore(
             getSoftwareLatestVersion,
             getServiceProviders,
             dbApi
-        })
+        }),
+        getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
 
     if (doPerformCacheInitialization) {

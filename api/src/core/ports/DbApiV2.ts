@@ -91,14 +91,14 @@ export type DbAgent = {
     isPublic: boolean;
 };
 
-type AgentWithAllDbFields = Agent & Pick<DbAgent, "id">;
+export type AgentWithId = Agent & Pick<DbAgent, "id">;
 
 export interface AgentRepository {
     add: (agent: OmitFromExisting<DbAgent, "id">) => Promise<number>;
     update: (agent: DbAgent) => Promise<void>;
     remove: (agentId: number) => Promise<void>;
-    getByEmail: (email: string) => Promise<AgentWithAllDbFields | undefined>;
-    getAll: () => Promise<AgentWithAllDbFields[]>;
+    getByEmail: (email: string) => Promise<AgentWithId | undefined>;
+    getAll: () => Promise<AgentWithId[]>;
 }
 
 export interface SoftwareReferentRepository {

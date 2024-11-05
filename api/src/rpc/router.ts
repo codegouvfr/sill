@@ -20,7 +20,6 @@ import {
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import type { UseCases } from "../core/usecases";
 import {
-    Agent,
     DeclarationFormData,
     InstanceFormData,
     Os,
@@ -479,19 +478,12 @@ export function createRouter(params: {
                     "email": z.string()
                 })
             )
-            .query(async ({ ctx: { user }, input }): Promise<{ agent: Agent }> => {
-                const { email } = input;
-
-                const agent = await dbApi.agent.getByEmail(email);
-                if (agent === undefined)
-                    throw new TRPCError({
-                        "code": "NOT_FOUND",
-                        message: "Agent not found"
-                    });
-                if (!agent?.isPublic && user === undefined) throw new TRPCError({ "code": "UNAUTHORIZED" });
-
-                return { agent };
-            }),
+            .query(async ({ ctx: { user }, input }) =>
+                useCases.getAgent({
+                    email: input.email,
+                    currentUser: user
+                })
+            ),
         "getAllowedEmailRegexp": loggedProcedure.query(() => coreContext.userApi.getAllowedEmailRegexp()),
         "getAllOrganizations": loggedProcedure.query(() => coreContext.userApi.getAllOrganizations()),
         "changeAgentOrganization": loggedProcedure
