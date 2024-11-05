@@ -131,11 +131,12 @@ export type SoftwareFormData = {
     softwareDescription: string;
     softwareLicense: string;
     softwareMinimalVersion: string;
-    isPresentInSupportContract: boolean;
-    isFromFrenchPublicService: boolean;
     similarSoftwareExternalDataIds: string[];
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
+
+    isPresentInSupportContract: boolean;
+    isFromFrenchPublicService: boolean;
     doRespectRgaa: boolean | null;
 };
 

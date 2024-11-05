@@ -21,3 +21,25 @@ services:
     image: adminer
     ports:
       - "8080:8080"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:18.0.2-legacy
+    container_name: keycloak
+    environment:
+      DB_VENDOR: h2
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      PROXY_ADDRESS_FORWARDING: "true"
+      JAVA_OPTS: -Dkeycloak.profile=preview
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/keycloak-dev-realm.json
+    volumes:
+      - ./keycloak-dev-realm.json:/opt/jboss/keycloak/imports/keycloak-dev-realm.json
+    ports:
+      - "8081:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081/auth/" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
