@@ -1,3 +1,26 @@
+## Install depencies
+
+To set up our dev environment we rely on the following softwares
+
+1. [Docker](https://docs.docker.com/engine/install/) & Docker compose plugin 
+2. [Node](https://nodejs.org/en/download/package-manager/current)
+3. [Yarn](https://classic.yarnpkg.com/en/docs/install#debian-stable)
+
+It is much easier to navigate the code with VSCode (We recommend the free distribution [VSCodium](https://code.gouv.fr/sill/software?name=VSCodium)).
+
+## Run local databases
+
+To launch local databses, you can quickly do that by running the following command
+
+`docker compose -f docker-compose.ressources.yml up`keycloak-dev-user-profile.json
+Login with admin credentials. In our dev environment we used `admin` for both `username` and `password`.
+
+Go to `userprofile` tab, choose the `JSON Editor` tab.
+
+Then copy paste the content of the file `keycloak-dev-user-profile.json` located in the root folder into the text field.
+
+Save an your are good to go !
+
 ## Defining the sill-api parameter
 
 There are 3 ways to provide the parameter required to run `sill-api`.  
@@ -50,7 +73,7 @@ export SILL_API_PORT=3084
 export SILL_IS_DEV_ENVIRONNEMENT=true
 ```
 
-### Option 2: Editing `.env.local.sh`
+### Option 3: Editing `.env.local.sh`
 
 If you dont like having to source thoses env variables you can provide them
 by editing the `.env.local.sh` at the root of the `sill/api` project.  
@@ -90,10 +113,7 @@ EOF
 $@
 ```
 
-You'll need [Node](https://nodejs.org/) and [Yarn 1.x](https://classic.yarnpkg.com/lang/en/). (Find [here](https://docs.gitlanding.dev/#step-by-step-guide) instructions by OS on how to install them)
-
-It is much easier to navigate the code with VSCode (We recommend the free distribution [VSCodium](https://code.gouv.fr/sill/software?name=VSCodium)).
-
+## Install dev packages and run
 ```bash
 # Only the first time
 
@@ -109,6 +129,8 @@ yarn dev # this uses turborepo : it runs `yarn dev` in both `web` and `api` pack
 # The app is running on http://localhost:3000
 # and the api on http://localhost:3084
 ```
+
+If you use vscode or vscodium, you can run it from the run and debug menu.
 
 ## Releasing a new version
 
