@@ -13,6 +13,7 @@ export type ServiceProvider = {
 };
 
 export type Software = {
+    id?: number;
     logoUrl: string | undefined;
     softwareId: number;
     softwareName: string;
@@ -124,20 +125,20 @@ export type Prerogative = keyof Prerogatives;
 export type Os = "windows" | "linux" | "mac" | "android" | "ios";
 
 export type SoftwareFormData = {
-    softwareType: SoftwareType;
-    externalId: string | undefined;
-    comptoirDuLibreId: number | undefined;
     softwareName: string;
     softwareDescription: string;
-    softwareLicense: string;
+    softwareType: SoftwareType;
+    externalId: string | undefined; // Id 
+    comptoirDuLibreId: number | undefined; // id on the library comptoir du libre
+    softwareLicense: string; // or default licence ?
     softwareMinimalVersion: string;
-    similarSoftwareExternalDataIds: string[];
+    similarSoftwareExternalDataIds: string[]; // 
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
 
-    isPresentInSupportContract: boolean;
-    isFromFrenchPublicService: boolean;
-    doRespectRgaa: boolean | null;
+    isPresentInSupportContract: boolean; // ??
+    isFromFrenchPublicService: boolean; // Financed and developped by public service 
+    doRespectRgaa: boolean | null; // référentiel général d’amélioration de l’accessibilité
 };
 
 export type DeclarationFormData = DeclarationFormData.User | DeclarationFormData.Referent;

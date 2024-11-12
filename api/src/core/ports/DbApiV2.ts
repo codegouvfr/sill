@@ -24,13 +24,13 @@ export interface SoftwareRepository {
         params: {
             formData: SoftwareFormData;
             externalDataOrigin: ExternalDataOrigin;
-        } & WithAgentId
+        } & (WithAgentId | {agentId : undefined})
     ) => Promise<number>;
     update: (
         params: {
             softwareSillId: number;
             formData: SoftwareFormData;
-        } & WithAgentId
+        } & (WithAgentId | {agentId : undefined})
     ) => Promise<void>;
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;

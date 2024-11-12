@@ -1,6 +1,15 @@
 import { Language, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { SoftwareExternalDataOption } from "../../ports/GetSoftwareExternalDataOptions";
+import { SoftwareFormData } from "../../usecases/readWriteSillData";
 import { parseBibliographicFields } from "./parseBibliographicFields";
+
+export type HalAPIResponse<T> = {
+    numFound: number;
+    start: number;
+    maxScore: number;
+    numFoundExact: boolean;
+    docs: T
+}
 
 const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "en_abstract_s",
@@ -20,7 +29,7 @@ export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(
 
 export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware): SoftwareExternalData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences.license.join(", ");
+    const license = bibliographicReferences.license ?bibliographicReferences.license.join(", ") : undefined;
     const developers = bibliographicReferences.author.map(author => ({
         id: author.toLowerCase().split(" ").join("-"),
         name: author
@@ -78,9 +87,9 @@ export type HalRawSoftware = {
     title_s: string[];
     en_title_s?: string[];
     fr_title_s?: string[];
-    abstract_s?: string[];
-    en_abstract_s?: string[];
-    fr_abstract_s?: string[];
+    abstract_s?: string[]; // 1030 / 1398
+    en_abstract_s?: string[]; // 896 / 1398
+    fr_abstract_s?: string[]; // 235 / 1398
     uri_s: string;
     openAccess_bool: boolean;
     docType_s: string;
@@ -102,9 +111,9 @@ export type HalRawSoftware = {
     // es_domainAllCodeLabel_fs: string[];
     // eu_domainAllCodeLabel_fs: string[];
     // primaryDomain_s: string;
-    // en_keyword_s?: string[];
-    // keyword_s: string[];
-    // fr_keyword_s?: string[];
+    // en_keyword_s?: string[]; // 711 / 1398
+    // keyword_s: string[]; // 786 / 1398
+    // fr_keyword_s?: string[]; // 184 / 1398
     // authIdFormPerson_s: string[];
     // authIdForm_i: number[];
     // authLastName_s: string[];
@@ -159,7 +168,7 @@ export type HalRawSoftware = {
     // contributorFullName_s: string;
     // contributorIdFullName_fs: string;
     // contributorFullNameId_fs: string;
-    // language_s: string[];
+    // language_s: string[]; // Could use
     // halId_s: string;
     // version_i: number;
     // status_i: number;
@@ -209,9 +218,44 @@ export type HalRawSoftware = {
     // collCategoryCodeName_fs: string[];
     // collNameCode_fs: string[];
     // fileMain_s: string;
-    // files_s: string[];
+    // files_s: string[]; // Could ontains zip code
     // fileType_s: string[];
     // _version_: bigint;
     // dateLastIndexed_tdate: string;
     // label_xml: string;
+    // softCodeRepository_s: string[]; // 727 / 1398
+    // softDevelopmentStatus_s: string[]; // 715 / 1398
+    // softPlatform_s:string[]; // 449 / 1398
+    // softProgrammingLanguage_s: string[]; // 929 / 1398
+    // softRuntimePlatform_s: string[]; // 195 / 1398
+    // softVersion_s: string[]; // 642 / 1398
+    // licence_s: string[]; // default licencse ? -> 20 / 1398
 };
+
+export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData  => {
+    const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
+    const license = bibliographicReferences.license ?bibliographicReferences.license.join(", ") : undefined;
+
+    // TODO Mapping
+    const formData : SoftwareFormData = {
+        softwareName: halSoftware.title_s[0],
+        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : '',
+        softwareType: {
+            type: "desktop/mobile",
+            os: {"linux": true, "windows": false, "android": false, "ios": false, "mac": false  }
+        }, // TODO
+        externalId: halSoftware.docid,
+        comptoirDuLibreId: undefined,
+        softwareLicense: license || 'copyright', // TODO
+        softwareMinimalVersion: '1', // TODO
+        similarSoftwareExternalDataIds: [],
+        softwareLogoUrl: "https://www.gnu.org/graphics/gnu-head-30-years-anniversary.svg",
+        softwareKeywords: [],
+    
+        isPresentInSupportContract: false,
+        isFromFrenchPublicService: false, // TODO comment 
+        doRespectRgaa: null,
+    };
+
+    return formData;
+}

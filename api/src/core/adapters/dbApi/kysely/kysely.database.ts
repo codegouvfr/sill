@@ -120,7 +120,7 @@ type SoftwaresTable = {
     >;
     categories: JSONColumnType<string[]>;
     generalInfoMd: string | null;
-    addedByAgentId: number;
+    addedByAgentId: number | null;
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
 };
