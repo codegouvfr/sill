@@ -12,7 +12,10 @@ It is much easier to navigate the code with VSCode (We recommend the free distri
 
 To launch local databses, you can quickly do that by running the following command
 
-`docker compose -f docker-compose.ressources.yml up`keycloak-dev-user-profile.json
+`docker compose -f docker-compose.ressources.yml up`
+
+We are almost finished ! Go to http://localhost:8081/auth/ to set up a small manual config (that can't be automated yet).
+
 Login with admin credentials. In our dev environment we used `admin` for both `username` and `password`.
 
 Go to `userprofile` tab, choose the `JSON Editor` tab.
