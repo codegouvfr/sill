@@ -21,6 +21,8 @@ import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import { feedDBfromHAL } from "./usecases/feedDB";
+import { env as config} from "../env";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -111,6 +113,21 @@ export async function bootstrapCore(
     if (doPerformCacheInitialization) {
         console.log("Performing user cache initialization...");
         await initializeUserApiCache();
+    }
+
+    if (config.feedFromSource) {
+        if (config.externalSoftwareDataOrigin === 'HAL') {
+            console.log(' ------ Feeding database with HAL software started ------');
+            const HAL = feedDBfromHAL(dbApi);
+            try {
+                await HAL();
+              } catch(err) {
+                // catches errors both in fetch and response.json
+                console.error(err);
+              }
+            
+            console.log(' ------ Feeding database with HAL software finished ------');
+        }
     }
 
     if (doPerPerformPeriodicalCompilation) {
