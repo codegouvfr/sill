@@ -67,7 +67,7 @@ const getJsonConfiguration = () => {
         "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
         "redirectUrl": process.env.SILL_REDIRECT_URL,
         "databaseUrl": process.env.DATABASE_URL,
-        "feedFromSource": process.env.FEEDFROMSOURCE || false,
+        "feedFromSource": process.env.FEEDFROMSOURCE ? process.env.FEEDFROMSOURCE.toLowerCase() == "true" : false,
     };
 };
 

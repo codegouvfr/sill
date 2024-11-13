@@ -3,14 +3,6 @@ import { SoftwareExternalDataOption } from "../../ports/GetSoftwareExternalDataO
 import { SoftwareFormData } from "../../usecases/readWriteSillData";
 import { parseBibliographicFields } from "./parseBibliographicFields";
 
-export type HalAPIResponse<T> = {
-    numFound: number;
-    start: number;
-    maxScore: number;
-    numFoundExact: boolean;
-    docs: T
-}
-
 const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "en_abstract_s",
     "en_title_s",
@@ -28,12 +20,18 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
 
 export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware): SoftwareExternalData => {
-    const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences.license ?bibliographicReferences.license.join(", ") : undefined;
-    const developers = bibliographicReferences.author.map(author => ({
+    let bibliographicReferences = undefined;
+    try {
+        bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
+    } catch (error) {
+        console.error('HalRawSoftwareToSoftwareForm', error);
+    }
+    const license = bibliographicReferences && bibliographicReferences.license ? bibliographicReferences.license.join(", ") : undefined;
+
+    const developers = bibliographicReferences && bibliographicReferences.author ? bibliographicReferences.author.map(author => ({
         id: author.toLowerCase().split(" ").join("-"),
         name: author
-    }));
+    })) : [];
 
     return {
         externalId: halSoftware.docid,
@@ -233,8 +231,13 @@ export type HalRawSoftware = {
 };
 
 export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData  => {
-    const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences.license ?bibliographicReferences.license.join(", ") : undefined;
+    let bibliographicReferences = undefined;
+    try {
+        bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
+    } catch (error) {
+        console.error('HalRawSoftwareToSoftwareForm', error);
+    }
+    const license = bibliographicReferences && bibliographicReferences.license ?bibliographicReferences.license.join(", ") : undefined;
 
     // TODO Mapping
     const formData : SoftwareFormData = {

@@ -58,31 +58,9 @@ export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoft
     return json.response.docs[0];
 }
 
-export async function fetchHalSoftwaresIds(): Promise<Array<string>> {
-    const url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=docid`;
-
-    const res = await fetch(url).catch(() => undefined);
-
-    if (res === undefined) {
-        throw new HalFetchError(undefined);
-    }
-
-    if (res.status === 429) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        return fetchHalSoftwaresIds();
-    }
-
-    if (res.status === 404) {
-        throw new HalFetchError(res.status);
-    }
-
-    const json = await res.json();
-
-    return json.response.docs.map((doc : any) => doc.docid);
-}
-
 export async function fetchHalSoftwares(): Promise<Array<HalRawSoftware>> {
-    const url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}`;
+    // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
+    const url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}&&fq=swhidId_s:["" TO *]`;
 
     const res = await fetch(url).catch(() => undefined);
 
