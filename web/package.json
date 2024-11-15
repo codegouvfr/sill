@@ -31,7 +31,7 @@
         "@uiw/react-md-editor": "^3.23.5",
         "api": "*",
         "evt": "^2.5.7",
-        "flexsearch": "0.7.21",
+        "flexsearch": "0.7.43",
         "i18nifty": "^3.2.2",
         "keycloakify": "^9.6.7",
         "memoizee": "^0.4.14",
