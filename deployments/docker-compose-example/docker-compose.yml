@@ -2,7 +2,7 @@ version: "3.8"
 services:
   api:
     platform: linux/amd64
-    image: codegouvfr/sill-api:1.42.7
+    image: codegouvfr/sill-api:1.43.5
     env_file: .env
     restart: unless-stopped
 
