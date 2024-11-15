@@ -8585,9 +8585,9 @@ eslint-plugin-testing-library@^5.0.1:
     "@typescript-eslint/utils" "^5.58.0"
 
 eslint-plugin-tss-unused-classes@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-tss-unused-classes/-/eslint-plugin-tss-unused-classes-1.0.2.tgz#d4bc6ca40c1748bea1aaf3bc48271b96d7a1cd77"
-  integrity sha512-9Fs8Qs7G3cDAOBKqVhPw64Q/qRHeglu0Bm30OGWr+0Nd/2dRMD3zV5g65X/k2Y54aPvP7yVYjIl6Ql+o284ttA==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-tss-unused-classes/-/eslint-plugin-tss-unused-classes-1.0.3.tgz#2f427c157182f77afeed45fbcd4aca7086402261"
+  integrity sha512-FtfNwEsUfEN7y+6+C9j4INh3LTL1lyujmtj8MiorPVbEDYwt9NcjuOpsjvEkSzsD0oyLZB1kBFrW59JTtepRnA==
 
 eslint-scope@5.1.1, eslint-scope@^5.1.1:
   version "5.1.1"
