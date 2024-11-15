@@ -41,7 +41,7 @@
         "@types/compression": "^1.7.2",
         "@types/cors": "^2.8.12",
         "@types/deepmerge": "^2.2.0",
-        "@types/express": "4.17.13",
+        "@types/express": "4.17.21",
         "@types/memoizee": "^0.4.7",
         "@types/node": "^16.4.9",
         "@types/node-fetch": "^2.5.7",
