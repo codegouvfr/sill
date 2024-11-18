@@ -88,7 +88,7 @@ export namespace CompiledData {
         };
 
         export type Private = Common & {
-            addedByAgentEmail: string | undefined;
+            addedByAgentEmail: string;
             users: (Pick<Db.AgentRow, "organization"> &
                 Pick<Db.SoftwareUserRow, "os" | "serviceUrl" | "useCaseDescription" | "version">)[];
             referents: (Pick<Db.AgentRow, "email" | "organization"> &

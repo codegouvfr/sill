@@ -115,7 +115,7 @@ export async function bootstrapCore(
         await initializeUserApiCache();
     }
 
-    if (config.feedFromSource) {
+    if (config.initializeSoftwareFromSource) {
         if (config.externalSoftwareDataOrigin === 'HAL') {
             console.log(' ------ Feeding database with HAL software started ------');
             const HAL = feedDBfromHAL(dbApi);

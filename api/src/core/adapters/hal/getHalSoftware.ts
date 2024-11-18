@@ -62,13 +62,10 @@ export async function fetchHalSoftwares(): Promise<Array<HalRawSoftware>> {
     // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
     const url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}&&fq=swhidId_s:["" TO *]`;
 
-    const res = await fetch(url).catch(() => undefined);
-
-    console.debug("Hal response status : ", res?.status);
-
-    if (res === undefined) {
+    const res = await fetch(url).catch((err) => {
+        console.error(err);
         throw new HalFetchError(undefined);
-    }
+    });
 
     if (res.status === 429) {
         await new Promise(resolve => setTimeout(resolve, 100));
