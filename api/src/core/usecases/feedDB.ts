@@ -13,7 +13,7 @@ export const feedDBfromHAL : any = (dbApi : DbApiV2)  => {
                 return Promise.resolve(soft.id);
             } else {
                 console.log('Importing HAL : ', software.docid);
-                return dbApi.software.create({ formData: newSoft, externalDataOrigin: 'HAL', agentId: undefined });
+                return dbApi.software.create({ formData: newSoft, externalDataOrigin: 'HAL', agentId: 1 }); // TODO agent id
             }
         });        
     }

@@ -128,17 +128,17 @@ export type SoftwareFormData = {
     softwareName: string;
     softwareDescription: string;
     softwareType: SoftwareType;
-    externalId: string | undefined; // Id 
-    comptoirDuLibreId: number | undefined; // id on the library comptoir du libre
-    softwareLicense: string; // or default licence ?
+    externalId: string | undefined;
+    comptoirDuLibreId: number | undefined;
+    softwareLicense: string;
     softwareMinimalVersion: string;
-    similarSoftwareExternalDataIds: string[]; // 
+    similarSoftwareExternalDataIds: string[];
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
 
-    isPresentInSupportContract: boolean; // ??
-    isFromFrenchPublicService: boolean; // Financed and developped by public service 
-    doRespectRgaa: boolean | null; // référentiel général d’amélioration de l’accessibilité
+    isPresentInSupportContract: boolean;
+    isFromFrenchPublicService: boolean;
+    doRespectRgaa: boolean | null;
 };
 
 export type DeclarationFormData = DeclarationFormData.User | DeclarationFormData.Referent;

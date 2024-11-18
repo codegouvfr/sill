@@ -29,7 +29,7 @@ const zConfiguration = z.object({
     "redirectUrl": z.string().optional(),
     "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
     "databaseUrl": z.string(),
-    "feedFromSource": z.boolean(),
+    "initializeSoftwareFromSource": z.boolean(),
 });
 
 const getJsonConfiguration = () => {
@@ -67,7 +67,7 @@ const getJsonConfiguration = () => {
         "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
         "redirectUrl": process.env.SILL_REDIRECT_URL,
         "databaseUrl": process.env.DATABASE_URL,
-        "feedFromSource": process.env.FEEDFROMSOURCE ? process.env.FEEDFROMSOURCE.toLowerCase() == "true" : false,
+        "initializeSoftwareFromSource": process.env?.INITSOFTFROMSOURCE?.toLowerCase() === "true",
     };
 };
 
