@@ -4,3 +4,5 @@ node_modules
 .env
 deploy_sill.js
 docker-data
+.dev
+.bruno
