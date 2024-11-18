@@ -21,6 +21,8 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "softCodeRepository_s",
     "authFullName_s",
     "authIdHal_s",
+    "softProgrammingLanguage_s",
+    "softVersion_s",
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
@@ -28,11 +30,6 @@ export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(
 export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware): SoftwareExternalData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
-
-    const developers = bibliographicReferences && bibliographicReferences.author ? bibliographicReferences.author.map(author => ({
-        id: author.toLowerCase().split(" ").join("-"),
-        name: author
-    })) : [];
 
     return {
         externalId: halSoftware.docid,
@@ -59,6 +56,10 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         sourceUrl: halSoftware?.softCodeRepository_s?.[0],
         documentationUrl: undefined, // TODO no info about documentation in HAL check on SWH or Repo ?
         license,
+        softwareVersion: halSoftware?.softVersion_s?.[0],
+        keywords: halSoftware?.keyword_s?.join(','),
+        programmingLanguage: halSoftware?.softProgrammingLanguage_s?.join(','),
+        applicationCategory: halSoftware?.domainAllCode_s?.join(','),
     };
 };
 
@@ -107,7 +108,7 @@ export type HalRawSoftware = {
     // citationFull_s: string;
     // label_endnote: string;
     // label_coins: string;
-    // domainAllCode_s: string[];
+    domainAllCode_s: string[];
     // level0_domain_s: string[];
     // domain_s: string[];
     // level1_domain_s: string[];
@@ -232,7 +233,7 @@ export type HalRawSoftware = {
     softCodeRepository_s: string[];
     // softDevelopmentStatus_s: string[];
     softPlatform_s:string[];
-    // softProgrammingLanguage_s: string[];
+    softProgrammingLanguage_s: string[];
     // softRuntimePlatform_s: string[];
     softVersion_s: string[];
     licence_s: string[];

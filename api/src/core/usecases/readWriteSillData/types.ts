@@ -132,7 +132,7 @@ export type SoftwareFormData = {
     comptoirDuLibreId: number | undefined;
     softwareLicense: string;
     softwareMinimalVersion: string | undefined;
-    similarSoftwareExternalDataIds: string[]; // 
+    similarSoftwareExternalDataIds: string[];
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
 

@@ -210,7 +210,11 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                         return removeDuplicates<SoftwareExternalData["developers"][number]>();
                     })()
                 )
-            )
+            ),
+            softwareVersion: getClaimDataValue<"string">("P348")[0],
+            keywords: getClaimDataValue<"string">("P921")[0],
+            programmingLanguage: getClaimDataValue<"string">("P277")[0],
+            applicationCategory: undefined,
         };
     },
     {

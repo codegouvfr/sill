@@ -29,6 +29,10 @@ export type SoftwareExternalData = {
     sourceUrl: string;
     documentationUrl: string;
     license: string;
+    softwareVersion: string;
+    keywords: string;
+    programmingLanguage: string;
+    applicationCategory: string;
 }>;
 
 export type SimilarSoftwareExternalData = Pick<
