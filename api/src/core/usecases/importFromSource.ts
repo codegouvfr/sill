@@ -18,7 +18,7 @@ export const importFromHALSource : (dbApi: DbApiV2) => (agentEmail: string) => P
             const index = softwareDbNames.indexOf(newSoft.softwareName);
 
             if (index != -1) {
-                return Promise.resolve(softwareDb[index].id);
+                return softwareDb[index].id;
             } else {
                 console.log('Importing HAL : ', software.docid);
                 return dbApi.software.create({ formData: newSoft, externalDataOrigin: 'HAL', agentId: agentId });
