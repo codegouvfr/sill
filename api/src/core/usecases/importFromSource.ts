@@ -8,12 +8,17 @@ export const importFromHALSource : (dbApi: DbApiV2) => (agentEmail: string) => P
         const agentId = agent ? agent.id : await dbApi.agent.add({email: agentEmail, 'isPublic': false, organization: '', about: undefined});
 
         const softwares = await HAL.software.getAll();
+        const softwareDb = await dbApi.software.getAll();
+        const softwareDbNames = softwareDb.map((software) => {
+            return software.softwareName;
+        });
 
         return softwares.map(async software => {
             const newSoft = HalRawSoftwareToSoftwareForm(software);
-            const soft = await dbApi.software.getByName(newSoft.softwareName);
-            if (soft) {
-                return Promise.resolve(soft.id);
+            const index = softwareDbNames.indexOf(newSoft.softwareName);
+
+            if (index != -1) {
+                return Promise.resolve(softwareDb[index].id);
             } else {
                 console.log('Importing HAL : ', software.docid);
                 return dbApi.software.create({ formData: newSoft, externalDataOrigin: 'HAL', agentId: agentId });
