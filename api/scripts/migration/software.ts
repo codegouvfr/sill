@@ -114,7 +114,7 @@ const zSoftwareRow = z.object({
     "license": z.string(),
     "softwareType": zSoftwareType,
     "catalogNumeriqueGouvFrId": z.string().optional(),
-    "versionMin": z.string(),
+    "versionMin": z.string().optional(),
     "workshopUrls": z.array(z.string()),
     "testUrls": z.array(
         z.object({
@@ -124,7 +124,7 @@ const zSoftwareRow = z.object({
     ),
     "categories": z.array(z.string()),
     "generalInfoMd": z.string().optional(),
-    "addedByAgentEmail": z.string(),
+    "addedByAgentEmail": z.string(), // TODO in #160
     "logoUrl": z.string().optional(),
     "keywords": z.array(z.string())
 });

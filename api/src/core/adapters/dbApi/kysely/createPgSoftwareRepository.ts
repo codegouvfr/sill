@@ -65,7 +65,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     .executeTakeFirstOrThrow();
 
                 console.log(
-                    `inserted software correctly, softwareId is : ${softwareId}, about to insert similars : `,
+                    `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to insert similars : `,
                     similarSoftwareExternalDataIds
                 );
 

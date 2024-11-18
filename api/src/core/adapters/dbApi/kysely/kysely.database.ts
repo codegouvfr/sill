@@ -110,7 +110,7 @@ type SoftwaresTable = {
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
     catalogNumeriqueGouvFrId: string | null;
-    versionMin: string;
+    versionMin: string | null;
     workshopUrls: JSONColumnType<string[]>;
     testUrls: JSONColumnType<
         {

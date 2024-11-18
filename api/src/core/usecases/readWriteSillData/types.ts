@@ -45,7 +45,7 @@ export type Software = {
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
-    versionMin: string;
+    versionMin: string | undefined;
     license: string;
     comptoirDuLibreServiceProviderCount: number;
     annuaireCnllServiceProviders:
@@ -131,7 +131,7 @@ export type SoftwareFormData = {
     externalId: string | undefined; // Id 
     comptoirDuLibreId: number | undefined; // id on the library comptoir du libre
     softwareLicense: string; // or default licence ?
-    softwareMinimalVersion: string;
+    softwareMinimalVersion: string | undefined;
     similarSoftwareExternalDataIds: string[]; // 
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];

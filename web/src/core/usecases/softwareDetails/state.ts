@@ -56,7 +56,7 @@ export namespace State {
               }
             | undefined;
         addedTime: number;
-        versionMin: string;
+        versionMin: string | undefined;
         license: string;
         comptoirDuLibreServiceProviderCount: number;
         comptoirDuLibreServiceProviderUrl: string | undefined;
