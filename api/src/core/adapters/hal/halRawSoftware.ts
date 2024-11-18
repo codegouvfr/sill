@@ -27,7 +27,7 @@ export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(
 
 export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware): SoftwareExternalData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences?.license.join(", ");
+    const license = bibliographicReferences?.license?.join(", ");
 
     const developers = bibliographicReferences && bibliographicReferences.author ? bibliographicReferences.author.map(author => ({
         id: author.toLowerCase().split(" ").join("-"),
@@ -266,7 +266,7 @@ const textToSoftwareType = (text : string): SoftwareType => {
 
 export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData  => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences?.license.join(", ");
+    const license = bibliographicReferences?.license?.join(", ");
 
     // TODO Mapping
     const formData : SoftwareFormData = {

@@ -30,6 +30,7 @@ const zConfiguration = z.object({
     "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
     "databaseUrl": z.string(),
     "initializeSoftwareFromSource": z.boolean(),
+    "botAgentEmail": z.string(),
 });
 
 const getJsonConfiguration = () => {
@@ -68,6 +69,7 @@ const getJsonConfiguration = () => {
         "redirectUrl": process.env.SILL_REDIRECT_URL,
         "databaseUrl": process.env.DATABASE_URL,
         "initializeSoftwareFromSource": process.env?.INITSOFTFROMSOURCE?.toLowerCase() === "true",
+        "botAgentEmail": process.env?.BOTAGENTEMAIL,
     };
 };
 

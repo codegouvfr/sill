@@ -21,7 +21,7 @@ import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
-import { feedDBfromHAL } from "./usecases/feedDB";
+import { importFromHALSource } from "./usecases/importFromSource";
 import { env as config} from "../env";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
@@ -118,9 +118,9 @@ export async function bootstrapCore(
     if (config.initializeSoftwareFromSource) {
         if (config.externalSoftwareDataOrigin === 'HAL') {
             console.log(' ------ Feeding database with HAL software started ------');
-            const HAL = feedDBfromHAL(dbApi);
+            const HAL = importFromHALSource(dbApi);
             try {
-                await HAL();
+                await HAL(config.botAgentEmail);
               } catch(err) {
                 // catches errors both in fetch and response.json
                 console.error(err);
