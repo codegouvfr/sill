@@ -77,6 +77,10 @@ type SoftwareExternalDatasTable = {
     sourceUrl: string | null;
     documentationUrl: string | null;
     license: string | null;
+    softwareVersion: string | null;
+    keywords: string | null;
+    programmingLanguage: string | null;
+    applicationCategory: string | null;
 };
 
 type SoftwareType =

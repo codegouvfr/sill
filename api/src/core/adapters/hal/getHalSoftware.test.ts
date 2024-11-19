@@ -11,16 +11,16 @@ describe("HAL", () => {
             const result = await getHalSoftware("1715545");
 
             expectToEqual(result, {
-                "description": { "en": "-" },
+                "description": { "en": "-", "fr": undefined },
                 "developers": [
                     {
-                        "id": "gruenpeter,-morane",
-                        "name": "Gruenpeter, Morane"
+                        "id": "morane-gruenpeter",
+                        "name": "Morane Gruenpeter"
                     }
                 ],
-                "documentationUrl": "https://inria.hal.science/hal-01715545v1",
+                "documentationUrl": undefined,
                 "externalId": "1715545",
-                "framaLibreId": "",
+                "framaLibreId": undefined,
                 "isLibreSoftware": true,
                 "label": {
                     "en": "Battleship exercise",

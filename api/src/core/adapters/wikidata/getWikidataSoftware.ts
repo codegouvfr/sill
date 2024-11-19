@@ -58,6 +58,10 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             return { "label": entity.aliases.en?.[0]?.value, "id": licenseId };
         })();
 
+        const { entity: programmingLanguageEntity } = await fetchEntity(getClaimDataValue<"wikibase-entityid">("P277")[0]?.id).catch(() => ({ "entity": undefined }));
+        const programmingLanguageLabel = programmingLanguageEntity ? wikidataSingleLocalizedStringToLocalizedString(programmingLanguageEntity.labels) : undefined;
+        const programmingLanguageString = programmingLanguageLabel ? resolveLocalizedString(programmingLanguageLabel) : undefined;
+
         return {
             externalId: wikidataId,
             externalDataOrigin: "wikidata",
@@ -213,7 +217,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             ),
             softwareVersion: getClaimDataValue<"string">("P348")[0],
             keywords: getClaimDataValue<"string">("P921")[0],
-            programmingLanguage: getClaimDataValue<"string">("P277")[0],
+            programmingLanguage: programmingLanguageString, // TODO Get element from wiki data
             applicationCategory: undefined,
         };
     },

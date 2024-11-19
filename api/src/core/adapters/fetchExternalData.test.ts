@@ -213,7 +213,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
-                    programmingLanguage: null,
+                    programmingLanguage: "JavaScript",
                     softwareVersion: "4.2.1",
                 }
             ]);
@@ -242,6 +242,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
+                    applicationCategory: null,
                     description: {
                         en: "open-source web server software",
                         fr: "serveur web sous licence libre"
@@ -257,12 +258,15 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q11354",
                     framaLibreId: null,
                     isLibreSoftware: false,
+                    keywords: null,
                     label: "Apache HTTP Server",
                     license: "Apache License v2.0",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                     sourceUrl: "https://github.com/apache/httpd",
-                    websiteUrl: "https://httpd.apache.org/"
+                    websiteUrl: "https://httpd.apache.org/",
+                    programmingLanguage: "C",
+                    softwareVersion: "2.4.62",
                 }
             ]);
 
