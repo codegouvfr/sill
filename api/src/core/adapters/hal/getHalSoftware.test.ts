@@ -27,10 +27,14 @@ describe("HAL", () => {
                     "fr": "Battleship exercise"
                 },
                 "license": "MIT License",
-                "logoUrl": "",
+                "logoUrl": undefined,
                 "externalDataOrigin": "HAL",
                 "sourceUrl": "https://github.com/moranegg/Battleship",
-                "websiteUrl": "https://inria.hal.science/hal-01715545"
+                "websiteUrl": "https://inria.hal.science/hal-01715545v1",
+                "softwareVersion": undefined,
+                "keywords": undefined,
+                "programmingLanguage": undefined,
+                "applicationCategory": undefined,
             });
         });
     });

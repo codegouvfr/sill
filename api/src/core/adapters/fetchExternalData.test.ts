@@ -175,6 +175,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
+                    applicationCategory: null,
                     description: "A framwork for creating react SPA that uses webpack as bundler",
                     developers: [],
                     documentationUrl: null,
@@ -182,13 +183,17 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: craSoftwareFormData.externalId,
                     framaLibreId: null,
                     isLibreSoftware: true,
+                    keywords: null,
                     label: "create-react-app",
                     license: "MIT licence",
                     logoUrl: null,
                     sourceUrl: "https://github.com/facebook/create-react-app",
-                    websiteUrl: "https://create-react-app.dev/"
+                    websiteUrl: "https://create-react-app.dev/",
+                    programmingLanguage: null,
+                    softwareVersion: "5.0.1",
                 },
                 {
+                    applicationCategory: null,
                     description: "open-source JavaScript module bundler",
                     developers: [
                         {
@@ -201,12 +206,15 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q111590996",
                     framaLibreId: null,
                     isLibreSoftware: true,
+                    keywords: null,
                     label: "Vite",
                     license: "MIT licence",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
-                    websiteUrl: "https://vitejs.dev/"
+                    websiteUrl: "https://vitejs.dev/",
+                    programmingLanguage: null,
+                    softwareVersion: "4.2.1",
                 }
             ]);
 

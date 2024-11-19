@@ -49,7 +49,11 @@ const softwareExternalData: SoftwareExternalData = {
     websiteUrl: "https://example.com",
     sourceUrl: "https://example.com/source",
     documentationUrl: "https://example.com/documentation",
-    license: "MIT"
+    license: "MIT",
+    softwareVersion: "1.0.0",
+    keywords: "Usefull,Daily",
+    programmingLanguage: "C++",
+    applicationCategory: "Software Cat I,Software Cat II",
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -64,7 +68,11 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     websiteUrl: "https://example.similar.com",
     sourceUrl: "https://example.similar.com/source",
     documentationUrl: "https://example.similar.com/documentation",
-    license: "MIT"
+    license: "MIT",
+    softwareVersion: "3.0.2",
+    keywords: "Infra,Adminsys",
+    programmingLanguage: "Python3",
+    applicationCategory: "Software Cat I,Software Cat II",
 };
 
 const parentSoftwareExternalData: SoftwareExternalData = {
