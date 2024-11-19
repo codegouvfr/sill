@@ -213,7 +213,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
-                    programmingLanguage: "JavaScript",
+                    programmingLanguage: ["JavaScript"],
                     softwareVersion: "4.2.1",
                 }
             ]);
@@ -265,7 +265,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
-                    programmingLanguage: "C",
+                    programmingLanguage: ["C"],
                     softwareVersion: "2.4.62",
                 }
             ]);

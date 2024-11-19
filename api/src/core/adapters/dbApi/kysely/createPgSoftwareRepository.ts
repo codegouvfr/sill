@@ -178,7 +178,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         documentationUrl: softwareExternalData?.documentationUrl,
                         comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                         testUrl: testUrls[0]?.url,
-                        parentWikidataSoftware: parentExternalData
+                        parentWikidataSoftware: parentExternalData,
+                        keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
                     });
                 }),
         getById: getBySoftwareId,
@@ -266,7 +267,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             comptoirDuLibreServiceProviderCount:
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
                             testUrl: testUrls[0]?.url,
-                            parentWikidataSoftware: parentExternalData ?? undefined
+                            parentWikidataSoftware: parentExternalData ?? undefined,
+                            applicationCategory: softwareExternalData?.applicationCategory ?? [],
+                            programmingLanguage: softwareExternalData?.programmingLanguage ?? [],
                         });
                     }
                 );
@@ -398,7 +401,11 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     framaLibreId: ref("ext.framaLibreId"),
                     websiteUrl: ref("ext.websiteUrl"),
                     sourceUrl: ref("ext.sourceUrl"),
-                    documentationUrl: ref("ext.documentationUrl")
+                    documentationUrl: ref("ext.documentationUrl"),
+                    programmingLanguage: ref("ext.programmingLanguage"),
+                    applicationCategory: ref("ext.applicationCategory"),
+                    keywords: ref("ext.keywords"),
+                    softwareVersion: ref("ext.softwareVersion"),
                 }).as("softwareExternalData"),
             ({ ref, fn }) =>
                 fn

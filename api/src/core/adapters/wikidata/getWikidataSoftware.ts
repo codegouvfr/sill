@@ -157,19 +157,19 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     }
 
                     /*
-					const { getClaimDataValue } = createGetClaimDataValue({
-						entity,
-					});
+                    const { getClaimDataValue } = createGetClaimDataValue({
+                        entity,
+                    });
 	
-					const isHuman =
-						getClaimDataValue<"wikibase-entityid">("P31").find(
-							({ id }) => id === "Q5",
-						) !== undefined;
+                    const isHuman =
+                        getClaimDataValue<"wikibase-entityid">("P31").find(
+                            ({ id }) => id === "Q5",
+                        ) !== undefined;
 	
-					if (!isHuman) {
-						return undefined;
-					}
-					*/
+                    if (!isHuman) {
+                        return undefined;
+                    }
+                    */
 
                     const name = (() => {
                         const { shortName } = (() => {
@@ -216,9 +216,9 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                 )
             ),
             softwareVersion: getClaimDataValue<"string">("P348")[0],
-            keywords: getClaimDataValue<"string">("P921")[0],
-            programmingLanguage: programmingLanguageString, // TODO Get element from wiki data
-            applicationCategory: undefined,
+            keywords: getClaimDataValue<"string">("P921"),
+            programmingLanguage: programmingLanguageString ? [programmingLanguageString] : [],
+            applicationCategory: undefined, // doesn't exit on wiki data
         };
     },
     {

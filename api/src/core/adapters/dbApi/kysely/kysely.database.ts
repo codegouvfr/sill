@@ -78,9 +78,9 @@ type SoftwareExternalDatasTable = {
     documentationUrl: string | null;
     license: string | null;
     softwareVersion: string | null;
-    keywords: string | null;
-    programmingLanguage: string | null;
-    applicationCategory: string | null;
+    keywords: JSONColumnType<string[]> | null;
+    programmingLanguage: JSONColumnType<string[]> | null;
+    applicationCategory: JSONColumnType<string[]> | null;
 };
 
 type SoftwareType =

@@ -23,6 +23,8 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "authIdHal_s",
     "softProgrammingLanguage_s",
     "softVersion_s",
+    "authIdForm_i",
+    "domainAllCode_s",
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
@@ -36,7 +38,7 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         externalDataOrigin: "HAL",
         developers: halSoftware.authFullName_s.map((fullname, index) => {
             return {
-                "id": halSoftware.authIdHal_s[index],
+                "id": halSoftware?.authIdHal_s?.[index] ?? halSoftware.authIdForm_i[index].toString(),
                 "name": fullname
             }
         }),
@@ -57,9 +59,9 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         documentationUrl: undefined, // TODO no info about documentation in HAL check on SWH or Repo ?
         license,
         softwareVersion: halSoftware?.softVersion_s?.[0],
-        keywords: halSoftware?.keyword_s?.join(','),
-        programmingLanguage: halSoftware?.softProgrammingLanguage_s?.join(','),
-        applicationCategory: halSoftware?.domainAllCode_s?.join(','),
+        keywords: halSoftware?.keyword_s,
+        programmingLanguage: halSoftware?.softProgrammingLanguage_s,
+        applicationCategory: halSoftware?.domainAllCode_s,
     };
 };
 
@@ -121,7 +123,7 @@ export type HalRawSoftware = {
     keyword_s: string[];
     // fr_keyword_s?: string[];
     // authIdFormPerson_s: string[];
-    // authIdForm_i: number[];
+    authIdForm_i: number[];
     // authLastName_s: string[];
     // authFirstName_s: string[];
     // authMiddleName_s: string[];
@@ -269,7 +271,6 @@ export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): Softw
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
-    // TODO Mapping
     const formData : SoftwareFormData = {
         softwareName: halSoftware.title_s[0],
         softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : '',
