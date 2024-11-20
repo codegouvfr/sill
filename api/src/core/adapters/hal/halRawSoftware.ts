@@ -23,10 +23,13 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
-    const developers = bibliographicReferences && bibliographicReferences.author ? bibliographicReferences.author.map(author => ({
-        id: author.toLowerCase().split(" ").join("-"),
-        name: author
-    })) : [];
+    const developers =
+        bibliographicReferences && bibliographicReferences.author
+            ? bibliographicReferences.author.map(author => ({
+                  id: author.toLowerCase().split(" ").join("-"),
+                  name: author
+              }))
+            : [];
 
     return {
         externalId: halSoftware.docid,
@@ -225,30 +228,30 @@ export type HalRawSoftware = {
     // licence_s: string[];
 };
 
-export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData  => {
+export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
     // TODO Mapping
-    const formData : SoftwareFormData = {
+    const formData: SoftwareFormData = {
         softwareName: halSoftware.title_s[0],
-        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : '',
+        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : "",
         softwareType: {
             type: "desktop/mobile",
-            os: {"linux": true, "windows": false, "android": false, "ios": false, "mac": false  }
+            os: { "linux": true, "windows": false, "android": false, "ios": false, "mac": false }
         }, // TODO
         externalId: halSoftware.docid,
         comptoirDuLibreId: undefined,
-        softwareLicense: license || 'copyright', // TODO
-        softwareMinimalVersion: '1', // TODO
+        softwareLicense: license || "copyright", // TODO
+        softwareMinimalVersion: "1", // TODO
         similarSoftwareExternalDataIds: [],
         softwareLogoUrl: "https://www.gnu.org/graphics/gnu-head-30-years-anniversary.svg",
         softwareKeywords: [],
-    
+
         isPresentInSupportContract: false,
-        isFromFrenchPublicService: false, // TODO comment 
-        doRespectRgaa: null,
+        isFromFrenchPublicService: false, // TODO comment
+        doRespectRgaa: null
     };
 
     return formData;
-}
+};
