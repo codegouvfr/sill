@@ -183,13 +183,13 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: craSoftwareFormData.externalId,
                     framaLibreId: null,
                     isLibreSoftware: true,
-                    keywords: null,
+                    keywords: [],
                     label: "create-react-app",
                     license: "MIT licence",
                     logoUrl: null,
                     sourceUrl: "https://github.com/facebook/create-react-app",
                     websiteUrl: "https://create-react-app.dev/",
-                    programmingLanguage: null,
+                    programmingLanguage: [],
                     softwareVersion: "5.0.1"
                 },
                 {
@@ -206,7 +206,7 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q111590996",
                     framaLibreId: null,
                     isLibreSoftware: true,
-                    keywords: null,
+                    keywords: [],
                     label: "Vite",
                     license: "MIT licence",
                     logoUrl:
@@ -258,7 +258,7 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q11354",
                     framaLibreId: null,
                     isLibreSoftware: false,
-                    keywords: null,
+                    keywords: [],
                     label: "Apache HTTP Server",
                     license: "Apache License v2.0",
                     logoUrl:

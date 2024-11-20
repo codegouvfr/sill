@@ -159,6 +159,7 @@ describe("pgDbApi", () => {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
+                applicationCategory: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     authorName: dev.name,
                     authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
@@ -186,6 +187,7 @@ describe("pgDbApi", () => {
                     isFromFrenchPublicServices: false,
                     isPresentInSupportContract: true
                 },
+                programmingLanguage: ["C++"],
                 serviceProviders: [],
                 similarSoftwares: [
                     {
