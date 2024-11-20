@@ -33,6 +33,9 @@ export type Props = {
     isPresentInSupportMarket: boolean | undefined;
     isFromFrenchPublicService: boolean | undefined;
     isRGAACompliant?: boolean | undefined;
+    programmingLanguage?: string[];
+    keywords?: string[];
+    applicationCategory?: string[];
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -51,7 +54,10 @@ export const PreviewTab = (props: Props) => {
         comptoirDuLibreServiceProvidersUrl,
         annuaireCnllServiceProviders,
         comptoireDuLibreUrl,
-        wikiDataUrl
+        wikiDataUrl,
+        programmingLanguage,
+        keywords,
+        applicationCategory,
     } = props;
 
     const { classes, cx } = useStyles();
@@ -101,27 +107,53 @@ export const PreviewTab = (props: Props) => {
                         </p>
                     )}
 
-                    <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                        <span className={classes.labelDetail}>
-                            {t("minimal version")}
-                        </span>
-                        <span
-                            className={cx(
-                                fr.cx(
-                                    "fr-badge",
-                                    "fr-badge--yellow-tournesol",
-                                    "fr-badge--sm"
-                                ),
-                                classes.badgeVersion
-                            )}
-                        >
-                            {minimalVersionRequired}
-                        </span>
+                    {minimalVersionRequired && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>
+                                {t("minimal version")}
+                            </span>
+                            <span
+                                className={cx(
+                                    fr.cx(
+                                        "fr-badge",
+                                        "fr-badge--yellow-tournesol",
+                                        "fr-badge--sm"
+                                    ),
+                                    classes.badgeVersion
+                                )}
+                            >
+                                {minimalVersionRequired}
+                            </span>
+                        </p>
+                    )}
+
+                    {license && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>{t("license")}</span>
+                            <span>{license}</span>
+                        </p>
+                    )}
+
+                    {keywords && keywords.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                        <span className={classes.labelDetail}>{t("keywords")} : </span>
+                        <span>{keywords.join(', ')}</span>
                     </p>
-                    <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                        <span className={classes.labelDetail}>{t("license")}</span>
-                        <span>{license}</span>
-                    </p>
+                    )}
+
+                    {programmingLanguage && programmingLanguage.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>{t("programming language")} : </span>
+                            <span>{programmingLanguage.join(', ')}</span>
+                        </p>
+                    )}
+
+                    {applicationCategory && applicationCategory.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>{t("application category")} : </span>
+                            <span>{applicationCategory.join(', ')}</span>
+                        </p>
+                    )}
                 </div>
                 <div className={classes.section}>
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
@@ -204,34 +236,34 @@ export const PreviewTab = (props: Props) => {
                     comptoireDuLibreUrl !== undefined ||
                     annuaireCnllServiceProviders.length !== 0 ||
                     wikiDataUrl !== undefined) && (
-                    <div className={classes.section}>
-                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                            {t("use full links")}
-                        </p>
-                        {comptoireDuLibreUrl !== undefined && (
-                            <a
-                                href={comptoireDuLibreUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={t("comptoire du libre sheet")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("comptoire du libre sheet")}
-                            </a>
-                        )}
-                        {wikiDataUrl !== undefined && (
-                            <a
-                                href={wikiDataUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={t("wikiData sheet")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("wikiData sheet")}
-                            </a>
-                        )}
-                    </div>
-                )}
+                        <div className={classes.section}>
+                            <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                                {t("use full links")}
+                            </p>
+                            {comptoireDuLibreUrl !== undefined && (
+                                <a
+                                    href={comptoireDuLibreUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={t("comptoire du libre sheet")}
+                                    className={cx(classes.externalLink, classes.item)}
+                                >
+                                    {t("comptoire du libre sheet")}
+                                </a>
+                            )}
+                            {wikiDataUrl !== undefined && (
+                                <a
+                                    href={wikiDataUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={t("wikiData sheet")}
+                                    className={cx(classes.externalLink, classes.item)}
+                                >
+                                    {t("wikiData sheet")}
+                                </a>
+                            )}
+                        </div>
+                    )}
             </section>
             <CnllServiceProviderModal
                 softwareName={softwareName}
@@ -308,4 +340,7 @@ export const { i18n } = declareComponentKeys<
     | { K: "CNLL service providers"; P: { count: number } }
     | "wikiData sheet"
     | { K: "what is the support market"; P: { url: string }; R: JSX.Element }
+    | "programming language"
+    | "keywords"
+    | "application category"
 >()({ PreviewTab });

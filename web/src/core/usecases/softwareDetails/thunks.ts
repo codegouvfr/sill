@@ -191,7 +191,10 @@ function apiSoftwareToSoftware(params: {
         softwareType,
         userAndReferentCountByOrganization,
         annuaireCnllServiceProviders,
-        serviceProviders
+        serviceProviders,
+        programmingLanguage,
+        keywords,
+        applicationCategory,
     } = apiSoftware;
 
     const { resolveLocalizedString } = createResolveLocalizedString({
@@ -328,6 +331,9 @@ function apiSoftwareToSoftware(params: {
         },
         comptoirDuLibreServiceProviderCount,
         testUrl,
-        versionMin
+        versionMin,
+        programmingLanguage,
+        keywords,
+        applicationCategory,
     };
 }
