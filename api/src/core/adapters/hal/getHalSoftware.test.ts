@@ -34,7 +34,8 @@ describe("HAL", () => {
                 "softwareVersion": undefined,
                 "keywords": undefined,
                 "programmingLanguage": undefined,
-                "applicationCategory": ["info"]
+                "applicationCategory": ["info"],
+                "publicationTime": new Date(454325143)
             });
         });
     });

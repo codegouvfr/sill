@@ -81,6 +81,7 @@ type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguage: JSONColumnType<string[]> | null;
     applicationCategory: JSONColumnType<string[]> | null;
+    publicationTime: Date | null;
 };
 
 type SoftwareType =

@@ -24,7 +24,8 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "softProgrammingLanguage_s",
     "softVersion_s",
     "authIdForm_i",
-    "domainAllCode_s"
+    "domainAllCode_s",
+    "modifiedDate_tdate"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
@@ -61,7 +62,8 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         softwareVersion: halSoftware?.softVersion_s?.[0],
         keywords: halSoftware?.keyword_s,
         programmingLanguage: halSoftware?.softProgrammingLanguage_s,
-        applicationCategory: halSoftware?.domainAllCode_s
+        applicationCategory: halSoftware?.domainAllCode_s,
+        publicationTime: new Date(halSoftware?.modifiedDate_tdate)
     };
 };
 
@@ -191,7 +193,7 @@ export type HalRawSoftware = {
     // authorityInstitution_s: string[];
     // reportType_s: string;
     // inPress_bool: boolean;
-    // modifiedDate_tdate: string;
+    modifiedDate_tdate: string;
     // modifiedDate_s: string;
     // modifiedDateY_i: number;
     // modifiedDateM_i: number;

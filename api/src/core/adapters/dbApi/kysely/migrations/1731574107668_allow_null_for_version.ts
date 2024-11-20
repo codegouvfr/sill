@@ -9,6 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .alterTable("software_external_datas")
         .addColumn("softwareVersion", "text")
+        .addColumn("publicationTime", "date")
         .addColumn("keywords", "jsonb")
         .addColumn("programmingLanguage", "jsonb")
         .addColumn("applicationCategory", "jsonb")
@@ -24,6 +25,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema
         .alterTable("software_external_datas")
         .dropColumn("softwareVersion")
+        .dropColumn("publicationTime")
         .dropColumn("keywords")
         .dropColumn("programmingLanguage")
         .dropColumn("applicationCategory")

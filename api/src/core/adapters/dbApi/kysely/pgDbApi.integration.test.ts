@@ -53,7 +53,8 @@ const softwareExternalData: SoftwareExternalData = {
     softwareVersion: "1.0.0",
     keywords: ["Usefull", "Daily"],
     programmingLanguage: ["C++"],
-    applicationCategory: ["Software Cat I", "Software Cat II"]
+    applicationCategory: ["Software Cat I", "Software Cat II"],
+    publicationTime: new Date("4554564")
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -72,7 +73,8 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     softwareVersion: "3.0.2",
     keywords: ["Infra", "Adminsys"],
     programmingLanguage: ["Python3"],
-    applicationCategory: ["Software Cat I", "Software Cat II"]
+    applicationCategory: ["Software Cat I", "Software Cat II"],
+    publicationTime: new Date (1111)
 };
 
 const parentSoftwareExternalData: SoftwareExternalData = {

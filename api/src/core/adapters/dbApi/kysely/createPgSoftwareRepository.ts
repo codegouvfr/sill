@@ -249,6 +249,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             //         isInSill: true // TODO: check if this is true
                             //     })
                             // ) ?? [],
+                            latestVersion: software.latestVersion ?? {
+                                semVer: softwareExternalData?.softwareVersion ?? '',
+                                publicationTime: softwareExternalData.publicationTime?.valueOf()
+                            },
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
@@ -405,7 +409,8 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     programmingLanguage: ref("ext.programmingLanguage"),
                     applicationCategory: ref("ext.applicationCategory"),
                     keywords: ref("ext.keywords"),
-                    softwareVersion: ref("ext.softwareVersion")
+                    softwareVersion: ref("ext.softwareVersion"),
+                    publicationTime:  ref("ext.publicationTime")
                 }).as("softwareExternalData"),
             ({ ref, fn }) =>
                 fn

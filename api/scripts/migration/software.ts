@@ -124,7 +124,7 @@ const zSoftwareRow = z.object({
     ),
     "categories": z.array(z.string()),
     "generalInfoMd": z.string().optional(),
-    "addedByAgentEmail": z.string(), // TODO in #160
+    "addedByAgentEmail": z.string(),
     "logoUrl": z.string().optional(),
     "keywords": z.array(z.string())
 });

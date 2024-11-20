@@ -33,6 +33,7 @@ export type SoftwareExternalData = {
     keywords: string[];
     programmingLanguage: string[];
     applicationCategory: string[];
+    publicationTime: Date;
 }>;
 
 export type SimilarSoftwareExternalData = Pick<
