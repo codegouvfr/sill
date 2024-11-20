@@ -15,7 +15,9 @@ import { env } from "../src/env";
         "githubPersonalAccessTokenForApiRateLimit": env.githubPersonalAccessTokenForApiRateLimit,
         "doPerPerformPeriodicalCompilation": false,
         "doPerformCacheInitialization": false,
-        "externalSoftwareDataOrigin": env.externalSoftwareDataOrigin
+        "externalSoftwareDataOrigin": env.externalSoftwareDataOrigin,
+        "initializeSoftwareFromSource": env.initializeSoftwareFromSource,
+        "botAgentEmail": env.botAgentEmail
     });
 
     await useCases.fetchAndSaveExternalDataForAllSoftwares();
