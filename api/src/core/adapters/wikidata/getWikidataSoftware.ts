@@ -58,9 +58,15 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             return { "label": entity.aliases.en?.[0]?.value, "id": licenseId };
         })();
 
-        const { entity: programmingLanguageEntity } = await fetchEntity(getClaimDataValue<"wikibase-entityid">("P277")[0]?.id).catch(() => ({ "entity": undefined }));
-        const programmingLanguageLabel = programmingLanguageEntity ? wikidataSingleLocalizedStringToLocalizedString(programmingLanguageEntity.labels) : undefined;
-        const programmingLanguageString = programmingLanguageLabel ? resolveLocalizedString(programmingLanguageLabel) : undefined;
+        const { entity: programmingLanguageEntity } = await fetchEntity(
+            getClaimDataValue<"wikibase-entityid">("P277")[0]?.id
+        ).catch(() => ({ "entity": undefined }));
+        const programmingLanguageLabel = programmingLanguageEntity
+            ? wikidataSingleLocalizedStringToLocalizedString(programmingLanguageEntity.labels)
+            : undefined;
+        const programmingLanguageString = programmingLanguageLabel
+            ? resolveLocalizedString(programmingLanguageLabel)
+            : undefined;
 
         return {
             externalId: wikidataId,
@@ -218,7 +224,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             softwareVersion: getClaimDataValue<"string">("P348")[0],
             keywords: getClaimDataValue<"string">("P921"),
             programmingLanguage: programmingLanguageString ? [programmingLanguageString] : [],
-            applicationCategory: undefined, // doesn't exit on wiki data
+            applicationCategory: undefined // doesn't exit on wiki data
         };
     },
     {

@@ -24,7 +24,7 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "softProgrammingLanguage_s",
     "softVersion_s",
     "authIdForm_i",
-    "domainAllCode_s",
+    "domainAllCode_s"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
@@ -40,7 +40,7 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
             return {
                 "id": halSoftware?.authIdHal_s?.[index] ?? halSoftware.authIdForm_i[index].toString(),
                 "name": fullname
-            }
+            };
         }),
         label: {
             "en": halSoftware?.en_title_s?.[0] ?? halSoftware?.title_s?.[0] ?? "-",
@@ -61,7 +61,7 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         softwareVersion: halSoftware?.softVersion_s?.[0],
         keywords: halSoftware?.keyword_s,
         programmingLanguage: halSoftware?.softProgrammingLanguage_s,
-        applicationCategory: halSoftware?.domainAllCode_s,
+        applicationCategory: halSoftware?.domainAllCode_s
     };
 };
 
@@ -234,59 +234,61 @@ export type HalRawSoftware = {
     // label_xml: string;
     softCodeRepository_s: string[];
     // softDevelopmentStatus_s: string[];
-    softPlatform_s:string[];
+    softPlatform_s: string[];
     softProgrammingLanguage_s: string[];
     // softRuntimePlatform_s: string[];
     softVersion_s: string[];
     licence_s: string[];
 };
 
-const reduceIncludes = (stringArray : Array<string>, text: string): boolean => {
-    return stringArray.reduce((old: boolean, arg : string) => {
+const reduceIncludes = (stringArray: Array<string>, text: string): boolean => {
+    return stringArray.reduce((old: boolean, arg: string) => {
         return old || text.includes(arg);
     }, false);
-}
+};
 
-const textToSoftwareType = (text : string): SoftwareType => {
-    if (text.includes('docker')) {
+const textToSoftwareType = (text: string): SoftwareType => {
+    if (text.includes("docker")) {
         return {
             type: "cloud"
-        }
+        };
     }
 
-    const linux = reduceIncludes(['linux', 'ubuntu', 'unix', 'multiplatform', 'all'], text);
-    const windows = reduceIncludes(['windows', 'multiplatform', 'all'], text);
-    const mac = reduceIncludes(['mac', 'unix', 'multiplatform', 'all'], text);
+    const linux = reduceIncludes(["linux", "ubuntu", "unix", "multiplatform", "all"], text);
+    const windows = reduceIncludes(["windows", "multiplatform", "all"], text);
+    const mac = reduceIncludes(["mac", "unix", "multiplatform", "all"], text);
 
-    const android = text.includes('android');
-    const ios = reduceIncludes(['ios', 'os x', 'unix', 'Multiplatform', 'all'], text);
+    const android = text.includes("android");
+    const ios = reduceIncludes(["ios", "os x", "unix", "Multiplatform", "all"], text);
 
     return {
         type: "desktop/mobile",
-        os: {"linux": linux, "windows": windows, "android": android, "ios": ios, "mac": mac  }
+        os: { "linux": linux, "windows": windows, "android": android, "ios": ios, "mac": mac }
     };
-}
+};
 
-export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData  => {
+export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
-    const formData : SoftwareFormData = {
+    const formData: SoftwareFormData = {
         softwareName: halSoftware.title_s[0],
-        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : '',
-        softwareType: textToSoftwareType(halSoftware.softPlatform_s ? halSoftware.softPlatform_s.join('').toLocaleLowerCase() : ''),
+        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : "",
+        softwareType: textToSoftwareType(
+            halSoftware.softPlatform_s ? halSoftware.softPlatform_s.join("").toLocaleLowerCase() : ""
+        ),
         externalId: halSoftware.docid,
         comptoirDuLibreId: undefined,
-        softwareLicense: license || 'copyright', // TODO 1 case to copyright
+        softwareLicense: license || "copyright", // TODO 1 case to copyright
         softwareMinimalVersion: halSoftware?.softVersion_s?.[0], // TODO not intended
         similarSoftwareExternalDataIds: [],
         softwareLogoUrl: undefined,
         softwareKeywords: halSoftware.keyword_s || [],
-    
+
         isPresentInSupportContract: false,
-        isFromFrenchPublicService: false, // TODO comment 
-        doRespectRgaa: null,
+        isFromFrenchPublicService: false, // TODO comment
+        doRespectRgaa: null
     };
 
     return formData;
-}
+};

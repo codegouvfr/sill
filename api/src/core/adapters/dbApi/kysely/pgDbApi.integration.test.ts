@@ -53,7 +53,7 @@ const softwareExternalData: SoftwareExternalData = {
     softwareVersion: "1.0.0",
     keywords: ["Usefull", "Daily"],
     programmingLanguage: ["C++"],
-    applicationCategory: ["Software Cat I", "Software Cat II"],
+    applicationCategory: ["Software Cat I", "Software Cat II"]
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -72,7 +72,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     softwareVersion: "3.0.2",
     keywords: ["Infra", "Adminsys"],
     programmingLanguage: ["Python3"],
-    applicationCategory: ["Software Cat I", "Software Cat II"],
+    applicationCategory: ["Software Cat I", "Software Cat II"]
 };
 
 const parentSoftwareExternalData: SoftwareExternalData = {
@@ -429,7 +429,7 @@ describe("pgDbApi", () => {
                     description: JSON.stringify(softExtData.description),
                     keywords: JSON.stringify(softwareExternalData.keywords),
                     applicationCategory: JSON.stringify(softwareExternalData.applicationCategory),
-                    programmingLanguage: JSON.stringify(softwareExternalData.programmingLanguage),
+                    programmingLanguage: JSON.stringify(softwareExternalData.programmingLanguage)
                 }))
             )
             .execute();

@@ -22,7 +22,6 @@ import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 import { importFromHALSource } from "./usecases/importFromSource";
-import { env as config} from "../env";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -35,6 +34,8 @@ type ParamsOfBootstrapCore = {
     doPerPerformPeriodicalCompilation: boolean;
     doPerformCacheInitialization: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
+    initializeSoftwareFromSource: boolean;
+    botAgentEmail: string;
 };
 
 export type Context = {
@@ -66,7 +67,9 @@ export async function bootstrapCore(
         githubPersonalAccessTokenForApiRateLimit,
         doPerPerformPeriodicalCompilation,
         doPerformCacheInitialization,
-        externalSoftwareDataOrigin
+        externalSoftwareDataOrigin,
+        initializeSoftwareFromSource,
+        botAgentEmail
     } = params;
 
     const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
@@ -115,18 +118,18 @@ export async function bootstrapCore(
         await initializeUserApiCache();
     }
 
-    if (config.initializeSoftwareFromSource) {
-        if (config.externalSoftwareDataOrigin === 'HAL') {
-            console.log(' ------ Feeding database with HAL software started ------');
+    if (initializeSoftwareFromSource) {
+        if (externalSoftwareDataOrigin === "HAL") {
+            console.log(" ------ Feeding database with HAL software started ------");
             const HAL = importFromHALSource(dbApi);
             try {
-                await HAL(config.botAgentEmail);
-              } catch(err) {
+                await HAL(botAgentEmail);
+            } catch (err) {
                 // catches errors both in fetch and response.json
                 console.error(err);
-              }
-            
-            console.log(' ------ Feeding database with HAL software finished ------');
+            }
+
+            console.log(" ------ Feeding database with HAL software finished ------");
         }
     }
 
