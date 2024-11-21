@@ -22,8 +22,8 @@ export type Props = {
         isPresentInSupportContract: boolean;
     };
     latestVersion?: {
-        semVer: string;
-        publicationTime: number;
+        semVer?: string;
+        publicationTime?: number;
     };
     softwareDescription: string;
     userCount: number;
@@ -33,17 +33,17 @@ export type Props = {
     testUrl?: string;
     softwareDetailsLink: Link;
     searchHighlight:
-        | {
-              searchChars: string[];
-              highlightedIndexes: number[];
-          }
-        | undefined;
+    | {
+        searchChars: string[];
+        highlightedIndexes: number[];
+    }
+    | undefined;
     userDeclaration:
-        | {
-              isUser: boolean;
-              isReferent: boolean;
-          }
-        | undefined;
+    | {
+        isUser: boolean;
+        isReferent: boolean;
+    }
+    | undefined;
 };
 
 export const SoftwareCatalogCard = memo((props: Props) => {
@@ -146,19 +146,21 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     )}
                                 >
                                     {t("latest version", { fromNowText })}
-                                    <span
-                                        className={cx(
-                                            fr.cx(
-                                                "fr-badge--no-icon",
-                                                "fr-badge--yellow-tournesol",
-                                                "fr-badge",
-                                                "fr-badge--sm"
-                                            ),
-                                            classes.badgeVersion
-                                        )}
-                                    >
-                                        {latestVersion.semVer}
-                                    </span>
+                                    {latestVersion?.semVer && (
+                                        <span
+                                            className={cx(
+                                                fr.cx(
+                                                    "fr-badge--no-icon",
+                                                    "fr-badge--yellow-tournesol",
+                                                    "fr-badge",
+                                                    "fr-badge--sm"
+                                                ),
+                                                classes.badgeVersion
+                                            )}
+                                        >
+                                            {latestVersion?.semVer}
+                                        </span>
+                                    )}
                                 </p>
                             )}
                         </div>

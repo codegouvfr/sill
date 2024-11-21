@@ -765,7 +765,10 @@ function apiSoftwareToInternalSoftware(params: {
         logoUrl,
         softwareName,
         softwareDescription,
-        latestVersion,
+        latestVersion: {
+            semVer: latestVersion?.semVer ?? "",
+            publicationTime: latestVersion?.publicationTime
+        },
         "referentCount": Object.values(userAndReferentCountByOrganization)
             .map(({ referentCount }) => referentCount)
             .reduce((prev, curr) => prev + curr, 0),

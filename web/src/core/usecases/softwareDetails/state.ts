@@ -51,8 +51,8 @@ export namespace State {
         codeRepositoryUrl: string | undefined;
         latestVersion:
             | {
-                  semVer: string;
-                  publicationTime: number;
+                  semVer?: string;
+                  publicationTime?: number;
               }
             | undefined;
         addedTime: number;

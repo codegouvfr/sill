@@ -21,8 +21,8 @@ export type Software = {
     serviceProviders: ServiceProvider[];
     latestVersion:
         | {
-              semVer: string;
-              publicationTime: number;
+              semVer?: string;
+              publicationTime?: number;
           }
         | undefined;
     testUrl: string | undefined;

@@ -241,7 +241,10 @@ function apiSoftwareToSoftware(params: {
         codeRepositoryUrl,
         softwareName,
         softwareDescription,
-        latestVersion,
+        latestVersion: {
+            semVer: latestVersion?.semVer ?? "",
+            publicationTime: latestVersion?.publicationTime
+        },
         dereferencing,
         serviceProviders: serviceProviders ?? [],
         "referentCount": Object.values(userAndReferentCountByOrganization)
