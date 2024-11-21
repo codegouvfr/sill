@@ -223,6 +223,16 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
             return builder.execute().then(async softwares => {
                 const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
+                const dateParser = (str: string | Date | undefined | null) => {
+                    if (str && typeof str === "string") {
+                        const date = new Date(str);
+                        return date.valueOf();
+                    } else if (str && str instanceof Date) {
+                        return str.valueOf();
+                    } else {
+                        return undefined;
+                    }
+                };
                 return softwares.map(
                     ({
                         testUrls,
@@ -250,8 +260,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             //     })
                             // ) ?? [],
                             latestVersion: software.latestVersion ?? {
-                                semVer: softwareExternalData?.softwareVersion ?? '',
-                                publicationTime: softwareExternalData.publicationTime?.valueOf()
+                                semVer: softwareExternalData?.softwareVersion ?? "",
+                                publicationTime: dateParser(softwareExternalData.publicationTime)
                             },
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
@@ -410,7 +420,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     applicationCategory: ref("ext.applicationCategory"),
                     keywords: ref("ext.keywords"),
                     softwareVersion: ref("ext.softwareVersion"),
-                    publicationTime:  ref("ext.publicationTime")
+                    publicationTime: ref("ext.publicationTime")
                 }).as("softwareExternalData"),
             ({ ref, fn }) =>
                 fn

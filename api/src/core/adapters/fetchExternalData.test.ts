@@ -191,7 +191,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguage: [],
                     softwareVersion: "5.0.1",
-                    publicationTime: new Date(135131)
+                    publicationTime: new Date("2022-04-11T22:00:00.000Z")
                 },
                 {
                     applicationCategory: null,
@@ -215,8 +215,8 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguage: ["JavaScript"],
-                    softwareVersion: "4.2.1",
-                    publicationTime: new Date(135131)
+                    softwareVersion: "5.4.10",
+                    publicationTime: new Date("2024-10-22T22:00:00.000Z")
                 }
             ]);
 
@@ -268,8 +268,8 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
                     programmingLanguage: ["C"],
-                    softwareVersion: "2.4.62",
-                    publicationTime: new Date(3514313)
+                    softwareVersion: "2.5.0-alpha",
+                    publicationTime: new Date("2017-11-07T23:00:00.000Z")
                 }
             ]);
 

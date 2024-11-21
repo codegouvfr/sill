@@ -63,7 +63,7 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         keywords: halSoftware?.keyword_s,
         programmingLanguage: halSoftware?.softProgrammingLanguage_s,
         applicationCategory: halSoftware?.domainAllCode_s,
-        publicationTime: new Date(halSoftware?.modifiedDate_tdate)
+        publicationTime: halSoftware?.modifiedDate_tdate ? new Date(halSoftware?.modifiedDate_tdate) : undefined
     };
 };
 

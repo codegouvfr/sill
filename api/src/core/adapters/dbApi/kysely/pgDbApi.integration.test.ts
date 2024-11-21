@@ -54,7 +54,7 @@ const softwareExternalData: SoftwareExternalData = {
     keywords: ["Usefull", "Daily"],
     programmingLanguage: ["C++"],
     applicationCategory: ["Software Cat I", "Software Cat II"],
-    publicationTime: new Date("4554564")
+    publicationTime: new Date(1561566581000)
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -74,7 +74,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     keywords: ["Infra", "Adminsys"],
     programmingLanguage: ["Python3"],
     applicationCategory: ["Software Cat I", "Software Cat II"],
-    publicationTime: new Date (1111)
+    publicationTime: new Date(1561566581000)
 };
 
 const parentSoftwareExternalData: SoftwareExternalData = {
@@ -175,7 +175,10 @@ describe("pgDbApi", () => {
                 externalDataOrigin: "wikidata",
                 externalId,
                 keywords: ["bob", "l'éponge"],
-                latestVersion: undefined,
+                latestVersion: {
+                    "publicationTime": 1561507200000,
+                    "semVer": "1.0.0"
+                },
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,

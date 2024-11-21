@@ -16,11 +16,40 @@ import {
     type SoftwareExternalData,
     type LocalizedString
 } from "../../ports/GetSoftwareExternalData";
-import type { Entity, DataValue, LocalizedString as WikiDataLocalizedString } from "../../../tools/WikidataEntity";
+import {
+    type Entity,
+    type DataValue,
+    type LocalizedString as WikiDataLocalizedString,
+    wikidataTimeToJSDate,
+    WikidataTime
+} from "../../../tools/WikidataEntity";
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
     "fallbackLanguage": "en"
 });
+
+const compareVersion = (version1: string[], version2: string[]): boolean => {
+    if (version1.length === 0) return false;
+
+    if (Number(version1[0]) === Number(version2[0] ?? 0)) {
+        return compareVersion(version1.slice(1), version2.slice(1));
+    }
+
+    return Number(version1[0]) > Number(version2[0]);
+};
+
+const lastestVersionClaim = (ent: Entity) => {
+    return ent?.claims?.P348?.reduce((acc, statementClaim) => {
+        const versionString = statementClaim.mainsnak.datavalue.value;
+        const oldversionString = acc.mainsnak.datavalue.value;
+
+        if (typeof versionString === "string" && typeof oldversionString === "string") {
+            return compareVersion(versionString.split("."), oldversionString.split(".")) ? statementClaim : acc;
+        } else {
+            throw TypeError("Type not supported");
+        }
+    });
+};
 
 export const getWikidataSoftware: GetSoftwareExternalData = memoize(
     async (wikidataId): Promise<SoftwareExternalData | undefined> => {
@@ -66,6 +95,13 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             : undefined;
         const programmingLanguageString = programmingLanguageLabel
             ? resolveLocalizedString(programmingLanguageLabel)
+            : undefined;
+
+        const versionClaim = lastestVersionClaim(entity);
+
+        const publicationTimeDateValue = <WikidataTime>versionClaim?.qualifiers?.["P577"]?.[0].datavalue.value;
+        const publicationTimeDate = publicationTimeDateValue?.time
+            ? wikidataTimeToJSDate(publicationTimeDateValue)
             : undefined;
 
         return {
@@ -221,11 +257,11 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     })()
                 )
             ),
-            softwareVersion: getClaimDataValue<"string">("P348")[0],
+            softwareVersion: <string>versionClaim.mainsnak.datavalue.value,
             keywords: getClaimDataValue<"string">("P921"),
             programmingLanguage: programmingLanguageString ? [programmingLanguageString] : [],
             applicationCategory: undefined, // doesn't exit on wiki data
-            publicationTime: new Date(getClaimDataValue<"string">("P5017")[0])
+            publicationTime: publicationTimeDate
         };
     },
     {
@@ -287,7 +323,9 @@ async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
 function createGetClaimDataValue(params: { entity: Entity }) {
     const { entity } = params;
 
-    function getClaimDataValue<Type extends "string" | "wikibase-entityid" | "text-language">(property: `P${number}`) {
+    function getClaimDataValue<Type extends "string" | "wikibase-entityid" | "text-language" | "time">(
+        property: `P${number}`
+    ) {
         const statementClaim = entity.claims[property];
 
         if (statementClaim === undefined) {
