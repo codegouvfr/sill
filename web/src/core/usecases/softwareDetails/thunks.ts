@@ -194,7 +194,7 @@ function apiSoftwareToSoftware(params: {
         serviceProviders,
         programmingLanguage,
         keywords,
-        applicationCategory,
+        applicationCategory
     } = apiSoftware;
 
     const { resolveLocalizedString } = createResolveLocalizedString({
@@ -334,6 +334,6 @@ function apiSoftwareToSoftware(params: {
         versionMin,
         programmingLanguage,
         keywords,
-        applicationCategory,
+        applicationCategory
     };
 }

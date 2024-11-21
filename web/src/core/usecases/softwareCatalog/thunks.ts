@@ -228,7 +228,7 @@ function apiSoftwareToInternalSoftware(params: {
         similarSoftwares,
         keywords,
         programmingLanguage,
-        applicationCategory,
+        applicationCategory
     } = apiSoftware;
 
     assert<
@@ -335,7 +335,7 @@ function apiSoftwareToInternalSoftware(params: {
         })(),
         userDeclaration,
         programmingLanguage,
-        applicationCategory: ['test'],
+        applicationCategory
     };
 }
 

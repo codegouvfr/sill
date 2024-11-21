@@ -137,95 +137,109 @@ export default function SoftwareDetails(props: Props) {
                                             software.latestVersion?.semVer
                                         }
                                         keywords={software?.keywords}
-                                        programmingLanguage={software?.programmingLanguage}
-                                        applicationCategory={software?.applicationCategory}
+                                        programmingLanguage={
+                                            software?.programmingLanguage
+                                        }
+                                        applicationCategory={
+                                            software?.applicationCategory
+                                        }
                                     />
                                 )
                             },
                             ...(software.instances === undefined
                                 ? []
                                 : [
-                                    {
-                                        "label": t("tab title instance", {
-                                            "instanceCount": software.instances.length
-                                        }),
-                                        "isDefault": route.params.tab === "instances",
-                                        "content": (
-                                            <ReferencedInstancesTab
-                                                instanceList={software.instances}
-                                                createInstanceLink={
-                                                    routes.instanceCreationForm({
-                                                        "softwareName":
-                                                            software.softwareName
-                                                    }).link
-                                                }
-                                            />
-                                        )
-                                    }
-                                ]),
+                                      {
+                                          "label": t("tab title instance", {
+                                              "instanceCount": software.instances.length
+                                          }),
+                                          "isDefault": route.params.tab === "instances",
+                                          "content": (
+                                              <ReferencedInstancesTab
+                                                  instanceList={software.instances}
+                                                  createInstanceLink={
+                                                      routes.instanceCreationForm({
+                                                          "softwareName":
+                                                              software.softwareName
+                                                      }).link
+                                                  }
+                                              />
+                                          )
+                                      }
+                                  ]),
                             ...(software.serviceProviders.length === 0
                                 ? []
                                 : [
-                                    {
-                                        "label": t("tab service providers", {
-                                            "serviceProvidersCount":
-                                                software.serviceProviders.length
-                                        }),
-                                        "content": (
-                                            <div>
-                                                <p className={fr.cx("fr-text--bold")}>
-                                                    {t("list of service providers")}
-                                                </p>
-                                                <ul>
-                                                    {software.serviceProviders.map(
-                                                        serviceProvider => (
-                                                            <ServiceProviderRow
-                                                                key={
-                                                                    serviceProvider.name
-                                                                }
-                                                                serviceProvider={
-                                                                    serviceProvider
-                                                                }
-                                                            />
-                                                        )
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        )
-                                    }
-                                ]),
-                            ...(software.similarSoftwares.length === 0) ? [] : [
-                                {
-                                    "label": t("tab title alike software", {
-                                        alikeSoftwareCount:
-                                            software.similarSoftwares.length ?? 0
-                                    }),
-                                    "isDefault": route.params.tab === "alternatives",
-                                    "content": (
-                                        <SimilarSoftwareTab
-                                            similarSoftwares={software.similarSoftwares}
-                                            getLinks={({ softwareName }) => ({
-                                                "declarationForm": routes.declarationForm({
-                                                    "name": softwareName
-                                                }).link,
-                                                "softwareDetails": routes.softwareDetails({
-                                                    "name": softwareName
-                                                }).link,
-                                                "softwareUsersAndReferents":
-                                                    routes.softwareUsersAndReferents({
-                                                        "name": softwareName
-                                                    }).link
-                                            })}
-                                            getAddWikipediaSoftwareToSillLink={({
-                                                externalId
-                                            }) =>
-                                                routes.softwareCreationForm({
-                                                    externalId: externalId
-                                                }).link
-                                            }
-                                        />
-                                    )
-                                }]
+                                      {
+                                          "label": t("tab service providers", {
+                                              "serviceProvidersCount":
+                                                  software.serviceProviders.length
+                                          }),
+                                          "content": (
+                                              <div>
+                                                  <p className={fr.cx("fr-text--bold")}>
+                                                      {t("list of service providers")}
+                                                  </p>
+                                                  <ul>
+                                                      {software.serviceProviders.map(
+                                                          serviceProvider => (
+                                                              <ServiceProviderRow
+                                                                  key={
+                                                                      serviceProvider.name
+                                                                  }
+                                                                  serviceProvider={
+                                                                      serviceProvider
+                                                                  }
+                                                              />
+                                                          )
+                                                      )}
+                                                  </ul>
+                                              </div>
+                                          )
+                                      }
+                                  ]),
+                            ...(software.similarSoftwares.length === 0
+                                ? []
+                                : [
+                                      {
+                                          "label": t("tab title alike software", {
+                                              alikeSoftwareCount:
+                                                  software.similarSoftwares.length ?? 0
+                                          }),
+                                          "isDefault":
+                                              route.params.tab === "alternatives",
+                                          "content": (
+                                              <SimilarSoftwareTab
+                                                  similarSoftwares={
+                                                      software.similarSoftwares
+                                                  }
+                                                  getLinks={({ softwareName }) => ({
+                                                      "declarationForm":
+                                                          routes.declarationForm({
+                                                              "name": softwareName
+                                                          }).link,
+                                                      "softwareDetails":
+                                                          routes.softwareDetails({
+                                                              "name": softwareName
+                                                          }).link,
+                                                      "softwareUsersAndReferents":
+                                                          routes.softwareUsersAndReferents(
+                                                              {
+                                                                  "name": softwareName
+                                                              }
+                                                          ).link
+                                                  })}
+                                                  getAddWikipediaSoftwareToSillLink={({
+                                                      externalId
+                                                  }) =>
+                                                      routes.softwareCreationForm({
+                                                          externalId: externalId
+                                                      }).link
+                                                  }
+                                              />
+                                          )
+                                      }
+                                  ])
                         ]}
                     />
                 </div>
@@ -238,8 +252,8 @@ export default function SoftwareDetails(props: Props) {
                         seeUserAndReferent={
                             software.referentCount > 0 || software.userCount > 0
                                 ? routes.softwareUsersAndReferents({
-                                    "name": software.softwareName
-                                }).link
+                                      "name": software.softwareName
+                                  }).link
                                 : undefined
                         }
                         referentCount={software.referentCount ?? 0}
@@ -295,8 +309,8 @@ export default function SoftwareDetails(props: Props) {
                             const declarationType = userDeclaration?.isReferent
                                 ? "referent"
                                 : userDeclaration?.isUser
-                                    ? "user"
-                                    : undefined;
+                                ? "user"
+                                : undefined;
 
                             if (declarationType === undefined) {
                                 return (

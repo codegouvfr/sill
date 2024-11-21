@@ -558,7 +558,7 @@ const {
                     `See the ${count} service providers on the CNLL index`,
                 "programming language": "Coded in",
                 "keywords": "Keywords",
-                "application category": "Categories",
+                "application category": "Categories"
             },
             "ReferencedInstancesTab": {
                 "publicInstanceCount": ({ instanceCount, organizationCount }) =>
@@ -1251,7 +1251,7 @@ const {
                     `Voir les ${count} prestataires de l'annuaire CNLL`,
                 "programming language": "Language de programmation",
                 "keywords": "Mots clés",
-                "application category": "Catégories",
+                "application category": "Catégories"
             },
             "ReferencedInstancesTab": {
                 "publicInstanceCount": ({ instanceCount, organizationCount }) => {

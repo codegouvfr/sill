@@ -57,7 +57,7 @@ export const PreviewTab = (props: Props) => {
         wikiDataUrl,
         programmingLanguage,
         keywords,
-        applicationCategory,
+        applicationCategory
     } = props;
 
     const { classes, cx } = useStyles();
@@ -73,31 +73,33 @@ export const PreviewTab = (props: Props) => {
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                         {t("about")}
                     </p>
-                    {softwareDateCurrentVersion && (
+                    {(softwareCurrentVersion || softwareDateCurrentVersion) && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
                                 {t("last version")}
                             </span>
-                            <span
-                                className={cx(
-                                    fr.cx(
-                                        "fr-badge",
-                                        "fr-badge--yellow-tournesol",
-                                        "fr-badge--sm"
-                                    ),
-                                    classes.badgeVersion
-                                )}
-                            >
-                                {softwareCurrentVersion}
-                            </span>
-                            (
-                            {capitalize(
-                                shortEndMonthDate({
-                                    "time": softwareDateCurrentVersion,
-                                    lang
-                                })
+                            {softwareCurrentVersion && (
+                                <span
+                                    className={cx(
+                                        fr.cx(
+                                            "fr-badge",
+                                            "fr-badge--yellow-tournesol",
+                                            "fr-badge--sm"
+                                        ),
+                                        classes.badgeVersion
+                                    )}
+                                >
+                                    {softwareCurrentVersion}
+                                </span>
                             )}
-                            )
+
+                            {softwareDateCurrentVersion &&
+                                capitalize(
+                                    shortEndMonthDate({
+                                        "time": softwareDateCurrentVersion,
+                                        lang
+                                    })
+                                )}
                         </p>
                     )}
                     {registerDate && (
@@ -136,22 +138,28 @@ export const PreviewTab = (props: Props) => {
 
                     {keywords && keywords.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                        <span className={classes.labelDetail}>{t("keywords")} : </span>
-                        <span>{keywords.join(', ')}</span>
-                    </p>
+                            <span className={classes.labelDetail}>
+                                {t("keywords")} :{" "}
+                            </span>
+                            <span>{keywords.join(", ")}</span>
+                        </p>
                     )}
 
                     {programmingLanguage && programmingLanguage.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("programming language")} : </span>
-                            <span>{programmingLanguage.join(', ')}</span>
+                            <span className={classes.labelDetail}>
+                                {t("programming language")} :{" "}
+                            </span>
+                            <span>{programmingLanguage.join(", ")}</span>
                         </p>
                     )}
 
                     {applicationCategory && applicationCategory.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("application category")} : </span>
-                            <span>{applicationCategory.join(', ')}</span>
+                            <span className={classes.labelDetail}>
+                                {t("application category")} :{" "}
+                            </span>
+                            <span>{applicationCategory.join(", ")}</span>
                         </p>
                     )}
                 </div>
@@ -236,34 +244,34 @@ export const PreviewTab = (props: Props) => {
                     comptoireDuLibreUrl !== undefined ||
                     annuaireCnllServiceProviders.length !== 0 ||
                     wikiDataUrl !== undefined) && (
-                        <div className={classes.section}>
-                            <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                                {t("use full links")}
-                            </p>
-                            {comptoireDuLibreUrl !== undefined && (
-                                <a
-                                    href={comptoireDuLibreUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    title={t("comptoire du libre sheet")}
-                                    className={cx(classes.externalLink, classes.item)}
-                                >
-                                    {t("comptoire du libre sheet")}
-                                </a>
-                            )}
-                            {wikiDataUrl !== undefined && (
-                                <a
-                                    href={wikiDataUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    title={t("wikiData sheet")}
-                                    className={cx(classes.externalLink, classes.item)}
-                                >
-                                    {t("wikiData sheet")}
-                                </a>
-                            )}
-                        </div>
-                    )}
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("use full links")}
+                        </p>
+                        {comptoireDuLibreUrl !== undefined && (
+                            <a
+                                href={comptoireDuLibreUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                title={t("comptoire du libre sheet")}
+                                className={cx(classes.externalLink, classes.item)}
+                            >
+                                {t("comptoire du libre sheet")}
+                            </a>
+                        )}
+                        {wikiDataUrl !== undefined && (
+                            <a
+                                href={wikiDataUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                title={t("wikiData sheet")}
+                                className={cx(classes.externalLink, classes.item)}
+                            >
+                                {t("wikiData sheet")}
+                            </a>
+                        )}
+                    </div>
+                )}
             </section>
             <CnllServiceProviderModal
                 softwareName={softwareName}

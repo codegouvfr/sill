@@ -33,17 +33,17 @@ export type Props = {
     testUrl?: string;
     softwareDetailsLink: Link;
     searchHighlight:
-    | {
-        searchChars: string[];
-        highlightedIndexes: number[];
-    }
-    | undefined;
+        | {
+              searchChars: string[];
+              highlightedIndexes: number[];
+          }
+        | undefined;
     userDeclaration:
-    | {
-        isUser: boolean;
-        isReferent: boolean;
-    }
-    | undefined;
+        | {
+              isUser: boolean;
+              isReferent: boolean;
+          }
+        | undefined;
 };
 
 export const SoftwareCatalogCard = memo((props: Props) => {
