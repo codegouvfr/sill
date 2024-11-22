@@ -13,7 +13,6 @@ export type ServiceProvider = {
 };
 
 export type Software = {
-    id?: number;
     logoUrl: string | undefined;
     softwareId: number;
     softwareName: string;

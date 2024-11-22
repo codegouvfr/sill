@@ -24,8 +24,8 @@ export CONFIGURATION=$(cat << EOF
   "port": $SILL_API_PORT,
   "isDevEnvironnement": $SILL_IS_DEV_ENVIRONNEMENT,
   "externalSoftwareDataOrigin": $SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
-  "initializeSoftwareFromSource": $INITSOFTFROMSOURCE,
-  "botAgentEmail": $BOTAGENTEMAIL,
+  "initializeSoftwareFromSource": $INIT_SOFT_FROM_SOURCE,
+  "botAgentEmail": $BOT_AGENT_EMAIL,
 }
 EOF
 ) 
