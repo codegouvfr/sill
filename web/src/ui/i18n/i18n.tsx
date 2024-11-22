@@ -556,9 +556,9 @@ const {
                 "CNLL service providers title": "CNLL service providers",
                 "CNLL service providers": ({ count }) =>
                     `See the ${count} service providers on the CNLL index`,
-                "programming language": "Coded in",
+                "programming languages": "Coded in",
                 "keywords": "Keywords",
-                "application category": "Categories"
+                "application categories": "Categories"
             },
             "ReferencedInstancesTab": {
                 "publicInstanceCount": ({ instanceCount, organizationCount }) =>
@@ -1249,9 +1249,9 @@ const {
                 "CNLL service providers title": "Prestataires de services CNLL",
                 "CNLL service providers": ({ count }) =>
                     `Voir les ${count} prestataires de l'annuaire CNLL`,
-                "programming language": "Language de programmation",
+                "programming languages": "Language de programmation",
                 "keywords": "Mots clés",
-                "application category": "Catégories"
+                "application categories": "Catégories"
             },
             "ReferencedInstancesTab": {
                 "publicInstanceCount": ({ instanceCount, organizationCount }) => {

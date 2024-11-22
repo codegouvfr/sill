@@ -148,7 +148,7 @@ export const PreviewTab = (props: Props) => {
                     {programmingLanguages && programmingLanguages.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("programming language")} :{" "}
+                                {t("programming languages")} :{" "}
                             </span>
                             <span>{programmingLanguages.join(", ")}</span>
                         </p>
@@ -157,7 +157,7 @@ export const PreviewTab = (props: Props) => {
                     {applicationCategories && applicationCategories.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("application category")} :{" "}
+                                {t("application categories")} :{" "}
                             </span>
                             <span>{applicationCategories.join(", ")}</span>
                         </p>
@@ -348,7 +348,7 @@ export const { i18n } = declareComponentKeys<
     | { K: "CNLL service providers"; P: { count: number } }
     | "wikiData sheet"
     | { K: "what is the support market"; P: { url: string }; R: JSX.Element }
-    | "programming language"
+    | "programming languages"
     | "keywords"
-    | "application category"
+    | "application categories"
 >()({ PreviewTab });
