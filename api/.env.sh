@@ -23,7 +23,9 @@ export CONFIGURATION=$(cat << EOF
   "githubWebhookSecret": "$SILL_WEBHOOK_SECRET",
   "port": $SILL_API_PORT,
   "isDevEnvironnement": $SILL_IS_DEV_ENVIRONNEMENT,
-  "externalSoftwareDataOrigin": $SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN
+  "externalSoftwareDataOrigin": $SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
+  "initializeSoftwareFromSource": $INIT_SOFT_FROM_SOURCE,
+  "botAgentEmail": $BOT_AGENT_EMAIL,
 }
 EOF
 ) 

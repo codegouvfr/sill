@@ -31,7 +31,9 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
         "githubPersonalAccessTokenForApiRateLimit": "fake-token",
         "doPerPerformPeriodicalCompilation": false,
         "doPerformCacheInitialization": false,
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+        "botAgentEmail": "bot@mydomain.fr",
+        "initializeSoftwareFromSource": false
     });
 
     const jwtClaimByUserKey = {

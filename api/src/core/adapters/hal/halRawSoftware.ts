@@ -1,5 +1,6 @@
 import { Language, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { SoftwareExternalDataOption } from "../../ports/GetSoftwareExternalDataOptions";
+import { SoftwareFormData } from "../../usecases/readWriteSillData";
 import { parseBibliographicFields } from "./parseBibliographicFields";
 
 const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
@@ -20,11 +21,15 @@ export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(
 
 export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware): SoftwareExternalData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
-    const license = bibliographicReferences.license.join(", ");
-    const developers = bibliographicReferences.author.map(author => ({
-        id: author.toLowerCase().split(" ").join("-"),
-        name: author
-    }));
+    const license = bibliographicReferences?.license?.join(", ");
+
+    const developers =
+        bibliographicReferences && bibliographicReferences.author
+            ? bibliographicReferences.author.map(author => ({
+                  id: author.toLowerCase().split(" ").join("-"),
+                  name: author
+              }))
+            : [];
 
     return {
         externalId: halSoftware.docid,
@@ -214,4 +219,39 @@ export type HalRawSoftware = {
     // _version_: bigint;
     // dateLastIndexed_tdate: string;
     // label_xml: string;
+    // softCodeRepository_s: string[];
+    // softDevelopmentStatus_s: string[];
+    // softPlatform_s:string[];
+    // softProgrammingLanguage_s: string[];
+    // softRuntimePlatform_s: string[];
+    // softVersion_s: string[];
+    // licence_s: string[];
+};
+
+export const halRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
+    const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
+    const license = bibliographicReferences?.license?.join(", ");
+
+    // TODO Mapping
+    const formData: SoftwareFormData = {
+        softwareName: halSoftware.title_s[0],
+        softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : "",
+        softwareType: {
+            type: "desktop/mobile",
+            os: { "linux": true, "windows": false, "android": false, "ios": false, "mac": false }
+        }, // TODO
+        externalId: halSoftware.docid,
+        comptoirDuLibreId: undefined,
+        softwareLicense: license || "copyright", // TODO
+        softwareMinimalVersion: "1", // TODO
+        similarSoftwareExternalDataIds: [],
+        softwareLogoUrl: "https://www.gnu.org/graphics/gnu-head-30-years-anniversary.svg",
+        softwareKeywords: [],
+
+        isPresentInSupportContract: false,
+        isFromFrenchPublicService: false, // TODO comment
+        doRespectRgaa: null
+    };
+
+    return formData;
 };

@@ -28,7 +28,9 @@ const zConfiguration = z.object({
     // Completely disable this instance and redirect to another url
     "redirectUrl": z.string().optional(),
     "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
-    "databaseUrl": z.string()
+    "databaseUrl": z.string(),
+    "initializeSoftwareFromSource": z.boolean(),
+    "botAgentEmail": z.string()
 });
 
 const getJsonConfiguration = () => {
@@ -65,7 +67,9 @@ const getJsonConfiguration = () => {
         "isDevEnvironnement": process.env.SILL_IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
         "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
         "redirectUrl": process.env.SILL_REDIRECT_URL,
-        "databaseUrl": process.env.DATABASE_URL
+        "databaseUrl": process.env.DATABASE_URL,
+        "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
+        "botAgentEmail": process.env?.BOT_AGENT_EMAIL
     };
 };
 

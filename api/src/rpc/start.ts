@@ -41,6 +41,8 @@ export async function startRpcService(params: {
     externalSoftwareDataOrigin: ExternalDataOrigin;
     redirectUrl?: string;
     databaseUrl: string;
+    initializeSoftwareFromSource: boolean;
+    botAgentEmail: string;
 }) {
     const {
         redirectUrl,
@@ -53,6 +55,8 @@ export async function startRpcService(params: {
         isDevEnvironnement,
         externalSoftwareDataOrigin,
         databaseUrl,
+        botAgentEmail,
+        initializeSoftwareFromSource,
         ...rest
     } = params;
 
@@ -84,7 +88,9 @@ export async function startRpcService(params: {
         "doPerPerformPeriodicalCompilation": true,
         // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
         "doPerformCacheInitialization": redirectUrl === undefined,
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+        "botAgentEmail": botAgentEmail,
+        "initializeSoftwareFromSource": initializeSoftwareFromSource
     });
 
     console.log("Core API initialized");

@@ -124,11 +124,11 @@ export type Prerogative = keyof Prerogatives;
 export type Os = "windows" | "linux" | "mac" | "android" | "ios";
 
 export type SoftwareFormData = {
+    softwareName: string;
+    softwareDescription: string;
     softwareType: SoftwareType;
     externalId: string | undefined;
     comptoirDuLibreId: number | undefined;
-    softwareName: string;
-    softwareDescription: string;
     softwareLicense: string;
     softwareMinimalVersion: string;
     similarSoftwareExternalDataIds: string[];

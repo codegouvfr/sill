@@ -21,6 +21,7 @@ import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import { importFromHALSource } from "./usecases/importFromSource";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -33,6 +34,8 @@ type ParamsOfBootstrapCore = {
     doPerPerformPeriodicalCompilation: boolean;
     doPerformCacheInitialization: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
+    initializeSoftwareFromSource: boolean;
+    botAgentEmail: string;
 };
 
 export type Context = {
@@ -64,7 +67,9 @@ export async function bootstrapCore(
         githubPersonalAccessTokenForApiRateLimit,
         doPerPerformPeriodicalCompilation,
         doPerformCacheInitialization,
-        externalSoftwareDataOrigin
+        externalSoftwareDataOrigin,
+        initializeSoftwareFromSource,
+        botAgentEmail
     } = params;
 
     const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
@@ -111,6 +116,21 @@ export async function bootstrapCore(
     if (doPerformCacheInitialization) {
         console.log("Performing user cache initialization...");
         await initializeUserApiCache();
+    }
+
+    if (initializeSoftwareFromSource) {
+        if (externalSoftwareDataOrigin === "HAL") {
+            console.log(" ------ Feeding database with HAL software started ------");
+            const importHAL = importFromHALSource(dbApi);
+            try {
+                await importHAL(botAgentEmail);
+            } catch (err) {
+                // catches errors both in fetch and response.json
+                console.error(err);
+            }
+
+            console.log(" ------ Feeding database with HAL software finished ------");
+        }
     }
 
     if (doPerPerformPeriodicalCompilation) {
