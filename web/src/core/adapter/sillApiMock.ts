@@ -116,7 +116,9 @@ export const sillApi: SillApi = {
                 "DINUM": { "referentCount": 2, "userCount": 43 }
             },
             "keywords": [],
-            "annuaireCnllServiceProviders": []
+            "annuaireCnllServiceProviders": [],
+            "programmingLanguages": ["c++"],
+            "applicationCategories": []
         };
 
         softwares.push(software);
@@ -171,7 +173,9 @@ export const sillApi: SillApi = {
                     "DINUM": { "referentCount": 2, "userCount": 43 }
                 },
                 "keywords": [],
-                "annuaireCnllServiceProviders": []
+                "annuaireCnllServiceProviders": [],
+                "applicationCategories": [],
+                "programmingLanguages": []
             })
         };
     },
@@ -349,7 +353,9 @@ const softwares = [
             "CC Pays de Pouzauges": { "referentCount": 1, "userCount": 0 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -413,7 +419,9 @@ const softwares = [
         "userAndReferentCountByOrganization": {
             "CA du Puy-en-Velay": { "referentCount": 1, "userCount": 0 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -469,7 +477,9 @@ const softwares = [
             "CC Pays de Pouzauges": { "referentCount": 1, "userCount": 0 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -524,7 +534,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -582,7 +594,9 @@ const softwares = [
             "CC Pays de Pouzauges": { "referentCount": 1, "userCount": 0 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -655,7 +669,9 @@ const softwares = [
             "CC Pays de Pouzauges": { "referentCount": 1, "userCount": 0 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -709,7 +725,9 @@ const softwares = [
             "CA du Puy-en-Velay": { "referentCount": 0, "userCount": 1 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": undefined,
@@ -778,7 +796,9 @@ const softwares = [
         "userAndReferentCountByOrganization": {
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoNeovim,
@@ -828,7 +848,9 @@ const softwares = [
         "userAndReferentCountByOrganization": {
             "CA du Puy-en-Velay": { "referentCount": 0, "userCount": 1 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoWordpress,
@@ -877,7 +899,9 @@ const softwares = [
             "CC Pays de Pouzauges": { "referentCount": 1, "userCount": 0 },
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -923,7 +947,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -969,7 +995,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1015,7 +1043,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1061,7 +1091,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1107,7 +1139,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1153,7 +1187,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1199,7 +1235,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
         "logoUrl": LogoLibreOffice,
@@ -1245,7 +1283,9 @@ const softwares = [
             "isPresentInSupportContract": false
         },
         "userAndReferentCountByOrganization": {},
-        "keywords": []
+        "keywords": [],
+        "applicationCategories": [],
+        "programmingLanguages": []
     })
 ];
 

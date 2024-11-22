@@ -99,7 +99,10 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
         const versionClaim = lastestVersionClaim(entity);
 
-        const publicationTimeDateValue = <WikidataTime>versionClaim?.qualifiers?.["P577"]?.[0].datavalue.value;
+        const publicationDateQualifier = "P577";
+        const publicationTimeDateValue = versionClaim?.qualifiers?.[publicationDateQualifier]?.[0].datavalue.value as
+            | WikidataTime
+            | undefined;
         const publicationTimeDate = publicationTimeDateValue?.time
             ? wikidataTimeToJSDate(publicationTimeDateValue)
             : undefined;
@@ -198,21 +201,6 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                         return undefined;
                     }
 
-                    /*
-                    const { getClaimDataValue } = createGetClaimDataValue({
-                        entity,
-                    });
-	
-                    const isHuman =
-                        getClaimDataValue<"wikibase-entityid">("P31").find(
-                            ({ id }) => id === "Q5",
-                        ) !== undefined;
-	
-                    if (!isHuman) {
-                        return undefined;
-                    }
-                    */
-
                     const name = (() => {
                         const { shortName } = (() => {
                             const { getClaimDataValue } = createGetClaimDataValue({
@@ -259,8 +247,8 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             ),
             softwareVersion: <string>versionClaim.mainsnak.datavalue.value,
             keywords: getClaimDataValue<"string">("P921"),
-            programmingLanguage: programmingLanguageString ? [programmingLanguageString] : [],
-            applicationCategory: undefined, // doesn't exit on wiki data
+            programmingLanguages: programmingLanguageString ? [programmingLanguageString] : [],
+            applicationCategories: undefined, // doesn't exit on wiki data
             publicationTime: publicationTimeDate
         };
     },

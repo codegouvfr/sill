@@ -7,6 +7,16 @@ import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
 
+const dateParser = (str: string | Date | undefined | null) => {
+    if (str && typeof str === "string") {
+        const date = new Date(str);
+        return date.valueOf();
+    }
+    if (str && str instanceof Date) {
+        return str.valueOf();
+    }
+};
+
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
@@ -179,7 +189,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                         testUrl: testUrls[0]?.url,
                         parentWikidataSoftware: parentExternalData,
-                        keywords: software?.keywords ?? softwareExternalData?.keywords ?? []
+                        keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
+                        programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                        applicationCategories: softwareExternalData?.applicationCategories ?? []
                     });
                 }),
         getById: getBySoftwareId,
@@ -223,16 +235,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
             return builder.execute().then(async softwares => {
                 const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
-                const dateParser = (str: string | Date | undefined | null) => {
-                    if (str && typeof str === "string") {
-                        const date = new Date(str);
-                        return date.valueOf();
-                    } else if (str && str instanceof Date) {
-                        return str.valueOf();
-                    } else {
-                        return undefined;
-                    }
-                };
+
                 return softwares.map(
                     ({
                         testUrls,
@@ -260,7 +263,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             //     })
                             // ) ?? [],
                             latestVersion: software.latestVersion ?? {
-                                semVer: softwareExternalData?.softwareVersion ?? "",
+                                semVer: softwareExternalData?.softwareVersion ?? undefined,
                                 publicationTime: dateParser(softwareExternalData.publicationTime)
                             },
                             userAndReferentCountByOrganization:
@@ -282,8 +285,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
                             testUrl: testUrls[0]?.url,
                             parentWikidataSoftware: parentExternalData ?? undefined,
-                            applicationCategory: softwareExternalData?.applicationCategory ?? [],
-                            programmingLanguage: softwareExternalData?.programmingLanguage ?? []
+                            applicationCategories: softwareExternalData?.applicationCategories ?? [],
+                            programmingLanguages: softwareExternalData?.programmingLanguages ?? []
                         });
                     }
                 );
@@ -416,8 +419,8 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     websiteUrl: ref("ext.websiteUrl"),
                     sourceUrl: ref("ext.sourceUrl"),
                     documentationUrl: ref("ext.documentationUrl"),
-                    programmingLanguage: ref("ext.programmingLanguage"),
-                    applicationCategory: ref("ext.applicationCategory"),
+                    programmingLanguages: ref("ext.programmingLanguages"),
+                    applicationCategories: ref("ext.applicationCategories"),
                     keywords: ref("ext.keywords"),
                     softwareVersion: ref("ext.softwareVersion"),
                     publicationTime: ref("ext.publicationTime")
@@ -539,6 +542,8 @@ const makeGetSoftwareById =
                     documentationUrl: softwareExternalData?.documentationUrl,
                     comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                     testUrl: testUrls[0]?.url,
-                    parentWikidataSoftware: parentExternalData
+                    parentWikidataSoftware: parentExternalData,
+                    programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                    applicationCategories: softwareExternalData?.applicationCategories ?? []
                 });
             });

@@ -175,7 +175,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
-                    applicationCategory: null,
+                    applicationCategories: null,
                     description: "A framwork for creating react SPA that uses webpack as bundler",
                     developers: [],
                     documentationUrl: null,
@@ -189,12 +189,12 @@ describe("fetches software extra data (from different providers)", () => {
                     logoUrl: null,
                     sourceUrl: "https://github.com/facebook/create-react-app",
                     websiteUrl: "https://create-react-app.dev/",
-                    programmingLanguage: [],
+                    programmingLanguages: [],
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-11T22:00:00.000Z")
                 },
                 {
-                    applicationCategory: null,
+                    applicationCategories: null,
                     description: "open-source JavaScript module bundler",
                     developers: [
                         {
@@ -214,7 +214,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
-                    programmingLanguage: ["JavaScript"],
+                    programmingLanguages: ["JavaScript"],
                     softwareVersion: "5.4.10",
                     publicationTime: new Date("2024-10-22T22:00:00.000Z")
                 }
@@ -244,7 +244,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
-                    applicationCategory: null,
+                    applicationCategories: null,
                     description: {
                         en: "open-source web server software",
                         fr: "serveur web sous licence libre"
@@ -267,7 +267,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
-                    programmingLanguage: ["C"],
+                    programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-07T23:00:00.000Z")
                 }

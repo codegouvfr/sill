@@ -61,8 +61,8 @@ export type Software = {
     parentWikidataSoftware: ParentSoftwareExternalData | undefined;
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
-    programmingLanguage?: string[];
-    applicationCategory?: string[];
+    programmingLanguages: string[];
+    applicationCategories: string[];
 };
 
 export namespace Software {
