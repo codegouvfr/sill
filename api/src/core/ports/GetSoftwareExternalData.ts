@@ -31,8 +31,8 @@ export type SoftwareExternalData = {
     license: string;
     softwareVersion: string;
     keywords: string[];
-    programmingLanguage: string[];
-    applicationCategory: string[];
+    programmingLanguages: string[];
+    applicationCategories: string[];
     publicationTime: Date;
 }>;
 

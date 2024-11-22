@@ -61,8 +61,8 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
         license,
         softwareVersion: halSoftware?.softVersion_s?.[0],
         keywords: halSoftware?.keyword_s,
-        programmingLanguage: halSoftware?.softProgrammingLanguage_s,
-        applicationCategory: halSoftware?.domainAllCode_s,
+        programmingLanguages: halSoftware?.softProgrammingLanguage_s,
+        applicationCategories: halSoftware?.domainAllCode_s,
         publicationTime: halSoftware?.modifiedDate_tdate ? new Date(halSoftware?.modifiedDate_tdate) : undefined
     };
 };
@@ -243,10 +243,10 @@ export type HalRawSoftware = {
     licence_s: string[];
 };
 
-const reduceIncludes = (stringArray: Array<string>, text: string): boolean => {
-    return stringArray.reduce((old: boolean, arg: string) => {
-        return old || text.includes(arg);
-    }, false);
+const stringOfArrayIncluded = (stringArray: Array<string>, text: string): boolean => {
+    return stringArray.some((arg: string) => {
+        return text.includes(arg);
+    });
 };
 
 const textToSoftwareType = (text: string): SoftwareType => {
@@ -256,12 +256,12 @@ const textToSoftwareType = (text: string): SoftwareType => {
         };
     }
 
-    const linux = reduceIncludes(["linux", "ubuntu", "unix", "multiplatform", "all"], text);
-    const windows = reduceIncludes(["windows", "multiplatform", "all"], text);
-    const mac = reduceIncludes(["mac", "unix", "multiplatform", "all"], text);
+    const linux = stringOfArrayIncluded(["linux", "ubuntu", "unix", "multiplatform", "all"], text);
+    const windows = stringOfArrayIncluded(["windows", "multiplatform", "all"], text);
+    const mac = stringOfArrayIncluded(["mac", "unix", "multiplatform", "all"], text);
 
     const android = text.includes("android");
-    const ios = reduceIncludes(["ios", "os x", "unix", "Multiplatform", "all"], text);
+    const ios = stringOfArrayIncluded(["ios", "os x", "unix", "Multiplatform", "all"], text);
 
     return {
         type: "desktop/mobile",

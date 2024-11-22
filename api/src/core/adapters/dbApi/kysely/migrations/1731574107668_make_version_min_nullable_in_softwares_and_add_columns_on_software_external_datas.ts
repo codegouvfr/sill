@@ -11,8 +11,8 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("softwareVersion", "text")
         .addColumn("publicationTime", "date")
         .addColumn("keywords", "jsonb")
-        .addColumn("programmingLanguage", "jsonb")
-        .addColumn("applicationCategory", "jsonb")
+        .addColumn("programmingLanguages", "jsonb")
+        .addColumn("applicationCategories", "jsonb")
         .execute();
 }
 
@@ -27,7 +27,7 @@ export async function down(db: Kysely<any>): Promise<void> {
         .dropColumn("softwareVersion")
         .dropColumn("publicationTime")
         .dropColumn("keywords")
-        .dropColumn("programmingLanguage")
-        .dropColumn("applicationCategory")
+        .dropColumn("programmingLanguages")
+        .dropColumn("applicationCategories")
         .execute();
 }

@@ -52,8 +52,8 @@ const softwareExternalData: SoftwareExternalData = {
     license: "MIT",
     softwareVersion: "1.0.0",
     keywords: ["Usefull", "Daily"],
-    programmingLanguage: ["C++"],
-    applicationCategory: ["Software Cat I", "Software Cat II"],
+    programmingLanguages: ["C++"],
+    applicationCategories: ["Software Cat I", "Software Cat II"],
     publicationTime: new Date(1561566581000)
 };
 
@@ -72,8 +72,8 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     license: "MIT",
     softwareVersion: "3.0.2",
     keywords: ["Infra", "Adminsys"],
-    programmingLanguage: ["Python3"],
-    applicationCategory: ["Software Cat I", "Software Cat II"],
+    programmingLanguages: ["Python3"],
+    applicationCategories: ["Software Cat I", "Software Cat II"],
     publicationTime: new Date(1561566581000)
 };
 
@@ -161,7 +161,7 @@ describe("pgDbApi", () => {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
-                applicationCategory: ["Software Cat I", "Software Cat II"],
+                applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     authorName: dev.name,
                     authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
@@ -192,7 +192,7 @@ describe("pgDbApi", () => {
                     isFromFrenchPublicServices: false,
                     isPresentInSupportContract: true
                 },
-                programmingLanguage: ["C++"],
+                programmingLanguages: ["C++"],
                 serviceProviders: [],
                 similarSoftwares: [
                     {
@@ -435,8 +435,8 @@ describe("pgDbApi", () => {
                     label: JSON.stringify(softExtData.label),
                     description: JSON.stringify(softExtData.description),
                     keywords: JSON.stringify(softwareExternalData.keywords),
-                    applicationCategory: JSON.stringify(softwareExternalData.applicationCategory),
-                    programmingLanguage: JSON.stringify(softwareExternalData.programmingLanguage)
+                    applicationCategories: JSON.stringify(softwareExternalData.applicationCategories),
+                    programmingLanguages: JSON.stringify(softwareExternalData.programmingLanguages)
                 }))
             )
             .execute();

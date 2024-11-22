@@ -33,8 +33,8 @@ describe("HAL", () => {
                 "websiteUrl": "https://inria.hal.science/hal-01715545v1",
                 "softwareVersion": undefined,
                 "keywords": undefined,
-                "programmingLanguage": undefined,
-                "applicationCategory": ["info"],
+                "programmingLanguages": undefined,
+                "applicationCategories": ["info"],
                 "publicationTime": new Date(1561566581000)
             });
         });
