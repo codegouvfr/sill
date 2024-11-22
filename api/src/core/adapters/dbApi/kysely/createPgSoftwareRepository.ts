@@ -131,7 +131,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     description: softwareDescription,
                     license: softwareLicense,
                     logoUrl: softwareLogoUrl,
-                    versionMin: softwareMinimalVersion,
+                    versionMin: softwareMinimalVersion || null,
                     updateTime: now,
                     isStillInObservation: false,
                     parentSoftwareWikidataId: undefined,
