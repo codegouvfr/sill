@@ -100,9 +100,9 @@ export namespace State {
               }
             | SimilarSoftwareNotInSill
         )[];
-        programmingLanguages?: string[];
+        programmingLanguages: string[];
         keywords: string[];
-        applicationCategories?: string[];
+        applicationCategories: string[];
     };
 }
 

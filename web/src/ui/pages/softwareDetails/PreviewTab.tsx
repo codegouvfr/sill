@@ -33,9 +33,9 @@ export type Props = {
     isPresentInSupportMarket: boolean | undefined;
     isFromFrenchPublicService: boolean | undefined;
     isRGAACompliant?: boolean | undefined;
-    programmingLanguages?: string[];
+    programmingLanguages: string[];
     keywords?: string[];
-    applicationCategories?: string[];
+    applicationCategories: string[];
 };
 export const PreviewTab = (props: Props) => {
     const {

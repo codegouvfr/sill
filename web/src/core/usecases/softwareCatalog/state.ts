@@ -86,8 +86,8 @@ export namespace State {
                       isReferent: boolean;
                   }
                 | undefined;
-            programmingLanguages?: string[];
-            applicationCategories?: string[];
+            programmingLanguages: string[];
+            applicationCategories: string[];
         };
 
         export type External = Common & {
