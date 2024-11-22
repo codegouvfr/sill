@@ -30,6 +30,9 @@ export const createInMemoryAgentRepository = (): {
             },
             getAll: () => {
                 throw new Error("Not implemented");
+            },
+            getAllOrganizations: () => {
+                throw new Error("Not implemented");
             }
         },
         testHelpers: {
