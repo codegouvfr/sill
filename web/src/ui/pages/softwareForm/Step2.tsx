@@ -415,7 +415,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                         label={t("minimal version")}
                         hintText={t("minimal version hint")}
                         nativeInputProps={{
-                            ...register("softwareMinimalVersion", { "required": true })
+                            ...register("softwareMinimalVersion", { "required": false })
                         }}
                         state={
                             errors.softwareMinimalVersion !== undefined

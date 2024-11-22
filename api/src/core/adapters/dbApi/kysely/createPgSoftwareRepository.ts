@@ -7,6 +7,16 @@ import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
 
+const dateParser = (str: string | Date | undefined | null) => {
+    if (str && typeof str === "string") {
+        const date = new Date(str);
+        return date.valueOf();
+    }
+    if (str && str instanceof Date) {
+        return str.valueOf();
+    }
+};
+
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
@@ -65,7 +75,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     .executeTakeFirstOrThrow();
 
                 console.log(
-                    `inserted software correctly, softwareId is : ${softwareId}, about to insert similars : `,
+                    `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to insert similars : `,
                     similarSoftwareExternalDataIds
                 );
 
@@ -121,7 +131,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     description: softwareDescription,
                     license: softwareLicense,
                     logoUrl: softwareLogoUrl,
-                    versionMin: softwareMinimalVersion,
+                    versionMin: softwareMinimalVersion || null,
                     updateTime: now,
                     isStillInObservation: false,
                     parentSoftwareWikidataId: undefined,
@@ -178,7 +188,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         documentationUrl: softwareExternalData?.documentationUrl,
                         comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                         testUrl: testUrls[0]?.url,
-                        parentWikidataSoftware: parentExternalData
+                        parentWikidataSoftware: parentExternalData,
+                        keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
+                        programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                        applicationCategories: softwareExternalData?.applicationCategories ?? []
                     });
                 }),
         getById: getBySoftwareId,
@@ -222,6 +235,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
             return builder.execute().then(async softwares => {
                 const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
+
                 return softwares.map(
                     ({
                         testUrls,
@@ -248,6 +262,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             //         isInSill: true // TODO: check if this is true
                             //     })
                             // ) ?? [],
+                            latestVersion: software.latestVersion ?? {
+                                semVer: softwareExternalData?.softwareVersion ?? undefined,
+                                publicationTime: dateParser(softwareExternalData.publicationTime)
+                            },
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
@@ -266,7 +284,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             comptoirDuLibreServiceProviderCount:
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
                             testUrl: testUrls[0]?.url,
-                            parentWikidataSoftware: parentExternalData ?? undefined
+                            parentWikidataSoftware: parentExternalData ?? undefined,
+                            applicationCategories: softwareExternalData?.applicationCategories ?? [],
+                            programmingLanguages: softwareExternalData?.programmingLanguages ?? []
                         });
                     }
                 );
@@ -398,7 +418,12 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     framaLibreId: ref("ext.framaLibreId"),
                     websiteUrl: ref("ext.websiteUrl"),
                     sourceUrl: ref("ext.sourceUrl"),
-                    documentationUrl: ref("ext.documentationUrl")
+                    documentationUrl: ref("ext.documentationUrl"),
+                    programmingLanguages: ref("ext.programmingLanguages"),
+                    applicationCategories: ref("ext.applicationCategories"),
+                    keywords: ref("ext.keywords"),
+                    softwareVersion: ref("ext.softwareVersion"),
+                    publicationTime: ref("ext.publicationTime")
                 }).as("softwareExternalData"),
             ({ ref, fn }) =>
                 fn
@@ -517,6 +542,8 @@ const makeGetSoftwareById =
                     documentationUrl: softwareExternalData?.documentationUrl,
                     comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
                     testUrl: testUrls[0]?.url,
-                    parentWikidataSoftware: parentExternalData
+                    parentWikidataSoftware: parentExternalData,
+                    programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                    applicationCategories: softwareExternalData?.applicationCategories ?? []
                 });
             });

@@ -67,8 +67,8 @@ export namespace State {
             softwareDescription: string;
             latestVersion:
                 | {
-                      semVer: string;
-                      publicationTime: number;
+                      semVer?: string;
+                      publicationTime?: number;
                   }
                 | undefined;
             referentCount: number;

@@ -77,6 +77,11 @@ type SoftwareExternalDatasTable = {
     sourceUrl: string | null;
     documentationUrl: string | null;
     license: string | null;
+    softwareVersion: string | null;
+    keywords: JSONColumnType<string[]> | null;
+    programmingLanguages: JSONColumnType<string[]> | null;
+    applicationCategories: JSONColumnType<string[]> | null;
+    publicationTime: Date | null;
 };
 
 type SoftwareType =
@@ -110,7 +115,7 @@ type SoftwaresTable = {
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
     catalogNumeriqueGouvFrId: string | null;
-    versionMin: string;
+    versionMin: string | null;
     workshopUrls: JSONColumnType<string[]>;
     testUrls: JSONColumnType<
         {

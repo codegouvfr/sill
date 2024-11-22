@@ -175,6 +175,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
+                    applicationCategories: null,
                     description: "A framwork for creating react SPA that uses webpack as bundler",
                     developers: [],
                     documentationUrl: null,
@@ -182,13 +183,18 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: craSoftwareFormData.externalId,
                     framaLibreId: null,
                     isLibreSoftware: true,
+                    keywords: [],
                     label: "create-react-app",
                     license: "MIT licence",
                     logoUrl: null,
                     sourceUrl: "https://github.com/facebook/create-react-app",
-                    websiteUrl: "https://create-react-app.dev/"
+                    websiteUrl: "https://create-react-app.dev/",
+                    programmingLanguages: [],
+                    softwareVersion: "5.0.1",
+                    publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
                 {
+                    applicationCategories: null,
                     description: "open-source JavaScript module bundler",
                     developers: [
                         {
@@ -201,12 +207,16 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q111590996",
                     framaLibreId: null,
                     isLibreSoftware: true,
+                    keywords: [],
                     label: "Vite",
                     license: "MIT licence",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
-                    websiteUrl: "https://vitejs.dev/"
+                    websiteUrl: "https://vitejs.dev/",
+                    programmingLanguages: ["JavaScript"],
+                    softwareVersion: "5.4.10",
+                    publicationTime: new Date("2024-10-23T00:00:00.000Z")
                 }
             ]);
 
@@ -234,6 +244,7 @@ describe("fetches software extra data (from different providers)", () => {
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
+                    applicationCategories: null,
                     description: {
                         en: "open-source web server software",
                         fr: "serveur web sous licence libre"
@@ -249,12 +260,16 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q11354",
                     framaLibreId: null,
                     isLibreSoftware: false,
+                    keywords: [],
                     label: "Apache HTTP Server",
                     license: "Apache License v2.0",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                     sourceUrl: "https://github.com/apache/httpd",
-                    websiteUrl: "https://httpd.apache.org/"
+                    websiteUrl: "https://httpd.apache.org/",
+                    programmingLanguages: ["C"],
+                    softwareVersion: "2.5.0-alpha",
+                    publicationTime: new Date("2017-11-08T00:00:00.000Z")
                 }
             ]);
 
@@ -360,7 +375,9 @@ describe("fetches software extra data (from different providers)", () => {
                         {
                             name: "Lan2Net",
                             siren: "524457520",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/524457520"
+                            cnllUrl: "https://annuaire.cnll.fr/societes/524457520",
+                            website: "https://www.lan2net.fr/",
+                            cdlUrl: "https://comptoir-du-libre.org/fr/users/4116"
                         },
                         {
                             name: "DEBAMAX",

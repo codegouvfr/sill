@@ -1,6 +1,6 @@
 import { Language, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { SoftwareExternalDataOption } from "../../ports/GetSoftwareExternalDataOptions";
-import { SoftwareFormData } from "../../usecases/readWriteSillData";
+import { SoftwareFormData, SoftwareType } from "../../usecases/readWriteSillData";
 import { parseBibliographicFields } from "./parseBibliographicFields";
 
 const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
@@ -14,7 +14,18 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "label_bibtex",
     "title_s",
     "abstract_s",
-    "docType_s"
+    "docType_s",
+    "keyword_s",
+    "softVersion_s",
+    "softPlatform_s",
+    "softCodeRepository_s",
+    "authFullName_s",
+    "authIdHal_s",
+    "softProgrammingLanguage_s",
+    "softVersion_s",
+    "authIdForm_i",
+    "domainAllCode_s",
+    "modifiedDate_tdate"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
@@ -23,33 +34,36 @@ export const rawHalSoftwareToSoftwareExternalData = (halSoftware: HalRawSoftware
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
-    const developers =
-        bibliographicReferences && bibliographicReferences.author
-            ? bibliographicReferences.author.map(author => ({
-                  id: author.toLowerCase().split(" ").join("-"),
-                  name: author
-              }))
-            : [];
-
     return {
         externalId: halSoftware.docid,
         externalDataOrigin: "HAL",
-        developers,
+        developers: halSoftware.authFullName_s.map((fullname, index) => {
+            return {
+                "id": halSoftware?.authIdHal_s?.[index] ?? halSoftware.authIdForm_i[index].toString(),
+                "name": fullname
+            };
+        }),
         label: {
             "en": halSoftware?.en_title_s?.[0] ?? halSoftware?.title_s?.[0] ?? "-",
-            "fr": halSoftware?.fr_title_s?.[0] ?? halSoftware.en_title_s?.[0]
+            "fr": halSoftware?.fr_title_s?.[0] ?? halSoftware.en_title_s?.[0] // TODO pourquoi en anglais et pas défault ?
         },
         description: {
             "en": halSoftware?.en_abstract_s?.[0] ?? halSoftware.abstract_s?.[0] ?? "-",
-            "fr": halSoftware?.fr_abstract_s?.[0] ?? halSoftware.en_abstract_s?.[0]
+            "fr": halSoftware?.fr_abstract_s?.[0] ?? halSoftware.en_abstract_s?.[0] // TODO pourquoi en anglais et pas défault ?
         },
-        documentationUrl: halSoftware.uri_s,
         isLibreSoftware: halSoftware.openAccess_bool,
+        // Optionnal
+        logoUrl: undefined,
+        framaLibreId: undefined,
+        websiteUrl: halSoftware.uri_s,
+        sourceUrl: halSoftware?.softCodeRepository_s?.[0],
+        documentationUrl: undefined, // TODO no info about documentation in HAL check on SWH or Repo ?
         license,
-        sourceUrl: bibliographicReferences?.repository?.[0],
-        websiteUrl: bibliographicReferences?.url?.[0],
-        framaLibreId: "",
-        logoUrl: ""
+        softwareVersion: halSoftware?.softVersion_s?.[0],
+        keywords: halSoftware?.keyword_s,
+        programmingLanguages: halSoftware?.softProgrammingLanguage_s,
+        applicationCategories: halSoftware?.domainAllCode_s,
+        publicationTime: halSoftware?.modifiedDate_tdate ? new Date(halSoftware?.modifiedDate_tdate) : undefined
     };
 };
 
@@ -98,7 +112,7 @@ export type HalRawSoftware = {
     // citationFull_s: string;
     // label_endnote: string;
     // label_coins: string;
-    // domainAllCode_s: string[];
+    domainAllCode_s: string[];
     // level0_domain_s: string[];
     // domain_s: string[];
     // level1_domain_s: string[];
@@ -108,14 +122,14 @@ export type HalRawSoftware = {
     // eu_domainAllCodeLabel_fs: string[];
     // primaryDomain_s: string;
     // en_keyword_s?: string[];
-    // keyword_s: string[];
+    keyword_s: string[];
     // fr_keyword_s?: string[];
     // authIdFormPerson_s: string[];
-    // authIdForm_i: number[];
+    authIdForm_i: number[];
     // authLastName_s: string[];
     // authFirstName_s: string[];
     // authMiddleName_s: string[];
-    // authFullName_s: string[];
+    authFullName_s: string[];
     // authLastNameFirstName_s: string[];
     // authIdLastNameFirstName_fs: string[];
     // authFullNameIdFormPerson_fs: string[];
@@ -130,6 +144,7 @@ export type HalRawSoftware = {
     // authAlphaLastNameFirstNameIdHal_fs: string[];
     // authLastNameFirstNameIdHalPersonid_fs: string[];
     // authIdHasPrimaryStructure_fs: string[];
+    authIdHal_s: string[];
     // structPrimaryHasAuthId_fs: string[];
     // structPrimaryHasAuthIdHal_fs: string[];
     // structPrimaryHasAlphaAuthId_fs: string[];
@@ -178,7 +193,7 @@ export type HalRawSoftware = {
     // authorityInstitution_s: string[];
     // reportType_s: string;
     // inPress_bool: boolean;
-    // modifiedDate_tdate: string;
+    modifiedDate_tdate: string;
     // modifiedDate_s: string;
     // modifiedDateY_i: number;
     // modifiedDateM_i: number;
@@ -219,34 +234,58 @@ export type HalRawSoftware = {
     // _version_: bigint;
     // dateLastIndexed_tdate: string;
     // label_xml: string;
-    // softCodeRepository_s: string[];
+    softCodeRepository_s: string[];
     // softDevelopmentStatus_s: string[];
-    // softPlatform_s:string[];
-    // softProgrammingLanguage_s: string[];
+    softPlatform_s: string[];
+    softProgrammingLanguage_s: string[];
     // softRuntimePlatform_s: string[];
-    // softVersion_s: string[];
-    // licence_s: string[];
+    softVersion_s: string[];
+    licence_s: string[];
+};
+
+const stringOfArrayIncluded = (stringArray: Array<string>, text: string): boolean => {
+    return stringArray.some((arg: string) => {
+        return text.includes(arg);
+    });
+};
+
+const textToSoftwareType = (text: string): SoftwareType => {
+    if (text.includes("docker")) {
+        return {
+            type: "cloud"
+        };
+    }
+
+    const linux = stringOfArrayIncluded(["linux", "ubuntu", "unix", "multiplatform", "all"], text);
+    const windows = stringOfArrayIncluded(["windows", "multiplatform", "all"], text);
+    const mac = stringOfArrayIncluded(["mac", "unix", "multiplatform", "all"], text);
+
+    const android = text.includes("android");
+    const ios = stringOfArrayIncluded(["ios", "os x", "unix", "Multiplatform", "all"], text);
+
+    return {
+        type: "desktop/mobile",
+        os: { "linux": linux, "windows": windows, "android": android, "ios": ios, "mac": mac }
+    };
 };
 
 export const halRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
-    // TODO Mapping
     const formData: SoftwareFormData = {
         softwareName: halSoftware.title_s[0],
         softwareDescription: halSoftware.abstract_s ? halSoftware.abstract_s[0] : "",
-        softwareType: {
-            type: "desktop/mobile",
-            os: { "linux": true, "windows": false, "android": false, "ios": false, "mac": false }
-        }, // TODO
+        softwareType: textToSoftwareType(
+            halSoftware.softPlatform_s ? halSoftware.softPlatform_s.join("").toLocaleLowerCase() : ""
+        ),
         externalId: halSoftware.docid,
         comptoirDuLibreId: undefined,
-        softwareLicense: license || "copyright", // TODO
-        softwareMinimalVersion: "1", // TODO
+        softwareLicense: license || "copyright", // TODO 1 case to copyright
+        softwareMinimalVersion: halSoftware?.softVersion_s?.[0], // TODO not intended
         similarSoftwareExternalDataIds: [],
-        softwareLogoUrl: "https://www.gnu.org/graphics/gnu-head-30-years-anniversary.svg",
-        softwareKeywords: [],
+        softwareLogoUrl: undefined,
+        softwareKeywords: halSoftware.keyword_s || [],
 
         isPresentInSupportContract: false,
         isFromFrenchPublicService: false, // TODO comment

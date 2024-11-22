@@ -114,7 +114,7 @@ const zSoftwareRow = z.object({
     "license": z.string(),
     "softwareType": zSoftwareType,
     "catalogNumeriqueGouvFrId": z.string().optional(),
-    "versionMin": z.string(),
+    "versionMin": z.string().optional(),
     "workshopUrls": z.array(z.string()),
     "testUrls": z.array(
         z.object({

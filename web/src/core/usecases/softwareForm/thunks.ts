@@ -215,7 +215,7 @@ export const thunks = {
                 "softwareName": step2.softwareName,
                 "softwareDescription": step2.softwareDescription,
                 "softwareLicense": step2.softwareLicense,
-                "softwareMinimalVersion": step2.softwareMinimalVersion,
+                "softwareMinimalVersion": step2.softwareMinimalVersion ?? "",
                 "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
                 "isFromFrenchPublicService": step3.isFromFrenchPublicService,
                 "doRespectRgaa": step3.doRespectRgaa,

@@ -22,8 +22,8 @@ export type Props = {
         isPresentInSupportContract: boolean;
     };
     latestVersion?: {
-        semVer: string;
-        publicationTime: number;
+        semVer?: string;
+        publicationTime?: number;
     };
     softwareDescription: string;
     userCount: number;

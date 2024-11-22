@@ -45,7 +45,7 @@ export namespace Db {
         //Lien vers catalogue.numerique.gouv.fr
         /* cspell: disable-next-line */
         catalogNumeriqueGouvFrId: string | undefined;
-        versionMin: string;
+        versionMin: string | undefined;
         workshopUrls: string[];
         testUrls: {
             description: string;

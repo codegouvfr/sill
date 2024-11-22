@@ -49,7 +49,12 @@ const softwareExternalData: SoftwareExternalData = {
     websiteUrl: "https://example.com",
     sourceUrl: "https://example.com/source",
     documentationUrl: "https://example.com/documentation",
-    license: "MIT"
+    license: "MIT",
+    softwareVersion: "1.0.0",
+    keywords: ["Usefull", "Daily"],
+    programmingLanguages: ["C++"],
+    applicationCategories: ["Software Cat I", "Software Cat II"],
+    publicationTime: new Date(1561566581000)
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -64,7 +69,12 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     websiteUrl: "https://example.similar.com",
     sourceUrl: "https://example.similar.com/source",
     documentationUrl: "https://example.similar.com/documentation",
-    license: "MIT"
+    license: "MIT",
+    softwareVersion: "3.0.2",
+    keywords: ["Infra", "Adminsys"],
+    programmingLanguages: ["Python3"],
+    applicationCategories: ["Software Cat I", "Software Cat II"],
+    publicationTime: new Date(1561566581000)
 };
 
 const parentSoftwareExternalData: SoftwareExternalData = {
@@ -151,6 +161,7 @@ describe("pgDbApi", () => {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
+                applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     authorName: dev.name,
                     authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
@@ -164,7 +175,10 @@ describe("pgDbApi", () => {
                 externalDataOrigin: "wikidata",
                 externalId,
                 keywords: ["bob", "l'éponge"],
-                latestVersion: undefined,
+                latestVersion: {
+                    "publicationTime": 1561566581000,
+                    "semVer": "1.0.0"
+                },
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
@@ -178,6 +192,7 @@ describe("pgDbApi", () => {
                     isFromFrenchPublicServices: false,
                     isPresentInSupportContract: true
                 },
+                programmingLanguages: ["C++"],
                 serviceProviders: [],
                 similarSoftwares: [
                     {
@@ -418,7 +433,10 @@ describe("pgDbApi", () => {
                     ...softExtData,
                     developers: JSON.stringify(softExtData.developers),
                     label: JSON.stringify(softExtData.label),
-                    description: JSON.stringify(softExtData.description)
+                    description: JSON.stringify(softExtData.description),
+                    keywords: JSON.stringify(softwareExternalData.keywords),
+                    applicationCategories: JSON.stringify(softwareExternalData.applicationCategories),
+                    programmingLanguages: JSON.stringify(softwareExternalData.programmingLanguages)
                 }))
             )
             .execute();

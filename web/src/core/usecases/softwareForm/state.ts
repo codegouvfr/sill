@@ -32,7 +32,7 @@ export type FormData = {
         softwareName: string;
         softwareDescription: string;
         softwareLicense: string;
-        softwareMinimalVersion: string;
+        softwareMinimalVersion: string | undefined;
         softwareLogoUrl: string | undefined;
         softwareKeywords: string[];
     };

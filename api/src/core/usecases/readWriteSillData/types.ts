@@ -20,8 +20,8 @@ export type Software = {
     serviceProviders: ServiceProvider[];
     latestVersion:
         | {
-              semVer: string;
-              publicationTime: number;
+              semVer?: string;
+              publicationTime?: number;
           }
         | undefined;
     testUrl: string | undefined;
@@ -44,7 +44,7 @@ export type Software = {
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
-    versionMin: string;
+    versionMin: string | undefined;
     license: string;
     comptoirDuLibreServiceProviderCount: number;
     annuaireCnllServiceProviders:
@@ -61,6 +61,8 @@ export type Software = {
     parentWikidataSoftware: ParentSoftwareExternalData | undefined;
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
+    programmingLanguages: string[];
+    applicationCategories: string[];
 };
 
 export namespace Software {
@@ -130,7 +132,7 @@ export type SoftwareFormData = {
     externalId: string | undefined;
     comptoirDuLibreId: number | undefined;
     softwareLicense: string;
-    softwareMinimalVersion: string;
+    softwareMinimalVersion: string | undefined;
     similarSoftwareExternalDataIds: string[];
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
