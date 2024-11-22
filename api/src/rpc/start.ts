@@ -83,8 +83,7 @@ export async function startRpcService(params: {
                 : {
                       "url": keycloakParams.url,
                       "realm": keycloakParams.realm,
-                      "adminPassword": keycloakParams.adminPassword,
-                      "organizationUserProfileAttributeName": keycloakParams.organizationUserProfileAttributeName
+                      "adminPassword": keycloakParams.adminPassword
                   },
         githubPersonalAccessTokenForApiRateLimit,
         "doPerPerformPeriodicalCompilation": true,

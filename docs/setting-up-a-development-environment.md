@@ -10,19 +10,11 @@ It is much easier to navigate the code with VSCode (We recommend the free distri
 
 ## Run local databases
 
-To launch local databses, you can quickly do that by running the following command
+To launch local databases, you can quickly do that by running the following command
 
 `docker compose -f docker-compose.ressources.yml up`
 
-We are almost finished ! Go to http://localhost:8081/auth/ to set up a small manual config (that can't be automated yet).
-
-Login with admin credentials. In our dev environment we used `admin` for both `username` and `password`.
-
-Go to `userprofile` tab, choose the `JSON Editor` tab.
-
-Then copy paste the content of the file `keycloak-dev-user-profile.json` located in the root folder into the text field.
-
-Save an your are good to go !
+This will also start the keycloak server, with a basic configuration (at the root of the project:`keycloak-dev-realm.json`).
 
 ## Defining the sill-api parameter
 
@@ -35,11 +27,10 @@ Makes sure to put the name of your SSH key and the private key (generated when y
 
 ### Option 1: Using a .env file
 ```
-SILL_KEYCLOAK_URL=https://auth.code.gouv.fr/auth
+SILL_KEYCLOAK_URL=http://localhost:8081/auth
 SILL_KEYCLOAK_REALM=codegouv
 SILL_KEYCLOAK_CLIENT_ID=sill
 SILL_KEYCLOAK_ADMIN_PASSWORD=xxxxxx
-SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME=agencyName
 SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
 SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
 SILL_JWT_ID=sub
@@ -61,7 +52,6 @@ export SILL_KEYCLOAK_URL=https://auth.code.gouv.fr/auth
 export SILL_KEYCLOAK_REALM=codegouv
 export SILL_KEYCLOAK_CLIENT_ID=sill
 export SILL_KEYCLOAK_ADMIN_PASSWORD=xxxxxx
-export SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME=agencyName
 export SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
 export SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
 export SILL_JWT_ID=sub
@@ -92,8 +82,7 @@ export CONFIGURATION=$(cat << EOF
     "url": "https://auth.code.gouv.fr/auth",
     "realm": "codegouv",
     "clientId": "sill",
-    "adminPassword": "xxxxxx",
-    "organizationUserProfileAttributeName": "agencyName"
+    "adminPassword": "xxxxxx"
   },
   "readmeUrl": "https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md",
   "termsOfServiceUrl": "https://code.gouv.fr/sill/tos_fr.md",

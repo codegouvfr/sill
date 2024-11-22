@@ -485,7 +485,7 @@ export function createRouter(params: {
                 })
             ),
         "getAllowedEmailRegexp": loggedProcedure.query(() => coreContext.userApi.getAllowedEmailRegexp()),
-        "getAllOrganizations": loggedProcedure.query(() => coreContext.userApi.getAllOrganizations()),
+        "getAllOrganizations": loggedProcedure.query(() => dbApi.agent.getAllOrganizations()),
         "changeAgentOrganization": loggedProcedure
             .input(
                 z.object({

@@ -7,7 +7,6 @@ export type KeycloakUserApiParams = {
     url: string;
     adminPassword: string;
     realm: string;
-    organizationUserProfileAttributeName: string;
 };
 
 const maxAge = 5 * 60 * 1000;
@@ -16,7 +15,7 @@ export function createKeycloakUserApi(params: KeycloakUserApiParams): {
     userApi: UserApi;
     initializeUserApiCache: () => Promise<void>;
 } {
-    const { url, adminPassword, realm, organizationUserProfileAttributeName } = params;
+    const { url, adminPassword, realm } = params;
 
     const keycloakAdminApiClient = createKeycloakAdminApiClient({
         url,
@@ -33,12 +32,6 @@ export function createKeycloakUserApi(params: KeycloakUserApiParams): {
                 "body": { email }
             })
         ),
-        "updateUserOrganization": runExclusive.build(groupRef, ({ userId, organization }) =>
-            keycloakAdminApiClient.updateUser({
-                userId,
-                "body": { "attributes": { [organizationUserProfileAttributeName]: organization } }
-            })
-        ),
         "getAllowedEmailRegexp": memoize(
             async () => {
                 const attributes = await keycloakAdminApiClient.getUserProfileAttributes();
@@ -53,55 +46,6 @@ export function createKeycloakUserApi(params: KeycloakUserApiParams): {
                 }
 
                 return emailRegExpStr;
-            },
-            {
-                "promise": true,
-                maxAge,
-                "preFetch": true
-            }
-        ),
-        "getAllOrganizations": memoize(
-            async () => {
-                const organizations = new Set<string>();
-
-                let first = 0;
-
-                // eslint-disable-next-line no-constant-condition
-                while (true) {
-                    const max = 100;
-
-                    const users = await keycloakAdminApiClient.getUsers({
-                        first,
-                        max
-                    });
-
-                    users.forEach(user => {
-                        let organization: string;
-
-                        try {
-                            organization = user.attributes[organizationUserProfileAttributeName][0];
-                        } catch {
-                            console.log("Strange user: ", user);
-
-                            return;
-                        }
-
-                        //NOTE: Hack, we had a bug so some organization are under
-                        //"MESRI: Ministry of Higher Education, Research and Innovation" instead of "MESRI"
-                        //(for example)
-                        organization = organization.split(":")[0];
-
-                        organizations.add(organization);
-                    });
-
-                    if (users.length < max) {
-                        break;
-                    }
-
-                    first += max;
-                }
-
-                return Array.from(organizations);
             },
             {
                 "promise": true,
@@ -149,9 +93,7 @@ export function createKeycloakUserApi(params: KeycloakUserApiParams): {
         console.log("Starting userApi cache initialization...");
 
         await Promise.all(
-            (["getUserCount", "getAllOrganizations", "getAllowedEmailRegexp"] as const).map(async function callee(
-                methodName
-            ) {
+            (["getUserCount", "getAllowedEmailRegexp"] as const).map(async function callee(methodName) {
                 const f = userApi[methodName];
 
                 await f();
