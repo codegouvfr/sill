@@ -145,7 +145,9 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                         classes.softwareVersionContainer
                                     )}
                                 >
-                                    {t("latest version", { fromNowText })}
+                                    {latestVersion?.publicationTime && (
+                                        t("latest version", { fromNowText })
+                                    )}
                                     {latestVersion?.semVer && (
                                         <span
                                             className={cx(
