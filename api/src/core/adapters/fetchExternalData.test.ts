@@ -191,7 +191,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguages: [],
                     softwareVersion: "5.0.1",
-                    publicationTime: new Date("2022-04-11T22:00:00.000Z")
+                    publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
                 {
                     applicationCategories: null,
@@ -216,7 +216,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
                     softwareVersion: "5.4.10",
-                    publicationTime: new Date("2024-10-22T22:00:00.000Z")
+                    publicationTime: new Date("2024-10-23T00:00:00.000Z")
                 }
             ]);
 
@@ -269,7 +269,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://httpd.apache.org/",
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
-                    publicationTime: new Date("2017-11-07T23:00:00.000Z")
+                    publicationTime: new Date("2017-11-08T00:00:00.000Z")
                 }
             ]);
 
@@ -375,7 +375,9 @@ describe("fetches software extra data (from different providers)", () => {
                         {
                             name: "Lan2Net",
                             siren: "524457520",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/524457520"
+                            cnllUrl: "https://annuaire.cnll.fr/societes/524457520",
+                            website: "https://www.lan2net.fr/",
+                            cdlUrl: "https://comptoir-du-libre.org/fr/users/4116"
                         },
                         {
                             name: "DEBAMAX",

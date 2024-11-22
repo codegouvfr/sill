@@ -176,7 +176,7 @@ describe("pgDbApi", () => {
                 externalId,
                 keywords: ["bob", "l'éponge"],
                 latestVersion: {
-                    "publicationTime": 1561507200000,
+                    "publicationTime": 1561566581000,
                     "semVer": "1.0.0"
                 },
                 license: "MIT",

@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.schema
         .alterTable("software_external_datas")
         .addColumn("softwareVersion", "text")
-        .addColumn("publicationTime", "date")
+        .addColumn("publicationTime", "timestamptz")
         .addColumn("keywords", "jsonb")
         .addColumn("programmingLanguages", "jsonb")
         .addColumn("applicationCategories", "jsonb")
