@@ -99,6 +99,7 @@ export interface AgentRepository {
     remove: (agentId: number) => Promise<void>;
     getByEmail: (email: string) => Promise<AgentWithId | undefined>;
     getAll: () => Promise<AgentWithId[]>;
+    getAllOrganizations: () => Promise<string[]>;
 }
 
 export interface SoftwareReferentRepository {
