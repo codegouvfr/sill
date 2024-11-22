@@ -35,7 +35,7 @@ type ParamsOfBootstrapCore = {
     doPerformCacheInitialization: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
     initializeSoftwareFromSource: boolean;
-    botAgentEmail: string;
+    botAgentEmail: string | undefined;
 };
 
 export type Context = {
@@ -121,6 +121,7 @@ export async function bootstrapCore(
     if (initializeSoftwareFromSource) {
         if (externalSoftwareDataOrigin === "HAL") {
             console.log(" ------ Feeding database with HAL software started ------");
+            if (!botAgentEmail) throw new Error("No bot agent email provided");
             const importHAL = importFromHALSource(dbApi);
             try {
                 await importHAL(botAgentEmail);

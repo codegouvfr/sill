@@ -42,7 +42,7 @@ export async function startRpcService(params: {
     redirectUrl?: string;
     databaseUrl: string;
     initializeSoftwareFromSource: boolean;
-    botAgentEmail: string;
+    botAgentEmail?: string;
 }) {
     const {
         redirectUrl,
