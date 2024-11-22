@@ -121,9 +121,9 @@ export async function bootstrapCore(
     if (initializeSoftwareFromSource) {
         if (externalSoftwareDataOrigin === "HAL") {
             console.log(" ------ Feeding database with HAL software started ------");
-            const HAL = importFromHALSource(dbApi);
+            const importHAL = importFromHALSource(dbApi);
             try {
-                await HAL(botAgentEmail);
+                await importHAL(botAgentEmail);
             } catch (err) {
                 // catches errors both in fetch and response.json
                 console.error(err);

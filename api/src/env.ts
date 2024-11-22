@@ -68,8 +68,8 @@ const getJsonConfiguration = () => {
         "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
         "redirectUrl": process.env.SILL_REDIRECT_URL,
         "databaseUrl": process.env.DATABASE_URL,
-        "initializeSoftwareFromSource": process.env.INITSOFTFROMSOURCE?.toLowerCase() === "true",
-        "botAgentEmail": process.env?.BOTAGENTEMAIL
+        "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
+        "botAgentEmail": process.env?.BOT_AGENT_EMAIL
     };
 };
 

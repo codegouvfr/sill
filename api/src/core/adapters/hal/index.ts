@@ -1,6 +1,6 @@
 import { fetchHalSoftwares } from "./getHalSoftware";
 
-export default {
+export const halAPIGateway = {
     software: {
         getAll: fetchHalSoftwares
     }
