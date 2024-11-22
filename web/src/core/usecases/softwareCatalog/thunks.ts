@@ -227,8 +227,8 @@ function apiSoftwareToInternalSoftware(params: {
         userAndReferentCountByOrganization,
         similarSoftwares,
         keywords,
-        programmingLanguage,
-        applicationCategory
+        programmingLanguages,
+        applicationCategories
     } = apiSoftware;
 
     assert<
@@ -334,8 +334,8 @@ function apiSoftwareToInternalSoftware(params: {
             return search;
         })(),
         userDeclaration,
-        programmingLanguage,
-        applicationCategory
+        programmingLanguages,
+        applicationCategories
     };
 }
 

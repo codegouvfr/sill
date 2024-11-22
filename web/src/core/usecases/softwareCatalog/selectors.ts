@@ -723,8 +723,8 @@ function apiSoftwareToInternalSoftware(params: {
         userAndReferentCountByOrganization,
         similarSoftwares,
         keywords,
-        programmingLanguage,
-        applicationCategory
+        programmingLanguages,
+        applicationCategories
     } = apiSoftware;
 
     assert<
@@ -812,8 +812,8 @@ function apiSoftwareToInternalSoftware(params: {
             return search;
         })(),
         userDeclaration,
-        programmingLanguage,
-        applicationCategory
+        programmingLanguages,
+        applicationCategories
     };
 }
 
@@ -844,8 +844,8 @@ function internalSoftwareToExternalSoftware(params: {
         parentSoftware,
         softwareType,
         userDeclaration,
-        programmingLanguage,
-        applicationCategory,
+        programmingLanguages,
+        applicationCategories,
         ...rest
     } = internalSoftware;
 
@@ -880,8 +880,8 @@ function internalSoftwareToExternalSoftware(params: {
                       "highlightedIndexes": Array.from(positions)
                   },
         userDeclaration,
-        programmingLanguage,
-        applicationCategory
+        programmingLanguages,
+        applicationCategories
     };
 }
 

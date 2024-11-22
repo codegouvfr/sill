@@ -33,9 +33,9 @@ export type Props = {
     isPresentInSupportMarket: boolean | undefined;
     isFromFrenchPublicService: boolean | undefined;
     isRGAACompliant?: boolean | undefined;
-    programmingLanguage?: string[];
+    programmingLanguages?: string[];
     keywords?: string[];
-    applicationCategory?: string[];
+    applicationCategories?: string[];
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -55,9 +55,9 @@ export const PreviewTab = (props: Props) => {
         annuaireCnllServiceProviders,
         comptoireDuLibreUrl,
         wikiDataUrl,
-        programmingLanguage,
+        programmingLanguages,
         keywords,
-        applicationCategory
+        applicationCategories
     } = props;
 
     const { classes, cx } = useStyles();
@@ -145,21 +145,21 @@ export const PreviewTab = (props: Props) => {
                         </p>
                     )}
 
-                    {programmingLanguage && programmingLanguage.length > 0 && (
+                    {programmingLanguages && programmingLanguages.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
                                 {t("programming language")} :{" "}
                             </span>
-                            <span>{programmingLanguage.join(", ")}</span>
+                            <span>{programmingLanguages.join(", ")}</span>
                         </p>
                     )}
 
-                    {applicationCategory && applicationCategory.length > 0 && (
+                    {applicationCategories && applicationCategories.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
                                 {t("application category")} :{" "}
                             </span>
-                            <span>{applicationCategory.join(", ")}</span>
+                            <span>{applicationCategories.join(", ")}</span>
                         </p>
                     )}
                 </div>

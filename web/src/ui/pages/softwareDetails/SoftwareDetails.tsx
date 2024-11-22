@@ -137,11 +137,11 @@ export default function SoftwareDetails(props: Props) {
                                             software.latestVersion?.semVer
                                         }
                                         keywords={software?.keywords}
-                                        programmingLanguage={
-                                            software?.programmingLanguage
+                                        programmingLanguages={
+                                            software?.programmingLanguages
                                         }
-                                        applicationCategory={
-                                            software?.applicationCategory
+                                        applicationCategories={
+                                            software?.applicationCategories
                                         }
                                     />
                                 )
