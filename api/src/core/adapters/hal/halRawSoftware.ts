@@ -269,7 +269,7 @@ const textToSoftwareType = (text: string): SoftwareType => {
     };
 };
 
-export const HalRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
+export const halRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): SoftwareFormData => {
     const bibliographicReferences = parseBibliographicFields(halSoftware.label_bibtex);
     const license = bibliographicReferences?.license?.join(", ");
 
