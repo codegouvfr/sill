@@ -36,7 +36,15 @@ export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository =
                     about: about ?? undefined,
                     declarations: [...usersDeclarations, ...referentsDeclarations]
                 }))
-            )
+            ),
+    getAllOrganizations: () =>
+        db
+            .selectFrom("agents")
+            .groupBy("organization")
+            .orderBy("organization")
+            .select("organization")
+            .execute()
+            .then(results => results.map(({ organization }) => organization))
 });
 
 const makeGetAgentBuilder = (db: Kysely<Database>) =>

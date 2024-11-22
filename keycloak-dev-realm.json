@@ -1869,8 +1869,7 @@
     "parRequestUriLifespan": "60",
     "clientSessionMaxLifespan": "0",
     "clientOfflineSessionIdleTimeout": "0",
-    "cibaInterval": "5",
-    "userProfile": "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{}}},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255},\"pattern\":{\"pattern\":\"^.*@.*$\"}}},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"required\":{\"roles\":[\"user\",\"admin\"]},\"permissions\":{\"view\":[\"user\",\"admin\"],\"edit\":[\"user\",\"admin\"]}},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"required\":{\"roles\":[\"user\",\"admin\"]},\"permissions\":{\"view\":[\"user\",\"admin\"],\"edit\":[\"user\",\"admin\"]}},{\"name\":\"agencyName\",\"displayName\":\"Agency Name\",\"required\":{\"roles\":[\"user\",\"admin\"]},\"permissions\":{\"view\":[\"user\",\"admin\"],\"edit\":[\"user\",\"admin\"]},\"validations\":{}}]}"
+    "cibaInterval": "5"
   },
   "keycloakVersion": "18.0.2",
   "userManagedAccessAllowed": false,
