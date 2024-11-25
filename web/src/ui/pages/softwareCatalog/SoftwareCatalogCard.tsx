@@ -145,20 +145,23 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                         classes.softwareVersionContainer
                                     )}
                                 >
-                                    {t("latest version", { fromNowText })}
-                                    <span
-                                        className={cx(
-                                            fr.cx(
-                                                "fr-badge--no-icon",
-                                                "fr-badge--yellow-tournesol",
-                                                "fr-badge",
-                                                "fr-badge--sm"
-                                            ),
-                                            classes.badgeVersion
-                                        )}
-                                    >
-                                        {latestVersion.semVer}
-                                    </span>
+                                    {latestVersion?.publicationTime &&
+                                        t("latest version", { fromNowText })}
+                                    {latestVersion?.semVer && (
+                                        <span
+                                            className={cx(
+                                                fr.cx(
+                                                    "fr-badge--no-icon",
+                                                    "fr-badge--yellow-tournesol",
+                                                    "fr-badge",
+                                                    "fr-badge--sm"
+                                                ),
+                                                classes.badgeVersion
+                                            )}
+                                        >
+                                            {latestVersion?.semVer}
+                                        </span>
+                                    )}
                                 </p>
                             )}
                         </div>

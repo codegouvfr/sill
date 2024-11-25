@@ -136,6 +136,13 @@ export default function SoftwareDetails(props: Props) {
                                         softwareCurrentVersion={
                                             software.latestVersion?.semVer
                                         }
+                                        keywords={software?.keywords}
+                                        programmingLanguages={
+                                            software?.programmingLanguages
+                                        }
+                                        applicationCategories={
+                                            software?.applicationCategories
+                                        }
                                     />
                                 )
                             },
@@ -191,37 +198,48 @@ export default function SoftwareDetails(props: Props) {
                                           )
                                       }
                                   ]),
-                            {
-                                "label": t("tab title alike software", {
-                                    alikeSoftwareCount:
-                                        software.similarSoftwares.length ?? 0
-                                }),
-                                "isDefault": route.params.tab === "alternatives",
-                                "content": (
-                                    <SimilarSoftwareTab
-                                        similarSoftwares={software.similarSoftwares}
-                                        getLinks={({ softwareName }) => ({
-                                            "declarationForm": routes.declarationForm({
-                                                "name": softwareName
-                                            }).link,
-                                            "softwareDetails": routes.softwareDetails({
-                                                "name": softwareName
-                                            }).link,
-                                            "softwareUsersAndReferents":
-                                                routes.softwareUsersAndReferents({
-                                                    "name": softwareName
-                                                }).link
-                                        })}
-                                        getAddWikipediaSoftwareToSillLink={({
-                                            externalId
-                                        }) =>
-                                            routes.softwareCreationForm({
-                                                externalId: externalId
-                                            }).link
-                                        }
-                                    />
-                                )
-                            }
+                            ...(software.similarSoftwares.length === 0
+                                ? []
+                                : [
+                                      {
+                                          "label": t("tab title alike software", {
+                                              alikeSoftwareCount:
+                                                  software.similarSoftwares.length ?? 0
+                                          }),
+                                          "isDefault":
+                                              route.params.tab === "alternatives",
+                                          "content": (
+                                              <SimilarSoftwareTab
+                                                  similarSoftwares={
+                                                      software.similarSoftwares
+                                                  }
+                                                  getLinks={({ softwareName }) => ({
+                                                      "declarationForm":
+                                                          routes.declarationForm({
+                                                              "name": softwareName
+                                                          }).link,
+                                                      "softwareDetails":
+                                                          routes.softwareDetails({
+                                                              "name": softwareName
+                                                          }).link,
+                                                      "softwareUsersAndReferents":
+                                                          routes.softwareUsersAndReferents(
+                                                              {
+                                                                  "name": softwareName
+                                                              }
+                                                          ).link
+                                                  })}
+                                                  getAddWikipediaSoftwareToSillLink={({
+                                                      externalId
+                                                  }) =>
+                                                      routes.softwareCreationForm({
+                                                          externalId: externalId
+                                                      }).link
+                                                  }
+                                              />
+                                          )
+                                      }
+                                  ])
                         ]}
                     />
                 </div>

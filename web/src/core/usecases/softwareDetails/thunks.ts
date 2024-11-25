@@ -191,7 +191,10 @@ function apiSoftwareToSoftware(params: {
         softwareType,
         userAndReferentCountByOrganization,
         annuaireCnllServiceProviders,
-        serviceProviders
+        serviceProviders,
+        programmingLanguages,
+        keywords,
+        applicationCategories
     } = apiSoftware;
 
     const { resolveLocalizedString } = createResolveLocalizedString({
@@ -241,7 +244,10 @@ function apiSoftwareToSoftware(params: {
         codeRepositoryUrl,
         softwareName,
         softwareDescription,
-        latestVersion,
+        latestVersion: {
+            semVer: latestVersion?.semVer ?? "",
+            publicationTime: latestVersion?.publicationTime
+        },
         dereferencing,
         serviceProviders: serviceProviders ?? [],
         "referentCount": Object.values(userAndReferentCountByOrganization)
@@ -325,6 +331,9 @@ function apiSoftwareToSoftware(params: {
         },
         comptoirDuLibreServiceProviderCount,
         testUrl,
-        versionMin
+        versionMin,
+        programmingLanguages,
+        keywords,
+        applicationCategories
     };
 }

@@ -245,7 +245,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     })()
                 )
             ),
-            softwareVersion: <string>versionClaim.mainsnak.datavalue.value,
+            softwareVersion: versionClaim?.mainsnak?.datavalue?.value as string | undefined,
             keywords: getClaimDataValue<"string">("P921"),
             programmingLanguages: programmingLanguageString ? [programmingLanguageString] : [],
             applicationCategories: undefined, // doesn't exit on wiki data

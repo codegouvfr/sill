@@ -33,6 +33,9 @@ export type Props = {
     isPresentInSupportMarket: boolean | undefined;
     isFromFrenchPublicService: boolean | undefined;
     isRGAACompliant?: boolean | undefined;
+    programmingLanguages: string[];
+    keywords?: string[];
+    applicationCategories: string[];
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -51,7 +54,10 @@ export const PreviewTab = (props: Props) => {
         comptoirDuLibreServiceProvidersUrl,
         annuaireCnllServiceProviders,
         comptoireDuLibreUrl,
-        wikiDataUrl
+        wikiDataUrl,
+        programmingLanguages,
+        keywords,
+        applicationCategories
     } = props;
 
     const { classes, cx } = useStyles();
@@ -67,10 +73,46 @@ export const PreviewTab = (props: Props) => {
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                         {t("about")}
                     </p>
-                    {softwareDateCurrentVersion && (
+                    {(softwareCurrentVersion || softwareDateCurrentVersion) && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
                                 {t("last version")}
+                            </span>
+                            {softwareCurrentVersion && (
+                                <span
+                                    className={cx(
+                                        fr.cx(
+                                            "fr-badge",
+                                            "fr-badge--yellow-tournesol",
+                                            "fr-badge--sm"
+                                        ),
+                                        classes.badgeVersion
+                                    )}
+                                >
+                                    {softwareCurrentVersion}
+                                </span>
+                            )}
+
+                            {softwareDateCurrentVersion &&
+                                capitalize(
+                                    shortEndMonthDate({
+                                        "time": softwareDateCurrentVersion,
+                                        lang
+                                    })
+                                )}
+                        </p>
+                    )}
+                    {registerDate && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>{t("register")}</span>
+                            {capitalize(monthDate({ "time": registerDate, lang }))}
+                        </p>
+                    )}
+
+                    {minimalVersionRequired && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>
+                                {t("minimal version")}
                             </span>
                             <span
                                 className={cx(
@@ -82,46 +124,44 @@ export const PreviewTab = (props: Props) => {
                                     classes.badgeVersion
                                 )}
                             >
-                                {softwareCurrentVersion}
+                                {minimalVersionRequired}
                             </span>
-                            (
-                            {capitalize(
-                                shortEndMonthDate({
-                                    "time": softwareDateCurrentVersion,
-                                    lang
-                                })
-                            )}
-                            )
-                        </p>
-                    )}
-                    {registerDate && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("register")}</span>
-                            {capitalize(monthDate({ "time": registerDate, lang }))}
                         </p>
                     )}
 
-                    <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                        <span className={classes.labelDetail}>
-                            {t("minimal version")}
-                        </span>
-                        <span
-                            className={cx(
-                                fr.cx(
-                                    "fr-badge",
-                                    "fr-badge--yellow-tournesol",
-                                    "fr-badge--sm"
-                                ),
-                                classes.badgeVersion
-                            )}
-                        >
-                            {minimalVersionRequired}
-                        </span>
-                    </p>
-                    <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                        <span className={classes.labelDetail}>{t("license")}</span>
-                        <span>{license}</span>
-                    </p>
+                    {license && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>{t("license")}</span>
+                            <span>{license}</span>
+                        </p>
+                    )}
+
+                    {keywords && keywords.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>
+                                {t("keywords")} :{" "}
+                            </span>
+                            <span>{keywords.join(", ")}</span>
+                        </p>
+                    )}
+
+                    {programmingLanguages && programmingLanguages.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>
+                                {t("programming languages")} :{" "}
+                            </span>
+                            <span>{programmingLanguages.join(", ")}</span>
+                        </p>
+                    )}
+
+                    {applicationCategories && applicationCategories.length > 0 && (
+                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                            <span className={classes.labelDetail}>
+                                {t("application categories")} :{" "}
+                            </span>
+                            <span>{applicationCategories.join(", ")}</span>
+                        </p>
+                    )}
                 </div>
                 <div className={classes.section}>
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
@@ -308,4 +348,7 @@ export const { i18n } = declareComponentKeys<
     | { K: "CNLL service providers"; P: { count: number } }
     | "wikiData sheet"
     | { K: "what is the support market"; P: { url: string }; R: JSX.Element }
+    | "programming languages"
+    | "keywords"
+    | "application categories"
 >()({ PreviewTab });
