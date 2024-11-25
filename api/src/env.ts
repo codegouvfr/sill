@@ -30,7 +30,7 @@ const zConfiguration = z.object({
     "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
     "databaseUrl": z.string(),
     "initializeSoftwareFromSource": z.boolean(),
-    "botAgentEmail": z.string()
+    "botAgentEmail": z.string().optional()
 });
 
 const getJsonConfiguration = () => {
