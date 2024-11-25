@@ -302,7 +302,7 @@ export function createCompileData(params: {
                     addedByAgentEmail,
                     logoUrl,
                     keywords,
-                    "serviceProviders": serviceProvidersBySillId[sillId] ?? [],
+                    "serviceProviders": serviceProvidersBySillId[sillId] ?? [], // TODO #191
                     "softwareExternalData": partialSoftwareBySillId[sillId].softwareExternalData,
                     "similarExternalSoftwares": partialSoftwareBySillId[sillId].similarExternalSoftwares,
                     "parentWikidataSoftware": partialSoftwareBySillId[sillId].parentWikidataSoftware,
@@ -329,7 +329,7 @@ export function createCompileData(params: {
 
                                   return { ...cdlSoftware, logoUrl, keywords };
                               })(),
-                    "annuaireCnllServiceProviders": cnllPrestatairesSill
+                    "annuaireCnllServiceProviders": cnllPrestatairesSill // TODO #191
                         .find(({ sill_id }) => sill_id === sillId)
                         ?.prestataires.map(({ nom, siren, url }) => ({
                             "name": nom,

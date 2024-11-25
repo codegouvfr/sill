@@ -2,7 +2,7 @@ import type { ComptoirDuLibreApi } from "../ports/ComptoirDuLibreApi";
 import { DbApiV2, OtherSoftwareExtraData } from "../ports/DbApiV2";
 import type { GetCnllPrestatairesSill } from "../ports/GetCnllPrestatairesSill";
 import { GetServiceProviders } from "../ports/GetServiceProviders";
-import type { GetSoftwareExternalData, SoftwareExternalData } from "../ports/GetSoftwareExternalData";
+import type { ExternalDataOrigin, GetSoftwareExternalData, SoftwareExternalData } from "../ports/GetSoftwareExternalData";
 import type { GetSoftwareLatestVersion } from "../ports/GetSoftwareLatestVersion";
 import { Software } from "../usecases/readWriteSillData";
 import { PgComptoirDuLibre } from "./dbApi/kysely/kysely.database";
@@ -20,17 +20,20 @@ type FetchOtherExternalDataDependencies = {
 type FetchAndSaveSoftwareExtraDataDependencies = FetchOtherExternalDataDependencies & {
     getSoftwareExternalData: GetSoftwareExternalData;
     dbApi: DbApiV2;
+    externalSoftwareDataOrigin: ExternalDataOrigin;
 };
 
 export const makeFetchAndSaveSoftwareExtraData = ({
     getSoftwareExternalData,
     dbApi,
+    externalSoftwareDataOrigin,
     ...otherExternalDataDeps
 }: FetchAndSaveSoftwareExtraDataDependencies) => {
     const getOtherExternalData = makeGetOtherExternalData(otherExternalDataDeps);
     const getSoftwareExternalDataAndSaveIt = makeGetSoftwareExternalData({
         dbApi,
-        getSoftwareExternalData
+        getSoftwareExternalData,
+        externalSoftwareDataOrigin
     });
 
     return async (softwareId: number, softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId) => {
@@ -58,7 +61,7 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         }
 
         const existingOtherSoftwareExtraData = await dbApi.otherSoftwareExtraData.getBySoftwareId(software.softwareId);
-        const newOtherSoftwareExtraData = await getOtherExternalData(software, existingOtherSoftwareExtraData);
+        const newOtherSoftwareExtraData = await getOtherExternalData(software, existingOtherSoftwareExtraData, externalSoftwareDataOrigin);
 
         if (newOtherSoftwareExtraData) await dbApi.otherSoftwareExtraData.save(newOtherSoftwareExtraData);
         await dbApi.software.updateLastExtraDataFetchAt({ softwareId: software.softwareId });
@@ -66,7 +69,7 @@ export const makeFetchAndSaveSoftwareExtraData = ({
 };
 
 const makeGetSoftwareExternalData =
-    (deps: { getSoftwareExternalData: GetSoftwareExternalData; dbApi: DbApiV2 }) =>
+    (deps: { getSoftwareExternalData: GetSoftwareExternalData; dbApi: DbApiV2, externalSoftwareDataOrigin: ExternalDataOrigin }) =>
     async (externalId: ExternalId, cache: SoftwareExternalDataCacheBySoftwareId) => {
         if (cache[externalId]) return cache[externalId];
 
@@ -81,7 +84,8 @@ const makeGetOtherExternalData =
     (deps: FetchOtherExternalDataDependencies) =>
     async (
         software: Software,
-        existingOtherSoftwareExtraData: OtherSoftwareExtraData | undefined
+        existingOtherSoftwareExtraData: OtherSoftwareExtraData | undefined,
+        externalSoftwareDataOrigin: ExternalDataOrigin 
     ): Promise<OtherSoftwareExtraData | undefined> => {
         const [serviceProvidersBySoftwareId, cnllPrestatairesSill, latestVersion] = await Promise.all([
             deps.getServiceProviders(),
@@ -97,16 +101,16 @@ const makeGetOtherExternalData =
 
         const otherSoftwareExtraData: OtherSoftwareExtraData = {
             softwareId: software.softwareId,
-            serviceProviders: serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [],
+            serviceProviders: externalSoftwareDataOrigin === "wikidata" ? serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [] : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
-                cnllPrestatairesSill
+                externalSoftwareDataOrigin === "wikidata" ? cnllPrestatairesSill
                     .find(({ sill_id }) => sill_id === software.softwareId)
                     ?.prestataires.map(({ nom, siren, url }) => ({
                         name: nom,
                         siren,
                         url
-                    })) ?? null,
+                    })) ?? null : [],
             latestVersion: latestVersion ?? null
         };
 

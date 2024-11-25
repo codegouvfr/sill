@@ -129,7 +129,8 @@ describe("fetches software extra data (from different providers)", () => {
             comptoirDuLibreApi,
             getCnllPrestatairesSill: getCnllPrestatairesSill,
             getServiceProviders: getServiceProviders,
-            getSoftwareLatestVersion
+            getSoftwareLatestVersion,
+            externalSoftwareDataOrigin : "wikidata"
         });
     });
 
