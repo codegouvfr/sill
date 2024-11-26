@@ -1,0 +1,89 @@
+{
+    "ui": {
+        "header": {
+            "title": {
+                "en": "My HAL english title",
+                "fr": "Catalgues des logiciels pour la recherche académique"
+            },
+            "icons": [
+                {
+                    "iconId": "fr-icon-bank-fill",
+                    "linkProps": {
+                        "href": "https://www.cnrs.fr/fr"
+                    },
+                    "text": "CNRS"
+                }
+            ],
+            "menu": {
+                "welcome": {
+                    "enabled": true
+                },
+                "catalog": {
+                    "enabled": true
+                },
+                "addSoftware": {
+                    "enabled": false
+                },
+                "about": {
+                    "enabled": true
+                },
+                "contribute": {
+                    "enabled": true,
+                    "text": {
+                        "en": "Contribute",
+                        "fr": "Contribuez"
+                    },
+                    "href": "mailto:sill@code.gouv.fr?subject=Contribute"
+                }
+            }
+        },
+        "home": {
+            "title": {
+                "accented": {
+                    "en": "List of open source software",
+                    "fr": "Référencement des logiciels libres"
+                },
+                "normal": {
+                    "en": "developped by French universities",
+                    "fr": "développés dans l'enseignement supérieur et la recherche"
+                }
+            },
+            "softwareSelection": {
+                "enabled": false
+            },
+            "presentation": {
+                "title": {
+                    "en": "",
+                    "fr": "Vers un catalogue des logiciels de la recherche"
+                },
+                "text": {
+                    "fr": "<p>L’un des objectifs majeurs du collège « Codes sources et logiciels » du comité pour la science ouverte est de contribuer à une meilleure compréhension du rôle du logiciel dans la recherche.</p><p>Le logiciel de recherche constitue une production scientifique de même importance que les publications et les données : ces trois facettes du savoir académique interagissent les unes avec les autres. De très nombreuses disciplines sont concernées, bien au‑delà des sciences de l’informatique. Par « logiciel de recherche », on entend unlogiciel créé, utilisé ou diffusé dans les productions de recherche. L’analyse reprendla définition du logiciel de recherche conçue par le collège.</p><p>Les communautés scientifiques, les laboratoires et les institutions ont besoin d’identifier et de rendre visibles leurs logiciels pour :</p><ul><li>garantir leur archivage et en pérenniser l’accès ;</li><li>faciliter leur citation ;</li><li>les valoriser, notamment sur le plan scientifique, afin de permettre leur réutilisation ;</li><li>faire émerger de nouvelles collaborations.</li></ul>",
+                    "en": "<p>Somting</p>"
+                }
+            },
+            "numbers": {
+                "catgegories": [
+                    "softwareCount",
+                    "programmerCount",
+                    "institutionsCount"
+                ]
+            },
+            "usecases": {
+                "declareUse": {
+                    "enabled": false
+                },
+                "editSoftware": {
+                    "enabled": false
+                }
+            }
+        },
+        "footer": {
+            "domains": [
+                "hal.science",
+                "recherche.data.gouv.fr",
+                "code.gouv.fr/sill",
+                "www.softwareheritage.org"
+            ]
+        }
+    }
+}

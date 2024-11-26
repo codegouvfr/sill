@@ -3,11 +3,19 @@ import {
     createObjectThatThrowsIfAccessed
 } from "redux-clean-architecture";
 
+export type Stat = {
+    value: number;
+    i18ref: string;
+    show: boolean;
+}
+
 export type State = {
-    softwareCount: number;
-    registeredUserCount: number;
-    agentReferentCount: number;
-    organizationCount: number;
+    softwareCount: Stat;
+    registeredUserCount: Stat;
+    agentReferentCount: Stat;
+    organizationCount: Stat;
+    programmerCount: Stat;
+    institutionsCount: Stat;
 };
 
 export const name = "generalStats";

@@ -19,6 +19,7 @@ import { ReactComponent as HomepageWaveSvg } from "ui/assets/homepage_wave.svg";
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
+import siteConfig from "../../../config-theme-ui.json"
 
 type Props = {
     className?: string;
@@ -92,16 +93,18 @@ export default function Home(props: Props) {
                     })}
                 />
             </div>
-            <section className={cx(classes.softwareSelectionBackground, classes.section)}>
-                <div className={fr.cx("fr-container")}>
-                    <h2 className={classes.titleSection}>{t("software selection")}</h2>
-                    <div className={classes.softwareSelection}>
-                        {softwareSelectionList.map(({ title, linkProps }) => (
-                            <Tile key={title} title={title} linkProps={linkProps} />
-                        ))}
+            {siteConfig.ui.home.softwareSelection.enabled && (
+                <section className={cx(classes.softwareSelectionBackground, classes.section)}>
+                    <div className={fr.cx("fr-container")}>
+                        <h2 className={classes.titleSection}>{t("software selection")}</h2>
+                        <div className={classes.softwareSelection}>
+                            {softwareSelectionList.map(({ title, linkProps }) => (
+                                <Tile key={title} title={title} linkProps={linkProps} />
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             <WhatIsTheSillSection
                 className={cx(fr.cx("fr-container"), classes.section)}
@@ -115,10 +118,7 @@ export default function Home(props: Props) {
                     <div className={classes.sillNumberList}>
                         {(
                             [
-                                "softwareCount",
-                                "registeredUserCount",
-                                "agentReferentCount",
-                                "organizationCount"
+                                ...["softwareCount"]
                             ] as const
                         ).map(metricName => (
                             <div key={metricName}>
@@ -128,11 +128,30 @@ export default function Home(props: Props) {
                                         classes.whiteText,
                                         classes.numberText
                                     )}
-                                    metricValue={stats[metricName]}
+                                    metricValue={stats[metricName].value}
                                 />
                                 <h4 className={classes.whiteText}>{t(metricName)}</h4>
                             </div>
                         ))}
+                    </div>
+                    <div className={classes.sillNumberList}>
+                        {(
+                            Object.values(stats).filter((stat) => {
+                                return stat.show;
+                            }).map((stat) => (
+                                <div key={stat.i18ref}>
+                                    <AnimatedMetric
+                                        className={cx(
+                                            fr.cx("fr-display--sm"),
+                                            classes.whiteText,
+                                            classes.numberText
+                                        )}
+                                        metricValue={stat.value}
+                                    />
+                                    <h4 className={classes.whiteText}>{t(stat.i18ref as any)}</h4>
+                                </div>
+                            ))
+                        )}
                     </div>
                 </div>
             </section>
@@ -140,6 +159,30 @@ export default function Home(props: Props) {
                 <div className={cx(fr.cx("fr-container"))}>
                     <h2 className={classes.titleSection}>{t("help us")}</h2>
                     <div className={classes.helpUsCards}>
+                        {siteConfig.ui.home.usecases.declareUse.enabled && (
+                            <Card
+                                classes={{
+                                    "img": css({
+                                        "& > img": {
+                                            "objectFit": "unset",
+                                            "background": "white"
+                                        }
+                                    })
+                                }}
+                                key={"declare referent"}
+                                title={t(`declare referent title`)}
+                                desc={t(`declare referent desc`)}
+                                imageAlt={t("illustration image")}
+                                linkProps={routes.softwareCatalog().link}
+                                imageUrl={humanCooperationSvgUrl}
+                                footer={
+                                    <Button priority="primary" linkProps={routes.softwareCatalog().link}>
+                                        {t(`declare referent button label`)}
+                                    </Button>
+                                }
+                                enlargeLink={false}
+                            />
+                        )}
                         {(
                             [
                                 "declare referent",
@@ -281,10 +324,10 @@ const useStyles = tss.withName({ Home }).create({
 
 export const { i18n } = declareComponentKeys<
     | {
-          K: "title";
-          P: { accentColor: string };
-          R: JSX.Element;
-      }
+        K: "title";
+        P: { accentColor: string };
+        R: JSX.Element;
+    }
     | "software selection"
     | "last added"
     | "most used"
@@ -300,10 +343,9 @@ export const { i18n } = declareComponentKeys<
     | "help us"
     | "the sill in a few words"
     | {
-          K: "the sill in a few words paragraph";
-          P: { accentColor: string };
-          R: JSX.Element;
-      }
+        K: "the sill in a few words paragraph";
+        R: JSX.Element;
+    }
     | "illustration image"
     | "declare referent title"
     | "edit software title"
@@ -314,6 +356,10 @@ export const { i18n } = declareComponentKeys<
     | "declare referent button label"
     | "edit software button label"
     | "add software or service button label"
+    | "accentedTitle"
+    | "nonAccentedTitle"
+    | "programmerCount"
+    | "institutionCount"
 >()({ Home });
 
 const { HeroSection } = (() => {
@@ -332,10 +378,10 @@ const { HeroSection } = (() => {
             <section className={cx(classes.root, className)}>
                 <div className={classes.titleWrapper}>
                     <h2 className={classes.title}>
-                        {t("title", {
-                            "accentColor":
-                                fr.colors.decisions.text.title.blueFrance.default
-                        })}
+                        <span style={{ "color": fr.colors.decisions.text.title.blueFrance.default }}>
+                            {t("accentedTitle")}
+                        </span>{" "}
+                        {t("nonAccentedTitle")}
                     </h2>
                 </div>
                 <img
@@ -401,9 +447,7 @@ const { WhatIsTheSillSection } = (() => {
                 <Waypoint onEnter={() => setIsVisible(true)} />
                 <h2>{t("the sill in a few words")}</h2>
                 <p className={classes.paragraph}>
-                    {t("the sill in a few words paragraph", {
-                        "accentColor": fr.colors.decisions.text.title.blueFrance.default
-                    })}
+                    {t("the sill in a few words paragraph")}
                 </p>
             </section>
         );
