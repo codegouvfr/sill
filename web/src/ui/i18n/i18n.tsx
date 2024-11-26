@@ -8,6 +8,8 @@ import { createUnionSchema } from "ui/tools/zod/createUnionSchema";
 import { DeclarationType } from "../shared/DeclarationRemovalModal";
 import { ReactNode } from "react";
 
+import siteConfig from "../../config-theme-ui.json"
+
 export { declareComponentKeys };
 export { languages };
 export type { Language };
@@ -93,6 +95,8 @@ const {
                         for French public agencies.
                     </>
                 ),
+                "accentedTitle": siteConfig?.ui?.home?.title?.accented?.en ?? "Recommended free software",
+                "nonAccentedTitle": siteConfig?.ui?.home?.title?.normal?.en ?? "for French public agencies.",
                 "software selection": "Software selections",
                 "last added": "Recently added",
                 "most used": "Most popular",
@@ -105,56 +109,15 @@ const {
                 "registeredUserCount": "registered users",
                 "agentReferentCount": "software referents",
                 "organizationCount": "organizations",
+                "programmerCount": "",
+                "institutionCount": "",
                 "help us": "You are a public servant? Help us enrich the catalog",
                 "the sill in a few words": "The SILL in a nutshell",
-                "the sill in a few words paragraph": ({ accentColor }) => (
+                "the sill in a few words paragraph": (
                     <>
-                        <p>
-                            The Interministerial Free Software Catalog (SILL) is the
-                            reference catalog of free software recommended by DINUM for
-                            the French administration.
-                        </p>
-                        <p>
-                            It is used to help administrations navigate and select the{" "}
-                            <a
-                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                style={{ "color": accentColor }}
-                            >
-                                free software
-                            </a>{" "}
-                            to use, in accordance with{" "}
-                            <a
-                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                style={{ "color": accentColor }}
-                            >
-                                Article 16 of the Digital Republic Act
-                            </a>
-                            .
-                        </p>
-                        <p>
-                            The{" "}
-                            <a
-                                href="https://code.gouv.fr/sill/readme"
-                                style={{ "color": accentColor }}
-                            >
-                                entry criteria
-                            </a>{" "}
-                            for software in the SILL include the publication of its source
-                            code under an{" "}
-                            <a
-                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                style={{ "color": accentColor }}
-                            >
-                                accepted free software license
-                            </a>{" "}
-                            and its deployment by a public institution or installation by
-                            a public agent.
-                        </p>
-                        <p>
-                            The SILL referents are public agents who volunteer to manage
-                            and update information on the software included in the
-                            catalog.
-                        </p>
+                        <span>Vous êtes agent public ? </span>Ajoutez des logiciels libres
+                        ou des instances de logiciels libres utilisés ou déployés dans
+                        votre organisation !
                     </>
                 ),
                 "illustration image": "Illustration image",
@@ -701,12 +664,12 @@ const {
             },
             "Header": {
                 "home title": "Home - Interministerial Free Software Catalog",
-                "title": "Interministerial Free Software Catalog",
+                "title": siteConfig?.ui?.header?.title?.en ?? "Interministerial Free Software Catalog",
                 "navigation welcome": "Welcome to the SILL",
                 "navigation catalog": "Software catalog",
                 "navigation add software": "Add software or instance",
                 "navigation update software": "Update software or instance",
-                "navigation support request": "Support request",
+                "navigation support request": siteConfig?.ui?.header?.menu?.contribute?.text?.en || "Support request",
                 "navigation about": "About the site"
             },
             "AuthButtons": {
@@ -770,6 +733,8 @@ const {
                         recommandés pour l'ensemble de l'administration.
                     </>
                 ),
+                "accentedTitle": siteConfig?.ui?.home?.title?.accented?.fr ?? "Catalogue de référence de logiciels libres",
+                "nonAccentedTitle": siteConfig?.ui?.home?.title?.normal?.fr ?? "recommandés pour l'ensemble de l'administration.",
                 "software selection": "Sélections de logiciels",
                 "last added": "Ajouts récents",
                 "most used": "Les plus populaires",
@@ -782,63 +747,17 @@ const {
                 "registeredUserCount": "utilisateurs inscrits",
                 "agentReferentCount": "référents logiciels",
                 "organizationCount": "organismes présents",
+                "programmerCount": "english", // TODO
+                "institutionCount": "english", // TODO
                 "help us":
                     "Vous êtes agent public ? Aidez-nous à enrichir le catalogue !",
                 "declare referent title":
                     "Se déclarer utilisateur ou référent d'un logiciel",
                 "edit software title": "Modifier une fiche logiciel",
-                "the sill in a few words": "Le SILL en quelques mots",
-                "the sill in a few words paragraph": ({ accentColor }) => (
-                    <>
-                        <p>
-                            Le Socle Interministériel de Logiciels Libres (SILL) est un
-                            catalogue de référence des logiciels libres recommandés pour
-                            l' administration française.
-                        </p>
-                        <p>
-                            Il est utilisé pour aider les administrations à naviguer et
-                            sélectionner les{" "}
-                            <a
-                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                style={{ "color": accentColor }}
-                            >
-                                logiciels libres
-                            </a>{" "}
-                            à utiliser, conformément à l'
-                            <a
-                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                style={{ "color": accentColor }}
-                            >
-                                article 16 de la loi pour une République numérique
-                            </a>
-                            .
-                        </p>
-                        <p>
-                            Les{" "}
-                            <a
-                                href="https://code.gouv.fr/sill/readme"
-                                style={{ "color": accentColor }}
-                            >
-                                critères d'entrée
-                            </a>{" "}
-                            d'un logiciel dans le SILL comprennent la publication de son
-                            code source sous une{" "}
-                            <a
-                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                style={{ "color": accentColor }}
-                            >
-                                licence libre acceptée
-                            </a>{" "}
-                            et son déploiement par un établissement public ou son
-                            installation par un agent public.
-                        </p>
-                        <p>
-                            Les référents SILL sont des agents publics qui se portent
-                            volontaires pour gérer et mettre à jour les informations sur
-                            les logiciels inclus dans le catalogue.
-                        </p>
-                    </>
-                ),
+                "the sill in a few words": siteConfig?.ui?.home?.presentation?.title?.fr ?? "Le SILL en quelques mots",
+                "the sill in a few words paragraph": (<>
+                    <div dangerouslySetInnerHTML={{ __html: siteConfig?.ui?.home?.presentation?.text?.fr }} />
+                </>),
                 "illustration image": "Image d'illustration",
                 "add software or service title": "Ajouter un logiciel ou un service",
                 "declare referent desc":
@@ -1403,12 +1322,12 @@ const {
             },
             "Header": {
                 "home title": "Accueil - Socle Interministériel des Logiciels Libres",
-                "title": "Socle Interministériel des Logiciels Libres",
+                "title": siteConfig?.ui?.header?.title?.fr ?? "Socle Interministériel des Logiciels Libres",
                 "navigation welcome": "Bienvenue sur le SILL",
                 "navigation catalog": "Catalogue de logiciels",
                 "navigation add software": "Ajouter un logiciel ou une instance ",
                 "navigation update software": "Mettre à jour un logiciel ou une instance",
-                "navigation support request": "Demande d'accompagnement",
+                "navigation support request": siteConfig?.ui?.header?.menu?.contribute?.text?.fr ?? "Demande d'accompagnement",
                 "navigation about": "À propos du site"
             },
             "AuthButtons": {
