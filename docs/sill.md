@@ -32,6 +32,8 @@ Pour qu'un logiciel soit référencé dans le SILL, il faut qu'un ou plusieurs a
 
 Pour devenir référent ou utilisateur SILL, créez un compte sur [code.gouv.fr/sill](https://code.gouv.fr/sill). De là, vous pouvez soit ajouter un nouveau logiciel libre, soit vous ajouter comme référent ou utilisateur d'un logiciel libre déjà présent.
 
+Le SILL permet aux utilisateurs d'indiquer l'identifiant [Wikidata](https://www.wikidata.org) d'un logiciel pour préremplir certains champs. Une fois l'identifiant Wikidata connu, la fiche Wikidata est quotidiennement consultée pour enrichir la fiche du logiciel du SILL.
+
 ## Comment ajouter un prestataire dans le SILL ?
 
 Vous représentez une entreprise proposant des services autour d'un logiciel libre du SILL mais vous n'êtes pas référencés comme prestataires ?
