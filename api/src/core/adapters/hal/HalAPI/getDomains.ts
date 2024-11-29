@@ -1,8 +1,8 @@
 import fetch from "node-fetch";
 import { HalAPIDomain, HalFetchError } from "./type";
 
-export async function getAllCategries(): Promise<HalAPIDomain[]> {
-    // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
+export async function getAllDomains(): Promise<HalAPIDomain[]> {
+    // Get all domains
     const url = "http://api.archives-ouvertes.fr/ref/domain/?fl=*";
 
     const res = await fetch(url).catch(err => {
@@ -12,7 +12,7 @@ export async function getAllCategries(): Promise<HalAPIDomain[]> {
 
     if (res.status === 429) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        return getAllCategries();
+        return getAllDomains();
     }
 
     if (res.status === 404) {
@@ -24,8 +24,8 @@ export async function getAllCategries(): Promise<HalAPIDomain[]> {
     return json.response.docs;
 }
 
-export async function getCategoryByCode(code: string): Promise<HalAPIDomain> {
-    // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
+export async function getDomainByCode(code: string): Promise<HalAPIDomain> {
+    // Get domain using code
     const url = `http://api.archives-ouvertes.fr/ref/domain/?q=code_s:${code}&fl=*`;
 
     const res = await fetch(url).catch(err => {
@@ -35,7 +35,7 @@ export async function getCategoryByCode(code: string): Promise<HalAPIDomain> {
 
     if (res.status === 429) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        return getCategoryByCode(code);
+        return getDomainByCode(code);
     }
 
     if (res.status === 404) {

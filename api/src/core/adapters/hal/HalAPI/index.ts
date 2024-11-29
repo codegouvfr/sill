@@ -1,4 +1,4 @@
-import { getAllCategries, getCategoryByCode } from "./getDomains";
+import { getAllDomains, getDomainByCode } from "./getDomains";
 import { fetchHalSoftwareById, fetchHalSoftwares } from "./getHalSoftware";
 
 export const halAPIGateway = {
@@ -7,7 +7,7 @@ export const halAPIGateway = {
         getAll: fetchHalSoftwares
     },
     domain: {
-        getByCode: getCategoryByCode,
-        gelAll: getAllCategries
+        getByCode: getDomainByCode,
+        gelAll: getAllDomains
     }
 };

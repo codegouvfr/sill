@@ -166,7 +166,7 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
         case "HAL":
             return {
                 "getSoftwareExternalDataOptions": getHalSoftwareOptions,
-                "getSoftwareExternalData": halAdapter.software.getByHalId
+                "getSoftwareExternalData": halAdapter.softwareExternalData.getByHalId
             };
         default:
             const unreachableCase: never = externalSoftwareDataOrigin;
