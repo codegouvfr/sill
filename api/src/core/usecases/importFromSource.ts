@@ -1,5 +1,5 @@
 import { DbApiV2 } from "../ports/DbApiV2";
-import { halAPIGateway } from "../adapters/hal";
+import { halAPIGateway } from "../adapters/hal/HalAPI";
 import { halRawSoftwareToSoftwareForm } from "../adapters/hal/halRawSoftware";
 
 export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Promise<Promise<number | undefined>[]> = (

@@ -9,7 +9,7 @@ import { assert } from "tsafe/assert";
 import { bootstrapCore } from "../core";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import { getHalSoftware } from "../core/adapters/hal/getHalSoftware";
+import { halAdapter } from "../core/adapters/hal";
 import { getHalSoftwareOptions } from "../core/adapters/hal/getHalSoftwareOptions";
 import { getWikidataSoftware } from "../core/adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidataSoftwareOptions";
@@ -181,7 +181,7 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
         case "HAL":
             return {
                 "getSoftwareExternalDataOptions": getHalSoftwareOptions,
-                "getSoftwareExternalData": getHalSoftware
+                "getSoftwareExternalData": halAdapter.software.getByHalId
             };
         default:
             const unreachableCase: never = externalSoftwareDataOrigin;

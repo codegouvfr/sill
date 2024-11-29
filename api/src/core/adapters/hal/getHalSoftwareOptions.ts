@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import type { GetSoftwareExternalDataOptions } from "../../ports/GetSoftwareExternalDataOptions";
-import { HalRawSoftware, halSoftwareFieldsToReturnAsString, rawHalSoftwareToExternalOption } from "./halRawSoftware";
+import { halSoftwareFieldsToReturnAsString, rawHalSoftwareToExternalOption } from "./halRawSoftware";
+import { HalRawSoftware } from "./HalAPI/type";
 
 // HAL documentation is here : https://api.archives-ouvertes.fr/docs/search
 
