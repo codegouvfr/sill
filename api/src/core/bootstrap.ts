@@ -108,8 +108,7 @@ export async function bootstrapCore(
             comptoirDuLibreApi,
             getSoftwareLatestVersion,
             getServiceProviders,
-            dbApi,
-            externalSoftwareDataOrigin
+            dbApi
         }),
         getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
