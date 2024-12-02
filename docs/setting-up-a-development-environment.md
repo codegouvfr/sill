@@ -40,7 +40,7 @@ SILL_KEYCLOAK_REALM=codegouv
 SILL_KEYCLOAK_CLIENT_ID=sill
 SILL_KEYCLOAK_ADMIN_PASSWORD=xxxxxx
 SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME=agencyName
-SILL_README_URL=https://git.sr.ht/~codegouvfr/logiciels-libres/blob/main/sill.md
+SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
 SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
 SILL_JWT_ID=sub
 SILL_JWT_EMAIL=email
@@ -62,7 +62,7 @@ export SILL_KEYCLOAK_REALM=codegouv
 export SILL_KEYCLOAK_CLIENT_ID=sill
 export SILL_KEYCLOAK_ADMIN_PASSWORD=xxxxxx
 export SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME=agencyName
-export SILL_README_URL=https://git.sr.ht/~codegouvfr/logiciels-libres/blob/main/sill.md
+export SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
 export SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
 export SILL_JWT_ID=sub
 export SILL_JWT_EMAIL=email
@@ -95,7 +95,7 @@ export CONFIGURATION=$(cat << EOF
     "adminPassword": "xxxxxx",
     "organizationUserProfileAttributeName": "agencyName"
   },
-  "readmeUrl": "https://git.sr.ht/~codegouvfr/logiciels-libres/blob/main/sill.md",
+  "readmeUrl": "https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md",
   "termsOfServiceUrl": "https://code.gouv.fr/sill/tos_fr.md",
   "jwtClaimByUserKey": {
     "id": "sub",
