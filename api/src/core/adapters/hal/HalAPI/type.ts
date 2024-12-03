@@ -168,3 +168,73 @@ export type HalAPIDomain = {
     dateLastIndexed_tdate: string; // ISO date
     level_i: number;
 };
+
+export type HalStructure = {
+    acronym_s: string[];
+    acronym_sci: string[];
+    acronym_t: string[];
+    address_s: string[];
+    address_t: string[];
+    aliasDocid_i: number;
+    code_s: string;
+    code_sci: string;
+    code_t: string;
+    country_s: string;
+    dateLastIndexed_tdate: Date;
+    docid: string;
+    label_html: string;
+    label_s: string;
+    label_sci: string;
+    label_xml: string;
+    locked_bool: boolean;
+    name_s: string;
+    name_sci: string;
+    name_t: string;
+    parentAcronym_s: string;
+    parentAcronym_t: string;
+    parentCountry_s: string;
+    parentDocid_i: string[];
+    parentName_s: string[];
+    parentType_s: string[];
+    parentUpdateDate_s: string[];
+    parentUpdateDate_tdate: string[];
+    parentUrl_s: string;
+    parentValid_s: string;
+    ror_s: string;
+    rorUrl_s: string;
+    text: string;
+    exte_autocomplete: string;
+    type_s: string;
+    updateDate_tdate: string;
+    url_s: string;
+    valid_s: string;
+};
+
+export type HalAuthor = {
+    accountAssociated_bool: boolean;
+    affPref_i: number;
+    dateLastIndexed_tdate: string; // ISO Date String
+    docid: string;
+    emailDomain_s: string;
+    emailId_t: string;
+    firstName_s: string;
+    firstName_t: string;
+    form_i: number;
+    fullNameDocid_fs: string;
+    fullName_autocomplete: string;
+    fullName_s: string;
+    fullName_sci: string;
+    fullName_t: string;
+    hasCV_bool: boolean;
+    idHal_i: number;
+    idHal_s: string;
+    label_html: string;
+    label_s: string;
+    lastName_s: string;
+    lastName_t: string;
+    middleName_s: string;
+    middleName_t: string;
+    person_i: number;
+    text_autocomplete: string;
+    valid_s: string;
+};

@@ -1,8 +1,30 @@
 import memoize from "memoizee";
-import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import { AuthStructure, GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
+
+const buildParentStructureTree = async (
+    structureIdArray: number[] | string[] | undefined
+): Promise<AuthStructure[]> => {
+    if (!structureIdArray) return [];
+
+    const IdsArray = structureIdArray.map(id => Number(id));
+
+    return await Promise.all(
+        IdsArray.map(async (structureId: number) => {
+            const structure = await halAPIGateway.structure.getById(structureId);
+
+            if (!structure) throw new Error(`Couldn't get data for structure docid : ${structureId}`);
+
+            return {
+                "name": structure.name_s,
+                "url": structure?.ror_s ?? structure?.url_s,
+                "parentStructure": await buildParentStructureTree(structure?.parentDocid_i)
+            };
+        })
+    );
+};
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
     async (halDocId): Promise<SoftwareExternalData | undefined> => {
@@ -23,30 +45,53 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         );
 
         const codemetaSoftware = await halAPIGateway.software.getCodemetaByUrl(halRawSoftware.uri_s);
-        const authors = codemetaSoftware?.author.map(auth => {
-            const author = auth.author;
-            const id = author?.["@id"]?.[0];
+        if (!codemetaSoftware) {
+            throw Error(`No codemeta found for doc : ${halDocId}`);
+        }
 
-            let base = {
-                "name": `${author.givenName} ${author.familyName}`,
-                "id": id
-            };
+        const authors = await await Promise.all(
+            codemetaSoftware.author.map(async auth => {
+                const author = auth.author;
+                const id = author?.["@id"]?.[0];
+                const affiliation = author.affiliation;
 
-            if (id?.split("-")?.length === 4 && id?.length === 19) {
-                return Object.assign({ "url": `https://orcid.org/${id}` }, base);
-            }
+                let base = {
+                    "name": `${author.givenName} ${author.familyName}`,
+                    "id": id
+                };
 
-            if (id) {
-                return Object.assign({ "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
-            }
+                if (affiliation?.length > 0) {
+                    const structures = await Promise.all(
+                        affiliation
+                            .filter(affilatiedStructure => affilatiedStructure.name)
+                            .map(async affilatiedStructure => {
+                                const structure = await halAPIGateway.structure.getByAcronym(affilatiedStructure?.name);
+                                return {
+                                    "name": structure?.name_s,
+                                    "url": structure?.ror_s ?? structure?.url_s,
+                                    "parentStructure": await buildParentStructureTree(structure?.parentDocid_i)
+                                };
+                            })
+                    );
+                    base = Object.assign({ "affiliatedStructure": structures }, base);
+                }
 
-            return Object.assign(
-                {
-                    "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
-                },
-                base
-            );
-        });
+                if (id?.split("-")?.length === 4 && id?.length === 19) {
+                    return Object.assign({ "url": `https://orcid.org/${id}` }, base);
+                }
+
+                if (id) {
+                    return Object.assign({ "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
+                }
+
+                return Object.assign(
+                    {
+                        "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                    },
+                    base
+                );
+            })
+        );
 
         return {
             externalId: halRawSoftware.docid,
