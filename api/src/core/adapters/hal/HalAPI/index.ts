@@ -1,6 +1,7 @@
 import { fetchCodeMetaSoftwareByURL } from "./getCodemetaSoftware";
 import { getAllDomains, getDomainByCode } from "./getDomains";
 import { fetchHalSoftwareById, fetchHalSoftwares } from "./getHalSoftware";
+import { getHalStructureByAcronym, getHalStructureById } from "./getStructure";
 
 export const halAPIGateway = {
     software: {
@@ -11,5 +12,9 @@ export const halAPIGateway = {
     domain: {
         getByCode: getDomainByCode,
         gelAll: getAllDomains
+    },
+    structure: {
+        getById: getHalStructureById,
+        getByAcronym: getHalStructureByAcronym
     }
 };

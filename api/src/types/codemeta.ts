@@ -32,6 +32,7 @@ export interface Person extends Auth {
 
 export interface Organization extends Auth {
     "@type": "Organization";
+    name: string;
 }
 
 export type CodeMetaIdentifier = {
