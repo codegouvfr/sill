@@ -66,7 +66,7 @@ type SoftwareExternalDatasTable = {
         {
             name: string;
             id: string | null;
-            url?: string
+            url?: string;
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;

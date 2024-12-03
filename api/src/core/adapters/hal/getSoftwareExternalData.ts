@@ -23,25 +23,30 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         );
 
         const codemetaSoftware = await halAPIGateway.software.getCodemetaByUrl(halRawSoftware.uri_s);
-        const authors = codemetaSoftware?.author.map((auth) => {
+        const authors = codemetaSoftware?.author.map(auth => {
             const author = auth.author;
-            const id = author?.['@id']?.[0];
+            const id = author?.["@id"]?.[0];
 
             let base = {
                 "name": `${author.givenName} ${author.familyName}`,
                 "id": id
-            }
+            };
 
-            if (id?.split('-')?.length === 4 && id?.length === 19) {
-                return Object.assign({ 'url': `https://orcid.org/${id}` }, base);
+            if (id?.split("-")?.length === 4 && id?.length === 19) {
+                return Object.assign({ "url": `https://orcid.org/${id}` }, base);
             }
 
             if (id) {
-                return Object.assign({ 'url': `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
+                return Object.assign({ "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
             }
 
-            return Object.assign({ 'url': `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}` }, base);
-        })
+            return Object.assign(
+                {
+                    "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                },
+                base
+            );
+        });
 
         return {
             externalId: halRawSoftware.docid,
@@ -62,7 +67,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             websiteUrl: halRawSoftware.uri_s,
             sourceUrl: halRawSoftware?.softCodeRepository_s?.[0],
             documentationUrl: undefined, // TODO no info about documentation in HAL check on SWH or Repo ?
-            license: codemetaSoftware?.license?.[0] ?? 'undefined',
+            license: codemetaSoftware?.license?.[0] ?? "undefined",
             softwareVersion: halRawSoftware?.softVersion_s?.[0],
             keywords: halRawSoftware?.keyword_s,
             programmingLanguages: halRawSoftware?.softProgrammingLanguage_s,

@@ -1,10 +1,10 @@
-import { SoftwareApplication } from '../../../../types/codemeta';
-import { HalFetchError } from './type';
+import { SoftwareApplication } from "../../../../types/codemeta";
+import { HalFetchError } from "./type";
 
 export async function fetchCodeMetaSoftwareByURL(url: string): Promise<SoftwareApplication | undefined> {
     const res = await fetch(`${url}/codemeta`, {
-        signal: AbortSignal.timeout(2000),
-    }).catch((err) => {
+        signal: AbortSignal.timeout(10000)
+    }).catch(err => {
         console.error(url, err);
     });
 

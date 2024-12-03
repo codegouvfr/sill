@@ -10,7 +10,7 @@ export type CodeMeta = {
     softwareVersion: string;
     dateModified: string; // DATE YYYY-MM-DD
     contributor: Auth[];
-}
+};
 
 export interface Role extends CodeMeta {
     author: Auth[];
@@ -20,7 +20,7 @@ export type Auth = {
     "@type": string; // Enum ?
     roleName: string; // Enum ?
     author: Person;
-}
+};
 
 export interface Person extends Auth {
     "@type": "Person";
@@ -38,14 +38,14 @@ export type CodeMetaIdentifier = {
     "@type": string;
     propertyID: string;
     value: string;
-}
+};
 
 export interface SoftwareSourceCode extends CodeMeta {
-    "@type": "SoftwareSourceCode",
+    "@type": "SoftwareSourceCode";
     author: Auth[];
 }
 
 export interface SoftwareApplication extends CodeMeta {
-    "@type": "SoftwareApplication",
+    "@type": "SoftwareApplication";
     author: Auth[];
 }

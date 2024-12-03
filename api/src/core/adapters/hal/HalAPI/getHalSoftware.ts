@@ -31,7 +31,6 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
 
-
 export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoftware | undefined> {
     const res = await fetch(
         `https://api.archives-ouvertes.fr/search/?q=docid:${halDocid}&wt=json&fl=${halSoftwareFieldsToReturnAsString}&sort=docid%20asc`
