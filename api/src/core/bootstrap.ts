@@ -10,7 +10,6 @@ import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVers
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
-import { getHalSoftwareOptions } from "./adapters/hal/getHalSoftwareOptions";
 import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
@@ -165,7 +164,7 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
             };
         case "HAL":
             return {
-                "getSoftwareExternalDataOptions": getHalSoftwareOptions,
+                "getSoftwareExternalDataOptions": halAdapter.softwareOptions.getByHalId,
                 "getSoftwareExternalData": halAdapter.softwareExternalData.getByHalId
             };
         default:
