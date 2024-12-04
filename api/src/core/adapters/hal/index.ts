@@ -1,7 +1,7 @@
-import { fetchHalSoftwares } from "./getHalSoftware";
+import { getHalSoftware } from "./getSoftwareFromHal";
 
-export const halAPIGateway = {
-    software: {
-        getAll: fetchHalSoftwares
+export const halAdapter = {
+    softwareExternalData: {
+        getByHalId: getHalSoftware
     }
 };

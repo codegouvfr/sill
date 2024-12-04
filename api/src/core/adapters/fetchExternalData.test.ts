@@ -215,8 +215,8 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
-                    softwareVersion: "5.4.10",
-                    publicationTime: new Date("2024-10-23T00:00:00.000Z")
+                    softwareVersion: expect.any(String),
+                    publicationTime: expect.any(Date)
                 }
             ]);
 

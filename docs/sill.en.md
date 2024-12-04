@@ -32,6 +32,8 @@ For software to be listed on this catalog, one or more public sector employees m
 
 To become a referrer or user, create an account on [code.gouv.fr/sill](https://code.gouv.fr/sill). From there, you can either add a new free software application, or become a referrer or user of an existing free software application.
 
+The SILL allows users to indicate the [Wikidata identifier](https://www.wikidata.org) of a software application in order to pre-fill certain fields. Once the Wikidata identifier is known, the Wikidata record is consulted daily to enrich the SILL software record.
+
 ## How do I add a service provider to this catalog?
 
 Do you represent a company offering services based on a Free Software from this catalog but are not listed as a service provider?

@@ -1,6 +1,6 @@
 import { describe, it } from "vitest";
 import { expectToEqual } from "../../../tools/test.helpers";
-import { getHalSoftware } from "./getHalSoftware";
+import { getHalSoftware } from "./getSoftwareFromHal";
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
 
 describe("HAL", () => {
@@ -34,7 +34,7 @@ describe("HAL", () => {
                 "softwareVersion": undefined,
                 "keywords": undefined,
                 "programmingLanguages": undefined,
-                "applicationCategories": ["info"],
+                "applicationCategories": ["Computer Science [cs]"],
                 "publicationTime": new Date(1561566581000)
             });
         });

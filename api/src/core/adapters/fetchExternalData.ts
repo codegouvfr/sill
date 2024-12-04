@@ -97,16 +97,21 @@ const makeGetOtherExternalData =
 
         const otherSoftwareExtraData: OtherSoftwareExtraData = {
             softwareId: software.softwareId,
-            serviceProviders: serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [],
+            serviceProviders:
+                software.externalDataOrigin === "wikidata"
+                    ? serviceProvidersBySoftwareId[software.softwareId.toString()] ?? []
+                    : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
-                cnllPrestatairesSill
-                    .find(({ sill_id }) => sill_id === software.softwareId)
-                    ?.prestataires.map(({ nom, siren, url }) => ({
-                        name: nom,
-                        siren,
-                        url
-                    })) ?? null,
+                software.externalDataOrigin === "wikidata"
+                    ? cnllPrestatairesSill
+                          .find(({ sill_id }) => sill_id === software.softwareId)
+                          ?.prestataires.map(({ nom, siren, url }) => ({
+                              name: nom,
+                              siren,
+                              url
+                          })) ?? null
+                    : null,
             latestVersion: latestVersion ?? null
         };
 

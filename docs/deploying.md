@@ -423,7 +423,7 @@ api:
           "organizationUserProfileAttributeName": "agencyName"
         },
         "termsOfServiceUrl": "https://sill-preprod.lab.sspcloud.fr/tos_fr.md",
-        "readmeUrl": "https://git.sr.ht/~codegouvfr/logiciels-libres/blob/main/sill.md",
+        "readmeUrl": "https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md",
         "jwtClaimByUserKey": {
           "id": "sub",
           "email": "email",
