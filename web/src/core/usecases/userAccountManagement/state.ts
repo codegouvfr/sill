@@ -14,7 +14,7 @@ namespace State {
 
     export type Ready = {
         stateDescription: "ready";
-        passwordResetUrlWithoutLangParam: string | undefined;
+        accountManagementUrl: string | undefined;
         allowedEmailRegexpStr: string;
         allOrganizations: string[];
         organization: {
@@ -51,7 +51,7 @@ export const { reducer, actions } = createUsecaseActions({
                 payload
             }: {
                 payload: {
-                    passwordResetUrlWithoutLangParam: string | undefined;
+                    accountManagementUrl: string | undefined;
                     allowedEmailRegexpStr: string;
                     organization: string;
                     email: string;
@@ -62,7 +62,7 @@ export const { reducer, actions } = createUsecaseActions({
             }
         ) => {
             const {
-                passwordResetUrlWithoutLangParam,
+                accountManagementUrl,
                 allowedEmailRegexpStr,
                 organization,
                 email,
@@ -73,7 +73,7 @@ export const { reducer, actions } = createUsecaseActions({
 
             return {
                 "stateDescription": "ready",
-                passwordResetUrlWithoutLangParam,
+                accountManagementUrl,
                 allowedEmailRegexpStr,
                 allOrganizations,
                 "organization": {

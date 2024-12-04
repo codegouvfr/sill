@@ -42,7 +42,7 @@ export const thunks = {
                     allowedEmailRegexpStr,
                     "email": user.email,
                     "organization": user.organization,
-                    "passwordResetUrlWithoutLangParam":
+                    "accountManagementUrl":
                         keycloakParams === undefined
                             ? undefined
                             : addParamToUrl({
@@ -50,8 +50,7 @@ export const thunks = {
                                       keycloakParams.url.replace(/\/$/, ""),
                                       "realms",
                                       keycloakParams.realm,
-                                      "account",
-                                      "password"
+                                      "account"
                                   ].join("/"),
                                   "name": "referrer",
                                   "value": keycloakParams.clientId
@@ -124,7 +123,7 @@ export const thunks = {
 
             dispatch(actions.updateFieldCompleted({ "fieldName": params.fieldName }));
         },
-    "getPasswordResetUrl":
+    "getAccountManagementUrl":
         () =>
         (...args): string => {
             const [
@@ -139,9 +138,9 @@ export const thunks = {
 
             assert(state.stateDescription === "ready");
 
-            assert(state.passwordResetUrlWithoutLangParam !== undefined);
+            assert(state.accountManagementUrl !== undefined);
 
-            let url = state.passwordResetUrlWithoutLangParam;
+            let url = state.accountManagementUrl;
 
             {
                 const { newUrl } = addParamToUrl({
