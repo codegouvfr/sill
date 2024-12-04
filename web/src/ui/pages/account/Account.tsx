@@ -86,7 +86,7 @@ function AccountReady(props: { className?: string }) {
 
     const [emailInputValue, setEmailInputValue] = useState(email.value);
     /* prettier-ignore */
-    const [organizationInputValue, setOrganizationInputValue] = useState(organization.value);
+    const [, setOrganizationInputValue] = useState(organization.value);
 
     const evtAboutInputValue = useConst(() => Evt.create(aboutAndIsPublic.about));
 
@@ -314,19 +314,11 @@ const useStyles = tss.withName({ Account }).create({
             "width": "100%"
         }
     },
-    "circularProgress": {
-        "position": "absolute",
-        "left": "calc(50% - 15px)",
-        "top": 5
-    },
     "paddingBlock": {
         "height": 125,
         [fr.breakpoints.down("md")]: {
             "height": 150
         }
-    },
-    "resetPasswordLink": {
-        "marginTop": fr.spacing("6v")
     },
     "isPublicCheckbox": {
         "marginBottom": 0,
