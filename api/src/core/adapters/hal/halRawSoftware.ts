@@ -94,13 +94,13 @@ export const halRawSoftwareToSoftwareForm = (halSoftware: HalRawSoftware): Softw
         externalId: halSoftware.docid,
         comptoirDuLibreId: undefined,
         softwareLicense: license || "copyright", // TODO 1 case to copyright
-        softwareMinimalVersion: halSoftware?.softVersion_s?.[0], // TODO not intended
+        softwareMinimalVersion: undefined,
         similarSoftwareExternalDataIds: [],
         softwareLogoUrl: undefined,
         softwareKeywords: halSoftware.keyword_s || [],
 
         isPresentInSupportContract: false,
-        isFromFrenchPublicService: false, // TODO comment
+        isFromFrenchPublicService: false,
         doRespectRgaa: null
     };
 
