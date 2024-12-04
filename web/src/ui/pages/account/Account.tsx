@@ -60,7 +60,7 @@ function AccountReady(props: { className?: string }) {
         email,
         organization,
         aboutAndIsPublic,
-        doSupportPasswordReset,
+        doSupportAccountManagement,
         allowedEmailRegExp
     } = (function useClosure() {
         const state = useCoreState("userAccountManagement", "main");
@@ -163,36 +163,8 @@ function AccountReady(props: { className?: string }) {
                                     : "error"
                             }
                             stateRelatedMessage={emailInputValueErrorMessage}
-                            disabled={email.isBeingUpdated}
+                            disabled={true}
                         />
-
-                        <div className={classes.submitButtonWrapper}>
-                            {email.isBeingUpdated && (
-                                <CircularProgress
-                                    className={classes.circularProgress}
-                                    size={30}
-                                />
-                            )}
-                            <Button
-                                className={css({
-                                    "visibility": !(
-                                        email.value !== emailInputValue &&
-                                        emailInputValueErrorMessage === undefined &&
-                                        !email.isBeingUpdated
-                                    )
-                                        ? "hidden"
-                                        : undefined
-                                })}
-                                onClick={() =>
-                                    userAccountManagement.updateField({
-                                        "fieldName": "email",
-                                        "value": emailInputValue
-                                    })
-                                }
-                            >
-                                {t("update")}
-                            </Button>
-                        </div>
                     </div>
                     <div className={classes.paddingBlock} />
                 </div>
@@ -210,43 +182,17 @@ function AccountReady(props: { className?: string }) {
                                 "label": t("organization"),
                                 "disabled": organization.isBeingUpdated
                             }}
+                            disabled={true}
                         />
-                        <div className={classes.submitButtonWrapper}>
-                            {organization.isBeingUpdated && (
-                                <CircularProgress
-                                    className={classes.circularProgress}
-                                    size={30}
-                                />
-                            )}
-                            <Button
-                                className={css({
-                                    "visibility": !(
-                                        organization.value !== organizationInputValue &&
-                                        !organization.isBeingUpdated
-                                    )
-                                        ? "hidden"
-                                        : undefined
-                                })}
-                                onClick={() =>
-                                    userAccountManagement.updateField({
-                                        "fieldName": "organization",
-                                        "value": organizationInputValue
-                                    })
-                                }
-                                disabled={organization.value === organizationInputValue}
-                            >
-                                {t("update")}
-                            </Button>
-                        </div>
                     </div>
                     <div className={classes.paddingBlock} />
                 </div>
-                {doSupportPasswordReset && (
+                {doSupportAccountManagement && (
                     <a
-                        className={classes.resetPasswordLink}
-                        href={userAccountManagement.getPasswordResetUrl()}
+                        className={fr.cx("fr-btn", "fr-btn--secondary")}
+                        href={userAccountManagement.getAccountManagementUrl()}
                     >
-                        {t("change password")}
+                        {t("manage account")}
                     </a>
                 )}
             </div>
@@ -368,19 +314,6 @@ const useStyles = tss.withName({ Account }).create({
             "width": "100%"
         }
     },
-    "submitButtonWrapper": {
-        "alignSelf": "flex-start",
-        "marginLeft": fr.spacing("3v"),
-        "position": "relative",
-        "top": 32,
-        [fr.breakpoints.down("md")]: {
-            "top": -5,
-            "marginLeft": "unset",
-            "width": "100%",
-            "display": "flex",
-            "justifyContent": "flex-end"
-        }
-    },
     "circularProgress": {
         "position": "absolute",
         "left": "calc(50% - 15px)",
@@ -427,7 +360,7 @@ export const { i18n } = declareComponentKeys<
     | "title"
     | "mail"
     | "organization"
-    | "change password"
+    | "manage account"
     | "no organization"
     | "update"
     | "not a valid email"
