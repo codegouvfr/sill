@@ -40,9 +40,10 @@ const compareVersion = (version1: string[], version2: string[]): boolean => {
 
 const lastestVersionClaim = (ent: Entity) => {
     return ent?.claims?.P348?.reduce((acc, statementClaim) => {
-        const versionString = statementClaim.mainsnak.datavalue.value;
+        const versionString = statementClaim.mainsnak.datavalue?.value;
         const oldversionString = acc.mainsnak.datavalue.value;
 
+        if (!versionString) return acc;
         if (typeof versionString === "string" && typeof oldversionString === "string") {
             return compareVersion(versionString.split("."), oldversionString.split(".")) ? statementClaim : acc;
         } else {
