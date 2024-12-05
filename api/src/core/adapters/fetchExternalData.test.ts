@@ -143,19 +143,23 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(updatedSoftwareExternalDatas, []);
     });
 
-    it("fetches correctly the logoUrl from comptoir du libre", async () => {
-        const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(softwareExternalDatas, []);
+    it(
+        "fetches correctly the logoUrl from comptoir du libre",
+        async () => {
+            const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
+            expectToEqual(softwareExternalDatas, []);
 
-        await fetchAndSaveSoftwareExtraData(acceleroId, {});
+            await fetchAndSaveSoftwareExtraData(acceleroId, {});
 
-        const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
-        expect(results).toHaveLength(1);
-        expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
-            name: "Acceleo",
-            logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
-        });
-    }, 10_000);
+            const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
+            expect(results).toHaveLength(1);
+            expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
+                name: "Acceleo",
+                logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
+            });
+        },
+        { timeout: 10_000 }
+    );
 
     it(
         "gets software external data and saves it, and does not save other extra data if there is nothing relevant",
@@ -230,7 +234,7 @@ describe("fetches software extra data (from different providers)", () => {
                 .executeTakeFirstOrThrow();
             expect(lastExtraDataFetchAt).toBeTruthy();
         },
-        { timeout: 10_000 }
+        { timeout: 20_000 }
     );
 
     it(
@@ -546,6 +550,6 @@ describe("fetches software extra data (from different providers)", () => {
                 }
             ]);
         },
-        { timeout: 10_000 }
+        { timeout: 20_000 }
     );
 });
