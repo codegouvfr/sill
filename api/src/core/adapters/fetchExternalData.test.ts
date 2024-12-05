@@ -155,7 +155,7 @@ describe("fetches software extra data (from different providers)", () => {
             name: "Acceleo",
             logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
         });
-    });
+    }, 10_000);
 
     it(
         "gets software external data and saves it, and does not save other extra data if there is nothing relevant",
