@@ -11854,10 +11854,10 @@ kuler@^2.0.0:
   resolved "https://registry.yarnpkg.com/kuler/-/kuler-2.0.0.tgz#e2c570a3800388fb44407e851531c1d670b061b3"
   integrity sha512-Xq9nH7KlWZmXAtodXDDRE7vs6DU1gTU8zYDHDiWLSip45Egwq3plLHzPn27NgvzL2r1LMPC1vdqh98sQxtqj4A==
 
-kysely-ctl@^0.8.10:
-  version "0.8.11"
-  resolved "https://registry.yarnpkg.com/kysely-ctl/-/kysely-ctl-0.8.11.tgz#48b3b856bfa8395a02a7960777f1472fa9df6c59"
-  integrity sha512-+WRoRzuT+b/op66G/80qPbe8fFgpwixfNAQUKRJzhCdfyH1VPxOJAUCGy+SNxkh1YsKc0k+QYKoHSEmFahRZWg==
+kysely-ctl@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/kysely-ctl/-/kysely-ctl-0.9.0.tgz#13a26defbd8cf9427c632df017d03802a380bf9c"
+  integrity sha512-Ek4u/4vXV1nATw/RFXMuG6g76nXcD2f5RSMX/n2lbYDh1sJ53wp7QVYbxuLJwEmfHtLXlQFpDe5xPV2URxs+wg==
   dependencies:
     c12 "^1.8.0"
     citty "^0.1.4"
