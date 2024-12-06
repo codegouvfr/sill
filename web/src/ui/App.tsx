@@ -25,7 +25,7 @@ import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFall
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
 
-let keycloakIsDark: boolean;
+let isDark: boolean | undefined = undefined;
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
@@ -33,13 +33,25 @@ const { CoreProvider } = createCoreProvider({
     // prettier-ignore
     "transformUrlBeforeRedirectToLogin": ({ url, termsOfServiceUrl }) =>
         [url]
+            // TODO: Remove, Not needed in generic keycloak theme
             .map(injectGlobalStatesInSearchParams)
+            // TODO: Remove, Not needed in generic keycloak theme
             .map(url => addSillApiUrlToQueryParams({ url, "value": apiUrl }))
-            .map(url => addIsDarkToQueryParams({ url, "value": keycloakIsDark }))
+            // TODO: Remove, the query param is dark=true or dark=false in generic keycloak theme
+            .map(url => addIsDarkToQueryParams({ url, "value": isDark }))
+            // TODO: Remove, Not implemented in generic keycloak theme
             .map(url => addTermsOfServiceUrlToQueryParams({ url, "value": termsOfServiceUrl }))
+            // TODO: Remove, Not needed in generic keycloak theme, inferred from redirect_uri (redirect to codegouv.fr and not codegouv.fr/sill though)
             .map(url => addAppLocationOriginToQueryParams({ url, "value": window.location.origin }))
+            .map(url => {
+                assert(isDark !== undefined);
+                const parsedUrl = new URL(url);
+                parsedUrl.searchParams.set("dark", `${isDark}`);
+                return parsedUrl.toString();
+            })
         [0],
     "getCurrentLang": () => evtLang.state,
+    // TODO: Remove, this was to redirect to an other instance of the sill
     "onMoved": ({ redirectUrl }) => {
         const currentUrlObj = new URL(window.location.href);
 
@@ -74,7 +86,7 @@ export default function App() {
 }
 
 function ContextualizedApp() {
-    keycloakIsDark = useIsDark().isDark;
+    isDark = useIsDark().isDark;
 
     const route = useRoute();
 
