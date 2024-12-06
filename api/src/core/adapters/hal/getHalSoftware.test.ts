@@ -1,21 +1,22 @@
 import { describe, it } from "vitest";
 import { expectToEqual } from "../../../tools/test.helpers";
-import { getHalSoftware } from "./getSoftwareFromHal";
+import { getHalSoftwareExternalData } from "./getHalSoftwareExternalData";
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
 
 describe("HAL", () => {
-    describe("getHalSoftware", () => {
+    describe("getHalSoftwareExternalData", () => {
         it("gets data from Hal and converts it to ExternalSoftware", async () => {
             // https://api.archives-ouvertes.fr/search/?q=docid:1510897&wt=json&fl=*&sort=docid%20asc
 
-            const result = await getHalSoftware("1715545");
+            const result = await getHalSoftwareExternalData("1715545");
 
             expectToEqual(result, {
                 "description": { "en": "-", "fr": undefined },
                 "developers": [
                     {
-                        "id": "morane-gruenpeter",
-                        "name": "Morane Gruenpeter"
+                        "id": "0000-0002-9777-5560",
+                        "name": "Morane Gruenpeter",
+                        "url": "https://orcid.org/0000-0002-9777-5560"
                     }
                 ],
                 "documentationUrl": undefined,

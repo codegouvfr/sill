@@ -1,8 +1,35 @@
 import fetch from "node-fetch";
-import { halSoftwareFieldsToReturnAsString } from "../halRawSoftware";
 import { HalFetchError, HalRawSoftware } from "./type";
 
 // HAL documentation is here : https://api.archives-ouvertes.fr/docs/search
+
+// Move to get data from API
+const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
+    "en_abstract_s",
+    "en_title_s",
+    "fr_abstract_s",
+    "fr_title_s",
+    "docid",
+    "uri_s",
+    "openAccess_bool",
+    "label_bibtex",
+    "title_s",
+    "abstract_s",
+    "docType_s",
+    "keyword_s",
+    "softVersion_s",
+    "softPlatform_s",
+    "softCodeRepository_s",
+    "authFullName_s",
+    "authIdHal_s",
+    "softProgrammingLanguage_s",
+    "softVersion_s",
+    "authIdForm_i",
+    "domainAllCode_s",
+    "modifiedDate_tdate"
+];
+
+export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
 
 export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoftware | undefined> {
     const res = await fetch(

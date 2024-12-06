@@ -232,7 +232,8 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
                     return {
                         name,
-                        "id": entity.id
+                        "id": entity.id,
+                        "url": `https://www.wikidata.org/wiki/${entity.id}`
                     };
                 })
             ).then(developers =>
