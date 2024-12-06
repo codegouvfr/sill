@@ -1,6 +1,6 @@
 export type CodeMeta = {
     identifier: CodeMetaIdentifier[];
-    applicationCategory: string[]; // TODO
+    applicationCategory: string[];
     keywords: string[];
     codeRepository: string[];
     programmingLanguage: string[];
@@ -8,7 +8,7 @@ export type CodeMeta = {
     license: string[];
     version: string[];
     softwareVersion: string;
-    dateModified: string; // DATE YYYY-MM-DD
+    dateModified: string;
     contributor: Auth[];
 };
 
@@ -17,8 +17,8 @@ export interface Role extends CodeMeta {
 }
 
 export type Auth = {
-    "@type": string; // Enum ?
-    roleName: string; // Enum ?
+    "@type": string;
+    roleName: string;
     author: Person;
 };
 

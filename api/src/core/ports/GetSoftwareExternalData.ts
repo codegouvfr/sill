@@ -18,7 +18,7 @@ export type SoftwareExternalData = {
     developers: {
         name: string;
         id: string | undefined;
-        url?: string;
+        url: string;
     }[];
     label: LocalizedString;
     description: LocalizedString;

@@ -33,19 +33,17 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             };
 
             if (id?.split("-")?.length === 4 && id?.length === 19) {
-                return Object.assign({ "url": `https://orcid.org/${id}` }, base);
+                return { ...base, "url": `https://orcid.org/${id}` };
             }
 
             if (id) {
-                return Object.assign({ "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
+                return { ...base, "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` };
             }
 
-            return Object.assign(
-                {
-                    "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
-                },
-                base
-            );
+            return {
+                ...base,
+                "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+            };
         });
 
         return {
