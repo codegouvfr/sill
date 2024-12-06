@@ -8,11 +8,11 @@ const main = (rootState: RootState) => {
         return undefined;
     }
 
-    const { stateDescription, passwordResetUrlWithoutLangParam, ...rest } = state;
+    const { stateDescription, accountManagementUrl, ...rest } = state;
 
     return {
         ...rest,
-        "doSupportPasswordReset": passwordResetUrlWithoutLangParam !== undefined
+        "doSupportAccountManagement": accountManagementUrl !== undefined
     };
 };
 
