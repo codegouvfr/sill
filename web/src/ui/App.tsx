@@ -66,7 +66,11 @@ const { CoreProvider } = createCoreProvider({
         );
 
         window.location.href = newUrl.toString();
-    }
+    },
+    // NOTE: Passed so that it can be injected in the Account management URL.  
+    // I'm not comfortable with this level of indirection, this is only UI related logic
+    // that shouldn't involve the core. However I do it this way for consistency sake. 
+    getIsDark
 });
 
 export default function App() {
