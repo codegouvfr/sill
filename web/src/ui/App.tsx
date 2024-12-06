@@ -19,13 +19,12 @@ import { pages } from "ui/pages";
 import { useConst } from "powerhooks/useConst";
 import { objectKeys } from "tsafe/objectKeys";
 import { assert } from "tsafe/assert";
-import { useIsDark } from "@codegouvfr/react-dsfr/useIsDark";
+import { getIsDark } from "@codegouvfr/react-dsfr/useIsDark";
 import { keyframes } from "tss-react";
 import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFallback";
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
 
-let isDark: boolean | undefined = undefined;
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
@@ -38,15 +37,14 @@ const { CoreProvider } = createCoreProvider({
             // TODO: Remove, Not needed in generic keycloak theme
             .map(url => addSillApiUrlToQueryParams({ url, "value": apiUrl }))
             // TODO: Remove, the query param is dark=true or dark=false in generic keycloak theme
-            .map(url => addIsDarkToQueryParams({ url, "value": isDark }))
+            .map(url => addIsDarkToQueryParams({ url, "value": getIsDark() }))
             // TODO: Remove, Not implemented in generic keycloak theme
             .map(url => addTermsOfServiceUrlToQueryParams({ url, "value": termsOfServiceUrl }))
             // TODO: Remove, Not needed in generic keycloak theme, inferred from redirect_uri (redirect to codegouv.fr and not codegouv.fr/sill though)
             .map(url => addAppLocationOriginToQueryParams({ url, "value": window.location.origin }))
             .map(url => {
-                assert(isDark !== undefined);
                 const parsedUrl = new URL(url);
-                parsedUrl.searchParams.set("dark", `${isDark}`);
+                parsedUrl.searchParams.set("dark", `${getIsDark()}`);
                 return parsedUrl.toString();
             })
         [0],
@@ -86,7 +84,6 @@ export default function App() {
 }
 
 function ContextualizedApp() {
-    isDark = useIsDark().isDark;
 
     const route = useRoute();
 
