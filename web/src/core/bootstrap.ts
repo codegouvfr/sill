@@ -22,6 +22,7 @@ type ParamsOfBootstrapCore = {
         termsOfServiceUrl: LocalizedString<Language>;
     }) => string;
     getCurrentLang: () => Language;
+    getIsDark: () => boolean;
     onMoved: (params: { redirectUrl: string }) => void;
 };
 
