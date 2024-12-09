@@ -43,6 +43,7 @@ export async function startRpcService(params: {
     databaseUrl: string;
     initializeSoftwareFromSource: boolean;
     botAgentEmail?: string;
+    listToImport?: string[];
 }) {
     const {
         redirectUrl,
@@ -57,6 +58,7 @@ export async function startRpcService(params: {
         databaseUrl,
         botAgentEmail,
         initializeSoftwareFromSource,
+        listToImport,
         ...rest
     } = params;
 
@@ -90,7 +92,8 @@ export async function startRpcService(params: {
         "doPerformCacheInitialization": redirectUrl === undefined,
         "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
         "botAgentEmail": botAgentEmail,
-        "initializeSoftwareFromSource": initializeSoftwareFromSource
+        "initializeSoftwareFromSource": initializeSoftwareFromSource,
+        "listToImport": listToImport ?? []
     });
 
     console.log("Core API initialized");

@@ -1,0 +1,74 @@
+import { SoftwareFormData } from "../../usecases/readWriteSillData";
+import { createGetClaimDataValue, fetchEntity, WikidataFetchError } from "./getWikidataSoftware";
+
+export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormData | undefined> => {
+    try {
+        console.info(`   -> fetching wiki soft : ${wikidataId}`);
+        const { entity } =
+            (await fetchEntity(wikidataId).catch(error => {
+                if (error instanceof WikidataFetchError) {
+                    if (error.status === 404 || error.status === undefined) {
+                        return undefined;
+                    }
+                    throw error;
+                }
+            })) ?? {};
+
+        if (entity === undefined) {
+            return undefined;
+        }
+
+        const { getClaimDataValue } = createGetClaimDataValue({ entity });
+
+        const logoName = getClaimDataValue<"string">("P154")[0];
+
+        const license = await (async () => {
+            const licenseId = getClaimDataValue<"wikibase-entityid">("P275")[0]?.id;
+
+            if (licenseId === undefined) {
+                return undefined;
+            }
+
+            console.info(`I   -> fetching wiki license : ${licenseId}`);
+            const { entity } = await fetchEntity(licenseId).catch(() => ({ "entity": undefined }));
+
+            if (entity === undefined) {
+                return undefined;
+            }
+
+            return { "label": entity.aliases.en?.[0]?.value, "id": licenseId };
+        })();
+
+        const name =
+            entity.labels?.en?.value ?? entity.labels?.fr?.value ?? entity.labels[Object.keys(entity.labels)[0]].value;
+        const description =
+            entity.descriptions?.en?.value ??
+            entity.descriptions?.fr?.value ??
+            entity.descriptions?.[Object.keys(entity.descriptions)[0]]?.value ??
+            "";
+
+        return {
+            softwareName: name,
+            softwareDescription: description,
+            softwareType: {
+                // Todo // P306
+                type: "desktop/mobile",
+                os: { "linux": true, "windows": true, "android": false, "ios": false, "mac": false }
+            },
+            externalId: wikidataId,
+            comptoirDuLibreId: undefined,
+            softwareLicense: license?.label ?? "Copyright",
+            softwareMinimalVersion: undefined,
+            similarSoftwareExternalDataIds: [],
+            softwareLogoUrl: `https://upload.wikimedia.org/wikipedia/commons/6/69/${logoName?.replace(" ", "_") ?? ""}`,
+            softwareKeywords: [],
+            isPresentInSupportContract: false,
+            isFromFrenchPublicService: false,
+            doRespectRgaa: false
+        };
+    } catch (error) {
+        console.error(`Error for ${wikidataId} : `, error);
+        // Expected output: ReferenceError: nonExistentFunction is not defined
+        // (Note: the exact output may be browser-dependent)
+    }
+};
