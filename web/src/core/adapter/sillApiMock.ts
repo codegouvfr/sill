@@ -208,9 +208,6 @@ export const sillApi: SillApi = {
             "promise": true
         }
     ),
-    "changeAgentOrganization": async ({ newOrganization }) => {
-        console.log(`Update organization -> ${newOrganization}`);
-    },
     "updateEmail": async ({ newEmail }) => {
         console.log(`Update email ${newEmail}`);
     },
@@ -237,15 +234,12 @@ export const sillApi: SillApi = {
             "isPublic": false
         }
     }),
-    "updateAgentAbout": async ({ about }) => {
-        console.log(`Update about ${about}`);
+    "updateAgentProfile": async input => {
+        console.log(`Update agent profile :`, input);
     },
     "getIsAgentProfilePublic": async ({ email }) => ({
         "isPublic": email.startsWith("public")
     }),
-    "updateIsAgentProfilePublic": async ({ isPublic }) => {
-        console.log(`Update isPublic ${isPublic}`);
-    },
     "unreferenceSoftware": async ({ reason }) => {
         console.log(`Unreference software ${reason}`);
     }

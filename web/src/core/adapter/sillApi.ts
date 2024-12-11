@@ -128,15 +128,6 @@ export function createSillApi(params: {
             return out;
         },
         "getAgents": memoize(() => trpcClient.getAgents.query(), { "promise": true }),
-        "changeAgentOrganization": async params => {
-            const out = await trpcClient.changeAgentOrganization
-                .mutate(params)
-                .catch(errorHandler);
-
-            sillApi.getAgents.clear();
-
-            return out;
-        },
         "updateEmail": async params => {
             const out = await trpcClient.updateEmail.mutate(params).catch(errorHandler);
 
@@ -164,13 +155,8 @@ export function createSillApi(params: {
         "getAgent": params => trpcClient.getAgent.query(params),
         "getIsAgentProfilePublic": params =>
             trpcClient.getIsAgentProfilePublic.query(params),
-        "updateAgentAbout": params =>
-            trpcClient.updateAgentAbout.mutate(params).catch(errorHandler),
-        "updateIsAgentProfilePublic": async params => {
-            await trpcClient.updateIsAgentProfilePublic
-                .mutate(params)
-                .catch(errorHandler);
-
+        "updateAgentProfile": async params => {
+            await trpcClient.updateAgentProfile.mutate(params).catch(errorHandler);
             sillApi.getAgents.clear();
         },
         "unreferenceSoftware": async params => {

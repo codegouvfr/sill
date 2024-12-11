@@ -192,7 +192,6 @@ function AccountReady(props: { className?: string }) {
                         }
                         value={organization.value}
                         onValueChange={value => {
-                            console.log("selected value : ", { value });
                             setOrganizationInputValue(value);
                         }}
                         dsfrInputProps={{

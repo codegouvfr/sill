@@ -69,10 +69,6 @@ export type SillApi = {
         (params: TrpcRouterInput["getAgents"]): Promise<TrpcRouterOutput["getAgents"]>;
         clear: () => void;
     };
-    changeAgentOrganization: (
-        params: TrpcRouterInput["changeAgentOrganization"]
-    ) => Promise<TrpcRouterOutput["changeAgentOrganization"]>;
-
     updateEmail: (
         params: TrpcRouterInput["updateEmail"]
     ) => Promise<TrpcRouterOutput["updateEmail"]>;
@@ -114,12 +110,9 @@ export type SillApi = {
     getAgent: (
         params: TrpcRouterInput["getAgent"]
     ) => Promise<TrpcRouterOutput["getAgent"]>;
-    updateAgentAbout: (
-        params: TrpcRouterInput["updateAgentAbout"]
-    ) => Promise<TrpcRouterOutput["updateAgentAbout"]>;
-    updateIsAgentProfilePublic: (
-        params: TrpcRouterInput["updateIsAgentProfilePublic"]
-    ) => Promise<TrpcRouterOutput["updateIsAgentProfilePublic"]>;
+    updateAgentProfile: (
+        params: TrpcRouterInput["updateAgentProfile"]
+    ) => Promise<TrpcRouterOutput["updateAgentProfile"]>;
     unreferenceSoftware: (
         params: TrpcRouterInput["unreferenceSoftware"]
     ) => Promise<TrpcRouterOutput["unreferenceSoftware"]>;
