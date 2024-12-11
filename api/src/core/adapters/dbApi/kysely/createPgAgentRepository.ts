@@ -10,7 +10,8 @@ export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository =
         return id;
     },
     update: async agent => {
-        await db.updateTable("agents").set(agent).where("id", "=", agent.id).execute();
+        const { declarations, ...dbAgent } = agent;
+        await db.updateTable("agents").set(dbAgent).where("id", "=", agent.id).execute();
     },
     remove: async agentId => {
         await db.deleteFrom("agents").where("id", "=", agentId).execute();

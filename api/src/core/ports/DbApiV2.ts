@@ -95,7 +95,7 @@ export type AgentWithId = Agent & Pick<DbAgent, "id">;
 
 export interface AgentRepository {
     add: (agent: OmitFromExisting<DbAgent, "id">) => Promise<number>;
-    update: (agent: DbAgent) => Promise<void>;
+    update: (agent: DbAgent & Partial<Agent>) => Promise<void>;
     remove: (agentId: number) => Promise<void>;
     getByEmail: (email: string) => Promise<AgentWithId | undefined>;
     getAll: () => Promise<AgentWithId[]>;
