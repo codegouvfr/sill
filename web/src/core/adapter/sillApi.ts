@@ -135,9 +135,6 @@ export function createSillApi(params: {
 
             return out;
         },
-        "getAllowedEmailRegexp": memoize(() => trpcClient.getAllowedEmailRegexp.query(), {
-            "promise": true
-        }),
         "getAllOrganizations": memoize(() => trpcClient.getAllOrganizations.query(), {
             "promise": true
         }),

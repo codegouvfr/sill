@@ -211,7 +211,6 @@ export const sillApi: SillApi = {
     "updateEmail": async ({ newEmail }) => {
         console.log(`Update email ${newEmail}`);
     },
-    "getAllowedEmailRegexp": memoize(async () => "/gouv.fr$/", { "promise": true }),
     "getAllOrganizations": memoize(async () => ["DINUM", "CNRS", "ESR"], {
         "promise": true
     }),

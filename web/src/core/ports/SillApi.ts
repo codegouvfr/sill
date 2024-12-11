@@ -73,10 +73,6 @@ export type SillApi = {
         params: TrpcRouterInput["updateEmail"]
     ) => Promise<TrpcRouterOutput["updateEmail"]>;
 
-    getAllowedEmailRegexp: {
-        (): Promise<TrpcRouterOutput["getAllowedEmailRegexp"]>;
-        clear: () => void;
-    };
     getAllOrganizations: {
         (params: TrpcRouterInput["getAllOrganizations"]): Promise<
             TrpcRouterOutput["getAllOrganizations"]

@@ -470,7 +470,6 @@ export function createRouter(params: {
                     currentUser: user
                 })
             ),
-        "getAllowedEmailRegexp": loggedProcedure.query(() => coreContext.userApi.getAllowedEmailRegexp()),
         "getAllOrganizations": loggedProcedure.query(() => dbApi.agent.getAllOrganizations()),
         "updateEmail": loggedProcedure
             .input(
