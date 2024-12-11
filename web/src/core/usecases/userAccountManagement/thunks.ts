@@ -65,7 +65,7 @@ export const thunks = {
         (
             params:
                 | {
-                      fieldName: "organization" | "email";
+                      fieldName: "organization";
                       value: string;
                   }
                 | {
@@ -86,39 +86,19 @@ export const thunks = {
             assert(oidc.isUserLoggedIn);
 
             switch (params.fieldName) {
-                case "organization":
-                    await sillApi.changeAgentOrganization({
+                case "organization": {
+                    await sillApi.updateAgentProfile({
                         "newOrganization": params.value
                     });
-                    await oidc.renewTokens();
                     break;
-                case "email":
-                    await sillApi.updateEmail({ "newEmail": params.value });
-                    await oidc.renewTokens();
+                }
+                case "aboutAndIsPublic": {
+                    await sillApi.updateAgentProfile({
+                        "about": params.about || undefined,
+                        "isPublic": params.isPublic
+                    });
                     break;
-                case "aboutAndIsPublic":
-                    await Promise.all([
-                        (async () => {
-                            if (state.aboutAndIsPublic.about === params.about) {
-                                return;
-                            }
-
-                            await sillApi.updateAgentAbout({
-                                "about": params.about || undefined
-                            });
-                        })(),
-                        (async () => {
-                            if (state.aboutAndIsPublic.isPublic === params.isPublic) {
-                                return;
-                            }
-
-                            await sillApi.updateIsAgentProfilePublic({
-                                "isPublic": params.isPublic
-                            });
-                        })()
-                    ]);
-
-                    break;
+                }
             }
 
             dispatch(actions.updateFieldCompleted({ "fieldName": params.fieldName }));

@@ -417,10 +417,12 @@ export function createRouter(params: {
             const agents = await dbApi.agent.getAll();
             return { agents };
         }),
-        "updateIsAgentProfilePublic": loggedProcedure
+        "updateAgentProfile": loggedProcedure
             .input(
                 z.object({
-                    "isPublic": z.boolean()
+                    "isPublic": z.boolean().optional(),
+                    "about": z.string().optional(),
+                    "newOrganization": z.string().optional()
                 })
             )
             .mutation(async ({ ctx: { user }, input }) => {
@@ -428,7 +430,7 @@ export function createRouter(params: {
                     throw new TRPCError({ "code": "UNAUTHORIZED" });
                 }
 
-                const { isPublic } = input;
+                const { isPublic, newOrganization, about } = input;
 
                 const agent = await dbApi.agent.getByEmail(user.email);
                 if (!agent)
@@ -436,28 +438,12 @@ export function createRouter(params: {
                         "code": "NOT_FOUND",
                         message: "Agent not found"
                     });
-                await dbApi.agent.update({ ...agent, isPublic });
-            }),
-        "updateAgentAbout": loggedProcedure
-            .input(
-                z.object({
-                    "about": z.string().optional()
-                })
-            )
-            .mutation(async ({ ctx: { user }, input }) => {
-                if (user === undefined) {
-                    throw new TRPCError({ "code": "UNAUTHORIZED" });
-                }
-
-                const { about } = input;
-
-                const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent)
-                    throw new TRPCError({
-                        "code": "NOT_FOUND",
-                        message: "Agent not found"
-                    });
-                await dbApi.agent.update({ ...agent, about });
+                await dbApi.agent.update({
+                    ...agent,
+                    ...(isPublic !== undefined ? { isPublic } : {}),
+                    ...(newOrganization ? { organization: newOrganization } : {}),
+                    ...(about ? { about } : {})
+                });
             }),
         "getIsAgentProfilePublic": loggedProcedure
             .input(
@@ -486,30 +472,6 @@ export function createRouter(params: {
             ),
         "getAllowedEmailRegexp": loggedProcedure.query(() => coreContext.userApi.getAllowedEmailRegexp()),
         "getAllOrganizations": loggedProcedure.query(() => dbApi.agent.getAllOrganizations()),
-        "changeAgentOrganization": loggedProcedure
-            .input(
-                z.object({
-                    "newOrganization": z.string()
-                })
-            )
-            .mutation(async ({ ctx: { user }, input }) => {
-                if (user === undefined) {
-                    throw new TRPCError({ "code": "UNAUTHORIZED" });
-                }
-
-                assert(keycloakParams !== undefined);
-
-                const { newOrganization } = input;
-
-                const agent = await dbApi.agent.getByEmail(user.email);
-                if (!agent)
-                    throw new TRPCError({
-                        "code": "NOT_FOUND",
-                        message: "Agent not found"
-                    });
-
-                await dbApi.agent.update({ ...agent, organization: newOrganization });
-            }),
         "updateEmail": loggedProcedure
             .input(
                 z.object({
