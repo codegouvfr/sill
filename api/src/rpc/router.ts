@@ -197,7 +197,7 @@ export function createRouter(params: {
                     if (!agent) {
                         agentId = await dbApi.agent.add({
                             email: user.email,
-                            organization: user.organization,
+                            organization: null,
                             about: undefined,
                             isPublic: false
                         });
@@ -268,7 +268,7 @@ export function createRouter(params: {
                 if (!agent) {
                     agentId = await dbApi.agent.add({
                         email: user.email,
-                        organization: user.organization,
+                        organization: null,
                         about: undefined,
                         isPublic: false
                     });

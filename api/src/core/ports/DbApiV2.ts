@@ -86,7 +86,7 @@ export interface InstanceRepository {
 export type DbAgent = {
     id: number;
     email: string;
-    organization: string;
+    organization: string | null;
     about: string | undefined;
     isPublic: boolean;
 };

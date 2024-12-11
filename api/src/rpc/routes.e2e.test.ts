@@ -17,37 +17,37 @@ import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 const softwareFormData = createSoftwareFormData();
 const declarationFormData = createDeclarationFormData();
 
-describe("stripNullOrUndefined", () => {
-    it("removes null and undefined values", () => {
-        const stripped = stripNullOrUndefinedValues({
-            "a": null,
-            "b": undefined,
-            "c": 0,
-            "d": 1,
-            "e": "",
-            "f": "yolo"
-        });
-        expect(stripped.hasOwnProperty("a")).toBe(false);
-        expect(stripped.hasOwnProperty("b")).toBe(false);
-        expect(stripped).toStrictEqual({ "c": 0, "d": 1, "e": "", "f": "yolo" });
-    });
-});
-
 describe("RPC e2e tests", () => {
     let apiCaller: ApiCaller;
     let kyselyDb: Kysely<Database>;
 
+    describe("stripNullOrUndefined", () => {
+        it("removes null and undefined values", () => {
+            const stripped = stripNullOrUndefinedValues({
+                "a": null,
+                "b": undefined,
+                "c": 0,
+                "d": 1,
+                "e": "",
+                "f": "yolo"
+            });
+            expect(stripped.hasOwnProperty("a")).toBe(false);
+            expect(stripped.hasOwnProperty("b")).toBe(false);
+            expect(stripped).toStrictEqual({ "c": 0, "d": 1, "e": "", "f": "yolo" });
+        });
+    });
+
     describe("getAgents - wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
-            expect(apiCaller.getAgents()).rejects.toThrow("UNAUTHORIZED");
+            await expect(apiCaller.getAgents()).rejects.toThrow("UNAUTHORIZED");
         });
     });
 
     describe("createUserOrReferent - Wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
-            expect(
+            await expect(
                 apiCaller.createUserOrReferent({
                     formData: declarationFormData,
                     softwareId: 123
@@ -57,7 +57,7 @@ describe("RPC e2e tests", () => {
 
         it("fails when software is not found in SILL", async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller());
-            expect(
+            await expect(
                 apiCaller.createUserOrReferent({
                     formData: declarationFormData,
                     softwareId: 404
@@ -69,7 +69,7 @@ describe("RPC e2e tests", () => {
     describe("createSoftware - Wrong paths", () => {
         it("fails with UNAUTHORIZED if user is not logged in", async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller({ user: undefined }));
-            expect(
+            await expect(
                 apiCaller.createSoftware({
                     formData: softwareFormData
                 })
@@ -114,7 +114,7 @@ describe("RPC e2e tests", () => {
             expectToMatchObject(agent, {
                 id: expect.any(Number),
                 email: defaultUser.email,
-                organization: defaultUser.organization
+                organization: null
             });
 
             const softwareRows = await getSoftwareRows();
@@ -162,7 +162,7 @@ describe("RPC e2e tests", () => {
             expect(agents).toHaveLength(1);
             expectToMatchObject(agents[0], {
                 "email": defaultUser.email,
-                "organization": defaultUser.organization
+                "organization": null
             });
         });
 
