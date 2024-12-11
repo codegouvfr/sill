@@ -6,14 +6,7 @@ import { Footer } from "ui/shared/Footer";
 import { declareComponentKeys } from "i18nifty";
 import { useCore } from "core";
 import { RouteProvider } from "ui/routes";
-import { injectGlobalStatesInSearchParams } from "powerhooks/useGlobalState";
 import { evtLang } from "ui/i18n";
-import {
-    addSillApiUrlToQueryParams,
-    addTermsOfServiceUrlToQueryParams,
-    addIsDarkToQueryParams,
-    addAppLocationOriginToQueryParams
-} from "keycloak-theme/login/valuesTransferredOverUrl";
 import { createCoreProvider } from "core";
 import { pages } from "ui/pages";
 import { useConst } from "powerhooks/useConst";
@@ -28,25 +21,11 @@ import { apiUrl, appUrl, appPath } from "urls";
 const { CoreProvider } = createCoreProvider({
     apiUrl,
     appUrl,
-    // prettier-ignore
-    "transformUrlBeforeRedirectToLogin": ({ url, termsOfServiceUrl }) =>
-        [url]
-            // TODO: Remove, Not needed in generic keycloak theme
-            .map(injectGlobalStatesInSearchParams)
-            // TODO: Remove, Not needed in generic keycloak theme
-            .map(url => addSillApiUrlToQueryParams({ url, "value": apiUrl }))
-            // TODO: Remove, the query param is dark=true or dark=false in generic keycloak theme
-            .map(url => addIsDarkToQueryParams({ url, "value": getIsDark() }))
-            // TODO: Remove, Not implemented in generic keycloak theme
-            .map(url => addTermsOfServiceUrlToQueryParams({ url, "value": termsOfServiceUrl }))
-            // TODO: Remove, Not needed in generic keycloak theme, inferred from redirect_uri (redirect to codegouv.fr and not codegouv.fr/sill though)
-            .map(url => addAppLocationOriginToQueryParams({ url, "value": window.location.origin }))
-            .map(url => {
-                const parsedUrl = new URL(url);
-                parsedUrl.searchParams.set("dark", `${getIsDark()}`);
-                return parsedUrl.toString();
-            })
-        [0],
+    "transformUrlBeforeRedirectToLogin": ({ url }) => {
+        const parsedUrl = new URL(url);
+        parsedUrl.searchParams.set("dark", `${getIsDark()}`);
+        return parsedUrl.toString();
+    },
     "getCurrentLang": () => evtLang.state,
     // TODO: Remove, this was to redirect to an other instance of the sill
     "onMoved": ({ redirectUrl }) => {

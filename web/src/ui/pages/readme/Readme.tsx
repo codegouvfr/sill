@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Markdown } from "keycloakify/tools/Markdown";
+import Markdown from "react-markdown";
 import { useCoreState, useCore } from "core";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
