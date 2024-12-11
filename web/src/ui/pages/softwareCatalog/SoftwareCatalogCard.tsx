@@ -10,7 +10,7 @@ import type { Equals } from "tsafe";
 import Tooltip from "@mui/material/Tooltip";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
-import { Markdown } from "keycloakify/tools/Markdown";
+import Markdown from "react-markdown";
 
 export type Props = {
     className?: string;

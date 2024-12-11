@@ -13,11 +13,11 @@
     "packageRules": [
         {
             "packagePatterns": ["*"],
-            "excludePackagePatterns": ["keycloakify", "run-exclusive", "i18nifty", "tsafe", "evt"],
+            "excludePackagePatterns": ["run-exclusive", "i18nifty", "tsafe", "evt"],
             "enabled": false
         },
         {
-            "packagePatterns": ["keycloakify", "run-exclusive", "i18nifty", "tsafe", "evt"],
+            "packagePatterns": ["run-exclusive", "i18nifty", "tsafe", "evt"],
             "matchUpdateTypes": ["minor", "patch"],
             "automerge": false,
             "automergeType": "pr",
