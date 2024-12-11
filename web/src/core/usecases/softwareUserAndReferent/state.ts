@@ -19,7 +19,7 @@ export namespace State {
     };
 
     export type SoftwareUser = {
-        organization: string;
+        organization: string | null;
         usecaseDescription: string;
         /** NOTE: undefined if the software is not of type desktop/mobile */
         os: ApiTypes.Os | undefined;
@@ -30,7 +30,7 @@ export namespace State {
 
     export type SoftwareReferent = {
         email: string;
-        organization: string;
+        organization: string | null;
         isTechnicalExpert: boolean;
         usecaseDescription: string;
         /** NOTE: Can be not undefined only if cloud */

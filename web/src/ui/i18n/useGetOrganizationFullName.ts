@@ -457,7 +457,8 @@ export function useGetOrganizationFullName() {
     const { resolveLocalizedString } = useResolveLocalizedString();
 
     const getOrganizationFullName = useCallback(
-        (organization: string) => {
+        (organization: string | null) => {
+            if (!organization) return "";
             const organizationFullName = organizationFullNameByAcronym[organization];
 
             if (organizationFullName === undefined) {

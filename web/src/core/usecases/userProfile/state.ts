@@ -13,7 +13,7 @@ export namespace State {
     export type Ready = {
         stateDescription: "ready";
         email: string;
-        organization: string;
+        organization: string | null;
         about: string | undefined;
         isHimself: boolean;
         declarations: ApiTypes.Agent["declarations"];
@@ -40,7 +40,7 @@ export const { reducer, actions } = createUsecaseActions({
             }: {
                 payload: {
                     email: string;
-                    organization: string;
+                    organization: string | null;
                     about: string | undefined;
                     isHimself: boolean;
                     declarations: ApiTypes.Agent["declarations"];

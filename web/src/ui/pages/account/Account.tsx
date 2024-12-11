@@ -87,7 +87,7 @@ function AccountReady(props: { className?: string }) {
     const [emailInputValue, setEmailInputValue] = useState(email.value);
 
     const [organizationInputValue, setOrganizationInputValue] = useState(
-        organization.value
+        organization.value ?? null
     );
 
     const evtAboutInputValue = useConst(() => Evt.create(aboutAndIsPublic.about));
@@ -190,7 +190,7 @@ function AccountReady(props: { className?: string }) {
                         getOptionLabel={organization =>
                             getOrganizationFullName(organization)
                         }
-                        value={organization.value}
+                        value={organization.value ?? ""}
                         onValueChange={value => {
                             setOrganizationInputValue(value);
                         }}
@@ -200,28 +200,29 @@ function AccountReady(props: { className?: string }) {
                         }}
                         disabled={organization.isBeingUpdated}
                     />
-                    {organization.value !== organizationInputValue && (
-                        <>
-                            <Button
-                                className={fr.cx("fr-ml-2w")}
-                                onClick={() =>
-                                    userAccountManagement.updateField({
-                                        "fieldName": "organization",
-                                        "value": organizationInputValue
-                                    })
-                                }
-                                disabled={
-                                    organization.value === organizationInputValue ||
-                                    organization.isBeingUpdated
-                                }
-                            >
-                                {t("update")}
-                            </Button>
-                            {organization.isBeingUpdated && (
-                                <CircularProgress size={30} />
-                            )}
-                        </>
-                    )}
+                    {organizationInputValue &&
+                        organization.value !== organizationInputValue && (
+                            <>
+                                <Button
+                                    className={fr.cx("fr-ml-2w")}
+                                    onClick={() =>
+                                        userAccountManagement.updateField({
+                                            "fieldName": "organization",
+                                            "value": organizationInputValue
+                                        })
+                                    }
+                                    disabled={
+                                        organization.value === organizationInputValue ||
+                                        organization.isBeingUpdated
+                                    }
+                                >
+                                    {t("update")}
+                                </Button>
+                                {organization.isBeingUpdated && (
+                                    <CircularProgress size={30} />
+                                )}
+                            </>
+                        )}
                 </div>
             </div>
             <>

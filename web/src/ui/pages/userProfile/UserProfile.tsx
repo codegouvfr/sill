@@ -153,7 +153,7 @@ export const { i18n } = declareComponentKeys<
           K: "agent profile";
           P: {
               email: string;
-              organization: string;
+              organization: string | null;
           };
       }
     | "no description"

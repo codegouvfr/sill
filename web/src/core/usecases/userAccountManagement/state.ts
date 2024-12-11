@@ -18,7 +18,7 @@ namespace State {
         allowedEmailRegexpStr: string;
         allOrganizations: string[];
         organization: {
-            value: string;
+            value: string | null;
             isBeingUpdated: boolean;
         };
         email: {
@@ -32,6 +32,17 @@ namespace State {
         };
     };
 }
+
+type UpdateFieldPayload =
+    | {
+          fieldName: "organization";
+          value: string;
+      }
+    | {
+          fieldName: "aboutAndIsPublic";
+          about: string;
+          isPublic: boolean;
+      };
 
 export const { reducer, actions } = createUsecaseActions({
     name,
@@ -53,7 +64,7 @@ export const { reducer, actions } = createUsecaseActions({
                 payload: {
                     accountManagementUrl: string | undefined;
                     allowedEmailRegexpStr: string;
-                    organization: string;
+                    organization: string | null;
                     email: string;
                     allOrganizations: string[];
                     about: string;
@@ -95,23 +106,7 @@ export const { reducer, actions } = createUsecaseActions({
                 }
             };
         },
-        "updateFieldStarted": (
-            state,
-            {
-                payload
-            }: {
-                payload:
-                    | {
-                          fieldName: "organization" | "email";
-                          value: string;
-                      }
-                    | {
-                          fieldName: "aboutAndIsPublic";
-                          about: string;
-                          isPublic: boolean;
-                      };
-            }
-        ) => {
+        "updateFieldStarted": (state, { payload }: { payload: UpdateFieldPayload }) => {
             assert(state.stateDescription === "ready");
 
             if (payload.fieldName === "aboutAndIsPublic") {
@@ -129,16 +124,7 @@ export const { reducer, actions } = createUsecaseActions({
                 "isBeingUpdated": true
             };
         },
-        "updateFieldCompleted": (
-            state,
-            {
-                payload
-            }: {
-                payload: {
-                    fieldName: "organization" | "email" | "aboutAndIsPublic";
-                };
-            }
-        ) => {
+        "updateFieldCompleted": (state, { payload }: { payload: UpdateFieldPayload }) => {
             const { fieldName } = payload;
 
             assert(state.stateDescription === "ready");
