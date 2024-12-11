@@ -57,7 +57,7 @@
         "csv-parse": "^5.5.6",
         "deepmerge": "^4.2.2",
         "dotenv-cli": "^7.4.2",
-        "esbuild": "^0.23.0",
+        "esbuild": "^0.24.0",
         "evt": "^2.5.7",
         "express": "^4.17.2",
         "forever": "^4.0.3",
