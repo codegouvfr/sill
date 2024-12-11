@@ -8,8 +8,8 @@ import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { z } from "zod";
-import { AutocompleteFreeSoloInput } from "ui/shared/AutocompleteFreeSoloInput";
 import { Button } from "@codegouvfr/react-dsfr/Button";
+import { OrganizationField } from "../../shared/PromptForOrganization";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -56,7 +56,6 @@ function AccountReady(props: { className?: string }) {
     const { t } = useTranslation({ Account });
 
     const {
-        allOrganizations,
         email,
         organization,
         aboutAndIsPublic,
@@ -135,13 +134,6 @@ function AccountReady(props: { className?: string }) {
 
     const { classes, cx, css } = useStyles();
 
-    const { getOrganizationFullName } = useGetOrganizationFullName();
-
-    console.log({
-        "organization.value": organization.value,
-        organizationInputValue
-    });
-
     return (
         <div className={cx(fr.cx("fr-container"), className)}>
             <div className={classes.oidcInfos}>
@@ -177,53 +169,7 @@ function AccountReady(props: { className?: string }) {
                     </a>
                 )}
 
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between"
-                    }}
-                >
-                    <AutocompleteFreeSoloInput
-                        className={classes.organizationInput}
-                        options={allOrganizations}
-                        getOptionLabel={organization =>
-                            getOrganizationFullName(organization)
-                        }
-                        value={organization.value ?? ""}
-                        onValueChange={value => {
-                            setOrganizationInputValue(value);
-                        }}
-                        dsfrInputProps={{
-                            "label": t("organization"),
-                            "disabled": organization.isBeingUpdated
-                        }}
-                        disabled={organization.isBeingUpdated}
-                    />
-                    {organizationInputValue &&
-                        organization.value !== organizationInputValue && (
-                            <>
-                                <Button
-                                    className={fr.cx("fr-ml-2w")}
-                                    onClick={() =>
-                                        userAccountManagement.updateField({
-                                            "fieldName": "organization",
-                                            "value": organizationInputValue
-                                        })
-                                    }
-                                    disabled={
-                                        organization.value === organizationInputValue ||
-                                        organization.isBeingUpdated
-                                    }
-                                >
-                                    {t("update")}
-                                </Button>
-                                {organization.isBeingUpdated && (
-                                    <CircularProgress size={30} />
-                                )}
-                            </>
-                        )}
-                </div>
+                <OrganizationField firstTime={false} />
             </div>
             <>
                 <h2>{t("about title")}</h2>
