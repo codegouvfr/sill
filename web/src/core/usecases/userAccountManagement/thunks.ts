@@ -130,7 +130,7 @@ export const thunks = {
                 ,
                 getState,
                 {
-                    paramsOfBootstrapCore: { getCurrentLang }
+                    paramsOfBootstrapCore: { getCurrentLang, getIsDark }
                 }
             ] = args;
 
@@ -157,6 +157,16 @@ export const thunks = {
                     url,
                     "name": "kc_locale",
                     "value": getCurrentLang()
+                });
+
+                url = newUrl;
+            }
+
+            {
+                const { newUrl } = addParamToUrl({
+                    url,
+                    "name": "dark",
+                    "value": `${getIsDark()}`
                 });
 
                 url = newUrl;

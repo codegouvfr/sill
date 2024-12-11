@@ -31,6 +31,7 @@ const { CoreProvider } = createCoreProvider({
     "transformUrlBeforeRedirectToLogin": () => {
         assert(false);
     },
+    "getIsDark": () => false,
     "getCurrentLang": () => "fr",
     "onMoved": () => {
         assert(false);
