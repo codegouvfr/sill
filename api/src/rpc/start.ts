@@ -29,8 +29,6 @@ export async function startRpcService(params: {
         url: string;
         realm: string;
         clientId: string;
-        adminPassword: string;
-        organizationUserProfileAttributeName: string;
     };
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
@@ -112,8 +110,7 @@ export async function startRpcService(params: {
                 : {
                       "url": keycloakParams.url,
                       "realm": keycloakParams.realm,
-                      "clientId": keycloakParams.clientId,
-                      "organizationUserProfileAttributeName": keycloakParams.organizationUserProfileAttributeName
+                      "clientId": keycloakParams.clientId
                   },
         termsOfServiceUrl,
         readmeUrl,

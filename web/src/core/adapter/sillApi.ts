@@ -51,12 +51,6 @@ export function createSillApi(params: {
         "getOidcParams": memoize(() => trpcClient.getOidcParams.query(), {
             "promise": true
         }),
-        "getOrganizationUserProfileAttributeName": memoize(
-            () => trpcClient.getOrganizationUserProfileAttributeName.query(),
-            {
-                "promise": true
-            }
-        ),
         "getSoftwares": memoize(() => trpcClient.getSoftwares.query(), {
             "promise": true
         }),

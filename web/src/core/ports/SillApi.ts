@@ -23,12 +23,6 @@ export type SillApi = {
         >;
         clear: () => void;
     };
-    getOrganizationUserProfileAttributeName: {
-        (params: TrpcRouterInput["getOrganizationUserProfileAttributeName"]): Promise<
-            TrpcRouterOutput["getOrganizationUserProfileAttributeName"]
-        >;
-        clear: () => void;
-    };
     getSoftwares: {
         (params: TrpcRouterInput["getSoftwares"]): Promise<
             TrpcRouterOutput["getSoftwares"]

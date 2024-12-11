@@ -34,11 +34,7 @@ import type { User } from "./user";
 export function createRouter(params: {
     dbApi: DbApiV2;
     useCases: UseCases;
-    keycloakParams:
-        | (KeycloakParams & {
-              organizationUserProfileAttributeName: string;
-          })
-        | undefined;
+    keycloakParams: KeycloakParams | undefined;
     jwtClaimByUserKey: Record<keyof User, string>;
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
@@ -106,17 +102,6 @@ export function createRouter(params: {
                 };
 
                 return () => out;
-            })()
-        ),
-        "getOrganizationUserProfileAttributeName": loggedProcedure.query(
-            (() => {
-                const { organizationUserProfileAttributeName } = keycloakParams ?? {};
-                if (organizationUserProfileAttributeName === undefined) {
-                    return () => {
-                        throw new TRPCError({ "code": "METHOD_NOT_SUPPORTED" });
-                    };
-                }
-                return () => organizationUserProfileAttributeName;
             })()
         ),
         "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),

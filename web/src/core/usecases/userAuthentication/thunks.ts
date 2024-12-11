@@ -31,7 +31,6 @@ export const thunks = {
 
             const [, , { oidc }] = args;
 
-            console.log("asesrting user not logged : ", oidc.isUserLoggedIn);
             assert(!oidc.isUserLoggedIn);
 
             return oidc.login({ doesCurrentHrefRequiresAuth });
