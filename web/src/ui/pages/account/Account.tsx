@@ -85,8 +85,10 @@ function AccountReady(props: { className?: string }) {
     const { userAccountManagement } = useCore().functions;
 
     const [emailInputValue, setEmailInputValue] = useState(email.value);
-    /* prettier-ignore */
-    const [, setOrganizationInputValue] = useState(organization.value);
+
+    const [organizationInputValue, setOrganizationInputValue] = useState(
+        organization.value
+    );
 
     const evtAboutInputValue = useConst(() => Evt.create(aboutAndIsPublic.about));
 
@@ -135,66 +137,93 @@ function AccountReady(props: { className?: string }) {
 
     const { getOrganizationFullName } = useGetOrganizationFullName();
 
+    console.log({
+        "organization.value": organization.value,
+        organizationInputValue
+    });
+
     return (
         <div className={cx(fr.cx("fr-container"), className)}>
             <div className={classes.oidcInfos}>
                 <h2 className={classes.title}>{t("title")}</h2>
-                <div className={classes.inputAndPaddingBlockWrapper}>
-                    <div className={classes.inputWrapper}>
-                        <Input
-                            className={cx(classes.input)}
-                            label={t("mail")}
-                            nativeInputProps={{
-                                "onChange": event =>
-                                    setEmailInputValue(event.target.value),
-                                "value": emailInputValue,
-                                "name": "email",
-                                "type": "email",
-                                "id": "email",
-                                "onKeyDown": event => {
-                                    if (event.key === "Escape") {
-                                        setEmailInputValue(email.value);
-                                    }
-                                }
-                            }}
-                            state={
-                                emailInputValueErrorMessage === undefined
-                                    ? undefined
-                                    : "error"
+
+                <Input
+                    label={t("mail")}
+                    nativeInputProps={{
+                        "onChange": event => setEmailInputValue(event.target.value),
+                        "value": emailInputValue,
+                        "name": "email",
+                        "type": "email",
+                        "id": "email",
+                        "onKeyDown": event => {
+                            if (event.key === "Escape") {
+                                setEmailInputValue(email.value);
                             }
-                            stateRelatedMessage={emailInputValueErrorMessage}
-                            disabled={true}
-                        />
-                    </div>
-                    <div className={classes.paddingBlock} />
-                </div>
-                <div className={classes.inputAndPaddingBlockWrapper}>
-                    <div className={classes.inputWrapper}>
-                        <AutocompleteFreeSoloInput
-                            className={classes.input}
-                            options={allOrganizations}
-                            getOptionLabel={organization =>
-                                getOrganizationFullName(organization)
-                            }
-                            value={organization.value}
-                            onValueChange={value => setOrganizationInputValue(value)}
-                            dsfrInputProps={{
-                                "label": t("organization"),
-                                "disabled": organization.isBeingUpdated
-                            }}
-                            disabled={true}
-                        />
-                    </div>
-                    <div className={classes.paddingBlock} />
-                </div>
+                        }
+                    }}
+                    state={
+                        emailInputValueErrorMessage === undefined ? undefined : "error"
+                    }
+                    stateRelatedMessage={emailInputValueErrorMessage}
+                    disabled={true}
+                />
+
                 {doSupportAccountManagement && (
                     <a
-                        className={fr.cx("fr-btn", "fr-btn--secondary")}
+                        className={fr.cx("fr-btn", "fr-btn--secondary", "fr-mb-4w")}
                         href={userAccountManagement.getAccountManagementUrl()}
                     >
                         {t("manage account")}
                     </a>
                 )}
+
+                <div
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between"
+                    }}
+                >
+                    <AutocompleteFreeSoloInput
+                        className={classes.organizationInput}
+                        options={allOrganizations}
+                        getOptionLabel={organization =>
+                            getOrganizationFullName(organization)
+                        }
+                        value={organization.value}
+                        onValueChange={value => {
+                            console.log("selected value : ", { value });
+                            setOrganizationInputValue(value);
+                        }}
+                        dsfrInputProps={{
+                            "label": t("organization"),
+                            "disabled": organization.isBeingUpdated
+                        }}
+                        disabled={organization.isBeingUpdated}
+                    />
+                    {organization.value !== organizationInputValue && (
+                        <>
+                            <Button
+                                className={fr.cx("fr-ml-2w")}
+                                onClick={() =>
+                                    userAccountManagement.updateField({
+                                        "fieldName": "organization",
+                                        "value": organizationInputValue
+                                    })
+                                }
+                                disabled={
+                                    organization.value === organizationInputValue ||
+                                    organization.isBeingUpdated
+                                }
+                            >
+                                {t("update")}
+                            </Button>
+                            {organization.isBeingUpdated && (
+                                <CircularProgress size={30} />
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
             <>
                 <h2>{t("about title")}</h2>
@@ -224,35 +253,31 @@ function AccountReady(props: { className?: string }) {
                                 .link
                         })}
                     />
-                    <div style={{ "flex": 1 }} />
-                    <div>
-                        <Button
-                            className={cx(
-                                classes.updateButton,
-                                css({
-                                    "visibility": aboutAndIsPublic.isBeingUpdated
-                                        ? "hidden"
-                                        : undefined
-                                })
-                            )}
-                            onClick={() =>
-                                userAccountManagement.updateField({
-                                    "fieldName": "aboutAndIsPublic",
-                                    "about": evtAboutInputValue.state,
-                                    "isPublic": isPublicInputValue
-                                })
-                            }
-                            disabled={
-                                aboutAndIsPublic.about === evtAboutInputValue.state &&
-                                aboutAndIsPublic.isPublic === isPublicInputValue
-                            }
-                        >
-                            {t("update")}
-                        </Button>
-                        {aboutAndIsPublic.isBeingUpdated && (
-                            <CircularProgress size={30} />
+
+                    <Button
+                        className={cx(
+                            classes.updateButton,
+                            css({
+                                "visibility": aboutAndIsPublic.isBeingUpdated
+                                    ? "hidden"
+                                    : undefined
+                            })
                         )}
-                    </div>
+                        onClick={() =>
+                            userAccountManagement.updateField({
+                                "fieldName": "aboutAndIsPublic",
+                                "about": evtAboutInputValue.state,
+                                "isPublic": isPublicInputValue
+                            })
+                        }
+                        disabled={
+                            aboutAndIsPublic.about === evtAboutInputValue.state &&
+                            aboutAndIsPublic.isPublic === isPublicInputValue
+                        }
+                    >
+                        {t("update")}
+                    </Button>
+                    {aboutAndIsPublic.isBeingUpdated && <CircularProgress size={30} />}
                 </div>
                 <div
                     data-color-mode={isDark ? "dark" : "light"}
@@ -286,6 +311,9 @@ function AccountReady(props: { className?: string }) {
 }
 
 const useStyles = tss.withName({ Account }).create({
+    organizationInput: {
+        flex: 1
+    },
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,
@@ -295,29 +323,6 @@ const useStyles = tss.withName({ Account }).create({
         "marginBottom": fr.spacing("10v"),
         [fr.breakpoints.down("md")]: {
             "marginBottom": fr.spacing("8v")
-        }
-    },
-    "inputAndPaddingBlockWrapper": {
-        "position": "relative"
-    },
-    "inputWrapper": {
-        "position": "absolute",
-        "display": "flex",
-        "width": "100%",
-        [fr.breakpoints.down("md")]: {
-            "flexDirection": "column"
-        }
-    },
-    "input": {
-        "flex": 1,
-        [fr.breakpoints.down("md")]: {
-            "width": "100%"
-        }
-    },
-    "paddingBlock": {
-        "height": 125,
-        [fr.breakpoints.down("md")]: {
-            "height": 150
         }
     },
     "isPublicCheckbox": {
