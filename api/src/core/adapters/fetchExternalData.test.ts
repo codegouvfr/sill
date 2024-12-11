@@ -59,18 +59,18 @@ const acceleroId = 2;
 const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
     await sql`
       INSERT INTO softwares (id, "softwareType", "externalId",
-                                    "externalDataOrigin", "comptoirDuLibreId",
-                                    name, description, license, "versionMin",
-                                    "isPresentInSupportContract",
-                                    "isFromFrenchPublicService", "logoUrl",
-                                    keywords, "doRespectRgaa",
-                                    "isStillInObservation",
-                                    "parentSoftwareWikidataId",
-                                    "catalogNumeriqueGouvFrId",
-                                    "workshopUrls", "testUrls", categories,
-                                    "generalInfoMd", "addedByAgentId",
-                                    dereferencing, "referencedSinceTime",
-                                    "updateTime")
+                             "externalDataOrigin", "comptoirDuLibreId",
+                             name, description, license, "versionMin",
+                             "isPresentInSupportContract",
+                             "isFromFrenchPublicService", "logoUrl",
+                             keywords, "doRespectRgaa",
+                             "isStillInObservation",
+                             "parentSoftwareWikidataId",
+                             "catalogNumeriqueGouvFrId",
+                             "workshopUrls", "testUrls", categories,
+                             "generalInfoMd", "addedByAgentId",
+                             dereferencing, "referencedSinceTime",
+                             "updateTime")
       VALUES (${acceleroId}, '{"type": "stack"}', 'Q2822666', 'wikidata', 304,
               'Acceleo',
               'Outil et/ou plugin de génération de tout ou partie du code',
@@ -502,6 +502,11 @@ describe("fetches software extra data (from different providers)", () => {
                             name: "APLOSE",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/165",
                             website: "https://www.aplose.fr"
+                        },
+                        {
+                            "cdlUrl": "https://comptoir-du-libre.org/fr/users/4129",
+                            "name": "Keenobi",
+                            "website": "https://keenobi.com/"
                         },
                         {
                             name: "TEICEE",
