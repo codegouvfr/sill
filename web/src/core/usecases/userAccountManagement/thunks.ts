@@ -163,7 +163,6 @@ export const thunks = {
             }
 
             {
-
                 const { newUrl } = addParamToUrl({
                     url,
                     "name": "dark",
@@ -171,7 +170,6 @@ export const thunks = {
                 });
 
                 url = newUrl;
-
             }
 
             return url;
