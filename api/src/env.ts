@@ -30,7 +30,8 @@ const zConfiguration = z.object({
     "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
     "databaseUrl": z.string(),
     "initializeSoftwareFromSource": z.boolean(),
-    "botAgentEmail": z.string().optional()
+    "botAgentEmail": z.string().optional(),
+    "listToImport": z.array(z.string()).optional()
 });
 
 const getJsonConfiguration = () => {
@@ -69,7 +70,8 @@ const getJsonConfiguration = () => {
         "redirectUrl": process.env.SILL_REDIRECT_URL,
         "databaseUrl": process.env.DATABASE_URL,
         "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
-        "botAgentEmail": process.env?.BOT_AGENT_EMAIL
+        "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
+        "listToImport": process.env?.SILL_IMPORT_WIKIDATA?.split(",")
     };
 };
 

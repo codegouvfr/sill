@@ -285,7 +285,7 @@ export class WikidataFetchError extends Error {
     }
 }
 
-async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
+export async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
     const res = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`).catch(
         () => undefined
     );
@@ -310,7 +310,7 @@ async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
     return { entity };
 }
 
-function createGetClaimDataValue(params: { entity: Entity }) {
+export function createGetClaimDataValue(params: { entity: Entity }) {
     const { entity } = params;
 
     function getClaimDataValue<Type extends "string" | "wikibase-entityid" | "text-language" | "time">(

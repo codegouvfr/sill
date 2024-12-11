@@ -20,7 +20,7 @@ import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
-import { importFromHALSource } from "./usecases/importFromSource";
+import { importFromHALSource, importFromWikidataSource } from "./usecases/importFromSource";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -35,6 +35,7 @@ type ParamsOfBootstrapCore = {
     externalSoftwareDataOrigin: ExternalDataOrigin;
     initializeSoftwareFromSource: boolean;
     botAgentEmail: string | undefined;
+    listToImport?: string[];
 };
 
 export type Context = {
@@ -68,7 +69,8 @@ export async function bootstrapCore(
         doPerformCacheInitialization,
         externalSoftwareDataOrigin,
         initializeSoftwareFromSource,
-        botAgentEmail
+        botAgentEmail,
+        listToImport
     } = params;
 
     const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
@@ -118,9 +120,9 @@ export async function bootstrapCore(
     }
 
     if (initializeSoftwareFromSource) {
+        if (!botAgentEmail) throw new Error("No bot agent email provided");
         if (externalSoftwareDataOrigin === "HAL") {
-            console.log(" ------ Feeding database with HAL software started ------");
-            if (!botAgentEmail) throw new Error("No bot agent email provided");
+            console.info(" ------ Feeding database with HAL software started ------");
             const importHAL = importFromHALSource(dbApi);
             try {
                 await importHAL(botAgentEmail);
@@ -129,7 +131,17 @@ export async function bootstrapCore(
                 console.error(err);
             }
 
-            console.log(" ------ Feeding database with HAL software finished ------");
+            console.info(" ------ Feeding database with HAL software finished ------");
+        }
+        if (externalSoftwareDataOrigin === "wikidata") {
+            console.info(" ------ Feeding database with Wikidata software started ------");
+            const importWikidata = importFromWikidataSource(dbApi);
+            try {
+                await importWikidata(botAgentEmail, listToImport ?? []);
+            } catch (err) {
+                console.error(err);
+            }
+            console.info(" ------ Feeding database with Wikidata software finished ------");
         }
     }
 
