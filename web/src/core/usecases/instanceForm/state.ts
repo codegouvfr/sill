@@ -35,7 +35,7 @@ namespace State {
             | {
                   type: "navigated from software form";
                   justRegisteredSoftwareSillId: number;
-                  userOrganization: string;
+                  userOrganization: string | null;
               }
             | undefined;
         step1Data:

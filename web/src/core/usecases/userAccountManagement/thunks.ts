@@ -27,9 +27,7 @@ export const thunks = {
                 { keycloakParams },
                 allowedEmailRegexpStr,
                 allOrganizations,
-                {
-                    agent: { about = "", isPublic }
-                }
+                { agent }
             ] = await Promise.all([
                 sillApi.getOidcParams(),
                 sillApi.getAllowedEmailRegexp(),
@@ -37,11 +35,13 @@ export const thunks = {
                 sillApi.getAgent({ "email": user.email })
             ]);
 
+            const { about = "", isPublic, organization } = agent;
+
             dispatch(
                 actions.initialized({
                     allowedEmailRegexpStr,
                     "email": user.email,
-                    "organization": user.organization,
+                    "organization": organization,
                     "accountManagementUrl":
                         keycloakParams === undefined
                             ? undefined
@@ -101,7 +101,7 @@ export const thunks = {
                 }
             }
 
-            dispatch(actions.updateFieldCompleted({ "fieldName": params.fieldName }));
+            dispatch(actions.updateFieldCompleted(params));
         },
     "getAccountManagementUrl":
         () =>

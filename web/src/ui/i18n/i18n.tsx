@@ -58,6 +58,7 @@ const {
     | typeof import("ui/shared/Footer").i18n
     | typeof import("ui/shared/DeclarationRemovalModal").i18n
     | typeof import("ui/shared/SmartLogo").i18n
+    | typeof import("ui/shared/PromptForOrganization").i18n
 >()(
     { languages, fallbackLanguage },
     {
@@ -682,7 +683,7 @@ const {
             },
             "UserProfile": {
                 "agent profile": ({ email, organization }) =>
-                    `Profile of ${email} - ${organization}`,
+                    `Profile of ${email}${organization ? ` - ${organization}` : ""}`,
                 "send email": "Send an email to this person",
                 "no description": "The user has not written a description yet",
                 "edit my profile": "Edit my profile",
@@ -735,6 +736,13 @@ const {
             },
             "SmartLogo": {
                 "software logo": "Software logo"
+            },
+            "PromptForOrganization": {
+                "title": "Please provide an organization",
+                "organization is required":
+                    "You need to provide an organization to be able to use Sill. Please provide one below.",
+                "update": "Update",
+                "organization": "Organization"
             }
         },
         "fr": {
@@ -1383,7 +1391,7 @@ const {
             },
             "UserProfile": {
                 "agent profile": ({ email, organization }) =>
-                    `Profile de ${email} - ${organization}`,
+                    `Profile de ${email}${organization ? ` - ${organization}` : ""}`,
                 "send email": "Envoyer un courrier à l'agent",
                 "no description":
                     "Cet agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
@@ -1437,6 +1445,13 @@ const {
             },
             "SmartLogo": {
                 "software logo": "Logo du logiciel"
+            },
+            "PromptForOrganization": {
+                "title": "Organisation requise",
+                "organization is required":
+                    "Vous devez préciser l'organisation à laquelle vous appartenez",
+                "update": "Mettre à jour",
+                "organization": "Organisation"
             }
             /* spell-checker: enable */
         }

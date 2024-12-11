@@ -1,12 +1,27 @@
 import type { Thunks } from "core/bootstrap";
 import { assert } from "tsafe/assert";
+import { name, actions } from "./state";
+
+export const protectedThunks = {
+    initialize:
+        () =>
+        async (dispatch, getState, { sillApi, oidc, getUser }) => {
+            console.log("OIDC : is user logged in ?", oidc.isUserLoggedIn);
+            if (!oidc.isUserLoggedIn) return;
+            const state = getState()[name];
+            if (state.stateDescription === "ready" || state.isInitializing) return;
+            dispatch(actions.initializationStarted());
+            const user = await getUser();
+            const { agent } = await sillApi.getAgent({ "email": user.email });
+            dispatch(actions.initialized({ agent }));
+        }
+} satisfies Thunks;
 
 export const thunks = {
     "getIsUserLoggedIn":
         () =>
         (...args): boolean => {
             const [, , { oidc }] = args;
-
             return oidc.isUserLoggedIn;
         },
     "login":
@@ -16,6 +31,7 @@ export const thunks = {
 
             const [, , { oidc }] = args;
 
+            console.log("asesrting user not logged : ", oidc.isUserLoggedIn);
             assert(!oidc.isUserLoggedIn);
 
             return oidc.login({ doesCurrentHrefRequiresAuth });

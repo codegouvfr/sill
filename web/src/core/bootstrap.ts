@@ -95,7 +95,6 @@ export async function bootstrapCore(
                 isUserInitiallyLoggedIn,
                 jwtClaimByUserKey,
                 "user": {
-                    "organization": "DINUM",
                     "email": "joseph.garrone@code.gouv.fr",
                     "id": "xxxxx"
                 }
@@ -150,7 +149,8 @@ export async function bootstrapCore(
         dispatch(usecases.externalDataOrigin.protectedThunks.initialize()),
         dispatch(usecases.softwareCatalog.protectedThunks.initialize()),
         dispatch(usecases.generalStats.protectedThunks.initialize()),
-        dispatch(usecases.redirect.protectedThunks.initialize())
+        dispatch(usecases.redirect.protectedThunks.initialize()),
+        dispatch(usecases.userAuthentication.protectedThunks.initialize())
     ]);
 
     return { core };

@@ -80,6 +80,7 @@ export const thunks = {
                     assert(oidc.isUserLoggedIn);
 
                     const user = await getUser();
+                    const { agent } = await sillApi.getAgent({ email: user.email });
 
                     dispatch(
                         actions.initializationCompleted({
@@ -91,7 +92,7 @@ export const thunks = {
                                           "type": "navigated from software form",
                                           "justRegisteredSoftwareSillId":
                                               software.softwareId,
-                                          "userOrganization": user.organization
+                                          "userOrganization": agent.organization
                                       }
                         })
                     );

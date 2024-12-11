@@ -4,7 +4,7 @@ import { useRoute } from "ui/routes";
 import { Header } from "ui/shared/Header";
 import { Footer } from "ui/shared/Footer";
 import { declareComponentKeys } from "i18nifty";
-import { useCore } from "core";
+import { useCore, useCoreState } from "core";
 import { RouteProvider } from "ui/routes";
 import { evtLang } from "ui/i18n";
 import { createCoreProvider } from "core";
@@ -17,6 +17,7 @@ import { keyframes } from "tss-react";
 import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFallback";
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
+import { PromptForOrganization } from "./shared/PromptForOrganization";
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
@@ -69,6 +70,7 @@ function ContextualizedApp() {
     const route = useRoute();
 
     const { userAuthentication, sillApiVersion } = useCore().functions;
+    const { currentAgent } = useCoreState("userAuthentication", "currentAgent");
 
     const headerUserAuthenticationApi = useConst(() =>
         userAuthentication.getIsUserLoggedIn()
@@ -116,6 +118,10 @@ function ContextualizedApp() {
                                     return <LoadingFallback />;
                                 }
 
+                                if (currentAgent && !currentAgent.organization) {
+                                    return <PromptForOrganization firstTime={true} />;
+                                }
+
                                 return (
                                     <page.LazyComponent
                                         route={route}
@@ -158,13 +164,13 @@ const useStyles = tss
         },
         "page": {
             "animation": `${keyframes`
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-            `} 400ms`
+          0% {
+              opacity: 0;
+          }
+          100% {
+              opacity: 1;
+          }
+      `} 400ms`
         }
     }));
 
