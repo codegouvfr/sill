@@ -25,12 +25,6 @@ export const sillApi: SillApi = {
         }),
         { "promise": true }
     ),
-    "getOrganizationUserProfileAttributeName": memoize(
-        async () => {
-            throw new Error("not implemented");
-        },
-        { "promise": true }
-    ),
     "getSoftwares": memoize(() => Promise.resolve([...softwares]), { "promise": true }),
     "getInstances": memoize(
         async () => {

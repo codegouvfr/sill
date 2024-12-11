@@ -7,9 +7,7 @@ const zConfiguration = z.object({
         .object({
             "url": z.string().nonempty(), //Example: https://auth.code.gouv.fr/auth (with the /auth at the end)
             "realm": z.string().nonempty(),
-            "clientId": z.string().nonempty(),
-            "adminPassword": z.string().nonempty(),
-            "organizationUserProfileAttributeName": z.string().nonempty()
+            "clientId": z.string().nonempty()
         })
         .optional(),
     "termsOfServiceUrl": zLocalizedString,
