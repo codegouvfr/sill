@@ -47,7 +47,7 @@ export const createPgReferentRepository = (db: Kysely<Database>): SoftwareRefere
     getTotalCount: async () => {
         const { total_referents } = await db
             .selectFrom("software_referents")
-            .select(qb => qb.fn.countAll<string>().as("total_referents"))
+            .select(qb => qb.fn.count<string>("agentId").distinct().as("total_referents"))
             .executeTakeFirstOrThrow();
         return parseInt(total_referents);
     }
