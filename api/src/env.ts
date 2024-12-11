@@ -71,9 +71,7 @@ const getJsonConfiguration = () => {
         "databaseUrl": process.env.DATABASE_URL,
         "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
         "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
-        "listToImport": process.env?.SILL_IMPORT_WIKIDATA
-            ? JSON.parse(process.env?.SILL_IMPORT_WIKIDATA)?.ids
-            : undefined
+        "listToImport": process.env?.SILL_IMPORT_WIKIDATA?.split(",")
     };
 };
 

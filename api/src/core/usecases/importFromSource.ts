@@ -14,7 +14,7 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
                   email: agentEmail,
                   "isPublic": false,
                   organization: "",
-                  about: "This is an bot user created to import data."
+                  about: "This is a bot user created to import data."
               });
 
         const softwares = await halAPIGateway.software.getAll();
@@ -48,7 +48,7 @@ export const importFromWikidataSource: (
                   email: agentEmail,
                   "isPublic": false,
                   organization: "",
-                  about: "This is an bot user created to import data."
+                  about: "This is a bot user created to import data."
               });
 
         const dbSoftwares = await dbApi.software.getAll();

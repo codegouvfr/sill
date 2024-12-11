@@ -120,9 +120,9 @@ export async function bootstrapCore(
     }
 
     if (initializeSoftwareFromSource) {
+        if (!botAgentEmail) throw new Error("No bot agent email provided");
         if (externalSoftwareDataOrigin === "HAL") {
-            console.log(" ------ Feeding database with HAL software started ------");
-            if (!botAgentEmail) throw new Error("No bot agent email provided");
+            console.info(" ------ Feeding database with HAL software started ------");
             const importHAL = importFromHALSource(dbApi);
             try {
                 await importHAL(botAgentEmail);
@@ -131,18 +131,17 @@ export async function bootstrapCore(
                 console.error(err);
             }
 
-            console.log(" ------ Feeding database with HAL software finished ------");
+            console.info(" ------ Feeding database with HAL software finished ------");
         }
         if (externalSoftwareDataOrigin === "wikidata") {
-            console.log(" ------ Feeding database with Wikidata software started ------");
-            if (!botAgentEmail) throw new Error("No bot agent email provided");
+            console.info(" ------ Feeding database with Wikidata software started ------");
             const importWikidata = importFromWikidataSource(dbApi);
             try {
                 await importWikidata(botAgentEmail, listToImport ?? []);
             } catch (err) {
                 console.error(err);
             }
-            console.log(" ------ Feeding database with Wikidata software finished ------");
+            console.info(" ------ Feeding database with Wikidata software finished ------");
         }
     }
 
