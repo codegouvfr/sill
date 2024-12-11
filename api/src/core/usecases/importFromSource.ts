@@ -28,7 +28,7 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
             if (index != -1) {
                 return dbSoftwares[index].softwareId;
             } else {
-                console.log("Importing HAL : ", software.docid);
+                console.info("Importing HAL : ", software.docid);
                 const newSoft = await halRawSoftwareToSoftwareForm(software);
                 return dbApi.software.create({ formData: newSoft, externalDataOrigin: "HAL", agentId: agentId });
             }

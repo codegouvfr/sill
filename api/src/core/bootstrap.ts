@@ -137,9 +137,9 @@ export async function bootstrapCore(
         const frequencyOfUpdate = 1000 * 60 * 60 * 4; // 4 hours
 
         const updateSoftwareExternalData = async () => {
-            console.log("------ Updating software external data started ------");
+            console.info("------ Updating software external data started ------");
             await useCases.fetchAndSaveExternalDataForAllSoftwares();
-            console.log("------ Updating software external data finished ------");
+            console.info("------ Updating software external data finished ------");
             setTimeout(async () => {
                 await updateSoftwareExternalData();
             }, frequencyOfUpdate);

@@ -8,6 +8,7 @@ import { useConst } from "powerhooks/useConst";
 import { useConstCallback } from "powerhooks/useConstCallback";
 
 export type AutocompleteFreeSoloInputProps = {
+    disabled?: boolean;
     className?: string;
     value: string;
     onValueChange: (value: string) => void;
@@ -25,7 +26,8 @@ export function AutocompleteFreeSoloInput(props: AutocompleteFreeSoloInputProps)
         options,
         getOptionLabel: getOptionLabel_props,
         renderOption,
-        dsfrInputProps
+        dsfrInputProps,
+        disabled
     } = props;
 
     const { getOptionFormLabel, getOptionLabel } = (function useClosure() {
@@ -87,6 +89,7 @@ export function AutocompleteFreeSoloInput(props: AutocompleteFreeSoloInputProps)
                         ...dsfrInputProps.style
                     }}
                     ref={params.InputProps.ref}
+                    disabled={disabled}
                     nativeInputProps={{
                         ...params.inputProps,
                         ...dsfrInputProps.nativeInputProps,

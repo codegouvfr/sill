@@ -1,5 +1,5 @@
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
-import { getHalSoftwareExternalData } from "./getSoftwareExternalData";
+import { getHalSoftwareExternalData } from "./getHalSoftwareExternalData";
 
 export const halAdapter = {
     softwareExternalData: {

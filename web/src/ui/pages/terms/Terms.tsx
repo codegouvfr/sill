@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { declareComponentKeys } from "i18nifty";
 import { useCoreState, useCore } from "core";
-import { Markdown } from "keycloakify/tools/Markdown";
 import { useLang } from "ui/i18n";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
+import Markdown from "react-markdown";
 
 type Props = {
     className?: string;

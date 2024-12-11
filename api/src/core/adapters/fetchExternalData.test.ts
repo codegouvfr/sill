@@ -59,18 +59,18 @@ const acceleroId = 2;
 const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
     await sql`
       INSERT INTO softwares (id, "softwareType", "externalId",
-                                    "externalDataOrigin", "comptoirDuLibreId",
-                                    name, description, license, "versionMin",
-                                    "isPresentInSupportContract",
-                                    "isFromFrenchPublicService", "logoUrl",
-                                    keywords, "doRespectRgaa",
-                                    "isStillInObservation",
-                                    "parentSoftwareWikidataId",
-                                    "catalogNumeriqueGouvFrId",
-                                    "workshopUrls", "testUrls", categories,
-                                    "generalInfoMd", "addedByAgentId",
-                                    dereferencing, "referencedSinceTime",
-                                    "updateTime")
+                             "externalDataOrigin", "comptoirDuLibreId",
+                             name, description, license, "versionMin",
+                             "isPresentInSupportContract",
+                             "isFromFrenchPublicService", "logoUrl",
+                             keywords, "doRespectRgaa",
+                             "isStillInObservation",
+                             "parentSoftwareWikidataId",
+                             "catalogNumeriqueGouvFrId",
+                             "workshopUrls", "testUrls", categories,
+                             "generalInfoMd", "addedByAgentId",
+                             dereferencing, "referencedSinceTime",
+                             "updateTime")
       VALUES (${acceleroId}, '{"type": "stack"}', 'Q2822666', 'wikidata', 304,
               'Acceleo',
               'Outil et/ou plugin de génération de tout ou partie du code',
@@ -143,19 +143,23 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(updatedSoftwareExternalDatas, []);
     });
 
-    it("fetches correctly the logoUrl from comptoir du libre", async () => {
-        const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(softwareExternalDatas, []);
+    it(
+        "fetches correctly the logoUrl from comptoir du libre",
+        async () => {
+            const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
+            expectToEqual(softwareExternalDatas, []);
 
-        await fetchAndSaveSoftwareExtraData(acceleroId, {});
+            await fetchAndSaveSoftwareExtraData(acceleroId, {});
 
-        const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
-        expect(results).toHaveLength(1);
-        expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
-            name: "Acceleo",
-            logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
-        });
-    });
+            const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
+            expect(results).toHaveLength(1);
+            expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
+                name: "Acceleo",
+                logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
+            });
+        },
+        { timeout: 10_000 }
+    );
 
     it(
         "gets software external data and saves it, and does not save other extra data if there is nothing relevant",
@@ -199,7 +203,8 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             id: "Q58482636",
-                            name: "Evan You"
+                            name: "Evan You",
+                            url: `https://www.wikidata.org/wiki/Q58482636`
                         }
                     ],
                     documentationUrl: "https://vitejs.dev/guide/",
@@ -230,7 +235,7 @@ describe("fetches software extra data (from different providers)", () => {
                 .executeTakeFirstOrThrow();
             expect(lastExtraDataFetchAt).toBeTruthy();
         },
-        { timeout: 10_000 }
+        { timeout: 20_000 }
     );
 
     it(
@@ -252,7 +257,8 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             id: "Q489709",
-                            name: "Apache Software Foundation"
+                            name: "Apache Software Foundation",
+                            url: `https://www.wikidata.org/wiki/Q489709`
                         }
                     ],
                     documentationUrl: null,
@@ -500,6 +506,11 @@ describe("fetches software extra data (from different providers)", () => {
                             website: "https://www.aplose.fr"
                         },
                         {
+                            "cdlUrl": "https://comptoir-du-libre.org/fr/users/4129",
+                            "name": "Keenobi",
+                            "website": "https://keenobi.com/"
+                        },
+                        {
                             name: "TEICEE",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/3838",
                             website: "https://www.teicee.com"
@@ -546,6 +557,6 @@ describe("fetches software extra data (from different providers)", () => {
                 }
             ]);
         },
-        { timeout: 10_000 }
+        { timeout: 20_000 }
     );
 });

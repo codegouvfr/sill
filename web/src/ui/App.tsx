@@ -6,40 +6,28 @@ import { Footer } from "ui/shared/Footer";
 import { declareComponentKeys } from "i18nifty";
 import { useCore } from "core";
 import { RouteProvider } from "ui/routes";
-import { injectGlobalStatesInSearchParams } from "powerhooks/useGlobalState";
 import { evtLang } from "ui/i18n";
-import {
-    addSillApiUrlToQueryParams,
-    addTermsOfServiceUrlToQueryParams,
-    addIsDarkToQueryParams,
-    addAppLocationOriginToQueryParams
-} from "keycloak-theme/login/valuesTransferredOverUrl";
 import { createCoreProvider } from "core";
 import { pages } from "ui/pages";
 import { useConst } from "powerhooks/useConst";
 import { objectKeys } from "tsafe/objectKeys";
 import { assert } from "tsafe/assert";
-import { useIsDark } from "@codegouvfr/react-dsfr/useIsDark";
+import { getIsDark } from "@codegouvfr/react-dsfr/useIsDark";
 import { keyframes } from "tss-react";
 import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFallback";
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
 
-let keycloakIsDark: boolean;
-
 const { CoreProvider } = createCoreProvider({
     apiUrl,
     appUrl,
-    // prettier-ignore
-    "transformUrlBeforeRedirectToLogin": ({ url, termsOfServiceUrl }) =>
-        [url]
-            .map(injectGlobalStatesInSearchParams)
-            .map(url => addSillApiUrlToQueryParams({ url, "value": apiUrl }))
-            .map(url => addIsDarkToQueryParams({ url, "value": keycloakIsDark }))
-            .map(url => addTermsOfServiceUrlToQueryParams({ url, "value": termsOfServiceUrl }))
-            .map(url => addAppLocationOriginToQueryParams({ url, "value": window.location.origin }))
-        [0],
+    "transformUrlBeforeRedirectToLogin": ({ url }) => {
+        const parsedUrl = new URL(url);
+        parsedUrl.searchParams.set("dark", `${getIsDark()}`);
+        return parsedUrl.toString();
+    },
     "getCurrentLang": () => evtLang.state,
+    // TODO: Remove, this was to redirect to an other instance of the sill
     "onMoved": ({ redirectUrl }) => {
         const currentUrlObj = new URL(window.location.href);
 
@@ -56,7 +44,11 @@ const { CoreProvider } = createCoreProvider({
         );
 
         window.location.href = newUrl.toString();
-    }
+    },
+    // NOTE: Passed so that it can be injected in the Account management URL.
+    // I'm not comfortable with this level of indirection, this is only UI related logic
+    // that shouldn't involve the core. However I do it this way for consistency sake.
+    getIsDark
 });
 
 export default function App() {
@@ -74,8 +66,6 @@ export default function App() {
 }
 
 function ContextualizedApp() {
-    keycloakIsDark = useIsDark().isDark;
-
     const route = useRoute();
 
     const { userAuthentication, sillApiVersion } = useCore().functions;

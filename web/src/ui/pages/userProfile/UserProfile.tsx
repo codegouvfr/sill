@@ -8,7 +8,7 @@ import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Markdown } from "keycloakify/tools/Markdown";
+import Markdown from "react-markdown";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { routes, session, getPreviousRouteName } from "ui/routes";
 import { Button } from "@codegouvfr/react-dsfr/Button";
