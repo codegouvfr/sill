@@ -14,7 +14,7 @@ export type Database = {
 type AgentsTable = {
     id: Generated<number>;
     email: string;
-    organization: string;
+    organization: string | null;
     about: string | null;
     isPublic: boolean;
 };
