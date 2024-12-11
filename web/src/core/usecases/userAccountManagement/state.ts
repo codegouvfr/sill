@@ -15,7 +15,6 @@ namespace State {
     export type Ready = {
         stateDescription: "ready";
         accountManagementUrl: string | undefined;
-        allowedEmailRegexpStr: string;
         allOrganizations: string[];
         organization: {
             value: string | null;
@@ -63,7 +62,6 @@ export const { reducer, actions } = createUsecaseActions({
             }: {
                 payload: {
                     accountManagementUrl: string | undefined;
-                    allowedEmailRegexpStr: string;
                     organization: string | null;
                     email: string;
                     allOrganizations: string[];
@@ -74,7 +72,6 @@ export const { reducer, actions } = createUsecaseActions({
         ) => {
             const {
                 accountManagementUrl,
-                allowedEmailRegexpStr,
                 organization,
                 email,
                 allOrganizations,
@@ -85,7 +82,6 @@ export const { reducer, actions } = createUsecaseActions({
             return {
                 "stateDescription": "ready",
                 accountManagementUrl,
-                allowedEmailRegexpStr,
                 allOrganizations,
                 "organization": {
                     "value": organization,

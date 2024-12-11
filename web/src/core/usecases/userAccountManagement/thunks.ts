@@ -23,14 +23,8 @@ export const thunks = {
 
             const user = await getUser();
 
-            const [
-                { keycloakParams },
-                allowedEmailRegexpStr,
-                allOrganizations,
-                { agent }
-            ] = await Promise.all([
+            const [{ keycloakParams }, allOrganizations, { agent }] = await Promise.all([
                 sillApi.getOidcParams(),
-                sillApi.getAllowedEmailRegexp(),
                 sillApi.getAllOrganizations(),
                 sillApi.getAgent({ "email": user.email })
             ]);
@@ -39,7 +33,6 @@ export const thunks = {
 
             dispatch(
                 actions.initialized({
-                    allowedEmailRegexpStr,
                     "email": user.email,
                     "organization": organization,
                     "accountManagementUrl":

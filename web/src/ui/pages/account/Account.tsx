@@ -7,7 +7,6 @@ import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import { Input } from "@codegouvfr/react-dsfr/Input";
-import { z } from "zod";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { OrganizationField } from "../../shared/PromptForOrganization";
 import type { PageRoute } from "./route";
@@ -55,39 +54,18 @@ function AccountReady(props: { className?: string }) {
 
     const { t } = useTranslation({ Account });
 
-    const {
-        email,
-        organization,
-        aboutAndIsPublic,
-        doSupportAccountManagement,
-        allowedEmailRegExp
-    } = (function useClosure() {
-        const state = useCoreState("userAccountManagement", "main");
+    const { email, aboutAndIsPublic, doSupportAccountManagement } =
+        (function useClosure() {
+            const state = useCoreState("userAccountManagement", "main");
 
-        assert(state !== undefined);
+            assert(state !== undefined);
 
-        const { allowedEmailRegexpStr, ...rest } = state;
-
-        const allowedEmailRegExp = useMemo(
-            () => new RegExp(allowedEmailRegexpStr),
-            [allowedEmailRegexpStr]
-        );
-
-        return {
-            ...rest,
-            allowedEmailRegExp
-        };
-    })();
+            return state;
+        })();
 
     const { isDark } = useIsDark();
 
     const { userAccountManagement } = useCore().functions;
-
-    const [emailInputValue, setEmailInputValue] = useState(email.value);
-
-    const [organizationInputValue, setOrganizationInputValue] = useState(
-        organization.value ?? null
-    );
 
     const evtAboutInputValue = useConst(() => Evt.create(aboutAndIsPublic.about));
 
@@ -116,22 +94,6 @@ function AccountReady(props: { className?: string }) {
         evtAboutInputValue.state = text;
     }, []);
 
-    const emailInputValueErrorMessage = (() => {
-        try {
-            z.string().email().parse(emailInputValue);
-        } catch {
-            return t("not a valid email");
-        }
-
-        if (!allowedEmailRegExp.test(emailInputValue)) {
-            return t("email domain not allowed", {
-                "domain": emailInputValue.split("@")[1]
-            });
-        }
-
-        return undefined;
-    })();
-
     const { classes, cx, css } = useStyles();
 
     return (
@@ -142,21 +104,11 @@ function AccountReady(props: { className?: string }) {
                 <Input
                     label={t("mail")}
                     nativeInputProps={{
-                        "onChange": event => setEmailInputValue(event.target.value),
-                        "value": emailInputValue,
+                        "value": email.value,
                         "name": "email",
                         "type": "email",
-                        "id": "email",
-                        "onKeyDown": event => {
-                            if (event.key === "Escape") {
-                                setEmailInputValue(email.value);
-                            }
-                        }
+                        "id": "email"
                     }}
-                    state={
-                        emailInputValueErrorMessage === undefined ? undefined : "error"
-                    }
-                    stateRelatedMessage={emailInputValueErrorMessage}
                     disabled={true}
                 />
 
