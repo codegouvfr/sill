@@ -7,7 +7,6 @@ import { env } from "../src/env";
 (async () => {
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(env.databaseUrl) });
     const { useCases } = await bootstrapCore({
-        "keycloakUserApiParams": undefined,
         "dbConfig": {
             "dbKind": "kysely",
             "kyselyDb": kyselyDb

@@ -1,7 +1,7 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { useTranslation, useGetOrganizationFullName, evtLang } from "ui/i18n";
+import { useTranslation, evtLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -209,9 +209,6 @@ function AccountReady(props: { className?: string }) {
 }
 
 const useStyles = tss.withName({ Account }).create({
-    organizationInput: {
-        flex: 1
-    },
     "oidcInfos": {
         "paddingTop": fr.spacing("6v"),
         "maxWidth": 650,
