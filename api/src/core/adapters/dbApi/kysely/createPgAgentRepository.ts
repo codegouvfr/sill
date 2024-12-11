@@ -41,9 +41,10 @@ export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository =
     getAllOrganizations: () =>
         db
             .selectFrom("agents")
+            .where("organization", "is not", null)
             .groupBy("organization")
             .orderBy("organization")
-            .select("organization")
+            .select(({ ref }) => ref("organization").$castTo<string>().as("organization"))
             .execute()
             .then(results => results.map(({ organization }) => organization))
 });

@@ -446,7 +446,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
         ]);
 
 type CountForOrganisationAndSoftwareId = {
-    organization: string;
+    organization: string | null;
     softwareId: number;
     type: "user" | "referent";
     count: string;
@@ -490,16 +490,19 @@ const getUserAndReferentCountByOrganizationBySoftwareId = async (
         .execute();
 
     return [...softwareReferentCountBySoftwareId, ...softwareUserCountBySoftwareId].reduce(
-        (acc, { organization, softwareId, type, count }): UserAndReferentCountByOrganizationBySoftwareId => ({
-            ...acc,
-            [softwareId]: {
-                ...(acc[softwareId] ?? {}),
-                [organization]: {
-                    ...(acc[softwareId]?.[organization] ?? defaultCount),
-                    [type]: +count
+        (acc, { organization, softwareId, type, count }): UserAndReferentCountByOrganizationBySoftwareId => {
+            const orga = organization ?? "NO_ORGANIZATION";
+            return {
+                ...acc,
+                [softwareId]: {
+                    ...(acc[softwareId] ?? {}),
+                    [orga]: {
+                        ...(acc[softwareId]?.[orga] ?? defaultCount),
+                        [type]: +count
+                    }
                 }
-            }
-        }),
+            };
+        },
         {} as UserAndReferentCountByOrganizationBySoftwareId
     );
 };

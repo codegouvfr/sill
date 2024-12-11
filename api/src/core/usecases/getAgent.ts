@@ -22,7 +22,7 @@ export const makeGetAgent =
             if (currentUser.email === email) {
                 const agentWithoutId = {
                     email: currentUser.email,
-                    organization: currentUser.organization,
+                    organization: null,
                     about: "",
                     isPublic: false
                 };

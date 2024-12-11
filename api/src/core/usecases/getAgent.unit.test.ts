@@ -29,8 +29,7 @@ describe("getAgent", () => {
 
     const currentUser: User = {
         id: "user-id",
-        email: "bob@mail.com",
-        organization: "Some orga"
+        email: "bob@mail.com"
     };
 
     let agentRepository: AgentRepository;
@@ -52,8 +51,7 @@ describe("getAgent", () => {
                 email: privateAgent.email,
                 currentUser: {
                     id: "user-id",
-                    email: "some@mail.com",
-                    organization: "Truc"
+                    email: "some@mail.com"
                 }
             });
 
@@ -71,7 +69,7 @@ describe("getAgent", () => {
             const expectedAgent: AgentWithId = {
                 id: expect.any(Number),
                 email: currentUser.email,
-                organization: currentUser.organization,
+                organization: null,
                 isPublic: false,
                 about: "",
                 declarations: []

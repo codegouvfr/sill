@@ -15,8 +15,7 @@ type TestCallerConfig = {
 
 export const defaultUser: User = {
     id: "1",
-    email: "default.user@mail.com",
-    organization: "Default Organization"
+    email: "default.user@mail.com"
 };
 
 export type ApiCaller = Awaited<ReturnType<typeof createTestCaller>>["apiCaller"];
