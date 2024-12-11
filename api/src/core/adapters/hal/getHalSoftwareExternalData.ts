@@ -49,15 +49,16 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             throw Error(`No codemeta found for doc : ${halDocId}`);
         }
 
-        const authors = await await Promise.all(
+        const authors = await Promise.all(
             codemetaSoftware.author.map(async auth => {
                 const author = auth.author;
                 const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
-                let base = {
+                const base = {
                     "name": `${author.givenName} ${author.familyName}`,
-                    "id": id
+                    "id": id,
+                    "affiliatedStructure": [] as AuthStructure[]
                 };
 
                 if (affiliation?.length > 0) {
@@ -66,30 +67,31 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                             .filter(affilatiedStructure => affilatiedStructure.name)
                             .map(async affilatiedStructure => {
                                 const structure = await halAPIGateway.structure.getByAcronym(affilatiedStructure?.name);
+                                if (!structure) {
+                                    throw new Error(`Structure not found : name = ${affilatiedStructure?.name}`);
+                                }
                                 return {
-                                    "name": structure?.name_s,
-                                    "url": structure?.ror_s ?? structure?.url_s,
-                                    "parentStructure": await buildParentStructureTree(structure?.parentDocid_i)
+                                    "name": structure.name_s,
+                                    "url": structure.ror_s ?? structure?.url_s,
+                                    "parentStructure": await buildParentStructureTree(structure.parentDocid_i)
                                 };
                             })
                     );
-                    base = Object.assign({ "affiliatedStructure": structures }, base);
+                    base.affiliatedStructure = structures;
                 }
 
                 if (id?.split("-")?.length === 4 && id?.length === 19) {
-                    return Object.assign({ "url": `https://orcid.org/${id}` }, base);
+                    return { ...base, "url": `https://orcid.org/${id}` };
                 }
 
                 if (id) {
-                    return Object.assign({ "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` }, base);
+                    return { ...base, "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` };
                 }
 
-                return Object.assign(
-                    {
-                        "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
-                    },
-                    base
-                );
+                return {
+                    ...base,
+                    "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                };
             })
         );
 
