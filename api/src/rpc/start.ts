@@ -68,23 +68,11 @@ export async function startRpcService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const {
-        dbApi,
-        context: coreContext,
-        useCases
-    } = await bootstrapCore({
+    const { dbApi, useCases } = await bootstrapCore({
         "dbConfig": {
             "dbKind": "kysely",
             "kyselyDb": kyselyDb
         },
-        "keycloakUserApiParams":
-            keycloakParams === undefined
-                ? undefined
-                : {
-                      "url": keycloakParams.url,
-                      "realm": keycloakParams.realm,
-                      "adminPassword": keycloakParams.adminPassword
-                  },
         githubPersonalAccessTokenForApiRateLimit,
         "doPerPerformPeriodicalCompilation": true,
         // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
@@ -117,7 +105,6 @@ export async function startRpcService(params: {
         dbApi,
         getSoftwareExternalDataOptions,
         getSoftwareExternalData,
-        coreContext,
         jwtClaimByUserKey,
         "keycloakParams":
             keycloakParams === undefined

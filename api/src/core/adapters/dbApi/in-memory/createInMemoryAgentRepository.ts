@@ -33,7 +33,8 @@ export const createInMemoryAgentRepository = (): {
             },
             getAllOrganizations: () => {
                 throw new Error("Not implemented");
-            }
+            },
+            countAll: async () => agents.length
         },
         testHelpers: {
             setAgents: (newAgents: DbAgentWithId[]) => {

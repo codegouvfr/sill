@@ -8,7 +8,6 @@ import superjson from "superjson";
 import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
-import type { Context as CoreContext } from "../core";
 import { DbApiV2 } from "../core/ports/DbApiV2";
 import {
     ExternalDataOrigin,
@@ -35,7 +34,6 @@ import type { User } from "./user";
 export function createRouter(params: {
     dbApi: DbApiV2;
     useCases: UseCases;
-    coreContext: CoreContext;
     keycloakParams:
         | (KeycloakParams & {
               organizationUserProfileAttributeName: string;
@@ -51,7 +49,6 @@ export function createRouter(params: {
 }) {
     const {
         useCases,
-        coreContext,
         dbApi,
         keycloakParams,
         jwtClaimByUserKey,
@@ -494,7 +491,7 @@ export function createRouter(params: {
                     });
                 await dbApi.agent.update({ ...agent, email: newEmail });
             }),
-        "getRegisteredUserCount": loggedProcedure.query(async () => coreContext.userApi.getUserCount()),
+        "getRegisteredUserCount": loggedProcedure.query(async () => dbApi.agent.countAll()),
         "getTotalReferentCount": loggedProcedure.query(async () => {
             const referentCount = await dbApi.softwareReferent.getTotalCount();
             return { referentCount };

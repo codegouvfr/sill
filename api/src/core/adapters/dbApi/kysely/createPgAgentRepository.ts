@@ -38,6 +38,12 @@ export const createPgAgentRepository = (db: Kysely<Database>): AgentRepository =
                     declarations: [...usersDeclarations, ...referentsDeclarations]
                 }))
             ),
+    countAll: () =>
+        db
+            .selectFrom("agents")
+            .select(qb => qb.fn.countAll<number>().as("count"))
+            .executeTakeFirstOrThrow()
+            .then(({ count }) => +count),
     getAllOrganizations: () =>
         db
             .selectFrom("agents")

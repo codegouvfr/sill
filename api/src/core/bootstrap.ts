@@ -1,5 +1,4 @@
 import { Kysely } from "kysely";
-import { createObjectThatThrowsIfAccessed } from "../tools/createObjectThatThrowsIfAccessed";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
@@ -10,13 +9,11 @@ import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVers
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
-import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
-import type { UserApi } from "./ports/UserApi";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
@@ -28,7 +25,6 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfBootstrapCore = {
     dbConfig: DbConfig;
-    keycloakUserApiParams: KeycloakUserApiParams | undefined;
     githubPersonalAccessTokenForApiRateLimit: string;
     doPerPerformPeriodicalCompilation: boolean;
     doPerformCacheInitialization: boolean;
@@ -41,7 +37,6 @@ type ParamsOfBootstrapCore = {
 export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     dbApi: DbApiV2;
-    userApi: UserApi;
     comptoirDuLibreApi: ComptoirDuLibreApi;
     getSoftwareExternalData: GetSoftwareExternalData;
     getSoftwareLatestVersion: GetSoftwareLatestVersion;
@@ -63,10 +58,8 @@ export async function bootstrapCore(
 ): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
     const {
         dbConfig,
-        keycloakUserApiParams,
         githubPersonalAccessTokenForApiRateLimit,
         doPerPerformPeriodicalCompilation,
-        doPerformCacheInitialization,
         externalSoftwareDataOrigin,
         initializeSoftwareFromSource,
         botAgentEmail,
@@ -81,20 +74,9 @@ export async function bootstrapCore(
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
-    const { userApi, initializeUserApiCache } =
-        keycloakUserApiParams === undefined
-            ? {
-                  "userApi": createObjectThatThrowsIfAccessed<Context["userApi"]>({
-                      "debugMessage": "No Keycloak server"
-                  }),
-                  "initializeUserApiCache": async () => {}
-              }
-            : createKeycloakUserApi(keycloakUserApiParams);
-
     const context: Context = {
         "paramsOfBootstrapCore": params,
         dbApi,
-        userApi,
         comptoirDuLibreApi,
         getSoftwareExternalData,
         getSoftwareLatestVersion
@@ -113,11 +95,6 @@ export async function bootstrapCore(
         }),
         getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
-
-    if (doPerformCacheInitialization) {
-        console.log("Performing user cache initialization...");
-        await initializeUserApiCache();
-    }
 
     if (initializeSoftwareFromSource) {
         if (!botAgentEmail) throw new Error("No bot agent email provided");
