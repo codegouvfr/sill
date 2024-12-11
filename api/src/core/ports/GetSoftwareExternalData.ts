@@ -12,6 +12,12 @@ export type GetSoftwareExternalData = {
     clear: (externalId: ExternalId) => void;
 };
 
+export type AuthStructure = {
+    name: string;
+    url: string | undefined;
+    parentStructure: AuthStructure[] | null;
+};
+
 export type SoftwareExternalData = {
     externalId: ExternalId;
     externalDataOrigin: ExternalDataOrigin;
@@ -19,6 +25,7 @@ export type SoftwareExternalData = {
         name: string;
         id: string | undefined;
         url: string;
+        affiliatedStructure?: AuthStructure[] | null;
     }[];
     label: LocalizedString;
     description: LocalizedString;
