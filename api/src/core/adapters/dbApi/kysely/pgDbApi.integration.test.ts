@@ -40,7 +40,7 @@ const softwareFormData: SoftwareFormData = {
 const softwareExternalData: SoftwareExternalData = {
     externalId,
     externalDataOrigin: "wikidata",
-    developers: [{ name: "Bob", id: "bob" }],
+    developers: [{ name: "Bob", id: "bob", url: `https://www.wikidata.org/wiki/bob` }],
     label: { en: "Some software" },
     description: { en: "Some software description" },
     isLibreSoftware: true,
@@ -60,7 +60,7 @@ const softwareExternalData: SoftwareExternalData = {
 const similarSoftwareExternalData: SoftwareExternalData = {
     externalId: similarExternalId,
     externalDataOrigin: "wikidata",
-    developers: [{ name: "Bobby", id: "similar-bob" }],
+    developers: [{ name: "Bobby", id: "similar-bob", url: `https://www.wikidata.org/wiki/similar-bob` }],
     label: "Some similar software",
     description: { en: "Some similar software description" },
     isLibreSoftware: true,

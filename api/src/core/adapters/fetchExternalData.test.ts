@@ -203,7 +203,8 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             id: "Q58482636",
-                            name: "Evan You"
+                            name: "Evan You",
+                            url: `https://www.wikidata.org/wiki/Q58482636`
                         }
                     ],
                     documentationUrl: "https://vitejs.dev/guide/",
@@ -256,7 +257,8 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             id: "Q489709",
-                            name: "Apache Software Foundation"
+                            name: "Apache Software Foundation",
+                            url: `https://www.wikidata.org/wiki/Q489709`
                         }
                     ],
                     documentationUrl: null,

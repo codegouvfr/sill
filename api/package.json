@@ -77,7 +77,6 @@
     },
     "dependencies": {
         "@octokit/graphql": "^7.0.2",
-        "@retorquere/bibtex-parser": "^7.0.11",
         "@trpc/server": "^10.18.0",
         "@types/pg": "^8.11.6",
         "jwt-decode": "^3.1.2",

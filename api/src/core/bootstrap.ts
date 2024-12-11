@@ -10,7 +10,6 @@ import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVers
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
-import { getHalSoftwareOptions } from "./adapters/hal/getHalSoftwareOptions";
 import { createKeycloakUserApi, type KeycloakUserApiParams } from "./adapters/userApi";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
@@ -138,9 +137,9 @@ export async function bootstrapCore(
         const frequencyOfUpdate = 1000 * 60 * 60 * 4; // 4 hours
 
         const updateSoftwareExternalData = async () => {
-            console.log("------ Updating software external data started ------");
+            console.info("------ Updating software external data started ------");
             await useCases.fetchAndSaveExternalDataForAllSoftwares();
-            console.log("------ Updating software external data finished ------");
+            console.info("------ Updating software external data finished ------");
             setTimeout(async () => {
                 await updateSoftwareExternalData();
             }, frequencyOfUpdate);
@@ -165,7 +164,7 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
             };
         case "HAL":
             return {
-                "getSoftwareExternalDataOptions": getHalSoftwareOptions,
+                "getSoftwareExternalDataOptions": halAdapter.softwareOptions.getByHalId,
                 "getSoftwareExternalData": halAdapter.softwareExternalData.getByHalId
             };
         default:
