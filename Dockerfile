@@ -34,7 +34,6 @@ COPY web/nginx.conf web/
 # to build only back run
 # docker build . --target api --tag my-api-tag`
 FROM node:20-alpine as api
-RUN npm install -g forever@4.0.3
 RUN apk add --no-cache \
   git \
   openssh-client \
@@ -42,7 +41,7 @@ RUN apk add --no-cache \
 COPY --from=build /app/api/dist/index.js .
 # For reading the version number
 COPY --from=build /app/package.json .
-ENTRYPOINT sh -c "forever index.js"
+ENTRYPOINT sh -c "node index.js"
 
 
 
