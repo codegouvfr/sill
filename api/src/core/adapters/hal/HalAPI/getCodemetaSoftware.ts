@@ -2,11 +2,20 @@ import { SoftwareApplication } from "../../../../types/codemeta";
 import { HalFetchError } from "./type";
 
 export async function fetchCodeMetaSoftwareByURL(url: string): Promise<SoftwareApplication | undefined> {
-    const res = await fetch(`${url}/codemeta`, {
-        signal: AbortSignal.timeout(10000)
-    }).catch(err => {
-        console.error(url, err);
-    });
+    let res : Response | null = null;
+
+    try {
+        res = await fetch(`${url}/codemeta`);
+    } catch(err: any) {
+        if (err && (err?.stack?.includes('TimeoutError') || err?.cause?.code === 'UND_ERR_CONNECT_TIMEOUT' || err?.cause?.code === "UND_ERR_SOCKET")) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return fetchCodeMetaSoftwareByURL(url);
+        }
+        throw new Error(err);
+    }
+
+    if (res === undefined || res === null) {
+        throw new HalFetchError(undefined);    }
 
     if (res === undefined) {
         throw new HalFetchError(undefined);
