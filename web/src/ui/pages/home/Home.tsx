@@ -280,11 +280,8 @@ const useStyles = tss.withName({ Home }).create({
 });
 
 export const { i18n } = declareComponentKeys<
-    | {
-          K: "title";
-          P: { accentColor: string };
-          R: JSX.Element;
-      }
+    | "title"
+    | "sub title"
     | "software selection"
     | "last added"
     | "most used"
@@ -299,11 +296,7 @@ export const { i18n } = declareComponentKeys<
     | "organizationCount"
     | "help us"
     | "the sill in a few words"
-    | {
-          K: "the sill in a few words paragraph";
-          P: { accentColor: string };
-          R: JSX.Element;
-      }
+    | "the sill in a few words paragraph"
     | "illustration image"
     | "declare referent title"
     | "edit software title"
@@ -314,6 +307,8 @@ export const { i18n } = declareComponentKeys<
     | "declare referent button label"
     | "edit software button label"
     | "add software or service button label"
+    | "programmerCount"
+    | "institutionCount"
 >()({ Home });
 
 const { HeroSection } = (() => {
@@ -332,10 +327,14 @@ const { HeroSection } = (() => {
             <section className={cx(classes.root, className)}>
                 <div className={classes.titleWrapper}>
                     <h2 className={classes.title}>
-                        {t("title", {
-                            "accentColor":
-                                fr.colors.decisions.text.title.blueFrance.default
-                        })}
+                        <span
+                            style={{
+                                "color": fr.colors.decisions.text.title.blueFrance.default
+                            }}
+                        >
+                            {t("title")}
+                        </span>{" "}
+                        {t("sub title")}
                     </h2>
                 </div>
                 <img
@@ -401,9 +400,7 @@ const { WhatIsTheSillSection } = (() => {
                 <Waypoint onEnter={() => setIsVisible(true)} />
                 <h2>{t("the sill in a few words")}</h2>
                 <p className={classes.paragraph}>
-                    {t("the sill in a few words paragraph", {
-                        "accentColor": fr.colors.decisions.text.title.blueFrance.default
-                    })}
+                    {t("the sill in a few words paragraph")}
                 </p>
             </section>
         );
