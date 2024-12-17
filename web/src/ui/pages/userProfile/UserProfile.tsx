@@ -117,11 +117,13 @@ export default function UserProfile(props: Props) {
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
-                                {t("badge text", {
-                                    isUser,
-                                    isTechnicalExpert,
-                                    isReferent
-                                })}
+                                {isReferent && isTechnicalExpert
+                                    ? t("badge text_expert")
+                                    : isReferent
+                                    ? t("badge text_referent")
+                                    : isUser
+                                    ? t("badge text_user")
+                                    : ""}
                             </Tag>
                             <Markdown className={classes.usecaseDescription}>
                                 {usecaseDescription}
@@ -159,14 +161,9 @@ export const { i18n } = declareComponentKeys<
     | "no description"
     | "send email"
     | "edit my profile"
-    | {
-          K: "badge text";
-          P: {
-              isUser: boolean;
-              isTechnicalExpert: boolean | undefined;
-              isReferent: boolean;
-          };
-      }
+    | "badge text_expert"
+    | "badge text_referent"
+    | "badge text_user"
 >()({ UserProfile });
 
 const useStyles = tss.withName({ UserProfile }).create({

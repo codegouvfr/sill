@@ -79,6 +79,7 @@ export default function InstanceForm(props: Props) {
     );
 
     const { classes, cx } = useStyles({ step });
+    const titleName = step === 1 ? "stepper-title_1" : "stepper-title_2";
     const { t } = useTranslation({ InstanceForm });
     const { t: tCommon } = useTranslation({ "App": null });
 
@@ -135,7 +136,7 @@ export default function InstanceForm(props: Props) {
                 <Stepper
                     currentStep={step}
                     stepCount={2}
-                    title={t("stepper title", { "currentStepIndex": step })}
+                    title={t(titleName)}
                     className={classes.stepper}
                 />
                 <InstanceFormStep1
@@ -271,6 +272,7 @@ export const { i18n } = declareComponentKeys<
     | "breadcrumb update instance"
     | "title add instance form"
     | "title update instance form"
-    | { K: "stepper title"; P: { currentStepIndex: number } }
+    | "stepper-title_1"
+    | "stepper-title_2"
     | "submit"
 >()({ InstanceForm });

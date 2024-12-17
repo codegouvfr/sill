@@ -86,14 +86,8 @@ const {
                 "not provided": "Not provided"
             },
             "Home": {
-                "title": ({ accentColor }) => (
-                    <>
-                        <span style={{ "color": accentColor }}>
-                            Recommended free software
-                        </span>{" "}
-                        for French public agencies.
-                    </>
-                ),
+                "title": "Recommended free software",
+                "sub title": "for French public agencies.",
                 "software selection": "Software selections",
                 "last added": "Recently added",
                 "most used": "Most popular",
@@ -106,58 +100,12 @@ const {
                 "registeredUserCount": "registered users",
                 "agentReferentCount": "software referents",
                 "organizationCount": "organizations",
+                "programmerCount": "",
+                "institutionCount": "",
                 "help us": "You are a public servant? Help us enrich the catalog",
                 "the sill in a few words": "The SILL in a nutshell",
-                "the sill in a few words paragraph": ({ accentColor }) => (
-                    <>
-                        <p>
-                            The Interministerial Free Software Catalog (SILL) is the
-                            reference catalog of free software recommended by DINUM for
-                            the French administration.
-                        </p>
-                        <p>
-                            It is used to help administrations navigate and select the{" "}
-                            <a
-                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                style={{ "color": accentColor }}
-                            >
-                                free software
-                            </a>{" "}
-                            to use, in accordance with{" "}
-                            <a
-                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                style={{ "color": accentColor }}
-                            >
-                                Article 16 of the Digital Republic Act
-                            </a>
-                            .
-                        </p>
-                        <p>
-                            The{" "}
-                            <a
-                                href="https://code.gouv.fr/sill/readme"
-                                style={{ "color": accentColor }}
-                            >
-                                entry criteria
-                            </a>{" "}
-                            for software in the SILL include the publication of its source
-                            code under an{" "}
-                            <a
-                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                style={{ "color": accentColor }}
-                            >
-                                accepted free software license
-                            </a>{" "}
-                            and its deployment by a public institution or installation by
-                            a public agent.
-                        </p>
-                        <p>
-                            The SILL referents are public agents who volunteer to manage
-                            and update information on the software included in the
-                            catalog.
-                        </p>
-                    </>
-                ),
+                // TODO HTML
+                "the sill in a few words paragraph": "test xdmvglkdxfngvkjl",
                 "illustration image": "Illustration image",
                 "declare referent title": "Declare yourself as a referent",
                 "edit software title": "Edit a software entry",
@@ -173,6 +121,7 @@ const {
                 "add software or service button label": "Complete the addition form"
             },
             "AddSoftwareLanding": {
+                // TODO HTML
                 "title": (
                     <>
                         <span>Are you a public servant? </span> Add free software or
@@ -183,6 +132,7 @@ const {
                     "Contribute to the creation of a reference platform for public service software equipment and share valuable information with agents and CIOs in the administration",
                 "who can add software": "Who can add software or a service, and how?",
                 "discover as agent label": "Discover as an agent",
+                // TODO HTML
                 "discover as agent description": (
                     <>
                         As a public agent, using the SILL (Interministerial Free Software
@@ -209,6 +159,7 @@ const {
                     </>
                 ),
                 "discover as DSI label": "Discover as CIO",
+                // TODO HTML
                 "discover as DSI description": (
                     <>
                         As a Chief Information Officer (CIO), using the SILL offers
@@ -237,6 +188,7 @@ const {
                     </>
                 ),
                 "contribute as agent label": "Contribute as agent",
+                // TODO HTML
                 "contribute as agent description": (
                     <>
                         As a public official, contributing to the SILL allows you to add
@@ -268,6 +220,7 @@ const {
                     </>
                 ),
                 "contribute as DSI label": "Contribute as CIO",
+                // TODO HTML
                 "contribute as DSI description": (
                     <>
                         As a Director of Information Systems (CIO), contributing to the
@@ -300,6 +253,7 @@ const {
                 )
             },
             "SoftwareForm": {
+                // TODO SWITCH
                 "stepper title": ({ currentStepIndex, softwareName, action }) => {
                     switch (currentStepIndex) {
                         case 1:
@@ -347,8 +301,6 @@ const {
             "SoftwareFormStep2": {
                 "external id": externalId("en"),
                 "external id hint": externalIdHint("en"),
-                // "wikidata id information":
-                //     "This information will automatically populate other fields",
                 "comptoir du libre id": "Comptoir du Libre identifier (optional)",
                 "comptoir du libre id hint":
                     "If you the software is listed in the Comptoir du Libre you can add its identifier here. The identifier is either a numeric id or the url of the product page.",
@@ -391,16 +343,8 @@ const {
                 "breadcrumb update instance": "Update instance",
                 "title add instance form": "Add software instance",
                 "title update instance form": "Update software instance",
-                "stepper title": ({ currentStepIndex }) => {
-                    switch (currentStepIndex) {
-                        case 1:
-                            return "About the instantiated software";
-                        case 2:
-                            return "About the instance";
-                        default:
-                            return "";
-                    }
-                },
+                "stepper-title_1": "About the instantiated software",
+                "stepper-title_2": "About the instance",
                 "submit": "Add instance"
             },
             "InstanceFormStep1": {
@@ -543,6 +487,7 @@ const {
                 "isRGAACompliant": "Is compliant with RGAA rules",
                 "comptoire du libre sheet": "Open Comptoir du libre sheet",
                 "wikiData sheet": "Open Wikidata sheet",
+                // TODO HTML
                 "what is the support market": ({ url }) => (
                     <>
                         The DGFIP manages two inter-ministerial markets: support (Atos)
@@ -589,6 +534,7 @@ const {
             },
             "CnllServiceProviderModal": {
                 "close": "Close",
+                // TODO HTML
                 "content description": ({ cnllWebsiteUrl, softwareName, count }) => (
                     <>
                         {count} service provider{count === 1 ? "" : "s"} listed in the
@@ -601,6 +547,7 @@ const {
                 "modal title": "CNLL service providers"
             },
             "DetailUsersAndReferents": {
+                // TODO HTML
                 "userAndReferentCount": ({ userCount, referentCount, referentColor }) => (
                     <>
                         {userCount !== 0 && <>{userCount} users and </>}
@@ -672,6 +619,7 @@ const {
                 Share your experiences here, how you use or contribute to open source, and any information you 
                 wish to highlight within the SILL community.`,
                 "isPublic label": "Public Profile",
+                // TODO HTML
                 "isPublic hint": ({ profileLik }) => (
                     <>
                         By enabling this option &nbsp;
@@ -687,18 +635,9 @@ const {
                 "send email": "Send an email to this person",
                 "no description": "The user has not written a description yet",
                 "edit my profile": "Edit my profile",
-                "badge text": ({ isReferent, isTechnicalExpert, isUser }) => {
-                    if (isReferent && isTechnicalExpert) {
-                        return "Technical expert referent";
-                    }
-                    if (isReferent) {
-                        return "Referent";
-                    }
-                    if (isUser) {
-                        return "User";
-                    }
-                    assert(false);
-                }
+                "badge text_expert": "Technical expert referent",
+                "badge text_referent": "Referent",
+                "badge text_user": "User"
             },
             "Header": {
                 "home title": "Home - Interministerial Free Software Catalog",
@@ -722,15 +661,9 @@ const {
             "DeclarationRemovalModal": {
                 "confirm": "Confirm",
                 "cancel": "Cancel",
-                "do you confirm": ({ declarationType, softwareName }) =>
-                    `Do you confirm that you're no longer ${(() => {
-                        switch (declarationType) {
-                            case "referent":
-                                return "willing to be referent of";
-                            case "user":
-                                return "using";
-                        }
-                    })()} ${softwareName}?`,
+                "do you confirm_referent":
+                    "Do you confirm that you're no longer willing to be referent of",
+                "do you confirm_using": "Do you confirm that you're no longer using",
                 "stop being user/referent": ({ declarationType, softwareName }) =>
                     `Stop being a ${declarationTypeToEnglish[declarationType]} of ${softwareName}`
             },
@@ -770,14 +703,8 @@ const {
                 "not provided": "Non Renseigné"
             },
             "Home": {
-                "title": ({ accentColor }) => (
-                    <>
-                        <span style={{ "color": accentColor }}>
-                            Catalogue de référence de logiciels libres
-                        </span>{" "}
-                        recommandés pour l'ensemble de l'administration.
-                    </>
-                ),
+                "title": "Catalogue de référence de logiciels libres",
+                "sub title": "recommandés pour l'ensemble de l'administration.",
                 "software selection": "Sélections de logiciels",
                 "last added": "Ajouts récents",
                 "most used": "Les plus populaires",
@@ -790,63 +717,17 @@ const {
                 "registeredUserCount": "utilisateurs inscrits",
                 "agentReferentCount": "référents logiciels",
                 "organizationCount": "organismes présents",
+                "programmerCount": "english", // TODO
+                "institutionCount": "english", // TODO
                 "help us":
                     "Vous êtes agent public ? Aidez-nous à enrichir le catalogue !",
                 "declare referent title":
                     "Se déclarer utilisateur ou référent d'un logiciel",
                 "edit software title": "Modifier une fiche logiciel",
                 "the sill in a few words": "Le SILL en quelques mots",
-                "the sill in a few words paragraph": ({ accentColor }) => (
-                    <>
-                        <p>
-                            Le Socle Interministériel de Logiciels Libres (SILL) est un
-                            catalogue de référence des logiciels libres recommandés pour
-                            l' administration française.
-                        </p>
-                        <p>
-                            Il est utilisé pour aider les administrations à naviguer et
-                            sélectionner les{" "}
-                            <a
-                                href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                style={{ "color": accentColor }}
-                            >
-                                logiciels libres
-                            </a>{" "}
-                            à utiliser, conformément à l'
-                            <a
-                                href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                style={{ "color": accentColor }}
-                            >
-                                article 16 de la loi pour une République numérique
-                            </a>
-                            .
-                        </p>
-                        <p>
-                            Les{" "}
-                            <a
-                                href="https://code.gouv.fr/sill/readme"
-                                style={{ "color": accentColor }}
-                            >
-                                critères d'entrée
-                            </a>{" "}
-                            d'un logiciel dans le SILL comprennent la publication de son
-                            code source sous une{" "}
-                            <a
-                                href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                style={{ "color": accentColor }}
-                            >
-                                licence libre acceptée
-                            </a>{" "}
-                            et son déploiement par un établissement public ou son
-                            installation par un agent public.
-                        </p>
-                        <p>
-                            Les référents SILL sont des agents publics qui se portent
-                            volontaires pour gérer et mettre à jour les informations sur
-                            les logiciels inclus dans le catalogue.
-                        </p>
-                    </>
-                ),
+                // TODO HTML
+                "the sill in a few words paragraph":
+                    "Text : the sill in a few words paragraph",
                 "illustration image": "Image d'illustration",
                 "add software or service title": "Ajouter un logiciel ou un service",
                 "declare referent desc":
@@ -860,6 +741,7 @@ const {
                 "add software or service button label": "Compléter le formulaire d'ajout"
             },
             "AddSoftwareLanding": {
+                // TODO HTML
                 "title": (
                     <>
                         <span>Vous êtes agent public ? </span>Ajoutez des logiciels libres
@@ -872,6 +754,7 @@ const {
                 "who can add software":
                     "Qui peut ajouter un logiciel ou un service et comment faire ?",
                 "discover as agent label": "Découvrir en tant qu'agent",
+                // TODO HTML
                 "discover as agent description": (
                     <>
                         En tant qu'agent public, utiliser le SILL (Socle Interministériel
@@ -900,6 +783,7 @@ const {
                     </>
                 ),
                 "discover as DSI label": "Découvrir en tant que DSI",
+                // TODO HTML
                 "discover as DSI description": (
                     <>
                         En tant que Directeur des Systèmes d'Information (DSI), utiliser
@@ -930,6 +814,7 @@ const {
                     </>
                 ),
                 "contribute as agent label": "Contribuer en tant qu'agent",
+                // TODO HTML
                 "contribute as agent description": (
                     <>
                         En tant qu'agent public, contribuer au SILL vous permet d'apporter
@@ -958,6 +843,7 @@ const {
                     </>
                 ),
                 "contribute as DSI label": "Contribuer en tant que DSI",
+                // TODO HTML
                 "contribute as DSI description": (
                     <>
                         En tant que Directeur des Systèmes d'Information (DSI), contribuer
@@ -989,6 +875,7 @@ const {
                 )
             },
             "SoftwareForm": {
+                // TODO SWITCH
                 "stepper title": ({ currentStepIndex, softwareName, action }) => {
                     switch (currentStepIndex) {
                         case 1:
@@ -1083,16 +970,8 @@ const {
                 "breadcrumb update instance": "Mettre à jour une instance",
                 "title add instance form": "Ajouter une instance de logiciel",
                 "title update instance form": "Mettre à jour une instance de logiciel",
-                "stepper title": ({ currentStepIndex }) => {
-                    switch (currentStepIndex) {
-                        case 1:
-                            return "À propos du logiciel instancié";
-                        case 2:
-                            return "À propos de l'instance";
-                        default:
-                            return "";
-                    }
-                },
+                "stepper-title_1": "À propos du logiciel instancié",
+                "stepper-title_2": "À propos de l'instance",
                 "submit": "Ajouter"
             },
             "InstanceFormStep1": {
@@ -1243,6 +1122,7 @@ const {
                 "isRGAACompliant": "Respecte les normes RGAA",
                 "comptoire du libre sheet": "Consulter la fiche du Comptoir du Libre",
                 "wikiData sheet": "Consulter la fiche de Wikidata",
+                // TODO HTML
                 "what is the support market": ({ url }) => (
                     <>
                         La DGFIP pilote deux marchés interministériels : support (Atos) et
@@ -1288,6 +1168,7 @@ const {
             },
             "CnllServiceProviderModal": {
                 "close": "Fermer",
+                // TODO HTML
                 "content description": ({ cnllWebsiteUrl, softwareName, count }) => (
                     <>
                         {count} fournisseur{count === 0 ? "" : "s"} de services listé dans
@@ -1301,6 +1182,7 @@ const {
                 "modal title": "Fournisseur de service de l'anuaire CNLL"
             },
             "DetailUsersAndReferents": {
+                // TODO HTML
                 "userAndReferentCount": ({ userCount, referentCount, referentColor }) => {
                     return (
                         <>
@@ -1380,6 +1262,7 @@ const {
                 Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations 
                 que vous souhaitez mettre en avant au sein de la communauté du SILL.`,
                 "isPublic label": "Profil Public",
+                // TODO HTML
                 "isPublic hint": ({ profileLik }) => (
                     <>
                         En activant cette option,&nbsp;{" "}
@@ -1396,18 +1279,9 @@ const {
                 "no description":
                     "Cet agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
                 "edit my profile": "Modifier mon profil",
-                "badge text": ({ isReferent, isTechnicalExpert, isUser }) => {
-                    if (isReferent && isTechnicalExpert) {
-                        return "Référent expert technique";
-                    }
-                    if (isReferent) {
-                        return "Référent";
-                    }
-                    if (isUser) {
-                        return "Utilisateur";
-                    }
-                    assert(false);
-                }
+                "badge text_expert": "Référent expert technique",
+                "badge text_referent": "Référent",
+                "badge text_user": "Utilisateur"
             },
             "Header": {
                 "home title": "Accueil - Socle Interministériel des Logiciels Libres",
@@ -1431,15 +1305,9 @@ const {
             "DeclarationRemovalModal": {
                 "confirm": "Confirmer",
                 "cancel": "Annuler",
-                "do you confirm": ({ declarationType, softwareName }) =>
-                    `Confirmez vous ${(() => {
-                        switch (declarationType) {
-                            case "referent":
-                                return "ne plus vouloir être référent de";
-                            case "user":
-                                return "ne plus utiliser";
-                        }
-                    })()} ${softwareName}?`,
+                "do you confirm_referent":
+                    "Confirmez vous ne plus vouloir être référent de",
+                "do you confirm_using": "Confirmez vous ne plus utiliser",
                 "stop being user/referent": ({ declarationType, softwareName }) =>
                     `Ne plus être ${declarationTypeToFrench[declarationType]} de ${softwareName}`
             },
@@ -1558,6 +1426,7 @@ function externalId(language: Language) {
     };
 }
 
+// TODO Dual case
 function externalIdHint(language: Language) {
     return (externalDataOrigin: ExternalDataOrigin) => {
         const {

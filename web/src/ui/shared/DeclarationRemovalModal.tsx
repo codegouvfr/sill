@@ -86,7 +86,10 @@ export function DeclarationRemovalModal() {
                 }
             ]}
         >
-            {t("do you confirm", { softwareName, declarationType })}
+            {declarationType === "referent"
+                ? t("do you confirm_referent")
+                : t("do you confirm_using")}{" "}
+            {softwareName} ?
         </modal.Component>
     );
 }
@@ -99,8 +102,6 @@ export const { i18n } = declareComponentKeys<
           K: "stop being user/referent";
           P: { softwareName: string; declarationType: DeclarationType };
       }
-    | {
-          K: "do you confirm";
-          P: { softwareName: string; declarationType: DeclarationType };
-      }
+    | "do you confirm_referent"
+    | "do you confirm_using"
 >()({ DeclarationRemovalModal });
