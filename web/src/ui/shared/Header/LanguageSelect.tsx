@@ -3,6 +3,7 @@ import {
     addLanguageSelectTranslations
 } from "@codegouvfr/react-dsfr/LanguageSelect";
 import { useLang, languages } from "ui/i18n";
+import i18n from '../../i18n/i18next';
 
 type Props = {
     id?: string;
@@ -18,7 +19,10 @@ export function LanguageSelect(props: Props) {
             id={id}
             supportedLangs={languages}
             lang={lang}
-            setLang={setLang}
+            setLang={(lang: any) => {
+                setLang(lang);
+                i18n.changeLanguage(lang);
+            }}
             fullNameByLang={{
                 en: "English",
                 fr: "Français"

@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { MuiDsfrThemeProvider } from "@codegouvfr/react-dsfr/mui";
 import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
 import { assert } from "tsafe/assert";
+import './ui/i18n/i18next';
 startReactDsfr({ "defaultColorScheme": "system" });
 
 const App = lazy(() => import("ui/App"));

@@ -4,7 +4,6 @@ import { keyframes } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -19,6 +18,7 @@ import { ReactComponent as HomepageWaveSvg } from "ui/assets/homepage_wave.svg";
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     className?: string;
@@ -31,43 +31,43 @@ export default function Home(props: Props) {
     assert<Equals<typeof rest, {}>>();
 
     const { cx, classes, css } = useStyles();
-    const { t } = useTranslation({ Home });
+    const { t } = useTranslation();
 
     const stats = useCoreState("generalStats", "main");
 
     const softwareSelectionList = [
         {
-            "title": t("last added"),
+            "title": t("home.lastAdded"),
             "linkProps": routes.softwareCatalog({
                 "sort": "added_time"
             }).link
         },
         {
-            "title": t("most used"),
+            "title": t("home.mostUsed"),
             "linkProps": routes.softwareCatalog({
                 "sort": "user_count"
             }).link
         },
         {
-            "title": t("essential"),
+            "title": t("home.essential"),
             "linkProps": routes.softwareCatalog({
                 "prerogatives": ["isInstallableOnUserComputer"]
             }).link
         },
         {
-            "title": t("recently updated"),
+            "title": t("home.recentlyUpdated"),
             "linkProps": routes.softwareCatalog({
                 "sort": "latest_version_publication_date"
             }).link
         },
         {
-            "title": t("waiting for referent"),
+            "title": t("home.waitingForReferent"),
             "linkProps": routes.softwareCatalog({
                 "sort": "referent_count_ASC"
             }).link
         },
         {
-            "title": t("in support market"),
+            "title": t("home.inSupportMarket"),
             "linkProps": routes.softwareCatalog({
                 "prerogatives": ["isPresentInSupportContract"]
             }).link
@@ -92,9 +92,10 @@ export default function Home(props: Props) {
                     })}
                 />
             </div>
+
             <section className={cx(classes.softwareSelectionBackground, classes.section)}>
                 <div className={fr.cx("fr-container")}>
-                    <h2 className={classes.titleSection}>{t("software selection")}</h2>
+                    <h2 className={classes.titleSection}>{t("home.softwareSelection")}</h2>
                     <div className={classes.softwareSelection}>
                         {softwareSelectionList.map(({ title, linkProps }) => (
                             <Tile key={title} title={title} linkProps={linkProps} />
@@ -110,7 +111,7 @@ export default function Home(props: Props) {
             <section className={cx(classes.sillNumbersBackground, classes.section)}>
                 <div className={cx(fr.cx("fr-container"), classes.sillNumbersContainer)}>
                     <h1 className={cx(classes.whiteText, classes.SillNumberTitle)}>
-                        {t("SILL numbers")}
+                        {t("home.SILLNumbers")}
                     </h1>
                     <div className={classes.sillNumberList}>
                         {(
@@ -130,7 +131,7 @@ export default function Home(props: Props) {
                                     )}
                                     metricValue={stats[metricName]}
                                 />
-                                <h4 className={classes.whiteText}>{t(metricName)}</h4>
+                                <h4 className={classes.whiteText}>{t(`home.${metricName}`)}</h4>
                             </div>
                         ))}
                     </div>
@@ -138,21 +139,21 @@ export default function Home(props: Props) {
             </section>
             <div className={cx(classes.helpUsBackground, classes.section)}>
                 <div className={cx(fr.cx("fr-container"))}>
-                    <h2 className={classes.titleSection}>{t("help us")}</h2>
+                    <h2 className={classes.titleSection}>{t("home.helpUs")}</h2>
                     <div className={classes.helpUsCards}>
                         {(
                             [
-                                "declare referent",
-                                "edit software",
-                                "add software or service"
+                                "declareReferent",
+                                "editSoftware",
+                                "addSoftwareOrService"
                             ] as const
                         ).map(cardName => {
                             const link = (() => {
                                 switch (cardName) {
-                                    case "add software or service":
+                                    case "addSoftwareOrService":
                                         return routes.addSoftwareLanding().link;
-                                    case "declare referent":
-                                    case "edit software":
+                                    case "declareReferent":
+                                    case "editSoftware":
                                         return routes.softwareCatalog().link;
                                 }
                             })();
@@ -168,23 +169,23 @@ export default function Home(props: Props) {
                                         })
                                     }}
                                     key={cardName}
-                                    title={t(`${cardName} title`)}
-                                    desc={t(`${cardName} desc`)}
-                                    imageAlt={t("illustration image")}
+                                    title={t(`home.${cardName}Title`)}
+                                    desc={t(`home.${cardName}Desc`)}
+                                    imageAlt={t("home.illustrationImage")}
                                     linkProps={link}
                                     imageUrl={(() => {
                                         switch (cardName) {
-                                            case "declare referent":
+                                            case "declareReferent":
                                                 return humanCooperationSvgUrl;
-                                            case "edit software":
+                                            case "editSoftware":
                                                 return documentSvgUrl;
-                                            case "add software or service":
+                                            case "addSoftwareOrService":
                                                 return codingSvgUrl;
                                         }
                                     })()}
                                     footer={
                                         <Button priority="primary" linkProps={link}>
-                                            {t(`${cardName} button label`)}
+                                            {t(`home.${cardName}ButtonLabel`)}
                                         </Button>
                                     }
                                     enlargeLink={false}
@@ -321,7 +322,7 @@ const { HeroSection } = (() => {
 
         const { cx, classes } = useStyles();
 
-        const { t } = useTranslation({ Home });
+        const { t } = useTranslation();
 
         return (
             <section className={cx(classes.root, className)}>
@@ -332,9 +333,9 @@ const { HeroSection } = (() => {
                                 "color": fr.colors.decisions.text.title.blueFrance.default
                             }}
                         >
-                            {t("title")}
+                            {t("home.title")}
                         </span>{" "}
-                        {t("sub title")}
+                        {t("home.subTitle")}
                     </h2>
                 </div>
                 <img
@@ -393,14 +394,14 @@ const { WhatIsTheSillSection } = (() => {
 
         const { cx, classes } = useStyles({ isVisible });
 
-        const { t } = useTranslation({ Home });
+        const { t } = useTranslation();
 
         return (
             <section className={cx(classes.root, className)}>
                 <Waypoint onEnter={() => setIsVisible(true)} />
-                <h2>{t("the sill in a few words")}</h2>
+                <h2>{t("home.theSillInAFewWords")}</h2>
                 <p className={classes.paragraph}>
-                    {t("the sill in a few words paragraph")}
+                    {t("home.theSillInAFewWordsParagraph")}
                 </p>
             </section>
         );

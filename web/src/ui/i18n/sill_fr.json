@@ -1,0 +1,37 @@
+{
+    "common": {
+        "user": "utilissateur",
+        "referent": "référent"
+    },
+    "home": {
+        "title": "Catalogue de référence de logiciels libres",
+        "subTitle": "recommandés pour l'ensemble de l'administration.",
+        "softwareSelection": "Sélections de logiciels",
+        "lastAdded": "Ajouts récents",
+        "mostUsed": "Les plus populaires",
+        "essential": "Indispensables sur votre poste",
+        "recentlyUpdated": "Mises à jour récentes",
+        "waitingForReferent": "En attente d'un référent",
+        "inSupportMarket": "Disponible dans le marché du support",
+        "SILLnumbers": "Le SILL en chiffres",
+        "softwareCount": "logiciels référencés",
+        "registeredUserCount": "utilisateurs inscrits",
+        "agentReferentCount": "référents logiciels",
+        "organizationCount": "organismes présents",
+        "programmerCount": "english",
+        "institutionCount": "english",
+        "helpUs": "Vous êtes agent public ? Aidez-nous à enrichir le catalogue !",
+        "declareReferentTitle": "Se déclarer utilisateur ou référent d'un logiciel",
+        "editSoftwareTitle": "Modifier une fiche logiciel",
+        "theSillInAFewWords": "Le SILL en quelques mots",
+        "theSillInAFewWordsParagraph": "Text : the sill in a few words paragraph",
+        "illustrationImage": "Image d'illustration",
+        "addSoftwareOrServiceTitle": "Ajouter un logiciel ou un service",
+        "declareReferentDesc": "Se porter volontaire pour gérer et mettre à jour les informations sur les logiciels du SILL",
+        "editSoftwareDesc": "Modifier les informations d'un logiciel existant dans le catalogue SILL",
+        "addSoftwareOrServiceDesc": "Proposer un nouveau logiciel ou service pour inclusion dans le catalogue SILL",
+        "declareReferentButtonLabel": "Accéder au formulaire",
+        "editSoftwareButtonLabel": "Rechercher un logiciel",
+        "addSoftwareOrServiceButtonLabel": "Compléter le formulaire d'ajout"
+    }
+}
