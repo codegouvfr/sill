@@ -1,0 +1,37 @@
+{
+    "common": {
+        "user": "user",
+        "referent": "referent"
+    },
+    "home": {
+        "title": "Recommended free software",
+        "subTitle": "for French public agencies.",
+        "softwareSelection": "Software selections",
+        "lastAdded": "Recently added",
+        "mostUsed": "Most popular",
+        "essential": "Essentials for your desktop or your mobile phone",
+        "recentlyUpdated": "Recently updated",
+        "waitingForReferent": "Awaiting a referent",
+        "inSupportMarket": "Support available",
+        "SILLNumbers": "The SILL in figures",
+        "softwareCount": "referenced software",
+        "registeredUserCount": "registered users",
+        "agentReferentCount": "software referents",
+        "organizationCount": "organizations",
+        "programmerCount": "",
+        "institutionCount": "",
+        "helpUs": "You are a public servant? Help us enrich the catalog",
+        "theSillInAFewWords": "The SILL in a nutshell",
+        "theSillInAFewWordsParagraph": "test xdmvglkdxfngvkjl",
+        "illustrationImage": "Illustration image",
+        "declareReferentTitle": "Declare yourself as a referent",
+        "editSoftwareTitle": "Edit a software entry",
+        "addSoftwareOrServiceTitle": "Add a software or service",
+        "declareReferentDesc": "Become a volunteer public agent to manage and update information on SILL software",
+        "editSoftwareDesc": "Modify the information of an existing software in the SILL catalog",
+        "addSoftwareOrServiceDesc": "Propose a new software or service for inclusion in the SILL catalog",
+        "declareReferentButtonLabel": "Access the form",
+        "editSoftwareButtonLabel": "Search for software",
+        "addSoftwareOrServiceButtonLabel": "Complete the addition form"
+    }
+}
