@@ -40,7 +40,7 @@ issues.
 
 # Licence
 
-2021-2024 Direction interministérielle du numérique, mission logiciels
+2021-2025 Direction interministérielle du numérique, mission logiciels
 libres.
 
 Le code de ce dépôt est publié sous [licence MIT](LICENSES/MIT.txt).
