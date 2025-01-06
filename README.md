@@ -20,7 +20,7 @@ La documentation est en cours de mise à jour pour refléter ces changements.
 
 # Contribuer
 
-Voir le fichier [CONTRIBUTING.md].
+Voir [ces instructions](CONTRIBUTING.md).
 
 # Gouvernance
 
