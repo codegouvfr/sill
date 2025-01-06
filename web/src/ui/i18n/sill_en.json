@@ -1,7 +1,33 @@
 {
     "common": {
-        "user": "user",
-        "referent": "referent"
+        "user_one": "user",
+        "user_other": "users",
+        "referent_one": "referent",
+        "referent_others": "referents",
+        "provider_one": "provider",
+        "providers_other": "providers"
+    },
+    "app": {
+        "yes": "Yes",
+        "no": "No",
+        "not applicable": "Not applicable",
+        "previous": "Previous",
+        "next": "Next",
+        "add software": "Add Software",
+        "update software": "Update Software",
+        "add software or service": "Add Software or Service",
+        "add instance": "Add Instance",
+        "update instance": "Update Instance",
+        "required": "This field is required",
+        "invalid url": "Invalid URL. It must start with \"http\"",
+        "invalid version": "The value must be numeric (e.g., 2.0.1)",
+        "all": "All",
+        "allFeminine": "All",
+        "loading": "Loading...",
+        "no result": "No results",
+        "search": "Search",
+        "validate": "Validate",
+        "not provided": "Not provided"
     },
     "home": {
         "title": "Recommended free software",
@@ -33,5 +59,339 @@
         "declareReferentButtonLabel": "Access the form",
         "editSoftwareButtonLabel": "Search for software",
         "addSoftwareOrServiceButtonLabel": "Complete the addition form"
+    },
+    "AddSoftwareLanding": {
+        "title": "<span>TODO Are you a public servant? </span> Add free software or instances of free software used or deployed in your organization!",
+        "subtitle": "Contribute to the creation of a reference platform for public service software equipment and share valuable information with agents and CIOs in the administration",
+        "who can add software": "Who can add software or a service, and how?",
+        "discover as agent label": "Discover as an agent",
+        "discover as agent description": "As a public agent, using the SILL (Interministerial Free Software Catalog) offers several benefits. <br /> Firstly, it simplifies the process of searching for and selecting free software recommended by DINUM, ensuring the quality, security, and compliance of tools used within the administration. <br /> Moreover, the SILL encourages collaboration between public agents from different public functions (State, Hospital, and Territorial), fostering the exchange of experiences and best practices. <br /> By using software referenced in the SILL, public agents contribute to the control, sustainability, and independence of their administration's information systems, in accordance with Article 16 of the Digital Republic Act. <br /> Lastly, by becoming a SILL referent for a free software, a public agent can not only share their expertise and knowledge but also benefit from the support and advice of the SILL referent community and DINUM's free software mission.",
+        "discover as DSI label": "Discover as CIO",
+        "discover as DSI description": "As a Chief Information Officer (CIO), using the SILL offers numerous advantages for managing and evolving your administration's information systems. <br /> The SILL streamlines the assessment and selection of free software recommended by DINUM, thus ensuring compliance, quality, and security of the implemented solutions. <br /> Moreover, using software referenced in the SILL contributes to strengthening the independence, control, and sustainability of information systems, in line with the Digital Republic Act. <br /> The SILL also allows benefiting from the shared experiences and best practices of the SILL referent community and DINUM's free software mission, fostering inter-administrative cooperation. <br /> Furthermore, adopting free software can generate savings on licensing and maintenance costs while encouraging innovation and interoperability. <br /> Ultimately, as a CIO, the SILL can help optimize the management of IT resources and promote a culture of openness and collaboration within the administration.",
+        "contribute as agent label": "Contribute as agent",
+        "contribute as agent description": "As a public official, contributing to the SILL allows you to add value to the community by sharing your knowledge and facilitating the adoption of open-source software within the administration. <br /> Contributing mainly involves adding software and becoming a point of reference for them. <br /> By adding open-source software to the SILL, you help other public servants discover reliable and high-performing solutions that meet their needs. <br /> Becoming a point of reference for a software allows you to attest to its use within your administration, contribute to updating relevant information about the software (minimum recommended version, fact sheet, etc.), and agree to be contacted by other public servants to discuss the software in question. <br /> As a SILL point of reference, you can also subscribe to the SILL maintainers' discussion list and participate in maintainers' meetings, thereby strengthening cooperation and experience sharing within the community of points of reference. <br /> In short, contributing to the SILL as a public servant provides you with the opportunity to develop your expertise, help your colleagues, and promote the use of open-source software within the administration.",
+        "contribute as DSI label": "Contribute as CIO",
+        "contribute as DSI description": "As a Director of Information Systems (CIO), contributing to the SILL allows you to improve and support the free software ecosystem within the administration, while sharing your expertise and promoting innovation. <br /> Contributing mainly involves adding software and becoming a reference for them. By adding a free software to the SILL, you help other administrations identify proven and effective solutions that meet their needs, while strengthening interoperability and inter-administrative collaboration. <br /> Becoming a reference for a software allows you to attest to its deployment within your administration, contribute to updating relevant information about the software (recommended minimum version, datasheet, etc.), and agree to be contacted by other public agents to discuss the software in question. <br /> As a SILL reference, you can also sign up for the SILL maintainers' discussion list and participate in maintainers' meetings, thus strengthening cooperation and experience sharing within the community of references. <br /> In short, contributing to the SILL as a CIO offers you the opportunity to promote the use of free software, develop your expertise, and encourage a culture of openness and collaboration within the administration."
+    },
+    "SoftwareForm": {
+        "stepper title_add_unnamed": "What type of software do you want to add?",
+        "stepper title_add_named": "What type of software is {{softwareName}}?",
+        "stepper title_update": "Modify the type of software of {{softwareName}}",
+        "stepper title_info_unnamed": "Information",
+        "stepper title_info_named": "$t(SoftwareForm.stepper title_info_unnamed) about {{softwareName}}",
+        "stepper title_prerequisites_unnamed": "Prerequisites",
+        "stepper title_prerequisites_named": "$t(SoftwareForm.stepper title_prerequisites_unnamed) of {{softwareName}}",
+        "stepper title_similar_software_unnamed": "Similar and equivalent software",
+        "stepper title_similar_software_named": "$t(SoftwareForm.stepper title_similar_software_unnamed) of {{softwareName}}",
+        "add unamed software": "Add software",
+        "add software": "Add ${name}",
+        "update software": "Update {name}",
+        "add software button": "Add {{name}} to the SILL",
+        "update software button": "Update {{name}}"
+    },
+    "SoftwareFormStep1": {
+        "software desktop": "Desktop or mobile installable software",
+        "software cloud": "Application software solution hosted in the cloud",
+        "software cloud hint": "Public cloud or your organization's cloud",
+        "module": "Brick or technical modules",
+        "module hint": "For example proxies, HTTP servers or plugins",
+        "checkbox legend": "Operating system on which the software can be installed"
+    },
+    "SoftwareFormStep2": {
+        "external id": "Wikidata item",
+        "external id hint_fill": "Fill up a name or directly the id (of the form <code>Qxxxxx</code>) to associate the software with an existing entry <space /><dataSource>Wikidata</dataSource>.<br />Most general information, such as the logo or the URL of the code repository, is extracted from Wikidata. If the software you want to add does not have a Wikidata entry yet, you can create one . Find here an <space /><dataSourceEntry>example of a Wikidata entry</dataSourceEntry><space />for the software<space /><exampleUrl /><space />.",
+        "comptoir du libre id": "Comptoir du Libre identifier (optional)",
+        "comptoir du libre id hint": "If you the software is listed in the Comptoir du Libre you can add its identifier here. The identifier is either a numeric id or the url of the product page.",
+        "software name": "Software name",
+        "software feature": "Software function",
+        "software feature hint": "Describe in a few words the features of the software",
+        "license": "Software license",
+        "license hint": "(GNU, GPL, BSD, etc.)",
+        "minimal version": "Minimum version",
+        "minimal version hint": "Earliest version still acceptable to have in production",
+        "url or numeric id": "This field must be a URL or an ID number",
+        "autofill notice": "This information will automatically populate other fields",
+        "logo url": "URL of the software logo",
+        "logo url hint": "The url must Access-Control-Allow-Origin: * (CORS)",
+        "must be an url": "Must be an URL",
+        "keywords": "Keywords",
+        "keywords hint": "Keywords for making it pop up in the search results, coma separated",
+        "logo preview alt": "Preview of the logo",
+        "invalid comptoir du libre id": "Comptoir du libre ID should be a numeric id or a comptoir du libre url"
+    },
+    "SoftwareFormStep3": {
+        "is present in support market": "Is the software present in the support market?",
+        "is from french public service": "Is the software developed by the French public service?",
+        "do respect RGAA": "Is the software compliant with RGAA rules?"
+    },
+    "SoftwareFormStep4": {
+        "similar software": "This software is an alternative to ...",
+        "similar software hint": "Associate the software with similar software, proprietary or not"
+    },
+    "InstanceForm": {
+        "breadcrumb add instance": "Add instance",
+        "breadcrumb update instance": "Update instance",
+        "title add instance form": "Add software instance",
+        "title update instance form": "Update software instance",
+        "stepper-title_1": "About the instantiated software",
+        "stepper-title_2": "About the instance",
+        "submit": "Add instance"
+    },
+    "InstanceFormStep1": {
+        "software instance": "What is the primary software used and deployed by your instance?",
+        "other software": "Are there other software mobilized by your instance?"
+    },
+    "InstanceFormStep2": {
+        "is in public access label": "Is your instance publicly accessible?*",
+        "is in public access hint": "*Within the public service",
+        "instance url label": "What is the URL of the instance ? (mandatory in the case of a public instance)",
+        "instance url hint": "In order to offer quick access to the service offered",
+        "organization label": "Which organization is involved?",
+        "organization hint": "What is the state organization that maintains this instance?",
+        "targeted public label": "Who is the target audience?",
+        "targeted public hint": "Describe in a few words to whom the service offer is proposed"
+    },
+    "softwareCatalogControlled": {
+        "searchResults": "{{count}} free software",
+        "sortBy": "Sort by",
+        "addedTime": "Last added",
+        "updateTime": "Last updated",
+        "referentCount": "Referent count",
+        "referentCountASC": "Referent count ASC",
+        "userCount": "User count",
+        "userCountASC": "User count ASC",
+        "latestVersionPublicationDate": "Last published version",
+        "noSoftwareFound": "No software found",
+        "bestMatch": "Best match",
+        "mySoftware": "My software"
+    },
+    "softwareCatalogCard": {
+        "latestVersion": "Latest version {{fromNowText}}",
+        "declareOneselfReferent": "Declare yourself referent / user",
+        "hasDesktopApp": "This software can be installed on a personal computer",
+        "isFromFrenchPublicService": "This software is from French public service",
+        "isPresentInSupportMarket": "This software is present in support market",
+        "youAreUser": "You're using it",
+        "youAreReferent": "You are referent"
+    },
+    "SoftwareCatalogSearch": {
+        "placeholder": "Search a software",
+        "filtersButton": "Filters",
+        "organizationLabel": "Organization",
+        "categoriesLabel": "Categories",
+        "environnement label": "Usage environnement ",
+        "prerogativesLabel": "Prerogatives",
+        "filters": "Filters",
+        "isInstallableOnUserComputer": "Can be installed on user terminal",
+        "isAvailableAsMobileApp": "Mobile application available",
+        "isFromFrenchPublicServices": "Is from French public services",
+        "doRespectRgaa": "Is compliant with RGAA rules",
+        "isPresentInSupportContract": "Comes with possible support",
+        "isTestable": "Is testable",
+        "organization filter hint": "Only show software that have at least one referent from a given organization",
+        "linux": "GNU/Linux",
+        "mac": "MacOS",
+        "windows": "Windows",
+        "browser": "Web browser",
+        "stack": "Library, Framework and other technical building blocks",
+        "number of prerogatives selected_zero": "None",
+        "number of prerogatives selected_other": "{{count}} selected",
+        "ios": "iOS (iPhone)",
+        "android": "Android Smartphones"
+    },
+    "SoftwareDetails": {
+        "catalog breadcrumb": "Software catalog",
+        "tab title overview": "Overview",
+        "tab title instance": "Referenced instance {{instanceCount}}",
+        "tab service providers": "Service providers {{serviceProvidersCount}}",
+        "tab title alike software": "Alike or equivalent proprietary software {{alikeSoftwareCount}}",
+        "list of service providers": "List of service providers",
+        "prerogatives": "Prerogatives",
+        "last version": "Last version",
+        "last version date": "in {{date}}",
+        "register": "Date de l'ajout : ",
+        "register date": "{{date}}",
+        "minimal version": "Minimal required version: ",
+        "license": "License : ",
+        "declare oneself referent": "Declare yourself $t(common:referent) / $t(common:user)",
+        "hasDesktopApp": "Installable on agent computer",
+        "isPresentInSupportMarket": "Present in support market",
+        "isFromFrenchPublicService": "From French public service",
+        "isRGAACompliant": "Is compliant with RGAA rules",
+        "comptoire du libre sheet": "Open Comptoir du libre sheet",
+        "wikiData sheet": "Open Wikidata sheet",
+        "share software": "Share the software",
+        "declare referent": "Declare yourself $t(common:referent) / $t(common:user)",
+        "edit software": "Edit software",
+        "stop being user": "Stop being $t(common:user)",
+        "stop being referent": "Stop being $t(common:referent)",
+        "become referent": "Become $t(common:referent)",
+        "please provide a reason for unreferencing this software": "Please provide a reason why you think this software should not be in the SILL anymore",
+        "unreference software": "Dereference the software"
+    },
+    "HeaderDetailCard": {
+        "authors": "Authors : ",
+        "website": "Official website",
+        "documentation": "Documentation",
+        "repository": "Source code repository",
+        "software logo": "Software logo",
+        "you are user": "You're using it",
+        "you are referent": "You are referent",
+        "software dereferenced": "From {{when}}, this software is no longer recommended",
+        "software dereferenced last version": "Last acceptable version: {{lastRecommendedVersion}}"
+    },
+    "PreviewTab": {
+        "about": "About",
+        "use full links": "Use full links",
+        "prerogatives": "Prerogatives",
+        "last version": "Last version",
+        "register": "In sill since: ",
+        "minimal version": "Minimal required version: ",
+        "license": "License : ",
+        "hasDesktopApp": "Installable on agent computer",
+        "isAvailableAsMobileApp": "Mobile app available",
+        "isPresentInSupportMarket": "Present in support market",
+        "isFromFrenchPublicService": "From French public service",
+        "isRGAACompliant": "Is compliant with RGAA rules",
+        "comptoire du libre sheet": "Open Comptoir du libre sheet",
+        "wikiData sheet": "Open Wikidata sheet",
+        "what is the support market": "The DGFIP manages two inter-ministerial markets: support (Atos) and expertise (multiple contractors) for open-source software, covering maintenance, monitoring, and expert services. <br /> <a>Learn more</a>",
+        "CNLL service providers title": "CNLL service providers",
+        "CNLL service providers_other": "See the {{count}} service providers on the CNLL index",
+        "programming languages": "Coded in",
+        "keywords": "Keywords",
+        "application categories": "Categories"
+    },
+    "ReferencedInstancesTab": {
+        "publicInstanceCount": "{{instanceCount}} maintained public $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} public $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
+        "instance_one": "instance",
+        "instance_other": "instances",
+        "organization_one": "organization",
+        "organization_other": "organizations",
+        "privateInstanceCount": "{{instanceCount}} maintained private $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
+        "concerned public": "Concerned public : ",
+        "go to instance": "Open the instance",
+        "add instance": "Reference new instance",
+        "edit instance": "Edit instance",
+        "connect to see private instances": "You must be logged in to see private instances"
+    },
+    "SimilarSoftwareTab": {
+        "similar software in sill": "Alike software in the SILL",
+        "similar software not in sill": "Other similar software that are not in the SILL, they might be proprietary or not",
+        "libre software": "Libre software - click to add to the SILL"
+    },
+    "CnllServiceProviderModal": {
+        "close": "Close",
+        "content description": "{{count}} service $t(common.provider, { \"count\": {{count}}) listed in the '<a> CNLL index </a>' for {{softwareName}}.",
+        "modal title": "CNLL service providers"
+    },
+    "DetailUsersAndReferents": {
+        "users": "{{userCount}} $t(common.user, {\"count\": {{userCount}} }) and ",
+        "referents": "{{referentCount}} $t(common.referent, {\"count\": {{referentCount}} })"
+    },
+    "SoftwareUserAndReferent": {
+        "catalog breadcrumb": "Software catalog",
+        "user and referent breadcrumb": "Users and referents",
+        "title": "Users and referents",
+        "tab user title_one": "User",
+        "tab user title_other": "Users",
+        "tab referent title_one": "Referent",
+        "tab referent title_other": "Referents",
+        "category": "Category",
+        "softwareDetails": "See the software sheet",
+        "declare user": "Declare yourself as a user",
+        "declare referent": "Declare yourself as a referent",
+        "is technical expert": "Technical expert",
+        "organization": "Organization",
+        "is user of": "Is user of",
+        "is referent of": "Is referent of",
+        "use case": "Use case"
+    },
+    "DeclarationForm": {
+        "catalog breadcrumb": "Software catalog",
+        "declare yourself user or referent breadcrumb": "Declare yourself user or referent of the software",
+        "title step 1": "How would you like to declare ?",
+        "title step 2 user": "About your usage",
+        "title step 2 referent": "About your referencing",
+        "submit declaration": "Submit declaration"
+    },
+    "DeclarationFormStep1": {
+        "user type label": "I'm a user of this software",
+        "user type hint": "Inside my organization",
+        "referent type label": "I would like to be referent of this software",
+        "referent type hint": "As a guarantor and reference of the use of this software inside my organization"
+    },
+    "DeclarationFormStep2User": {
+        "useCase": "Describe in a few words your use case",
+        "environment": "In which environment do you use your software?",
+        "version": "Which version of the software do you use? (Optional)",
+        "service": "Which web instance of the software do you use?"
+    },
+    "DeclarationFormStep2Referent": {
+        "legend title": "Are you a technical expert of this software ?",
+        "legend hint": "You are able to answer to questions of agents and of CIO",
+        "useCase": "Describe in a few words the use case of your administration",
+        "service": "Which web instance of the software do you declare yourself referent for"
+    },
+    "Account": {
+        "title": "My account",
+        "mail": "Email Address",
+        "organization": "Affiliated Organization Name",
+        "manage account": "Manage account or change your password",
+        "no organization": "No Organization",
+        "update": "Update",
+        "not a valid email": "Doesn't seem to be a valid email",
+        "email domain not allowed": "The domain {{domain}} is not allowed yet",
+        "about title": "Open Source Profile",
+        "about description": "Sketch out an overview of your journey and commitments to open source. Share your experiences here, how you use or contribute to open source, and any information you wish to highlight within the SILL community.",
+        "isPublic label": "Public Profile",
+        "isPublic hint": "By enabling this option &nbsp; <a>your SILL profile 2 - 1   </a>'     will be made publicly accessible.'",
+        "go to profile": "Go to public profile"
+    },
+    "UserProfile": {
+        "agent profile": "Profile of {{email}}",
+        "agent profile with orga": "$t(UserProfile.agent profile, {\"email\" : {{email}} }) - {{organization}}",
+        "send email": "Send an email to this person",
+        "no description": "The user has not written a description yet",
+        "edit my profile": "Edit my profile",
+        "badge text_expert": "Technical expert referent",
+        "badge text_referent": "Referent",
+        "badge text_user": "User"
+    },
+    "Header": {
+        "home title": "Home - Interministerial Free Software Catalog",
+        "title": "Interministerial Free Software Catalog",
+        "navigation welcome": "Welcome to the SILL",
+        "navigation catalog": "Software catalog",
+        "navigation add software": "Add software or instance",
+        "navigation update software": "Update software or instance",
+        "navigation support request": "Support request",
+        "navigation about": "About the site"
+    },
+    "AuthButtons": {
+        "login": "Login",
+        "register": "Register",
+        "logout": "Logout",
+        "account": "My account"
+    },
+    "Footer": {
+        "contribute": "Contribute"
+    },
+    "DeclarationRemovalModal": {
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "do you confirm_referent": "Do you confirm that you're no longer willing to be referent of",
+        "do you confirm_using": "Do you confirm that you're no longer using",
+        "stop being_user": "Stop being a $t(common:user) of {{softwareName}}",
+        "stop being_referent": "Stop being a $t(common:referent) of {{softwareName}}"
+    },
+    "SmartLogo": {
+        "software logo": "Software logo"
+    },
+    "PromptForOrganization": {
+        "title": "Please provide an organization",
+        "organization is required": "You need to provide an organization to be able to use Sill. Please provide one below.",
+        "update": "Update",
+        "organization": "Organization"
     }
 }

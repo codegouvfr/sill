@@ -1,5 +1,5 @@
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { fr, type FrCxArg } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { Equals } from "tsafe";
@@ -36,7 +36,7 @@ export const ReferencedInstancesTab = (props: Props) => {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ ReferencedInstancesTab });
+    const { t } = useTranslation();
 
     const publicInstances = instanceList.filter(instance => instance.isPublic);
     const privateInstances = instanceList.filter(instance => !instance.isPublic);
@@ -50,7 +50,7 @@ export const ReferencedInstancesTab = (props: Props) => {
                 classname={"fr-mt-4w"}
             />
             <Button className={fr.cx("fr-mt-3w")} linkProps={createInstanceLink}>
-                {t("add instance")}
+                {t("ReferencedInstancesTab.add instance")}
             </Button>
         </section>
     );
@@ -64,7 +64,7 @@ const ReferenceInstancesSection = ({
     const { userAuthentication } = useCore().functions;
     const isUserLoggedIn = userAuthentication.getIsUserLoggedIn();
     const { classes, cx } = useStyles();
-    const { t } = useTranslation({ ReferencedInstancesTab });
+    const { t } = useTranslation();
 
     if (instances.length === 0) return null;
 
@@ -74,13 +74,13 @@ const ReferenceInstancesSection = ({
         return (
             <>
                 <p className={fr.cx("fr-text--bold", classname)}>
-                    {t("privateInstanceCount", {
+                    {t("ReferencedInstancesTab.privateInstanceCount", {
                         "instanceCount": instances.length,
                         "organizationCount": Object.keys(instancesByOrganisation).length
                     })}
                 </p>
                 <span className={fr.cx("fr-hint-text")}>
-                    {t("connect to see private instances")}
+                    {t("ReferencedInstancesTab.connect to see private instances")}
                 </span>
             </>
         );
@@ -91,8 +91,8 @@ const ReferenceInstancesSection = ({
             <p className={fr.cx("fr-text--bold", classname)}>
                 {t(
                     visibility === "public"
-                        ? "publicInstanceCount"
-                        : "privateInstanceCount",
+                        ? "ReferencedInstancesTab.publicInstanceCount"
+                        : "ReferencedInstancesTab.privateInstanceCount",
                     {
                         "instanceCount": instances.length,
                         "organizationCount": Object.keys(instancesByOrganisation).length
@@ -124,7 +124,7 @@ const ReferenceInstancesSection = ({
                                                 classes.concernedPublic
                                             )}
                                         >
-                                            {t("concerned public")}
+                                            {t("ReferencedInstancesTab.concerned public")}
                                         </p>
                                         <p
                                             className={cx(
@@ -146,7 +146,9 @@ const ReferenceInstancesSection = ({
                                                             .push()
                                                     }
                                                 >
-                                                    {t("edit instance")}
+                                                    {t(
+                                                        "ReferencedInstancesTab.edit instance"
+                                                    )}
                                                 </Button>
                                             )}
 
@@ -162,7 +164,9 @@ const ReferenceInstancesSection = ({
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 >
-                                                    {t("go to instance")}
+                                                    {t(
+                                                        "ReferencedInstancesTab.go to instance"
+                                                    )}
                                                 </a>
                                             )}
                                         </div>

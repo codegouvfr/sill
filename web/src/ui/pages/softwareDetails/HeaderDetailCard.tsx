@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useLang } from "ui/i18n";
+import { useLang } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -53,7 +54,7 @@ export const HeaderDetailCard = memo((props: Props) => {
 
     const { classes, cx } = useStyles();
 
-    const { t } = useTranslation({ HeaderDetailCard });
+    const { t } = useTranslation();
 
     const { lang } = useLang();
 
@@ -69,7 +70,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                         <img
                             className={classes.logo}
                             src={softwareLogoUrl}
-                            alt={t("software logo")}
+                            alt={t("HeaderDetailCard.software logo")}
                         />
                     </div>
                     <div className={classes.mainInfo}>
@@ -86,7 +87,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("you are referent")}
+                                    {t("HeaderDetailCard.you are referent")}
                                 </span>
                             ) : userDeclaration?.isUser ? (
                                 <span
@@ -98,13 +99,15 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("you are user")}
+                                    {t("HeaderDetailCard.you are user")}
                                 </span>
                             ) : null}
                         </div>
                         {authors.length > 0 && (
                             <div>
-                                <span className={classes.authors}>{t("authors")}</span>
+                                <span className={classes.authors}>
+                                    {t("HeaderDetailCard.authors")}
+                                </span>
                                 <span>
                                     {authors.map(author => (
                                         <a
@@ -122,16 +125,23 @@ export const HeaderDetailCard = memo((props: Props) => {
                             <>
                                 &nbsp; &nbsp;
                                 <p className={classes.dereferencedText}>
-                                    {t("software dereferenced", {
-                                        "lastRecommendedVersion":
-                                            softwareDereferencing.lastRecommendedVersion,
-                                        "reason": softwareDereferencing.reason,
+                                    {t("HeaderDetailCard.software dereferenced", {
                                         "when": getFormattedDate({
                                             "time": softwareDereferencing.time,
                                             lang,
                                             "doAlwaysShowYear": true
                                         })
                                     })}
+                                    {softwareDereferencing.reason === undefined
+                                        ? ""
+                                        : `, ${softwareDereferencing.reason}`}
+                                    {t(
+                                        "HeaderDetailCard.software dereferenced last version",
+                                        {
+                                            lastRecommendedVersion:
+                                                softwareDereferencing.lastRecommendedVersion
+                                        }
+                                    )}
                                 </p>
                             </>
                         )}
@@ -154,7 +164,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("website")}
+                        {t("HeaderDetailCard.website")}
                     </a>
                 )}
                 {documentationWebsite && (
@@ -173,7 +183,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("documentation")}
+                        {t("HeaderDetailCard.documentation")}
                     </a>
                 )}
                 {sourceCodeRepository && (
@@ -190,7 +200,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             "fr-my-2v"
                         )}
                     >
-                        {t("repository")}
+                        {t("HeaderDetailCard.repository")}
                     </a>
                 )}
             </div>

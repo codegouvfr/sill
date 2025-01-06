@@ -18,7 +18,7 @@ import { ReactComponent as HomepageWaveSvg } from "ui/assets/homepage_wave.svg";
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 type Props = {
     className?: string;
@@ -95,7 +95,9 @@ export default function Home(props: Props) {
 
             <section className={cx(classes.softwareSelectionBackground, classes.section)}>
                 <div className={fr.cx("fr-container")}>
-                    <h2 className={classes.titleSection}>{t("home.softwareSelection")}</h2>
+                    <h2 className={classes.titleSection}>
+                        {t("home.softwareSelection")}
+                    </h2>
                     <div className={classes.softwareSelection}>
                         {softwareSelectionList.map(({ title, linkProps }) => (
                             <Tile key={title} title={title} linkProps={linkProps} />
@@ -131,7 +133,9 @@ export default function Home(props: Props) {
                                     )}
                                     metricValue={stats[metricName]}
                                 />
-                                <h4 className={classes.whiteText}>{t(`home.${metricName}`)}</h4>
+                                <h4 className={classes.whiteText}>
+                                    {t(`home.${metricName}`)}
+                                </h4>
                             </div>
                         ))}
                     </div>

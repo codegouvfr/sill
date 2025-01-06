@@ -1,6 +1,7 @@
 import React from "react";
 import { declareComponentKeys } from "i18nifty";
-import { useLang, useTranslation } from "ui/i18n";
+import { useLang } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
@@ -62,7 +63,7 @@ export const PreviewTab = (props: Props) => {
 
     const { classes, cx } = useStyles();
 
-    const { t } = useTranslation({ PreviewTab });
+    const { t } = useTranslation();
     const { lang } = useLang();
 
     return (
@@ -71,12 +72,12 @@ export const PreviewTab = (props: Props) => {
                 <p style={{ "gridColumn": "span 2" }}>{softwareDescription}</p>
                 <div className="section">
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("about")}
+                        {t("PreviewTab.about")}
                     </p>
                     {(softwareCurrentVersion || softwareDateCurrentVersion) && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("last version")}
+                                {t("PreviewTab.last version")}
                             </span>
                             {softwareCurrentVersion && (
                                 <span
@@ -104,7 +105,9 @@ export const PreviewTab = (props: Props) => {
                     )}
                     {registerDate && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("register")}</span>
+                            <span className={classes.labelDetail}>
+                                {t("PreviewTab.register")}
+                            </span>
                             {capitalize(monthDate({ "time": registerDate, lang }))}
                         </p>
                     )}
@@ -112,7 +115,7 @@ export const PreviewTab = (props: Props) => {
                     {minimalVersionRequired && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("minimal version")}
+                                {t("PreviewTab.minimal version")}
                             </span>
                             <span
                                 className={cx(
@@ -131,7 +134,9 @@ export const PreviewTab = (props: Props) => {
 
                     {license && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("license")}</span>
+                            <span className={classes.labelDetail}>
+                                {t("PreviewTab.license")}
+                            </span>
                             <span>{license}</span>
                         </p>
                     )}
@@ -139,7 +144,7 @@ export const PreviewTab = (props: Props) => {
                     {keywords && keywords.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("keywords")} :{" "}
+                                {t("PreviewTab.keywords")} :{" "}
                             </span>
                             <span>{keywords.join(", ")}</span>
                         </p>
@@ -148,7 +153,7 @@ export const PreviewTab = (props: Props) => {
                     {programmingLanguages && programmingLanguages.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("programming languages")} :{" "}
+                                {t("PreviewTab.programming languages")} :{" "}
                             </span>
                             <span>{programmingLanguages.join(", ")}</span>
                         </p>
@@ -157,7 +162,7 @@ export const PreviewTab = (props: Props) => {
                     {applicationCategories && applicationCategories.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("application categories")} :{" "}
+                                {t("PreviewTab.application categories")} :{" "}
                             </span>
                             <span>{applicationCategories.join(", ")}</span>
                         </p>
@@ -165,7 +170,7 @@ export const PreviewTab = (props: Props) => {
                 </div>
                 <div className={classes.section}>
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("prerogatives")}
+                        {t("PreviewTab.prerogatives")}
                     </p>
 
                     {(
@@ -197,7 +202,7 @@ export const PreviewTab = (props: Props) => {
                             return null;
                         }
 
-                        const label = t(prerogativeName);
+                        const label = t(`PreviewTab.${prerogativeName}`);
 
                         return (
                             <div
@@ -226,9 +231,16 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                                 {prerogativeName === "isPresentInSupportMarket" && (
                                     <Tooltip
-                                        title={t("what is the support market", {
-                                            "url": "https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/"
-                                        })}
+                                        title={
+                                            <Trans
+                                                i18nKey="PreviewTab.what is the support market"
+                                                components={{
+                                                    a: (
+                                                        <a href="https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/" />
+                                                    )
+                                                }}
+                                            ></Trans>
+                                        }
                                         arrow
                                     >
                                         <i
@@ -246,17 +258,17 @@ export const PreviewTab = (props: Props) => {
                     wikiDataUrl !== undefined) && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                            {t("use full links")}
+                            {t("PreviewTab.use full links")}
                         </p>
                         {comptoireDuLibreUrl !== undefined && (
                             <a
                                 href={comptoireDuLibreUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                title={t("comptoire du libre sheet")}
+                                title={t("PreviewTab.comptoire du libre sheet")}
                                 className={cx(classes.externalLink, classes.item)}
                             >
-                                {t("comptoire du libre sheet")}
+                                {t("PreviewTab.comptoire du libre sheet")}
                             </a>
                         )}
                         {wikiDataUrl !== undefined && (
@@ -264,10 +276,10 @@ export const PreviewTab = (props: Props) => {
                                 href={wikiDataUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                title={t("wikiData sheet")}
+                                title={t("PreviewTab.wikiData sheet")}
                                 className={cx(classes.externalLink, classes.item)}
                             >
-                                {t("wikiData sheet")}
+                                {t("PreviewTab.wikiData sheet")}
                             </a>
                         )}
                     </div>

@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useResolveLocalizedString } from "ui/i18n";
+import { useTranslation } from "react-i18next";
+import { useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
@@ -68,7 +69,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ SoftwareCatalogCard });
+    const { t } = useTranslation();
     const { resolveLocalizedString } = useResolveLocalizedString();
     const { classes, cx } = useStyles({
         "isSearchHighlighted": searchHighlight !== undefined
@@ -92,17 +93,30 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                             <h3 className={cx(classes.title)}>{softwareName}</h3>
                             <div className={cx(classes.titleActionsContainer)}>
                                 {prerogatives.isInstallableOnUserComputer && (
-                                    <Tooltip title={t("hasDesktopApp")} arrow>
+                                    <Tooltip
+                                        title={t("softwareCatalogCard.hasDesktopApp")}
+                                        arrow
+                                    >
                                         <i className={fr.cx("fr-icon-computer-line")} />
                                     </Tooltip>
                                 )}
                                 {prerogatives.isFromFrenchPublicServices && (
-                                    <Tooltip title={t("isFromFrenchPublicService")} arrow>
+                                    <Tooltip
+                                        title={t(
+                                            "softwareCatalogCard.isFromFrenchPublicService"
+                                        )}
+                                        arrow
+                                    >
                                         <i className={fr.cx("fr-icon-france-line")} />
                                     </Tooltip>
                                 )}
                                 {prerogatives.isPresentInSupportContract && (
-                                    <Tooltip title={t("isPresentInSupportMarket")} arrow>
+                                    <Tooltip
+                                        title={t(
+                                            "softwareCatalogCard.isPresentInSupportMarket"
+                                        )}
+                                        arrow
+                                    >
                                         <i
                                             className={fr.cx(
                                                 "fr-icon-questionnaire-line"
@@ -122,7 +136,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     "fr-mb-1v"
                                 )}
                             >
-                                {t("you are referent")}
+                                {t("softwareCatalogCard.youAreReferent")}
                             </span>
                         ) : userDeclaration?.isUser ? (
                             <span
@@ -134,7 +148,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     "fr-mb-1v"
                                 )}
                             >
-                                {t("you are user")}
+                                {t("softwareCatalogCard.youAreUser")}
                             </span>
                         ) : null}
                         <div>
@@ -146,7 +160,9 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     )}
                                 >
                                     {latestVersion?.publicationTime &&
-                                        t("latest version", { fromNowText })}
+                                        t("softwareCatalogCard.latestVersion", {
+                                            fromNowText
+                                        })}
                                     {latestVersion?.semVer && (
                                         <span
                                             className={cx(
@@ -204,7 +220,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                         )}
                         {...declareFormLink}
                     >
-                        {t("declare oneself referent")}
+                        {t("softwareCatalogCard.declareOneselfReferent")}
                     </a>
                 )}
                 <div className={cx(classes.footerActionsContainer)}>

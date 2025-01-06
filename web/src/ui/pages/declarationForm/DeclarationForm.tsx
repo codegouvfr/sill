@@ -16,7 +16,7 @@ import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { fr } from "@codegouvfr/react-dsfr";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { declareComponentKeys } from "i18nifty";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
@@ -78,8 +78,7 @@ export default function DeclarationForm(props: Props) {
 
     const { classes, cx } = useStyles({ step, declarationType });
 
-    const { t } = useTranslation({ DeclarationForm });
-    const { t: tCommon } = useTranslation({ "App": "App" });
+    const { t } = useTranslation();
 
     if (!isReady) {
         return <LoadingFallback />;
@@ -104,7 +103,7 @@ export default function DeclarationForm(props: Props) {
                             "linkProps": {
                                 ...routes.softwareCatalog().link
                             },
-                            "label": t("catalog breadcrumb")
+                            "label": t("DeclarationForm.catalog breadcrumb")
                         },
                         {
                             "linkProps": {
@@ -115,7 +114,9 @@ export default function DeclarationForm(props: Props) {
                             "label": software.softwareName
                         }
                     ]}
-                    currentPageLabel={t("declare yourself user or referent breadcrumb")}
+                    currentPageLabel={t(
+                        "DeclarationForm.declare yourself user or referent breadcrumb"
+                    )}
                     className={classes.breadcrumb}
                 />
                 <div className={classes.headerDeclareUserOrReferent}>
@@ -128,7 +129,9 @@ export default function DeclarationForm(props: Props) {
                         <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                     </a>
                     <h4 className={classes.title}>
-                        {t("declare yourself user or referent breadcrumb")}
+                        {t(
+                            "DeclarationForm.declare yourself user or referent breadcrumb"
+                        )}
                     </h4>
                 </div>
                 <div className={classes.formContainer}>
@@ -172,11 +175,11 @@ export default function DeclarationForm(props: Props) {
                                     {(() => {
                                         switch (step) {
                                             case 1:
-                                                return t("title step 1");
+                                                return t("DeclarationForm.title step 1");
                                             case 2:
                                                 assert(declarationType !== undefined);
                                                 return t(
-                                                    `title step 2 ${declarationType}`
+                                                    `DeclarationForm.title step 2 ${declarationType}`
                                                 );
                                         }
                                     })()}
@@ -243,12 +246,12 @@ export default function DeclarationForm(props: Props) {
                         }
                     })()}
                 >
-                    {tCommon("previous")}
+                    {t("app.previous")}
                 </Button>
                 <Button onClick={onNextStep} priority="primary" disabled={isSubmitting}>
                     {step === stepCount ? (
                         <>
-                            {t("submit declaration")}{" "}
+                            {t("DeclarationForm.submit declaration")}{" "}
                             {isSubmitting && (
                                 <CircularProgress
                                     size={20}
@@ -257,7 +260,7 @@ export default function DeclarationForm(props: Props) {
                             )}
                         </>
                     ) : (
-                        tCommon("next")
+                        t("app.next")
                     )}
                 </Button>
             </ActionsFooter>

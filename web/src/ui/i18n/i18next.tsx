@@ -5,25 +5,23 @@ import translationFr from "./sill_fr.json";
 
 export const fallbackNS = "sill";
 export const resources = {
-  en: {
-    sill: translationEn,
-  },
-  fr: {
-    sill: translationFr
-  }
+    en: {
+        sill: translationEn
+    },
+    fr: {
+        sill: translationFr
+    }
 } as const;
 
-i18next
-  .use(initReactI18next)
-  .init({
+i18next.use(initReactI18next).init({
     resources,
     lng: "en",
-    defaultNS: 'sill',
-    fallbackNS: 'sill',
+    defaultNS: "sill",
+    fallbackNS: "sill",
 
     interpolation: {
-      escapeValue: false
+        escapeValue: false
     }
-  });
+});
 
-  export default i18next;
+export default i18next;

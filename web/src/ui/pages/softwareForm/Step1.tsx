@@ -7,7 +7,7 @@ import { assert } from "tsafe/assert";
 import { Checkbox } from "@codegouvfr/react-dsfr/Checkbox";
 import type { FormData } from "core/usecases/softwareForm";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 
 export type Step1Props = {
     className?: string;
@@ -19,8 +19,7 @@ export type Step1Props = {
 export function SoftwareFormStep1(props: Step1Props) {
     const { className, initialFormData, onSubmit, evtActionSubmit } = props;
 
-    const { t } = useTranslation({ SoftwareFormStep1 });
-    const { t: tCommon } = useTranslation({ App: null });
+    const { t } = useTranslation();
 
     const {
         handleSubmit,
@@ -98,23 +97,23 @@ export function SoftwareFormStep1(props: Step1Props) {
                 stateRelatedMessage="This is field is required"
                 options={[
                     {
-                        "label": t("software desktop"),
+                        "label": t("SoftwareFormStep1.software desktop"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "desktop/mobile"
                         }
                     },
                     {
-                        "label": t("software cloud"),
-                        "hintText": t("software cloud hint"),
+                        "label": t("SoftwareFormStep1.software cloud"),
+                        "hintText": t("SoftwareFormStep1.software cloud hint"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "cloud"
                         }
                     },
                     {
-                        "label": t("module"),
-                        "hintText": t("module hint"),
+                        "label": t("SoftwareFormStep1.module"),
+                        "hintText": t("SoftwareFormStep1.module hint"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "stack"
@@ -124,9 +123,9 @@ export function SoftwareFormStep1(props: Step1Props) {
             />
             {watch("softwareType") === "desktop/mobile" && (
                 <Checkbox
-                    legend={t("checkbox legend")}
+                    legend={t("SoftwareFormStep1.checkbox legend")}
                     state={errors.osCheckboxValues !== undefined ? "error" : undefined}
-                    stateRelatedMessage={tCommon("required")}
+                    stateRelatedMessage={t("app.required")}
                     options={[
                         {
                             "label": "Windows",

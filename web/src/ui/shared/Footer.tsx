@@ -1,7 +1,7 @@
 import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { Footer as DsfrFooter } from "@codegouvfr/react-dsfr/Footer";
 import { routes } from "ui/routes";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
@@ -20,7 +20,7 @@ export const Footer = memo(
 
         assert<Equals<typeof rest, {}>>();
 
-        const { t } = useTranslation({ Footer });
+        const { t } = useTranslation();
 
         return (
             <>
@@ -43,7 +43,7 @@ export const Footer = memo(
                             }
                         },
                         {
-                            "text": t("contribute"),
+                            "text": t("Footer.contribute"),
                             "linkProps": {
                                 "href": "https://github.com/codegouvfr/sill-web/issues/new"
                             }

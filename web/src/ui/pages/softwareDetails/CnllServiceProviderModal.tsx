@@ -1,6 +1,6 @@
 import { createModal } from "@codegouvfr/react-dsfr/Modal";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 
 const modal = createModal({
     "id": "cnll-service-provider",
@@ -23,24 +23,29 @@ type Props = {
 export function CnllServiceProviderModal(props: Props) {
     const { className, annuaireCnllServiceProviders, softwareName } = props;
 
-    const { t } = useTranslation({ CnllServiceProviderModal });
+    const { t } = useTranslation();
 
     return (
         <modal.Component
             className={className}
-            title={t("modal title")}
+            title={t("CnllServiceProviderModal.modal title")}
             buttons={[
                 {
                     "doClosesModal": true,
-                    "children": t("close")
+                    "children": t("CnllServiceProviderModal.close")
                 }
             ]}
         >
-            {t("content description", {
-                "cnllWebsiteUrl": "https://cnll.fr/",
-                "count": annuaireCnllServiceProviders.length,
-                "softwareName": softwareName
-            })}
+            <Trans
+                i18nKey="CnllServiceProviderModal.content description"
+                components={{
+                    a: <a href="https://cnll.fr/" target="_blank" rel="noreferrer" />
+                }}
+                values={{
+                    "count": annuaireCnllServiceProviders.length,
+                    "softwareName": softwareName
+                }}
+            ></Trans>
             <ul>
                 {annuaireCnllServiceProviders.map(({ name, siren, url }) => (
                     <li key={url}>

@@ -13,7 +13,7 @@ import { Evt } from "evt";
 import { useCoreState, useCore } from "core";
 import { useEvt } from "evt/hooks";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -77,8 +77,7 @@ export default function SoftwareForm(props: Props) {
     );
 
     const { classes } = useStyles({ step });
-    const { t } = useTranslation({ SoftwareForm });
-    const { t: tCommon } = useTranslation({ "App": undefined });
+    const { t } = useTranslation();
 
     const evtActionSubmitStep = useConst(() => Evt.create());
 
@@ -97,15 +96,15 @@ export default function SoftwareForm(props: Props) {
                             "linkProps": {
                                 ...routes.addSoftwareLanding().link
                             },
-                            "label": tCommon("add software or service")
+                            "label": t("app.add software or service")
                         }
                     ]}
                     currentPageLabel={(() => {
                         switch (route.name) {
                             case "softwareCreationForm":
-                                return tCommon("add software");
+                                return t("app.add software");
                             case "softwareUpdateForm":
-                                return tCommon("update software");
+                                return t("app.update software");
                         }
                     })()}
                     className={classes.breadcrumb}
@@ -123,11 +122,13 @@ export default function SoftwareForm(props: Props) {
                         {(() => {
                             switch (route.name) {
                                 case "softwareCreationForm":
-                                    return t("add software", {
-                                        "name": formData.step2?.softwareName
-                                    });
+                                    return formData.step2?.softwareName
+                                        ? t("SoftwareForm.add software", {
+                                              "name": formData.step2.softwareName
+                                          })
+                                        : t("SoftwareForm.add unamed software");
                                 case "softwareUpdateForm":
-                                    return t("update software", {
+                                    return t("SoftwareForm.update software", {
                                         "name": formData.step2?.softwareName ?? ""
                                     });
                             }
@@ -137,18 +138,56 @@ export default function SoftwareForm(props: Props) {
                 <Stepper
                     currentStep={step}
                     stepCount={stepCount}
-                    title={t("stepper title", {
-                        "currentStepIndex": step,
-                        "softwareName": formData.step2?.softwareName,
-                        "action": (() => {
-                            switch (route.name) {
-                                case "softwareCreationForm":
-                                    return "add";
-                                case "softwareUpdateForm":
-                                    return "update";
-                            }
-                        })()
-                    })}
+                    title={(() => {
+                        const softwareName = formData.step2?.softwareName;
+                        switch (step) {
+                            case 1:
+                                return (() => {
+                                    switch (route.name) {
+                                        case "softwareCreationForm":
+                                            return softwareName === undefined
+                                                ? t(
+                                                      "SoftwareForm.stepper title_add_unnamed"
+                                                  )
+                                                : t(
+                                                      "SoftwareForm.stepper title_add_named",
+                                                      { softwareName }
+                                                  );
+                                        case "softwareUpdateForm":
+                                            return t(
+                                                "SoftwareForm.stepper title_update",
+                                                { softwareName }
+                                            );
+                                    }
+                                })();
+                            case 2:
+                                return softwareName === undefined
+                                    ? t("SoftwareForm.stepper title_info_unnamed")
+                                    : t("SoftwareForm.stepper title_info_named", {
+                                          softwareName
+                                      });
+                            case 3:
+                                return softwareName === undefined
+                                    ? t(
+                                          "SoftwareForm.stepper title_prerequisites_unnamed"
+                                      )
+                                    : t(
+                                          "SoftwareForm.stepper title_prerequisites_named",
+                                          { softwareName }
+                                      );
+                            case 4:
+                                return softwareName === undefined
+                                    ? t(
+                                          "SoftwareForm.stepper title_similar_software_unnamed"
+                                      )
+                                    : t(
+                                          "SoftwareForm.stepper title_similar_software_named",
+                                          { softwareName }
+                                      );
+                            default:
+                                return "";
+                        }
+                    })()}
                     className={classes.stepper}
                 />
                 <SoftwareFormStep1
@@ -215,7 +254,7 @@ export default function SoftwareForm(props: Props) {
                     className={classes.softwareDetails}
                     disabled={step === 1}
                 >
-                    {tCommon("previous")}
+                    {t("app.previous")}
                 </Button>
                 <Button
                     onClick={() => evtActionSubmitStep.post()}
@@ -227,11 +266,11 @@ export default function SoftwareForm(props: Props) {
                             {(() => {
                                 switch (route.name) {
                                     case "softwareCreationForm":
-                                        return t("add software", {
+                                        return t("SoftwareForm.add software", {
                                             "name": formData.step2?.softwareName
                                         });
                                     case "softwareUpdateForm":
-                                        return t("update software", {
+                                        return t("SoftwareForm.update software", {
                                             "name": formData.step2?.softwareName ?? ""
                                         });
                                 }
@@ -245,7 +284,7 @@ export default function SoftwareForm(props: Props) {
                             )}
                         </>
                     ) : (
-                        tCommon("next")
+                        t("app.next")
                     )}
                 </Button>
             </ActionsFooter>
