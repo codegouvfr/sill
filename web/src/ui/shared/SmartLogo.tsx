@@ -1,7 +1,7 @@
 import { useDomRect } from "powerhooks/useDomRect";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr/fr";
 
@@ -24,7 +24,7 @@ export function SmartLogo(props: Props) {
         return { imgRef, isBanner };
     })();
 
-    const { t } = useTranslation({ SmartLogo });
+    const { t } = useTranslation();
 
     const { cx } = useStyles();
 
@@ -35,7 +35,7 @@ export function SmartLogo(props: Props) {
         <img
             className={cx(classes.logo)}
             src={logoUrl ?? softwareLogoPlaceholder}
-            alt={t("software logo")}
+            alt={t("SmartLogo.software logo")}
         />
     );
 }

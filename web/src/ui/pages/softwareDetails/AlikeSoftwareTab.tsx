@@ -1,5 +1,5 @@
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
@@ -36,7 +36,7 @@ export const SimilarSoftwareTab = (props: Props) => {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ SimilarSoftwareTab });
+    const { t } = useTranslation();
 
     const { css } = useStyles();
 
@@ -50,7 +50,7 @@ export const SimilarSoftwareTab = (props: Props) => {
     return (
         <section className={className}>
             <p className={fr.cx("fr-text--bold")}>
-                {t("similar software in sill")} (
+                {t("SimilarSoftwareTab.similar software in sill")} (
                 {similarSoftwares.filter(({ isInSill }) => isInSill).length}) :
             </p>
             {similarSoftwares
@@ -107,7 +107,7 @@ export const SimilarSoftwareTab = (props: Props) => {
             {similarSoftwaresNotInSill.length === 0 ? null : (
                 <>
                     <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
-                        {t("similar software not in sill")} (
+                        {t("SimilarSoftwareTab.similar software not in sill")} (
                         {similarSoftwaresNotInSill.length}) :
                     </p>
                     <ul>
@@ -157,7 +157,9 @@ export const SimilarSoftwareTab = (props: Props) => {
                                                         }
                                                     )}
                                                 >
-                                                    {t("libre software")}
+                                                    {t(
+                                                        "SimilarSoftwareTab.libre software"
+                                                    )}
                                                 </Tag>
                                             ) : null}
                                         </li>

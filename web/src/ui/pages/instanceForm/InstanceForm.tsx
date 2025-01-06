@@ -11,7 +11,7 @@ import { Evt } from "evt";
 import { useCoreState, useCore } from "core";
 import { useEvt } from "evt/hooks";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
@@ -80,22 +80,21 @@ export default function InstanceForm(props: Props) {
 
     const { classes, cx } = useStyles({ step });
     const titleName = step === 1 ? "stepper-title_1" : "stepper-title_2";
-    const { t } = useTranslation({ InstanceForm });
-    const { t: tCommon } = useTranslation({ "App": null });
+    const { t } = useTranslation();
 
     const translationByRoute: Record<
         PageRoute["name"],
         { title: string; submitLabel: string; breadcrumbs: string }
     > = {
         instanceCreationForm: {
-            title: t("title add instance form"),
-            breadcrumbs: t("breadcrumb add instance"),
-            submitLabel: tCommon("add instance")
+            title: t("InstanceForm.title add instance form"),
+            breadcrumbs: t("InstanceForm.breadcrumb add instance"),
+            submitLabel: t("app.add instance")
         },
         instanceUpdateForm: {
-            title: t("title update instance form"),
-            breadcrumbs: t("breadcrumb update instance"),
-            submitLabel: tCommon("update instance")
+            title: t("InstanceForm.title update instance form"),
+            breadcrumbs: t("InstanceForm.breadcrumb update instance"),
+            submitLabel: t("app.update instance")
         }
     };
 
@@ -116,7 +115,7 @@ export default function InstanceForm(props: Props) {
                             "linkProps": {
                                 ...routes.addSoftwareLanding().link
                             },
-                            "label": tCommon("add software or service")
+                            "label": t("app.add software or service")
                         }
                     ]}
                     currentPageLabel={translations.breadcrumbs}
@@ -136,7 +135,7 @@ export default function InstanceForm(props: Props) {
                 <Stepper
                     currentStep={step}
                     stepCount={2}
-                    title={t(titleName)}
+                    title={t(`InstanceForm.${titleName}`)}
                     className={classes.stepper}
                 />
                 <InstanceFormStep1
@@ -183,7 +182,7 @@ export default function InstanceForm(props: Props) {
                     className={classes.softwareDetails}
                     disabled={step === 1}
                 >
-                    {tCommon("previous")}
+                    {t("app.previous")}
                 </Button>
                 <Button
                     onClick={() => evtActionSubmitStep.post()}
@@ -201,7 +200,7 @@ export default function InstanceForm(props: Props) {
                             )}
                         </>
                     ) : (
-                        tCommon("next")
+                        t("app.next")
                     )}
                 </Button>
             </ActionsFooter>

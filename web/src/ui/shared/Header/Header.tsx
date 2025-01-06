@@ -2,7 +2,7 @@ import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
 import { contactEmail } from "ui/shared/contactEmail";
@@ -30,7 +30,7 @@ export const Header = memo(
 
         assert<Equals<typeof rest, {}>>();
 
-        const { t } = useTranslation({ Header });
+        const { t } = useTranslation();
 
         /*
         const { classes, cx } = useStyles({
@@ -49,10 +49,10 @@ export const Header = memo(
                         République <br /> Française{" "}
                     </>
                 }
-                serviceTitle={t("title")}
+                serviceTitle={t("Header.title")}
                 homeLinkProps={{
                     ...routes.home().link,
-                    "title": t("home title")
+                    "title": t("Header.home title")
                 }}
                 quickAccessItems={[
                     <LanguageSelect />,
@@ -72,7 +72,7 @@ export const Header = memo(
                     {
                         "isActive": routeName === routes.home.name,
                         "linkProps": routes.home().link,
-                        "text": t("navigation welcome")
+                        "text": t("Header.navigation welcome")
                     },
                     {
                         "isActive":
@@ -80,7 +80,7 @@ export const Header = memo(
                             routeName === routes.softwareDetails.name ||
                             routeName === routes.softwareUsersAndReferents.name,
                         "linkProps": routes.softwareCatalog().link,
-                        "text": t("navigation catalog")
+                        "text": t("Header.navigation catalog")
                     },
                     {
                         "isActive":
@@ -90,13 +90,13 @@ export const Header = memo(
                         "linkProps": routes.addSoftwareLanding().link,
                         "text":
                             routeName === routes.softwareUpdateForm.name
-                                ? t("navigation update software")
-                                : t("navigation add software")
+                                ? t("Header.navigation update software")
+                                : t("Header.navigation add software")
                     },
                     {
                         "isActive": routeName === routes.readme.name,
                         "linkProps": routes.readme().link,
-                        "text": t("navigation about")
+                        "text": t("Header.navigation about")
                     },
                     {
                         "linkProps": {
@@ -107,7 +107,7 @@ export const Header = memo(
                             )}`
                             /* cSpell:enable */
                         },
-                        "text": t("navigation support request")
+                        "text": t("Header.navigation support request")
                     }
                 ]}
             />

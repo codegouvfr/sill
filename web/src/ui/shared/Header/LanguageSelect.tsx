@@ -3,7 +3,7 @@ import {
     addLanguageSelectTranslations
 } from "@codegouvfr/react-dsfr/LanguageSelect";
 import { useLang, languages } from "ui/i18n";
-import i18n from '../../i18n/i18next';
+import i18n from "../../i18n/i18next";
 
 type Props = {
     id?: string;

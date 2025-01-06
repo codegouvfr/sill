@@ -4,7 +4,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { declareComponentKeys } from "i18nifty";
 import { useEffect, useState } from "react";
 import { tss } from "tss-react";
-import { useGetOrganizationFullName, useTranslation } from "ui/i18n";
+import { useGetOrganizationFullName } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { useCore, useCoreState } from "../../core";
 import { AutocompleteFreeSoloInput } from "./AutocompleteFreeSoloInput";
 import { LoadingFallback } from "./LoadingFallback";
@@ -14,19 +15,19 @@ type PromptForOrganizationProps = {
 };
 
 export const PromptForOrganization = ({ firstTime }: PromptForOrganizationProps) => {
-    const { t } = useTranslation({ PromptForOrganization });
+    const { t } = useTranslation();
 
     return (
         <div className={fr.cx("fr-container", "fr-py-6w")}>
-            <h1 className={fr.cx("fr-h1")}>{t("title")}</h1>
-            <p>{t("organization is required")}</p>
+            <h1 className={fr.cx("fr-h1")}>{t("PromptForOrganization.title")}</h1>
+            <p>{t("PromptForOrganization.organization is required")}</p>
             <OrganizationField firstTime={firstTime} />
         </div>
     );
 };
 
 export const OrganizationField = ({ firstTime }: PromptForOrganizationProps) => {
-    const { t } = useTranslation({ PromptForOrganization });
+    const { t } = useTranslation();
     const { classes } = useStyles();
     const { userAccountManagement } = useCore().functions;
     const userAccountManagementState = useCoreState("userAccountManagement", "main");
@@ -60,7 +61,7 @@ export const OrganizationField = ({ firstTime }: PromptForOrganizationProps) => 
                     setOrganizationInputValue(value);
                 }}
                 dsfrInputProps={{
-                    "label": t("organization"),
+                    "label": t("PromptForOrganization.organization"),
                     "disabled": organization.isBeingUpdated
                 }}
                 disabled={organization.isBeingUpdated}
@@ -82,7 +83,7 @@ export const OrganizationField = ({ firstTime }: PromptForOrganizationProps) => 
                             organization.isBeingUpdated
                         }
                     >
-                        {t("update")}
+                        {t("PromptForOrganization.update")}
                     </Button>
                     {organization.isBeingUpdated && <CircularProgress size={30} />}
                 </>

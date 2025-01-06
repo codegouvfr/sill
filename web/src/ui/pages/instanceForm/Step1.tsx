@@ -6,7 +6,7 @@ import { declareComponentKeys } from "i18nifty";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { assert } from "tsafe/assert";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { AutocompleteInput } from "ui/shared/AutocompleteInput";
 
 export type Step1Props = {
@@ -27,8 +27,7 @@ export function InstanceFormStep1(props: Step1Props) {
     const { className, initialFormData, onSubmit, evtActionSubmit, allSillSoftwares } =
         props;
 
-    const { t } = useTranslation({ InstanceFormStep1 });
-    const { t: tCommon } = useTranslation({ "App": null });
+    const { t } = useTranslation();
 
     const {
         handleSubmit,
@@ -106,9 +105,9 @@ export function InstanceFormStep1(props: Step1Props) {
                                 </div>
                             </li>
                         )}
-                        noOptionText={tCommon("no result")}
+                        noOptionText={t("app.no result")}
                         dsfrInputProps={{
-                            "label": t("software instance"),
+                            "label": t("InstanceFormStep1.software instance"),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,
@@ -116,7 +115,7 @@ export function InstanceFormStep1(props: Step1Props) {
                             },
                             "state":
                                 errors.mainSoftware === undefined ? undefined : "error",
-                            "stateRelatedMessage": tCommon("required")
+                            "stateRelatedMessage": t("app.required")
                         }}
                     />
                 )}
@@ -132,5 +131,6 @@ export function InstanceFormStep1(props: Step1Props) {
 }
 
 export const { i18n } = declareComponentKeys<"software instance" | "other software">()({
+    // other not use ?
     InstanceFormStep1
 });

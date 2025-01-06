@@ -7,7 +7,8 @@ import { SearchMultiInput } from "ui/shared/SearchMultiInput";
 import type { FormData } from "core/usecases/softwareForm";
 import type { useCore } from "core";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useResolveLocalizedString } from "ui/i18n";
+import { useResolveLocalizedString } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import type { ReturnType } from "tsafe";
 
 export type Step4Props = {
@@ -35,7 +36,7 @@ export function SoftwareFormStep4(props: Step4Props) {
         getExternalSoftwareOptions
     } = props;
 
-    const { t } = useTranslation({ SoftwareFormStep4 });
+    const { t } = useTranslation();
     const { handleSubmit, control } = useForm<FormData["step4"]>({
         "defaultValues": (() => {
             if (initialFormData === undefined) {
@@ -50,8 +51,6 @@ export function SoftwareFormStep4(props: Step4Props) {
 
     const [submitButtonElement, setSubmitButtonElement] =
         useState<HTMLButtonElement | null>(null);
-
-    const { t: tCommon } = useTranslation({ "App": null });
 
     const { resolveLocalizedString } = useResolveLocalizedString();
 
@@ -98,11 +97,11 @@ export function SoftwareFormStep4(props: Step4Props) {
                                 </div>
                             </li>
                         )}
-                        noOptionText={tCommon("no result")}
-                        loadingText={tCommon("loading")}
+                        noOptionText={t("app.no result")}
+                        loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("similar software"),
-                            "hintText": t("similar software hint"),
+                            "label": t("SoftwareFormStep4.similar software"),
+                            "hintText": t("SoftwareFormStep4.similar software hint"),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,

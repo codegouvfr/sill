@@ -1,7 +1,7 @@
 import { declareComponentKeys } from "i18nifty";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { Link } from "type-route";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
@@ -19,8 +19,11 @@ export function DetailUsersAndReferents(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ DetailUsersAndReferents });
+    const { t } = useTranslation();
     const { classes, cx } = useStyles();
+
+    const referentColor =
+        referentCount !== 0 ? undefined : fr.colors.decisions.text.default.error.default;
 
     return (
         <a
@@ -29,14 +32,10 @@ export function DetailUsersAndReferents(props: Props) {
         >
             <i className={cx(fr.cx("fr-icon-user-line"), classes.detailsUsersIcon)} />
             <span>
-                {t("userAndReferentCount", {
-                    referentCount,
-                    userCount,
-                    "referentColor":
-                        referentCount !== 0
-                            ? undefined
-                            : fr.colors.decisions.text.default.error.default
-                })}
+                {userCount !== 0 && t("DetailUsersAndReferents.users", { userCount })}
+                <span style={{ "color": referentColor }}>
+                    {t("DetailUsersAndReferents.referents", { referentCount })}
+                </span>
             </span>
             <i className={cx(fr.cx("fr-icon-arrow-right-s-line"))} />
         </a>

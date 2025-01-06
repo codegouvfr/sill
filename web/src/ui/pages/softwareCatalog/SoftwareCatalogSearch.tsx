@@ -7,11 +7,11 @@ import { declareComponentKeys } from "i18nifty";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import {
-    useTranslation,
     useLang,
     softwareCategoriesFrBySoftwareCategoryEn,
     useGetOrganizationFullName
 } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
 import MenuItem from "@mui/material/MenuItem";
 import SelectMui from "@mui/material/Select";
@@ -88,8 +88,7 @@ export function SoftwareCatalogSearch(props: Props) {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ SoftwareCatalogSearch });
-    const { t: tCommon } = useTranslation({ "App": undefined });
+    const { t } = useTranslation();
 
     const [filtersWrapperDivElement, setFiltersWrapperDivElement] =
         useState<HTMLDivElement | null>(null);
@@ -128,7 +127,7 @@ export function SoftwareCatalogSearch(props: Props) {
             <div className={cx(classes.basicSearch, className)}>
                 <SearchBar
                     className={classes.searchBar}
-                    label={t("placeholder")}
+                    label={t("SoftwareCatalogSearch.placeholder")}
                     renderInput={({ className, id, placeholder, type }) => {
                         const [inputElement, setInputElement] =
                             useState<HTMLInputElement | null>(null);
@@ -164,7 +163,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     aria-expanded={areFiltersOpen ? "true" : "false"}
                     aria-controls={filtersWrapperId}
                 >
-                    {t("filters")}
+                    {t("SoftwareCatalogSearch.filters")}
                 </Button>
             </div>
             <div
@@ -176,8 +175,13 @@ export function SoftwareCatalogSearch(props: Props) {
                     className={classes.filterSelectGroup}
                     label={
                         <>
-                            {t("organizationLabel")}{" "}
-                            <Tooltip title={t("organization filter hint")} arrow>
+                            {t("SoftwareCatalogSearch.organizationLabel")}{" "}
+                            <Tooltip
+                                title={t(
+                                    "SoftwareCatalogSearch.organization filter hint"
+                                )}
+                                arrow
+                            >
                                 <i className={fr.cx("ri-question-line")} />
                             </Tooltip>
                         </>
@@ -190,7 +194,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     disabled={organizationOptions.length === 0}
                     options={[
                         {
-                            "label": tCommon("allFeminine"),
+                            "label": t("app.allFeminine"),
                             "value": ""
                         },
                         ...organizationOptions.map(({ organization, softwareCount }) => ({
@@ -204,7 +208,7 @@ export function SoftwareCatalogSearch(props: Props) {
 
                 <SelectNext
                     className={classes.filterSelectGroup}
-                    label={t("categoriesLabel")}
+                    label={t("SoftwareCatalogSearch.categoriesLabel")}
                     disabled={categoryOptions.length === 0}
                     nativeSelectProps={{
                         "onChange": event =>
@@ -213,7 +217,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     }}
                     options={[
                         {
-                            "label": tCommon("allFeminine"),
+                            "label": t("app.allFeminine"),
                             "value": ""
                         },
                         ...categoryOptions
@@ -239,7 +243,7 @@ export function SoftwareCatalogSearch(props: Props) {
 
                 <SelectNext
                     className={classes.filterSelectGroup}
-                    label={t("environnement label")}
+                    label={t("SoftwareCatalogSearch.environnement label")}
                     nativeSelectProps={{
                         "onChange": event =>
                             onEnvironmentChange(event.target.value || undefined),
@@ -247,18 +251,22 @@ export function SoftwareCatalogSearch(props: Props) {
                     }}
                     options={[
                         {
-                            "label": tCommon("all"),
+                            "label": t("app.all"),
                             "value": "" as const
                         },
                         ...environmentOptions.map(({ environment, softwareCount }) => ({
                             "value": environment,
-                            "label": `${t(environment)} (${softwareCount})`
+                            "label": `${t(
+                                `SoftwareCatalogSearch.${environment}`
+                            )} (${softwareCount})`
                         }))
                     ]}
                 />
 
                 <div className={classes.filterSelectGroup}>
-                    <label htmlFor="prerogatives-label">{t("prerogativesLabel")}</label>
+                    <label htmlFor="prerogatives-label">
+                        {t("SoftwareCatalogSearch.prerogativesLabel")}
+                    </label>
                     <SelectMui
                         multiple
                         displayEmpty={true}
@@ -273,7 +281,7 @@ export function SoftwareCatalogSearch(props: Props) {
                         className={cx(fr.cx("fr-select"), classes.multiSelect)}
                         input={<InputBase />}
                         renderValue={prerogatives =>
-                            t("number of prerogatives selected", {
+                            t("SoftwareCatalogSearch.number of prerogatives selected", {
                                 "count": prerogatives.length
                             })
                         }
@@ -293,27 +301,27 @@ export function SoftwareCatalogSearch(props: Props) {
                                         switch (prerogative) {
                                             case "doRespectRgaa":
                                                 return `${t(
-                                                    "doRespectRgaa"
+                                                    "SoftwareCatalogSearch.doRespectRgaa"
                                                 )} (${softwareCount})`;
                                             case "isFromFrenchPublicServices":
                                                 return `${t(
-                                                    "isFromFrenchPublicServices"
+                                                    "SoftwareCatalogSearch.isFromFrenchPublicServices"
                                                 )} (${softwareCount})`;
                                             case "isInstallableOnUserComputer":
                                                 return `${t(
-                                                    "isInstallableOnUserComputer"
+                                                    "SoftwareCatalogSearch.isInstallableOnUserComputer"
                                                 )} (${softwareCount})`;
                                             case "isTestable":
                                                 return `${t(
-                                                    "isTestable"
+                                                    "SoftwareCatalogSearch.isTestable"
                                                 )} (${softwareCount})`;
                                             case "isPresentInSupportContract":
                                                 return `${t(
-                                                    "isPresentInSupportContract"
+                                                    "SoftwareCatalogSearch.isPresentInSupportContract"
                                                 )} (${softwareCount})`;
                                             case "isAvailableAsMobileApp":
                                                 return `${t(
-                                                    "isAvailableAsMobileApp"
+                                                    "SoftwareCatalogSearch.isAvailableAsMobileApp"
                                                 )} (${softwareCount})`;
                                         }
                                     })()}
