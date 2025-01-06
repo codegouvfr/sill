@@ -253,10 +253,10 @@ export function SoftwareFormStep2(props: Step2Props) {
                         noOptionText={t("app.no result")}
                         loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("SoftwareFormStep2.external id"),
+                            "label": t("softwareFormStep2.external id"),
                             "hintText": (
                                 <Trans
-                                    i18nKey={"SoftwareFormStep2.external id hint_fill"}
+                                    i18nKey={"softwareFormStep2.external id hint_fill"}
                                     components={{
                                         code: <code />,
                                         br: <br />,
@@ -296,7 +296,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                     />
                 )}
             />
-            <p className="fr-info-text">{t("SoftwareFormStep2.autofill notice")}</p>
+            <p className="fr-info-text">{t("softwareFormStep2.autofill notice")}</p>
             <div
                 style={{
                     "display": "flex",
@@ -313,8 +313,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 ...style,
                                 "marginTop": fr.spacing("4v")
                             }}
-                            label={t("SoftwareFormStep2.logo url")}
-                            hintText={t("SoftwareFormStep2.logo url hint")}
+                            label={t("softwareFormStep2.logo url")}
+                            hintText={t("softwareFormStep2.logo url hint")}
                             nativeInputProps={{
                                 ...register("softwareLogoUrl", {
                                     "pattern": /^(?:https:)?\/\//
@@ -323,14 +323,14 @@ export function SoftwareFormStep2(props: Step2Props) {
                             state={
                                 errors.softwareLogoUrl !== undefined ? "error" : undefined
                             }
-                            stateRelatedMessage={t("SoftwareFormStep2.must be an url")}
+                            stateRelatedMessage={t("softwareFormStep2.must be an url")}
                         />
                     )}
                 />
                 {watch("softwareLogoUrl") && (
                     <img
                         src={watch("softwareLogoUrl")}
-                        alt={t("SoftwareFormStep2.logo preview alt")}
+                        alt={t("softwareFormStep2.logo preview alt")}
                         style={{
                             "marginLeft": fr.spacing("4v"),
                             "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,
@@ -351,8 +351,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("SoftwareFormStep2.comptoir du libre id")}
-                        hintText={t("SoftwareFormStep2.comptoir du libre id hint")}
+                        label={t("softwareFormStep2.comptoir du libre id")}
+                        hintText={t("softwareFormStep2.comptoir du libre id hint")}
                         nativeInputProps={{
                             ...register("comptoirDuLibreIdInputValue", {
                                 "validate": value => {
@@ -374,7 +374,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 : undefined
                         }
                         stateRelatedMessage={t(
-                            "SoftwareFormStep2.invalid comptoir du libre id"
+                            "softwareFormStep2.invalid comptoir du libre id"
                         )}
                     />
                 )}
@@ -388,7 +388,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("SoftwareFormStep2.software name")}
+                        label={t("softwareFormStep2.software name")}
                         nativeInputProps={{
                             ...register("softwareName", { "required": true })
                         }}
@@ -406,8 +406,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("SoftwareFormStep2.software feature")}
-                        hintText={t("SoftwareFormStep2.software feature hint")}
+                        label={t("softwareFormStep2.software feature")}
+                        hintText={t("softwareFormStep2.software feature hint")}
                         nativeInputProps={{
                             ...register("softwareDescription", { "required": true })
                         }}
@@ -427,8 +427,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("SoftwareFormStep2.license")}
-                        hintText={t("SoftwareFormStep2.license hint")}
+                        label={t("softwareFormStep2.license")}
+                        hintText={t("softwareFormStep2.license hint")}
                         nativeInputProps={{
                             ...register("softwareLicense", { "required": true })
                         }}
@@ -446,8 +446,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("SoftwareFormStep2.minimal version")}
-                        hintText={t("SoftwareFormStep2.minimal version hint")}
+                        label={t("softwareFormStep2.minimal version")}
+                        hintText={t("softwareFormStep2.minimal version hint")}
                         nativeInputProps={{
                             ...register("softwareMinimalVersion", { "required": false })
                         }}
@@ -465,8 +465,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                 style={{
                     "marginTop": fr.spacing("4v")
                 }}
-                label={t("SoftwareFormStep2.keywords")}
-                hintText={t("SoftwareFormStep2.keywords hint")}
+                label={t("softwareFormStep2.keywords")}
+                hintText={t("softwareFormStep2.keywords hint")}
                 nativeInputProps={{
                     ...register("keywordsInputValue")
                 }}

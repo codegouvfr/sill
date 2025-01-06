@@ -58,13 +58,13 @@ export function DeclarationRemovalModal() {
         <modal.Component
             title={
                 declarationType == "referent"
-                    ? t("DeclarationRemovalModal.stop being_referent", { softwareName })
-                    : t("DeclarationRemovalModal.stop being_user", { softwareName })
+                    ? t("declarationRemovalModal.stop being_referent", { softwareName })
+                    : t("declarationRemovalModal.stop being_user", { softwareName })
             }
             buttons={[
                 {
                     "doClosesModal": true,
-                    "children": t("DeclarationRemovalModal.cancel")
+                    "children": t("declarationRemovalModal.cancel")
                 },
                 {
                     "doClosesModal": false,
@@ -78,7 +78,7 @@ export function DeclarationRemovalModal() {
                     },
                     "children": (
                         <>
-                            {t("DeclarationRemovalModal.confirm")}{" "}
+                            {t("declarationRemovalModal.confirm")}{" "}
                             {isRemovingUserDeclaration && (
                                 <>
                                     &nbsp;&nbsp;&nbsp;
@@ -91,8 +91,8 @@ export function DeclarationRemovalModal() {
             ]}
         >
             {declarationType === "referent"
-                ? t("DeclarationRemovalModal.do you confirm_referent")
-                : t("DeclarationRemovalModal.do you confirm_using")}{" "}
+                ? t("declarationRemovalModal.do you confirm_referent")
+                : t("declarationRemovalModal.do you confirm_using")}{" "}
             {softwareName} ?
         </modal.Component>
     );

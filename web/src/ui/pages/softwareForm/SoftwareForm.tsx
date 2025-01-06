@@ -123,12 +123,12 @@ export default function SoftwareForm(props: Props) {
                             switch (route.name) {
                                 case "softwareCreationForm":
                                     return formData.step2?.softwareName
-                                        ? t("SoftwareForm.add software", {
+                                        ? t("softwareForm.add software", {
                                               "name": formData.step2.softwareName
                                           })
-                                        : t("SoftwareForm.add unamed software");
+                                        : t("softwareForm.add unamed software");
                                 case "softwareUpdateForm":
-                                    return t("SoftwareForm.update software", {
+                                    return t("softwareForm.update software", {
                                         "name": formData.step2?.softwareName ?? ""
                                     });
                             }
@@ -147,41 +147,41 @@ export default function SoftwareForm(props: Props) {
                                         case "softwareCreationForm":
                                             return softwareName === undefined
                                                 ? t(
-                                                      "SoftwareForm.stepper title_add_unnamed"
+                                                      "softwareForm.stepper title_add_unnamed"
                                                   )
                                                 : t(
-                                                      "SoftwareForm.stepper title_add_named",
+                                                      "softwareForm.stepper title_add_named",
                                                       { softwareName }
                                                   );
                                         case "softwareUpdateForm":
                                             return t(
-                                                "SoftwareForm.stepper title_update",
+                                                "softwareForm.stepper title_update",
                                                 { softwareName }
                                             );
                                     }
                                 })();
                             case 2:
                                 return softwareName === undefined
-                                    ? t("SoftwareForm.stepper title_info_unnamed")
-                                    : t("SoftwareForm.stepper title_info_named", {
+                                    ? t("softwareForm.stepper title_info_unnamed")
+                                    : t("softwareForm.stepper title_info_named", {
                                           softwareName
                                       });
                             case 3:
                                 return softwareName === undefined
                                     ? t(
-                                          "SoftwareForm.stepper title_prerequisites_unnamed"
+                                          "softwareForm.stepper title_prerequisites_unnamed"
                                       )
                                     : t(
-                                          "SoftwareForm.stepper title_prerequisites_named",
+                                          "softwareForm.stepper title_prerequisites_named",
                                           { softwareName }
                                       );
                             case 4:
                                 return softwareName === undefined
                                     ? t(
-                                          "SoftwareForm.stepper title_similar_software_unnamed"
+                                          "softwareForm.stepper title_similar_software_unnamed"
                                       )
                                     : t(
-                                          "SoftwareForm.stepper title_similar_software_named",
+                                          "softwareForm.stepper title_similar_software_named",
                                           { softwareName }
                                       );
                             default:
@@ -266,11 +266,11 @@ export default function SoftwareForm(props: Props) {
                             {(() => {
                                 switch (route.name) {
                                     case "softwareCreationForm":
-                                        return t("SoftwareForm.add software", {
+                                        return t("softwareForm.add software", {
                                             "name": formData.step2?.softwareName
                                         });
                                     case "softwareUpdateForm":
-                                        return t("SoftwareForm.update software", {
+                                        return t("softwareForm.update software", {
                                             "name": formData.step2?.softwareName ?? ""
                                         });
                                 }

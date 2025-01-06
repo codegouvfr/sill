@@ -97,23 +97,23 @@ export function SoftwareFormStep1(props: Step1Props) {
                 stateRelatedMessage="This is field is required"
                 options={[
                     {
-                        "label": t("SoftwareFormStep1.software desktop"),
+                        "label": t("softwareFormStep1.software desktop"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "desktop/mobile"
                         }
                     },
                     {
-                        "label": t("SoftwareFormStep1.software cloud"),
-                        "hintText": t("SoftwareFormStep1.software cloud hint"),
+                        "label": t("softwareFormStep1.software cloud"),
+                        "hintText": t("softwareFormStep1.software cloud hint"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "cloud"
                         }
                     },
                     {
-                        "label": t("SoftwareFormStep1.module"),
-                        "hintText": t("SoftwareFormStep1.module hint"),
+                        "label": t("softwareFormStep1.module"),
+                        "hintText": t("softwareFormStep1.module hint"),
                         "nativeInputProps": {
                             ...register("softwareType", { "required": true }),
                             "value": "stack"
@@ -123,7 +123,7 @@ export function SoftwareFormStep1(props: Step1Props) {
             />
             {watch("softwareType") === "desktop/mobile" && (
                 <Checkbox
-                    legend={t("SoftwareFormStep1.checkbox legend")}
+                    legend={t("softwareFormStep1.checkbox legend")}
                     state={errors.osCheckboxValues !== undefined ? "error" : undefined}
                     stateRelatedMessage={t("app.required")}
                     options={[

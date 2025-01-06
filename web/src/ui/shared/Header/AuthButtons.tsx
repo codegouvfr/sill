@@ -37,7 +37,7 @@ export function AuthButtons(props: Props) {
                         buttonProps: {
                             onClick: () => userAuthenticationApi.login()
                         },
-                        text: t("AuthButtons.login")
+                        text: t("authButtons.login")
                     }}
                 />
                 <HeaderQuickAccessItem
@@ -47,7 +47,7 @@ export function AuthButtons(props: Props) {
                         buttonProps: {
                             onClick: () => userAuthenticationApi.register()
                         },
-                        text: t("AuthButtons.register")
+                        text: t("authButtons.register")
                     }}
                 />
             </>
@@ -68,7 +68,7 @@ export function AuthButtons(props: Props) {
                             ),
                             ...routes.account().link
                         },
-                        "text": t("AuthButtons.account")
+                        "text": t("authButtons.account")
                     } as const
                 }
             />
@@ -79,7 +79,7 @@ export function AuthButtons(props: Props) {
                     buttonProps: {
                         onClick: () => userAuthenticationApi.logout()
                     },
-                    text: t("AuthButtons.logout")
+                    text: t("authButtons.logout")
                 }}
             />
         </>

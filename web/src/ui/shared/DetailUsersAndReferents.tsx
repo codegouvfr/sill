@@ -32,9 +32,9 @@ export function DetailUsersAndReferents(props: Props) {
         >
             <i className={cx(fr.cx("fr-icon-user-line"), classes.detailsUsersIcon)} />
             <span>
-                {userCount !== 0 && t("DetailUsersAndReferents.users", { userCount })}
+                {userCount !== 0 && t("detailUsersAndReferents.users", { userCount })}
                 <span style={{ "color": referentColor }}>
-                    {t("DetailUsersAndReferents.referents", { referentCount })}
+                    {t("detailUsersAndReferents.referents", { referentCount })}
                 </span>
             </span>
             <i className={cx(fr.cx("fr-icon-arrow-right-s-line"))} />

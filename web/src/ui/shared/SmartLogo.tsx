@@ -35,7 +35,7 @@ export function SmartLogo(props: Props) {
         <img
             className={cx(classes.logo)}
             src={logoUrl ?? softwareLogoPlaceholder}
-            alt={t("SmartLogo.software logo")}
+            alt={t("smartLogo.software logo")}
         />
     );
 }

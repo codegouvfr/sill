@@ -75,7 +75,7 @@ export default function UserProfile(props: Props) {
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
                 <h4 className={classes.headerTitle}>
-                    {t("UserProfile.agent profile", {
+                    {t("userProfile.agent profile", {
                         "email": profile.email,
                         "organization": profile.organization
                     })}
@@ -87,7 +87,7 @@ export default function UserProfile(props: Props) {
                         priority="secondary"
                         linkProps={routes.account().link}
                     >
-                        {t("UserProfile.edit my profile")}
+                        {t("userProfile.edit my profile")}
                     </Button>
                 )}
             </div>
@@ -118,11 +118,11 @@ export default function UserProfile(props: Props) {
                                 iconId="fr-icon-checkbox-circle-line"
                             >
                                 {isReferent && isTechnicalExpert
-                                    ? t("UserProfile.badge text_expert")
+                                    ? t("userProfile.badge text_expert")
                                     : isReferent
-                                    ? t("UserProfile.badge text_referent")
+                                    ? t("userProfile.badge text_referent")
                                     : isUser
-                                    ? t("UserProfile.badge text_user")
+                                    ? t("userProfile.badge text_user")
                                     : ""}
                             </Tag>
                             <Markdown className={classes.usecaseDescription}>
@@ -135,7 +135,7 @@ export default function UserProfile(props: Props) {
             {profile.about !== undefined ? (
                 <Markdown>{profile.about}</Markdown>
             ) : (
-                <p>{t("UserProfile.no description")}</p>
+                <p>{t("userProfile.no description")}</p>
             )}
             <div className={classes.sendEmailButtonWrapper}>
                 <Button
@@ -143,7 +143,7 @@ export default function UserProfile(props: Props) {
                         "href": `mailto:${profile.email}`
                     }}
                 >
-                    {t("UserProfile.send email")}
+                    {t("userProfile.send email")}
                 </Button>
             </div>
         </div>

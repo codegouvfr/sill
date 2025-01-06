@@ -43,7 +43,7 @@ export const Footer = memo(
                             }
                         },
                         {
-                            "text": t("Footer.contribute"),
+                            "text": t("footer.contribute"),
                             "linkProps": {
                                 "href": "https://github.com/codegouvfr/sill-web/issues/new"
                             }

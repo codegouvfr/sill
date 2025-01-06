@@ -70,8 +70,8 @@ export function DeclarationFormStep2Referent(props: Props) {
             )}
         >
             <RadioButtons
-                legend={t("DeclarationFormStep2Referent.legend title")}
-                hintText={t("DeclarationFormStep2Referent.legend hint")}
+                legend={t("declarationFormStep2Referent.legend title")}
+                hintText={t("declarationFormStep2Referent.legend hint")}
                 options={[
                     {
                         "label": t("app.yes"),
@@ -99,7 +99,7 @@ export function DeclarationFormStep2Referent(props: Props) {
             />
 
             <Input
-                label={t("DeclarationFormStep2Referent.useCase")}
+                label={t("declarationFormStep2Referent.useCase")}
                 nativeInputProps={{
                     ...register("usecaseDescription", { "required": true })
                 }}
@@ -108,7 +108,7 @@ export function DeclarationFormStep2Referent(props: Props) {
             />
             {softwareType === "cloud" && (
                 <Input
-                    label={t("DeclarationFormStep2Referent.service")}
+                    label={t("declarationFormStep2Referent.service")}
                     nativeInputProps={{
                         ...register("serviceUrlInputValue", {
                             "pattern": /^http/

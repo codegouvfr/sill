@@ -50,7 +50,7 @@ export const SimilarSoftwareTab = (props: Props) => {
     return (
         <section className={className}>
             <p className={fr.cx("fr-text--bold")}>
-                {t("SimilarSoftwareTab.similar software in sill")} (
+                {t("similarSoftwareTab.similar software in sill")} (
                 {similarSoftwares.filter(({ isInSill }) => isInSill).length}) :
             </p>
             {similarSoftwares
@@ -107,7 +107,7 @@ export const SimilarSoftwareTab = (props: Props) => {
             {similarSoftwaresNotInSill.length === 0 ? null : (
                 <>
                     <p className={fr.cx("fr-text--bold", "fr-mt-8v")}>
-                        {t("SimilarSoftwareTab.similar software not in sill")} (
+                        {t("similarSoftwareTab.similar software not in sill")} (
                         {similarSoftwaresNotInSill.length}) :
                     </p>
                     <ul>
@@ -158,7 +158,7 @@ export const SimilarSoftwareTab = (props: Props) => {
                                                     )}
                                                 >
                                                     {t(
-                                                        "SimilarSoftwareTab.libre software"
+                                                        "similarSoftwareTab.libre software"
                                                     )}
                                                 </Tag>
                                             ) : null}

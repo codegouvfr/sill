@@ -100,10 +100,10 @@ function AccountReady(props: { className?: string }) {
     return (
         <div className={cx(fr.cx("fr-container"), className)}>
             <div className={classes.oidcInfos}>
-                <h2 className={classes.title}>{t("Account.title")}</h2>
+                <h2 className={classes.title}>{t("account.title")}</h2>
 
                 <Input
-                    label={t("Account.mail")}
+                    label={t("account.mail")}
                     nativeInputProps={{
                         "value": email.value,
                         "name": "email",
@@ -118,15 +118,15 @@ function AccountReady(props: { className?: string }) {
                         className={fr.cx("fr-btn", "fr-btn--secondary", "fr-mb-4w")}
                         href={userAccountManagement.getAccountManagementUrl()}
                     >
-                        {t("Account.manage account")}
+                        {t("account.manage account")}
                     </a>
                 )}
 
                 <OrganizationField firstTime={false} />
             </div>
             <>
-                <h2>{t("Account.about title")}</h2>
-                <p> {t("Account.about description")} </p>
+                <h2>{t("account.about title")}</h2>
+                <p> {t("account.about description")} </p>
                 <div
                     style={{
                         "display": "flex",
@@ -139,7 +139,7 @@ function AccountReady(props: { className?: string }) {
                         disabled={aboutAndIsPublic.isBeingUpdated}
                         options={[
                             {
-                                "label": t("Account.isPublic label"),
+                                "label": t("account.isPublic label"),
                                 "nativeInputProps": {
                                     "checked": isPublicInputValue,
                                     "onChange": event =>
@@ -149,7 +149,7 @@ function AccountReady(props: { className?: string }) {
                         ]}
                         stateRelatedMessage={
                             <Trans
-                                i18nKey="Account.isPublic hint"
+                                i18nKey="account.isPublic hint"
                                 components={{
                                     a: (
                                         <a
@@ -159,7 +159,8 @@ function AccountReady(props: { className?: string }) {
                                                 }).link.href
                                             }
                                         />
-                                    )
+                                    ),
+                                    space: <span> </span>
                                 }}
                             ></Trans>
                         }
@@ -185,7 +186,7 @@ function AccountReady(props: { className?: string }) {
                             aboutAndIsPublic.isPublic === isPublicInputValue
                         }
                     >
-                        {t("Account.update")}
+                        {t("account.update")}
                     </Button>
                     {aboutAndIsPublic.isBeingUpdated && <CircularProgress size={30} />}
                 </div>
@@ -213,7 +214,7 @@ function AccountReady(props: { className?: string }) {
                         "marginBottom": fr.spacing("6v")
                     }}
                 >
-                    {t("Account.go to profile")}
+                    {t("account.go to profile")}
                 </a>
             </>
         </div>

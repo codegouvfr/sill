@@ -70,7 +70,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                         <img
                             className={classes.logo}
                             src={softwareLogoUrl}
-                            alt={t("HeaderDetailCard.software logo")}
+                            alt={t("headerDetailCard.software logo")}
                         />
                     </div>
                     <div className={classes.mainInfo}>
@@ -87,7 +87,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("HeaderDetailCard.you are referent")}
+                                    {t("headerDetailCard.you are referent")}
                                 </span>
                             ) : userDeclaration?.isUser ? (
                                 <span
@@ -99,14 +99,14 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("HeaderDetailCard.you are user")}
+                                    {t("headerDetailCard.you are user")}
                                 </span>
                             ) : null}
                         </div>
                         {authors.length > 0 && (
                             <div>
                                 <span className={classes.authors}>
-                                    {t("HeaderDetailCard.authors")}
+                                    {t("headerDetailCard.authors")}
                                 </span>
                                 <span>
                                     {authors.map(author => (
@@ -125,7 +125,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             <>
                                 &nbsp; &nbsp;
                                 <p className={classes.dereferencedText}>
-                                    {t("HeaderDetailCard.software dereferenced", {
+                                    {t("headerDetailCard.software dereferenced", {
                                         "when": getFormattedDate({
                                             "time": softwareDereferencing.time,
                                             lang,
@@ -136,7 +136,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         ? ""
                                         : `, ${softwareDereferencing.reason}`}
                                     {t(
-                                        "HeaderDetailCard.software dereferenced last version",
+                                        "headerDetailCard.software dereferenced last version",
                                         {
                                             lastRecommendedVersion:
                                                 softwareDereferencing.lastRecommendedVersion
@@ -164,7 +164,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("HeaderDetailCard.website")}
+                        {t("headerDetailCard.website")}
                     </a>
                 )}
                 {documentationWebsite && (
@@ -183,7 +183,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("HeaderDetailCard.documentation")}
+                        {t("headerDetailCard.documentation")}
                     </a>
                 )}
                 {sourceCodeRepository && (
@@ -200,7 +200,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             "fr-my-2v"
                         )}
                     >
-                        {t("HeaderDetailCard.repository")}
+                        {t("headerDetailCard.repository")}
                     </a>
                 )}
             </div>

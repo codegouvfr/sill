@@ -28,18 +28,19 @@ export function CnllServiceProviderModal(props: Props) {
     return (
         <modal.Component
             className={className}
-            title={t("CnllServiceProviderModal.modal title")}
+            title={t("cnllServiceProviderModal.modal title")}
             buttons={[
                 {
                     "doClosesModal": true,
-                    "children": t("CnllServiceProviderModal.close")
+                    "children": t("cnllServiceProviderModal.close")
                 }
             ]}
         >
             <Trans
-                i18nKey="CnllServiceProviderModal.content description"
+                i18nKey="cnllServiceProviderModal.content description"
                 components={{
-                    a: <a href="https://cnll.fr/" target="_blank" rel="noreferrer" />
+                    a: <a href="https://cnll.fr/" target="_blank" rel="noreferrer" />,
+                    space: <span> </span>
                 }}
                 values={{
                     "count": annuaireCnllServiceProviders.length,

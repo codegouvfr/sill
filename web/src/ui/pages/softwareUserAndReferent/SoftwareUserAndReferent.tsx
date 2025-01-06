@@ -63,14 +63,14 @@ export default function SoftwareUserAndReferent(props: Props) {
         {
             "id": 0,
             "name": "referents" as const,
-            "label": `${t("SoftwareUserAndReferent.tab referent title", {
+            "label": `${t("common.referent", {
                 count: referents.length
             })}`
         },
         {
             "id": 1,
             "name": "users" as const,
-            "label": `${t("SoftwareUserAndReferent.tab user title", {
+            "label": `${t("common.user", {
                 count: users.length
             })}`
         }
@@ -100,27 +100,27 @@ export default function SoftwareUserAndReferent(props: Props) {
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
-                                {t("SoftwareUserAndReferent.is technical expert")}
+                                {t("softwareUserAndReferent.is technical expert")}
                             </Tag>
                         )}
                     </p>
                     <p>
                         <span className={classes.infoLegend}>
-                            {t("SoftwareUserAndReferent.organization")}
+                            {t("softwareUserAndReferent.organization")}
                         </span>
                         : {getOrganizationFullName(organization)}{" "}
                     </p>
                     {usecaseDescription && (
                         <p>
                             <span className={classes.infoLegend}>
-                                {t("SoftwareUserAndReferent.use case")}
+                                {t("softwareUserAndReferent.use case")}
                             </span>
                             : {usecaseDescription}
                         </p>
                     )}
                     {serviceUrl && (
                         <p>
-                            {t("SoftwareUserAndReferent.is referent of")}{" "}
+                            {t("softwareUserAndReferent.is referent of")}{" "}
                             <a href={serviceUrl}>{serviceUrl}</a>
                         </p>
                     )}
@@ -136,14 +136,14 @@ export default function SoftwareUserAndReferent(props: Props) {
                 <li key={index}>
                     <p>
                         <span className={classes.infoLegend}>
-                            {t("SoftwareUserAndReferent.organization")}
+                            {t("softwareUserAndReferent.organization")}
                         </span>
                         : {getOrganizationFullName(organization)}{" "}
                     </p>
                     {usecaseDescription && (
                         <p>
                             <span className={classes.infoLegend}>
-                                {t("SoftwareUserAndReferent.use case")}
+                                {t("softwareUserAndReferent.use case")}
                             </span>
                             : {usecaseDescription}
                         </p>
@@ -151,7 +151,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                     {serviceUrl !== undefined && (
                         <p>
                             <span className={classes.infoLegend}>
-                                {t("SoftwareUserAndReferent.is user of")}{" "}
+                                {t("softwareUserAndReferent.is user of")}{" "}
                             </span>
                             <a href={serviceUrl} target="_blank" rel="noreferrer">
                                 {serviceUrl}
@@ -172,7 +172,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                             "linkProps": {
                                 ...routes.softwareCatalog().link
                             },
-                            label: t("SoftwareUserAndReferent.catalog breadcrumb")
+                            label: t("softwareUserAndReferent.catalog breadcrumb")
                         },
                         {
                             "linkProps": routes.softwareDetails({ "name": softwareName })
@@ -181,7 +181,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                         }
                     ]}
                     currentPageLabel={t(
-                        "SoftwareUserAndReferent.user and referent breadcrumb"
+                        "softwareUserAndReferent.user and referent breadcrumb"
                     )}
                     className={classes.breadcrumb}
                 />
@@ -208,7 +208,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                         <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                     </a>
                     <h4 className={classes.title}>
-                        {t("SoftwareUserAndReferent.title")}
+                        {t("softwareUserAndReferent.title")}
                     </h4>
                 </div>
                 <div className={classes.main}>
@@ -223,12 +223,12 @@ export default function SoftwareUserAndReferent(props: Props) {
                                 aria-controls="fr-sidemenu-wrapper"
                                 aria-expanded="false"
                             >
-                                {t("SoftwareUserAndReferent.category")} (
+                                {t("softwareUserAndReferent.category")} (
                                 {activeMenu === 0
-                                    ? t("SoftwareUserAndReferent.tab referent title", {
+                                    ? t("common.referent", {
                                           "count": referents.length
                                       })
-                                    : t("SoftwareUserAndReferent.tab user title", {
+                                    : t("common.user", {
                                           "count": users.length
                                       })}
                                 )
@@ -322,7 +322,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                     className={classes.softwareDetails}
                     {...routes.softwareDetails({ "name": softwareName }).link}
                 >
-                    {t("SoftwareUserAndReferent.softwareDetails")}
+                    {t("softwareUserAndReferent.softwareDetails")}
                 </Button>
                 <Button
                     priority="primary"
@@ -334,8 +334,8 @@ export default function SoftwareUserAndReferent(props: Props) {
                     }
                 >
                     {activeMenu === 0
-                        ? t("SoftwareUserAndReferent.declare referent")
-                        : t("SoftwareUserAndReferent.declare user")}
+                        ? t("softwareUserAndReferent.declare referent")
+                        : t("softwareUserAndReferent.declare user")}
                 </Button>
             </ActionsFooter>
         </div>
