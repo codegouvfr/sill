@@ -76,8 +76,8 @@ export function InstanceFormStep2(props: Step1Props) {
             )}
         >
             <RadioButtons
-                legend={t("InstanceFormStep2.is in public access label")}
-                hintText={t("InstanceFormStep2.is in public access hint")}
+                legend={t("instanceFormStep2.is in public access label")}
+                hintText={t("instanceFormStep2.is in public access hint")}
                 options={[
                     {
                         "label": t("app.yes"),
@@ -103,8 +103,8 @@ export function InstanceFormStep2(props: Step1Props) {
             />
 
             <Input
-                label={t("InstanceFormStep2.instance url label")}
-                hintText={t("InstanceFormStep2.instance url hint")}
+                label={t("instanceFormStep2.instance url label")}
+                hintText={t("instanceFormStep2.instance url hint")}
                 nativeInputProps={{
                     ...register("instanceUrl", {
                         "required": watch("isPublic") === "true",
@@ -118,8 +118,8 @@ export function InstanceFormStep2(props: Step1Props) {
             />
 
             <Input
-                label={t("InstanceFormStep2.organization label")}
-                hintText={t("InstanceFormStep2.organization hint")}
+                label={t("instanceFormStep2.organization label")}
+                hintText={t("instanceFormStep2.organization hint")}
                 nativeInputProps={{
                     ...register("organization", { "required": true })
                 }}
@@ -127,8 +127,8 @@ export function InstanceFormStep2(props: Step1Props) {
                 stateRelatedMessage={t("app.required")}
             />
             <Input
-                label={t("InstanceFormStep2.targeted public label")}
-                hintText={t("InstanceFormStep2.targeted public hint")}
+                label={t("instanceFormStep2.targeted public label")}
+                hintText={t("instanceFormStep2.targeted public hint")}
                 nativeInputProps={{
                     ...register("targetAudience", { "required": true })
                 }}

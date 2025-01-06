@@ -87,13 +87,13 @@ export default function InstanceForm(props: Props) {
         { title: string; submitLabel: string; breadcrumbs: string }
     > = {
         instanceCreationForm: {
-            title: t("InstanceForm.title add instance form"),
-            breadcrumbs: t("InstanceForm.breadcrumb add instance"),
+            title: t("instanceForm.title add instance form"),
+            breadcrumbs: t("instanceForm.breadcrumb add instance"),
             submitLabel: t("app.add instance")
         },
         instanceUpdateForm: {
-            title: t("InstanceForm.title update instance form"),
-            breadcrumbs: t("InstanceForm.breadcrumb update instance"),
+            title: t("instanceForm.title update instance form"),
+            breadcrumbs: t("instanceForm.breadcrumb update instance"),
             submitLabel: t("app.update instance")
         }
     };
@@ -135,7 +135,7 @@ export default function InstanceForm(props: Props) {
                 <Stepper
                     currentStep={step}
                     stepCount={2}
-                    title={t(`InstanceForm.${titleName}`)}
+                    title={t(`instanceForm.${titleName}`)}
                     className={classes.stepper}
                 />
                 <InstanceFormStep1

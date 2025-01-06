@@ -49,10 +49,10 @@ export const Header = memo(
                         République <br /> Française{" "}
                     </>
                 }
-                serviceTitle={t("Header.title")}
+                serviceTitle={t("header.title")}
                 homeLinkProps={{
                     ...routes.home().link,
-                    "title": t("Header.home title")
+                    "title": t("header.home title")
                 }}
                 quickAccessItems={[
                     <LanguageSelect />,
@@ -72,7 +72,7 @@ export const Header = memo(
                     {
                         "isActive": routeName === routes.home.name,
                         "linkProps": routes.home().link,
-                        "text": t("Header.navigation welcome")
+                        "text": t("header.navigation welcome")
                     },
                     {
                         "isActive":
@@ -80,7 +80,7 @@ export const Header = memo(
                             routeName === routes.softwareDetails.name ||
                             routeName === routes.softwareUsersAndReferents.name,
                         "linkProps": routes.softwareCatalog().link,
-                        "text": t("Header.navigation catalog")
+                        "text": t("header.navigation catalog")
                     },
                     {
                         "isActive":
@@ -90,13 +90,13 @@ export const Header = memo(
                         "linkProps": routes.addSoftwareLanding().link,
                         "text":
                             routeName === routes.softwareUpdateForm.name
-                                ? t("Header.navigation update software")
-                                : t("Header.navigation add software")
+                                ? t("header.navigation update software")
+                                : t("header.navigation add software")
                     },
                     {
                         "isActive": routeName === routes.readme.name,
                         "linkProps": routes.readme().link,
-                        "text": t("Header.navigation about")
+                        "text": t("header.navigation about")
                     },
                     {
                         "linkProps": {
@@ -107,7 +107,7 @@ export const Header = memo(
                             )}`
                             /* cSpell:enable */
                         },
-                        "text": t("Header.navigation support request")
+                        "text": t("header.navigation support request")
                     }
                 ]}
             />

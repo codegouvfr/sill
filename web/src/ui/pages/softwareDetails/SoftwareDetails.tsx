@@ -65,7 +65,7 @@ export default function SoftwareDetails(props: Props) {
                                 "linkProps": {
                                     ...routes.softwareCatalog().link
                                 },
-                                "label": t("SoftwareDetails.catalog breadcrumb")
+                                "label": t("softwareDetails.catalog breadcrumb")
                             }
                         ]}
                         currentPageLabel={software.softwareName}
@@ -95,7 +95,7 @@ export default function SoftwareDetails(props: Props) {
                     <Tabs
                         tabs={[
                             {
-                                "label": t("SoftwareDetails.tab title overview"),
+                                "label": t("softwareDetails.tab title overview"),
                                 "isDefault": route.params.tab === undefined,
                                 "content": (
                                     <PreviewTab
@@ -151,7 +151,7 @@ export default function SoftwareDetails(props: Props) {
                                 : [
                                       {
                                           "label": t(
-                                              "SoftwareDetails.tab title instance",
+                                              "softwareDetails.tab title instance",
                                               {
                                                   instanceCount: software.instances.length
                                               }
@@ -175,7 +175,7 @@ export default function SoftwareDetails(props: Props) {
                                 : [
                                       {
                                           "label": t(
-                                              "SoftwareDetails.tab service providers",
+                                              "softwareDetails.tab service providers",
                                               {
                                                   serviceProvidersCount:
                                                       software.serviceProviders.length
@@ -185,7 +185,7 @@ export default function SoftwareDetails(props: Props) {
                                               <div>
                                                   <p className={fr.cx("fr-text--bold")}>
                                                       {t(
-                                                          "SoftwareDetails.list of service providers"
+                                                          "softwareDetails.list of service providers"
                                                       )}
                                                   </p>
                                                   <ul>
@@ -211,7 +211,7 @@ export default function SoftwareDetails(props: Props) {
                                 : [
                                       {
                                           "label": t(
-                                              "SoftwareDetails.tab title alike software",
+                                              "softwareDetails.tab title alike software",
                                               {
                                                   alikeSoftwareCountc:
                                                       software.similarSoftwares.length ??
@@ -286,7 +286,7 @@ export default function SoftwareDetails(props: Props) {
 
                                     const userInput = window.prompt(
                                         t(
-                                            "SoftwareDetails.please provide a reason for unreferencing this software"
+                                            "softwareDetails.please provide a reason for unreferencing this software"
                                         )
                                     );
 
@@ -302,7 +302,7 @@ export default function SoftwareDetails(props: Props) {
                                 {isUnreferencingOngoing ? (
                                     <CircularProgress size={17} />
                                 ) : (
-                                    t("SoftwareDetails.unreference software")
+                                    t("softwareDetails.unreference software")
                                 )}
                             </Button>
                         )}
@@ -315,7 +315,7 @@ export default function SoftwareDetails(props: Props) {
                                 }).link
                             }
                         >
-                            {t("SoftwareDetails.edit software")}
+                            {t("softwareDetails.edit software")}
                         </Button>
                         {(() => {
                             const declarationType = userDeclaration?.isReferent
@@ -333,7 +333,7 @@ export default function SoftwareDetails(props: Props) {
                                             }).link
                                         }
                                     >
-                                        {t("SoftwareDetails.declare referent")}
+                                        {t("softwareDetails.declare referent")}
                                     </Button>
                                 );
                             }
@@ -351,8 +351,8 @@ export default function SoftwareDetails(props: Props) {
                                         }
                                     >
                                         {declarationType === "user"
-                                            ? t("SoftwareDetails.stop being user")
-                                            : t("SoftwareDetails.stop being referent")}
+                                            ? t("softwareDetails.stop being user")
+                                            : t("softwareDetails.stop being referent")}
                                     </Button>
                                     {declarationType === "user" && (
                                         <Button
@@ -363,7 +363,7 @@ export default function SoftwareDetails(props: Props) {
                                                 }).link
                                             }
                                         >
-                                            {t("SoftwareDetails.become referent")}
+                                            {t("softwareDetails.become referent")}
                                         </Button>
                                     )}
                                 </>

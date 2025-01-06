@@ -50,7 +50,7 @@ export const ReferencedInstancesTab = (props: Props) => {
                 classname={"fr-mt-4w"}
             />
             <Button className={fr.cx("fr-mt-3w")} linkProps={createInstanceLink}>
-                {t("ReferencedInstancesTab.add instance")}
+                {t("referencedInstancesTab.add instance")}
             </Button>
         </section>
     );
@@ -74,13 +74,13 @@ const ReferenceInstancesSection = ({
         return (
             <>
                 <p className={fr.cx("fr-text--bold", classname)}>
-                    {t("ReferencedInstancesTab.privateInstanceCount", {
+                    {t("referencedInstancesTab.privateInstanceCount", {
                         "instanceCount": instances.length,
                         "organizationCount": Object.keys(instancesByOrganisation).length
                     })}
                 </p>
                 <span className={fr.cx("fr-hint-text")}>
-                    {t("ReferencedInstancesTab.connect to see private instances")}
+                    {t("referencedInstancesTab.connect to see private instances")}
                 </span>
             </>
         );
@@ -91,8 +91,8 @@ const ReferenceInstancesSection = ({
             <p className={fr.cx("fr-text--bold", classname)}>
                 {t(
                     visibility === "public"
-                        ? "ReferencedInstancesTab.publicInstanceCount"
-                        : "ReferencedInstancesTab.privateInstanceCount",
+                        ? "referencedInstancesTab.publicInstanceCount"
+                        : "referencedInstancesTab.privateInstanceCount",
                     {
                         "instanceCount": instances.length,
                         "organizationCount": Object.keys(instancesByOrganisation).length
@@ -124,7 +124,7 @@ const ReferenceInstancesSection = ({
                                                 classes.concernedPublic
                                             )}
                                         >
-                                            {t("ReferencedInstancesTab.concerned public")}
+                                            {t("referencedInstancesTab.concerned public")}
                                         </p>
                                         <p
                                             className={cx(
@@ -147,7 +147,7 @@ const ReferenceInstancesSection = ({
                                                     }
                                                 >
                                                     {t(
-                                                        "ReferencedInstancesTab.edit instance"
+                                                        "referencedInstancesTab.edit instance"
                                                     )}
                                                 </Button>
                                             )}
@@ -165,7 +165,7 @@ const ReferenceInstancesSection = ({
                                                     rel="noreferrer"
                                                 >
                                                     {t(
-                                                        "ReferencedInstancesTab.go to instance"
+                                                        "referencedInstancesTab.go to instance"
                                                     )}
                                                 </a>
                                             )}

@@ -107,7 +107,7 @@ export function InstanceFormStep1(props: Step1Props) {
                         )}
                         noOptionText={t("app.no result")}
                         dsfrInputProps={{
-                            "label": t("InstanceFormStep1.software instance"),
+                            "label": t("instanceFormStep1.software instance"),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,

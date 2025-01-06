@@ -72,12 +72,12 @@ export const PreviewTab = (props: Props) => {
                 <p style={{ "gridColumn": "span 2" }}>{softwareDescription}</p>
                 <div className="section">
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("PreviewTab.about")}
+                        {t("previewTab.about")}
                     </p>
                     {(softwareCurrentVersion || softwareDateCurrentVersion) && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.last version")}
+                                {t("previewTab.last version")}
                             </span>
                             {softwareCurrentVersion && (
                                 <span
@@ -106,7 +106,7 @@ export const PreviewTab = (props: Props) => {
                     {registerDate && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.register")}
+                                {t("previewTab.register")}
                             </span>
                             {capitalize(monthDate({ "time": registerDate, lang }))}
                         </p>
@@ -115,7 +115,7 @@ export const PreviewTab = (props: Props) => {
                     {minimalVersionRequired && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.minimal version")}
+                                {t("previewTab.minimal version")}
                             </span>
                             <span
                                 className={cx(
@@ -135,7 +135,7 @@ export const PreviewTab = (props: Props) => {
                     {license && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.license")}
+                                {t("previewTab.license")}
                             </span>
                             <span>{license}</span>
                         </p>
@@ -144,7 +144,7 @@ export const PreviewTab = (props: Props) => {
                     {keywords && keywords.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.keywords")} :{" "}
+                                {t("previewTab.keywords")} :{" "}
                             </span>
                             <span>{keywords.join(", ")}</span>
                         </p>
@@ -153,7 +153,7 @@ export const PreviewTab = (props: Props) => {
                     {programmingLanguages && programmingLanguages.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.programming languages")} :{" "}
+                                {t("previewTab.programming languages")} :{" "}
                             </span>
                             <span>{programmingLanguages.join(", ")}</span>
                         </p>
@@ -162,7 +162,7 @@ export const PreviewTab = (props: Props) => {
                     {applicationCategories && applicationCategories.length > 0 && (
                         <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                             <span className={classes.labelDetail}>
-                                {t("PreviewTab.application categories")} :{" "}
+                                {t("previewTab.application categories")} :{" "}
                             </span>
                             <span>{applicationCategories.join(", ")}</span>
                         </p>
@@ -170,7 +170,7 @@ export const PreviewTab = (props: Props) => {
                 </div>
                 <div className={classes.section}>
                     <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("PreviewTab.prerogatives")}
+                        {t("previewTab.prerogatives")}
                     </p>
 
                     {(
@@ -202,7 +202,7 @@ export const PreviewTab = (props: Props) => {
                             return null;
                         }
 
-                        const label = t(`PreviewTab.${prerogativeName}`);
+                        const label = t(`previewTab.${prerogativeName}`);
 
                         return (
                             <div
@@ -233,7 +233,7 @@ export const PreviewTab = (props: Props) => {
                                     <Tooltip
                                         title={
                                             <Trans
-                                                i18nKey="PreviewTab.what is the support market"
+                                                i18nKey="previewTab.what is the support market"
                                                 components={{
                                                     a: (
                                                         <a href="https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/" />
@@ -258,17 +258,17 @@ export const PreviewTab = (props: Props) => {
                     wikiDataUrl !== undefined) && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                            {t("PreviewTab.use full links")}
+                            {t("previewTab.use full links")}
                         </p>
                         {comptoireDuLibreUrl !== undefined && (
                             <a
                                 href={comptoireDuLibreUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                title={t("PreviewTab.comptoire du libre sheet")}
+                                title={t("previewTab.comptoire du libre sheet")}
                                 className={cx(classes.externalLink, classes.item)}
                             >
-                                {t("PreviewTab.comptoire du libre sheet")}
+                                {t("previewTab.comptoire du libre sheet")}
                             </a>
                         )}
                         {wikiDataUrl !== undefined && (
@@ -276,10 +276,10 @@ export const PreviewTab = (props: Props) => {
                                 href={wikiDataUrl}
                                 target="_blank"
                                 rel="noreferrer"
-                                title={t("PreviewTab.wikiData sheet")}
+                                title={t("previewTab.wikiData sheet")}
                                 className={cx(classes.externalLink, classes.item)}
                             >
-                                {t("PreviewTab.wikiData sheet")}
+                                {t("previewTab.wikiData sheet")}
                             </a>
                         )}
                     </div>

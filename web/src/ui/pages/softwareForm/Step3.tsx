@@ -121,7 +121,7 @@ export function SoftwareFormStep3(props: Step2Props) {
             )}
         >
             <RadioButtons
-                legend={t("SoftwareFormStep3.is present in support market")}
+                legend={t("softwareFormStep3.is present in support market")}
                 options={[
                     {
                         "label": t("app.yes"),
@@ -140,7 +140,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                 ]}
             />
             <RadioButtons
-                legend={t("SoftwareFormStep3.is from french public service")}
+                legend={t("softwareFormStep3.is from french public service")}
                 options={[
                     {
                         "label": t("app.yes"),
@@ -169,7 +169,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                 stateRelatedMessage={t("app.required")}
             />
             <RadioButtons
-                legend={t("SoftwareFormStep3.do respect RGAA")}
+                legend={t("softwareFormStep3.do respect RGAA")}
                 options={[
                     {
                         "label": t("app.yes"),

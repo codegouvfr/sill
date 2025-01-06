@@ -69,7 +69,7 @@ export function DeclarationFormStep2User(props: Props) {
             )}
         >
             <Input
-                label={t("DeclarationFormStep2User.useCase")}
+                label={t("declarationFormStep2User.useCase")}
                 nativeInputProps={{
                     ...register("usecaseDescription", { "required": true })
                 }}
@@ -78,7 +78,7 @@ export function DeclarationFormStep2User(props: Props) {
             />
             {softwareType === "desktop/mobile" && (
                 <Select
-                    label={t("DeclarationFormStep2User.environment")}
+                    label={t("declarationFormStep2User.environment")}
                     nativeSelectProps={{
                         ...register("osSelectValue", { "required": true })
                     }}
@@ -92,7 +92,7 @@ export function DeclarationFormStep2User(props: Props) {
                 </Select>
             )}
             <Input
-                label={t("DeclarationFormStep2User.version")}
+                label={t("declarationFormStep2User.version")}
                 nativeInputProps={{
                     ...register("version", { "pattern": /^(\d+)((\.{1}\d+)*)(\.{0})$/ })
                 }}
@@ -101,7 +101,7 @@ export function DeclarationFormStep2User(props: Props) {
             />
             {softwareType === "cloud" && (
                 <Input
-                    label={t("DeclarationFormStep2User.service")}
+                    label={t("declarationFormStep2User.service")}
                     nativeInputProps={{
                         ...register("serviceUrlInputValue", {
                             "pattern": /^http/

@@ -24,20 +24,20 @@ export default function AddSoftwareLanding(props: Props) {
 
     const whoCanAddAccordionList = [
         {
-            "label": t("AddSoftwareLanding.discover as agent label"),
-            "description": t("AddSoftwareLanding.discover as agent description")
+            "label": t("addSoftwareLanding.discover as agent label"),
+            "description": t("addSoftwareLanding.discover as agent description")
         },
         {
-            "label": t("AddSoftwareLanding.discover as DSI label"),
-            "description": t("AddSoftwareLanding.discover as DSI description")
+            "label": t("addSoftwareLanding.discover as DSI label"),
+            "description": t("addSoftwareLanding.discover as DSI description")
         },
         {
-            "label": t("AddSoftwareLanding.contribute as agent label"),
-            "description": t("AddSoftwareLanding.contribute as agent description")
+            "label": t("addSoftwareLanding.contribute as agent label"),
+            "description": t("addSoftwareLanding.contribute as agent description")
         },
         {
-            "label": t("AddSoftwareLanding.contribute as DSI label"),
-            "description": t("AddSoftwareLanding.contribute as DSI description")
+            "label": t("addSoftwareLanding.contribute as DSI label"),
+            "description": t("addSoftwareLanding.contribute as DSI description")
         }
     ];
 
@@ -46,9 +46,9 @@ export default function AddSoftwareLanding(props: Props) {
             <div className={classes.section}>
                 <div className={cx(fr.cx("fr-container"), classes.titleContainer)}>
                     <div>
-                        <h2 className={classes.title}>{t("AddSoftwareLanding.title")}</h2>
+                        <h2 className={classes.title}>{t("addSoftwareLanding.title")}</h2>
                         <p className={fr.cx("fr-text--lg")}>
-                            {t("AddSoftwareLanding.subtitle")}
+                            {t("addSoftwareLanding.subtitle")}
                         </p>
                     </div>
                     <img
@@ -67,7 +67,7 @@ export default function AddSoftwareLanding(props: Props) {
                         )}
                     >
                         <h2 className={classes.whoCanAddTitle}>
-                            {t("AddSoftwareLanding.who can add software")}
+                            {t("addSoftwareLanding.who can add software")}
                         </h2>
                         <div className={classes.whoCanAddButtonContainer}>
                             <a

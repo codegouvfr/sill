@@ -57,16 +57,16 @@ export function DeclarationFormStep1(props: Props) {
                 name="radio"
                 options={[
                     {
-                        "label": t("DeclarationFormStep1.user type label"),
-                        "hintText": t("DeclarationFormStep1.user type hint"),
+                        "label": t("declarationFormStep1.user type label"),
+                        "hintText": t("declarationFormStep1.user type hint"),
                         "nativeInputProps": {
                             ...register("declarationType", { "required": true }),
                             "value": "user"
                         }
                     },
                     {
-                        "label": t("DeclarationFormStep1.referent type label"),
-                        "hintText": t("DeclarationFormStep1.referent type label"),
+                        "label": t("declarationFormStep1.referent type label"),
+                        "hintText": t("declarationFormStep1.referent type label"),
                         "nativeInputProps": {
                             ...register("declarationType", { "required": true }),
                             "value": "referent"

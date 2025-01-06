@@ -103,7 +103,7 @@ export default function DeclarationForm(props: Props) {
                             "linkProps": {
                                 ...routes.softwareCatalog().link
                             },
-                            "label": t("DeclarationForm.catalog breadcrumb")
+                            "label": t("declarationForm.catalog breadcrumb")
                         },
                         {
                             "linkProps": {
@@ -115,7 +115,7 @@ export default function DeclarationForm(props: Props) {
                         }
                     ]}
                     currentPageLabel={t(
-                        "DeclarationForm.declare yourself user or referent breadcrumb"
+                        "declarationForm.declare yourself user or referent breadcrumb"
                     )}
                     className={classes.breadcrumb}
                 />
@@ -130,7 +130,7 @@ export default function DeclarationForm(props: Props) {
                     </a>
                     <h4 className={classes.title}>
                         {t(
-                            "DeclarationForm.declare yourself user or referent breadcrumb"
+                            "declarationForm.declare yourself user or referent breadcrumb"
                         )}
                     </h4>
                 </div>
@@ -175,11 +175,11 @@ export default function DeclarationForm(props: Props) {
                                     {(() => {
                                         switch (step) {
                                             case 1:
-                                                return t("DeclarationForm.title step 1");
+                                                return t("declarationForm.title step 1");
                                             case 2:
                                                 assert(declarationType !== undefined);
                                                 return t(
-                                                    `DeclarationForm.title step 2 ${declarationType}`
+                                                    `declarationForm.title step 2 ${declarationType}`
                                                 );
                                         }
                                     })()}
@@ -251,7 +251,7 @@ export default function DeclarationForm(props: Props) {
                 <Button onClick={onNextStep} priority="primary" disabled={isSubmitting}>
                     {step === stepCount ? (
                         <>
-                            {t("DeclarationForm.submit declaration")}{" "}
+                            {t("declarationForm.submit declaration")}{" "}
                             {isSubmitting && (
                                 <CircularProgress
                                     size={20}

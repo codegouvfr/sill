@@ -100,8 +100,8 @@ export function SoftwareFormStep4(props: Step4Props) {
                         noOptionText={t("app.no result")}
                         loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("SoftwareFormStep4.similar software"),
-                            "hintText": t("SoftwareFormStep4.similar software hint"),
+                            "label": t("softwareFormStep4.similar software"),
+                            "hintText": t("softwareFormStep4.similar software hint"),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,
