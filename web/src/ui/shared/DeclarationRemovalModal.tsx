@@ -56,7 +56,7 @@ export function DeclarationRemovalModal() {
     return (
         <modal.Component
             title={
-                declarationType == "referent"
+                declarationType === "referent"
                     ? t("declarationRemovalModal.stop being_referent", { softwareName })
                     : t("declarationRemovalModal.stop being_user", { softwareName })
             }

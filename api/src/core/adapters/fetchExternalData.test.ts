@@ -550,7 +550,7 @@ describe("fetches software extra data (from different providers)", () => {
                             siren: "824429708",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/255",
                             cnllUrl: "https://annuaire.cnll.fr/societes/824429708",
-                            website: "https://www.worteks.com/fr/"
+                            website: "https://www.worteks.com/"
                         }
                     ],
                     latestVersion: null

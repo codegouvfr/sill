@@ -234,6 +234,7 @@ export const PreviewTab = (props: Props) => {
                                                 i18nKey="previewTab.what is the support market"
                                                 components={{
                                                     a: (
+                                                        /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                                                         <a href="https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/" />
                                                     )
                                                 }}
