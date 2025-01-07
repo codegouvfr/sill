@@ -38,6 +38,7 @@ export function CnllServiceProviderModal(props: Props) {
             <Trans
                 i18nKey="cnllServiceProviderModal.content description"
                 components={{
+                    /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                     a: <a href="https://cnll.fr/" target="_blank" rel="noreferrer" />,
                     space: <span> </span>
                 }}

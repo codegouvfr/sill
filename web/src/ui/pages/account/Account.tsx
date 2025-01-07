@@ -22,7 +22,6 @@ import { useRerenderOnStateChange } from "evt/hooks";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
 import { routes } from "ui/routes";
-import type { Link } from "type-route";
 
 type Props = {
     className?: string;
@@ -151,6 +150,7 @@ function AccountReady(props: { className?: string }) {
                                 i18nKey="account.isPublic hint"
                                 components={{
                                     a: (
+                                        /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                                         <a
                                             href={
                                                 routes.userProfile({

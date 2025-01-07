@@ -258,18 +258,20 @@ export function SoftwareFormStep2(props: Step2Props) {
                                         br: <br />,
                                         space: <span> </span>,
                                         dataSource: (
+                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                                             <a
                                                 href="https://www.wikidata.org/wiki"
                                                 target="_blank"
                                                 rel="noreferrer"
-                                            ></a>
+                                            />
                                         ),
                                         dataSourceEntry: (
+                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                                             <a
                                                 href="https://www.wikidata.org/wiki/Q107693197"
                                                 target="_blank"
                                                 rel="noreferrer"
-                                            ></a>
+                                            />
                                         ),
                                         exampleUrl: (
                                             <a
