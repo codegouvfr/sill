@@ -17,7 +17,7 @@ import { ReactComponent as HomepageWaveSvg } from "ui/assets/homepage_wave.svg";
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 type Props = {
     className?: string;
@@ -372,7 +372,56 @@ const { WhatIsTheSillSection } = (() => {
                 <Waypoint onEnter={() => setIsVisible(true)} />
                 <h2>{t("home.theSillInAFewWords")}</h2>
                 <p className={classes.paragraph}>
-                    {t("home.theSillInAFewWordsParagraph")}
+                    <Trans
+                        i18nKey={"home.theSillInAFewWordsParagraph"}
+                        components={{
+                            space: <span> </span>,
+                            a1: (
+                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                <a
+                                    href="https://fr.wikipedia.org/wiki/Logiciel_libre"
+                                    style={{
+                                        "color":
+                                            fr.colors.decisions.text.title.blueFrance
+                                                .default
+                                    }}
+                                />
+                            ),
+                            a2: (
+                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                <a
+                                    href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
+                                    style={{
+                                        "color":
+                                            fr.colors.decisions.text.title.blueFrance
+                                                .default
+                                    }}
+                                />
+                            ),
+                            a3: (
+                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                <a
+                                    href="https://code.gouv.fr/sill/readme"
+                                    style={{
+                                        "color":
+                                            fr.colors.decisions.text.title.blueFrance
+                                                .default
+                                    }}
+                                />
+                            ),
+                            a4: (
+                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                <a
+                                    href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
+                                    style={{
+                                        "color":
+                                            fr.colors.decisions.text.title.blueFrance
+                                                .default
+                                    }}
+                                />
+                            )
+                        }}
+                    ></Trans>
                 </p>
             </section>
         );

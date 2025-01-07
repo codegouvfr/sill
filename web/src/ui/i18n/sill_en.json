@@ -48,7 +48,7 @@
         "institutionCount": "",
         "helpUs": "You are a public servant? Help us enrich the catalog",
         "theSillInAFewWords": "The SILL in a nutshell",
-        "theSillInAFewWordsParagraph": "test xdmvglkdxfngvkjl",
+        "theSillInAFewWordsParagraph": "<p>The Interministerial Free Software Catalog (SILL) is the reference catalog of free software recommended by DINUM for the French administration.</p> <p>It is used to help administrations navigate and select the <space /><a1>free software</a1><space /> to use, in accordance with <space /><a2> Article 16 of the Digital Republic Act </a2>. </p> <p>The <space /><a3>entry criteria</a3><space />for software in the SILL include the publication of its source code under an<space /><a4>accepted free software license</a4><space />and its deployment by a public institution or installation by a public agent. </p> <p>The SILL referents are public agents who volunteer to manage and update information on the software included in the catalog.</p>",
         "illustrationImage": "Illustration image",
         "declareReferentTitle": "Declare yourself as a referent",
         "editSoftwareTitle": "Edit a software entry",
