@@ -1,5 +1,4 @@
 import { createModal } from "@codegouvfr/react-dsfr/Modal";
-import { declareComponentKeys } from "i18nifty";
 import { Trans, useTranslation } from "react-i18next";
 
 const modal = createModal({
@@ -59,13 +58,3 @@ export function CnllServiceProviderModal(props: Props) {
         </modal.Component>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | "close"
-    | "modal title"
-    | {
-          K: "content description";
-          P: { cnllWebsiteUrl: "https://cnll.fr/"; softwareName: string; count: number };
-          R: JSX.Element;
-      }
->()({ CnllServiceProviderModal });

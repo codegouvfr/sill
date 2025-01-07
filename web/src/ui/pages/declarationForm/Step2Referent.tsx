@@ -6,7 +6,6 @@ import type { FormData } from "core/usecases/declarationForm";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import { useTranslation } from "react-i18next";
-import { declareComponentKeys } from "i18nifty";
 
 type Props = {
     className?: string;
@@ -128,9 +127,3 @@ export function DeclarationFormStep2Referent(props: Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "legend title" | "legend hint" | "useCase" | "service"
->()({
-    DeclarationFormStep2Referent
-});

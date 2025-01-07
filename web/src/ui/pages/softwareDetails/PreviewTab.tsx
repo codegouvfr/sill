@@ -1,5 +1,3 @@
-import React from "react";
-import { declareComponentKeys } from "i18nifty";
 import { useLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -341,26 +339,3 @@ const useStyles = tss.withName({ PreviewTab }).create({
         "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "about"
-    | "use full links"
-    | "prerogatives"
-    | "last version"
-    | "register"
-    | "minimal version"
-    | "license"
-    | "hasDesktopApp"
-    | "isAvailableAsMobileApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "isRGAACompliant"
-    | "comptoire du libre sheet"
-    | "CNLL service providers title"
-    | { K: "CNLL service providers"; P: { count: number } }
-    | "wikiData sheet"
-    | { K: "what is the support market"; P: { url: string }; R: JSX.Element }
-    | "programming languages"
-    | "keywords"
-    | "application categories"
->()({ PreviewTab });

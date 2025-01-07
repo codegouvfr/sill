@@ -2,7 +2,6 @@ import { fr } from "@codegouvfr/react-dsfr";
 import type { WikidataEntry } from "core/usecases/instanceForm";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
-import { declareComponentKeys } from "i18nifty";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { assert } from "tsafe/assert";
@@ -129,8 +128,3 @@ export function InstanceFormStep1(props: Step1Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<"software instance" | "other software">()({
-    // other not use ?
-    InstanceFormStep1
-});

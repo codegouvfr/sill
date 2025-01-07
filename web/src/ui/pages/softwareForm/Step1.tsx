@@ -6,7 +6,6 @@ import { useEvt } from "evt/hooks";
 import { assert } from "tsafe/assert";
 import { Checkbox } from "@codegouvfr/react-dsfr/Checkbox";
 import type { FormData } from "core/usecases/softwareForm";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 
 export type Step1Props = {
@@ -173,12 +172,3 @@ export function SoftwareFormStep1(props: Step1Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | "software desktop"
-    | "software cloud"
-    | "software cloud hint"
-    | "module"
-    | "module hint"
-    | "checkbox legend"
->()({ SoftwareFormStep1 });

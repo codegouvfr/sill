@@ -3,7 +3,6 @@ import { useCoreState, useCore } from "core";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { useRerenderOnStateChange } from "evt/hooks";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -99,13 +98,3 @@ export function DeclarationRemovalModal() {
 }
 
 export type DeclarationType = "user" | "referent";
-export const { i18n } = declareComponentKeys<
-    | "cancel"
-    | "confirm"
-    | {
-          K: "stop being user/referent";
-          P: { softwareName: string; declarationType: DeclarationType };
-      }
-    | "do you confirm_referent"
-    | "do you confirm_using"
->()({ DeclarationRemovalModal });

@@ -7,7 +7,6 @@ import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { SoftwareCatalogCard } from "ui/pages/softwareCatalog/SoftwareCatalogCard";
 import { SoftwareCatalogSearch } from "ui/pages/softwareCatalog/SoftwareCatalogSearch";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
@@ -339,21 +338,3 @@ const useStyles = tss.withName({ SoftwareCatalogControlled }).create({
         }
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "search results";
-          P: { count: number };
-      }
-    | "sort by"
-    | "added_time"
-    | "update_time"
-    | "referent_count"
-    | "referent_count_ASC"
-    | "user_count"
-    | "user_count_ASC"
-    | "latest_version_publication_date"
-    | "no software found"
-    | "best_match"
-    | "my_software"
->()({ SoftwareCatalogControlled });

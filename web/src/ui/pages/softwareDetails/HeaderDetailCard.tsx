@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { declareComponentKeys } from "i18nifty";
 import { useLang } from "ui/i18n";
 import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
@@ -276,20 +275,4 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
     "dereferencedText": {
         "color": fr.colors.decisions.text.default.error.default
     }
-});
-
-export const { i18n } = declareComponentKeys<
-    | "authors"
-    | "website"
-    | "documentation"
-    | "repository"
-    | "software logo"
-    | "you are user"
-    | "you are referent"
-    | {
-          K: "software dereferenced";
-          P: { lastRecommendedVersion?: string; reason?: string; when: string };
-      }
->()({
-    HeaderDetailCard
 });

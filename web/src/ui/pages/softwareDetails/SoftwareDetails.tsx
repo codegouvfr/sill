@@ -3,7 +3,6 @@ import { useCoreState, useCore } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { HeaderDetailCard } from "ui/pages/softwareDetails/HeaderDetailCard";
 import { PreviewTab } from "ui/pages/softwareDetails/PreviewTab";
@@ -427,33 +426,3 @@ const useStyles = tss.withName({ SoftwareDetails }).create({
         "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "catalog breadcrumb"
-    | "tab title overview"
-    | { K: "tab title instance"; P: { instanceCount: number } }
-    | { K: "tab service providers"; P: { serviceProvidersCount: number } }
-    | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
-    | "list of service providers"
-    | "prerogatives"
-    | "last version"
-    | { K: "last version date"; P: { date: string } }
-    | "register"
-    | { K: "register date"; P: { date: string } }
-    | "minimal version"
-    | "license"
-    | "declare oneself referent"
-    | "hasDesktopApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "isRGAACompliant"
-    | "comptoire du libre sheet"
-    | "wikiData sheet"
-    | "share software"
-    | "declare referent"
-    | "edit software"
-    | { K: "stop being user/referent"; P: { declarationType: "user" | "referent" } }
-    | "become referent"
-    | "please provide a reason for unreferencing this software"
-    | "unreference software"
->()({ SoftwareDetails });

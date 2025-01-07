@@ -17,7 +17,6 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
 import { useTranslation } from "react-i18next";
-import { declareComponentKeys } from "i18nifty";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
@@ -367,12 +366,3 @@ const useStyles = tss
             "marginLeft": fr.spacing("4v")
         }
     }));
-
-export const { i18n } = declareComponentKeys<
-    | "catalog breadcrumb"
-    | "declare yourself user or referent breadcrumb"
-    | "title step 1"
-    | "title step 2 user"
-    | "title step 2 referent"
-    | "submit declaration"
->()({ DeclarationForm });

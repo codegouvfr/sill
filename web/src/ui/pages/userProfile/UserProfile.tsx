@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
@@ -149,22 +148,6 @@ export default function UserProfile(props: Props) {
         </div>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "agent profile";
-          P: {
-              email: string;
-              organization: string | null;
-          };
-      }
-    | "no description"
-    | "send email"
-    | "edit my profile"
-    | "badge text_expert"
-    | "badge text_referent"
-    | "badge text_user"
->()({ UserProfile });
 
 const useStyles = tss.withName({ UserProfile }).create({
     "header": {

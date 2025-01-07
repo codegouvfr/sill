@@ -4,7 +4,6 @@ import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import { Input } from "@codegouvfr/react-dsfr/Input";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 
 export type Step1Props = {
@@ -143,14 +142,3 @@ export function InstanceFormStep2(props: Step1Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | "is in public access label"
-    | "is in public access hint"
-    | "instance url label"
-    | "instance url hint"
-    | "organization label"
-    | "organization hint"
-    | "targeted public label"
-    | "targeted public hint"
->()({ InstanceFormStep2 });

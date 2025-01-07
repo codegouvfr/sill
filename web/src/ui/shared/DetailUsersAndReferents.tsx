@@ -1,4 +1,3 @@
-import { declareComponentKeys } from "i18nifty";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { Link } from "type-route";
 import { useTranslation } from "react-i18next";
@@ -52,9 +51,3 @@ const useStyles = tss.withName({ DetailUsersAndReferents }).create({
         "marginRight": fr.spacing("2v")
     }
 });
-
-export const { i18n } = declareComponentKeys<{
-    K: "userAndReferentCount";
-    P: { userCount: number; referentCount: number; referentColor: string | undefined };
-    R: JSX.Element;
-}>()({ DetailUsersAndReferents });
