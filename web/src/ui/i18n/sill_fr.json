@@ -52,7 +52,7 @@
         "declareReferentTitle": "Se déclarer utilisateur ou référent d'un logiciel",
         "editSoftwareTitle": "Modifier une fiche logiciel",
         "theSillInAFewWords": "Le SILL en quelques mots",
-        "theSillInAFewWordsParagraph": "Text : the sill in a few words paragraph",
+        "theSillInAFewWordsParagraph": "<p>Le Socle Interministériel de Logiciels Libres (SILL) est un catalogue de référence des logiciels libres recommandés pour l' administration française.</p><p>Il est utilisé pour aider les administrations à naviguer et sélectionner les <a1>logiciels libres</a1> à utiliser, conformément à l'<a2>article 16 de la loi pour une République numérique</a2>.</p><p>Les <a3>critères d'entrées</a3> d'un logiciel dans le SILL comprennent la publication de son code source sous une <a4>licence libre acceptée</a4> et son déploiement par un établissement public ou son installation par un agent public.</p><p>Les référents SILL sont des agents publics qui se portent volontaires pour gérer et mettre à jour les informations sur les logiciels inclus dans le catalogue.</p>",
         "illustrationImage": "Image d'illustration",
         "addSoftwareOrServiceTitle": "Ajouter un logiciel ou un service",
         "declareReferentDesc": "Se porter volontaire pour gérer et mettre à jour les informations sur les logiciels du SILL",

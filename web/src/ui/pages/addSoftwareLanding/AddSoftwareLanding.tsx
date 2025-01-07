@@ -24,19 +24,39 @@ export default function AddSoftwareLanding(props: Props) {
     const whoCanAddAccordionList = [
         {
             "label": t("addSoftwareLanding.discover as agent label"),
-            "description": t("addSoftwareLanding.discover as agent description")
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.discover as agent description"}
+                    components={{ br: <br /> }}
+                ></Trans>
+            )
         },
         {
             "label": t("addSoftwareLanding.discover as DSI label"),
-            "description": t("addSoftwareLanding.discover as DSI description")
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.discover as DSI description"}
+                    components={{ br: <br /> }}
+                ></Trans>
+            )
         },
         {
             "label": t("addSoftwareLanding.contribute as agent label"),
-            "description": t("addSoftwareLanding.contribute as agent description")
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.contribute as agent description"}
+                    components={{ br: <br /> }}
+                ></Trans>
+            )
         },
         {
             "label": t("addSoftwareLanding.contribute as DSI label"),
-            "description": t("addSoftwareLanding.contribute as DSI description")
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.contribute as DSI description"}
+                    components={{ br: <br /> }}
+                ></Trans>
+            )
         }
     ];
 
