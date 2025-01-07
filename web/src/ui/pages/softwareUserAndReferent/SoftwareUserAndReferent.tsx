@@ -3,7 +3,6 @@ import { useCore, useCoreState } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { declareComponentKeys } from "i18nifty";
 import { useGetOrganizationFullName } from "ui/i18n";
 import { useTranslation } from "react-i18next";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
@@ -413,28 +412,3 @@ const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
         "color": fr.colors.decisions.text.mention.grey.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "catalog breadcrumb"
-    | "user and referent breadcrumb"
-    | "title"
-    | {
-          K: "tab user title";
-          P: { count: number };
-          R: string;
-      }
-    | {
-          K: "tab referent title";
-          P: { count: number };
-          R: string;
-      }
-    | "category"
-    | "softwareDetails"
-    | "declare referent"
-    | "declare user"
-    | "is technical expert"
-    | "organization"
-    | "use case"
-    | "is user of"
-    | "is referent of"
->()({ SoftwareUserAndReferent });

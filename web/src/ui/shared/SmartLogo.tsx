@@ -1,6 +1,5 @@
 import { useDomRect } from "powerhooks/useDomRect";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr/fr";
@@ -50,5 +49,3 @@ const useStyles = tss.withName({ SmartLogo }).create({
         "objectPosition": "left"
     }
 });
-
-export const { i18n } = declareComponentKeys<"software logo">()({ SmartLogo });

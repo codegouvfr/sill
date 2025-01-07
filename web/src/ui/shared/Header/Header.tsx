@@ -1,7 +1,6 @@
 import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
@@ -114,14 +113,3 @@ export const Header = memo(
         );
     })
 );
-
-export const { i18n } = declareComponentKeys<
-    | "home title"
-    | "title"
-    | "navigation welcome"
-    | "navigation catalog"
-    | "navigation add software"
-    | "navigation update software"
-    | "navigation support request"
-    | "navigation about"
->()({ Header });

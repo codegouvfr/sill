@@ -5,7 +5,6 @@ import { evtLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -260,26 +259,3 @@ const useStyles = tss.withName({ Account }).create({
         "marginLeft": fr.spacing("4v")
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "title"
-    | "mail"
-    | "organization"
-    | "manage account"
-    | "no organization"
-    | "update"
-    | "not a valid email"
-    | {
-          K: "email domain not allowed"; // unused ?
-          P: { domain: string };
-      }
-    | "about title"
-    | "about description"
-    | "isPublic label"
-    | {
-          K: "isPublic hint";
-          P: { profileLik: Link };
-          R: JSX.Element;
-      }
-    | "go to profile"
->()({ Account });

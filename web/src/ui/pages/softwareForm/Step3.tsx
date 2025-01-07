@@ -4,7 +4,6 @@ import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import type { FormData } from "core/usecases/softwareForm";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 
 export type Step2Props = {
@@ -202,7 +201,3 @@ export function SoftwareFormStep3(props: Step2Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "is present in support market" | "is from french public service" | "do respect RGAA"
->()({ SoftwareFormStep3 });

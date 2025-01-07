@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useId } from "react";
+import { useEffect, useState, useId } from "react";
 import { SearchInput } from "ui/shared/SearchInput";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useForm, Controller } from "react-hook-form";
@@ -10,11 +10,9 @@ import { useEvt } from "evt/hooks";
 import { useCore } from "core";
 import type { FormData } from "core/usecases/softwareForm";
 import type { ReturnType } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useResolveLocalizedString } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { useStyles } from "tss-react";
-import { ExternalDataOrigin } from "api";
 
 export type Step2Props = {
     className?: string;
@@ -37,8 +35,6 @@ export type Step2Props = {
 };
 
 export function SoftwareFormStep2(props: Step2Props) {
-    const { externalDataOrigin: externalDataOriginCore } = useCore().functions;
-    const externalDataOrigin = externalDataOriginCore.getExternalDataOrigin();
     const {
         className,
         isUpdateForm,
@@ -519,32 +515,3 @@ function comptoirDuLibreInputValueToComptoirDuLibreId(comptoirDuLibreInputValue:
 
     assert(false);
 }
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "external id";
-          R: (origin: ExternalDataOrigin) => React.ReactNode;
-      }
-    | {
-          K: "external id hint";
-          R: (origin: ExternalDataOrigin) => React.ReactNode;
-      }
-    | "comptoir du libre id"
-    | "comptoir du libre id hint"
-    | "software name"
-    | "software feature"
-    | "software feature hint"
-    | "license"
-    | "license hint"
-    | "minimal version"
-    | "minimal version hint"
-    | "url or numeric id"
-    | "invalid comptoir du libre id"
-    | "autofill notice"
-    | "logo url"
-    | "logo url hint"
-    | "must be an url"
-    | "keywords"
-    | "keywords hint"
-    | "logo preview alt"
->()({ SoftwareFormStep2 });

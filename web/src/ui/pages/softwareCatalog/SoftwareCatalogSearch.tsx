@@ -3,7 +3,6 @@ import { tss } from "tss-react";
 import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import { fr } from "@codegouvfr/react-dsfr";
-import { declareComponentKeys } from "i18nifty";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
 import {
@@ -398,31 +397,3 @@ const useStyles = tss
             }
         }
     }));
-
-export const { i18n } = declareComponentKeys<
-    | "filters"
-    | "placeholder"
-    | "filtersButton"
-    | "organizationLabel"
-    | "categoriesLabel"
-    | "environnement label"
-    | "prerogativesLabel"
-    | "isInstallableOnUserComputer"
-    | "isAvailableAsMobileApp"
-    | "isPresentInSupportContract"
-    | "isFromFrenchPublicServices"
-    | "doRespectRgaa"
-    | "isTestable"
-    | "organization filter hint"
-    | "linux"
-    | "mac"
-    | "windows"
-    | "browser"
-    | "stack"
-    | "ios"
-    | "android"
-    | {
-          K: "number of prerogatives selected";
-          P: { count: number };
-      }
->()({ SoftwareCatalogSearch });

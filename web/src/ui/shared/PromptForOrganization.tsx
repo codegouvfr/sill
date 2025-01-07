@@ -1,7 +1,6 @@
 import { fr } from "@codegouvfr/react-dsfr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import CircularProgress from "@mui/material/CircularProgress";
-import { declareComponentKeys } from "i18nifty";
 import { useEffect, useState } from "react";
 import { tss } from "tss-react";
 import { useGetOrganizationFullName } from "ui/i18n";
@@ -97,7 +96,3 @@ const useStyles = tss.withName({ PromptForOrganization }).create({
         flex: 1
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    "title" | "organization is required" | "update" | "organization"
->()({ PromptForOrganization });

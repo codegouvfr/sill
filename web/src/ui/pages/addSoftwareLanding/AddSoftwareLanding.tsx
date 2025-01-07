@@ -1,7 +1,6 @@
 import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { Trans, useTranslation } from "react-i18next";
 import type { PageRoute } from "./route";
 import { routes } from "ui/routes";
@@ -172,20 +171,3 @@ const useStyles = tss.withName({ AddSoftwareLanding }).create({
         "marginBottom": 0
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "title";
-          R: JSX.Element;
-      }
-    | "subtitle"
-    | "who can add software"
-    | "discover as agent label"
-    | { K: "discover as agent description"; R: JSX.Element }
-    | "discover as DSI label"
-    | { K: "discover as DSI description"; R: JSX.Element }
-    | "contribute as agent label"
-    | { K: "contribute as agent description"; R: JSX.Element }
-    | "contribute as DSI label"
-    | { K: "contribute as DSI description"; R: JSX.Element }
->()({ AddSoftwareLanding });

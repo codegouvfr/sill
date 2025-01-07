@@ -14,7 +14,6 @@ import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { Stepper } from "@codegouvfr/react-dsfr/Stepper";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import type { PageRoute } from "./route";
@@ -265,13 +264,3 @@ const useStyles = tss
             "marginLeft": fr.spacing("4v")
         }
     }));
-
-export const { i18n } = declareComponentKeys<
-    | "breadcrumb add instance"
-    | "breadcrumb update instance"
-    | "title add instance form"
-    | "title update instance form"
-    | "stepper-title_1"
-    | "stepper-title_2"
-    | "submit"
->()({ InstanceForm });

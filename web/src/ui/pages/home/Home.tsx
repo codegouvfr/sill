@@ -3,7 +3,6 @@ import { tss } from "tss-react";
 import { keyframes } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -283,38 +282,6 @@ const useStyles = tss.withName({ Home }).create({
         }
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "title"
-    | "sub title"
-    | "software selection"
-    | "last added"
-    | "most used"
-    | "essential"
-    | "recently updated"
-    | "waiting for referent"
-    | "in support market"
-    | "SILL numbers"
-    | "softwareCount"
-    | "registeredUserCount"
-    | "agentReferentCount"
-    | "organizationCount"
-    | "help us"
-    | "the sill in a few words"
-    | "the sill in a few words paragraph"
-    | "illustration image"
-    | "declare referent title"
-    | "edit software title"
-    | "add software or service title"
-    | "declare referent desc"
-    | "edit software desc"
-    | "add software or service desc"
-    | "declare referent button label"
-    | "edit software button label"
-    | "add software or service button label"
-    | "programmerCount"
-    | "institutionCount"
->()({ Home });
 
 const { HeroSection } = (() => {
     type Props = {

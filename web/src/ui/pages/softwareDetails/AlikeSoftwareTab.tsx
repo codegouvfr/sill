@@ -1,4 +1,3 @@
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Equals } from "tsafe";
@@ -172,7 +171,3 @@ export const SimilarSoftwareTab = (props: Props) => {
         </section>
     );
 };
-
-export const { i18n } = declareComponentKeys<
-    "similar software in sill" | "similar software not in sill" | "libre software"
->()({ SimilarSoftwareTab });

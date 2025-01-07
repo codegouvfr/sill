@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Footer as DsfrFooter } from "@codegouvfr/react-dsfr/Footer";
 import { routes } from "ui/routes";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
-import { declareComponentKeys } from "i18nifty";
 import { apiUrl } from "urls";
 
 export type Props = {
@@ -79,5 +78,3 @@ export const Footer = memo(
         );
     })
 );
-
-export const { i18n } = declareComponentKeys<"contribute">()({ Footer });

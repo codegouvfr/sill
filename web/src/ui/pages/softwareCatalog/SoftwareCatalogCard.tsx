@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
@@ -367,13 +366,3 @@ const useStyles = tss
             "background": "none"
         }
     }));
-
-export const { i18n } = declareComponentKeys<
-    | { K: "latest version"; P: { fromNowText: string } }
-    | "declare oneself referent"
-    | "hasDesktopApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "you are user"
-    | "you are referent"
->()({ SoftwareCatalogCard });

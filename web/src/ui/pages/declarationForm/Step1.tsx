@@ -4,7 +4,6 @@ import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { assert } from "tsafe/assert";
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 
 type Props = {
@@ -84,9 +83,3 @@ export function DeclarationFormStep1(props: Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "user type label" | "user type hint" | "referent type label" | "referent type hint"
->()({
-    DeclarationFormStep1
-});

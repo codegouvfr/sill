@@ -1,5 +1,4 @@
 import { HeaderQuickAccessItem } from "@codegouvfr/react-dsfr/Header";
-import { declareComponentKeys } from "ui/i18n";
 import { useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
@@ -85,10 +84,6 @@ export function AuthButtons(props: Props) {
         </>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "login" | "register" | "logout" | "account"
->()({ AuthButtons });
 
 const useStyles = tss
     .withName({ AuthButtons })

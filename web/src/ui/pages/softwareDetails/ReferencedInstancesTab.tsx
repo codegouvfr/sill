@@ -1,4 +1,3 @@
-import { declareComponentKeys } from "i18nifty";
 import { useTranslation } from "react-i18next";
 import { fr, type FrCxArg } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
@@ -212,19 +211,3 @@ const useStyles = tss.withName({ ReferencedInstancesTab }).create({
         "justifyContent": "flex-end"
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "publicInstanceCount";
-          P: { instanceCount: number; organizationCount: number };
-      }
-    | {
-          K: "privateInstanceCount";
-          P: { instanceCount: number; organizationCount: number };
-      }
-    | "concerned public"
-    | "go to instance"
-    | "add instance"
-    | "edit instance"
-    | "connect to see private instances"
->()({ ReferencedInstancesTab });

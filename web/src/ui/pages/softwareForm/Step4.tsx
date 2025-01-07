@@ -6,7 +6,6 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { SearchMultiInput } from "ui/shared/SearchMultiInput";
 import type { FormData } from "core/usecases/softwareForm";
 import type { useCore } from "core";
-import { declareComponentKeys } from "i18nifty";
 import { useResolveLocalizedString } from "ui/i18n";
 import { useTranslation } from "react-i18next";
 import type { ReturnType } from "tsafe";
@@ -119,7 +118,3 @@ export function SoftwareFormStep4(props: Step4Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "similar software" | "similar software hint"
->()({ SoftwareFormStep4 });

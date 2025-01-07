@@ -7,7 +7,6 @@ import type { FormData } from "core/usecases/declarationForm";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { Select } from "@codegouvfr/react-dsfr/Select";
 import { useTranslation } from "react-i18next";
-import { declareComponentKeys } from "i18nifty";
 
 type Props = {
     className?: string;
@@ -121,9 +120,3 @@ export function DeclarationFormStep2User(props: Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "useCase" | "environment" | "version" | "service"
->()({
-    DeclarationFormStep2User
-});
