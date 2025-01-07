@@ -63,7 +63,7 @@
         "addSoftwareOrServiceButtonLabel": "Compléter le formulaire d'ajout"
     },
     "addSoftwareLanding": {
-        "title": "TODO <span>Vous êtes agent public ? </span>Ajoutez des logiciels libres ou des instances de logiciels libres utilisés ou déployés dans votre organisation !",
+        "title": "<span>Vous êtes agent public ? </span>Ajoutez des logiciels libres ou des instances de logiciels libres utilisés ou déployés dans votre organisation !",
         "subtitle": "Contribuez à la création d'une plateforme de référence pour les logiciels du service public et partagez des informations utiles aux agents et aux DSI de l'administration.",
         "who can add software": "Qui peut ajouter un logiciel ou un service et comment faire ?",
         "discover as agent label": "Découvrir en tant qu'agent",

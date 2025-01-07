@@ -61,7 +61,7 @@
         "addSoftwareOrServiceButtonLabel": "Complete the addition form"
     },
     "addSoftwareLanding": {
-        "title": "<span>TODO Are you a public servant? </span> Add free software or instances of free software used or deployed in your organization!",
+        "title": "<span>Are you a public servant ?</span> Add free software or instances of free software used or deployed in your organization!",
         "subtitle": "Contribute to the creation of a reference platform for public service software equipment and share valuable information with agents and CIOs in the administration",
         "who can add software": "Who can add software or a service, and how?",
         "discover as agent label": "Discover as an agent",
