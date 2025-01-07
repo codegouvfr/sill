@@ -2,7 +2,7 @@ import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import type { PageRoute } from "./route";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -46,7 +46,12 @@ export default function AddSoftwareLanding(props: Props) {
             <div className={classes.section}>
                 <div className={cx(fr.cx("fr-container"), classes.titleContainer)}>
                     <div>
-                        <h2 className={classes.title}>{t("addSoftwareLanding.title")}</h2>
+                        <h2 className={classes.title}>
+                            <Trans
+                                i18nKey={"addSoftwareLanding.title"}
+                                components={{ span: <span></span> }}
+                            ></Trans>
+                        </h2>
                         <p className={fr.cx("fr-text--lg")}>
                             {t("addSoftwareLanding.subtitle")}
                         </p>
