@@ -2,11 +2,12 @@ import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { useTranslation } from "react-i18next";
-import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
+import { Header as HeaderDsfr, HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
 import { contactEmail } from "ui/shared/contactEmail";
 import { LanguageSelect } from "./LanguageSelect";
 import { AuthButtons } from "./AuthButtons";
+import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -36,6 +37,57 @@ export const Header = memo(
             "isOnPageMyAccount": routeName === "account"
         });
         */
+        const navigations = [];
+        if (config.header.menu.welcome.enabled) {
+            navigations.push({
+                "isActive": routeName === routes.home.name,
+                "linkProps": routes.home().link,
+                "text": t("header.navigation welcome")
+            });
+        }
+        if (config.header.menu.catalog.enabled) {
+            navigations.push({
+                "isActive":
+                    routeName === routes.softwareCatalog.name ||
+                    routeName === routes.softwareDetails.name ||
+                    routeName === routes.softwareUsersAndReferents.name,
+                "linkProps": routes.softwareCatalog().link,
+                "text": t("header.navigation catalog")
+            });
+        }
+        if (config.header.menu.addSoftware.enabled) {
+            navigations.push({
+                "isActive":
+                    routeName === routes.addSoftwareLanding.name ||
+                    routeName === routes.softwareUpdateForm.name ||
+                    routeName === routes.softwareCreationForm.name,
+                "linkProps": routes.addSoftwareLanding().link,
+                "text":
+                    routeName === routes.softwareUpdateForm.name
+                        ? t("header.navigation update software")
+                        : t("header.navigation add software")
+            });
+        }
+        if (config.header.menu.about.enabled) {
+            navigations.push({
+                "isActive": routeName === routes.readme.name,
+                "linkProps": routes.readme().link,
+                "text": t("header.navigation about")
+            });
+        }
+        if (config.header.menu.catalog.enabled) {
+            navigations.push({
+                "linkProps": {
+                    "target": "_blank",
+                    /* cSpell:disable */
+                    "href": `mailto:${contactEmail}?subject=${encodeURIComponent(
+                        "Demande d'accompagnement"
+                    )}`
+                    /* cSpell:enable */
+                },
+                "text": t("header.navigation support request")
+            });
+        }
 
         return (
             <HeaderDsfr
@@ -55,60 +107,13 @@ export const Header = memo(
                 }}
                 quickAccessItems={[
                     <LanguageSelect />,
-                    {
-                        "iconId": "fr-icon-bank-fill",
-                        "linkProps": {
-                            "href": "https://code.gouv.fr/"
-                        },
-                        "text": "Code Gouv"
-                    },
+                    config.header.icons[0] as HeaderProps.QuickAccessItem,
                     <AuthButtons
                         isOnPageMyAccount={routeName === "account"}
                         userAuthenticationApi={userAuthenticationApi}
                     />
                 ]}
-                navigation={[
-                    {
-                        "isActive": routeName === routes.home.name,
-                        "linkProps": routes.home().link,
-                        "text": t("header.navigation welcome")
-                    },
-                    {
-                        "isActive":
-                            routeName === routes.softwareCatalog.name ||
-                            routeName === routes.softwareDetails.name ||
-                            routeName === routes.softwareUsersAndReferents.name,
-                        "linkProps": routes.softwareCatalog().link,
-                        "text": t("header.navigation catalog")
-                    },
-                    {
-                        "isActive":
-                            routeName === routes.addSoftwareLanding.name ||
-                            routeName === routes.softwareUpdateForm.name ||
-                            routeName === routes.softwareCreationForm.name,
-                        "linkProps": routes.addSoftwareLanding().link,
-                        "text":
-                            routeName === routes.softwareUpdateForm.name
-                                ? t("header.navigation update software")
-                                : t("header.navigation add software")
-                    },
-                    {
-                        "isActive": routeName === routes.readme.name,
-                        "linkProps": routes.readme().link,
-                        "text": t("header.navigation about")
-                    },
-                    {
-                        "linkProps": {
-                            "target": "_blank",
-                            /* cSpell:disable */
-                            "href": `mailto:${contactEmail}?subject=${encodeURIComponent(
-                                "Demande d'accompagnement"
-                            )}`
-                            /* cSpell:enable */
-                        },
-                        "text": t("header.navigation support request")
-                    }
-                ]}
+                navigation={navigations}
             />
         );
     })

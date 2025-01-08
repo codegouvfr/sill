@@ -18,6 +18,7 @@ import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
 import { Trans, useTranslation } from "react-i18next";
+import config from "../../../ui/config-ui.json";
 
 type Props = {
     className?: string;
@@ -33,6 +34,16 @@ export default function Home(props: Props) {
     const { t } = useTranslation();
 
     const stats = useCoreState("generalStats", "main");
+
+    type availableStat =
+        | "softwareCount"
+        | "registeredUserCount"
+        | "agentReferentCount"
+        | "organizationCount";
+    const statsCases = config.home.statistics.catgegories as Array<availableStat>;
+
+    type availableUseCase = "declareReferent" | "editSoftware" | "addSoftwareOrService";
+    const useCases = config.home.usecases.catgegories as Array<availableUseCase>;
 
     const softwareSelectionList = [
         {
@@ -92,18 +103,22 @@ export default function Home(props: Props) {
                 />
             </div>
 
-            <section className={cx(classes.softwareSelectionBackground, classes.section)}>
-                <div className={fr.cx("fr-container")}>
-                    <h2 className={classes.titleSection}>
-                        {t("home.softwareSelection")}
-                    </h2>
-                    <div className={classes.softwareSelection}>
-                        {softwareSelectionList.map(({ title, linkProps }) => (
-                            <Tile key={title} title={title} linkProps={linkProps} />
-                        ))}
+            {config?.home?.softwareSelection?.enabled && (
+                <section
+                    className={cx(classes.softwareSelectionBackground, classes.section)}
+                >
+                    <div className={fr.cx("fr-container")}>
+                        <h2 className={classes.titleSection}>
+                            {t("home.softwareSelection")}
+                        </h2>
+                        <div className={classes.softwareSelection}>
+                            {softwareSelectionList.map(({ title, linkProps }) => (
+                                <Tile key={title} title={title} linkProps={linkProps} />
+                            ))}
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             <WhatIsTheSillSection
                 className={cx(fr.cx("fr-container"), classes.section)}
@@ -115,14 +130,7 @@ export default function Home(props: Props) {
                         {t("home.SILLNumbers")}
                     </h1>
                     <div className={classes.sillNumberList}>
-                        {(
-                            [
-                                "softwareCount",
-                                "registeredUserCount",
-                                "agentReferentCount",
-                                "organizationCount"
-                            ] as const
-                        ).map(metricName => (
+                        {statsCases.map((metricName: availableStat) => (
                             <div key={metricName}>
                                 <AnimatedMetric
                                     className={cx(
@@ -144,13 +152,7 @@ export default function Home(props: Props) {
                 <div className={cx(fr.cx("fr-container"))}>
                     <h2 className={classes.titleSection}>{t("home.helpUs")}</h2>
                     <div className={classes.helpUsCards}>
-                        {(
-                            [
-                                "declareReferent",
-                                "editSoftware",
-                                "addSoftwareOrService"
-                            ] as const
-                        ).map(cardName => {
+                        {useCases.map((cardName: availableUseCase) => {
                             const link = (() => {
                                 switch (cardName) {
                                     case "addSoftwareOrService":
