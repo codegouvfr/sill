@@ -1,0 +1,55 @@
+{
+    "header": {
+        "icons": [
+            {
+                "iconId": "fr-icon-bank-fill",
+                "linkProps": {
+                    "href": "https://code.gouv.fr"
+                },
+                "text": "Code Gouv"
+            }
+        ],
+        "menu": {
+            "welcome": {
+                "enabled": true
+            },
+            "catalog": {
+                "enabled": true
+            },
+            "addSoftware": {
+                "enabled": true
+            },
+            "about": {
+                "enabled": true
+            },
+            "contribute": {
+                "enabled": true,
+                "href": "mailto:sill@code.gouv.fr?subject=Contribute"
+            }
+        }
+    },
+    "home": {
+        "softwareSelection": {
+            "enabled": true
+        },
+        "statistics": {
+            "catgegories": [
+                "softwareCount",
+                "registeredUserCount",
+                "agentReferentCount",
+                "organizationCount"
+            ]
+        },
+        "usecases": {
+            "catgegories": ["declareReferent", "editSoftware", "addSoftwareOrService"]
+        }
+    },
+    "footer": {
+        "domains": [
+            "info.gouv.fr",
+            "service-public.fr",
+            "legifrance.gouv.fr",
+            "data.gouv.fr"
+        ]
+    }
+}

@@ -6,6 +6,7 @@ import { Footer as DsfrFooter } from "@codegouvfr/react-dsfr/Footer";
 import { routes } from "ui/routes";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 import { apiUrl } from "urls";
+import configUI from "../../ui/config-ui.json";
 
 export type Props = {
     className?: string;
@@ -73,6 +74,7 @@ export const Footer = memo(
                         },
                         headerFooterDisplayItem
                     ]}
+                    domains={configUI.footer.domains}
                 />
             </>
         );
