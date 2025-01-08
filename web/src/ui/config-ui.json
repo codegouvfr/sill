@@ -1,14 +1,6 @@
 {
     "header": {
-        "icons": [
-            {
-                "iconId": "fr-icon-bank-fill",
-                "linkProps": {
-                    "href": "https://code.gouv.fr"
-                },
-                "text": "Code Gouv"
-            }
-        ],
+        "icons": [],
         "menu": {
             "welcome": {
                 "enabled": true
@@ -17,7 +9,7 @@
                 "enabled": true
             },
             "addSoftware": {
-                "enabled": true
+                "enabled": false
             },
             "about": {
                 "enabled": true
@@ -30,33 +22,34 @@
     },
     "home": {
         "softwareSelection": {
-            "enabled": true
+            "enabled": false
         },
         "statistics": {
             "catgegories": [
-                "softwareCount",
-                "registeredUserCount",
-                "agentReferentCount",
-                "organizationCount"
+                "softwareCount"
             ]
         },
         "usecases": {
-            "catgegories": ["declareReferent", "editSoftware", "addSoftwareOrService"]
+            "catgegories": [
+                "declareReferent",
+                "editSoftware",
+                "addSoftwareOrService"
+            ]
         }
     },
     "softwareDetails": {
-        "defaultLogo": true,
+        "defaultLogo": false,
         "details": {
             "enabled": true,
             "fields": {
                 "registerDate": true,
-                "minimalVersionRequired": true,
-                "softwareCurrentVersion": true,
+                "minimalVersionRequired": false,
+                "softwareCurrentVersion": false,
                 "license": true
             }
         },
         "prerogatives": {
-            "enabled": true
+            "enabled": false
         },
         "metadata": {
             "enabled": true,
@@ -68,10 +61,10 @@
             }
         },
         "links": {
-            "enabled": true
+            "enabled": false
         },
         "userActions": {
-            "enabled": true
+            "enabled": false
         }
     },
     "catalog": {
@@ -101,10 +94,10 @@
     },
     "footer": {
         "domains": [
-            "info.gouv.fr",
-            "service-public.fr",
-            "legifrance.gouv.fr",
-            "data.gouv.fr"
+            "hal.science",
+            "recherche.data.gouv.fr",
+            "code.gouv.fr/sill",
+            "softwareheritage.org"
         ]
     }
 }
