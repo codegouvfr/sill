@@ -193,7 +193,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                         applicationCategories: software.categories.concat(
                             softwareExternalData?.applicationCategories ?? []
-                        )
+                        ),
+                        categories: undefined // merged in applicationCategories, set to undefined to remove it
                     });
                 }),
         getById: getBySoftwareId,
@@ -290,6 +291,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             applicationCategories: software.categories.concat(
                                 softwareExternalData?.applicationCategories ?? []
                             ),
+                            categories: undefined, // merged in applicationCategories, set to undefined to remove it
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? []
                         });
                     }
@@ -511,6 +513,12 @@ const getUserAndReferentCountByOrganizationBySoftwareId = async (
     );
 };
 
+const filterDuplicate = (array: any[]) => {
+    return array.filter(function (item: any, pos: number) {
+        return array.indexOf(item) == pos;
+    });
+};
+
 const makeGetSoftwareById =
     (db: Kysely<Database>) =>
     async (softwareId: number): Promise<Software | undefined> =>
@@ -551,6 +559,9 @@ const makeGetSoftwareById =
                     testUrl: testUrls[0]?.url,
                     parentWikidataSoftware: parentExternalData,
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                    applicationCategories: software.categories.concat(softwareExternalData?.applicationCategories ?? [])
+                    applicationCategories: filterDuplicate(
+                        software.categories.concat(softwareExternalData?.applicationCategories ?? [])
+                    ),
+                    categories: undefined // merged in applicationCategories, set to undefined to remove it
                 });
             });

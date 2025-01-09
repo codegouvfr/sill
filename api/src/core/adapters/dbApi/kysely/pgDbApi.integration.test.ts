@@ -166,7 +166,6 @@ describe("pgDbApi", () => {
                     authorName: dev.name,
                     authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
                 })),
-                categories: [],
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,
                 comptoirDuLibreServiceProviderCount: 0,
