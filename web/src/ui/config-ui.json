@@ -89,28 +89,28 @@
         }
     },
     "catalog": {
-        "defaultLogo": true,
+        "defaultLogo": false,
         "search": {
             "options": {
-                "organisation": true,
+                "organisation": false,
                 "applicationCategories": true,
                 "softwareType": true,
-                "prerogatives": true,
-                "programmingLanguages": false
+                "prerogatives": false,
+                "programmingLanguages": true
             }
         },
         "sortOptions": {
-            "referent_count": true,
-            "user_count": true,
+            "referent_count": false,
+            "user_count": false,
             "added_time": true,
             "update_time": true,
             "latest_version_publication_date": true,
-            "user_count_ASC": true,
-            "referent_count_ASC": true
+            "user_count_ASC": false,
+            "referent_count_ASC": false
         },
         "cardOptions": {
-            "referentCount": true,
-            "userCase": true
+            "referentCount": false,
+            "userCase": false
         }
     },
     "footer": {
