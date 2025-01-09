@@ -260,7 +260,12 @@
         "CNLL service providers_other": "See the {{count}} service providers on the CNLL index",
         "programming languages": "Coded in",
         "keywords": "Keywords",
-        "application categories": "Categories"
+        "application categories": "Categories",
+        "softwareType": "Software Type",
+        "softwareType-desktop/mobile": "Software / mobile app",
+        "softwareType-stack": "Stack",
+        "softwareType-cloud": "Cloud Hosted App",
+        "supportedOS": "Supported OS"
     },
     "referencedInstancesTab": {
         "publicInstanceCount": "{{instanceCount}} maintained public $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} public $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",

@@ -334,6 +334,7 @@ function apiSoftwareToSoftware(params: {
         versionMin,
         programmingLanguages,
         keywords,
-        applicationCategories
+        applicationCategories,
+        softwareType
     };
 }

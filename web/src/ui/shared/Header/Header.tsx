@@ -89,6 +89,15 @@ export const Header = memo(
             });
         }
 
+        const quickAccess: Array<JSX.Element | HeaderProps.QuickAccessItem> = [<LanguageSelect />];
+        config.header.icons.forEach(icon => quickAccess.push(icon as HeaderProps.QuickAccessItem));
+        quickAccess.push(
+            <AuthButtons
+                isOnPageMyAccount={routeName === "account"}
+                userAuthenticationApi={userAuthenticationApi}
+            />
+        );
+
         return (
             <HeaderDsfr
                 ref={ref}
@@ -105,14 +114,7 @@ export const Header = memo(
                     ...routes.home().link,
                     "title": t("header.home title")
                 }}
-                quickAccessItems={[
-                    <LanguageSelect />,
-                    config.header.icons[0] as HeaderProps.QuickAccessItem,
-                    <AuthButtons
-                        isOnPageMyAccount={routeName === "account"}
-                        userAuthenticationApi={userAuthenticationApi}
-                    />
-                ]}
+                quickAccessItems={quickAccess}
                 navigation={navigations}
             />
         );

@@ -44,6 +44,36 @@
             "catgegories": ["declareReferent", "editSoftware", "addSoftwareOrService"]
         }
     },
+    "softwareDetails": {
+        "defaultLogo": true,
+        "details": {
+            "enabled": true,
+            "fields": {
+                "registerDate": true,
+                "minimalVersionRequired": true,
+                "softwareCurrentVersion": true,
+                "license": true
+            }
+        },
+        "prerogatives": {
+            "enabled": true
+        },
+        "metadata": {
+            "enabled": true,
+            "fields": {
+                "keywords": true,
+                "programmingLanguages": true,
+                "applicationCategories": true,
+                "softwareType": true
+            }
+        },
+        "links": {
+            "enabled": true
+        },
+        "userActions": {
+            "enabled": true
+        }
+    },
     "footer": {
         "domains": [
             "info.gouv.fr",

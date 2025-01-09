@@ -22,6 +22,7 @@ import {
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import type { ApiTypes } from "api";
+import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -57,7 +58,10 @@ export default function SoftwareDetails(props: Props) {
     return (
         <>
             <div className={className}>
-                <div className={fr.cx("fr-container")}>
+                <div
+                    className={fr.cx("fr-container")}
+                    style={{ marginBottom: fr.spacing("6v") }}
+                >
                     <Breadcrumb
                         segments={[
                             {
@@ -71,7 +75,11 @@ export default function SoftwareDetails(props: Props) {
                         className={classes.breadcrumb}
                     />
                     <HeaderDetailCard
-                        softwareLogoUrl={software.logoUrl ?? softwareLogoPlaceholder}
+                        softwareLogoUrl={
+                            software?.logoUrl ?? config.softwareDetails.defaultLogo
+                                ? softwareLogoPlaceholder
+                                : undefined
+                        }
                         softwareName={software.softwareName}
                         softwareDereferencing={software.dereferencing}
                         authors={software.authors}
@@ -142,6 +150,7 @@ export default function SoftwareDetails(props: Props) {
                                         applicationCategories={
                                             software?.applicationCategories
                                         }
+                                        softwareType={software?.softwareType}
                                     />
                                 )
                             },
@@ -254,122 +263,126 @@ export default function SoftwareDetails(props: Props) {
                         ]}
                     />
                 </div>
-                <ActionsFooter className={classes.container}>
-                    <DetailUsersAndReferents
-                        className={cx(
-                            fr.cx("fr-text--lg"),
-                            classes.detailUsersAndReferents
-                        )}
-                        seeUserAndReferent={
-                            software.referentCount > 0 || software.userCount > 0
-                                ? routes.softwareUsersAndReferents({
-                                      "name": software.softwareName
-                                  }).link
-                                : undefined
-                        }
-                        referentCount={software.referentCount ?? 0}
-                        userCount={software.userCount ?? 0}
-                    />
-                    <div className={classes.buttons}>
-                        {software.dereferencing === undefined && (
+                {config.softwareDetails.userActions.enabled && (
+                    <ActionsFooter className={classes.container}>
+                        <DetailUsersAndReferents
+                            className={cx(
+                                fr.cx("fr-text--lg"),
+                                classes.detailUsersAndReferents
+                            )}
+                            seeUserAndReferent={
+                                software.referentCount > 0 || software.userCount > 0
+                                    ? routes.softwareUsersAndReferents({
+                                          "name": software.softwareName
+                                      }).link
+                                    : undefined
+                            }
+                            referentCount={software.referentCount ?? 0}
+                            userCount={software.userCount ?? 0}
+                        />
+                        <div className={classes.buttons}>
+                            {software.dereferencing === undefined && (
+                                <Button
+                                    priority="secondary"
+                                    disabled={isUnreferencingOngoing}
+                                    onClick={() => {
+                                        if (!userAuthentication.getIsUserLoggedIn()) {
+                                            userAuthentication.login({
+                                                "doesCurrentHrefRequiresAuth": false
+                                            });
+                                            return;
+                                        }
+
+                                        const userInput = window.prompt(
+                                            t(
+                                                "softwareDetails.please provide a reason for unreferencing this software"
+                                            )
+                                        );
+
+                                        if (userInput === null || userInput === "") {
+                                            return;
+                                        }
+
+                                        softwareDetails.unreference({
+                                            "reason": userInput
+                                        });
+                                    }}
+                                >
+                                    {isUnreferencingOngoing ? (
+                                        <CircularProgress size={17} />
+                                    ) : (
+                                        t("softwareDetails.unreference software")
+                                    )}
+                                </Button>
+                            )}
+
                             <Button
                                 priority="secondary"
-                                disabled={isUnreferencingOngoing}
-                                onClick={() => {
-                                    if (!userAuthentication.getIsUserLoggedIn()) {
-                                        userAuthentication.login({
-                                            "doesCurrentHrefRequiresAuth": false
-                                        });
-                                        return;
-                                    }
-
-                                    const userInput = window.prompt(
-                                        t(
-                                            "softwareDetails.please provide a reason for unreferencing this software"
-                                        )
-                                    );
-
-                                    if (userInput === null || userInput === "") {
-                                        return;
-                                    }
-
-                                    softwareDetails.unreference({
-                                        "reason": userInput
-                                    });
-                                }}
+                                linkProps={
+                                    routes.softwareUpdateForm({
+                                        "name": software.softwareName
+                                    }).link
+                                }
                             >
-                                {isUnreferencingOngoing ? (
-                                    <CircularProgress size={17} />
-                                ) : (
-                                    t("softwareDetails.unreference software")
-                                )}
+                                {t("softwareDetails.edit software")}
                             </Button>
-                        )}
+                            {(() => {
+                                const declarationType = userDeclaration?.isReferent
+                                    ? "referent"
+                                    : userDeclaration?.isUser
+                                    ? "user"
+                                    : undefined;
 
-                        <Button
-                            priority="secondary"
-                            linkProps={
-                                routes.softwareUpdateForm({
-                                    "name": software.softwareName
-                                }).link
-                            }
-                        >
-                            {t("softwareDetails.edit software")}
-                        </Button>
-                        {(() => {
-                            const declarationType = userDeclaration?.isReferent
-                                ? "referent"
-                                : userDeclaration?.isUser
-                                ? "user"
-                                : undefined;
-
-                            if (declarationType === undefined) {
-                                return (
-                                    <Button
-                                        linkProps={
-                                            routes.declarationForm({
-                                                "name": software.softwareName
-                                            }).link
-                                        }
-                                    >
-                                        {t("softwareDetails.declare referent")}
-                                    </Button>
-                                );
-                            }
-
-                            return (
-                                <>
-                                    <Button
-                                        priority="tertiary no outline"
-                                        onClick={() =>
-                                            openDeclarationRemovalModal({
-                                                declarationType,
-                                                "softwareName": software.softwareName,
-                                                "softwareId": software.softwareId
-                                            })
-                                        }
-                                    >
-                                        {declarationType === "user"
-                                            ? t("softwareDetails.stop being user")
-                                            : t("softwareDetails.stop being referent")}
-                                    </Button>
-                                    {declarationType === "user" && (
+                                if (declarationType === undefined) {
+                                    return (
                                         <Button
                                             linkProps={
                                                 routes.declarationForm({
-                                                    "name": software.softwareName,
-                                                    "declarationType": "referent"
+                                                    "name": software.softwareName
                                                 }).link
                                             }
                                         >
-                                            {t("softwareDetails.become referent")}
+                                            {t("softwareDetails.declare referent")}
                                         </Button>
-                                    )}
-                                </>
-                            );
-                        })()}
-                    </div>
-                </ActionsFooter>
+                                    );
+                                }
+
+                                return (
+                                    <>
+                                        <Button
+                                            priority="tertiary no outline"
+                                            onClick={() =>
+                                                openDeclarationRemovalModal({
+                                                    declarationType,
+                                                    "softwareName": software.softwareName,
+                                                    "softwareId": software.softwareId
+                                                })
+                                            }
+                                        >
+                                            {declarationType === "user"
+                                                ? t("softwareDetails.stop being user")
+                                                : t(
+                                                      "softwareDetails.stop being referent"
+                                                  )}
+                                        </Button>
+                                        {declarationType === "user" && (
+                                            <Button
+                                                linkProps={
+                                                    routes.declarationForm({
+                                                        "name": software.softwareName,
+                                                        "declarationType": "referent"
+                                                    }).link
+                                                }
+                                            >
+                                                {t("softwareDetails.become referent")}
+                                            </Button>
+                                        )}
+                                    </>
+                                );
+                            })()}
+                        </div>
+                    </ActionsFooter>
+                )}
             </div>
             {userDeclaration !== undefined && <DeclarationRemovalModal />}
         </>
