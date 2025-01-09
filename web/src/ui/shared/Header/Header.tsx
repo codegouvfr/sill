@@ -89,8 +89,12 @@ export const Header = memo(
             });
         }
 
-        const quickAccess: Array<JSX.Element | HeaderProps.QuickAccessItem> = [<LanguageSelect />];
-        config.header.icons.forEach(icon => quickAccess.push(icon as HeaderProps.QuickAccessItem));
+        const quickAccess: Array<JSX.Element | HeaderProps.QuickAccessItem> = [
+            <LanguageSelect />
+        ];
+        config.header.icons.forEach(icon =>
+            quickAccess.push(icon as HeaderProps.QuickAccessItem)
+        );
         quickAccess.push(
             <AuthButtons
                 isOnPageMyAccount={routeName === "account"}
