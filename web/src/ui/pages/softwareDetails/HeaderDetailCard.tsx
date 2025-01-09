@@ -65,13 +65,15 @@ export const HeaderDetailCard = memo((props: Props) => {
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
                 <div className={classes.softwareInformation}>
-                    <div className={classes.logoWrapper}>
-                        <img
-                            className={classes.logo}
-                            src={softwareLogoUrl}
-                            alt={t("headerDetailCard.software logo")}
-                        />
-                    </div>
+                    {softwareLogoUrl && (
+                        <div className={classes.logoWrapper}>
+                            <img
+                                className={classes.logo}
+                                src={softwareLogoUrl}
+                                alt={t("headerDetailCard.software logo")}
+                            />
+                        </div>
+                    )}
                     <div className={classes.mainInfo}>
                         <div className={classes.titleAndTagWrapper}>
                             <h4 className={classes.softwareName}>{softwareName}</h4>

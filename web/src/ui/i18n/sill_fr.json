@@ -261,7 +261,12 @@
         "what is the support market": "La DGFIP pilote deux marchés interministériels : support (Atos) et expertise (plusieurs titulaires) pour logiciels libres, couvrant maintenance, veille et prestations d'expertise.<br /> a> En savoir plus </a>",
         "programming languages": "Language de programmation",
         "keywords": "Mots clés",
-        "application categories": "Catégories"
+        "application categories": "Catégories",
+        "softwareType": "Type de logiciel",
+        "softwareType-desktop/mobile": "Logiciel Ordinateur / Application mobile",
+        "softwareType-stack": "Stack",
+        "softwareType-cloud": "Application cloud",
+        "supportedOS": "Système d'exploitation supporté"
     },
     "referencedInstancesTab": {
         "publicInstanceCount": "{{instanceCount}} $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) web $t(ReferencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} }) $t(ReferencedInstancesTab.public, {\"count\": {{organizationCount}} }",
