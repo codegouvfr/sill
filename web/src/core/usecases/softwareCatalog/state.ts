@@ -103,7 +103,6 @@ export namespace State {
         export type Internal = Common & {
             addedTime: number;
             updateTime: number;
-            categories: string[];
             organizations: string[];
             prerogatives: OmitFromExisting<
                 Prerogatives,
