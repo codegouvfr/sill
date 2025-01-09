@@ -11,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import Markdown from "react-markdown";
+import config from "../../config-ui.json";
 
 export type Props = {
     className?: string;
@@ -79,13 +80,15 @@ export const SoftwareCatalogCard = memo((props: Props) => {
         <div className={cx(fr.cx("fr-card"), classes.root, className)}>
             <div className={classes.cardBody}>
                 <a className={cx(classes.headerContainer)} {...softwareDetailsLink}>
-                    <div className={classes.logoWrapper}>
-                        <img
-                            className={cx(classes.logo)}
-                            src={logoUrl ?? softwareLogoPlaceholder}
-                            alt={"software logo"}
-                        />
-                    </div>
+                    {(logoUrl || config.catalog.defaultLogo) && (
+                        <div className={classes.logoWrapper}>
+                            <img
+                                className={cx(classes.logo)}
+                                src={logoUrl ?? softwareLogoPlaceholder}
+                                alt={"software logo"}
+                            />
+                        </div>
+                    )}
 
                     <div className={cx(classes.header)}>
                         <div className={cx(classes.titleContainer)}>
@@ -199,29 +202,33 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                     <Markdown>{resolveLocalizedString(softwareDescription)}</Markdown>
                 </div>
 
-                <DetailUsersAndReferents
-                    seeUserAndReferent={
-                        referentCount > 0 || userCount > 0
-                            ? softwareUsersAndReferentsLink
-                            : undefined
-                    }
-                    referentCount={referentCount}
-                    userCount={userCount}
-                    className={classes.detailUsersAndReferents}
-                />
+                {config.catalog.cardOptions.referentCount && (
+                    <DetailUsersAndReferents
+                        seeUserAndReferent={
+                            referentCount > 0 || userCount > 0
+                                ? softwareUsersAndReferentsLink
+                                : undefined
+                        }
+                        referentCount={referentCount}
+                        userCount={userCount}
+                        className={classes.detailUsersAndReferents}
+                    />
+                )}
             </div>
             <div className={classes.footer}>
-                {!userDeclaration?.isReferent && !userDeclaration?.isUser && (
-                    <a
-                        className={cx(
-                            fr.cx("fr-btn", "fr-btn--secondary", "fr-text--sm"),
-                            classes.declareReferentOrUserButton
-                        )}
-                        {...declareFormLink}
-                    >
-                        {t("softwareCatalogCard.declareOneselfReferent")}
-                    </a>
-                )}
+                {config.catalog.cardOptions.userCase &&
+                    !userDeclaration?.isReferent &&
+                    !userDeclaration?.isUser && (
+                        <a
+                            className={cx(
+                                fr.cx("fr-btn", "fr-btn--secondary", "fr-text--sm"),
+                                classes.declareReferentOrUserButton
+                            )}
+                            {...declareFormLink}
+                        >
+                            {t("softwareCatalogCard.declareOneselfReferent")}
+                        </a>
+                    )}
                 <div className={cx(classes.footerActionsContainer)}>
                     <a className={cx(classes.footerActionLink)} {...softwareDetailsLink}>
                         <i className={fr.cx("fr-icon-arrow-right-line")} />
@@ -326,7 +333,10 @@ const useStyles = tss
             "overflow": "hidden",
             "display": "-webkit-box",
             "WebkitBoxOrient": "vertical",
-            "WebkitLineClamp": isSearchHighlighted ? "5" : "3",
+            "WebkitLineClamp":
+                isSearchHighlighted || !config.catalog.cardOptions.referentCount
+                    ? "5"
+                    : "3",
             "whiteSpace": "pre-wrap"
         },
         "detailUsersAndReferents": {
