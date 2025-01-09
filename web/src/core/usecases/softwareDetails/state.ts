@@ -4,6 +4,7 @@ import { assert } from "tsafe/assert";
 import { type State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
 import { LocalizedString } from "i18nifty";
 import type { Language, ApiTypes } from "api";
+import { SoftwareType } from "api/dist/src/lib/ApiTypes";
 
 export const name = "softwareDetails";
 
@@ -103,6 +104,7 @@ export namespace State {
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
+        softwareType: SoftwareType;
     };
 }
 

@@ -258,7 +258,12 @@
         "what is the support market": "The DGFIP manages two inter-ministerial markets: support (Atos) and expertise (multiple contractors) for open-source software, covering maintenance, monitoring, and expert services. <br /> <a>Learn more</a>",
         "programming languages": "Coded in",
         "keywords": "Keywords",
-        "application categories": "Categories"
+        "application categories": "Categories",
+        "softwareType": "Software Type",
+        "softwareType-desktop/mobile": "Software / mobile app",
+        "softwareType-stack": "Stack",
+        "softwareType-cloud": "Cloud Hosted App",
+        "supportedOS": "Supported OS"
     },
     "referencedInstancesTab": {
         "publicInstanceCount": "{{instanceCount}} maintained public $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} public $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
