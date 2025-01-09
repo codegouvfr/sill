@@ -74,6 +74,31 @@
             "enabled": true
         }
     },
+    "catalog": {
+        "defaultLogo": true,
+        "search": {
+            "options": {
+                "organisation": true,
+                "applicationCategories": true,
+                "softwareType": true,
+                "prerogatives": true,
+                "programmingLanguages": false
+            }
+        },
+        "sortOptions": {
+            "referent_count": true,
+            "user_count": true,
+            "added_time": true,
+            "update_time": true,
+            "latest_version_publication_date": true,
+            "user_count_ASC": true,
+            "referent_count_ASC": true
+        },
+        "cardOptions": {
+            "referentCount": true,
+            "userCase": true
+        }
+    },
     "footer": {
         "domains": [
             "info.gouv.fr",

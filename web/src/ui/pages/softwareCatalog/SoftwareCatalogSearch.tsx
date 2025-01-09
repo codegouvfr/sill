@@ -20,6 +20,7 @@ import { SelectNext } from "ui/shared/SelectNext";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
+import config from "../../config-ui.json";
 
 export type Props = {
     className?: string;
@@ -170,165 +171,180 @@ export function SoftwareCatalogSearch(props: Props) {
                 id={filtersWrapperId}
                 ref={setFiltersWrapperDivElement}
             >
-                <SelectNext
-                    className={classes.filterSelectGroup}
-                    label={
-                        <>
-                            {t("softwareCatalogSearch.organizationLabel")}{" "}
-                            <Tooltip
-                                title={t(
-                                    "softwareCatalogSearch.organization filter hint"
-                                )}
-                                arrow
-                            >
-                                <i className={fr.cx("ri-question-line")} />
-                            </Tooltip>
-                        </>
-                    }
-                    nativeSelectProps={{
-                        "onChange": event =>
-                            onOrganizationChange(event.target.value || undefined),
-                        "value": organization ?? ""
-                    }}
-                    disabled={organizationOptions.length === 0}
-                    options={[
-                        {
-                            "label": t("app.allFeminine"),
-                            "value": ""
-                        },
-                        ...organizationOptions.map(({ organization, softwareCount }) => ({
-                            "value": organization,
-                            "label": `${getOrganizationFullName(
-                                organization
-                            )} (${softwareCount})`
-                        }))
-                    ]}
-                />
-
-                <SelectNext
-                    className={classes.filterSelectGroup}
-                    label={t("softwareCatalogSearch.categoriesLabel")}
-                    disabled={categoryOptions.length === 0}
-                    nativeSelectProps={{
-                        "onChange": event =>
-                            onCategoryChange(event.target.value || undefined),
-                        "value": category ?? ""
-                    }}
-                    options={[
-                        {
-                            "label": t("app.allFeminine"),
-                            "value": ""
-                        },
-                        ...categoryOptions
-                            .map(({ category, softwareCount }) => ({
-                                "value": category,
-                                "label": `${
-                                    lang === "fr"
-                                        ? softwareCategoriesFrBySoftwareCategoryEn[
-                                              category
-                                          ] ?? category
-                                        : category
-                                } (${softwareCount})`
-                            }))
-                            .sort((a, b) => {
-                                const labelA = a.label.toLowerCase();
-                                const labelB = b.label.toLowerCase();
-                                if (labelA < labelB) return -1;
-                                if (labelA > labelB) return 1;
-                                return 0;
-                            })
-                    ]}
-                />
-
-                <SelectNext
-                    className={classes.filterSelectGroup}
-                    label={t("softwareCatalogSearch.environnement label")}
-                    nativeSelectProps={{
-                        "onChange": event =>
-                            onEnvironmentChange(event.target.value || undefined),
-                        "value": environment ?? ""
-                    }}
-                    options={[
-                        {
-                            "label": t("app.all"),
-                            "value": "" as const
-                        },
-                        ...environmentOptions.map(({ environment, softwareCount }) => ({
-                            "value": environment,
-                            "label": `${t(
-                                `softwareCatalogSearch.${environment}`
-                            )} (${softwareCount})`
-                        }))
-                    ]}
-                />
-
-                <div className={classes.filterSelectGroup}>
-                    <label htmlFor="prerogatives-label">
-                        {t("softwareCatalogSearch.prerogativesLabel")}
-                    </label>
-                    <SelectMui
-                        multiple
-                        displayEmpty={true}
-                        value={prerogatives}
-                        onChange={event => {
-                            const prerogatives = event.target.value;
-
-                            assert(typeof prerogatives !== "string");
-
-                            onPrerogativesChange(prerogatives);
-                        }}
-                        className={cx(fr.cx("fr-select"), classes.multiSelect)}
-                        input={<InputBase />}
-                        renderValue={prerogatives =>
-                            t("softwareCatalogSearch.number of prerogatives selected", {
-                                "count": prerogatives.length
-                            })
+                {config.catalog.search.options.organisation && (
+                    <SelectNext
+                        className={classes.filterSelectGroup}
+                        label={
+                            <>
+                                {t("softwareCatalogSearch.organizationLabel")}{" "}
+                                <Tooltip
+                                    title={t(
+                                        "softwareCatalogSearch.organization filter hint"
+                                    )}
+                                    arrow
+                                >
+                                    <i className={fr.cx("ri-question-line")} />
+                                </Tooltip>
+                            </>
                         }
-                        placeholder="Placeholder"
-                    >
-                        {prerogativesOptions.map(({ prerogative, softwareCount }) => (
-                            <MenuItem
-                                key={prerogative}
-                                value={prerogative}
-                                disabled={softwareCount === 0}
-                            >
-                                <Checkbox
-                                    checked={prerogatives.indexOf(prerogative) !== -1}
-                                />
-                                <ListItemText
-                                    primary={(() => {
-                                        switch (prerogative) {
-                                            case "doRespectRgaa":
-                                                return `${t(
-                                                    "softwareCatalogSearch.doRespectRgaa"
-                                                )} (${softwareCount})`;
-                                            case "isFromFrenchPublicServices":
-                                                return `${t(
-                                                    "softwareCatalogSearch.isFromFrenchPublicServices"
-                                                )} (${softwareCount})`;
-                                            case "isInstallableOnUserComputer":
-                                                return `${t(
-                                                    "softwareCatalogSearch.isInstallableOnUserComputer"
-                                                )} (${softwareCount})`;
-                                            case "isTestable":
-                                                return `${t(
-                                                    "softwareCatalogSearch.isTestable"
-                                                )} (${softwareCount})`;
-                                            case "isPresentInSupportContract":
-                                                return `${t(
-                                                    "softwareCatalogSearch.isPresentInSupportContract"
-                                                )} (${softwareCount})`;
-                                            case "isAvailableAsMobileApp":
-                                                return `${t(
-                                                    "softwareCatalogSearch.isAvailableAsMobileApp"
-                                                )} (${softwareCount})`;
-                                        }
-                                    })()}
-                                />
-                            </MenuItem>
-                        ))}
-                    </SelectMui>
-                </div>
+                        nativeSelectProps={{
+                            "onChange": event =>
+                                onOrganizationChange(event.target.value || undefined),
+                            "value": organization ?? ""
+                        }}
+                        disabled={organizationOptions.length === 0}
+                        options={[
+                            {
+                                "label": t("app.allFeminine"),
+                                "value": ""
+                            },
+                            ...organizationOptions.map(
+                                ({ organization, softwareCount }) => ({
+                                    "value": organization,
+                                    "label": `${getOrganizationFullName(
+                                        organization
+                                    )} (${softwareCount})`
+                                })
+                            )
+                        ]}
+                    />
+                )}
+
+                {config.catalog.search.options.applicationCategories && (
+                    <SelectNext
+                        className={classes.filterSelectGroup}
+                        label={t("softwareCatalogSearch.categoriesLabel")}
+                        disabled={categoryOptions.length === 0}
+                        nativeSelectProps={{
+                            "onChange": event =>
+                                onCategoryChange(event.target.value || undefined),
+                            "value": category ?? ""
+                        }}
+                        options={[
+                            {
+                                "label": t("app.allFeminine"),
+                                "value": ""
+                            },
+                            ...categoryOptions
+                                .map(({ category, softwareCount }) => ({
+                                    "value": category,
+                                    "label": `${
+                                        lang === "fr"
+                                            ? softwareCategoriesFrBySoftwareCategoryEn[
+                                                  category
+                                              ] ?? category
+                                            : category
+                                    } (${softwareCount})`
+                                }))
+                                .sort((a, b) => {
+                                    const labelA = a.label.toLowerCase();
+                                    const labelB = b.label.toLowerCase();
+                                    if (labelA < labelB) return -1;
+                                    if (labelA > labelB) return 1;
+                                    return 0;
+                                })
+                        ]}
+                    />
+                )}
+
+                {config.catalog.search.options.softwareType && (
+                    <SelectNext
+                        className={classes.filterSelectGroup}
+                        label={t("softwareCatalogSearch.environnement label")}
+                        nativeSelectProps={{
+                            "onChange": event =>
+                                onEnvironmentChange(event.target.value || undefined),
+                            "value": environment ?? ""
+                        }}
+                        options={[
+                            {
+                                "label": t("app.all"),
+                                "value": "" as const
+                            },
+                            ...environmentOptions.map(
+                                ({ environment, softwareCount }) => ({
+                                    "value": environment,
+                                    "label": `${t(
+                                        `softwareCatalogSearch.${environment}`
+                                    )} (${softwareCount})`
+                                })
+                            )
+                        ]}
+                    />
+                )}
+
+                {config.catalog.search.options.prerogatives && (
+                    <div className={classes.filterSelectGroup}>
+                        <label htmlFor="prerogatives-label">
+                            {t("softwareCatalogSearch.prerogativesLabel")}
+                        </label>
+                        <SelectMui
+                            multiple
+                            displayEmpty={true}
+                            value={prerogatives}
+                            onChange={event => {
+                                const prerogatives = event.target.value;
+
+                                assert(typeof prerogatives !== "string");
+
+                                onPrerogativesChange(prerogatives);
+                            }}
+                            className={cx(fr.cx("fr-select"), classes.multiSelect)}
+                            input={<InputBase />}
+                            renderValue={prerogatives =>
+                                t(
+                                    "softwareCatalogSearch.number of prerogatives selected",
+                                    {
+                                        "count": prerogatives.length
+                                    }
+                                )
+                            }
+                            placeholder="Placeholder"
+                        >
+                            {prerogativesOptions.map(({ prerogative, softwareCount }) => (
+                                <MenuItem
+                                    key={prerogative}
+                                    value={prerogative}
+                                    disabled={softwareCount === 0}
+                                >
+                                    <Checkbox
+                                        checked={prerogatives.indexOf(prerogative) !== -1}
+                                    />
+                                    <ListItemText
+                                        primary={(() => {
+                                            switch (prerogative) {
+                                                case "doRespectRgaa":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.doRespectRgaa"
+                                                    )} (${softwareCount})`;
+                                                case "isFromFrenchPublicServices":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.isFromFrenchPublicServices"
+                                                    )} (${softwareCount})`;
+                                                case "isInstallableOnUserComputer":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.isInstallableOnUserComputer"
+                                                    )} (${softwareCount})`;
+                                                case "isTestable":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.isTestable"
+                                                    )} (${softwareCount})`;
+                                                case "isPresentInSupportContract":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.isPresentInSupportContract"
+                                                    )} (${softwareCount})`;
+                                                case "isAvailableAsMobileApp":
+                                                    return `${t(
+                                                        "softwareCatalogSearch.isAvailableAsMobileApp"
+                                                    )} (${softwareCount})`;
+                                            }
+                                        })()}
+                                    />
+                                </MenuItem>
+                            ))}
+                        </SelectMui>
+                    </div>
+                )}
             </div>
         </div>
     );
