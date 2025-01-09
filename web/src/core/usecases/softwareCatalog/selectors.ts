@@ -286,7 +286,7 @@ const categoryOptions = createSelector(
             Array.from(
                 new Set(
                     internalSoftwares
-                        .map(({ categories }) => categories)
+                        .map(({ applicationCategories }) => applicationCategories)
                         .reduce((prev, curr) => [...prev, ...curr], [])
                 )
             ).map(category => [category, 0])
@@ -322,8 +322,8 @@ const categoryOptions = createSelector(
             });
         }
 
-        tmpSoftwares.forEach(({ categories }) =>
-            categories.forEach(
+        tmpSoftwares.forEach(({ applicationCategories }) =>
+            applicationCategories.forEach(
                 category => softwareCountInCurrentFilterByCategory[category]++
             )
         );
@@ -635,7 +635,9 @@ function filterByCategory(params: {
 }) {
     const { softwares, category } = params;
 
-    return softwares.filter(({ categories }) => categories.includes(category));
+    return softwares.filter(({ applicationCategories }) =>
+        applicationCategories.includes(category)
+    );
 }
 
 function filterByEnvironnement(params: {
@@ -717,14 +719,13 @@ function apiSoftwareToInternalSoftware(params: {
         testUrl,
         addedTime,
         updateTime,
-        categories,
+        applicationCategories,
         prerogatives,
         softwareType,
         userAndReferentCountByOrganization,
         similarSoftwares,
         keywords,
-        programmingLanguages,
-        applicationCategories
+        programmingLanguages
     } = apiSoftware;
 
     assert<
@@ -780,7 +781,7 @@ function apiSoftwareToInternalSoftware(params: {
         testUrl,
         addedTime,
         updateTime,
-        categories,
+        applicationCategories,
         "organizations": objectKeys(userAndReferentCountByOrganization),
         parentSoftware,
         softwareType,
@@ -812,8 +813,7 @@ function apiSoftwareToInternalSoftware(params: {
             return search;
         })(),
         userDeclaration,
-        programmingLanguages,
-        applicationCategories
+        programmingLanguages
     };
 }
 
@@ -833,7 +833,7 @@ function internalSoftwareToExternalSoftware(params: {
         testUrl,
         addedTime,
         updateTime,
-        categories,
+        applicationCategories,
         organizations,
         prerogatives: {
             isFromFrenchPublicServices,
@@ -845,7 +845,6 @@ function internalSoftwareToExternalSoftware(params: {
         softwareType,
         userDeclaration,
         programmingLanguages,
-        applicationCategories,
         ...rest
     } = internalSoftware;
 
