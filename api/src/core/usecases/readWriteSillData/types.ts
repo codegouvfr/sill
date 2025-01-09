@@ -34,7 +34,7 @@ export type Software = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    categories: string[];
+    applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
     authors: {
@@ -62,7 +62,6 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
-    applicationCategories: string[];
 };
 
 export namespace Software {
