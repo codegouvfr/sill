@@ -191,7 +191,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         parentWikidataSoftware: parentExternalData,
                         keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                        applicationCategories: softwareExternalData?.applicationCategories ?? []
+                        applicationCategories: software.categories.concat(
+                            softwareExternalData?.applicationCategories ?? []
+                        )
                     });
                 }),
         getById: getBySoftwareId,
@@ -285,7 +287,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
                             testUrl: testUrls[0]?.url,
                             parentWikidataSoftware: parentExternalData ?? undefined,
-                            applicationCategories: softwareExternalData?.applicationCategories ?? [],
+                            applicationCategories: software.categories.concat(
+                                softwareExternalData?.applicationCategories ?? []
+                            ),
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? []
                         });
                     }
@@ -547,6 +551,6 @@ const makeGetSoftwareById =
                     testUrl: testUrls[0]?.url,
                     parentWikidataSoftware: parentExternalData,
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                    applicationCategories: softwareExternalData?.applicationCategories ?? []
+                    applicationCategories: software.categories.concat(softwareExternalData?.applicationCategories ?? [])
                 });
             });

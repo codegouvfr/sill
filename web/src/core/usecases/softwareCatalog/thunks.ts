@@ -221,14 +221,13 @@ function apiSoftwareToInternalSoftware(params: {
         testUrl,
         addedTime,
         updateTime,
-        categories,
+        applicationCategories,
         prerogatives,
         softwareType,
         userAndReferentCountByOrganization,
         similarSoftwares,
         keywords,
-        programmingLanguages,
-        applicationCategories
+        programmingLanguages
     } = apiSoftware;
 
     assert<
@@ -302,7 +301,7 @@ function apiSoftwareToInternalSoftware(params: {
         testUrl,
         addedTime,
         updateTime,
-        categories,
+        applicationCategories,
         "organizations": objectKeys(userAndReferentCountByOrganization),
         parentSoftware,
         softwareType,
@@ -334,8 +333,7 @@ function apiSoftwareToInternalSoftware(params: {
             return search;
         })(),
         userDeclaration,
-        programmingLanguages,
-        applicationCategories
+        programmingLanguages
     };
 }
 

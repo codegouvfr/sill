@@ -98,7 +98,7 @@ export const sillApi: SillApi = {
             "testUrl": undefined,
             "addedTime": Date.now(),
             "updateTime": Date.now(),
-            "categories": [],
+            "applicationCategories": [],
             "prerogatives": {
                 "doRespectRgaa": false,
                 "isFromFrenchPublicServices": formData.isFromFrenchPublicService,
@@ -111,8 +111,7 @@ export const sillApi: SillApi = {
             },
             "keywords": [],
             "annuaireCnllServiceProviders": [],
-            "programmingLanguages": ["c++"],
-            "applicationCategories": []
+            "programmingLanguages": ["c++"]
         };
 
         softwares.push(software);
@@ -154,7 +153,7 @@ export const sillApi: SillApi = {
                 "testUrl": undefined,
                 "addedTime": Date.now(),
                 "updateTime": Date.now(),
-                "categories": [],
+                "applicationCategories": [],
                 "prerogatives": {
                     "doRespectRgaa": false,
                     "isFromFrenchPublicServices": formData.isFromFrenchPublicService,
@@ -168,7 +167,6 @@ export const sillApi: SillApi = {
                 },
                 "keywords": [],
                 "annuaireCnllServiceProviders": [],
-                "applicationCategories": [],
                 "programmingLanguages": []
             })
         };
@@ -326,7 +324,7 @@ const softwares = [
         "addedTime": 1670416144,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["messaging"],
+        "applicationCategories": ["messaging"],
         "softwareType": {
             "type": "cloud"
         },
@@ -341,7 +339,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -387,7 +384,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["traitement de texte"],
+        "applicationCategories": ["traitement de texte"],
         "prerogatives": {
             "doRespectRgaa": true,
             "isFromFrenchPublicServices": true,
@@ -407,7 +404,6 @@ const softwares = [
             "CA du Puy-en-Velay": { "referentCount": 1, "userCount": 0 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -453,7 +449,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud", "software"],
+        "applicationCategories": ["cloud", "software"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -465,7 +461,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -514,7 +509,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["player"],
+        "applicationCategories": ["player"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -522,7 +517,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -570,7 +564,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -582,7 +576,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -645,7 +638,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -657,7 +650,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -702,7 +694,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -713,7 +705,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -763,7 +754,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -784,7 +775,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -823,7 +813,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "softwareType": {
             "type": "stack"
         },
@@ -836,7 +826,6 @@ const softwares = [
             "CA du Puy-en-Velay": { "referentCount": 0, "userCount": 1 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -875,7 +864,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -887,7 +876,6 @@ const softwares = [
             "DINUM": { "referentCount": 2, "userCount": 43 }
         },
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -927,7 +915,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -935,7 +923,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -975,7 +962,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -983,7 +970,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1023,7 +1009,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1031,7 +1017,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1071,7 +1056,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1079,7 +1064,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1119,7 +1103,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1127,7 +1111,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1167,7 +1150,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1175,7 +1158,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1215,7 +1197,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1223,7 +1205,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     }),
     id<ApiTypes.Software>({
@@ -1263,7 +1244,7 @@ const softwares = [
         "addedTime": 1674739365178,
         "updateTime": 1674739365178,
         "dereferencing": undefined,
-        "categories": ["cloud"],
+        "applicationCategories": ["cloud"],
         "prerogatives": {
             "doRespectRgaa": false,
             "isFromFrenchPublicServices": false,
@@ -1271,7 +1252,6 @@ const softwares = [
         },
         "userAndReferentCountByOrganization": {},
         "keywords": [],
-        "applicationCategories": [],
         "programmingLanguages": []
     })
 ];
