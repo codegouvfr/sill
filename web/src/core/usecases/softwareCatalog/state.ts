@@ -22,6 +22,7 @@ export type State = {
     organization: string | undefined;
     /** E.g: JavaScript */
     category: string | undefined;
+    programmingLanguage: string | undefined;
     environment: State.Environment | undefined;
     prerogatives: State.Prerogative[];
     sortBackup: State.Sort;
@@ -159,6 +160,7 @@ export const { reducer, actions } = createUsecaseActions({
                 "sortBackup": defaultSort,
                 "organization": undefined,
                 "category": undefined,
+                "programmingLanguage": undefined,
                 "environment": undefined,
                 "prerogatives": [],
                 "referentCount": undefined,
@@ -206,6 +208,7 @@ export const { reducer, actions } = createUsecaseActions({
             state.prerogatives = [];
             state.organization = undefined;
             state.category = undefined;
+            state.programmingLanguage = undefined;
             state.environment = undefined;
             state.prerogatives = [];
         }
