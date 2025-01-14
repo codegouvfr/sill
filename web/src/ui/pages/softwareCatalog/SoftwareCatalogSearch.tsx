@@ -42,6 +42,13 @@ export type Props = {
     category: string | undefined;
     onCategoryChange: (category: string | undefined) => void;
 
+    programmingLanguageOptions: {
+        programmingLanguage: string;
+        softwareCount: number;
+    }[];
+    programmingLanguage: string | undefined;
+    onProgrammingLanguageChange: (programmingLanguage: string | undefined) => void;
+
     environmentOptions: {
         environment: SoftwareCatalogState.Environment;
         softwareCount: number;
@@ -77,6 +84,10 @@ export function SoftwareCatalogSearch(props: Props) {
         environmentOptions,
         environment,
         onEnvironmentChange,
+
+        programmingLanguageOptions,
+        programmingLanguage,
+        onProgrammingLanguageChange,
 
         prerogativesOptions,
         prerogatives,
@@ -344,6 +355,32 @@ export function SoftwareCatalogSearch(props: Props) {
                             ))}
                         </SelectMui>
                     </div>
+                )}
+
+                {config.catalog.search.options.programmingLanguages && (
+                    <SelectNext
+                        className={classes.filterSelectGroup}
+                        label={t("softwareCatalogSearch.programmingLanguages label")}
+                        nativeSelectProps={{
+                            "onChange": event =>
+                                onProgrammingLanguageChange(
+                                    event.target.value || undefined
+                                ),
+                            "value": programmingLanguage ?? ""
+                        }}
+                        options={[
+                            {
+                                "label": t("app.all"),
+                                "value": "" as const
+                            },
+                            ...programmingLanguageOptions.map(
+                                ({ programmingLanguage, softwareCount }) => ({
+                                    "value": programmingLanguage,
+                                    "label": `${programmingLanguage} (${softwareCount})`
+                                })
+                            )
+                        ]}
+                    />
                 )}
             </div>
         </div>

@@ -25,6 +25,7 @@ export default function SoftwareCatalog(props: Props) {
         environmentOptions,
         organizationOptions,
         prerogativeFilterOptions,
+        programmingLanguageOptions,
         softwares,
         sortOptions
     } = useCoreState("softwareCatalog", "main");
@@ -115,6 +116,16 @@ export default function SoftwareCatalog(props: Props) {
 
     useEffect(() => {
         softwareCatalog.updateFilter({
+            "key": "programmingLanguage",
+            "value":
+                route.params.programmingLanguage !== undefined
+                    ? route.params.programmingLanguage
+                    : undefined
+        });
+    }, [route.params.programmingLanguage]);
+
+    useEffect(() => {
+        softwareCatalog.updateFilter({
             "key": "environment",
             "value":
                 route.params.environment !== undefined
@@ -163,6 +174,9 @@ export default function SoftwareCatalog(props: Props) {
             categoryOptions={categoryOptions}
             category={route.params.category}
             onCategoryChange={category => startTransition(() => updateRouteParams({ category }).replace())}
+            programmingLanguageOptions={programmingLanguageOptions}
+            programmingLanguage={route.params.programmingLanguage}
+            onProgrammingLanguageChange={programmingLanguage => startTransition(() => updateRouteParams({ programmingLanguage }).replace())}
             environmentOptions={environmentOptions}
             environment={route.params.environment}
             onEnvironmentChange={environment => startTransition(() => updateRouteParams({ environment }).replace())}

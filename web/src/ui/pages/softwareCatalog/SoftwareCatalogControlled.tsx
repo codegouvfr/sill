@@ -42,6 +42,13 @@ export type Props = {
     category: string | undefined;
     onCategoryChange: (category: string | undefined) => void;
 
+    programmingLanguageOptions: {
+        programmingLanguage: string;
+        softwareCount: number;
+    }[];
+    programmingLanguage: string | undefined;
+    onProgrammingLanguageChange: (programmingLanguage: string | undefined) => void;
+
     environmentOptions: {
         environment: SoftwareCatalogState.Environment;
         softwareCount: number;
@@ -81,6 +88,9 @@ export function SoftwareCatalogControlled(props: Props) {
         prerogativesOptions,
         prerogatives,
         onPrerogativesChange,
+        programmingLanguageOptions,
+        programmingLanguage,
+        onProgrammingLanguageChange,
         ...rest
     } = props;
 
@@ -106,6 +116,9 @@ export function SoftwareCatalogControlled(props: Props) {
                 prerogativesOptions={prerogativesOptions}
                 prerogatives={prerogatives}
                 onPrerogativesChange={onPrerogativesChange}
+                programmingLanguage={programmingLanguage}
+                programmingLanguageOptions={programmingLanguageOptions}
+                onProgrammingLanguageChange={onProgrammingLanguageChange}
             />
             <div>
                 <div className={classes.header}>

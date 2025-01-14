@@ -19,6 +19,7 @@ const searchResults = (rootState: RootState) => rootState[name].searchResults;
 const sort = (rootState: RootState) => rootState[name].sort;
 const organization = (rootState: RootState) => rootState[name].organization;
 const category = (rootState: RootState) => rootState[name].category;
+const programmingLanguage = (rootState: RootState) => rootState[name].programmingLanguage;
 const environment = (rootState: RootState) => rootState[name].environment;
 const prerogatives = (rootState: RootState) => rootState[name].prerogatives;
 const userEmail = (rootState: RootState) => rootState[name].userEmail;
@@ -54,6 +55,7 @@ const softwares = createSelector(
     sort,
     organization,
     category,
+    programmingLanguage,
     environment,
     prerogatives,
     (
@@ -62,6 +64,7 @@ const softwares = createSelector(
         sort,
         organization,
         category,
+        programmingLanguage,
         environment,
         prerogatives
     ) => {
@@ -95,6 +98,13 @@ const softwares = createSelector(
             tmpSoftwares = filterByCategory({
                 "softwares": tmpSoftwares,
                 "category": category
+            });
+        }
+
+        if (programmingLanguage) {
+            tmpSoftwares = filterByProgrammingLanguage({
+                "softwares": tmpSoftwares,
+                "programmingLanguage": programmingLanguage
             });
         }
 
@@ -197,12 +207,14 @@ const organizationOptions = createSelector(
     internalSoftwares,
     searchResults,
     category,
+    programmingLanguage,
     environment,
     prerogatives,
     (
         internalSoftwares,
         searchResults,
         category,
+        programmingLanguage,
         environment,
         prerogatives
     ): { organization: string; softwareCount: number }[] => {
@@ -229,6 +241,13 @@ const organizationOptions = createSelector(
             tmpSoftwares = filterByCategory({
                 "softwares": tmpSoftwares,
                 "category": category
+            });
+        }
+
+        if (programmingLanguage) {
+            tmpSoftwares = filterByProgrammingLanguage({
+                "softwares": tmpSoftwares,
+                "programmingLanguage": programmingLanguage
             });
         }
 
@@ -273,12 +292,14 @@ const categoryOptions = createSelector(
     internalSoftwares,
     searchResults,
     organization,
+    programmingLanguage,
     environment,
     prerogatives,
     (
         internalSoftwares,
         searchResults,
         organization,
+        programmingLanguage,
         environment,
         prerogatives
     ): { category: string; softwareCount: number }[] => {
@@ -305,6 +326,13 @@ const categoryOptions = createSelector(
             tmpSoftwares = filterByOrganization({
                 "softwares": tmpSoftwares,
                 "organization": organization
+            });
+        }
+
+        if (programmingLanguage) {
+            tmpSoftwares = filterByProgrammingLanguage({
+                "softwares": tmpSoftwares,
+                "programmingLanguage": programmingLanguage
             });
         }
 
@@ -343,12 +371,14 @@ const environmentOptions = createSelector(
     searchResults,
     organization,
     category,
+    programmingLanguage,
     prerogatives,
     (
         internalSoftwares,
         searchResults,
         organization,
         category,
+        programmingLanguage,
         prerogatives
     ): { environment: State.Environment; softwareCount: number }[] => {
         const softwareCountInCurrentFilterByEnvironment = new Map(
@@ -392,6 +422,13 @@ const environmentOptions = createSelector(
             tmpSoftwares = filterByOrganization({
                 "softwares": tmpSoftwares,
                 "organization": organization
+            });
+        }
+
+        if (programmingLanguage) {
+            tmpSoftwares = filterByProgrammingLanguage({
+                "softwares": tmpSoftwares,
+                "programmingLanguage": programmingLanguage
             });
         }
 
@@ -450,6 +487,7 @@ const prerogativeFilterOptions = createSelector(
     searchResults,
     organization,
     category,
+    programmingLanguage,
     environment,
     prerogatives,
     (
@@ -457,6 +495,7 @@ const prerogativeFilterOptions = createSelector(
         searchResults,
         organization,
         category,
+        programmingLanguage,
         environment,
         prerogatives
     ): { prerogative: State.Prerogative; softwareCount: number }[] => {
@@ -498,6 +537,13 @@ const prerogativeFilterOptions = createSelector(
             tmpSoftwares = filterByCategory({
                 "softwares": tmpSoftwares,
                 "category": category
+            });
+        }
+
+        if (programmingLanguage) {
+            tmpSoftwares = filterByProgrammingLanguage({
+                "softwares": tmpSoftwares,
+                "programmingLanguage": programmingLanguage
             });
         }
 
@@ -565,12 +611,94 @@ const prerogativeFilterOptions = createSelector(
     }
 );
 
+const programmingLanguageOptions = createSelector(
+    internalSoftwares,
+    searchResults,
+    organization,
+    category,
+    environment,
+    prerogatives,
+    (
+        internalSoftwares,
+        searchResults,
+        organization,
+        category,
+        environment,
+        prerogatives
+    ): { programmingLanguage: string; softwareCount: number }[] => {
+        const softwareCountInCurrentFilterByProgrammingLanguage = Object.fromEntries(
+            Array.from(
+                new Set(
+                    internalSoftwares
+                        .map(({ programmingLanguages }) => programmingLanguages)
+                        .reduce((prev, curr) => [...prev, ...curr], [])
+                )
+            ).map(category => [category, 0])
+        );
+
+        let tmpSoftwares = internalSoftwares;
+
+        if (searchResults !== undefined) {
+            tmpSoftwares = filterAndSortBySearch({
+                "softwares": tmpSoftwares,
+                searchResults
+            }).map(({ software }) => software);
+        }
+
+        if (organization !== undefined) {
+            tmpSoftwares = filterByOrganization({
+                "softwares": tmpSoftwares,
+                "organization": organization
+            });
+        }
+
+        if (category !== undefined) {
+            tmpSoftwares = filterByCategory({
+                "softwares": tmpSoftwares,
+                "category": category
+            });
+        }
+
+        if (environment !== undefined) {
+            tmpSoftwares = filterByEnvironnement({
+                "softwares": tmpSoftwares,
+                "environment": environment
+            });
+        }
+
+        for (const prerogative of prerogatives) {
+            tmpSoftwares = filterByPrerogative({
+                "softwares": tmpSoftwares,
+                prerogative
+            });
+        }
+
+        tmpSoftwares.forEach(({ programmingLanguages }) =>
+            programmingLanguages.forEach(
+                programmingLanguages =>
+                    softwareCountInCurrentFilterByProgrammingLanguage[
+                        programmingLanguages
+                    ]++
+            )
+        );
+
+        return Object.entries(softwareCountInCurrentFilterByProgrammingLanguage)
+            .map(([programmingLanguage, softwareCount]) => ({
+                programmingLanguage,
+                softwareCount
+            }))
+            .filter(({ softwareCount }) => softwareCount !== 0)
+            .sort((a, b) => b.softwareCount - a.softwareCount);
+    }
+);
+
 const main = createSelector(
     softwares,
     sortOptions,
     organizationOptions,
     categoryOptions,
     environmentOptions,
+    programmingLanguageOptions,
     prerogativeFilterOptions,
     (
         softwares,
@@ -578,6 +706,7 @@ const main = createSelector(
         organizationOptions,
         categoryOptions,
         environmentOptions,
+        programmingLanguageOptions,
         prerogativeFilterOptions
     ) => ({
         softwares,
@@ -585,6 +714,7 @@ const main = createSelector(
         organizationOptions,
         categoryOptions,
         environmentOptions,
+        programmingLanguageOptions,
         prerogativeFilterOptions
     })
 );
@@ -637,6 +767,16 @@ function filterByCategory(params: {
 
     return softwares.filter(({ applicationCategories }) =>
         applicationCategories.includes(category)
+    );
+}
+
+function filterByProgrammingLanguage(params: {
+    softwares: State.Software.Internal[];
+    programmingLanguage: string;
+}) {
+    const { softwares, programmingLanguage } = params;
+    return softwares.filter(({ programmingLanguages }) =>
+        programmingLanguages.includes(programmingLanguage)
     );
 }
 

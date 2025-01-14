@@ -58,6 +58,7 @@ export const routeDefs = {
                 },
                 "stringify": value => value
             }),
+            "programmingLanguage": param.query.optional.string,
             "prerogatives": param.query.optional
                 .ofType({
                     "parse": raw => {
