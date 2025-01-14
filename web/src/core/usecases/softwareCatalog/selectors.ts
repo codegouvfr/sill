@@ -11,6 +11,7 @@ import { exclude } from "tsafe/exclude";
 import type { ApiTypes } from "api";
 import { createResolveLocalizedString } from "i18nifty";
 import { name, type State } from "./state";
+import config from "../../../ui/config-ui.json";
 
 const internalSoftwares = (rootState: RootState) => {
     return rootState[name].softwares;
@@ -29,19 +30,40 @@ const sortOptions = createSelector(
     sort,
     userEmail,
     (searchResults, sort, userEmail): State.Sort[] => {
-        const sorts = [
+        const sorts: State.Sort[] = [
             ...(searchResults !== undefined || sort === "best_match"
                 ? ["best_match" as const]
                 : []),
-            ...(userEmail === undefined ? [] : ["my_software" as const]),
-            "referent_count" as const,
-            "user_count" as const,
-            "added_time" as const,
-            "update_time" as const,
-            "latest_version_publication_date" as const,
-            "user_count_ASC" as const,
-            "referent_count_ASC" as const
+            ...(userEmail === undefined ? [] : ["my_software" as const])
         ];
+
+        if (config.catalog.sortOptions.referent_count) {
+            sorts.push("referent_count");
+        }
+
+        if (config.catalog.sortOptions.user_count) {
+            sorts.push("user_count");
+        }
+
+        if (config.catalog.sortOptions.added_time) {
+            sorts.push("added_time");
+        }
+
+        if (config.catalog.sortOptions.update_time) {
+            sorts.push("update_time");
+        }
+
+        if (config.catalog.sortOptions.latest_version_publication_date) {
+            sorts.push("latest_version_publication_date");
+        }
+
+        if (config.catalog.sortOptions.user_count_ASC) {
+            sorts.push("user_count_ASC");
+        }
+
+        if (config.catalog.sortOptions.referent_count_ASC) {
+            sorts.push("referent_count_ASC");
+        }
 
         assert<Equals<(typeof sorts)[number], State.Sort>>();
 
