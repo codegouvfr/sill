@@ -6,6 +6,7 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
 import { getFormattedDate } from "ui/useMoment";
+import type { ApiTypes } from "api";
 
 export type Props = {
     className?: string;
@@ -18,10 +19,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: {
-        authorName: string;
-        authorUrl: string;
-    }[];
+    authors: ApiTypes.Author[];
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;

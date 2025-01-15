@@ -177,7 +177,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
                             authorName: dev.name,
-                            authorUrl: dev.url
+                            authorUrl: dev.url,
+                            affiliatedStructure: dev.affiliatedStructure
                         })),
                         officialWebsiteUrl:
                             softwareExternalData?.websiteUrl ??
@@ -273,7 +274,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
                                 authorName: dev.name,
-                                authorUrl: dev.url
+                                authorUrl: dev.url,
+                                affiliatedStructure: dev.affiliatedStructure
                             })),
                             officialWebsiteUrl:
                                 softwareExternalData?.websiteUrl ??
@@ -546,7 +548,8 @@ const makeGetSoftwareById =
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
                         authorName: dev.name,
-                        authorUrl: dev.url
+                        authorUrl: dev.url,
+                        affiliatedStructure: dev.affiliatedStructure
                     })),
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??
