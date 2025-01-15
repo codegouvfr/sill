@@ -45,6 +45,7 @@
         }
     },
     "softwareDetails": {
+        "authorCard": false,
         "defaultLogo": true,
         "details": {
             "enabled": true,
