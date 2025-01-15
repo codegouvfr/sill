@@ -1,4 +1,5 @@
 import { Generated, JSONColumnType } from "kysely";
+import { AuthStructure } from "../../../ports/GetSoftwareExternalData";
 
 export type Database = {
     agents: AgentsTable;
@@ -67,6 +68,7 @@ type SoftwareExternalDatasTable = {
             name: string;
             id: string | null;
             url: string;
+            affiliatedStructure?: AuthStructure[] | null;
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;

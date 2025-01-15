@@ -45,6 +45,7 @@ export namespace State {
         authors: {
             authorName: string;
             authorUrl: string;
+            affiliatedStructure?: ApiTypes.AuthStructure[] | null;
         }[];
         officialWebsiteUrl: string | undefined;
         documentationUrl: string | undefined;

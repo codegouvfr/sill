@@ -1,6 +1,7 @@
 export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 export type { SoftwareExternalDataOption } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+export type { AuthStructure } from "../core/ports/GetSoftwareExternalData";
 
 export type {
     Agent,
@@ -12,5 +13,6 @@ export type {
     DeclarationFormData,
     InstanceFormData,
     SoftwareType,
-    ServiceProvider
+    ServiceProvider,
+    Author
 } from "../core/usecases/readWriteSillData";
