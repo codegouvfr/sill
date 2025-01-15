@@ -1,8 +1,15 @@
 import type {
+    AuthStructure,
     ExternalDataOrigin,
     ParentSoftwareExternalData,
     SimilarSoftwareExternalData
 } from "../../ports/GetSoftwareExternalData";
+
+export type Author = {
+    authorName: string;
+    authorUrl: string;
+    affiliatedStructure?: AuthStructure[] | null;
+};
 
 export type ServiceProvider = {
     name: string;
@@ -37,10 +44,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: {
-        authorName: string;
-        authorUrl: string;
-    }[];
+    authors: Author[];
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
