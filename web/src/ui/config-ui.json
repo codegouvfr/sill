@@ -62,7 +62,7 @@
         }
     },
     "softwareDetails": {
-        "authorCard": false,
+        "authorCard": true,
         "defaultLogo": false,
         "details": {
             "enabled": true,
