@@ -62,12 +62,10 @@ export const HeaderDetailCard = memo((props: Props) => {
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
     const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-        console.log("enter", event.currentTarget.id);
         setAnchorEl(anchorEl ? null : event.currentTarget);
     };
 
-    const handlePopoverClose = (event: React.MouseEvent<HTMLElement>) => {
-        console.log("close", event.currentTarget.id);
+    const handlePopoverClose = () => {
         setAnchorEl(null);
     };
 
