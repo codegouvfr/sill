@@ -41,13 +41,21 @@ export function AuthorCard(props: Props) {
             {author?.affiliatedStructure?.map(affiliatedStructure => {
                 return (
                     <>
-                        <a target="_blank" href={affiliatedStructure.url}>
+                        <a
+                            target="_blank"
+                            rel="noreferrer"
+                            href={affiliatedStructure.url}
+                        >
                             {affiliatedStructure.name}
                         </a>
                         <ul>
                             {affiliatedStructure.parentStructure?.map(parentStructure => (
                                 <li>
-                                    <a target="_blank" href={parentStructure.url}>
+                                    <a
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        href={parentStructure.url}
+                                    >
                                         {parentStructure.name}
                                     </a>
                                     {parentStructure.parentStructure && (
@@ -57,6 +65,7 @@ export function AuthorCard(props: Props) {
                                                     <li>
                                                         <a
                                                             target="_blank"
+                                                            rel="noreferrer"
                                                             href={parent3Structure.url}
                                                         >
                                                             {parent3Structure.name}
