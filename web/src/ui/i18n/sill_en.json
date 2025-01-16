@@ -27,7 +27,8 @@
         "no result": "No results",
         "search": "Search",
         "validate": "Validate",
-        "not provided": "Not provided"
+        "not provided": "Not provided",
+        "close": "Close"
     },
     "home": {
         "title": "Recommended free software",
@@ -373,6 +374,9 @@
         "register": "Register",
         "logout": "Logout",
         "account": "My account"
+    },
+    "authorCard": {
+        "affiliatedStructure": "Affiliated structures"
     },
     "footer": {
         "contribute": "Contribute"
