@@ -206,6 +206,8 @@
     },
     "softwareDetails": {
         "catalog breadcrumb": "Le catalogue de logiciels",
+        "tabReferencePublication": "Articles de recherche associés",
+        "tabReferencePublicationTitle": "Articles de recherche",
         "tab title overview": "Aperçu",
         "tab title instance": "Instances référencées {{instanceCount}}",
         "tab service providers": "Prestataires de services {{serviceProvidersCount}}",
