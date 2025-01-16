@@ -10,6 +10,7 @@ export type CodeMeta = {
     softwareVersion: string;
     dateModified: string;
     contributor: Auth[];
+    referencePublication?: string[] | string | Object;
 };
 
 export interface Role extends CodeMeta {
@@ -50,3 +51,16 @@ export interface SoftwareApplication extends CodeMeta {
     "@type": "SoftwareApplication";
     author: Auth[];
 }
+
+export type ScholarlyArticle = {
+    "@id": string;
+    "@type": "ScholarlyArticle";
+    identifier?: PropertyValue;
+};
+
+export type PropertyValue = {
+    "@type"?: "PropertyValue";
+    value?: string;
+    propertyID?: string;
+    url?: URL | null;
+};

@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
+import { ScholarlyArticle } from "../../types/codemeta";
 
 type ExternalId = string;
 
@@ -42,6 +43,7 @@ export type SoftwareExternalData = {
     programmingLanguages: string[];
     applicationCategories: string[];
     publicationTime: Date;
+    referencePublication: ScholarlyArticle[];
 }>;
 
 export type SimilarSoftwareExternalData = Pick<
