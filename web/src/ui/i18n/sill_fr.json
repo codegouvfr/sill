@@ -29,7 +29,8 @@
         "no result": "Aucun Résultat",
         "search": "Rechercher",
         "validate": "Valider",
-        "not provided": "Non Renseigné"
+        "not provided": "Non Renseigné",
+        "close": "Fermer"
     },
     "home": {
         "title": "Catalogue de référence de logiciels libres",
@@ -380,6 +381,9 @@
         "register": "Créer un compte",
         "logout": "Se déconnecter",
         "account": "Mon compte"
+    },
+    "authorCard": {
+        "affiliatedStructure": "Structures associées"
     },
     "footer": {
         "contribute": "Contribuez"
