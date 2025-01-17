@@ -376,53 +376,53 @@ const { WhatIsTheSillSection } = (() => {
                 <p className={classes.paragraph}>
                     <Trans
                         i18nKey={"home.theSillInAFewWordsParagraph"}
-                        components={{
-                            space: <span> </span>,
-                            a1: (
-                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
-                                <a
-                                    href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                    style={{
-                                        "color":
-                                            fr.colors.decisions.text.title.blueFrance
-                                                .default
-                                    }}
-                                />
-                            ),
-                            a2: (
-                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
-                                <a
-                                    href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                    style={{
-                                        "color":
-                                            fr.colors.decisions.text.title.blueFrance
-                                                .default
-                                    }}
-                                />
-                            ),
-                            a3: (
-                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
-                                <a
-                                    href="https://code.gouv.fr/sill/readme"
-                                    style={{
-                                        "color":
-                                            fr.colors.decisions.text.title.blueFrance
-                                                .default
-                                    }}
-                                />
-                            ),
-                            a4: (
-                                /* eslint-disable-next-line jsx-a11y/anchor-has-content */
-                                <a
-                                    href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                    style={{
-                                        "color":
-                                            fr.colors.decisions.text.title.blueFrance
-                                                .default
-                                    }}
-                                />
-                            )
-                        }}
+                        /* eslint-disable jsx-a11y/anchor-has-content */
+                        components={
+                            {
+                                space: <span> </span>,
+                                a1: (
+                                    <a
+                                        href="https://fr.wikipedia.org/wiki/Logiciel_libre"
+                                        style={{
+                                            "color":
+                                                fr.colors.decisions.text.title.blueFrance
+                                                    .default
+                                        }}
+                                    />
+                                ),
+                                a2: (
+                                    <a
+                                        href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
+                                        style={{
+                                            "color":
+                                                fr.colors.decisions.text.title.blueFrance
+                                                    .default
+                                        }}
+                                    />
+                                ),
+                                a3: (
+                                    <a
+                                        href="https://code.gouv.fr/sill/readme"
+                                        style={{
+                                            "color":
+                                                fr.colors.decisions.text.title.blueFrance
+                                                    .default
+                                        }}
+                                    />
+                                ),
+                                a4: (
+                                    <a
+                                        href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
+                                        style={{
+                                            "color":
+                                                fr.colors.decisions.text.title.blueFrance
+                                                    .default
+                                        }}
+                                    />
+                                )
+                            }
+                            /* eslint-enable jsx-a11y/anchor-has-content */
+                        }
                     ></Trans>
                 </p>
             </section>
