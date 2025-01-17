@@ -1,12 +1,12 @@
 import memoize from "memoizee";
-import { AuthStructure, GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import { SchemaOrganization, GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
 
 const buildParentStructureTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<AuthStructure[]> => {
+): Promise<SchemaOrganization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -58,7 +58,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 const base = {
                     "name": `${author.givenName} ${author.familyName}`,
                     "id": id,
-                    "affiliatedStructure": [] as AuthStructure[]
+                    "affiliatedStructure": [] as SchemaOrganization[]
                 };
 
                 if (affiliation?.length > 0) {
