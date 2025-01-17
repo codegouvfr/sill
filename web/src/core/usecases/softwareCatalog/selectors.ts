@@ -34,36 +34,23 @@ const sortOptions = createSelector(
             ...(searchResults !== undefined || sort === "best_match"
                 ? ["best_match" as const]
                 : []),
-            ...(userEmail === undefined ? [] : ["my_software" as const])
+            ...(userEmail === undefined ? [] : ["my_software" as const]),
+            ...(config.catalog.sortOptions.referent_count
+                ? ["referent_count" as const]
+                : []),
+            ...(config.catalog.sortOptions.user_count ? ["user_count" as const] : []),
+            ...(config.catalog.sortOptions.added_time ? ["added_time" as const] : []),
+            ...(config.catalog.sortOptions.update_time ? ["update_time" as const] : []),
+            ...(config.catalog.sortOptions.latest_version_publication_date
+                ? ["latest_version_publication_date" as const]
+                : []),
+            ...(config.catalog.sortOptions.user_count_ASC
+                ? ["user_count_ASC" as const]
+                : []),
+            ...(config.catalog.sortOptions.referent_count_ASC
+                ? ["referent_count_ASC" as const]
+                : [])
         ];
-
-        if (config.catalog.sortOptions.referent_count) {
-            sorts.push("referent_count");
-        }
-
-        if (config.catalog.sortOptions.user_count) {
-            sorts.push("user_count");
-        }
-
-        if (config.catalog.sortOptions.added_time) {
-            sorts.push("added_time");
-        }
-
-        if (config.catalog.sortOptions.update_time) {
-            sorts.push("update_time");
-        }
-
-        if (config.catalog.sortOptions.latest_version_publication_date) {
-            sorts.push("latest_version_publication_date");
-        }
-
-        if (config.catalog.sortOptions.user_count_ASC) {
-            sorts.push("user_count_ASC");
-        }
-
-        if (config.catalog.sortOptions.referent_count_ASC) {
-            sorts.push("referent_count_ASC");
-        }
 
         assert<Equals<(typeof sorts)[number], State.Sort>>();
 
