@@ -32,6 +32,7 @@
         "evt": "^2.5.7",
         "flexsearch": "0.7.43",
         "i18next": "^23.6.0",
+        "i18next-browser-languagedetector": "^8.0.2",
         "i18nifty": "^3.2.2",
         "memoizee": "^0.4.14",
         "moment": "^2.29.1",
