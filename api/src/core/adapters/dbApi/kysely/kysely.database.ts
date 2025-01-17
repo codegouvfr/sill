@@ -1,5 +1,6 @@
 import { Generated, JSONColumnType } from "kysely";
 import { AuthStructure } from "../../../ports/GetSoftwareExternalData";
+import { ScholarlyArticle } from "../../../../types/codemeta";
 
 export type Database = {
     agents: AgentsTable;
@@ -84,6 +85,7 @@ type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguages: JSONColumnType<string[]> | null;
     applicationCategories: JSONColumnType<string[]> | null;
+    referencePublication: JSONColumnType<ScholarlyArticle[]> | null;
     publicationTime: Date | null;
 };
 

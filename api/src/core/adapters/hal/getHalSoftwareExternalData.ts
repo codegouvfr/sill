@@ -3,6 +3,7 @@ import { AuthStructure, GetSoftwareExternalData, SoftwareExternalData } from "..
 import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
+import { ScholarlyArticle } from "../../../types/codemeta";
 
 const buildParentStructureTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -24,6 +25,69 @@ const buildParentStructureTree = async (
             };
         })
     );
+};
+
+const parseReferencePublication = (key: string, value: string | string[]): ScholarlyArticle[] => {
+    const arrayValue = typeof value === "string" ? value.split(",") : value;
+    switch (key) {
+        case "hal":
+            return arrayValue.map((halThing): ScholarlyArticle => {
+                return {
+                    "@id": halThing,
+                    "@type": "ScholarlyArticle",
+                    identifier: {
+                        "@type": "PropertyValue",
+                        value: halThing,
+                        propertyID: "HAL",
+                        url: halThing.includes("https") ? new URL(halThing) : new URL(`https://hal.science/${halThing}`)
+                    }
+                };
+            });
+        case "doi":
+            return arrayValue.map((doi): ScholarlyArticle => {
+                return {
+                    "@id": doi,
+                    "@type": "ScholarlyArticle",
+                    identifier: {
+                        "@type": "PropertyValue",
+                        value: doi,
+                        propertyID: "doi",
+                        url: doi.includes("https") ? URL.parse(doi) : URL.parse(`https://doi.org/${doi}`)
+                    }
+                };
+            });
+        case "arxiv":
+            return arrayValue.map((arxivId): ScholarlyArticle => {
+                return {
+                    "@id": arxivId,
+                    "@type": "ScholarlyArticle",
+                    identifier: {
+                        "@type": "PropertyValue",
+                        value: arxivId,
+                        propertyID: "arxiv",
+                        url: arxivId.includes("https")
+                            ? URL.parse(arxivId)
+                            : URL.parse(`https://arxiv.org/abs/${arxivId}`)
+                    }
+                };
+            });
+        default:
+            return [];
+    }
+};
+
+const codeMetaToReferencePublication = (HALReferencePublication: string[] | Object | undefined) => {
+    if (HALReferencePublication) {
+        if (Array.isArray(HALReferencePublication)) {
+            console.error("Issue with HAL data. This data need to be curated", HALReferencePublication);
+            return undefined;
+        }
+
+        return Object.entries(HALReferencePublication).reduce((publicationArray: ScholarlyArticle[], [key, value]) => {
+            return publicationArray.concat(parseReferencePublication(key, value));
+        }, []);
+    }
+    return undefined;
 };
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
@@ -121,7 +185,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             applicationCategories: sciencesCategories,
             publicationTime: halRawSoftware?.modifiedDate_tdate
                 ? new Date(halRawSoftware?.modifiedDate_tdate)
-                : undefined
+                : undefined,
+            referencePublication: codeMetaToReferencePublication(codemetaSoftware.referencePublication)
         };
     },
     {
