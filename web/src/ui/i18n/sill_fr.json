@@ -1,9 +1,9 @@
 {
     "common": {
-        "user_one": "utilissateur",
-        "user_other": "utilissateurs",
+        "user_one": "utilisateur",
+        "user_other": "utilisateurs",
         "referent_one": "référent",
-        "referent_others": "rréférents",
+        "referent_others": "référents",
         "provider_one": "fournisseur",
         "providers_other": "fournisseurs",
         "free software_one": "logiciel libre",
@@ -41,7 +41,7 @@
         "recentlyUpdated": "Mises à jour récentes",
         "waitingForReferent": "En attente d'un référent",
         "inSupportMarket": "Disponible dans le marché du support",
-        "SILLnumbers": "Le SILL en chiffres",
+        "SILLNumbers": "Le SILL en chiffres",
         "softwareCount": "logiciels référencés",
         "registeredUserCount": "utilisateurs inscrits",
         "agentReferentCount": "référents logiciels",
@@ -101,7 +101,7 @@
     },
     "softwareFormStep2": {
         "external id": "Fiche Wikidata",
-        "external id hint": "Renseignez le nom du logiciel ou directement l'identifiant (de la forme <code>QXXXXX</code>) pour associer le logiciel à une fiche existante<space /><dataSource>Wikidata</dataSource>.<br />La plupart des informations générales, telles que le logo ou l'URL du dépôt de code, sont extraites de Wikidata. Si le logiciel que vous souhaitez ajouter ne possède pas encore de fiche sur Wikidata, vous pouvez en créer une. Vous trouverez ici un<space /><dataSourceEntry>exemple de fiche Wikidata</dataSourceEntry><space />pour le logiciel<space /><exampleUrl></exampleUrl>.",
+        "external id hint_fill": "Renseignez le nom du logiciel ou directement l'identifiant (de la forme <code>QXXXXX</code>) pour associer le logiciel à une fiche existante<space /><dataSource>Wikidata</dataSource>.<br />La plupart des informations générales, telles que le logo ou l'URL du dépôt de code, sont extraites de Wikidata. Si le logiciel que vous souhaitez ajouter ne possède pas encore de fiche sur Wikidata, vous pouvez en créer une. Vous trouverez ici un<space /><dataSourceEntry>exemple de fiche Wikidata</dataSourceEntry><space />pour le logiciel<space /><exampleUrl></exampleUrl>.",
         "comptoir du libre id": "Identifiant Comptoir du Libre (Optionnel)",
         "comptoir du libre id hint": "Si le logiciel est présent sur le comptoir du libre vous pouvez renseigner son identifiant ou l'URL de sa fiche",
         "software name": "Nom du logiciel",
@@ -259,8 +259,6 @@
         "comptoire du libre sheet": "Consulter la fiche du Comptoir du Libre",
         "wikiData sheet": "Consulter la fiche de Wikidata",
         "what is the support market": "La DGFIP pilote deux marchés interministériels : support (Atos) et expertise (plusieurs titulaires) pour logiciels libres, couvrant maintenance, veille et prestations d'expertise.<br /> a> En savoir plus </a>",
-        "CNLL service providers title": "Prestataires de services CNLL",
-        "CNLL service providers": "Voir les {{count}} prestataires de l'annuaire CNLL",
         "programming languages": "Language de programmation",
         "keywords": "Mots clés",
         "application categories": "Catégories"
