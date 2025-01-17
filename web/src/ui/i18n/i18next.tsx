@@ -4,13 +4,13 @@ import translationEn from "./sill_en.json";
 import translationFr from "./sill_fr.json";
 
 export const fallbackNS = "sill";
+
+// following is only for typechecking
+const _isAssignable = (fr: typeof translationFr): typeof translationEn => fr;
+
 export const resources = {
-    en: {
-        sill: translationEn
-    },
-    fr: {
-        sill: translationFr
-    }
+    en: { sill: translationEn },
+    fr: { sill: translationFr }
 } as const;
 
 i18next.use(initReactI18next).init({
