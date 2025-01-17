@@ -176,9 +176,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         similarSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                            authorName: dev.name,
-                            authorUrl: dev.url,
-                            affiliatedStructure: dev.affiliatedStructure
+                            name: dev.name,
+                            url: dev.url,
+                            affiliations: dev.affiliations
                         })),
                         officialWebsiteUrl:
                             softwareExternalData?.websiteUrl ??
@@ -273,9 +273,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                authorName: dev.name,
-                                authorUrl: dev.url,
-                                affiliatedStructure: dev.affiliatedStructure
+                                name: dev.name,
+                                url: dev.url,
+                                affiliations: dev.affiliations
                             })),
                             officialWebsiteUrl:
                                 softwareExternalData?.websiteUrl ??
@@ -547,9 +547,9 @@ const makeGetSoftwareById =
                     similarSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                        authorName: dev.name,
-                        authorUrl: dev.url,
-                        affiliatedStructure: dev.affiliatedStructure
+                        name: dev.name,
+                        url: dev.url,
+                        affiliations: dev.affiliations
                     })),
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??

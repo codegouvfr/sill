@@ -1,5 +1,11 @@
 import { Generated, JSONColumnType } from "kysely";
-import { AuthStructure } from "../../../ports/GetSoftwareExternalData";
+
+// from https://schema.org/Organization
+type SchemaOrganization = {
+    name: string;
+    url: string | undefined;
+    parentOrganizations?: SchemaOrganization[];
+};
 
 export type Database = {
     agents: AgentsTable;
@@ -66,9 +72,9 @@ type SoftwareExternalDatasTable = {
     developers: JSONColumnType<
         {
             name: string;
-            id: string | null;
+            id?: string;
             url: string;
-            affiliatedStructure?: AuthStructure[] | null;
+            affiliations?: SchemaOrganization[];
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;
