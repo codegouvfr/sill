@@ -12,10 +12,11 @@ export type GetSoftwareExternalData = {
     clear: (externalId: ExternalId) => void;
 };
 
-export type AuthStructure = {
+// from https://schema.org/Organization
+export type SchemaOrganization = {
     name: string;
     url: string | undefined;
-    parentStructure: AuthStructure[] | null;
+    parentOrganizations?: SchemaOrganization[];
 };
 
 export type SoftwareExternalData = {
@@ -25,7 +26,7 @@ export type SoftwareExternalData = {
         name: string;
         id: string | undefined;
         url: string;
-        affiliatedStructure?: AuthStructure[] | null;
+        affiliatedStructure?: SchemaOrganization[];
     }[];
     label: LocalizedString;
     description: LocalizedString;

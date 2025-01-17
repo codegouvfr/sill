@@ -1,14 +1,14 @@
 import type {
-    AuthStructure,
+    SchemaOrganization,
     ExternalDataOrigin,
     ParentSoftwareExternalData,
     SimilarSoftwareExternalData
 } from "../../ports/GetSoftwareExternalData";
 
-export type Author = {
-    authorName: string;
-    authorUrl: string;
-    affiliatedStructure?: AuthStructure[] | null;
+export type Person = {
+    name: string;
+    url: string;
+    affiliations?: SchemaOrganization[];
 };
 
 export type ServiceProvider = {
@@ -44,7 +44,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: Author[];
+    authors: Person[];
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;

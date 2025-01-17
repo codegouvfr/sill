@@ -163,8 +163,8 @@ describe("pgDbApi", () => {
                 annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
-                    authorName: dev.name,
-                    authorUrl: `https://www.wikidata.org/wiki/${dev.id}`
+                    name: dev.name,
+                    url: `https://www.wikidata.org/wiki/${dev.id}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,
