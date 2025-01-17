@@ -104,6 +104,7 @@ export namespace State {
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
+        referencePublication?: ApiTypes.ScholarlyArticle[];
         softwareType: ApiTypes.SoftwareType;
     };
 }

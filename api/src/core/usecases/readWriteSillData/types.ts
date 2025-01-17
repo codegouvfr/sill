@@ -1,3 +1,4 @@
+import { ScholarlyArticle } from "../../../types/codemeta";
 import type {
     AuthStructure,
     ExternalDataOrigin,
@@ -66,6 +67,7 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
+    referencePublication?: ScholarlyArticle[];
 };
 
 export namespace Software {
