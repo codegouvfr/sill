@@ -1,5 +1,7 @@
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
+import LanguageDetector from 'i18next-browser-languagedetector';
+
 import translationEn from "./sill_en.json";
 import translationFr from "./sill_fr.json";
 
@@ -13,9 +15,9 @@ export const resources = {
     fr: { sill: translationFr }
 } as const;
 
-i18next.use(initReactI18next).init({
+i18next.use(LanguageDetector).use(initReactI18next).init({
+    supportedLngs: ['en', 'fr'],
     resources,
-    lng: "en",
     fallbackLng: ["en", "fr"],
     defaultNS: "sill",
     fallbackNS: "sill",
