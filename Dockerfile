@@ -2,7 +2,7 @@
 # to take advantage of docker cache
 
 # build step
-FROM node:20-alpine as build
+FROM node:22-alpine as build
 RUN npm install -g @vercel/ncc@0.36.1
 WORKDIR /app
 COPY package.json yarn.lock ./
@@ -33,7 +33,7 @@ COPY web/nginx.conf web/
 # ----- api only ------
 # to build only back run
 # docker build . --target api --tag my-api-tag`
-FROM node:20-alpine as api
+FROM node:22-alpine as api
 RUN npm install -g forever@4.0.3
 RUN apk add --no-cache \
   git \
