@@ -3688,17 +3688,17 @@
     "@svgr/plugin-svgo" "^5.5.0"
     loader-utils "^2.0.0"
 
-"@tanstack/react-virtual@3.0.0-beta.39":
-  version "3.0.0-beta.39"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.0.0-beta.39.tgz#5356f63f5633e1da90ed9fb3d13b615bc730a1bb"
-  integrity sha512-odun31XKT4gQyJXw0ipsNmXL7AAO+mbg2omoxZyW+JJyqU5m1S3BeLpZQKMCv+Ek59mPGeGWPZXxaZd7TalnHg==
+"@tanstack/react-virtual@3.11.2":
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.11.2.tgz#d6b9bd999c181f0a2edce270c87a2febead04322"
+  integrity sha512-OuFzMXPF4+xZgx8UzJha0AieuMihhhaWG0tCqpp6tDzlFwOmNBPYMuLOtMJ1Tr4pXLHmgjcWhG6RlknY2oNTdQ==
   dependencies:
-    "@tanstack/virtual-core" "3.0.0-beta.39"
+    "@tanstack/virtual-core" "3.11.2"
 
-"@tanstack/virtual-core@3.0.0-beta.39":
-  version "3.0.0-beta.39"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.39.tgz#f767c3a2abb76485e4eff2d471e5e714dc46c0b4"
-  integrity sha512-VZ1ESIo+PAPOsxqGzccFPWDD/gsJAViSTU6glhd5pLSMkYDsmtdklfYrE3bWLC3dsbLWI689yzpLgh436v26mQ==
+"@tanstack/virtual-core@3.11.2":
+  version "3.11.2"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
+  integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
 "@tootallnate/once@1":
   version "1.1.2"
