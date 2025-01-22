@@ -1,4 +1,26 @@
-export type CodeMeta = {
+// from https://schema.org/Organization
+export type SchemaOrganization = {
+    "@type": "Organization";
+    identifier?: string;
+    name: string;
+    url: string | undefined;
+    parentOrganization?: SchemaOrganization[];
+};
+
+// from https://schema.org/Person
+export type SchemaPerson = {
+    "@id"?: string[];
+    "@type": "Person";
+    name?: string;
+    givenName?: string;
+    familyName?: string;
+    identifier?: string;
+    url?: string;
+    affiliation?: SchemaOrganization[];
+};
+
+export type SoftwareApplication = {
+    "@type": "SoftwareApplication";
     identifier: CodeMetaIdentifier[];
     applicationCategory: string[];
     keywords: string[];
@@ -9,30 +31,14 @@ export type CodeMeta = {
     version: string[];
     softwareVersion: string;
     dateModified: string;
-    contributor: Auth[];
+    contributor: SchemaPerson[];
+    author: HALRole[]; // Non regular Schema.org / CodeMeta
 };
 
-export interface Role extends CodeMeta {
-    author: Auth[];
-}
-
-export type Auth = {
-    "@type": string;
-    roleName: string;
-    author: Person;
-};
-
-export interface Person extends Auth {
-    "@type": "Person";
-    "@id": string[];
-    givenName: string;
-    familyName: string;
-    affiliation: Organization[];
-}
-
-export interface Organization extends Auth {
-    "@type": "Organization";
-    name: string;
+export interface HALRole {
+    "@type": "role";
+    roleName: string; // aut
+    author: SchemaPerson; // Non regular Schema.org / CodeMeta
 }
 
 export type CodeMetaIdentifier = {
@@ -40,13 +46,3 @@ export type CodeMetaIdentifier = {
     propertyID: string;
     value: string;
 };
-
-export interface SoftwareSourceCode extends CodeMeta {
-    "@type": "SoftwareSourceCode";
-    author: Auth[];
-}
-
-export interface SoftwareApplication extends CodeMeta {
-    "@type": "SoftwareApplication";
-    author: Auth[];
-}

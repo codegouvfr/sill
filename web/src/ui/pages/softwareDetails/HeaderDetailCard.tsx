@@ -23,7 +23,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: ApiTypes.Author[];
+    authors: Array<ApiTypes.SchemaPerson | ApiTypes.SchemaOrganization>;
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;
@@ -129,36 +129,38 @@ export const HeaderDetailCard = memo((props: Props) => {
                                     {authors.map(author => (
                                         <>
                                             {(!config.softwareDetails.authorCard ||
-                                                !author.affiliatedStructure ||
-                                                author.affiliatedStructure?.length <=
-                                                    0) && (
+                                                author["@type"] === "Organization" ||
+                                                (author["@type"] === "Person" &&
+                                                    (!author.affiliation ||
+                                                        author.affiliation?.length <=
+                                                            0))) && (
                                                 <a
-                                                    href={author.authorUrl}
+                                                    href={author.url}
                                                     className={classes.authorLink}
-                                                    key={author.authorName}
+                                                    key={author.name}
                                                 >
-                                                    {author.authorName}
+                                                    {author.name}
                                                 </a>
                                             )}
 
                                             {config.softwareDetails.authorCard &&
-                                                author.affiliatedStructure &&
-                                                author.affiliatedStructure?.length >
-                                                    0 && (
+                                                author["@type"] === "Person" &&
+                                                author.affiliation &&
+                                                author.affiliation?.length > 0 && (
                                                     <>
                                                         <button
-                                                            id={`a-popover-${author.authorName}`}
+                                                            id={`a-popover-${author.name}`}
                                                             className={classes.authorLink}
-                                                            key={author.authorName}
+                                                            key={author.name}
                                                             onClick={handlePopoverOpen}
                                                         >
-                                                            {author.authorName}
+                                                            {author.name}
                                                         </button>
 
                                                         <Popover
-                                                            id={`popover-${author.authorName}`}
+                                                            id={`popover-${author.name}`}
                                                             open={open(
-                                                                `popover-${author.authorName}`
+                                                                `popover-${author.name}`
                                                             )}
                                                             sx={{ pointerEvents: "auto" }}
                                                             anchorEl={anchorEl}
