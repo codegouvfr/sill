@@ -14,8 +14,9 @@ describe("HAL", () => {
                 "description": { "en": "-", "fr": undefined },
                 "developers": [
                     {
-                        "affiliatedStructure": [],
-                        "id": "0000-0002-9777-5560",
+                        "@type": "Person",
+                        "affiliation": [],
+                        "identifier": "0000-0002-9777-5560",
                         "name": "Morane Gruenpeter",
                         "url": "https://orcid.org/0000-0002-9777-5560"
                     }
