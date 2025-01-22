@@ -40,7 +40,7 @@ const softwareFormData: SoftwareFormData = {
 const softwareExternalData: SoftwareExternalData = {
     externalId,
     externalDataOrigin: "wikidata",
-    developers: [{ name: "Bob", id: "bob", url: `https://www.wikidata.org/wiki/bob` }],
+    developers: [{ "@type": "Person", name: "Bob", identifier: "bob", url: `https://www.wikidata.org/wiki/bob` }],
     label: { en: "Some software" },
     description: { en: "Some software description" },
     isLibreSoftware: true,
@@ -60,7 +60,14 @@ const softwareExternalData: SoftwareExternalData = {
 const similarSoftwareExternalData: SoftwareExternalData = {
     externalId: similarExternalId,
     externalDataOrigin: "wikidata",
-    developers: [{ name: "Bobby", id: "similar-bob", url: `https://www.wikidata.org/wiki/similar-bob` }],
+    developers: [
+        {
+            "@type": "Person",
+            name: "Bobby",
+            identifier: "similar-bob",
+            url: `https://www.wikidata.org/wiki/similar-bob`
+        }
+    ],
     label: "Some similar software",
     description: { en: "Some similar software description" },
     isLibreSoftware: true,
@@ -163,8 +170,9 @@ describe("pgDbApi", () => {
                 annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
+                    "@type": "Person" as const,
                     name: dev.name,
-                    url: `https://www.wikidata.org/wiki/${dev.id}`
+                    url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,

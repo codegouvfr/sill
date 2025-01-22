@@ -2,9 +2,10 @@ import { Generated, JSONColumnType } from "kysely";
 
 // from https://schema.org/Organization
 type SchemaOrganization = {
+    "@type": "Organization";
     name: string;
     url: string | undefined;
-    parentOrganizations?: SchemaOrganization[];
+    parentOrganization?: SchemaOrganization[];
 };
 
 export type Database = {
@@ -71,10 +72,12 @@ type SoftwareExternalDatasTable = {
     externalDataOrigin: ExternalDataOrigin;
     developers: JSONColumnType<
         {
+            "@type": "Organization" | "Person";
             name: string;
-            id?: string;
+            identifier?: string;
             url: string;
-            affiliations?: SchemaOrganization[];
+            affiliation?: SchemaOrganization[];
+            parentOrganization?: SchemaOrganization[];
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;

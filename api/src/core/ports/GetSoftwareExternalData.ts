@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
+import { SchemaOrganization, SchemaPerson } from "../../types/codemeta";
 
 type ExternalId = string;
 
@@ -12,22 +13,10 @@ export type GetSoftwareExternalData = {
     clear: (externalId: ExternalId) => void;
 };
 
-// from https://schema.org/Organization
-export type SchemaOrganization = {
-    name: string;
-    url: string | undefined;
-    parentOrganizations?: SchemaOrganization[];
-};
-
 export type SoftwareExternalData = {
     externalId: ExternalId;
     externalDataOrigin: ExternalDataOrigin;
-    developers: {
-        name: string;
-        id: string | undefined;
-        url: string;
-        affiliatedStructure?: SchemaOrganization[];
-    }[];
+    developers: Array<SchemaPerson | SchemaOrganization>;
     label: LocalizedString;
     description: LocalizedString;
     isLibreSoftware: boolean;

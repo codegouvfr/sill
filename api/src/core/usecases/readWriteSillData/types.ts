@@ -1,15 +1,9 @@
+import { SchemaOrganization, SchemaPerson } from "../../../types/codemeta";
 import type {
-    SchemaOrganization,
     ExternalDataOrigin,
     ParentSoftwareExternalData,
     SimilarSoftwareExternalData
 } from "../../ports/GetSoftwareExternalData";
-
-export type Person = {
-    name: string;
-    url: string;
-    affiliations?: SchemaOrganization[];
-};
 
 export type ServiceProvider = {
     name: string;
@@ -44,7 +38,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: Person[];
+    authors: Array<SchemaPerson | SchemaOrganization>;
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;

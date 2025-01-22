@@ -1,101 +1,93 @@
 import { Card, CardHeader } from "@mui/material";
 import { ApiTypes } from "api";
-import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
+import Button from "@codegouvfr/react-dsfr/Button";
 
 export type Props = {
-    author: ApiTypes.Author;
+    author: ApiTypes.SchemaPerson;
     handleClose?: MouseEventHandler<HTMLButtonElement>;
 };
 
 export function AuthorCard(props: Props) {
     const { author, handleClose } = props;
 
-    const { classes, cx } = useStyles();
+    const { classes } = useStyles();
 
     const { t } = useTranslation();
 
     return (
         <Card style={{ "padding": "20px" }}>
             <CardHeader
-                title={author.authorName}
+                title={author.name}
                 action={
                     handleClose ? (
-                        <button
-                            onClick={handleClose}
-                            className={cx(
-                                fr.cx("fr-badge--error", "fr-badge", "fr-mb-1v"),
-                                classes.actionClose
-                            )}
-                        >
+                        <Button priority="secondary" onClick={handleClose}>
                             {t("app.close")}
-                        </button>
+                        </Button>
                     ) : (
                         ""
                     )
                 }
             ></CardHeader>
             <h6>{t("authorCard.affiliatedStructure")}</h6>
-            {author?.affiliatedStructure?.map(affiliatedStructure => {
+            {author?.affiliation?.map(affiliatedOrganization => {
                 return (
                     <>
                         <a
                             target="_blank"
                             rel="noreferrer"
-                            href={affiliatedStructure.url}
+                            href={affiliatedOrganization.url}
                         >
-                            {affiliatedStructure.name}
+                            {affiliatedOrganization.name}
                         </a>
                         <ul>
-                            {affiliatedStructure.parentStructure?.map(parentStructure => (
-                                <li>
-                                    <a
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        href={parentStructure.url}
-                                    >
-                                        {parentStructure.name}
-                                    </a>
-                                    {parentStructure.parentStructure && (
-                                        <ul>
-                                            {parentStructure.parentStructure.map(
-                                                parent3Structure => (
-                                                    <li>
-                                                        <a
-                                                            target="_blank"
-                                                            rel="noreferrer"
-                                                            href={parent3Structure.url}
-                                                        >
-                                                            {parent3Structure.name}
-                                                        </a>
-                                                    </li>
-                                                )
-                                            )}
-                                        </ul>
-                                    )}
-                                </li>
-                            ))}
+                            {affiliatedOrganization.parentOrganization?.map(
+                                parentOrganization => (
+                                    <li>
+                                        <a
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            href={parentOrganization.url}
+                                        >
+                                            {parentOrganization.name}
+                                        </a>
+                                        {parentOrganization.parentOrganization && (
+                                            <ul>
+                                                {parentOrganization.parentOrganization.map(
+                                                    parentOrganization3 => (
+                                                        <li>
+                                                            <a
+                                                                target="_blank"
+                                                                rel="noreferrer"
+                                                                href={
+                                                                    parentOrganization3.url
+                                                                }
+                                                            >
+                                                                {parentOrganization3.name}
+                                                            </a>
+                                                        </li>
+                                                    )
+                                                )}
+                                            </ul>
+                                        )}
+                                    </li>
+                                )
+                            )}
                         </ul>
                     </>
                 );
             })}
             <div className={classes.externalLinkButtons}>
-                <a
-                    target="_blank"
-                    rel="noreferrer"
-                    href={author.authorUrl}
-                    className={cx(
-                        fr.cx(
-                            "fr-btn",
-                            "fr-btn--secondary",
-                            "fr-btn--icon-left",
-                            "fr-my-2v"
-                        )
-                    )}
+                <Button
+                    linkProps={{
+                        target: "_blank",
+                        rel: "noreferrer",
+                        href: author.url
+                    }}
                 >
-                    {author.authorUrl.includes("hal.science") && (
+                    {author?.url?.includes("hal.science") && (
                         <>
                             <img
                                 alt="HAL logo"
@@ -105,7 +97,7 @@ export function AuthorCard(props: Props) {
                             <p className={classes.linkContent}>HAL</p>
                         </>
                     )}
-                    {author.authorUrl.includes("orcid") && (
+                    {author?.url?.includes("orcid") && (
                         <>
                             <img
                                 alt="ORCID logo"
@@ -115,7 +107,7 @@ export function AuthorCard(props: Props) {
                             <p className={classes.linkContent}>ORCID</p>
                         </>
                     )}
-                    {author.authorUrl.includes("wikidata") && (
+                    {author?.url?.includes("wikidata") && (
                         <>
                             <img
                                 alt="Wikidata logo"
@@ -125,17 +117,13 @@ export function AuthorCard(props: Props) {
                             <p className={classes.linkContent}>Wikidata</p>
                         </>
                     )}
-                </a>
+                </Button>
             </div>
         </Card>
     );
 }
 
 const useStyles = tss.withName({ AuthorCard }).create({
-    "actionClose": {
-        "marginLeft": "40px",
-        "marginTop": "10px"
-    },
     "linkContent": {
         "marginLeft": "7px"
     },

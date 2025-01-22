@@ -1,7 +1,7 @@
 export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 export type { SoftwareExternalDataOption } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
-export type { SchemaOrganization } from "../core/ports/GetSoftwareExternalData";
+export type { SchemaOrganization, SchemaPerson } from "../types/codemeta";
 
 export type {
     Agent,
@@ -13,6 +13,5 @@ export type {
     DeclarationFormData,
     InstanceFormData,
     SoftwareType,
-    ServiceProvider,
-    Person
+    ServiceProvider
 } from "../core/usecases/readWriteSillData";

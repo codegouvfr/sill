@@ -42,11 +42,7 @@ export namespace State {
         softwareDescription: string;
         serviceProviders: ApiTypes.ServiceProvider[];
         logoUrl: string | undefined;
-        authors: {
-            authorName: string;
-            authorUrl: string;
-            affiliatedStructure?: ApiTypes.AuthStructure[] | null;
-        }[];
+        authors: Array<ApiTypes.SchemaPerson | ApiTypes.SchemaOrganization>;
         officialWebsiteUrl: string | undefined;
         documentationUrl: string | undefined;
         codeRepositoryUrl: string | undefined;
