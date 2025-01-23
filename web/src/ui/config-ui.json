@@ -38,7 +38,24 @@
             ]
         },
         "usecases": {
-            "catgegories": ["declareReferent", "editSoftware", "addSoftwareOrService"]
+            "declareReferent": {
+                "enabled": true,
+                "labelLinks": [],
+                "buttonEnabled": true,
+                "buttonLink": ""
+            },
+            "editSoftware": {
+                "enabled": true,
+                "labelLinks": [],
+                "buttonEnabled": true,
+                "buttonLink": ""
+            },
+            "addSoftwareOrService": {
+                "enabled": true,
+                "labelLinks": [],
+                "buttonEnabled": true,
+                "buttonLink": ""
+            }
         }
     },
     "softwareDetails": {
