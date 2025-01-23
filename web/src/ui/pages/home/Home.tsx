@@ -237,7 +237,9 @@ export default function Home(props: Props) {
                                                             string,
                                                             JSX.Element
                                                         > = {};
+
                                                         obj[key] = (
+                                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
                                                             <a
                                                                 href={link}
                                                                 style={{
@@ -248,7 +250,7 @@ export default function Home(props: Props) {
                                                                             .blueFrance
                                                                             .default
                                                                 }}
-                                                            ></a>
+                                                            />
                                                         );
                                                         return Object.assign(map, obj);
                                                     },
@@ -351,15 +353,6 @@ const useStyles = tss.withName({ Home }).create({
     },
     "helpUsBackground": {
         "backgroundColor": fr.colors.decisions.background.default.grey.hover
-    },
-    "helpUsCards": {
-        "display": "grid",
-        "gridTemplateColumns": "repeat(3, 1fr)",
-        "columnGap": fr.spacing("6v"),
-        [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`,
-            "rowGap": fr.spacing("4v")
-        }
     }
 });
 
@@ -458,45 +451,27 @@ const { WhatIsTheSillSection } = (() => {
                         components={
                             {
                                 space: <span> </span>,
-                                a1: (
-                                    <a
-                                        href="https://fr.wikipedia.org/wiki/Logiciel_libre"
-                                        style={{
-                                            "color":
-                                                fr.colors.decisions.text.title.blueFrance
-                                                    .default
-                                        }}
-                                    />
-                                ),
-                                a2: (
-                                    <a
-                                        href="https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039"
-                                        style={{
-                                            "color":
-                                                fr.colors.decisions.text.title.blueFrance
-                                                    .default
-                                        }}
-                                    />
-                                ),
-                                a3: (
-                                    <a
-                                        href="https://code.gouv.fr/sill/readme"
-                                        style={{
-                                            "color":
-                                                fr.colors.decisions.text.title.blueFrance
-                                                    .default
-                                        }}
-                                    />
-                                ),
-                                a4: (
-                                    <a
-                                        href="https://code.gouv.fr/fr/doc/licences-libres-dinum"
-                                        style={{
-                                            "color":
-                                                fr.colors.decisions.text.title.blueFrance
-                                                    .default
-                                        }}
-                                    />
+                                ...config.home.theSillInAFewWordsParagraphLinks.reduce(
+                                    (
+                                        map: Record<string, JSX.Element>,
+                                        link: string,
+                                        index: number
+                                    ) => {
+                                        const key = `a${index + 1}`;
+                                        const obj: Record<string, JSX.Element> = {};
+                                        obj[key] = (
+                                            <a
+                                                href={link}
+                                                style={{
+                                                    "color":
+                                                        fr.colors.decisions.text.title
+                                                            .blueFrance.default
+                                                }}
+                                            />
+                                        );
+                                        return Object.assign(map, obj);
+                                    },
+                                    {}
                                 )
                             }
                             /* eslint-enable jsx-a11y/anchor-has-content */
