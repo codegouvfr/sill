@@ -30,34 +30,30 @@
             "enabled": false
         },
         "theSillInAFewWordsParagraphLinks": [
-            "https://fr.wikipedia.org/wiki/Logiciel_libre",
-            "https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039",
-            "https://code.gouv.fr/sill/readme",
-            "https://code.gouv.fr/fr/doc/licences-libres-dinum"
+            "https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/",
+            "https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/"
         ],
         "statistics": {
-            "catgegories": [
-                "softwareCount"
-            ]
+            "catgegories": ["softwareCount"]
         },
         "usecases": {
             "declareReferent": {
-                "enabled": true,
+                "enabled": false,
                 "labelLinks": [],
                 "buttonEnabled": true,
                 "buttonLink": ""
             },
             "editSoftware": {
                 "enabled": true,
-                "labelLinks": [],
+                "labelLinks": ["https://hal.science/"],
                 "buttonEnabled": true,
-                "buttonLink": ""
+                "buttonLink": "https://cas.ccsd.cnrs.fr/cas/login?service=https%3A%2F%2Fhal.science%2Fuser%2Flogin%3Furl%3Dhttps%253A%252F%252Fhal.science%252F"
             },
             "addSoftwareOrService": {
                 "enabled": true,
-                "labelLinks": [],
+                "labelLinks": ["https://hal.science/"],
                 "buttonEnabled": true,
-                "buttonLink": ""
+                "buttonLink": "https://doc.hal.science/en/deposer/deposer-le-code-source"
             }
         }
     },
