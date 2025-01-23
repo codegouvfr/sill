@@ -52,6 +52,7 @@
                 "registerDate": true,
                 "minimalVersionRequired": true,
                 "softwareCurrentVersion": true,
+                "softwareCurrentVersionDate": true,
                 "license": true
             }
         },

@@ -107,7 +107,7 @@ export type HalRawSoftware = {
     // authorityInstitution_s: string[];
     // reportType_s: string;
     // inPress_bool: boolean;
-    modifiedDate_tdate: string;
+    // modifiedDate_tdate: string;
     // modifiedDate_s: string;
     // modifiedDateY_i: number;
     // modifiedDateM_i: number;
@@ -117,7 +117,7 @@ export type HalRawSoftware = {
     // submittedDateY_i: number;
     // submittedDateM_i: number;
     // submittedDateD_i: number;
-    // releasedDate_tdate: string;
+    releasedDate_tdate: string;
     // releasedDate_s: string;
     // releasedDateY_i: number;
     // releasedDateM_i: number;

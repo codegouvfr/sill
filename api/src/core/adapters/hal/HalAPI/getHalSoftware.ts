@@ -22,11 +22,11 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
     "softCodeRepository_s",
     "authFullName_s",
     "authIdHal_s",
+    "releasedDate_tdate",
     "softProgrammingLanguage_s",
     "softVersion_s",
     "authIdForm_i",
-    "domainAllCode_s",
-    "modifiedDate_tdate"
+    "domainAllCode_s"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
