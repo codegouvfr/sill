@@ -29,6 +29,12 @@
         "softwareSelection": {
             "enabled": true
         },
+        "theSillInAFewWordsParagraphLinks": [
+            "https://fr.wikipedia.org/wiki/Logiciel_libre",
+            "https://www.legifrance.gouv.fr/jorf/article_jo/JORFARTI000033203039",
+            "https://code.gouv.fr/sill/readme",
+            "https://code.gouv.fr/fr/doc/licences-libres-dinum"
+        ],
         "statistics": {
             "catgegories": [
                 "softwareCount",
