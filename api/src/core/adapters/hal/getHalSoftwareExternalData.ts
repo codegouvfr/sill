@@ -119,8 +119,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             keywords: halRawSoftware?.keyword_s,
             programmingLanguages: halRawSoftware?.softProgrammingLanguage_s,
             applicationCategories: sciencesCategories,
-            publicationTime: halRawSoftware?.modifiedDate_tdate
-                ? new Date(halRawSoftware?.modifiedDate_tdate)
+            publicationTime: halRawSoftware?.releasedDate_tdate
+                ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined
         };
     },
