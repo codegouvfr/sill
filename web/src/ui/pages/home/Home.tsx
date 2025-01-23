@@ -19,6 +19,7 @@ import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictogra
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
 import { Trans, useTranslation } from "react-i18next";
 import config from "../../../ui/config-ui.json";
+import { Grid } from "@mui/material";
 
 type Props = {
     className?: string;
@@ -43,7 +44,25 @@ export default function Home(props: Props) {
     const statsCases = config.home.statistics.catgegories as Array<availableStat>;
 
     type availableUseCase = "declareReferent" | "editSoftware" | "addSoftwareOrService";
-    const useCases = config.home.usecases.catgegories as Array<availableUseCase>;
+    type UseCaseConfig = {
+        enabled: boolean;
+        labelLinks: any;
+        buttonEnabled: boolean;
+        buttonLink: string;
+    };
+    type UsesCaseConfig = Record<availableUseCase, UseCaseConfig>;
+
+    const configUseCases: UsesCaseConfig = config.home.usecases;
+    const keys: Array<availableUseCase> = Object.keys(
+        configUseCases
+    ) as Array<availableUseCase>;
+
+    const useCases: Array<availableUseCase> = keys.reduce(
+        (accumulator: Array<availableUseCase>, key: availableUseCase) => {
+            return configUseCases[key].enabled ? accumulator.concat([key]) : accumulator;
+        },
+        []
+    );
 
     const softwareSelectionList = [
         {
@@ -129,75 +148,142 @@ export default function Home(props: Props) {
                     <h1 className={cx(classes.whiteText, classes.SillNumberTitle)}>
                         {t("home.SILLNumbers")}
                     </h1>
-                    <div className={classes.sillNumberList}>
+                    <Grid
+                        container
+                        direction="row"
+                        sx={{
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}
+                    >
                         {statsCases.map((metricName: availableStat) => (
-                            <div key={metricName}>
-                                <AnimatedMetric
-                                    className={cx(
-                                        fr.cx("fr-display--sm"),
-                                        classes.whiteText,
-                                        classes.numberText
-                                    )}
-                                    metricValue={stats[metricName]}
-                                />
-                                <h4 className={classes.whiteText}>
-                                    {t(`home.${metricName}`)}
-                                </h4>
-                            </div>
+                            <Grid item xs={3}>
+                                <div key={metricName}>
+                                    <AnimatedMetric
+                                        className={cx(
+                                            fr.cx("fr-display--sm"),
+                                            classes.whiteText,
+                                            classes.numberText
+                                        )}
+                                        metricValue={stats[metricName]}
+                                    />
+                                    <h4 className={classes.whiteText}>
+                                        {t(`home.${metricName}`)}
+                                    </h4>
+                                </div>
+                            </Grid>
                         ))}
-                    </div>
+                    </Grid>
                 </div>
             </section>
             <div className={cx(classes.helpUsBackground, classes.section)}>
                 <div className={cx(fr.cx("fr-container"))}>
                     <h2 className={classes.titleSection}>{t("home.helpUs")}</h2>
-                    <div className={classes.helpUsCards}>
+                    <Grid
+                        container
+                        direction="row"
+                        spacing={2}
+                        sx={{
+                            justifyContent: "center",
+                            alignItems: "stretch",
+                            alignContent: "stretch"
+                        }}
+                    >
                         {useCases.map((cardName: availableUseCase) => {
                             const link = (() => {
+                                const configLink = configUseCases[cardName].buttonLink;
+                                const renderedConfigLink = {
+                                    href: configLink
+                                };
                                 switch (cardName) {
                                     case "addSoftwareOrService":
-                                        return routes.addSoftwareLanding().link;
+                                        return configLink && configLink !== ""
+                                            ? renderedConfigLink
+                                            : routes.addSoftwareLanding().link;
                                     case "declareReferent":
                                     case "editSoftware":
-                                        return routes.softwareCatalog().link;
+                                        return configLink && configLink !== ""
+                                            ? renderedConfigLink
+                                            : routes.softwareCatalog().link;
                                 }
                             })();
 
                             return (
-                                <Card
-                                    classes={{
-                                        "img": css({
-                                            "& > img": {
-                                                "objectFit": "unset",
-                                                "background": "white"
-                                            }
-                                        })
-                                    }}
-                                    key={cardName}
-                                    title={t(`home.${cardName}Title`)}
-                                    desc={t(`home.${cardName}Desc`)}
-                                    imageAlt={t("home.illustrationImage")}
-                                    linkProps={link}
-                                    imageUrl={(() => {
-                                        switch (cardName) {
-                                            case "declareReferent":
-                                                return humanCooperationSvgUrl;
-                                            case "editSoftware":
-                                                return documentSvgUrl;
-                                            case "addSoftwareOrService":
-                                                return codingSvgUrl;
+                                <Grid item xs={4}>
+                                    <Card
+                                        classes={{
+                                            "img": css({
+                                                "& > img": {
+                                                    "objectFit": "unset",
+                                                    "background": "white"
+                                                }
+                                            })
+                                        }}
+                                        key={cardName}
+                                        title={t(`home.${cardName}Title`)}
+                                        desc={
+                                            <Trans
+                                                i18nKey={`home.${cardName}Desc`}
+                                                components={configUseCases[
+                                                    cardName
+                                                ].labelLinks.reduce(
+                                                    (
+                                                        map: Record<string, JSX.Element>,
+                                                        link: string,
+                                                        index: number
+                                                    ) => {
+                                                        const key = `a${index + 1}`;
+                                                        const obj: Record<
+                                                            string,
+                                                            JSX.Element
+                                                        > = {};
+                                                        obj[key] = (
+                                                            <a
+                                                                href={link}
+                                                                style={{
+                                                                    "color":
+                                                                        fr.colors
+                                                                            .decisions
+                                                                            .text.title
+                                                                            .blueFrance
+                                                                            .default
+                                                                }}
+                                                            ></a>
+                                                        );
+                                                        return Object.assign(map, obj);
+                                                    },
+                                                    {}
+                                                )}
+                                            ></Trans>
                                         }
-                                    })()}
-                                    footer={
-                                        <Button priority="primary" linkProps={link}>
-                                            {t(`home.${cardName}ButtonLabel`)}
-                                        </Button>
-                                    }
-                                    enlargeLink={false}
-                                />
+                                        imageAlt={t("home.illustrationImage")}
+                                        linkProps={link}
+                                        imageUrl={(() => {
+                                            switch (cardName) {
+                                                case "declareReferent":
+                                                    return humanCooperationSvgUrl;
+                                                case "editSoftware":
+                                                    return documentSvgUrl;
+                                                case "addSoftwareOrService":
+                                                    return codingSvgUrl;
+                                            }
+                                        })()}
+                                        footer={
+                                            configUseCases[cardName].buttonEnabled && (
+                                                <Button
+                                                    priority="primary"
+                                                    linkProps={link}
+                                                >
+                                                    {t(`home.${cardName}ButtonLabel`)}
+                                                </Button>
+                                            )
+                                        }
+                                        enlargeLink={false}
+                                    />
+                                </Grid>
                             );
                         })}
-                    </div>
+                    </Grid>
                 </div>
             </div>
         </div>
@@ -233,7 +319,8 @@ const useStyles = tss.withName({ Home }).create({
         "marginBottom": fr.spacing("10v"),
         [fr.breakpoints.down("md")]: {
             "marginBottom": fr.spacing("8v")
-        }
+        },
+        "textAlign": "center"
     },
     "softwareSelectionBackground": {
         "backgroundColor": fr.colors.decisions.background.alt.blueFrance.default
@@ -252,15 +339,6 @@ const useStyles = tss.withName({ Home }).create({
     },
     "sillNumbersContainer": {
         "textAlign": "center"
-    },
-    "sillNumberList": {
-        "display": "grid",
-        "gridTemplateColumns": "repeat(4, 1fr)",
-        "columnGap": fr.spacing("6v"),
-        [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`,
-            "rowGap": fr.spacing("4v")
-        }
     },
     "whiteText": {
         "color": fr.colors.decisions.text.inverted.grey.default
