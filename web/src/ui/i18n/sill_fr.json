@@ -1,9 +1,11 @@
 {
     "common": {
+        "user": "utilisateur",
         "user_one": "utilisateur",
         "user_other": "utilisateurs",
+        "referent": "référent",
         "referent_one": "référent",
-        "referent_others": "référents",
+        "referent_other": "référents",
         "provider_one": "fournisseur",
         "providers_other": "fournisseurs",
         "free software_one": "logiciel libre",
@@ -86,8 +88,8 @@
         "stepper title_similar_software_unnamed": "Logiciels similaires ou équivalents",
         "stepper title_similar_software_named": "$t(SoftwareForm.stepper title_similar_software_unnamed) à {{softwareName}}",
         "add unamed software": "Ajouter un logiciel",
-        "add software": "Ajouter ${name}",
-        "update software": "Mettre à jour {name}",
+        "add software": "Ajouter {{name}}",
+        "update software": "Mettre à jour {{name}}",
         "add software button": "Ajouter {{name}} au SILL",
         "update software button": "Mettre à jour {{name}}"
     },
@@ -227,8 +229,8 @@
         "share software": "Partager la fiche",
         "declare referent": "Se déclarer référent ou utilisateur",
         "edit software": "Éditer la fiche logiciel",
-        "stop being user": "Ne plus être $t(common:user)",
-        "stop being referent": "Ne plus être $t(common:referent)",
+        "stop being user": "Ne plus être $t(common.user)",
+        "stop being referent": "Ne plus être $t(common.referent)",
         "become referent": "Devenir référent",
         "please provide a reason for unreferencing this software": "Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le SILL",
         "unreference software": "Dé-référencer le logiciel"
@@ -389,8 +391,8 @@
         "cancel": "Annuler",
         "do you confirm_referent": "Confirmez vous ne plus vouloir être référent de",
         "do you confirm_using": "Confirmez vous ne plus utiliser",
-        "stop being_user": "Ne plus être $t(common:user) de {{softwareName}}",
-        "stop being_referent": "Ne plus être $t(common:referent) de {{softwareName}}"
+        "stop being_user": "Ne plus être $t(common.user) de {{softwareName}}",
+        "stop being_referent": "Ne plus être $t(common.referent) de {{softwareName}}"
     },
     "smartLogo": {
         "software logo": "Logo du logiciel"

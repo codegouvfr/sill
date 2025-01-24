@@ -1,9 +1,11 @@
 {
     "common": {
+        "user": "user",
         "user_one": "user",
         "user_other": "users",
+        "referent": "referent",
         "referent_one": "referent",
-        "referent_others": "referents",
+        "referent_other": "referents",
         "provider_one": "provider",
         "providers_other": "providers"
     },
@@ -84,8 +86,8 @@
         "stepper title_similar_software_unnamed": "Similar and equivalent software",
         "stepper title_similar_software_named": "$t(SoftwareForm.stepper title_similar_software_unnamed) of {{softwareName}}",
         "add unamed software": "Add software",
-        "add software": "Add ${name}",
-        "update software": "Update {name}",
+        "add software": "Add {{name}}",
+        "update software": "Update {{name}}",
         "add software button": "Add {{name}} to the SILL",
         "update software button": "Update {{name}}"
     },
@@ -214,7 +216,7 @@
         "register date": "{{date}}",
         "minimal version": "Minimal required version: ",
         "license": "License : ",
-        "declare oneself referent": "Declare yourself $t(common:referent) / $t(common:user)",
+        "declare oneself referent": "Declare yourself $t(common.referent) / $t(common.user)",
         "hasDesktopApp": "Installable on agent computer",
         "isPresentInSupportMarket": "Present in support market",
         "isFromFrenchPublicService": "From French public service",
@@ -222,11 +224,11 @@
         "comptoire du libre sheet": "Open Comptoir du libre sheet",
         "wikiData sheet": "Open Wikidata sheet",
         "share software": "Share the software",
-        "declare referent": "Declare yourself $t(common:referent) / $t(common:user)",
+        "declare referent": "Declare yourself $t(common.referent) / $t(common.user)",
         "edit software": "Edit software",
-        "stop being user": "Stop being $t(common:user)",
-        "stop being referent": "Stop being $t(common:referent)",
-        "become referent": "Become $t(common:referent)",
+        "stop being user": "Stop being $t(common.user)",
+        "stop being referent": "Stop being $t(common.referent)",
+        "become referent": "Become $t(common.referent)",
         "please provide a reason for unreferencing this software": "Please provide a reason why you think this software should not be in the SILL anymore",
         "unreference software": "Dereference the software"
     },
@@ -382,8 +384,8 @@
         "cancel": "Cancel",
         "do you confirm_referent": "Do you confirm that you're no longer willing to be referent of",
         "do you confirm_using": "Do you confirm that you're no longer using",
-        "stop being_user": "Stop being a $t(common:user) of {{softwareName}}",
-        "stop being_referent": "Stop being a $t(common:referent) of {{softwareName}}"
+        "stop being_user": "Stop being a $t(common.user) of {{softwareName}}",
+        "stop being_referent": "Stop being a $t(common.referent) of {{softwareName}}"
     },
     "smartLogo": {
         "software logo": "Software logo"
