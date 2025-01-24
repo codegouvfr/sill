@@ -1,9 +1,7 @@
 {
     "common": {
-        "user": "user",
         "user_one": "user",
         "user_other": "users",
-        "referent": "referent",
         "referent_one": "referent",
         "referent_other": "referents",
         "provider_one": "provider",
@@ -80,11 +78,11 @@
         "stepper title_add_named": "What type of software is {{softwareName}}?",
         "stepper title_update": "Modify the type of software of {{softwareName}}",
         "stepper title_info_unnamed": "Information",
-        "stepper title_info_named": "$t(SoftwareForm.stepper title_info_unnamed) about {{softwareName}}",
+        "stepper title_info_named": "Information about {{softwareName}}",
         "stepper title_prerequisites_unnamed": "Prerequisites",
-        "stepper title_prerequisites_named": "$t(SoftwareForm.stepper title_prerequisites_unnamed) of {{softwareName}}",
+        "stepper title_prerequisites_named": "Prerequisites of {{softwareName}}",
         "stepper title_similar_software_unnamed": "Similar and equivalent software",
-        "stepper title_similar_software_named": "$t(SoftwareForm.stepper title_similar_software_unnamed) of {{softwareName}}",
+        "stepper title_similar_software_named": "Similar and equivalent software of {{softwareName}}",
         "add unamed software": "Add software",
         "add software": "Add {{name}}",
         "update software": "Update {{name}}",
@@ -216,7 +214,7 @@
         "register date": "{{date}}",
         "minimal version": "Minimal required version: ",
         "license": "License : ",
-        "declare oneself referent": "Declare yourself $t(common.referent) / $t(common.user)",
+        "declare oneself referent": "Declare yourself referent / user",
         "hasDesktopApp": "Installable on agent computer",
         "isPresentInSupportMarket": "Present in support market",
         "isFromFrenchPublicService": "From French public service",
@@ -224,11 +222,11 @@
         "comptoire du libre sheet": "Open Comptoir du libre sheet",
         "wikiData sheet": "Open Wikidata sheet",
         "share software": "Share the software",
-        "declare referent": "Declare yourself $t(common.referent) / $t(common.user)",
+        "declare referent": "Declare yourself referent / user",
         "edit software": "Edit software",
-        "stop being user": "Stop being $t(common.user)",
-        "stop being referent": "Stop being $t(common.referent)",
-        "become referent": "Become $t(common.referent)",
+        "stop being user": "Stop being user",
+        "stop being referent": "Stop being referent",
+        "become referent": "Become referent",
         "please provide a reason for unreferencing this software": "Please provide a reason why you think this software should not be in the SILL anymore",
         "unreference software": "Dereference the software"
     },
@@ -269,12 +267,12 @@
         "supportedOS": "Supported OS"
     },
     "referencedInstancesTab": {
-        "publicInstanceCount": "{{instanceCount}} maintained public $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} public $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
+        "publicInstanceCount": "{{instanceCount}} maintained public $t(referencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} public $t(referencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
         "instance_one": "instance",
         "instance_other": "instances",
         "organization_one": "organization",
         "organization_other": "organizations",
-        "privateInstanceCount": "{{instanceCount}} maintained private $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
+        "privateInstanceCount": "{{instanceCount}} maintained private $t(referencedInstancesTab.instance, {\"count\": {{instanceCount}} }) by {{organizationCount}} $t(referencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
         "concerned public": "Concerned public : ",
         "go to instance": "Open the instance",
         "add instance": "Reference new instance",
@@ -352,7 +350,7 @@
     },
     "userProfile": {
         "agent profile": "Profile of {{email}}",
-        "agent profile with orga": "$t(UserProfile.agent profile, {\"email\" : {{email}} }) - {{organization}}",
+        "agent profile with orga": "Profile of {{email}} - {{organization}}",
         "send email": "Send an email to this person",
         "no description": "The user has not written a description yet",
         "edit my profile": "Edit my profile",
@@ -384,8 +382,8 @@
         "cancel": "Cancel",
         "do you confirm_referent": "Do you confirm that you're no longer willing to be referent of",
         "do you confirm_using": "Do you confirm that you're no longer using",
-        "stop being_user": "Stop being a $t(common.user) of {{softwareName}}",
-        "stop being_referent": "Stop being a $t(common.referent) of {{softwareName}}"
+        "stop being_user": "Stop being a user of {{softwareName}}",
+        "stop being_referent": "Stop being a referent of {{softwareName}}"
     },
     "smartLogo": {
         "software logo": "Software logo"

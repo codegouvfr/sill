@@ -1,9 +1,7 @@
 {
     "common": {
-        "user": "utilisateur",
         "user_one": "utilisateur",
         "user_other": "utilisateurs",
-        "referent": "référent",
         "referent_one": "référent",
         "referent_other": "référents",
         "provider_one": "fournisseur",
@@ -82,11 +80,11 @@
         "stepper title_add_named": "À quelle type de logicel correspond {{softwareName}} ?",
         "stepper title_update": "Modifier le type de {{softwareName}}",
         "stepper title_info_unnamed": "Information",
-        "stepper title_info_named": "$t(SoftwareForm.stepper title_info_unnamed) à propos de {{softwareName}}",
+        "stepper title_info_named": "Information à propos de {{softwareName}}",
         "stepper title_prerequisites_unnamed": "Pré-requis",
-        "stepper title_prerequisites_named": "$t(SoftwareForm.stepper title_prerequisites_unnamed) pour {{softwareName}}",
+        "stepper title_prerequisites_named": "Pré-requis pour {{softwareName}}",
         "stepper title_similar_software_unnamed": "Logiciels similaires ou équivalents",
-        "stepper title_similar_software_named": "$t(SoftwareForm.stepper title_similar_software_unnamed) à {{softwareName}}",
+        "stepper title_similar_software_named": "Logiciels similaires ou équivalents à {{softwareName}}",
         "add unamed software": "Ajouter un logiciel",
         "add software": "Ajouter {{name}}",
         "update software": "Mettre à jour {{name}}",
@@ -229,8 +227,8 @@
         "share software": "Partager la fiche",
         "declare referent": "Se déclarer référent ou utilisateur",
         "edit software": "Éditer la fiche logiciel",
-        "stop being user": "Ne plus être $t(common.user)",
-        "stop being referent": "Ne plus être $t(common.referent)",
+        "stop being user": "Ne plus être utilisateur",
+        "stop being referent": "Ne plus être référent",
         "become referent": "Devenir référent",
         "please provide a reason for unreferencing this software": "Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le SILL",
         "unreference software": "Dé-référencer le logiciel"
@@ -272,11 +270,11 @@
         "supportedOS": "Système d'exploitation supporté"
     },
     "referencedInstancesTab": {
-        "publicInstanceCount": "{{instanceCount}} $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) web $t(ReferencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} }) $t(ReferencedInstancesTab.public, {\"count\": {{organizationCount}} }",
-        "privateInstanceCount": "{{instanceCount}} $t(ReferencedInstancesTab.instance, {\"count\": {{instanceCount}} }) en accès restreint $t(ReferencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(ReferencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
+        "publicInstanceCount": "{{instanceCount}} $t(referencedInstancesTab.instance, {\"count\": {{instanceCount}} }) web $t(referencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(referencedInstancesTab.organization, {\"count\": {{organizationCount}} }) $t(referencedInstancesTab.public, {\"count\": {{organizationCount}} }",
+        "privateInstanceCount": "{{instanceCount}} $t(referencedInstancesTab.instance, {\"count\": {{instanceCount}} }) en accès restreint $t(referencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(referencedInstancesTab.organization, {\"count\": {{organizationCount}} })",
         "instance_one": "instance web maintenue",
         "instance_other": "instances web maintenues",
-        "maintain_one": "maitenue",
+        "maintain_one": "maintenue",
         "maintain_other": "maintenues",
         "organization_one": "organisation",
         "organization_other": "organisations",
@@ -359,7 +357,7 @@
     },
     "userProfile": {
         "agent profile": "Profile de {{email}}",
-        "agent profile with orga": "$t(UserProfile.agent profile, {\"email\" : {{email}} }) - {{organization}}",
+        "agent profile with orga": "Profile de {{email}} - {{organization}}",
         "send email": "Envoyer un courrier à l'agent",
         "no description": "Cet agent n'a pas renségné son profil ou son profil n'est pas visible par les autres agents.",
         "edit my profile": "Modifier mon profil",
@@ -391,8 +389,8 @@
         "cancel": "Annuler",
         "do you confirm_referent": "Confirmez vous ne plus vouloir être référent de",
         "do you confirm_using": "Confirmez vous ne plus utiliser",
-        "stop being_user": "Ne plus être $t(common.user) de {{softwareName}}",
-        "stop being_referent": "Ne plus être $t(common.referent) de {{softwareName}}"
+        "stop being_user": "Ne plus être utilisateur de {{softwareName}}",
+        "stop being_referent": "Ne plus être référent de {{softwareName}}"
     },
     "smartLogo": {
         "software logo": "Logo du logiciel"
