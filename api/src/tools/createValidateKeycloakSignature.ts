@@ -1,21 +1,16 @@
-import urlJoin from "url-join";
-import fetch from "node-fetch";
-import memoize from "memoizee";
 import createKeycloakBacked from "keycloak-backend";
+import memoize from "memoizee";
+import fetch from "node-fetch";
 import { assert } from "tsafe/assert";
+import urlJoin from "url-join";
+import { OidcParams } from "../env";
 
-export type KeycloakParams = {
-    url: string;
-    realm: string;
-    clientId: string;
-};
-
-export function createValidateKeycloakSignature(params: KeycloakParams) {
-    const { url, realm, clientId } = params;
+export function createValidateKeycloakSignature(params: OidcParams) {
+    const { url, clientId } = params;
 
     const getKeycloakBackendVerifyOffline = memoize(
         async () => {
-            const cert = await fetchKeycloakRealmPublicCert({ url, realm });
+            const cert = await fetchKeycloakRealmPublicCert({ url });
 
             const keycloakBackend = createKeycloakBacked({
                 realm,

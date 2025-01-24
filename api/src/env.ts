@@ -2,14 +2,17 @@ import * as JSONC from "comment-json";
 import { z } from "zod";
 import { zLocalizedString } from "./core/ports/GetSoftwareExternalData";
 
+export type OidcParams = {
+    url: string;
+    clientId: string;
+};
+const oidcParamsSchema: z.Schema<OidcParams> = z.object({
+    clientId: z.string().min(1),
+    url: z.string().min(1)
+});
+
 const zConfiguration = z.object({
-    "keycloakParams": z
-        .object({
-            "url": z.string().nonempty(), //Example: https://auth.code.gouv.fr/auth (with the /auth at the end)
-            "realm": z.string().nonempty(),
-            "clientId": z.string().nonempty()
-        })
-        .optional(),
+    "oidcParams": oidcParamsSchema,
     "termsOfServiceUrl": zLocalizedString,
     "readmeUrl": zLocalizedString,
     "jwtClaimByUserKey": z.object({
@@ -47,13 +50,18 @@ const getJsonConfiguration = () => {
     }
 
     return {
-        "keycloakParams": {
-            "url": process.env.SILL_KEYCLOAK_URL,
-            "realm": process.env.SILL_KEYCLOAK_REALM,
-            "clientId": process.env.SILL_KEYCLOAK_CLIENT_ID,
-            "adminPassword": process.env.SILL_KEYCLOAK_ADMIN_PASSWORD,
-            "organizationUserProfileAttributeName": process.env.SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME
+        "oidcParams": {
+            clientId: process.env.SILL_KEYCLOAK_CLIENT_ID,
+            url: process.env.SILL_KEYCLOAK_URL
+            // clientSecret: z.string().min(1),
         },
+        // "keycloakParams": {
+        //     "url": process.env.SILL_KEYCLOAK_URL,
+        //     "realm": process.env.SILL_KEYCLOAK_REALM,
+        //     "clientId": process.env.SILL_KEYCLOAK_CLIENT_ID,
+        //     "adminPassword": process.env.SILL_KEYCLOAK_ADMIN_PASSWORD,
+        //     "organizationUserProfileAttributeName": process.env.SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME
+        // },
         "readmeUrl": process.env.SILL_README_URL,
         "termsOfServiceUrl": process.env.SILL_TERMS_OF_SERVICE_URL,
         "jwtClaimByUserKey": {

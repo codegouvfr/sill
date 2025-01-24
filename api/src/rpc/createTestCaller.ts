@@ -43,7 +43,7 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
     const { router } = createRouter({
         useCases,
         dbApi,
-        keycloakParams: undefined,
+        oidcParams: undefined,
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
         readmeUrl: "http://readme.url",

@@ -1,4 +1,5 @@
-import { createValidateKeycloakSignature, type KeycloakParams } from "../tools/createValidateKeycloakSignature";
+import { OidcParams } from "../env";
+import { createValidateKeycloakSignature } from "../tools/createValidateKeycloakSignature";
 import * as jwtSimple from "jwt-simple";
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import { type User, createAccessTokenToUser } from "./user";
@@ -9,9 +10,9 @@ export type Context = {
 
 export function createContextFactory(params: {
     jwtClaimByUserKey: Record<keyof User, string>;
-    keycloakParams: KeycloakParams | undefined;
+    oidcParams: OidcParams | undefined;
 }) {
-    const { jwtClaimByUserKey, keycloakParams } = params;
+    const { jwtClaimByUserKey, oidcParams } = params;
 
     const { accessTokenToUser } = createAccessTokenToUser({
         "decodeJwt": accessToken => jwtSimple.decode(accessToken, "", true),
@@ -19,8 +20,8 @@ export function createContextFactory(params: {
     });
 
     const { validateKeycloakSignature } =
-        keycloakParams !== undefined
-            ? createValidateKeycloakSignature(keycloakParams)
+        oidcParams !== undefined
+            ? createValidateKeycloakSignature(oidcParams)
             : { "validateKeycloakSignature": undefined };
 
     async function createContext({ req }: CreateExpressContextOptions): Promise<Context> {

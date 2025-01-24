@@ -20,16 +20,13 @@ import type {
     LocalizedString
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { OidcParams } from "../env";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
 import type { User } from "./user";
 
 export async function startRpcService(params: {
-    keycloakParams?: {
-        url: string;
-        realm: string;
-        clientId: string;
-    };
+    oidcParams: OidcParams | undefined;
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
     jwtClaimByUserKey: Record<keyof User, string>;
@@ -45,7 +42,7 @@ export async function startRpcService(params: {
 }) {
     const {
         redirectUrl,
-        keycloakParams,
+        oidcParams,
         termsOfServiceUrl,
         readmeUrl,
         jwtClaimByUserKey,
@@ -85,14 +82,7 @@ export async function startRpcService(params: {
 
     const { createContext } = createContextFactory({
         jwtClaimByUserKey,
-        "keycloakParams":
-            keycloakParams === undefined
-                ? undefined
-                : {
-                      "url": keycloakParams.url,
-                      "realm": keycloakParams.realm,
-                      "clientId": keycloakParams.clientId
-                  }
+        oidcParams
     });
 
     const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
@@ -104,14 +94,7 @@ export async function startRpcService(params: {
         getSoftwareExternalDataOptions,
         getSoftwareExternalData,
         jwtClaimByUserKey,
-        "keycloakParams":
-            keycloakParams === undefined
-                ? undefined
-                : {
-                      "url": keycloakParams.url,
-                      "realm": keycloakParams.realm,
-                      "clientId": keycloakParams.clientId
-                  },
+        oidcParams,
         termsOfServiceUrl,
         readmeUrl,
         redirectUrl,
