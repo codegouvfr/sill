@@ -78,7 +78,9 @@ export const PreviewTab = (props: Props) => {
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.about")}
                         </p>
-                        {(config.softwareDetails.details.fields.softwareCurrentVersion || config.softwareDetails.details.fields.softwareCurrentVersionDate)  &&
+                        {(config.softwareDetails.details.fields.softwareCurrentVersion ||
+                            config.softwareDetails.details.fields
+                                .softwareCurrentVersionDate) &&
                             (softwareCurrentVersion || softwareDateCurrentVersion) && (
                                 <p
                                     className={cx(
@@ -89,22 +91,26 @@ export const PreviewTab = (props: Props) => {
                                     <span className={classes.labelDetail}>
                                         {t("previewTab.last version")}
                                     </span>
-                                    {config.softwareDetails.details.fields.softwareCurrentVersion && softwareCurrentVersion && (
-                                        <span
-                                            className={cx(
-                                                fr.cx(
-                                                    "fr-badge",
-                                                    "fr-badge--yellow-tournesol",
-                                                    "fr-badge--sm"
-                                                ),
-                                                classes.badgeVersion
-                                            )}
-                                        >
-                                            {softwareCurrentVersion}
-                                        </span>
-                                    )}
+                                    {config.softwareDetails.details.fields
+                                        .softwareCurrentVersion &&
+                                        softwareCurrentVersion && (
+                                            <span
+                                                className={cx(
+                                                    fr.cx(
+                                                        "fr-badge",
+                                                        "fr-badge--yellow-tournesol",
+                                                        "fr-badge--sm"
+                                                    ),
+                                                    classes.badgeVersion
+                                                )}
+                                            >
+                                                {softwareCurrentVersion}
+                                            </span>
+                                        )}
 
-                                    {config.softwareDetails.details.fields.softwareCurrentVersionDate && softwareDateCurrentVersion &&
+                                    {config.softwareDetails.details.fields
+                                        .softwareCurrentVersionDate &&
+                                        softwareDateCurrentVersion &&
                                         capitalize(
                                             shortEndMonthDate({
                                                 "time": softwareDateCurrentVersion,

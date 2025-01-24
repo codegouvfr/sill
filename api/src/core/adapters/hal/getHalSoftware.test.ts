@@ -37,7 +37,7 @@ describe("HAL", () => {
                 "keywords": undefined,
                 "programmingLanguages": undefined,
                 "applicationCategories": ["Computer Science [cs]"],
-                "publicationTime": new Date(1561566581000)
+                "publicationTime": new Date(1521545908000)
             });
         });
     });
