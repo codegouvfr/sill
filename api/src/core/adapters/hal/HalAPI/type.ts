@@ -18,6 +18,17 @@ export type HalRawSoftware = {
     openAccess_bool: boolean;
     docType_s: string;
     label_bibtex: string;
+    domainAllCode_s: string[];
+    keyword_s: string[];
+    authIdForm_i: number[];
+    authFullName_s: string[];
+    authIdHal_s: string[];
+    releasedDate_tdate: string;
+    softCodeRepository_s: string[];
+    softPlatform_s: string[];
+    softProgrammingLanguage_s: string[];
+    softVersion_s: string[];
+    licence_s: string[];
 
     // The following is the complete list of fields that could be returned by the HAL API
 
@@ -26,7 +37,6 @@ export type HalRawSoftware = {
     // citationFull_s: string;
     // label_endnote: string;
     // label_coins: string;
-    domainAllCode_s: string[];
     // level0_domain_s: string[];
     // domain_s: string[];
     // level1_domain_s: string[];
@@ -36,14 +46,11 @@ export type HalRawSoftware = {
     // eu_domainAllCodeLabel_fs: string[];
     // primaryDomain_s: string;
     // en_keyword_s?: string[];
-    keyword_s: string[];
     // fr_keyword_s?: string[];
     // authIdFormPerson_s: string[];
-    authIdForm_i: number[];
     // authLastName_s: string[];
     // authFirstName_s: string[];
     // authMiddleName_s: string[];
-    authFullName_s: string[];
     // authLastNameFirstName_s: string[];
     // authIdLastNameFirstName_fs: string[];
     // authFullNameIdFormPerson_fs: string[];
@@ -58,7 +65,6 @@ export type HalRawSoftware = {
     // authAlphaLastNameFirstNameIdHal_fs: string[];
     // authLastNameFirstNameIdHalPersonid_fs: string[];
     // authIdHasPrimaryStructure_fs: string[];
-    authIdHal_s: string[];
     // structPrimaryHasAuthId_fs: string[];
     // structPrimaryHasAuthIdHal_fs: string[];
     // structPrimaryHasAlphaAuthId_fs: string[];
@@ -117,7 +123,6 @@ export type HalRawSoftware = {
     // submittedDateY_i: number;
     // submittedDateM_i: number;
     // submittedDateD_i: number;
-    releasedDate_tdate: string;
     // releasedDate_s: string;
     // releasedDateY_i: number;
     // releasedDateM_i: number;
@@ -148,13 +153,8 @@ export type HalRawSoftware = {
     // _version_: bigint;
     // dateLastIndexed_tdate: string;
     // label_xml: string;
-    softCodeRepository_s: string[];
     // softDevelopmentStatus_s: string[];
-    softPlatform_s: string[];
-    softProgrammingLanguage_s: string[];
     // softRuntimePlatform_s: string[];
-    softVersion_s: string[];
-    licence_s: string[];
 };
 
 export type HalAPIDomain = {
