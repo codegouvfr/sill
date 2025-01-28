@@ -221,7 +221,7 @@ export default function SoftwareDetails(props: Props) {
                                           "label": t(
                                               "softwareDetails.tab title alike software",
                                               {
-                                                  alikeSoftwareCountc:
+                                                  alikeSoftwareCount:
                                                       software.similarSoftwares.length ??
                                                       0
                                               }
