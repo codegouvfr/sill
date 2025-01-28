@@ -23,7 +23,8 @@ import {
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
-import { SchemaOrganization, SchemaPerson } from "../../../types/codemeta";
+import { SILL } from "../../../types/SILL";
+
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
     "fallbackLanguage": "en"
@@ -196,7 +197,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P170"),
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
-                ].map(async ({ id }): Promise<SchemaPerson | SchemaOrganization | undefined> => {
+                ].map(async ({ id }): Promise<SILL.Person | SILL.Organization | undefined> => {
                     console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {
