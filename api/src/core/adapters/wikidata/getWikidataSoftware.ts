@@ -255,6 +255,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             keywords: getClaimDataValue<"string">("P921"),
             programmingLanguages: programmingLanguageString ? [programmingLanguageString] : [],
             applicationCategories: undefined, // doesn't exit on wiki data
+            referencePublication: undefined, // doesn't exit on wiki data
             publicationTime: publicationTimeDate
         };
     },
