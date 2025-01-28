@@ -23,7 +23,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: Array<ApiTypes.SchemaPerson | ApiTypes.SchemaOrganization>;
+    authors: Array<ApiTypes.SILL.Person | ApiTypes.SILL.Organization>;
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;

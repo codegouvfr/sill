@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import Button from "@codegouvfr/react-dsfr/Button";
 
 export type Props = {
-    author: ApiTypes.SchemaPerson;
+    author: ApiTypes.SILL.Person;
     handleClose?: MouseEventHandler<HTMLButtonElement>;
 };
 

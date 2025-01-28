@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
-import { SchemaOrganization, SchemaPerson } from "../../types/codemeta";
+import { SILL } from "../../types/SILL";
 
 type ExternalId = string;
 
@@ -16,7 +16,7 @@ export type GetSoftwareExternalData = {
 export type SoftwareExternalData = {
     externalId: ExternalId;
     externalDataOrigin: ExternalDataOrigin;
-    developers: Array<SchemaPerson | SchemaOrganization>;
+    developers: Array<SILL.Person | SILL.Organization>;
     label: LocalizedString;
     description: LocalizedString;
     isLibreSoftware: boolean;

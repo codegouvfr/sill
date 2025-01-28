@@ -1,7 +1,7 @@
-import { SoftwareApplication } from "../../../../types/codemeta";
+import { HAL } from "../types/HAL";
 import { HalFetchError } from "./type";
 
-export async function fetchCodeMetaSoftwareByURL(url: string): Promise<SoftwareApplication | undefined> {
+export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.SoftwareApplication | undefined> {
     const res = await fetch(`${url}/codemeta`, {
         signal: AbortSignal.timeout(10000)
     }).catch(err => {

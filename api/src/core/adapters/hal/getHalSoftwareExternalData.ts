@@ -3,11 +3,11 @@ import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSo
 import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
-import { SchemaOrganization, SchemaPerson } from "../../../types/codemeta";
+import { SILL } from "../../../types/SILL";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<SchemaOrganization[]> => {
+): Promise<SILL.Organization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -57,11 +57,11 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
-                const base: SchemaPerson = {
+                const base: SILL.Person = {
                     "@type": "Person",
                     "name": `${author.givenName} ${author.familyName}`,
                     "identifier": id,
-                    "affiliation": [] as SchemaOrganization[]
+                    "affiliation": [] as SILL.Organization[]
                 };
 
                 if (affiliation?.length && affiliation.length > 0) {
