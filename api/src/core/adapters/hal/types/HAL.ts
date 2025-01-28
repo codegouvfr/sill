@@ -34,6 +34,7 @@ export namespace HAL {
         developmentStatus?: string;
         author: Role[]; // Non regular Schema.org / CodeMeta
         contributor?: Person[];
+        referencePublication?: string[] | string | Object;
     };
 
     // HAL implementation of https://codemeta.github.io/terms/
