@@ -11,6 +11,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             keywords: JSON.stringify(softwareExternalData.keywords),
             applicationCategories: JSON.stringify(softwareExternalData.applicationCategories),
             programmingLanguages: JSON.stringify(softwareExternalData.programmingLanguages),
+            referencePublication: JSON.stringify(softwareExternalData.referencePublication),
             description: JSON.stringify(softwareExternalData.description)
         };
 

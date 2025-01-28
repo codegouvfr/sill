@@ -194,6 +194,7 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/facebook/create-react-app",
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguages: [],
+                    referencePublication: null,
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
@@ -213,6 +214,7 @@ describe("fetches software extra data (from different providers)", () => {
                     externalId: "Q111590996",
                     framaLibreId: null,
                     isLibreSoftware: true,
+
                     keywords: [],
                     label: "Vite",
                     license: "MIT licence",
@@ -221,6 +223,7 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
+                    referencePublication: null,
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date)
                 }
@@ -275,6 +278,7 @@ describe("fetches software extra data (from different providers)", () => {
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
+                    referencePublication: null,
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z")
