@@ -60,6 +60,7 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
+    referencePublication?: SILL.ScholarlyArticle[];
 };
 
 export namespace Software {

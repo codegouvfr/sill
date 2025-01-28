@@ -203,6 +203,8 @@
     },
     "softwareDetails": {
         "catalog breadcrumb": "Software catalog",
+        "tabReferencePublication": "Related Scholar Articles",
+        "tabReferencePublicationTitle": "Scholar Articles",
         "tab title overview": "Overview",
         "tab title instance": "Referenced instance {{instanceCount}}",
         "tab service providers": "Service providers {{serviceProvidersCount}}",
