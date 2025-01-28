@@ -9,6 +9,7 @@ import { PreviewTab } from "ui/pages/softwareDetails/PreviewTab";
 import { ReferencedInstancesTab } from "ui/pages/softwareDetails/ReferencedInstancesTab";
 import { Tabs } from "@codegouvfr/react-dsfr/Tabs";
 import { SimilarSoftwareTab } from "ui/pages/softwareDetails/AlikeSoftwareTab";
+import { PublicationTab } from "./PublicationTab";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -257,6 +258,22 @@ export default function SoftwareDetails(props: Props) {
                                                       }).link
                                                   }
                                               />
+                                          )
+                                      }
+                                  ]),
+                            ...(software.referencePublication === undefined
+                                ? []
+                                : [
+                                      {
+                                          "label": t(
+                                              "softwareDetails.tabReferencePublication"
+                                          ),
+                                          "content": (
+                                              <PublicationTab
+                                                  referencePublication={
+                                                      software.referencePublication
+                                                  }
+                                              ></PublicationTab>
                                           )
                                       }
                                   ])
