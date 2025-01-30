@@ -1,9 +1,9 @@
-import { ScholarlyArticle } from "api/dist/src/types/codemeta";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useTranslation } from "react-i18next";
+import { ApiTypes } from "api";
 
 export type Props = {
-    referencePublication?: ScholarlyArticle[];
+    referencePublication?: ApiTypes.SILL.ScholarlyArticle[];
 };
 
 export const PublicationTab = (props: Props) => {
