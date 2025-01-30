@@ -4,6 +4,7 @@ import { tss } from "tss-react";
 import { MouseEventHandler } from "react";
 import { useTranslation } from "react-i18next";
 import Button from "@codegouvfr/react-dsfr/Button";
+import { LogoURLButton } from "./LogoURLButton";
 
 export type Props = {
     author: ApiTypes.SILL.Person;
@@ -80,53 +81,13 @@ export function AuthorCard(props: Props) {
                 );
             })}
             <div className={classes.externalLinkButtons}>
-                <Button
-                    linkProps={{
-                        target: "_blank",
-                        rel: "noreferrer",
-                        href: author.url
-                    }}
-                >
-                    {author?.url?.includes("hal.science") && (
-                        <>
-                            <img
-                                alt="HAL logo"
-                                src="https://hal.science/assets/favicon/apple-touch-icon.png"
-                                height="20px"
-                            ></img>
-                            <p className={classes.linkContent}>HAL</p>
-                        </>
-                    )}
-                    {author?.url?.includes("orcid") && (
-                        <>
-                            <img
-                                alt="ORCID logo"
-                                src="https://homepage-prod.orcid.org/assets/iD_icon_1-9cfee7d6c7.png"
-                                height="20px"
-                            ></img>
-                            <p className={classes.linkContent}>ORCID</p>
-                        </>
-                    )}
-                    {author?.url?.includes("wikidata") && (
-                        <>
-                            <img
-                                alt="Wikidata logo"
-                                src="https://www.wikidata.org/static/apple-touch/wikidata.png"
-                                height="20px"
-                            ></img>
-                            <p className={classes.linkContent}>Wikidata</p>
-                        </>
-                    )}
-                </Button>
+                <LogoURLButton url={author.url} labelFromURL={true}></LogoURLButton>
             </div>
         </Card>
     );
 }
 
 const useStyles = tss.withName({ AuthorCard }).create({
-    "linkContent": {
-        "marginLeft": "7px"
-    },
     "externalLinkButtons": {
         "display": "flex",
         "alignItems": "center",

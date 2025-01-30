@@ -152,6 +152,7 @@ export default function SoftwareDetails(props: Props) {
                                             software?.applicationCategories
                                         }
                                         softwareType={software?.softwareType}
+                                        identifiers={software.identifiers}
                                     />
                                 )
                             },
