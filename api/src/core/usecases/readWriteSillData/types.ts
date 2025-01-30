@@ -1,3 +1,4 @@
+import { SILL } from "../../../types/SILL";
 import type {
     ExternalDataOrigin,
     ParentSoftwareExternalData,
@@ -37,10 +38,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: {
-        authorName: string;
-        authorUrl: string;
-    }[];
+    authors: Array<SILL.Person | SILL.Organization>;
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;

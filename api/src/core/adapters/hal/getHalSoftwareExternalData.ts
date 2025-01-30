@@ -1,12 +1,13 @@
 import memoize from "memoizee";
-import { AuthStructure, GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
+import { SILL } from "../../../types/SILL";
 
-const buildParentStructureTree = async (
+const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<AuthStructure[]> => {
+): Promise<SILL.Organization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -18,9 +19,10 @@ const buildParentStructureTree = async (
             if (!structure) throw new Error(`Couldn't get data for structure docid : ${structureId}`);
 
             return {
+                "@type": "Organization",
                 "name": structure.name_s,
                 "url": structure?.ror_s ?? structure?.url_s,
-                "parentStructure": await buildParentStructureTree(structure?.parentDocid_i)
+                "parentOrganization": await buildParentOrganizationTree(structure?.parentDocid_i)
             };
         })
     );
@@ -50,18 +52,19 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         }
 
         const authors = await Promise.all(
-            codemetaSoftware.author.map(async auth => {
-                const author = auth.author;
+            codemetaSoftware.author.map(async role => {
+                const author = role.author;
                 const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
-                const base = {
+                const base: SILL.Person = {
+                    "@type": "Person",
                     "name": `${author.givenName} ${author.familyName}`,
-                    "id": id,
-                    "affiliatedStructure": [] as AuthStructure[]
+                    "identifier": id,
+                    "affiliation": [] as SILL.Organization[]
                 };
 
-                if (affiliation?.length > 0) {
+                if (affiliation?.length && affiliation.length > 0) {
                     const structures = await Promise.all(
                         affiliation
                             .filter(affilatiedStructure => affilatiedStructure.name)
@@ -71,13 +74,14 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                                     throw new Error(`Structure not found : name = ${affilatiedStructure?.name}`);
                                 }
                                 return {
+                                    "@type": "Organization" as const,
                                     "name": structure.name_s,
                                     "url": structure.ror_s ?? structure?.url_s,
-                                    "parentStructure": await buildParentStructureTree(structure.parentDocid_i)
+                                    "parentOrganization": await buildParentOrganizationTree(structure.parentDocid_i)
                                 };
                             })
                     );
-                    base.affiliatedStructure = structures;
+                    base.affiliation = structures;
                 }
 
                 if (id?.split("-")?.length === 4 && id?.length === 19) {

@@ -1,5 +1,13 @@
 import { Generated, JSONColumnType } from "kysely";
 
+// from https://schema.org/Organization
+type SchemaOrganization = {
+    "@type": "Organization";
+    name: string;
+    url: string | undefined;
+    parentOrganization?: SchemaOrganization[];
+};
+
 export type Database = {
     agents: AgentsTable;
     software_referents: SoftwareReferentsTable;
@@ -64,9 +72,12 @@ type SoftwareExternalDatasTable = {
     externalDataOrigin: ExternalDataOrigin;
     developers: JSONColumnType<
         {
+            "@type": "Organization" | "Person";
             name: string;
-            id: string | null;
+            identifier?: string;
             url: string;
+            affiliation?: SchemaOrganization[];
+            parentOrganization?: SchemaOrganization[];
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;

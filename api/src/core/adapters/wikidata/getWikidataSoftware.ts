@@ -23,6 +23,8 @@ import {
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
+import { SILL } from "../../../types/SILL";
+
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
     "fallbackLanguage": "en"
@@ -195,19 +197,19 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P170"),
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
-                ].map(async ({ id }) => {
+                ].map(async ({ id }): Promise<SILL.Person | SILL.Organization | undefined> => {
                     console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {
                         return undefined;
                     }
 
+                    const { getClaimDataValue } = createGetClaimDataValue({
+                        entity
+                    });
+
                     const name = (() => {
                         const { shortName } = (() => {
-                            const { getClaimDataValue } = createGetClaimDataValue({
-                                entity
-                            });
-
                             const shortName = getClaimDataValue<"text-language">("P1813")[0]?.text;
 
                             return { shortName };
@@ -231,8 +233,10 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     }
 
                     return {
+                        "@type":
+                            getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5" ? "Person" : "Organization", // Q5 : Humans
                         name,
-                        "id": entity.id,
+                        identifier: entity.id,
                         "url": `https://www.wikidata.org/wiki/${entity.id}`
                     };
                 })

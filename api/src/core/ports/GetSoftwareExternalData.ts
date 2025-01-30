@@ -2,6 +2,7 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
+import { SILL } from "../../types/SILL";
 
 type ExternalId = string;
 
@@ -12,21 +13,10 @@ export type GetSoftwareExternalData = {
     clear: (externalId: ExternalId) => void;
 };
 
-export type AuthStructure = {
-    name: string;
-    url: string | undefined;
-    parentStructure: AuthStructure[] | null;
-};
-
 export type SoftwareExternalData = {
     externalId: ExternalId;
     externalDataOrigin: ExternalDataOrigin;
-    developers: {
-        name: string;
-        id: string | undefined;
-        url: string;
-        affiliatedStructure?: AuthStructure[] | null;
-    }[];
+    developers: Array<SILL.Person | SILL.Organization>;
     label: LocalizedString;
     description: LocalizedString;
     isLibreSoftware: boolean;

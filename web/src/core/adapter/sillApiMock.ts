@@ -349,8 +349,9 @@ const softwares = [
         "codeRepositoryUrl": undefined,
         "authors": [
             {
-                "authorName": "TDF",
-                "authorUrl": "https://www.wikidata.org/wiki/Q313103"
+                "@type": "Organization",
+                "name": "TDF",
+                "url": "https://www.wikidata.org/wiki/Q313103"
             }
         ],
         "versionMin": "17.0.3",
@@ -414,16 +415,19 @@ const softwares = [
         "codeRepositoryUrl": "https://core.trac.wordpress.org/browser",
         "authors": [
             {
-                "authorName": "Matt Mullenweg",
-                "authorUrl": "https://www.wikidata.org/wiki/Q92877"
+                "@type": "Person",
+                "name": "Matt Mullenweg",
+                "url": "https://www.wikidata.org/wiki/Q92877"
             },
             {
-                "authorName": "Mike Little",
-                "authorUrl": "https://www.wikidata.org/wiki/Q16731558"
+                "@type": "Person",
+                "name": "Mike Little",
+                "url": "https://www.wikidata.org/wiki/Q16731558"
             },
             {
-                "authorName": "Automattic",
-                "authorUrl": "https://www.wikidata.org/wiki/Q2872634"
+                "@type": "Person",
+                "name": "Automattic",
+                "url": "https://www.wikidata.org/wiki/Q2872634"
             }
         ],
         "versionMin": "Dernière stable",
@@ -471,12 +475,14 @@ const softwares = [
         "codeRepositoryUrl": "https://code.videolan.org/videolan/vlc",
         "authors": [
             {
-                "authorName": "VideoLAN",
-                "authorUrl": "https://www.wikidata.org/wiki/Q1282963"
+                "@type": "Organization",
+                "name": "VideoLAN",
+                "url": "https://www.wikidata.org/wiki/Q1282963"
             },
             {
-                "authorName": "Jean-Baptiste Kempf",
-                "authorUrl": "https://www.wikidata.org/wiki/Q58879462"
+                "@type": "Person",
+                "name": "Jean-Baptiste Kempf",
+                "url": "https://www.wikidata.org/wiki/Q58879462"
             }
         ],
         "versionMin": "Dernière stable",
@@ -527,8 +533,9 @@ const softwares = [
         "codeRepositoryUrl": "https://sources.debian.org/",
         "authors": [
             {
-                "authorName": "The Debian Project",
-                "authorUrl": "https://www.wikidata.org/wiki/Q55966784"
+                "@type": "Person",
+                "name": "The Debian Project",
+                "url": "https://www.wikidata.org/wiki/Q55966784"
             }
         ],
         "versionMin": "10",
@@ -586,16 +593,19 @@ const softwares = [
         "codeRepositoryUrl": "https://hg.mozilla.org/comm-central",
         "authors": [
             {
-                "authorName": "MZLA Technologies Corporation",
-                "authorUrl": "https://www.wikidata.org/wiki/Q90137272"
+                "@type": "Organization",
+                "name": "MZLA Technologies Corporation",
+                "url": "https://www.wikidata.org/wiki/Q90137272"
             },
             {
-                "authorName": "Mozilla Foundation",
-                "authorUrl": "https://www.wikidata.org/wiki/Q55672"
+                "@type": "Organization",
+                "name": "Mozilla Foundation",
+                "url": "https://www.wikidata.org/wiki/Q55672"
             },
             {
-                "authorName": "Mozilla Messaging",
-                "authorUrl": "https://www.wikidata.org/wiki/Q1370678"
+                "@type": "Organization",
+                "name": "Mozilla Messaging",
+                "url": "https://www.wikidata.org/wiki/Q1370678"
             }
         ],
         "versionMin": "68",
@@ -660,8 +670,9 @@ const softwares = [
         "codeRepositoryUrl": "https://github.com/qgis/QGIS",
         "authors": [
             {
-                "authorName": "QGIS Development Team",
-                "authorUrl": "https://www.wikidata.org/wiki/Q15952356"
+                "@type": "Organization",
+                "name": "QGIS Development Team",
+                "url": "https://www.wikidata.org/wiki/Q15952356"
             }
         ],
         "versionMin": "3.16",
@@ -715,24 +726,29 @@ const softwares = [
         "codeRepositoryUrl": "https://hg.mozilla.org/mozilla-central/",
         "authors": [
             {
-                "authorName": "Mozilla Foundation",
-                "authorUrl": "https://www.wikidata.org/wiki/Q55672"
+                "@type": "Organization",
+                "name": "Mozilla Foundation",
+                "url": "https://www.wikidata.org/wiki/Q55672"
             },
             {
-                "authorName": "Dave Hyatt",
-                "authorUrl": "https://www.wikidata.org/wiki/Q558130"
+                "@type": "Person",
+                "name": "Dave Hyatt",
+                "url": "https://www.wikidata.org/wiki/Q558130"
             },
             {
-                "authorName": "Joe Hewitt",
-                "authorUrl": "https://www.wikidata.org/wiki/Q4502689"
+                "@type": "Person",
+                "name": "Joe Hewitt",
+                "url": "https://www.wikidata.org/wiki/Q4502689"
             },
             {
-                "authorName": "Blake Ross",
-                "authorUrl": "https://www.wikidata.org/wiki/Q92792"
+                "@type": "Person",
+                "name": "Blake Ross",
+                "url": "https://www.wikidata.org/wiki/Q92792"
             },
             {
-                "authorName": "Mozilla Corporation",
-                "authorUrl": "https://www.wikidata.org/wiki/Q169925"
+                "@type": "Organization",
+                "name": "Mozilla Corporation",
+                "url": "https://www.wikidata.org/wiki/Q169925"
             }
         ],
         "versionMin": "3.16",
@@ -785,12 +801,14 @@ const softwares = [
         "codeRepositoryUrl": "https://git.postgresql.org/gitweb/?p=postgresql.git",
         "authors": [
             {
-                "authorName": "Michael Stonebraker",
-                "authorUrl": "https://www.wikidata.org/wiki/Q92758"
+                "@type": "Person",
+                "name": "Michael Stonebraker",
+                "url": "https://www.wikidata.org/wiki/Q92758"
             },
             {
-                "authorName": "PostgreSQL Global Development Group",
-                "authorUrl": "https://www.wikidata.org/wiki/Q65807102"
+                "@type": "Organization",
+                "name": "PostgreSQL Global Development Group",
+                "url": "https://www.wikidata.org/wiki/Q65807102"
             }
         ],
         "versionMin": "10",
@@ -836,8 +854,9 @@ const softwares = [
         "codeRepositoryUrl": "https://github.com/Chocobozzz/PeerTube",
         "authors": [
             {
-                "authorName": "Framasoft",
-                "authorUrl": "https://www.wikidata.org/wiki/Q3080414"
+                "@type": "Organization",
+                "name": "Framasoft",
+                "url": "https://www.wikidata.org/wiki/Q3080414"
             }
         ],
         "versionMin": "3.x",

@@ -6,6 +6,11 @@ import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
 import { getFormattedDate } from "ui/useMoment";
+import type { ApiTypes } from "api";
+import { Popover } from "@mui/material";
+import React from "react";
+import { AuthorCard } from "ui/shared/AuthorCard";
+import config from "../../config-ui.json";
 
 export type Props = {
     className?: string;
@@ -18,10 +23,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: {
-        authorName: string;
-        authorUrl: string;
-    }[];
+    authors: Array<ApiTypes.SILL.Person | ApiTypes.SILL.Organization>;
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;
@@ -56,6 +58,20 @@ export const HeaderDetailCard = memo((props: Props) => {
     const { t } = useTranslation();
 
     const { lang } = useLang();
+
+    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+    const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(anchorEl ? null : event.currentTarget);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+    };
+
+    const open = (id: string) => {
+        return anchorEl?.id?.slice(2) === id || anchorEl?.id === id;
+    };
 
     return (
         <div className={cx(classes.root, className)}>
@@ -111,13 +127,64 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 </span>
                                 <span>
                                     {authors.map(author => (
-                                        <a
-                                            href={author.authorUrl}
-                                            className={classes.authorLink}
-                                            key={author.authorName}
-                                        >
-                                            {author.authorName}
-                                        </a>
+                                        <>
+                                            {(!config.softwareDetails.authorCard ||
+                                                author["@type"] === "Organization" ||
+                                                (author["@type"] === "Person" &&
+                                                    (!author.affiliation ||
+                                                        author.affiliation?.length <=
+                                                            0))) && (
+                                                <a
+                                                    href={author.url}
+                                                    className={classes.authorLink}
+                                                    key={author.name}
+                                                >
+                                                    {author.name}
+                                                </a>
+                                            )}
+
+                                            {config.softwareDetails.authorCard &&
+                                                author["@type"] === "Person" &&
+                                                author.affiliation &&
+                                                author.affiliation?.length > 0 && (
+                                                    <>
+                                                        <button
+                                                            id={`a-popover-${author.name}`}
+                                                            className={classes.authorLink}
+                                                            key={author.name}
+                                                            onClick={handlePopoverOpen}
+                                                        >
+                                                            {author.name}
+                                                        </button>
+
+                                                        <Popover
+                                                            id={`popover-${author.name}`}
+                                                            open={open(
+                                                                `popover-${author.name}`
+                                                            )}
+                                                            sx={{ pointerEvents: "auto" }}
+                                                            anchorEl={anchorEl}
+                                                            onClose={handlePopoverClose}
+                                                            anchorOrigin={{
+                                                                vertical: "bottom",
+                                                                horizontal: "left"
+                                                            }}
+                                                            transformOrigin={{
+                                                                vertical: "top",
+                                                                horizontal: "left"
+                                                            }}
+                                                            disableRestoreFocus
+                                                        >
+                                                            <AuthorCard
+                                                                author={author}
+                                                                handleClose={
+                                                                    handlePopoverClose
+                                                                }
+                                                            ></AuthorCard>
+                                                        </Popover>
+                                                    </>
+                                                )}
+                                        </>
                                     ))}
                                 </span>
                             </div>
