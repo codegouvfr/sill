@@ -102,6 +102,7 @@ export namespace State {
         applicationCategories: string[];
         referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
         softwareType: ApiTypes.SoftwareType;
+        identifiers: ApiTypes.SILL.Identification[];
     };
 }
 
