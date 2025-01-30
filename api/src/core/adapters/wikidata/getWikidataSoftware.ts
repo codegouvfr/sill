@@ -256,7 +256,8 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             programmingLanguages: programmingLanguageString ? [programmingLanguageString] : [],
             applicationCategories: undefined, // doesn't exit on wiki data
             referencePublications: undefined, // doesn't exit on wiki data
-            publicationTime: publicationTimeDate
+            publicationTime: publicationTimeDate,
+            identifiers: undefined
         };
     },
     {

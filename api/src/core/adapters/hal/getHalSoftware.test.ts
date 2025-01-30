@@ -39,6 +39,33 @@ describe("HAL", () => {
                 "programmingLanguages": undefined,
                 "applicationCategories": ["Computer Science [cs]"],
                 "referencePublications": undefined,
+                "identifiers": [
+                    {
+                        "@type": "PropertyValue",
+                        "subjectOf": {
+                            "@type": "Website",
+                            "additionalType": "HAL",
+                            "name": "HAL instance",
+                            "url": new URL("https://hal.science/")
+                        },
+                        "url": new URL("https://hal.science/hal-01715545"),
+                        "value": "hal-01715545"
+                    },
+                    {
+                        "@type": "PropertyValue",
+                        "subjectOf": {
+                            "@type": "Website",
+                            "additionalType": "SWH",
+                            "name": "Software Heritage instance",
+                            "url": new URL("https://www.softwareheritage.org/")
+                        },
+                        "url": new URL(
+                            "https://archive.softwareheritage.org/swh:1:dir:424f2533fe51aa8a49d891f8413dd089995cc851;origin=https://hal.archives-ouvertes.fr/hal-01715545;visit=swh:1:snp:9f3237e88d818d975a63da2d5e04d9ad38b42581;anchor=swh:1:rev:8b71800feca2e28cc0f7f78d248e49244b554875;path=/"
+                        ),
+                        "value":
+                            "swh:1:dir:424f2533fe51aa8a49d891f8413dd089995cc851;origin=https://hal.archives-ouvertes.fr/hal-01715545;visit=swh:1:snp:9f3237e88d818d975a63da2d5e04d9ad38b42581;anchor=swh:1:rev:8b71800feca2e28cc0f7f78d248e49244b554875;path=/"
+                    }
+                ],
                 "publicationTime": new Date(1521545908000)
             });
         });
