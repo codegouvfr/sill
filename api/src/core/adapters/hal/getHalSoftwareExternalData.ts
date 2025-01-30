@@ -94,6 +94,27 @@ const codeMetaToReferencePublication = (HALReferencePublication: string[] | Obje
     return undefined;
 };
 
+const HALSource: SILL.WebSite = {
+    "@type": "Website" as const,
+    name: "HAL instance",
+    url: new URL("https://hal.science"),
+    additionalType: "HAL"
+};
+
+const SWHSource: SILL.WebSite = {
+    "@type": "Website" as const,
+    name: "Software Heritage instance",
+    url: new URL("https://www.softwareheritage.org/"),
+    additionalType: "SWH"
+};
+
+const DOISource: SILL.WebSite = {
+    "@type": "Website" as const,
+    name: "DOI instance",
+    url: new URL("https://www.doi.org"),
+    additionalType: "doi"
+};
+
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
     async (halDocId): Promise<SoftwareExternalData | undefined> => {
         const halRawSoftware = await fetchHalSoftwareById(halDocId).catch(error => {
@@ -165,6 +186,30 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             })
         );
 
+        const identifiers: SILL.Identification[] =
+            codemetaSoftware?.identifier?.map(halIdentifier => {
+                const base = {
+                    "@type": "PropertyValue" as const,
+                    value: halIdentifier.value,
+                    url: new URL(halIdentifier.propertyID)
+                };
+                switch (halIdentifier["@type"]) {
+                    case "hal":
+                        return { ...base, subjectOf: HALSource };
+                    case "swhid":
+                        return { ...base, subjectOf: SWHSource };
+                    case "doi":
+                        return { ...base, subjectOf: DOISource };
+                    case "bibcode":
+                    case "cern":
+                    case "prodinra":
+                    case "arxiv":
+                    case "biorxiv":
+                    default:
+                        return base;
+                }
+            }) ?? [];
+
         return {
             externalId: halRawSoftware.docid,
             externalDataOrigin: "HAL",
@@ -192,7 +237,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             publicationTime: halRawSoftware?.releasedDate_tdate
                 ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined,
-            referencePublication: codeMetaToReferencePublication(codemetaSoftware.referencePublication)
+            referencePublication: codeMetaToReferencePublication(codemetaSoftware.referencePublication),
+            identifiers: identifiers
         };
     },
     {
