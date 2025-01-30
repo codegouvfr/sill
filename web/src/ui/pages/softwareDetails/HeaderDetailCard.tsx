@@ -11,6 +11,7 @@ import { Popover } from "@mui/material";
 import React from "react";
 import { AuthorCard } from "ui/shared/AuthorCard";
 import config from "../../config-ui.json";
+import { LogoURLButton } from "ui/shared/LogoURLButton";
 
 export type Props = {
     className?: string;
@@ -218,58 +219,31 @@ export const HeaderDetailCard = memo((props: Props) => {
             </div>
             <div className={classes.externalLinkButtons}>
                 {officialWebsite && (
-                    <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={officialWebsite}
-                        className={cx(
-                            fr.cx(
-                                "fr-icon-global-line",
-                                "fr-btn",
-                                "fr-btn--secondary",
-                                "fr-btn--icon-left",
-                                "fr-my-2v"
-                            )
-                        )}
-                    >
-                        {t("headerDetailCard.website")}
-                    </a>
+                    <LogoURLButton
+                        iconId={"fr-icon-global-line"}
+                        className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
+                        priority="secondary"
+                        url={officialWebsite}
+                        label={t("headerDetailCard.website")}
+                    ></LogoURLButton>
                 )}
                 {documentationWebsite && (
-                    <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={documentationWebsite}
-                        className={cx(
-                            fr.cx(
-                                "fr-icon-global-line",
-                                "fr-btn",
-                                "fr-btn--secondary",
-                                "fr-btn--icon-left",
-                                "fr-ml-4v",
-                                "fr-my-2v"
-                            )
-                        )}
-                    >
-                        {t("headerDetailCard.documentation")}
-                    </a>
+                    <LogoURLButton
+                        iconId={"fr-icon-book-2-line"}
+                        className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
+                        priority="secondary"
+                        url={documentationWebsite}
+                        label={t("headerDetailCard.documentation")}
+                    ></LogoURLButton>
                 )}
                 {sourceCodeRepository && (
-                    <a
-                        target="_blank"
-                        rel="noreferrer"
-                        href={sourceCodeRepository}
-                        className={fr.cx(
-                            "fr-icon-code-s-slash-line",
-                            "fr-btn",
-                            "fr-btn--secondary",
-                            "fr-btn--icon-left",
-                            "fr-ml-4v",
-                            "fr-my-2v"
-                        )}
-                    >
-                        {t("headerDetailCard.repository")}
-                    </a>
+                    <LogoURLButton
+                        iconId={"fr-icon-git-repository-line"}
+                        className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
+                        priority="secondary"
+                        url={sourceCodeRepository}
+                        label={t("headerDetailCard.repository")}
+                    ></LogoURLButton>
                 )}
             </div>
         </div>

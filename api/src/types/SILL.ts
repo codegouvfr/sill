@@ -1,5 +1,5 @@
 export namespace SILL {
-    export type Sources = "GitLab" | "HAL" | "WikiData" | "SWH" | "Orcid" | "doi" | "GitHub";
+    export type Sources = "GitLab" | "HAL" | "WikiData" | "SWH" | "Orcid" | "doi" | "GitHub" | "ComptoirDuLibre";
 
     // from https://schema.org/PropertyValue
     export type Identification = {

@@ -8,8 +8,9 @@ import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
 import config from "../../config-ui.json";
-import { SoftwareType } from "api/dist/src/lib/ApiTypes";
+import { SILL, SoftwareType } from "api/dist/src/lib/ApiTypes";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
+import { LogoURLButton } from "ui/shared/LogoURLButton";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead
 // so we are sure that we don't forget to provide some props
@@ -39,6 +40,7 @@ export type Props = {
     keywords?: string[];
     applicationCategories: string[];
     softwareType: SoftwareType;
+    identifiers: SILL.Identification[];
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -61,7 +63,8 @@ export const PreviewTab = (props: Props) => {
         programmingLanguages,
         keywords,
         applicationCategories,
-        softwareType
+        softwareType,
+        identifiers
     } = props;
 
     const { classes, cx } = useStyles();
@@ -344,39 +347,48 @@ export const PreviewTab = (props: Props) => {
                     </div>
                 )}
 
-                {config.softwareDetails.links.enabled &&
-                    (comptoirDuLibreServiceProvidersUrl !== undefined ||
-                        comptoireDuLibreUrl !== undefined ||
-                        annuaireCnllServiceProviders.length !== 0 ||
-                        wikiDataUrl !== undefined) && (
-                        <div className={classes.section}>
-                            <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                                {t("previewTab.use full links")}
-                            </p>
-                            {comptoireDuLibreUrl !== undefined && (
-                                <a
-                                    href={comptoireDuLibreUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    title={t("previewTab.comptoire du libre sheet")}
-                                    className={cx(classes.externalLink, classes.item)}
-                                >
-                                    {t("previewTab.comptoire du libre sheet")}
-                                </a>
-                            )}
-                            {wikiDataUrl !== undefined && (
-                                <a
-                                    href={wikiDataUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    title={t("previewTab.wikiData sheet")}
-                                    className={cx(classes.externalLink, classes.item)}
-                                >
-                                    {t("previewTab.wikiData sheet")}
-                                </a>
-                            )}
-                        </div>
-                    )}
+                {config.softwareDetails.links.enabled && (
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("previewTab.use full links")}
+                        </p>
+                        {(comptoirDuLibreServiceProvidersUrl !== undefined ||
+                            comptoireDuLibreUrl !== undefined ||
+                            annuaireCnllServiceProviders.length !== 0 ||
+                            wikiDataUrl !== undefined) && (
+                            <>
+                                {comptoireDuLibreUrl !== undefined && (
+                                    <LogoURLButton
+                                        className={cx(classes.externalLink, classes.item)}
+                                        priority="secondary"
+                                        url={comptoireDuLibreUrl}
+                                        label={t("previewTab.comptoire du libre sheet")}
+                                    ></LogoURLButton>
+                                )}
+                                {wikiDataUrl !== undefined && (
+                                    <LogoURLButton
+                                        className={cx(classes.externalLink, classes.item)}
+                                        priority="secondary"
+                                        url={wikiDataUrl}
+                                        label={t("previewTab.wikiData sheet")}
+                                    ></LogoURLButton>
+                                )}
+                            </>
+                        )}
+                        {identifiers && (
+                            <>
+                                {identifiers.map(identifier => (
+                                    <LogoURLButton
+                                        className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
+                                        priority="secondary"
+                                        url={identifier.url}
+                                        labelFromURL={true}
+                                    ></LogoURLButton>
+                                ))}
+                            </>
+                        )}
+                    </div>
+                )}
             </section>
             <CnllServiceProviderModal
                 softwareName={softwareName}
