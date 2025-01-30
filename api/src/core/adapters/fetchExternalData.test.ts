@@ -195,6 +195,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguages: [],
                     referencePublications: null,
+                    identifiers: null,
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
@@ -224,6 +225,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: null,
+                    identifiers: null,
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date)
                 }
@@ -279,6 +281,7 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
                     referencePublications: null,
+                    identifiers: null,
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z")
