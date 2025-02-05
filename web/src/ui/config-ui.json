@@ -79,11 +79,11 @@
                 "keywords": true,
                 "programmingLanguages": true,
                 "applicationCategories": true,
-                "softwareType": true
+                "softwareType": false
             }
         },
         "links": {
-            "enabled": false
+            "enabled": true
         },
         "userActions": {
             "enabled": false
