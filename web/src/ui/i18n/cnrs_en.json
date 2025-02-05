@@ -13,5 +13,8 @@
         "title": "Catalog of academic research software",
         "navigation welcome": "Welcome on the SILL",
         "navigation support request": "Contribute !"
+    },
+    "headerDetailCard": {
+        "website": "HAL Notice"
     }
 }

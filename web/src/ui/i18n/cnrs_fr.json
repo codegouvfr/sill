@@ -21,5 +21,8 @@
         "title": "Catalogue des logiciels de la recherche académique",
         "navigation welcome": "Bienvenue sur le SILL",
         "navigation support request": "Contribuez !"
+    },
+    "headerDetailCard": {
+        "website": "Notice HAL"
     }
 }
