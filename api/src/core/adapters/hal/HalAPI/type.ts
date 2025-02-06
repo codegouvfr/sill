@@ -200,7 +200,7 @@ export type HalStructure = {
     parentUpdateDate_tdate: string[];
     parentUrl_s: string;
     parentValid_s: string;
-    ror_s: string;
+    ror_s: string | string[];
     rorUrl_s: string;
     text: string;
     exte_autocomplete: string;

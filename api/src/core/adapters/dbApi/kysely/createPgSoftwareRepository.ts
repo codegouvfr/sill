@@ -179,7 +179,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             "@type": "Person",
                             name: dev.name,
                             url: dev.url,
-                            affiliation: dev.affiliation
+                            affiliations: dev.affiliations
                         })),
                         officialWebsiteUrl:
                             softwareExternalData?.websiteUrl ??
@@ -277,7 +277,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 "@type": "Person",
                                 name: dev.name,
                                 url: dev.url,
-                                affiliation: dev.affiliation
+                                affiliations: dev.affiliations
                             })),
                             officialWebsiteUrl:
                                 softwareExternalData?.websiteUrl ??
@@ -552,7 +552,7 @@ const makeGetSoftwareById =
                         "@type": "Person",
                         name: dev.name,
                         url: dev.url,
-                        affiliation: dev.affiliation
+                        affiliations: dev.affiliations
                     })),
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??

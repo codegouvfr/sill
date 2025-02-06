@@ -131,8 +131,8 @@ export const HeaderDetailCard = memo((props: Props) => {
                                             {(!config.softwareDetails.authorCard ||
                                                 author["@type"] === "Organization" ||
                                                 (author["@type"] === "Person" &&
-                                                    (!author.affiliation ||
-                                                        author.affiliation?.length <=
+                                                    (!author.affiliations ||
+                                                        author.affiliations?.length <=
                                                             0))) && (
                                                 <a
                                                     href={author.url}
@@ -145,8 +145,8 @@ export const HeaderDetailCard = memo((props: Props) => {
 
                                             {config.softwareDetails.authorCard &&
                                                 author["@type"] === "Person" &&
-                                                author.affiliation &&
-                                                author.affiliation?.length > 0 && (
+                                                author.affiliations &&
+                                                author.affiliations?.length > 0 && (
                                                     <>
                                                         <button
                                                             id={`a-popover-${author.name}`}
