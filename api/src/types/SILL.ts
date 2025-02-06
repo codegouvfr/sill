@@ -4,17 +4,16 @@ export namespace SILL {
         "@type": "Organization";
         identifier?: string;
         name: string;
-        url: string | undefined;
-        parentOrganization?: Organization[];
+        url?: string;
+        parentOrganizations?: Organization[];
     };
 
-    // from https://schema.org/Organization
+    // from https://schema.org/Person
     export type Person = {
-        "@id"?: string[];
         "@type": "Person";
-        name?: string;
+        name: string;
         identifier?: string;
         url?: string;
-        affiliation?: Organization[];
+        affiliations?: Organization[];
     };
 }

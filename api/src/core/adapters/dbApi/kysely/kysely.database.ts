@@ -5,7 +5,7 @@ type SchemaOrganization = {
     "@type": "Organization";
     name: string;
     url: string | undefined;
-    parentOrganization?: SchemaOrganization[];
+    parentOrganizations?: SchemaOrganization[];
 };
 
 export type Database = {
@@ -76,8 +76,8 @@ type SoftwareExternalDatasTable = {
             name: string;
             identifier?: string;
             url: string;
-            affiliation?: SchemaOrganization[];
-            parentOrganization?: SchemaOrganization[];
+            affiliations?: SchemaOrganization[];
+            parentOrganizations?: SchemaOrganization[];
         }[]
     >;
     label: string | JSONColumnType<LocalizedString>;

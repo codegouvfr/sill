@@ -32,7 +32,7 @@ export function AuthorCard(props: Props) {
                 }
             ></CardHeader>
             <h6>{t("authorCard.affiliatedStructure")}</h6>
-            {author?.affiliation?.map(affiliatedOrganization => {
+            {author?.affiliations?.map(affiliatedOrganization => {
                 return (
                     <>
                         <a
@@ -43,7 +43,7 @@ export function AuthorCard(props: Props) {
                             {affiliatedOrganization.name}
                         </a>
                         <ul>
-                            {affiliatedOrganization.parentOrganization?.map(
+                            {affiliatedOrganization.parentOrganizations?.map(
                                 parentOrganization => (
                                     <li>
                                         <a
@@ -53,9 +53,9 @@ export function AuthorCard(props: Props) {
                                         >
                                             {parentOrganization.name}
                                         </a>
-                                        {parentOrganization.parentOrganization && (
+                                        {parentOrganization.parentOrganizations && (
                                             <ul>
-                                                {parentOrganization.parentOrganization.map(
+                                                {parentOrganization.parentOrganizations.map(
                                                     parentOrganization3 => (
                                                         <li>
                                                             <a

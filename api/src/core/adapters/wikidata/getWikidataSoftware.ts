@@ -237,7 +237,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                             getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5" ? "Person" : "Organization", // Q5 : Humans
                         name,
                         identifier: entity.id,
-                        "url": `https://www.wikidata.org/wiki/${entity.id}`
+                        url: `https://www.wikidata.org/wiki/${entity.id}`
                     };
                 })
             ).then(developers =>

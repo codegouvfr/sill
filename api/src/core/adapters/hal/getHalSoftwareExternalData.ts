@@ -21,8 +21,8 @@ const buildParentOrganizationTree = async (
             return {
                 "@type": "Organization",
                 "name": structure.name_s,
-                "url": structure?.ror_s ?? structure?.url_s,
-                "parentOrganization": await buildParentOrganizationTree(structure?.parentDocid_i)
+                "url": structure.ror_s?.[0] ?? structure.ror_s ?? structure?.url_s,
+                "parentOrganizations": await buildParentOrganizationTree(structure?.parentDocid_i)
             };
         })
     );
@@ -61,7 +61,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                     "@type": "Person",
                     "name": `${author.givenName} ${author.familyName}`,
                     "identifier": id,
-                    "affiliation": [] as SILL.Organization[]
+                    "affiliations": [] as SILL.Organization[]
                 };
 
                 if (affiliation?.length && affiliation.length > 0) {
@@ -76,12 +76,12 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                                 return {
                                     "@type": "Organization" as const,
                                     "name": structure.name_s,
-                                    "url": structure.ror_s ?? structure?.url_s,
-                                    "parentOrganization": await buildParentOrganizationTree(structure.parentDocid_i)
+                                    "url": structure.ror_s?.[0] ?? structure.ror_s ?? structure?.url_s,
+                                    "parentOrganizations": await buildParentOrganizationTree(structure.parentDocid_i)
                                 };
                             })
                     );
-                    base.affiliation = structures;
+                    base.affiliations = structures;
                 }
 
                 if (id?.split("-")?.length === 4 && id?.length === 19) {
