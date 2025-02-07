@@ -4,6 +4,7 @@ import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
 import { SILL } from "../../../types/SILL";
+import { HAL } from "./types/HAL";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -28,9 +29,9 @@ const buildParentOrganizationTree = async (
     );
 };
 
-const parseReferencePublication = (key: string, value: string | string[]): SILL.ScholarlyArticle[] => {
+const parseReferencePublication = (source: HAL.ArticleIdentifierOrigin, value: string | string[]): SILL.ScholarlyArticle[] => {
     const arrayValue = typeof value === "string" ? value.split(",") : value;
-    switch (key) {
+    switch (source) {
         case "hal":
             return arrayValue.map((halThing): SILL.ScholarlyArticle => {
                 return {
@@ -73,6 +74,7 @@ const parseReferencePublication = (key: string, value: string | string[]): SILL.
                 };
             });
         default:
+            source satisfies never;
             return [];
     }
 };
@@ -86,7 +88,7 @@ const codeMetaToReferencePublication = (HALReferencePublication: string[] | Obje
 
         return Object.entries(HALReferencePublication).reduce(
             (publicationArray: SILL.ScholarlyArticle[], [key, value]) => {
-                return publicationArray.concat(parseReferencePublication(key, value));
+                return publicationArray.concat(parseReferencePublication(key as HAL.ArticleIdentifierOrigin, value));
             },
             []
         );
