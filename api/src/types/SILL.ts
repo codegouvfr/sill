@@ -3,15 +3,17 @@ export namespace SILL {
     export type ScholarlyArticle = {
         "@id": string;
         "@type": "ScholarlyArticle";
-        identifier?: PropertyValue;
+        identifier: ArticleIdentifier;
     };
 
+    export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";
+
     // from https://schema.org/PropertyValue
-    export type PropertyValue = {
-        "@type"?: "PropertyValue";
-        value?: string;
-        propertyID?: string;
-        url?: URL | null;
+    export type ArticleIdentifier = {
+        "@type": "PropertyValue";
+        value: string;
+        propertyID: ArticleIdentifierOrigin;
+        url: URL | null;
     };
 
     // from https://schema.org/Organization

@@ -10,6 +10,8 @@ export namespace HAL {
         affiliation?: SILL.Organization[];
     };
 
+    export type ArticleIdentifierOrigin = "doi" | "arxiv" | "hal";
+
     // HAL implementation of https://codemeta.github.io/terms/
     export type SoftwareApplication = {
         "@context"?: string[];
