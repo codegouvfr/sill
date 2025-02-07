@@ -61,9 +61,9 @@ const resolveLogoFromURL = (
 };
 
 const resolveLogoFromType = (
-    type: ApiTypes.SILL.Sources
+    sourceType: ApiTypes.SILL.Sources
 ): { URLlogo: URL | undefined; textFromURL: string | undefined } => {
-    switch (type) {
+    switch (sourceType) {
         case "HAL":
             return {
                 URLlogo: new URL(
@@ -118,6 +118,7 @@ const resolveLogoFromType = (
                 textFromURL: "GitComptoir Du Libre"
             };
         default:
+            sourceType satisfies never;
             return {
                 URLlogo: undefined,
                 textFromURL: undefined
