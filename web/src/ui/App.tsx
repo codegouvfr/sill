@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { tss, useStyles as useCss } from "tss-react";
 import { useRoute } from "ui/routes";
 import { Header } from "ui/shared/Header";
@@ -18,6 +18,10 @@ import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFall
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
 import { PromptForOrganization } from "./shared/PromptForOrganization";
+
+const title =
+    process.env.REACT_APP_SILL_WEBSITE_TITLE ??
+    "Le socle interministériel de logiciels libres est un ensemble de logiciels libres préconisés par l'État français depuis 2013.";
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
@@ -92,6 +96,12 @@ function ContextualizedApp() {
     } = useDomRect();
 
     const { classes } = useStyles({ headerHeight });
+
+    if (title) {
+        useEffect(() => {
+            document.title = title;
+        }, []);
+    }
 
     return (
         <div className={classes.root}>
