@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { useTranslation, evtLang } from "ui/i18n";
+import { evtLang } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { Button } from "@codegouvfr/react-dsfr/Button";
@@ -22,7 +22,6 @@ import { useRerenderOnStateChange } from "evt/hooks";
 import { Evt } from "evt";
 import { useConst } from "powerhooks/useConst";
 import { routes } from "ui/routes";
-import type { Link } from "type-route";
 
 type Props = {
     className?: string;
@@ -52,7 +51,7 @@ export default function Account(props: Props) {
 function AccountReady(props: { className?: string }) {
     const { className } = props;
 
-    const { t } = useTranslation({ Account });
+    const { t } = useTranslation();
 
     const { email, aboutAndIsPublic, doSupportAccountManagement } =
         (function useClosure() {
@@ -99,10 +98,10 @@ function AccountReady(props: { className?: string }) {
     return (
         <div className={cx(fr.cx("fr-container"), className)}>
             <div className={classes.oidcInfos}>
-                <h2 className={classes.title}>{t("title")}</h2>
+                <h2 className={classes.title}>{t("account.title")}</h2>
 
                 <Input
-                    label={t("mail")}
+                    label={t("account.mail")}
                     nativeInputProps={{
                         "value": email.value,
                         "name": "email",
@@ -117,15 +116,15 @@ function AccountReady(props: { className?: string }) {
                         className={fr.cx("fr-btn", "fr-btn--secondary", "fr-mb-4w")}
                         href={userAccountManagement.getAccountManagementUrl()}
                     >
-                        {t("manage account")}
+                        {t("account.manage account")}
                     </a>
                 )}
 
                 <OrganizationField firstTime={false} />
             </div>
             <>
-                <h2>{t("about title")}</h2>
-                <p> {t("about description")} </p>
+                <h2>{t("account.about title")}</h2>
+                <p> {t("account.about description")} </p>
                 <div
                     style={{
                         "display": "flex",
@@ -138,7 +137,7 @@ function AccountReady(props: { className?: string }) {
                         disabled={aboutAndIsPublic.isBeingUpdated}
                         options={[
                             {
-                                "label": t("isPublic label"),
+                                "label": t("account.isPublic label"),
                                 "nativeInputProps": {
                                     "checked": isPublicInputValue,
                                     "onChange": event =>
@@ -146,12 +145,25 @@ function AccountReady(props: { className?: string }) {
                                 }
                             }
                         ]}
-                        stateRelatedMessage={t("isPublic hint", {
-                            "profileLik": routes.userProfile({ "email": email.value })
-                                .link
-                        })}
+                        stateRelatedMessage={
+                            <Trans
+                                i18nKey="account.isPublic hint"
+                                components={{
+                                    a: (
+                                        /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                        <a
+                                            href={
+                                                routes.userProfile({
+                                                    "email": email.value
+                                                }).link.href
+                                            }
+                                        />
+                                    ),
+                                    space: <span> </span>
+                                }}
+                            ></Trans>
+                        }
                     />
-
                     <Button
                         className={cx(
                             classes.updateButton,
@@ -173,7 +185,7 @@ function AccountReady(props: { className?: string }) {
                             aboutAndIsPublic.isPublic === isPublicInputValue
                         }
                     >
-                        {t("update")}
+                        {t("account.update")}
                     </Button>
                     {aboutAndIsPublic.isBeingUpdated && <CircularProgress size={30} />}
                 </div>
@@ -201,7 +213,7 @@ function AccountReady(props: { className?: string }) {
                         "marginBottom": fr.spacing("6v")
                     }}
                 >
-                    {t("go to profile")}
+                    {t("account.go to profile")}
                 </a>
             </>
         </div>
@@ -247,26 +259,3 @@ const useStyles = tss.withName({ Account }).create({
         "marginLeft": fr.spacing("4v")
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "title"
-    | "mail"
-    | "organization"
-    | "manage account"
-    | "no organization"
-    | "update"
-    | "not a valid email"
-    | {
-          K: "email domain not allowed";
-          P: { domain: string };
-      }
-    | "about title"
-    | "about description"
-    | "isPublic label"
-    | {
-          K: "isPublic hint";
-          P: { profileLik: Link };
-          R: JSX.Element;
-      }
-    | "go to profile"
->()({ Account });

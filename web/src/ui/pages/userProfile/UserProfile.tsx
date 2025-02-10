@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { assert } from "tsafe/assert";
 import { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
 import { useCore, useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
@@ -36,7 +35,7 @@ export default function UserProfile(props: Props) {
         };
     }, [route.params.email]);
 
-    const { t } = useTranslation({ UserProfile });
+    const { t } = useTranslation();
 
     const { cx, classes } = useStyles();
 
@@ -75,7 +74,7 @@ export default function UserProfile(props: Props) {
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
                 <h4 className={classes.headerTitle}>
-                    {t("agent profile", {
+                    {t("userProfile.agent profile", {
                         "email": profile.email,
                         "organization": profile.organization
                     })}
@@ -87,7 +86,7 @@ export default function UserProfile(props: Props) {
                         priority="secondary"
                         linkProps={routes.account().link}
                     >
-                        {t("edit my profile")}
+                        {t("userProfile.edit my profile")}
                     </Button>
                 )}
             </div>
@@ -117,11 +116,13 @@ export default function UserProfile(props: Props) {
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
-                                {t("badge text", {
-                                    isUser,
-                                    isTechnicalExpert,
-                                    isReferent
-                                })}
+                                {isReferent && isTechnicalExpert
+                                    ? t("userProfile.badge text_expert")
+                                    : isReferent
+                                    ? t("userProfile.badge text_referent")
+                                    : isUser
+                                    ? t("userProfile.badge text_user")
+                                    : ""}
                             </Tag>
                             <Markdown className={classes.usecaseDescription}>
                                 {usecaseDescription}
@@ -133,7 +134,7 @@ export default function UserProfile(props: Props) {
             {profile.about !== undefined ? (
                 <Markdown>{profile.about}</Markdown>
             ) : (
-                <p>{t("no description")}</p>
+                <p>{t("userProfile.no description")}</p>
             )}
             <div className={classes.sendEmailButtonWrapper}>
                 <Button
@@ -141,33 +142,12 @@ export default function UserProfile(props: Props) {
                         "href": `mailto:${profile.email}`
                     }}
                 >
-                    {t("send email")}
+                    {t("userProfile.send email")}
                 </Button>
             </div>
         </div>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "agent profile";
-          P: {
-              email: string;
-              organization: string | null;
-          };
-      }
-    | "no description"
-    | "send email"
-    | "edit my profile"
-    | {
-          K: "badge text";
-          P: {
-              isUser: boolean;
-              isTechnicalExpert: boolean | undefined;
-              isReferent: boolean;
-          };
-      }
->()({ UserProfile });
 
 const useStyles = tss.withName({ UserProfile }).create({
     "header": {

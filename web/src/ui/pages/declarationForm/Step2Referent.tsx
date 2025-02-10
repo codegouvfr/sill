@@ -5,8 +5,7 @@ import { useEvt } from "evt/hooks";
 import type { FormData } from "core/usecases/declarationForm";
 import { Input } from "@codegouvfr/react-dsfr/Input";
 import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
-import { useTranslation } from "ui/i18n";
-import { declareComponentKeys } from "i18nifty";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     className?: string;
@@ -42,8 +41,7 @@ export function DeclarationFormStep2Referent(props: Props) {
         [evtActionSubmit, submitButtonElement]
     );
 
-    const { t } = useTranslation({ DeclarationFormStep2Referent });
-    const { t: tCommon } = useTranslation({ "App": "App" });
+    const { t } = useTranslation();
 
     return (
         <form
@@ -71,11 +69,11 @@ export function DeclarationFormStep2Referent(props: Props) {
             )}
         >
             <RadioButtons
-                legend={t("legend title")}
-                hintText={t("legend hint")}
+                legend={t("declarationFormStep2Referent.legend title")}
+                hintText={t("declarationFormStep2Referent.legend hint")}
                 options={[
                     {
-                        "label": tCommon("yes"),
+                        "label": t("app.yes"),
                         "nativeInputProps": {
                             ...register("isTechnicalExpertInputValue", {
                                 "required": true
@@ -84,7 +82,7 @@ export function DeclarationFormStep2Referent(props: Props) {
                         }
                     },
                     {
-                        "label": tCommon("no"),
+                        "label": t("app.no"),
                         "nativeInputProps": {
                             ...register("isTechnicalExpertInputValue", {
                                 "required": true
@@ -96,20 +94,20 @@ export function DeclarationFormStep2Referent(props: Props) {
                 state={
                     errors.isTechnicalExpertInputValue !== undefined ? "error" : undefined
                 }
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
 
             <Input
-                label={t("useCase")}
+                label={t("declarationFormStep2Referent.useCase")}
                 nativeInputProps={{
                     ...register("usecaseDescription", { "required": true })
                 }}
                 state={errors.usecaseDescription !== undefined ? "error" : undefined}
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
             {softwareType === "cloud" && (
                 <Input
-                    label={t("service")}
+                    label={t("declarationFormStep2Referent.service")}
                     nativeInputProps={{
                         ...register("serviceUrlInputValue", {
                             "pattern": /^http/
@@ -118,7 +116,7 @@ export function DeclarationFormStep2Referent(props: Props) {
                     state={
                         errors.serviceUrlInputValue !== undefined ? "error" : undefined
                     }
-                    stateRelatedMessage={tCommon("invalid url")}
+                    stateRelatedMessage={t("app.invalid url")}
                 />
             )}
             <button
@@ -129,9 +127,3 @@ export function DeclarationFormStep2Referent(props: Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "legend title" | "legend hint" | "useCase" | "service"
->()({
-    DeclarationFormStep2Referent
-});

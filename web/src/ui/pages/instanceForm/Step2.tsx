@@ -4,8 +4,7 @@ import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import { Input } from "@codegouvfr/react-dsfr/Input";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 
 export type Step1Props = {
     className?: string;
@@ -49,8 +48,7 @@ export function InstanceFormStep2(props: Step1Props) {
     const [submitButtonElement, setSubmitButtonElement] =
         useState<HTMLButtonElement | null>(null);
 
-    const { t } = useTranslation({ InstanceFormStep2 });
-    const { t: tCommon } = useTranslation({ "App": null });
+    const { t } = useTranslation();
 
     useEvt(
         ctx => {
@@ -77,11 +75,11 @@ export function InstanceFormStep2(props: Step1Props) {
             )}
         >
             <RadioButtons
-                legend={t("is in public access label")}
-                hintText={t("is in public access hint")}
+                legend={t("instanceFormStep2.is in public access label")}
+                hintText={t("instanceFormStep2.is in public access hint")}
                 options={[
                     {
-                        "label": tCommon("yes"),
+                        "label": t("app.yes"),
                         "nativeInputProps": {
                             ...register("isPublic", {
                                 "required": true
@@ -90,7 +88,7 @@ export function InstanceFormStep2(props: Step1Props) {
                         }
                     },
                     {
-                        "label": tCommon("no"),
+                        "label": t("app.no"),
                         "nativeInputProps": {
                             ...register("isPublic", {
                                 "required": true
@@ -100,12 +98,12 @@ export function InstanceFormStep2(props: Step1Props) {
                     }
                 ]}
                 state={errors.isPublic !== undefined ? "error" : undefined}
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
 
             <Input
-                label={t("instance url label")}
-                hintText={t("instance url hint")}
+                label={t("instanceFormStep2.instance url label")}
+                hintText={t("instanceFormStep2.instance url hint")}
                 nativeInputProps={{
                     ...register("instanceUrl", {
                         "required": watch("isPublic") === "true",
@@ -114,27 +112,27 @@ export function InstanceFormStep2(props: Step1Props) {
                 }}
                 state={errors.instanceUrl !== undefined ? "error" : undefined}
                 stateRelatedMessage={
-                    errors.instanceUrl ? tCommon("invalid url") : tCommon("required")
+                    errors.instanceUrl ? t("app.invalid url") : t("app.required")
                 }
             />
 
             <Input
-                label={t("organization label")}
-                hintText={t("organization hint")}
+                label={t("instanceFormStep2.organization label")}
+                hintText={t("instanceFormStep2.organization hint")}
                 nativeInputProps={{
                     ...register("organization", { "required": true })
                 }}
                 state={errors.organization !== undefined ? "error" : undefined}
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
             <Input
-                label={t("targeted public label")}
-                hintText={t("targeted public hint")}
+                label={t("instanceFormStep2.targeted public label")}
+                hintText={t("instanceFormStep2.targeted public hint")}
                 nativeInputProps={{
                     ...register("targetAudience", { "required": true })
                 }}
                 state={errors.targetAudience !== undefined ? "error" : undefined}
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
             <button
                 style={{ "display": "none" }}
@@ -144,14 +142,3 @@ export function InstanceFormStep2(props: Step1Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    | "is in public access label"
-    | "is in public access hint"
-    | "instance url label"
-    | "instance url hint"
-    | "organization label"
-    | "organization hint"
-    | "targeted public label"
-    | "targeted public hint"
->()({ InstanceFormStep2 });

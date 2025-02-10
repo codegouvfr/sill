@@ -3,8 +3,7 @@ import { useCoreState, useCore } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { HeaderDetailCard } from "ui/pages/softwareDetails/HeaderDetailCard";
 import { PreviewTab } from "ui/pages/softwareDetails/PreviewTab";
 import { ReferencedInstancesTab } from "ui/pages/softwareDetails/ReferencedInstancesTab";
@@ -23,6 +22,7 @@ import {
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import type { ApiTypes } from "api";
+import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -36,7 +36,7 @@ export default function SoftwareDetails(props: Props) {
 
     const { cx, classes } = useStyles();
 
-    const { t } = useTranslation({ SoftwareDetails });
+    const { t } = useTranslation();
 
     const { isReady, software, userDeclaration, isUnreferencingOngoing } = useCoreState(
         "softwareDetails",
@@ -58,21 +58,28 @@ export default function SoftwareDetails(props: Props) {
     return (
         <>
             <div className={className}>
-                <div className={fr.cx("fr-container")}>
+                <div
+                    className={fr.cx("fr-container")}
+                    style={{ marginBottom: fr.spacing("6v") }}
+                >
                     <Breadcrumb
                         segments={[
                             {
                                 "linkProps": {
                                     ...routes.softwareCatalog().link
                                 },
-                                "label": t("catalog breadcrumb")
+                                "label": t("softwareDetails.catalog breadcrumb")
                             }
                         ]}
                         currentPageLabel={software.softwareName}
                         className={classes.breadcrumb}
                     />
                     <HeaderDetailCard
-                        softwareLogoUrl={software.logoUrl ?? softwareLogoPlaceholder}
+                        softwareLogoUrl={
+                            software?.logoUrl ?? config.softwareDetails.defaultLogo
+                                ? softwareLogoPlaceholder
+                                : undefined
+                        }
                         softwareName={software.softwareName}
                         softwareDereferencing={software.dereferencing}
                         authors={software.authors}
@@ -95,7 +102,7 @@ export default function SoftwareDetails(props: Props) {
                     <Tabs
                         tabs={[
                             {
-                                "label": t("tab title overview"),
+                                "label": t("softwareDetails.tab title overview"),
                                 "isDefault": route.params.tab === undefined,
                                 "content": (
                                     <PreviewTab
@@ -143,6 +150,7 @@ export default function SoftwareDetails(props: Props) {
                                         applicationCategories={
                                             software?.applicationCategories
                                         }
+                                        softwareType={software?.softwareType}
                                     />
                                 )
                             },
@@ -150,9 +158,12 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t("tab title instance", {
-                                              "instanceCount": software.instances.length
-                                          }),
+                                          "label": t(
+                                              "softwareDetails.tab title instance",
+                                              {
+                                                  instanceCount: software.instances.length
+                                              }
+                                          ),
                                           "isDefault": route.params.tab === "instances",
                                           "content": (
                                               <ReferencedInstancesTab
@@ -171,14 +182,19 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t("tab service providers", {
-                                              "serviceProvidersCount":
-                                                  software.serviceProviders.length
-                                          }),
+                                          "label": t(
+                                              "softwareDetails.tab service providers",
+                                              {
+                                                  serviceProvidersCount:
+                                                      software.serviceProviders.length
+                                              }
+                                          ),
                                           "content": (
                                               <div>
                                                   <p className={fr.cx("fr-text--bold")}>
-                                                      {t("list of service providers")}
+                                                      {t(
+                                                          "softwareDetails.list of service providers"
+                                                      )}
                                                   </p>
                                                   <ul>
                                                       {software.serviceProviders.map(
@@ -202,10 +218,14 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t("tab title alike software", {
-                                              alikeSoftwareCount:
-                                                  software.similarSoftwares.length ?? 0
-                                          }),
+                                          "label": t(
+                                              "softwareDetails.tab title alike software",
+                                              {
+                                                  alikeSoftwareCount:
+                                                      software.similarSoftwares.length ??
+                                                      0
+                                              }
+                                          ),
                                           "isDefault":
                                               route.params.tab === "alternatives",
                                           "content": (
@@ -243,122 +263,126 @@ export default function SoftwareDetails(props: Props) {
                         ]}
                     />
                 </div>
-                <ActionsFooter className={classes.container}>
-                    <DetailUsersAndReferents
-                        className={cx(
-                            fr.cx("fr-text--lg"),
-                            classes.detailUsersAndReferents
-                        )}
-                        seeUserAndReferent={
-                            software.referentCount > 0 || software.userCount > 0
-                                ? routes.softwareUsersAndReferents({
-                                      "name": software.softwareName
-                                  }).link
-                                : undefined
-                        }
-                        referentCount={software.referentCount ?? 0}
-                        userCount={software.userCount ?? 0}
-                    />
-                    <div className={classes.buttons}>
-                        {software.dereferencing === undefined && (
+                {config.softwareDetails.userActions.enabled && (
+                    <ActionsFooter className={classes.container}>
+                        <DetailUsersAndReferents
+                            className={cx(
+                                fr.cx("fr-text--lg"),
+                                classes.detailUsersAndReferents
+                            )}
+                            seeUserAndReferent={
+                                software.referentCount > 0 || software.userCount > 0
+                                    ? routes.softwareUsersAndReferents({
+                                          "name": software.softwareName
+                                      }).link
+                                    : undefined
+                            }
+                            referentCount={software.referentCount ?? 0}
+                            userCount={software.userCount ?? 0}
+                        />
+                        <div className={classes.buttons}>
+                            {software.dereferencing === undefined && (
+                                <Button
+                                    priority="secondary"
+                                    disabled={isUnreferencingOngoing}
+                                    onClick={() => {
+                                        if (!userAuthentication.getIsUserLoggedIn()) {
+                                            userAuthentication.login({
+                                                "doesCurrentHrefRequiresAuth": false
+                                            });
+                                            return;
+                                        }
+
+                                        const userInput = window.prompt(
+                                            t(
+                                                "softwareDetails.please provide a reason for unreferencing this software"
+                                            )
+                                        );
+
+                                        if (userInput === null || userInput === "") {
+                                            return;
+                                        }
+
+                                        softwareDetails.unreference({
+                                            "reason": userInput
+                                        });
+                                    }}
+                                >
+                                    {isUnreferencingOngoing ? (
+                                        <CircularProgress size={17} />
+                                    ) : (
+                                        t("softwareDetails.unreference software")
+                                    )}
+                                </Button>
+                            )}
+
                             <Button
                                 priority="secondary"
-                                disabled={isUnreferencingOngoing}
-                                onClick={() => {
-                                    if (!userAuthentication.getIsUserLoggedIn()) {
-                                        userAuthentication.login({
-                                            "doesCurrentHrefRequiresAuth": false
-                                        });
-                                        return;
-                                    }
-
-                                    const userInput = window.prompt(
-                                        t(
-                                            "please provide a reason for unreferencing this software"
-                                        )
-                                    );
-
-                                    if (userInput === null || userInput === "") {
-                                        return;
-                                    }
-
-                                    softwareDetails.unreference({
-                                        "reason": userInput
-                                    });
-                                }}
+                                linkProps={
+                                    routes.softwareUpdateForm({
+                                        "name": software.softwareName
+                                    }).link
+                                }
                             >
-                                {isUnreferencingOngoing ? (
-                                    <CircularProgress size={17} />
-                                ) : (
-                                    t("unreference software")
-                                )}
+                                {t("softwareDetails.edit software")}
                             </Button>
-                        )}
+                            {(() => {
+                                const declarationType = userDeclaration?.isReferent
+                                    ? "referent"
+                                    : userDeclaration?.isUser
+                                    ? "user"
+                                    : undefined;
 
-                        <Button
-                            priority="secondary"
-                            linkProps={
-                                routes.softwareUpdateForm({
-                                    "name": software.softwareName
-                                }).link
-                            }
-                        >
-                            {t("edit software")}
-                        </Button>
-                        {(() => {
-                            const declarationType = userDeclaration?.isReferent
-                                ? "referent"
-                                : userDeclaration?.isUser
-                                ? "user"
-                                : undefined;
-
-                            if (declarationType === undefined) {
-                                return (
-                                    <Button
-                                        linkProps={
-                                            routes.declarationForm({
-                                                "name": software.softwareName
-                                            }).link
-                                        }
-                                    >
-                                        {t("declare referent")}
-                                    </Button>
-                                );
-                            }
-
-                            return (
-                                <>
-                                    <Button
-                                        priority="tertiary no outline"
-                                        onClick={() =>
-                                            openDeclarationRemovalModal({
-                                                declarationType,
-                                                "softwareName": software.softwareName,
-                                                "softwareId": software.softwareId
-                                            })
-                                        }
-                                    >
-                                        {t("stop being user/referent", {
-                                            declarationType
-                                        })}
-                                    </Button>
-                                    {declarationType === "user" && (
+                                if (declarationType === undefined) {
+                                    return (
                                         <Button
                                             linkProps={
                                                 routes.declarationForm({
-                                                    "name": software.softwareName,
-                                                    "declarationType": "referent"
+                                                    "name": software.softwareName
                                                 }).link
                                             }
                                         >
-                                            {t("become referent")}
+                                            {t("softwareDetails.declare referent")}
                                         </Button>
-                                    )}
-                                </>
-                            );
-                        })()}
-                    </div>
-                </ActionsFooter>
+                                    );
+                                }
+
+                                return (
+                                    <>
+                                        <Button
+                                            priority="tertiary no outline"
+                                            onClick={() =>
+                                                openDeclarationRemovalModal({
+                                                    declarationType,
+                                                    "softwareName": software.softwareName,
+                                                    "softwareId": software.softwareId
+                                                })
+                                            }
+                                        >
+                                            {declarationType === "user"
+                                                ? t("softwareDetails.stop being user")
+                                                : t(
+                                                      "softwareDetails.stop being referent"
+                                                  )}
+                                        </Button>
+                                        {declarationType === "user" && (
+                                            <Button
+                                                linkProps={
+                                                    routes.declarationForm({
+                                                        "name": software.softwareName,
+                                                        "declarationType": "referent"
+                                                    }).link
+                                                }
+                                            >
+                                                {t("softwareDetails.become referent")}
+                                            </Button>
+                                        )}
+                                    </>
+                                );
+                            })()}
+                        </div>
+                    </ActionsFooter>
+                )}
             </div>
             {userDeclaration !== undefined && <DeclarationRemovalModal />}
         </>
@@ -415,33 +439,3 @@ const useStyles = tss.withName({ SoftwareDetails }).create({
         "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "catalog breadcrumb"
-    | "tab title overview"
-    | { K: "tab title instance"; P: { instanceCount: number } }
-    | { K: "tab service providers"; P: { serviceProvidersCount: number } }
-    | { K: "tab title alike software"; P: { alikeSoftwareCount: number } }
-    | "list of service providers"
-    | "prerogatives"
-    | "last version"
-    | { K: "last version date"; P: { date: string } }
-    | "register"
-    | { K: "register date"; P: { date: string } }
-    | "minimal version"
-    | "license"
-    | "declare oneself referent"
-    | "hasDesktopApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "isRGAACompliant"
-    | "comptoire du libre sheet"
-    | "wikiData sheet"
-    | "share software"
-    | "declare referent"
-    | "edit software"
-    | { K: "stop being user/referent"; P: { declarationType: "user" | "referent" } }
-    | "become referent"
-    | "please provide a reason for unreferencing this software"
-    | "unreference software"
->()({ SoftwareDetails });

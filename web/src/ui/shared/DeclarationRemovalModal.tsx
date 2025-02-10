@@ -3,8 +3,7 @@ import { useCoreState, useCore } from "core";
 import { Evt } from "evt";
 import { useEvt } from "evt/hooks";
 import { useRerenderOnStateChange } from "evt/hooks";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const modal = createModal({
@@ -34,7 +33,7 @@ export function DeclarationRemovalModal() {
         "isRemovingUserDeclaration"
     );
 
-    const { t } = useTranslation({ DeclarationRemovalModal });
+    const { t } = useTranslation();
 
     useEvt(ctx =>
         evtDeclarationRemoval.attach(
@@ -56,11 +55,15 @@ export function DeclarationRemovalModal() {
 
     return (
         <modal.Component
-            title={t("stop being user/referent", { softwareName, declarationType })}
+            title={
+                declarationType === "referent"
+                    ? t("declarationRemovalModal.stop being_referent", { softwareName })
+                    : t("declarationRemovalModal.stop being_user", { softwareName })
+            }
             buttons={[
                 {
                     "doClosesModal": true,
-                    "children": t("cancel")
+                    "children": t("declarationRemovalModal.cancel")
                 },
                 {
                     "doClosesModal": false,
@@ -74,7 +77,7 @@ export function DeclarationRemovalModal() {
                     },
                     "children": (
                         <>
-                            {t("confirm")}{" "}
+                            {t("declarationRemovalModal.confirm")}{" "}
                             {isRemovingUserDeclaration && (
                                 <>
                                     &nbsp;&nbsp;&nbsp;
@@ -86,21 +89,12 @@ export function DeclarationRemovalModal() {
                 }
             ]}
         >
-            {t("do you confirm", { softwareName, declarationType })}
+            {declarationType === "referent"
+                ? t("declarationRemovalModal.do you confirm_referent")
+                : t("declarationRemovalModal.do you confirm_using")}{" "}
+            {softwareName} ?
         </modal.Component>
     );
 }
 
 export type DeclarationType = "user" | "referent";
-export const { i18n } = declareComponentKeys<
-    | "cancel"
-    | "confirm"
-    | {
-          K: "stop being user/referent";
-          P: { softwareName: string; declarationType: DeclarationType };
-      }
-    | {
-          K: "do you confirm";
-          P: { softwareName: string; declarationType: DeclarationType };
-      }
->()({ DeclarationRemovalModal });

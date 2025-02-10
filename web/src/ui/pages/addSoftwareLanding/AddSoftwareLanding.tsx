@@ -1,8 +1,7 @@
 import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import type { PageRoute } from "./route";
 import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
@@ -20,25 +19,38 @@ export default function AddSoftwareLanding(props: Props) {
     assert<Equals<typeof rest, {}>>();
 
     const { cx, classes } = useStyles();
-    const { t } = useTranslation({ AddSoftwareLanding });
-    const { t: tCommon } = useTranslation({ "App": undefined });
+    const { t } = useTranslation();
 
     const whoCanAddAccordionList = [
         {
-            "label": t("discover as agent label"),
-            "description": t("discover as agent description")
+            "label": t("addSoftwareLanding.discover as agent label"),
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.discover as agent description"}
+                ></Trans>
+            )
         },
         {
-            "label": t("discover as DSI label"),
-            "description": t("discover as DSI description")
+            "label": t("addSoftwareLanding.discover as DSI label"),
+            "description": (
+                <Trans i18nKey={"addSoftwareLanding.discover as DSI description"}></Trans>
+            )
         },
         {
-            "label": t("contribute as agent label"),
-            "description": t("contribute as agent description")
+            "label": t("addSoftwareLanding.contribute as agent label"),
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.contribute as agent description"}
+                ></Trans>
+            )
         },
         {
-            "label": t("contribute as DSI label"),
-            "description": t("contribute as DSI description")
+            "label": t("addSoftwareLanding.contribute as DSI label"),
+            "description": (
+                <Trans
+                    i18nKey={"addSoftwareLanding.contribute as DSI description"}
+                ></Trans>
+            )
         }
     ];
 
@@ -47,8 +59,15 @@ export default function AddSoftwareLanding(props: Props) {
             <div className={classes.section}>
                 <div className={cx(fr.cx("fr-container"), classes.titleContainer)}>
                     <div>
-                        <h2 className={classes.title}>{t("title")}</h2>
-                        <p className={fr.cx("fr-text--lg")}>{t("subtitle")}</p>
+                        <h2 className={classes.title}>
+                            <Trans
+                                i18nKey={"addSoftwareLanding.title"}
+                                components={{ span: <span></span> }}
+                            ></Trans>
+                        </h2>
+                        <p className={fr.cx("fr-text--lg")}>
+                            {t("addSoftwareLanding.subtitle")}
+                        </p>
                     </div>
                     <img
                         src={illustration_sill}
@@ -66,20 +85,20 @@ export default function AddSoftwareLanding(props: Props) {
                         )}
                     >
                         <h2 className={classes.whoCanAddTitle}>
-                            {t("who can add software")}
+                            {t("addSoftwareLanding.who can add software")}
                         </h2>
                         <div className={classes.whoCanAddButtonContainer}>
                             <a
                                 {...routes.softwareCreationForm().link}
                                 className={fr.cx("fr-btn")}
                             >
-                                {tCommon("add software")}
+                                {t("app.add software")}
                             </a>
                             <a
                                 {...routes.instanceCreationForm().link}
                                 className={fr.cx("fr-btn", "fr-btn--secondary")}
                             >
-                                {tCommon("add instance")}
+                                {t("app.add instance")}
                             </a>
                         </div>
                     </div>
@@ -166,20 +185,3 @@ const useStyles = tss.withName({ AddSoftwareLanding }).create({
         "marginBottom": 0
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "title";
-          R: JSX.Element;
-      }
-    | "subtitle"
-    | "who can add software"
-    | "discover as agent label"
-    | { K: "discover as agent description"; R: JSX.Element }
-    | "discover as DSI label"
-    | { K: "discover as DSI description"; R: JSX.Element }
-    | "contribute as agent label"
-    | { K: "contribute as agent description"; R: JSX.Element }
-    | "contribute as DSI label"
-    | { K: "contribute as DSI description"; R: JSX.Element }
->()({ AddSoftwareLanding });

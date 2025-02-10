@@ -1,0 +1,111 @@
+{
+    "header": {
+        "icons": [
+            {
+                "iconId": "fr-icon-bank-fill",
+                "linkProps": {
+                    "href": "https://code.gouv.fr"
+                },
+                "text": "Code Gouv"
+            }
+        ],
+        "menu": {
+            "welcome": {
+                "enabled": true
+            },
+            "catalog": {
+                "enabled": true
+            },
+            "addSoftware": {
+                "enabled": true
+            },
+            "about": {
+                "enabled": true
+            },
+            "contribute": {
+                "enabled": true,
+                "href": "mailto:sill@code.gouv.fr?subject=Contribute"
+            }
+        }
+    },
+    "home": {
+        "softwareSelection": {
+            "enabled": true
+        },
+        "statistics": {
+            "catgegories": [
+                "softwareCount",
+                "registeredUserCount",
+                "agentReferentCount",
+                "organizationCount"
+            ]
+        },
+        "usecases": {
+            "catgegories": ["declareReferent", "editSoftware", "addSoftwareOrService"]
+        }
+    },
+    "softwareDetails": {
+        "defaultLogo": true,
+        "details": {
+            "enabled": true,
+            "fields": {
+                "registerDate": true,
+                "minimalVersionRequired": true,
+                "softwareCurrentVersion": true,
+                "softwareCurrentVersionDate": true,
+                "license": true
+            }
+        },
+        "prerogatives": {
+            "enabled": true
+        },
+        "metadata": {
+            "enabled": true,
+            "fields": {
+                "keywords": true,
+                "programmingLanguages": true,
+                "applicationCategories": true,
+                "softwareType": true
+            }
+        },
+        "links": {
+            "enabled": true
+        },
+        "userActions": {
+            "enabled": true
+        }
+    },
+    "catalog": {
+        "defaultLogo": true,
+        "search": {
+            "options": {
+                "organisation": true,
+                "applicationCategories": true,
+                "softwareType": true,
+                "prerogatives": true,
+                "programmingLanguages": false
+            }
+        },
+        "sortOptions": {
+            "referent_count": true,
+            "user_count": true,
+            "added_time": true,
+            "update_time": true,
+            "latest_version_publication_date": true,
+            "user_count_ASC": true,
+            "referent_count_ASC": true
+        },
+        "cardOptions": {
+            "referentCount": true,
+            "userCase": true
+        }
+    },
+    "footer": {
+        "domains": [
+            "info.gouv.fr",
+            "service-public.fr",
+            "legifrance.gouv.fr",
+            "data.gouv.fr"
+        ]
+    }
+}

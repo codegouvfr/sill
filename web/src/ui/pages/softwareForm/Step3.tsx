@@ -4,8 +4,7 @@ import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import type { FormData } from "core/usecases/softwareForm";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 
 export type Step2Props = {
     className?: string;
@@ -20,8 +19,7 @@ type DoRespectRgaaInputValue = "true" | "false" | "not applicable";
 export function SoftwareFormStep3(props: Step2Props) {
     const { className, initialFormData, onSubmit, evtActionSubmit } = props;
 
-    const { t } = useTranslation({ SoftwareFormStep3 });
-    const { t: tCommon } = useTranslation({ "App": "App" });
+    const { t } = useTranslation();
 
     const {
         handleSubmit,
@@ -122,17 +120,17 @@ export function SoftwareFormStep3(props: Step2Props) {
             )}
         >
             <RadioButtons
-                legend={t("is present in support market")}
+                legend={t("softwareFormStep3.is present in support market")}
                 options={[
                     {
-                        "label": tCommon("yes"),
+                        "label": t("app.yes"),
                         "nativeInputProps": {
                             ...register("isPresentInSupportContractInputValue"),
                             "value": "true"
                         }
                     },
                     {
-                        "label": tCommon("no"),
+                        "label": t("app.no"),
                         "nativeInputProps": {
                             ...register("isPresentInSupportContractInputValue"),
                             "value": "false"
@@ -141,10 +139,10 @@ export function SoftwareFormStep3(props: Step2Props) {
                 ]}
             />
             <RadioButtons
-                legend={t("is from french public service")}
+                legend={t("softwareFormStep3.is from french public service")}
                 options={[
                     {
-                        "label": tCommon("yes"),
+                        "label": t("app.yes"),
                         "nativeInputProps": {
                             ...register("isFromFrenchPublicServiceInputValue", {
                                 "required": true
@@ -153,7 +151,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                         }
                     },
                     {
-                        "label": tCommon("no"),
+                        "label": t("app.no"),
                         "nativeInputProps": {
                             ...register("isFromFrenchPublicServiceInputValue", {
                                 "required": true
@@ -167,27 +165,27 @@ export function SoftwareFormStep3(props: Step2Props) {
                         ? "error"
                         : undefined
                 }
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
             <RadioButtons
-                legend={t("do respect RGAA")}
+                legend={t("softwareFormStep3.do respect RGAA")}
                 options={[
                     {
-                        "label": tCommon("yes"),
+                        "label": t("app.yes"),
                         "nativeInputProps": {
                             ...register("doRespectRgaaInputValue"),
                             "value": "true"
                         }
                     },
                     {
-                        "label": tCommon("no"),
+                        "label": t("app.no"),
                         "nativeInputProps": {
                             ...register("doRespectRgaaInputValue"),
                             "value": "false"
                         }
                     },
                     {
-                        "label": tCommon("not applicable"),
+                        "label": t("app.not applicable"),
                         "nativeInputProps": {
                             ...register("doRespectRgaaInputValue"),
                             "value": "not applicable"
@@ -203,7 +201,3 @@ export function SoftwareFormStep3(props: Step2Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "is present in support market" | "is from french public service" | "do respect RGAA"
->()({ SoftwareFormStep3 });

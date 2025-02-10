@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useLang } from "ui/i18n";
+import { useLang } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
@@ -53,7 +53,7 @@ export const HeaderDetailCard = memo((props: Props) => {
 
     const { classes, cx } = useStyles();
 
-    const { t } = useTranslation({ HeaderDetailCard });
+    const { t } = useTranslation();
 
     const { lang } = useLang();
 
@@ -65,13 +65,15 @@ export const HeaderDetailCard = memo((props: Props) => {
                     <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                 </a>
                 <div className={classes.softwareInformation}>
-                    <div className={classes.logoWrapper}>
-                        <img
-                            className={classes.logo}
-                            src={softwareLogoUrl}
-                            alt={t("software logo")}
-                        />
-                    </div>
+                    {softwareLogoUrl && (
+                        <div className={classes.logoWrapper}>
+                            <img
+                                className={classes.logo}
+                                src={softwareLogoUrl}
+                                alt={t("headerDetailCard.software logo")}
+                            />
+                        </div>
+                    )}
                     <div className={classes.mainInfo}>
                         <div className={classes.titleAndTagWrapper}>
                             <h4 className={classes.softwareName}>{softwareName}</h4>
@@ -86,7 +88,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("you are referent")}
+                                    {t("headerDetailCard.you are referent")}
                                 </span>
                             ) : userDeclaration?.isUser ? (
                                 <span
@@ -98,13 +100,15 @@ export const HeaderDetailCard = memo((props: Props) => {
                                         "fr-mb-1v"
                                     )}
                                 >
-                                    {t("you are user")}
+                                    {t("headerDetailCard.you are user")}
                                 </span>
                             ) : null}
                         </div>
                         {authors.length > 0 && (
                             <div>
-                                <span className={classes.authors}>{t("authors")}</span>
+                                <span className={classes.authors}>
+                                    {t("headerDetailCard.authors")}
+                                </span>
                                 <span>
                                     {authors.map(author => (
                                         <a
@@ -122,16 +126,23 @@ export const HeaderDetailCard = memo((props: Props) => {
                             <>
                                 &nbsp; &nbsp;
                                 <p className={classes.dereferencedText}>
-                                    {t("software dereferenced", {
-                                        "lastRecommendedVersion":
-                                            softwareDereferencing.lastRecommendedVersion,
-                                        "reason": softwareDereferencing.reason,
+                                    {t("headerDetailCard.software dereferenced", {
                                         "when": getFormattedDate({
                                             "time": softwareDereferencing.time,
                                             lang,
                                             "doAlwaysShowYear": true
                                         })
                                     })}
+                                    {softwareDereferencing.reason === undefined
+                                        ? ""
+                                        : `, ${softwareDereferencing.reason}`}
+                                    {t(
+                                        "headerDetailCard.software dereferenced last version",
+                                        {
+                                            lastRecommendedVersion:
+                                                softwareDereferencing.lastRecommendedVersion
+                                        }
+                                    )}
                                 </p>
                             </>
                         )}
@@ -154,7 +165,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("website")}
+                        {t("headerDetailCard.website")}
                     </a>
                 )}
                 {documentationWebsite && (
@@ -173,7 +184,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             )
                         )}
                     >
-                        {t("documentation")}
+                        {t("headerDetailCard.documentation")}
                     </a>
                 )}
                 {sourceCodeRepository && (
@@ -190,7 +201,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                             "fr-my-2v"
                         )}
                     >
-                        {t("repository")}
+                        {t("headerDetailCard.repository")}
                     </a>
                 )}
             </div>
@@ -266,20 +277,4 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
     "dereferencedText": {
         "color": fr.colors.decisions.text.default.error.default
     }
-});
-
-export const { i18n } = declareComponentKeys<
-    | "authors"
-    | "website"
-    | "documentation"
-    | "repository"
-    | "software logo"
-    | "you are user"
-    | "you are referent"
-    | {
-          K: "software dereferenced";
-          P: { lastRecommendedVersion?: string; reason?: string; when: string };
-      }
->()({
-    HeaderDetailCard
 });

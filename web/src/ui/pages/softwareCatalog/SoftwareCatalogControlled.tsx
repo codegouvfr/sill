@@ -7,8 +7,7 @@ import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { SoftwareCatalogCard } from "ui/pages/softwareCatalog/SoftwareCatalogCard";
 import { SoftwareCatalogSearch } from "ui/pages/softwareCatalog/SoftwareCatalogSearch";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useWindowInnerSize } from "powerhooks/useWindowInnerSize";
 import { useBreakpointsValues } from "@codegouvfr/react-dsfr/useBreakpointsValues";
@@ -42,6 +41,13 @@ export type Props = {
     }[];
     category: string | undefined;
     onCategoryChange: (category: string | undefined) => void;
+
+    programmingLanguageOptions: {
+        programmingLanguage: string;
+        softwareCount: number;
+    }[];
+    programmingLanguage: string | undefined;
+    onProgrammingLanguageChange: (programmingLanguage: string | undefined) => void;
 
     environmentOptions: {
         environment: SoftwareCatalogState.Environment;
@@ -82,13 +88,16 @@ export function SoftwareCatalogControlled(props: Props) {
         prerogativesOptions,
         prerogatives,
         onPrerogativesChange,
+        programmingLanguageOptions,
+        programmingLanguage,
+        onProgrammingLanguageChange,
         ...rest
     } = props;
 
     assert<Equals<typeof rest, {}>>();
 
     const { cx, classes } = useStyles();
-    const { t } = useTranslation({ SoftwareCatalogControlled });
+    const { t } = useTranslation();
 
     return (
         <div className={cx(fr.cx("fr-container"), classes.root, className)}>
@@ -107,16 +116,19 @@ export function SoftwareCatalogControlled(props: Props) {
                 prerogativesOptions={prerogativesOptions}
                 prerogatives={prerogatives}
                 onPrerogativesChange={onPrerogativesChange}
+                programmingLanguage={programmingLanguage}
+                programmingLanguageOptions={programmingLanguageOptions}
+                onProgrammingLanguageChange={onProgrammingLanguageChange}
             />
             <div>
                 <div className={classes.header}>
                     <h6 className={classes.softwareCount}>
-                        {t("search results", {
-                            "count": softwares.length
+                        {t("softwareCatalogControlled.searchResults", {
+                            count: softwares.length
                         })}
                     </h6>
                     <SelectNext
-                        label={t("sort by")}
+                        label={t("softwareCatalogControlled.sortBy")}
                         className={classes.sort}
                         nativeSelectProps={{
                             "value": sort,
@@ -127,30 +139,38 @@ export function SoftwareCatalogControlled(props: Props) {
                             "label": (() => {
                                 switch (value) {
                                     case "added_time":
-                                        return t("added_time");
+                                        return t("softwareCatalogControlled.addedTime");
                                     case "update_time":
-                                        return t("update_time");
+                                        return t("softwareCatalogControlled.updateTime");
                                     case "referent_count":
-                                        return t("referent_count");
+                                        return t(
+                                            "softwareCatalogControlled.referentCount"
+                                        );
                                     case "referent_count_ASC":
-                                        return t("referent_count_ASC");
+                                        return t(
+                                            "softwareCatalogControlled.referentCountASC"
+                                        );
                                     case "user_count":
-                                        return t("user_count");
+                                        return t("softwareCatalogControlled.userCount");
                                     case "user_count_ASC":
-                                        return t("user_count_ASC");
+                                        return t(
+                                            "softwareCatalogControlled.userCountASC"
+                                        );
                                     case "latest_version_publication_date":
-                                        return t("latest_version_publication_date");
+                                        return t(
+                                            "softwareCatalogControlled.latestVersionPublicationDate"
+                                        );
                                     case "best_match":
-                                        return t("best_match");
+                                        return t("softwareCatalogControlled.bestMatch");
                                     case "my_software":
-                                        return t("my_software");
+                                        return t("softwareCatalogControlled.mySoftware");
                                 }
                             })()
                         }))}
                     />
                 </div>
                 {softwares.length === 0 ? (
-                    <h1>{t("no software found")}</h1>
+                    <h1>{t("softwareCatalogControlled.noSoftwareFound")}</h1>
                 ) : (
                     <RowVirtualizerDynamicWindow
                         softwares={softwares}
@@ -331,21 +351,3 @@ const useStyles = tss.withName({ SoftwareCatalogControlled }).create({
         }
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "search results";
-          P: { count: number };
-      }
-    | "sort by"
-    | "added_time"
-    | "update_time"
-    | "referent_count"
-    | "referent_count_ASC"
-    | "user_count"
-    | "user_count_ASC"
-    | "latest_version_publication_date"
-    | "no software found"
-    | "best_match"
-    | "my_software"
->()({ SoftwareCatalogControlled });

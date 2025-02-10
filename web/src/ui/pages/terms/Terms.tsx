@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { declareComponentKeys } from "i18nifty";
 import { useCoreState, useCore } from "core";
 import { useLang } from "ui/i18n";
 import { tss } from "tss-react";
@@ -38,10 +37,6 @@ export default function Terms(props: Props) {
         </div>
     );
 }
-
-export const { i18n } = declareComponentKeys<"no terms">()({
-    Terms
-});
 
 export const useStyles = tss.withName({ Terms }).create({
     "root": {

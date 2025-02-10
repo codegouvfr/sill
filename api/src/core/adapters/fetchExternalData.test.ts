@@ -267,7 +267,10 @@ describe("fetches software extra data (from different providers)", () => {
                     framaLibreId: null,
                     isLibreSoftware: false,
                     keywords: [],
-                    label: "Apache HTTP Server",
+                    label: {
+                        "en": "Javascript HTTP Server",
+                        "fr": "Apache HTTP Server"
+                    },
                     license: "Apache License v2.0",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
@@ -550,7 +553,7 @@ describe("fetches software extra data (from different providers)", () => {
                             siren: "824429708",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/255",
                             cnllUrl: "https://annuaire.cnll.fr/societes/824429708",
-                            website: "https://www.worteks.com/fr/"
+                            website: "https://www.worteks.com/"
                         }
                     ],
                     latestVersion: null

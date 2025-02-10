@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useId } from "react";
+import { useEffect, useState, useId } from "react";
 import { SearchInput } from "ui/shared/SearchInput";
 import { fr } from "@codegouvfr/react-dsfr";
 import { useForm, Controller } from "react-hook-form";
@@ -10,10 +10,9 @@ import { useEvt } from "evt/hooks";
 import { useCore } from "core";
 import type { FormData } from "core/usecases/softwareForm";
 import type { ReturnType } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useResolveLocalizedString } from "ui/i18n";
+import { useResolveLocalizedString } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import { useStyles } from "tss-react";
-import { ExternalDataOrigin } from "api";
 
 export type Step2Props = {
     className?: string;
@@ -36,8 +35,6 @@ export type Step2Props = {
 };
 
 export function SoftwareFormStep2(props: Step2Props) {
-    const { externalDataOrigin: externalDataOriginCore } = useCore().functions;
-    const externalDataOrigin = externalDataOriginCore.getExternalDataOrigin();
     const {
         className,
         isUpdateForm,
@@ -48,8 +45,7 @@ export function SoftwareFormStep2(props: Step2Props) {
         getAutofillDataFromWikidata
     } = props;
 
-    const { t } = useTranslation({ SoftwareFormStep2 });
-    const { t: tCommon } = useTranslation({ "App": "App" });
+    const { t } = useTranslation();
     const { resolveLocalizedString } = useResolveLocalizedString();
 
     const {
@@ -250,11 +246,45 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 </div>
                             </li>
                         )}
-                        noOptionText={tCommon("no result")}
-                        loadingText={tCommon("loading")}
+                        noOptionText={t("app.no result")}
+                        loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("external id")(externalDataOrigin),
-                            "hintText": t("external id hint")(externalDataOrigin),
+                            "label": t("softwareFormStep2.external id"),
+                            "hintText": (
+                                <Trans
+                                    i18nKey={"softwareFormStep2.external id hint_fill"}
+                                    components={{
+                                        code: <code />,
+                                        br: <br />,
+                                        space: <span> </span>,
+                                        dataSource: (
+                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                            <a
+                                                href="https://www.wikidata.org/wiki"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            />
+                                        ),
+                                        dataSourceEntry: (
+                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                            <a
+                                                href="https://www.wikidata.org/wiki/Q107693197"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            />
+                                        ),
+                                        exampleUrl: (
+                                            <a
+                                                href="https://code.gouv.fr/sill/detail?name=Keycloakify"
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                Keycloakify
+                                            </a>
+                                        )
+                                    }}
+                                ></Trans>
+                            ),
                             "nativeInputProps": {
                                 "ref": field.ref,
                                 "onBlur": field.onBlur,
@@ -264,7 +294,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                     />
                 )}
             />
-            <p className="fr-info-text">{t("autofill notice")}</p>
+            <p className="fr-info-text">{t("softwareFormStep2.autofill notice")}</p>
             <div
                 style={{
                     "display": "flex",
@@ -281,8 +311,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 ...style,
                                 "marginTop": fr.spacing("4v")
                             }}
-                            label={t("logo url")}
-                            hintText={t("logo url hint")}
+                            label={t("softwareFormStep2.logo url")}
+                            hintText={t("softwareFormStep2.logo url hint")}
                             nativeInputProps={{
                                 ...register("softwareLogoUrl", {
                                     "pattern": /^(?:https:)?\/\//
@@ -291,14 +321,14 @@ export function SoftwareFormStep2(props: Step2Props) {
                             state={
                                 errors.softwareLogoUrl !== undefined ? "error" : undefined
                             }
-                            stateRelatedMessage={t("must be an url")}
+                            stateRelatedMessage={t("softwareFormStep2.must be an url")}
                         />
                     )}
                 />
                 {watch("softwareLogoUrl") && (
                     <img
                         src={watch("softwareLogoUrl")}
-                        alt={t("logo preview alt")}
+                        alt={t("softwareFormStep2.logo preview alt")}
                         style={{
                             "marginLeft": fr.spacing("4v"),
                             "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,
@@ -319,8 +349,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("comptoir du libre id")}
-                        hintText={t("comptoir du libre id hint")}
+                        label={t("softwareFormStep2.comptoir du libre id")}
+                        hintText={t("softwareFormStep2.comptoir du libre id hint")}
                         nativeInputProps={{
                             ...register("comptoirDuLibreIdInputValue", {
                                 "validate": value => {
@@ -341,7 +371,9 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 ? "error"
                                 : undefined
                         }
-                        stateRelatedMessage={t("invalid comptoir du libre id")}
+                        stateRelatedMessage={t(
+                            "softwareFormStep2.invalid comptoir du libre id"
+                        )}
                     />
                 )}
             />
@@ -354,12 +386,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("software name")}
+                        label={t("softwareFormStep2.software name")}
                         nativeInputProps={{
                             ...register("softwareName", { "required": true })
                         }}
                         state={errors.softwareName !== undefined ? "error" : undefined}
-                        stateRelatedMessage={tCommon("required")}
+                        stateRelatedMessage={t("app.required")}
                     />
                 )}
             />
@@ -372,15 +404,15 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("software feature")}
-                        hintText={t("software feature hint")}
+                        label={t("softwareFormStep2.software feature")}
+                        hintText={t("softwareFormStep2.software feature hint")}
                         nativeInputProps={{
                             ...register("softwareDescription", { "required": true })
                         }}
                         state={
                             errors.softwareDescription !== undefined ? "error" : undefined
                         }
-                        stateRelatedMessage={tCommon("required")}
+                        stateRelatedMessage={t("app.required")}
                     />
                 )}
             />
@@ -393,13 +425,13 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("license")}
-                        hintText={t("license hint")}
+                        label={t("softwareFormStep2.license")}
+                        hintText={t("softwareFormStep2.license hint")}
                         nativeInputProps={{
                             ...register("softwareLicense", { "required": true })
                         }}
                         state={errors.softwareLicense !== undefined ? "error" : undefined}
-                        stateRelatedMessage={tCommon("required")}
+                        stateRelatedMessage={t("app.required")}
                     />
                 )}
             />
@@ -412,8 +444,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             "marginTop": fr.spacing("4v")
                         }}
-                        label={t("minimal version")}
-                        hintText={t("minimal version hint")}
+                        label={t("softwareFormStep2.minimal version")}
+                        hintText={t("softwareFormStep2.minimal version hint")}
                         nativeInputProps={{
                             ...register("softwareMinimalVersion", { "required": false })
                         }}
@@ -422,7 +454,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                                 ? "error"
                                 : undefined
                         }
-                        stateRelatedMessage={tCommon("required")}
+                        stateRelatedMessage={t("app.required")}
                     />
                 )}
             />
@@ -431,8 +463,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                 style={{
                     "marginTop": fr.spacing("4v")
                 }}
-                label={t("keywords")}
-                hintText={t("keywords hint")}
+                label={t("softwareFormStep2.keywords")}
+                hintText={t("softwareFormStep2.keywords hint")}
                 nativeInputProps={{
                     ...register("keywordsInputValue")
                 }}
@@ -485,32 +517,3 @@ function comptoirDuLibreInputValueToComptoirDuLibreId(comptoirDuLibreInputValue:
 
     assert(false);
 }
-
-export const { i18n } = declareComponentKeys<
-    | {
-          K: "external id";
-          R: (origin: ExternalDataOrigin) => React.ReactNode;
-      }
-    | {
-          K: "external id hint";
-          R: (origin: ExternalDataOrigin) => React.ReactNode;
-      }
-    | "comptoir du libre id"
-    | "comptoir du libre id hint"
-    | "software name"
-    | "software feature"
-    | "software feature hint"
-    | "license"
-    | "license hint"
-    | "minimal version"
-    | "minimal version hint"
-    | "url or numeric id"
-    | "invalid comptoir du libre id"
-    | "autofill notice"
-    | "logo url"
-    | "logo url hint"
-    | "must be an url"
-    | "keywords"
-    | "keywords hint"
-    | "logo preview alt"
->()({ SoftwareFormStep2 });

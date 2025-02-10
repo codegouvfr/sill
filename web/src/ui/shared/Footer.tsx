@@ -1,12 +1,12 @@
 import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { Footer as DsfrFooter } from "@codegouvfr/react-dsfr/Footer";
 import { routes } from "ui/routes";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
-import { declareComponentKeys } from "i18nifty";
 import { apiUrl } from "urls";
+import configUI from "../../ui/config-ui.json";
 
 export type Props = {
     className?: string;
@@ -20,7 +20,7 @@ export const Footer = memo(
 
         assert<Equals<typeof rest, {}>>();
 
-        const { t } = useTranslation({ Footer });
+        const { t } = useTranslation();
 
         return (
             <>
@@ -43,7 +43,7 @@ export const Footer = memo(
                             }
                         },
                         {
-                            "text": t("contribute"),
+                            "text": t("footer.contribute"),
                             "linkProps": {
                                 "href": "https://github.com/codegouvfr/sill-web/issues/new"
                             }
@@ -74,10 +74,9 @@ export const Footer = memo(
                         },
                         headerFooterDisplayItem
                     ]}
+                    domains={configUI.footer.domains}
                 />
             </>
         );
     })
 );
-
-export const { i18n } = declareComponentKeys<"contribute">()({ Footer });

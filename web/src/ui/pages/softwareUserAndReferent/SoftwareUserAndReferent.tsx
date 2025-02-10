@@ -3,8 +3,8 @@ import { useCore, useCoreState } from "core";
 import { Breadcrumb } from "@codegouvfr/react-dsfr/Breadcrumb";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useGetOrganizationFullName } from "ui/i18n";
+import { useGetOrganizationFullName } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { ActionsFooter } from "ui/shared/ActionsFooter";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import type { PageRoute } from "./route";
@@ -46,7 +46,7 @@ export default function SoftwareUserAndReferent(props: Props) {
 
     const { classes, cx } = useStyles();
 
-    const { t } = useTranslation({ SoftwareUserAndReferent });
+    const { t } = useTranslation();
 
     const [activeMenu, setActiveMenu] = useState(0);
 
@@ -62,12 +62,16 @@ export default function SoftwareUserAndReferent(props: Props) {
         {
             "id": 0,
             "name": "referents" as const,
-            "label": `${t("tab referent title", { count: referents.length })}`
+            "label": `${t("common.referent", {
+                count: referents.length
+            })}`
         },
         {
             "id": 1,
             "name": "users" as const,
-            "label": `${t("tab user title", { count: users.length })}`
+            "label": `${t("common.user", {
+                count: users.length
+            })}`
         }
     ];
 
@@ -95,23 +99,28 @@ export default function SoftwareUserAndReferent(props: Props) {
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
-                                {t("is technical expert")}
+                                {t("softwareUserAndReferent.is technical expert")}
                             </Tag>
                         )}
                     </p>
                     <p>
-                        <span className={classes.infoLegend}>{t("organization")}</span>:{" "}
-                        {getOrganizationFullName(organization)}{" "}
+                        <span className={classes.infoLegend}>
+                            {t("softwareUserAndReferent.organization")}
+                        </span>
+                        : {getOrganizationFullName(organization)}{" "}
                     </p>
                     {usecaseDescription && (
                         <p>
-                            <span className={classes.infoLegend}>{t("use case")}</span>:{" "}
-                            {usecaseDescription}
+                            <span className={classes.infoLegend}>
+                                {t("softwareUserAndReferent.use case")}
+                            </span>
+                            : {usecaseDescription}
                         </p>
                     )}
                     {serviceUrl && (
                         <p>
-                            {t("is referent of")} <a href={serviceUrl}>{serviceUrl}</a>
+                            {t("softwareUserAndReferent.is referent of")}{" "}
+                            <a href={serviceUrl}>{serviceUrl}</a>
                         </p>
                     )}
                 </li>
@@ -125,18 +134,24 @@ export default function SoftwareUserAndReferent(props: Props) {
             return (
                 <li key={index}>
                     <p>
-                        <span className={classes.infoLegend}>{t("organization")}</span>:{" "}
-                        {getOrganizationFullName(organization)}{" "}
+                        <span className={classes.infoLegend}>
+                            {t("softwareUserAndReferent.organization")}
+                        </span>
+                        : {getOrganizationFullName(organization)}{" "}
                     </p>
                     {usecaseDescription && (
                         <p>
-                            <span className={classes.infoLegend}>{t("use case")}</span>:{" "}
-                            {usecaseDescription}
+                            <span className={classes.infoLegend}>
+                                {t("softwareUserAndReferent.use case")}
+                            </span>
+                            : {usecaseDescription}
                         </p>
                     )}
                     {serviceUrl !== undefined && (
                         <p>
-                            <span className={classes.infoLegend}>{t("is user of")} </span>
+                            <span className={classes.infoLegend}>
+                                {t("softwareUserAndReferent.is user of")}{" "}
+                            </span>
                             <a href={serviceUrl} target="_blank" rel="noreferrer">
                                 {serviceUrl}
                             </a>
@@ -156,7 +171,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                             "linkProps": {
                                 ...routes.softwareCatalog().link
                             },
-                            label: t("catalog breadcrumb")
+                            label: t("softwareUserAndReferent.catalog breadcrumb")
                         },
                         {
                             "linkProps": routes.softwareDetails({ "name": softwareName })
@@ -164,7 +179,9 @@ export default function SoftwareUserAndReferent(props: Props) {
                             "label": route.params.name
                         }
                     ]}
-                    currentPageLabel={t("user and referent breadcrumb")}
+                    currentPageLabel={t(
+                        "softwareUserAndReferent.user and referent breadcrumb"
+                    )}
                     className={classes.breadcrumb}
                 />
                 <div className={classes.header}>
@@ -189,7 +206,9 @@ export default function SoftwareUserAndReferent(props: Props) {
                     >
                         <i className={fr.cx("fr-icon-arrow-left-s-line")} />
                     </a>
-                    <h4 className={classes.title}>{t("title")}</h4>
+                    <h4 className={classes.title}>
+                        {t("softwareUserAndReferent.title")}
+                    </h4>
                 </div>
                 <div className={classes.main}>
                     <nav
@@ -203,12 +222,14 @@ export default function SoftwareUserAndReferent(props: Props) {
                                 aria-controls="fr-sidemenu-wrapper"
                                 aria-expanded="false"
                             >
-                                {t("category")} (
+                                {t("softwareUserAndReferent.category")} (
                                 {activeMenu === 0
-                                    ? t("tab referent title", {
+                                    ? t("common.referent", {
                                           "count": referents.length
                                       })
-                                    : t("tab user title", { "count": users.length })}
+                                    : t("common.user", {
+                                          "count": users.length
+                                      })}
                                 )
                             </button>
                             <div
@@ -300,7 +321,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                     className={classes.softwareDetails}
                     {...routes.softwareDetails({ "name": softwareName }).link}
                 >
-                    {t("softwareDetails")}
+                    {t("softwareUserAndReferent.softwareDetails")}
                 </Button>
                 <Button
                     priority="primary"
@@ -311,7 +332,9 @@ export default function SoftwareUserAndReferent(props: Props) {
                         }).link
                     }
                 >
-                    {activeMenu === 0 ? t("declare referent") : t("declare user")}
+                    {activeMenu === 0
+                        ? t("softwareUserAndReferent.declare referent")
+                        : t("softwareUserAndReferent.declare user")}
                 </Button>
             </ActionsFooter>
         </div>
@@ -389,28 +412,3 @@ const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
         "color": fr.colors.decisions.text.mention.grey.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "catalog breadcrumb"
-    | "user and referent breadcrumb"
-    | "title"
-    | {
-          K: "tab user title";
-          P: { count: number };
-          R: string;
-      }
-    | {
-          K: "tab referent title";
-          P: { count: number };
-          R: string;
-      }
-    | "category"
-    | "softwareDetails"
-    | "declare referent"
-    | "declare user"
-    | "is technical expert"
-    | "organization"
-    | "use case"
-    | "is user of"
-    | "is referent of"
->()({ SoftwareUserAndReferent });

@@ -1,6 +1,5 @@
-import React from "react";
-import { declareComponentKeys } from "i18nifty";
-import { useLang, useTranslation } from "ui/i18n";
+import { useLang } from "ui/i18n";
+import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { shortEndMonthDate, monthDate } from "ui/useMoment";
@@ -8,6 +7,9 @@ import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
+import config from "../../config-ui.json";
+import { SoftwareType } from "api/dist/src/lib/ApiTypes";
+import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead
 // so we are sure that we don't forget to provide some props
@@ -36,6 +38,7 @@ export type Props = {
     programmingLanguages: string[];
     keywords?: string[];
     applicationCategories: string[];
+    softwareType: SoftwareType;
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -57,221 +60,323 @@ export const PreviewTab = (props: Props) => {
         wikiDataUrl,
         programmingLanguages,
         keywords,
-        applicationCategories
+        applicationCategories,
+        softwareType
     } = props;
 
     const { classes, cx } = useStyles();
 
-    const { t } = useTranslation({ PreviewTab });
+    const { t } = useTranslation();
     const { lang } = useLang();
 
     return (
         <>
             <section className={classes.tabContainer}>
                 <p style={{ "gridColumn": "span 2" }}>{softwareDescription}</p>
-                <div className="section">
-                    <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("about")}
-                    </p>
-                    {(softwareCurrentVersion || softwareDateCurrentVersion) && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>
-                                {t("last version")}
-                            </span>
-                            {softwareCurrentVersion && (
-                                <span
-                                    className={cx(
-                                        fr.cx(
-                                            "fr-badge",
-                                            "fr-badge--yellow-tournesol",
-                                            "fr-badge--sm"
-                                        ),
-                                        classes.badgeVersion
-                                    )}
-                                >
-                                    {softwareCurrentVersion}
-                                </span>
-                            )}
-
-                            {softwareDateCurrentVersion &&
-                                capitalize(
-                                    shortEndMonthDate({
-                                        "time": softwareDateCurrentVersion,
-                                        lang
-                                    })
-                                )}
+                {config.softwareDetails.details.enabled && (
+                    <div className="section">
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("previewTab.about")}
                         </p>
-                    )}
-                    {registerDate && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("register")}</span>
-                            {capitalize(monthDate({ "time": registerDate, lang }))}
-                        </p>
-                    )}
-
-                    {minimalVersionRequired && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>
-                                {t("minimal version")}
-                            </span>
-                            <span
-                                className={cx(
-                                    fr.cx(
-                                        "fr-badge",
-                                        "fr-badge--yellow-tournesol",
-                                        "fr-badge--sm"
-                                    ),
-                                    classes.badgeVersion
-                                )}
-                            >
-                                {minimalVersionRequired}
-                            </span>
-                        </p>
-                    )}
-
-                    {license && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>{t("license")}</span>
-                            <span>{license}</span>
-                        </p>
-                    )}
-
-                    {keywords && keywords.length > 0 && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>
-                                {t("keywords")} :{" "}
-                            </span>
-                            <span>{keywords.join(", ")}</span>
-                        </p>
-                    )}
-
-                    {programmingLanguages && programmingLanguages.length > 0 && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>
-                                {t("programming languages")} :{" "}
-                            </span>
-                            <span>{programmingLanguages.join(", ")}</span>
-                        </p>
-                    )}
-
-                    {applicationCategories && applicationCategories.length > 0 && (
-                        <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
-                            <span className={classes.labelDetail}>
-                                {t("application categories")} :{" "}
-                            </span>
-                            <span>{applicationCategories.join(", ")}</span>
-                        </p>
-                    )}
-                </div>
-                <div className={classes.section}>
-                    <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                        {t("prerogatives")}
-                    </p>
-
-                    {(
-                        [
-                            "hasDesktopApp",
-                            "isAvailableAsMobileApp",
-                            "isPresentInSupportMarket",
-                            "isFromFrenchPublicService",
-                            "isRGAACompliant"
-                        ] as const
-                    ).map(prerogativeName => {
-                        const value = (() => {
-                            switch (prerogativeName) {
-                                case "hasDesktopApp":
-                                    return hasDesktopApp;
-                                case "isAvailableAsMobileApp":
-                                    return isAvailableAsMobileApp;
-                                case "isFromFrenchPublicService":
-                                    return isFromFrenchPublicService;
-                                case "isPresentInSupportMarket":
-                                    return isPresentInSupportMarket;
-                                case "isRGAACompliant":
-                                    return isRGAACompliant;
-                            }
-                            assert<Equals<typeof prerogativeName, never>>(false);
-                        })();
-
-                        if (value === undefined) {
-                            return null;
-                        }
-
-                        const label = t(prerogativeName);
-
-                        return (
-                            <div
-                                key={label}
-                                className={cx(classes.item, classes.prerogativeItem)}
-                            >
-                                <i
-                                    className={cx(
-                                        fr.cx(
-                                            value
-                                                ? "fr-icon-check-line"
-                                                : "fr-icon-close-line"
-                                        ),
-                                        value
-                                            ? classes.prerogativeStatusSuccess
-                                            : classes.prerogativeStatusError
-                                    )}
-                                />
+                        {(config.softwareDetails.details.fields.softwareCurrentVersion ||
+                            config.softwareDetails.details.fields
+                                .softwareCurrentVersionDate) &&
+                            (softwareCurrentVersion || softwareDateCurrentVersion) && (
                                 <p
                                     className={cx(
-                                        fr.cx("fr-text--md"),
-                                        classes.prerogativeItemDetail
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
                                     )}
                                 >
-                                    {label}
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.last version")}
+                                    </span>
+                                    {config.softwareDetails.details.fields
+                                        .softwareCurrentVersion &&
+                                        softwareCurrentVersion && (
+                                            <span
+                                                className={cx(
+                                                    fr.cx(
+                                                        "fr-badge",
+                                                        "fr-badge--yellow-tournesol",
+                                                        "fr-badge--sm"
+                                                    ),
+                                                    classes.badgeVersion
+                                                )}
+                                            >
+                                                {softwareCurrentVersion}
+                                            </span>
+                                        )}
+
+                                    {config.softwareDetails.details.fields
+                                        .softwareCurrentVersionDate &&
+                                        softwareDateCurrentVersion &&
+                                        capitalize(
+                                            shortEndMonthDate({
+                                                "time": softwareDateCurrentVersion,
+                                                lang
+                                            })
+                                        )}
                                 </p>
-                                {prerogativeName === "isPresentInSupportMarket" && (
-                                    <Tooltip
-                                        title={t("what is the support market", {
-                                            "url": "https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/"
-                                        })}
-                                        arrow
+                            )}
+                        {config.softwareDetails.details.fields.registerDate &&
+                            registerDate && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.register")}
+                                    </span>
+                                    {capitalize(
+                                        monthDate({ "time": registerDate, lang })
+                                    )}
+                                </p>
+                            )}
+
+                        {config.softwareDetails.details.fields.minimalVersionRequired &&
+                            minimalVersionRequired && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.minimal version")}
+                                    </span>
+                                    <span
+                                        className={cx(
+                                            fr.cx(
+                                                "fr-badge",
+                                                "fr-badge--yellow-tournesol",
+                                                "fr-badge--sm"
+                                            ),
+                                            classes.badgeVersion
+                                        )}
                                     >
-                                        <i
-                                            className={fr.cx("fr-icon-information-line")}
-                                        />
-                                    </Tooltip>
-                                )}
-                            </div>
-                        );
-                    })}
-                </div>
-                {(comptoirDuLibreServiceProvidersUrl !== undefined ||
-                    comptoireDuLibreUrl !== undefined ||
-                    annuaireCnllServiceProviders.length !== 0 ||
-                    wikiDataUrl !== undefined) && (
-                    <div className={classes.section}>
-                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                            {t("use full links")}
-                        </p>
-                        {comptoireDuLibreUrl !== undefined && (
-                            <a
-                                href={comptoireDuLibreUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={t("comptoire du libre sheet")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("comptoire du libre sheet")}
-                            </a>
-                        )}
-                        {wikiDataUrl !== undefined && (
-                            <a
-                                href={wikiDataUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                title={t("wikiData sheet")}
-                                className={cx(classes.externalLink, classes.item)}
-                            >
-                                {t("wikiData sheet")}
-                            </a>
+                                        {minimalVersionRequired}
+                                    </span>
+                                </p>
+                            )}
+
+                        {config.softwareDetails.details.fields.license && license && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.license")}
+                                </span>
+                                <span>{license}</span>
+                            </p>
                         )}
                     </div>
                 )}
+
+                {config.softwareDetails.prerogatives.enabled && (
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("previewTab.prerogatives")}
+                        </p>
+
+                        {(
+                            [
+                                "hasDesktopApp",
+                                "isAvailableAsMobileApp",
+                                "isPresentInSupportMarket",
+                                "isFromFrenchPublicService",
+                                "isRGAACompliant"
+                            ] as const
+                        ).map(prerogativeName => {
+                            const value = (() => {
+                                switch (prerogativeName) {
+                                    case "hasDesktopApp":
+                                        return hasDesktopApp;
+                                    case "isAvailableAsMobileApp":
+                                        return isAvailableAsMobileApp;
+                                    case "isFromFrenchPublicService":
+                                        return isFromFrenchPublicService;
+                                    case "isPresentInSupportMarket":
+                                        return isPresentInSupportMarket;
+                                    case "isRGAACompliant":
+                                        return isRGAACompliant;
+                                }
+                                assert<Equals<typeof prerogativeName, never>>(false);
+                            })();
+
+                            if (value === undefined) {
+                                return null;
+                            }
+
+                            const label = t(`previewTab.${prerogativeName}`);
+
+                            return (
+                                <div
+                                    key={label}
+                                    className={cx(classes.item, classes.prerogativeItem)}
+                                >
+                                    <i
+                                        className={cx(
+                                            fr.cx(
+                                                value
+                                                    ? "fr-icon-check-line"
+                                                    : "fr-icon-close-line"
+                                            ),
+                                            value
+                                                ? classes.prerogativeStatusSuccess
+                                                : classes.prerogativeStatusError
+                                        )}
+                                    />
+                                    <p
+                                        className={cx(
+                                            fr.cx("fr-text--md"),
+                                            classes.prerogativeItemDetail
+                                        )}
+                                    >
+                                        {label}
+                                    </p>
+                                    {prerogativeName === "isPresentInSupportMarket" && (
+                                        <Tooltip
+                                            title={
+                                                <Trans
+                                                    i18nKey="previewTab.what is the support market"
+                                                    components={{
+                                                        a: (
+                                                            /* eslint-disable-next-line jsx-a11y/anchor-has-content */
+                                                            <a href="https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/" />
+                                                        )
+                                                    }}
+                                                ></Trans>
+                                            }
+                                            arrow
+                                        >
+                                            <i
+                                                className={fr.cx(
+                                                    "fr-icon-information-line"
+                                                )}
+                                            />
+                                        </Tooltip>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+
+                {config.softwareDetails.metadata.enabled && (
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {"Metadata"}
+                        </p>
+                        {config.softwareDetails.metadata.fields.keywords &&
+                            keywords &&
+                            keywords.length > 0 && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.keywords")} :{" "}
+                                    </span>
+                                    <span>{keywords.join(", ")}</span>
+                                </p>
+                            )}
+
+                        {config.softwareDetails.metadata.fields.programmingLanguages &&
+                            programmingLanguages &&
+                            programmingLanguages.length > 0 && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.programming languages")} :{" "}
+                                    </span>
+                                    <span>{programmingLanguages.join(", ")}</span>
+                                </p>
+                            )}
+
+                        {config.softwareDetails.metadata.fields.applicationCategories &&
+                            applicationCategories &&
+                            applicationCategories.length > 0 && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.application categories")} :{" "}
+                                    </span>
+                                    <span>{applicationCategories.join(", ")}</span>
+                                </p>
+                            )}
+
+                        {config.softwareDetails.metadata.fields.softwareType &&
+                            applicationCategories &&
+                            applicationCategories.length > 0 && (
+                                <p
+                                    className={cx(
+                                        fr.cx("fr-text--regular"),
+                                        classes.item
+                                    )}
+                                >
+                                    <span className={classes.labelDetail}>
+                                        {t("previewTab.softwareType")} :{" "}
+                                    </span>
+                                    <span>
+                                        {t(
+                                            `previewTab.softwareType-${softwareType.type}`
+                                        )}
+                                    </span>
+                                    {softwareType?.type === "desktop/mobile" && (
+                                        <SoftwareTypeTable
+                                            title="Test"
+                                            softwareType={softwareType}
+                                        ></SoftwareTypeTable>
+                                    )}
+                                </p>
+                            )}
+                    </div>
+                )}
+
+                {config.softwareDetails.links.enabled &&
+                    (comptoirDuLibreServiceProvidersUrl !== undefined ||
+                        comptoireDuLibreUrl !== undefined ||
+                        annuaireCnllServiceProviders.length !== 0 ||
+                        wikiDataUrl !== undefined) && (
+                        <div className={classes.section}>
+                            <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                                {t("previewTab.use full links")}
+                            </p>
+                            {comptoireDuLibreUrl !== undefined && (
+                                <a
+                                    href={comptoireDuLibreUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={t("previewTab.comptoire du libre sheet")}
+                                    className={cx(classes.externalLink, classes.item)}
+                                >
+                                    {t("previewTab.comptoire du libre sheet")}
+                                </a>
+                            )}
+                            {wikiDataUrl !== undefined && (
+                                <a
+                                    href={wikiDataUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    title={t("previewTab.wikiData sheet")}
+                                    className={cx(classes.externalLink, classes.item)}
+                                >
+                                    {t("previewTab.wikiData sheet")}
+                                </a>
+                            )}
+                        </div>
+                    )}
             </section>
             <CnllServiceProviderModal
                 softwareName={softwareName}
@@ -303,7 +408,8 @@ const useStyles = tss.withName({ PreviewTab }).create({
     },
     "prerogativeItem": {
         "display": "flex",
-        "alignItems": "center"
+        "alignItems": "center",
+        "marginBottom": "24px"
     },
     "prerogativeItemDetail": {
         "color": fr.colors.decisions.text.label.grey.default,
@@ -329,26 +435,3 @@ const useStyles = tss.withName({ PreviewTab }).create({
         "color": fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });
-
-export const { i18n } = declareComponentKeys<
-    | "about"
-    | "use full links"
-    | "prerogatives"
-    | "last version"
-    | "register"
-    | "minimal version"
-    | "license"
-    | "hasDesktopApp"
-    | "isAvailableAsMobileApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "isRGAACompliant"
-    | "comptoire du libre sheet"
-    | "CNLL service providers title"
-    | { K: "CNLL service providers"; P: { count: number } }
-    | "wikiData sheet"
-    | { K: "what is the support market"; P: { url: string }; R: JSX.Element }
-    | "programming languages"
-    | "keywords"
-    | "application categories"
->()({ PreviewTab });

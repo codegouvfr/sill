@@ -1,0 +1,6 @@
+{
+    "softwareFormStep2": {
+        "external id": "HAL item",
+        "external id hint_fill": "Fill up a name or directly the id (careful, HAL ids look like 'hal-123123v1', but only the number should be provided  (without 'hal-' or the version), in this case it should be  '123123') to associate the software with an existing entry <space /><dataSource>Wikidata</dataSource>. <br />Most general information, such as the URL of the code  repository, is extracted from HAL. If the software you want to  add does not have a Hal entry yet, you can create one. Find here an<space /><exampleUrl>example of an HAL entry</exampleUrl>"
+    }
+}

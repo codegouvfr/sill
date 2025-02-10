@@ -4,8 +4,7 @@ import { RadioButtons } from "@codegouvfr/react-dsfr/RadioButtons";
 import type { NonPostableEvt } from "evt";
 import { useEvt } from "evt/hooks";
 import { assert } from "tsafe/assert";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     className?: string;
@@ -42,8 +41,7 @@ export function DeclarationFormStep1(props: Props) {
         [evtActionSubmit, submitButtonElement]
     );
 
-    const { t } = useTranslation({ DeclarationFormStep1 });
-    const { t: tCommon } = useTranslation({ "App": "App" });
+    const { t } = useTranslation();
 
     return (
         <form
@@ -58,16 +56,16 @@ export function DeclarationFormStep1(props: Props) {
                 name="radio"
                 options={[
                     {
-                        "label": t("user type label"),
-                        "hintText": t("user type hint"),
+                        "label": t("declarationFormStep1.user type label"),
+                        "hintText": t("declarationFormStep1.user type hint"),
                         "nativeInputProps": {
                             ...register("declarationType", { "required": true }),
                             "value": "user"
                         }
                     },
                     {
-                        "label": t("referent type label"),
-                        "hintText": t("referent type label"),
+                        "label": t("declarationFormStep1.referent type label"),
+                        "hintText": t("declarationFormStep1.referent type label"),
                         "nativeInputProps": {
                             ...register("declarationType", { "required": true }),
                             "value": "referent"
@@ -75,7 +73,7 @@ export function DeclarationFormStep1(props: Props) {
                     }
                 ]}
                 state={errors.declarationType !== undefined ? "error" : undefined}
-                stateRelatedMessage={tCommon("required")}
+                stateRelatedMessage={t("app.required")}
             />
             <button
                 style={{ "display": "none" }}
@@ -85,9 +83,3 @@ export function DeclarationFormStep1(props: Props) {
         </form>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "user type label" | "user type hint" | "referent type label" | "referent type hint"
->()({
-    DeclarationFormStep1
-});

@@ -1,13 +1,13 @@
 import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation } from "ui/i18n";
-import { Header as HeaderDsfr } from "@codegouvfr/react-dsfr/Header";
+import { useTranslation } from "react-i18next";
+import { Header as HeaderDsfr, HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
 import { contactEmail } from "ui/shared/contactEmail";
 import { LanguageSelect } from "./LanguageSelect";
 import { AuthButtons } from "./AuthButtons";
+import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -30,13 +30,77 @@ export const Header = memo(
 
         assert<Equals<typeof rest, {}>>();
 
-        const { t } = useTranslation({ Header });
+        const { t } = useTranslation();
 
         /*
         const { classes, cx } = useStyles({
             "isOnPageMyAccount": routeName === "account"
         });
         */
+        const navigations = [];
+        if (config.header.menu.welcome.enabled) {
+            navigations.push({
+                "isActive": routeName === routes.home.name,
+                "linkProps": routes.home().link,
+                "text": t("header.navigation welcome")
+            });
+        }
+        if (config.header.menu.catalog.enabled) {
+            navigations.push({
+                "isActive":
+                    routeName === routes.softwareCatalog.name ||
+                    routeName === routes.softwareDetails.name ||
+                    routeName === routes.softwareUsersAndReferents.name,
+                "linkProps": routes.softwareCatalog().link,
+                "text": t("header.navigation catalog")
+            });
+        }
+        if (config.header.menu.addSoftware.enabled) {
+            navigations.push({
+                "isActive":
+                    routeName === routes.addSoftwareLanding.name ||
+                    routeName === routes.softwareUpdateForm.name ||
+                    routeName === routes.softwareCreationForm.name,
+                "linkProps": routes.addSoftwareLanding().link,
+                "text":
+                    routeName === routes.softwareUpdateForm.name
+                        ? t("header.navigation update software")
+                        : t("header.navigation add software")
+            });
+        }
+        if (config.header.menu.about.enabled) {
+            navigations.push({
+                "isActive": routeName === routes.readme.name,
+                "linkProps": routes.readme().link,
+                "text": t("header.navigation about")
+            });
+        }
+        if (config.header.menu.catalog.enabled) {
+            navigations.push({
+                "linkProps": {
+                    "target": "_blank",
+                    /* cSpell:disable */
+                    "href": `mailto:${contactEmail}?subject=${encodeURIComponent(
+                        "Demande d'accompagnement"
+                    )}`
+                    /* cSpell:enable */
+                },
+                "text": t("header.navigation support request")
+            });
+        }
+
+        const quickAccess: Array<JSX.Element | HeaderProps.QuickAccessItem> = [
+            <LanguageSelect />
+        ];
+        config.header.icons.forEach(icon =>
+            quickAccess.push(icon as HeaderProps.QuickAccessItem)
+        );
+        quickAccess.push(
+            <AuthButtons
+                isOnPageMyAccount={routeName === "account"}
+                userAuthenticationApi={userAuthenticationApi}
+            />
+        );
 
         return (
             <HeaderDsfr
@@ -49,79 +113,14 @@ export const Header = memo(
                         République <br /> Française{" "}
                     </>
                 }
-                serviceTitle={t("title")}
+                serviceTitle={t("header.title")}
                 homeLinkProps={{
                     ...routes.home().link,
-                    "title": t("home title")
+                    "title": t("header.home title")
                 }}
-                quickAccessItems={[
-                    <LanguageSelect />,
-                    {
-                        "iconId": "fr-icon-bank-fill",
-                        "linkProps": {
-                            "href": "https://code.gouv.fr/"
-                        },
-                        "text": "Code Gouv"
-                    },
-                    <AuthButtons
-                        isOnPageMyAccount={routeName === "account"}
-                        userAuthenticationApi={userAuthenticationApi}
-                    />
-                ]}
-                navigation={[
-                    {
-                        "isActive": routeName === routes.home.name,
-                        "linkProps": routes.home().link,
-                        "text": t("navigation welcome")
-                    },
-                    {
-                        "isActive":
-                            routeName === routes.softwareCatalog.name ||
-                            routeName === routes.softwareDetails.name ||
-                            routeName === routes.softwareUsersAndReferents.name,
-                        "linkProps": routes.softwareCatalog().link,
-                        "text": t("navigation catalog")
-                    },
-                    {
-                        "isActive":
-                            routeName === routes.addSoftwareLanding.name ||
-                            routeName === routes.softwareUpdateForm.name ||
-                            routeName === routes.softwareCreationForm.name,
-                        "linkProps": routes.addSoftwareLanding().link,
-                        "text":
-                            routeName === routes.softwareUpdateForm.name
-                                ? t("navigation update software")
-                                : t("navigation add software")
-                    },
-                    {
-                        "isActive": routeName === routes.readme.name,
-                        "linkProps": routes.readme().link,
-                        "text": t("navigation about")
-                    },
-                    {
-                        "linkProps": {
-                            "target": "_blank",
-                            /* cSpell:disable */
-                            "href": `mailto:${contactEmail}?subject=${encodeURIComponent(
-                                "Demande d'accompagnement"
-                            )}`
-                            /* cSpell:enable */
-                        },
-                        "text": t("navigation support request")
-                    }
-                ]}
+                quickAccessItems={quickAccess}
+                navigation={navigations}
             />
         );
     })
 );
-
-export const { i18n } = declareComponentKeys<
-    | "home title"
-    | "title"
-    | "navigation welcome"
-    | "navigation catalog"
-    | "navigation add software"
-    | "navigation update software"
-    | "navigation support request"
-    | "navigation about"
->()({ Header });

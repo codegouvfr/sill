@@ -1,5 +1,5 @@
 import { HeaderQuickAccessItem } from "@codegouvfr/react-dsfr/Header";
-import { declareComponentKeys, useTranslation } from "ui/i18n";
+import { useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { routes } from "ui/routes";
@@ -22,7 +22,7 @@ type Props = {
 export function AuthButtons(props: Props) {
     const { id, isOnPageMyAccount, userAuthenticationApi } = props;
 
-    const { t } = useTranslation({ AuthButtons });
+    const { t } = useTranslation();
 
     const { classes, cx } = useStyles({ isOnPageMyAccount });
 
@@ -36,7 +36,7 @@ export function AuthButtons(props: Props) {
                         buttonProps: {
                             onClick: () => userAuthenticationApi.login()
                         },
-                        text: t("login")
+                        text: t("authButtons.login")
                     }}
                 />
                 <HeaderQuickAccessItem
@@ -46,7 +46,7 @@ export function AuthButtons(props: Props) {
                         buttonProps: {
                             onClick: () => userAuthenticationApi.register()
                         },
-                        text: t("register")
+                        text: t("authButtons.register")
                     }}
                 />
             </>
@@ -67,7 +67,7 @@ export function AuthButtons(props: Props) {
                             ),
                             ...routes.account().link
                         },
-                        "text": t("account")
+                        "text": t("authButtons.account")
                     } as const
                 }
             />
@@ -78,16 +78,12 @@ export function AuthButtons(props: Props) {
                     buttonProps: {
                         onClick: () => userAuthenticationApi.logout()
                     },
-                    text: t("logout")
+                    text: t("authButtons.logout")
                 }}
             />
         </>
     );
 }
-
-export const { i18n } = declareComponentKeys<
-    "login" | "register" | "logout" | "account"
->()({ AuthButtons });
 
 const useStyles = tss
     .withName({ AuthButtons })

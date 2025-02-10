@@ -1,6 +1,6 @@
 import { memo } from "react";
-import { declareComponentKeys } from "i18nifty";
-import { useTranslation, useResolveLocalizedString } from "ui/i18n";
+import { useTranslation } from "react-i18next";
+import { useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
@@ -11,6 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import Markdown from "react-markdown";
+import config from "../../config-ui.json";
 
 export type Props = {
     className?: string;
@@ -68,7 +69,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
 
-    const { t } = useTranslation({ SoftwareCatalogCard });
+    const { t } = useTranslation();
     const { resolveLocalizedString } = useResolveLocalizedString();
     const { classes, cx } = useStyles({
         "isSearchHighlighted": searchHighlight !== undefined
@@ -79,30 +80,45 @@ export const SoftwareCatalogCard = memo((props: Props) => {
         <div className={cx(fr.cx("fr-card"), classes.root, className)}>
             <div className={classes.cardBody}>
                 <a className={cx(classes.headerContainer)} {...softwareDetailsLink}>
-                    <div className={classes.logoWrapper}>
-                        <img
-                            className={cx(classes.logo)}
-                            src={logoUrl ?? softwareLogoPlaceholder}
-                            alt={"software logo"}
-                        />
-                    </div>
+                    {(logoUrl || config.catalog.defaultLogo) && (
+                        <div className={classes.logoWrapper}>
+                            <img
+                                className={cx(classes.logo)}
+                                src={logoUrl ?? softwareLogoPlaceholder}
+                                alt={"software logo"}
+                            />
+                        </div>
+                    )}
 
                     <div className={cx(classes.header)}>
                         <div className={cx(classes.titleContainer)}>
                             <h3 className={cx(classes.title)}>{softwareName}</h3>
                             <div className={cx(classes.titleActionsContainer)}>
                                 {prerogatives.isInstallableOnUserComputer && (
-                                    <Tooltip title={t("hasDesktopApp")} arrow>
+                                    <Tooltip
+                                        title={t("softwareCatalogCard.hasDesktopApp")}
+                                        arrow
+                                    >
                                         <i className={fr.cx("fr-icon-computer-line")} />
                                     </Tooltip>
                                 )}
                                 {prerogatives.isFromFrenchPublicServices && (
-                                    <Tooltip title={t("isFromFrenchPublicService")} arrow>
+                                    <Tooltip
+                                        title={t(
+                                            "softwareCatalogCard.isFromFrenchPublicService"
+                                        )}
+                                        arrow
+                                    >
                                         <i className={fr.cx("fr-icon-france-line")} />
                                     </Tooltip>
                                 )}
                                 {prerogatives.isPresentInSupportContract && (
-                                    <Tooltip title={t("isPresentInSupportMarket")} arrow>
+                                    <Tooltip
+                                        title={t(
+                                            "softwareCatalogCard.isPresentInSupportMarket"
+                                        )}
+                                        arrow
+                                    >
                                         <i
                                             className={fr.cx(
                                                 "fr-icon-questionnaire-line"
@@ -122,7 +138,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     "fr-mb-1v"
                                 )}
                             >
-                                {t("you are referent")}
+                                {t("softwareCatalogCard.youAreReferent")}
                             </span>
                         ) : userDeclaration?.isUser ? (
                             <span
@@ -134,7 +150,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     "fr-mb-1v"
                                 )}
                             >
-                                {t("you are user")}
+                                {t("softwareCatalogCard.youAreUser")}
                             </span>
                         ) : null}
                         <div>
@@ -146,7 +162,9 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                                     )}
                                 >
                                     {latestVersion?.publicationTime &&
-                                        t("latest version", { fromNowText })}
+                                        t("softwareCatalogCard.latestVersion", {
+                                            fromNowText
+                                        })}
                                     {latestVersion?.semVer && (
                                         <span
                                             className={cx(
@@ -184,29 +202,33 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                     <Markdown>{resolveLocalizedString(softwareDescription)}</Markdown>
                 </div>
 
-                <DetailUsersAndReferents
-                    seeUserAndReferent={
-                        referentCount > 0 || userCount > 0
-                            ? softwareUsersAndReferentsLink
-                            : undefined
-                    }
-                    referentCount={referentCount}
-                    userCount={userCount}
-                    className={classes.detailUsersAndReferents}
-                />
+                {config.catalog.cardOptions.referentCount && (
+                    <DetailUsersAndReferents
+                        seeUserAndReferent={
+                            referentCount > 0 || userCount > 0
+                                ? softwareUsersAndReferentsLink
+                                : undefined
+                        }
+                        referentCount={referentCount}
+                        userCount={userCount}
+                        className={classes.detailUsersAndReferents}
+                    />
+                )}
             </div>
             <div className={classes.footer}>
-                {!userDeclaration?.isReferent && !userDeclaration?.isUser && (
-                    <a
-                        className={cx(
-                            fr.cx("fr-btn", "fr-btn--secondary", "fr-text--sm"),
-                            classes.declareReferentOrUserButton
-                        )}
-                        {...declareFormLink}
-                    >
-                        {t("declare oneself referent")}
-                    </a>
-                )}
+                {config.catalog.cardOptions.userCase &&
+                    !userDeclaration?.isReferent &&
+                    !userDeclaration?.isUser && (
+                        <a
+                            className={cx(
+                                fr.cx("fr-btn", "fr-btn--secondary", "fr-text--sm"),
+                                classes.declareReferentOrUserButton
+                            )}
+                            {...declareFormLink}
+                        >
+                            {t("softwareCatalogCard.declareOneselfReferent")}
+                        </a>
+                    )}
                 <div className={cx(classes.footerActionsContainer)}>
                     <a className={cx(classes.footerActionLink)} {...softwareDetailsLink}>
                         <i className={fr.cx("fr-icon-arrow-right-line")} />
@@ -311,7 +333,10 @@ const useStyles = tss
             "overflow": "hidden",
             "display": "-webkit-box",
             "WebkitBoxOrient": "vertical",
-            "WebkitLineClamp": isSearchHighlighted ? "5" : "3",
+            "WebkitLineClamp":
+                isSearchHighlighted || !config.catalog.cardOptions.referentCount
+                    ? "5"
+                    : "3",
             "whiteSpace": "pre-wrap"
         },
         "detailUsersAndReferents": {
@@ -351,13 +376,3 @@ const useStyles = tss
             "background": "none"
         }
     }));
-
-export const { i18n } = declareComponentKeys<
-    | { K: "latest version"; P: { fromNowText: string } }
-    | "declare oneself referent"
-    | "hasDesktopApp"
-    | "isPresentInSupportMarket"
-    | "isFromFrenchPublicService"
-    | "you are user"
-    | "you are referent"
->()({ SoftwareCatalogCard });

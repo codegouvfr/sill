@@ -103,6 +103,7 @@ export namespace State {
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
+        softwareType: ApiTypes.SoftwareType;
     };
 }
 

@@ -2,7 +2,8 @@ import {
     LanguageSelect as LanguageSelectBase,
     addLanguageSelectTranslations
 } from "@codegouvfr/react-dsfr/LanguageSelect";
-import { useLang, languages } from "ui/i18n";
+import { useLang } from "ui/i18n";
+import i18n from "../../i18n/i18next";
 
 type Props = {
     id?: string;
@@ -11,14 +12,17 @@ type Props = {
 export function LanguageSelect(props: Props) {
     const { id } = props;
 
-    const { lang, setLang } = useLang();
+    const { setLang } = useLang();
 
     return (
         <LanguageSelectBase
             id={id}
-            supportedLangs={languages}
-            lang={lang}
-            setLang={setLang}
+            supportedLangs={i18n.languages}
+            lang={i18n.language}
+            setLang={(lang: any) => {
+                setLang(lang);
+                i18n.changeLanguage(lang);
+            }}
             fullNameByLang={{
                 en: "English",
                 fr: "Français"
@@ -27,7 +31,7 @@ export function LanguageSelect(props: Props) {
     );
 }
 
-languages.forEach(lang =>
+i18n.languages.forEach(lang =>
     addLanguageSelectTranslations({
         lang,
         "messages": {

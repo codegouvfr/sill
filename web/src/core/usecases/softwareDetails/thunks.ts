@@ -185,6 +185,7 @@ function apiSoftwareToSoftware(params: {
         comptoirDuLibreServiceProviderCount,
         comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
+        externalDataOrigin,
         externalId,
         license,
         versionMin,
@@ -268,7 +269,7 @@ function apiSoftwareToSoftware(params: {
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
         "wikidataUrl":
-            externalId === undefined
+            externalDataOrigin !== "wikidata" || externalId === undefined
                 ? undefined
                 : `https://www.wikidata.org/wiki/${externalId}`,
         "instances":
@@ -334,6 +335,7 @@ function apiSoftwareToSoftware(params: {
         versionMin,
         programmingLanguages,
         keywords,
-        applicationCategories
+        applicationCategories,
+        softwareType
     };
 }
