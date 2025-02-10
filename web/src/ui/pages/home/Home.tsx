@@ -36,33 +36,30 @@ export default function Home(props: Props) {
 
     const stats = useCoreState("generalStats", "main");
 
-    type availableStat =
+    type AvailableStat =
         | "softwareCount"
         | "registeredUserCount"
         | "agentReferentCount"
         | "organizationCount";
-    const statsCases = config.home.statistics.catgegories as Array<availableStat>;
+    const statsCases = config.home.statistics.catgegories as Array<AvailableStat>;
 
-    type availableUseCase = "declareReferent" | "editSoftware" | "addSoftwareOrService";
+    type AvailableUseCase = "declareReferent" | "editSoftware" | "addSoftwareOrService";
     type UseCaseConfig = {
         enabled: boolean;
         labelLinks: any;
         buttonEnabled: boolean;
         buttonLink: string;
     };
-    type UsesCaseConfig = Record<availableUseCase, UseCaseConfig>;
+    type UsesCaseConfig = Record<AvailableUseCase, UseCaseConfig>;
 
     const configUseCases: UsesCaseConfig = config.home.usecases;
-    const keys: Array<availableUseCase> = Object.keys(
+    const keys: Array<AvailableUseCase> = Object.keys(
         configUseCases
-    ) as Array<availableUseCase>;
+    ) as Array<AvailableUseCase>;
 
-    const useCases: Array<availableUseCase> = keys.reduce(
-        (accumulator: Array<availableUseCase>, key: availableUseCase) => {
-            return configUseCases[key].enabled ? accumulator.concat([key]) : accumulator;
-        },
-        []
-    );
+    const useCases: Array<AvailableUseCase> = keys.filter((key: AvailableUseCase) => {
+        return configUseCases[key].enabled;
+    });
 
     const softwareSelectionList = [
         {
@@ -156,7 +153,7 @@ export default function Home(props: Props) {
                             alignItems: "center"
                         }}
                     >
-                        {statsCases.map((metricName: availableStat) => (
+                        {statsCases.map((metricName: AvailableStat) => (
                             <Grid item xs={3}>
                                 <div key={metricName}>
                                     <AnimatedMetric
@@ -189,7 +186,7 @@ export default function Home(props: Props) {
                             alignContent: "stretch"
                         }}
                     >
-                        {useCases.map((cardName: availableUseCase) => {
+                        {useCases.map((cardName: AvailableUseCase) => {
                             const link = (() => {
                                 const configLink = configUseCases[cardName].buttonLink;
                                 const renderedConfigLink = {
