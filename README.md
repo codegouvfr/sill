@@ -1,5 +1,3 @@
-[![img](https://img.shields.io/badge/code.gouv.fr-contributif-blue.svg)](https://code.gouv.fr/documentation/#quels-degres-douverture-pour-les-codes-sources)
-
 # A Software Catalog application
 
 This repository contains a software catalog application.
@@ -16,6 +14,8 @@ This "monorepo" is made of several directories:
 - docs: Documentation, as deployed [here](https://codegouvfr.github.io/sill/)
 
 # Governance and contributions
+
+[![img](https://img.shields.io/badge/code.gouv.fr-contributif-blue.svg)](https://code.gouv.fr/documentation/#quels-degres-douverture-pour-les-codes-sources)
 
 See [GOVERNANCE.md](GOVERNANCE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
