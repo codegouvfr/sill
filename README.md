@@ -17,7 +17,7 @@ This "monorepo" is made of several directories:
 
 # Governance and contributions
 
-See GOVERNANCE.md and CONTRIBUTIONS.md.
+See [GOVERNANCE.md](GOVERNANCE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 # License
 
