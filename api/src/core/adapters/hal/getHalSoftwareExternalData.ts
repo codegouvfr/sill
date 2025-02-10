@@ -29,7 +29,10 @@ const buildParentOrganizationTree = async (
     );
 };
 
-const parseReferencePublication = (source: HAL.ArticleIdentifierOrigin, value: string | string[]): SILL.ScholarlyArticle[] => {
+const parseReferencePublication = (
+    source: HAL.ArticleIdentifierOrigin,
+    value: string | string[]
+): SILL.ScholarlyArticle[] => {
     const arrayValue = typeof value === "string" ? value.split(",") : value;
     switch (source) {
         case "hal":
