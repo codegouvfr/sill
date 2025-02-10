@@ -238,7 +238,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                 )}
                 {sourceCodeRepository && (
                     <LogoURLButton
-                        iconId={"fr-icon-git-repository-line"}
+                        iconId={"fr-icon-code-s-slash-line"}
                         className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
                         priority="secondary"
                         url={sourceCodeRepository}
