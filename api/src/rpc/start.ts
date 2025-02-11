@@ -67,13 +67,8 @@ export async function startRpcService(params: {
                 "kyselyDb": kyselyDb
             },
             githubPersonalAccessTokenForApiRateLimit,
-            "doPerPerformPeriodicalCompilation": true,
             // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
-            "doPerformCacheInitialization": redirectUrl === undefined,
-            "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
-            "botAgentEmail": botAgentEmail,
-            "initializeSoftwareFromSource": initializeSoftwareFromSource,
-            "listToImport": listToImport ?? []
+            "externalSoftwareDataOrigin": externalSoftwareDataOrigin
         }),
         createContextFactory({
             "oidcParams": {

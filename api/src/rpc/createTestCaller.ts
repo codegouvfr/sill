@@ -27,11 +27,7 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
     const { dbApi, useCases } = await bootstrapCore({
         "dbConfig": { dbKind: "kysely", kyselyDb },
         "githubPersonalAccessTokenForApiRateLimit": "fake-token",
-        "doPerPerformPeriodicalCompilation": false,
-        "doPerformCacheInitialization": false,
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
-        "botAgentEmail": "bot@mydomain.fr",
-        "initializeSoftwareFromSource": false
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
     });
 
     const { router } = createRouter({
