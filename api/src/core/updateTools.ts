@@ -9,31 +9,18 @@ import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVers
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
-import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
-import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
-import { UseCases } from "./usecases";
-import { makeGetAgent } from "./usecases/getAgent";
-import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
 type DbConfig = PgDbConfig;
 
-type ParamsOfBootstrapCore = {
+type ParamsOfUpdateService = {
     dbConfig: DbConfig;
     githubPersonalAccessTokenForApiRateLimit: string;
     externalSoftwareDataOrigin: ExternalDataOrigin;
-};
-
-export type Context = {
-    paramsOfBootstrapCore: ParamsOfBootstrapCore;
-    dbApi: DbApiV2;
-    comptoirDuLibreApi: ComptoirDuLibreApi;
-    getSoftwareExternalData: GetSoftwareExternalData;
-    getSoftwareLatestVersion: GetSoftwareLatestVersion;
 };
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
@@ -47,9 +34,7 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     throw new Error(`Unsupported case: ${shouldNotBeReached}`);
 };
 
-export async function bootstrapCore(
-    params: ParamsOfBootstrapCore
-): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
+export async function updateTool(params: ParamsOfUpdateService): Promise<boolean> {
     const { dbConfig, githubPersonalAccessTokenForApiRateLimit, externalSoftwareDataOrigin } = params;
 
     const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
@@ -60,29 +45,19 @@ export async function bootstrapCore(
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
-    const context: Context = {
-        "paramsOfBootstrapCore": params,
-        dbApi,
-        comptoirDuLibreApi,
+    const fetchAndSaveExternalDataForAllSoftwares = makeFetchAndSaveExternalDataForAllSoftwares({
         getSoftwareExternalData,
-        getSoftwareLatestVersion
-    };
+        getCnllPrestatairesSill,
+        comptoirDuLibreApi,
+        getSoftwareLatestVersion,
+        getServiceProviders,
+        dbApi
+    });
+    console.info("------ Updating software external data started ------");
+    await fetchAndSaveExternalDataForAllSoftwares();
+    console.info("------ Updating software external data finished ------");
 
-    const useCases: UseCases = {
-        getSoftwareFormAutoFillDataFromExternalAndOtherSources:
-            makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
-        fetchAndSaveExternalDataForAllSoftwares: makeFetchAndSaveExternalDataForAllSoftwares({
-            getSoftwareExternalData,
-            getCnllPrestatairesSill,
-            comptoirDuLibreApi,
-            getSoftwareLatestVersion,
-            getServiceProviders,
-            dbApi
-        }),
-        getAgent: makeGetAgent({ agentRepository: dbApi.agent })
-    };
-
-    return { dbApi, context, useCases };
+    return Promise.resolve(true);
 }
 
 function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {

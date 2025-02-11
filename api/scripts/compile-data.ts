@@ -12,11 +12,7 @@ import { env } from "../src/env";
             "kyselyDb": kyselyDb
         },
         "githubPersonalAccessTokenForApiRateLimit": env.githubPersonalAccessTokenForApiRateLimit,
-        "doPerPerformPeriodicalCompilation": false,
-        "doPerformCacheInitialization": false,
-        "externalSoftwareDataOrigin": env.externalSoftwareDataOrigin,
-        "initializeSoftwareFromSource": env.initializeSoftwareFromSource,
-        "botAgentEmail": env.botAgentEmail
+        "externalSoftwareDataOrigin": env.externalSoftwareDataOrigin
     });
 
     await useCases.fetchAndSaveExternalDataForAllSoftwares();
