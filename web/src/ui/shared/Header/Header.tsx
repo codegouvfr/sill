@@ -89,18 +89,22 @@ export const Header = memo(
             });
         }
 
+        const link: HeaderProps.QuickAccessItem | null = config.header.link
+            ? {
+                  iconId: "fr-icon-bank-fill",
+                  linkProps: config.header.link.linkProps,
+                  text: config.header.link.text
+              }
+            : null;
+
         const quickAccess: Array<JSX.Element | HeaderProps.QuickAccessItem> = [
-            <LanguageSelect />
-        ];
-        config.header.icons.forEach(icon =>
-            quickAccess.push(icon as HeaderProps.QuickAccessItem)
-        );
-        quickAccess.push(
+            <LanguageSelect />,
+            ...(link ? [link] : []),
             <AuthButtons
                 isOnPageMyAccount={routeName === "account"}
                 userAuthenticationApi={userAuthenticationApi}
             />
-        );
+        ];
 
         return (
             <HeaderDsfr
