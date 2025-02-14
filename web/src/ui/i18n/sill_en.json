@@ -8,6 +8,7 @@
         "providers_other": "providers"
     },
     "app": {
+        "title": "The Interministerial Free Software Base is a set of free software recommended by the French State since 2013.",
         "yes": "Yes",
         "no": "No",
         "not applicable": "Not applicable",
