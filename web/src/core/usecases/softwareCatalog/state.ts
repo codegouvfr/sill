@@ -89,7 +89,7 @@ export namespace State {
                 | undefined;
             programmingLanguages: string[];
             applicationCategories: string[];
-            referencePublication?: ApiTypes.SILL.ScholarlyArticle[];
+            referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
         };
 
         export type External = Common & {

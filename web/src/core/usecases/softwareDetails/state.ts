@@ -100,7 +100,7 @@ export namespace State {
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
-        referencePublication?: ApiTypes.SILL.ScholarlyArticle[];
+        referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
         softwareType: ApiTypes.SoftwareType;
     };
 }

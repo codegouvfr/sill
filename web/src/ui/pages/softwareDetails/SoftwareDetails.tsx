@@ -261,7 +261,7 @@ export default function SoftwareDetails(props: Props) {
                                           )
                                       }
                                   ]),
-                            ...(software.referencePublication === undefined
+                            ...(software.referencePublications === undefined
                                 ? []
                                 : [
                                       {
@@ -270,8 +270,8 @@ export default function SoftwareDetails(props: Props) {
                                           ),
                                           "content": (
                                               <PublicationTab
-                                                  referencePublication={
-                                                      software.referencePublication
+                                                  referencePublications={
+                                                      software.referencePublications
                                                   }
                                               ></PublicationTab>
                                           )

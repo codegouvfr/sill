@@ -195,7 +195,7 @@ function apiSoftwareToSoftware(params: {
         serviceProviders,
         programmingLanguages,
         keywords,
-        referencePublication,
+        referencePublications,
         applicationCategories
     } = apiSoftware;
 
@@ -337,7 +337,7 @@ function apiSoftwareToSoftware(params: {
         programmingLanguages,
         keywords,
         applicationCategories,
-        referencePublication,
+        referencePublications,
         softwareType
     };
 }
