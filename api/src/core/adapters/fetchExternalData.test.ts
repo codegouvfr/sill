@@ -180,7 +180,7 @@ describe("fetches software extra data (from different providers)", () => {
             expectToEqual(updatedSoftwareExternalDatas, [
                 {
                     applicationCategories: null,
-                    description: "A framwork for creating react SPA that uses webpack as bundler",
+                    description: "deprecated tool for creating React SPA using webpack as bundler",
                     developers: [],
                     documentationUrl: null,
                     externalDataOrigin: "wikidata",
@@ -267,10 +267,7 @@ describe("fetches software extra data (from different providers)", () => {
                     framaLibreId: null,
                     isLibreSoftware: false,
                     keywords: [],
-                    label: {
-                        "en": "Javascript HTTP Server",
-                        "fr": "Apache HTTP Server"
-                    },
+                    label: "Apache HTTP Server",
                     license: "Apache License v2.0",
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/1/10/Apache_HTTP_server_logo_%282019-present%29.svg/220px-Apache_HTTP_server_logo_%282019-present%29.svg.png",
@@ -289,11 +286,6 @@ describe("fetches software extra data (from different providers)", () => {
                     softwareId: apacheSoftwareId,
                     comptoirDuLibreSoftware: null,
                     annuaireCnllServiceProviders: [
-                        {
-                            url: "https://annuaire.cnll.fr/societes/434940763",
-                            name: "YPOK",
-                            siren: "434940763"
-                        },
                         {
                             url: "https://annuaire.cnll.fr/societes/538420753",
                             name: "INNO3",
