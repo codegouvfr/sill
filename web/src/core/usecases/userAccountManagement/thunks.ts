@@ -7,7 +7,7 @@ export const thunks = {
     "initialize":
         () =>
         async (...args) => {
-            const [dispatch, getState, { oidc, getUser, sillApi }] = args;
+            const [dispatch, getState, { oidc, sillApi }] = args;
 
             {
                 const state = getState()[name];
@@ -21,9 +21,9 @@ export const thunks = {
 
             assert(oidc.isUserLoggedIn);
 
-            const user = await getUser();
+            const user = await sillApi.getCurrentUser();
 
-            const [{ keycloakParams }, allOrganizations, { agent }] = await Promise.all([
+            const [oidcParams, allOrganizations, { agent }] = await Promise.all([
                 sillApi.getOidcParams(),
                 sillApi.getAllOrganizations(),
                 sillApi.getAgent({ "email": user.email })
@@ -35,19 +35,11 @@ export const thunks = {
                 actions.initialized({
                     "email": user.email,
                     "organization": organization,
-                    "accountManagementUrl":
-                        keycloakParams === undefined
-                            ? undefined
-                            : addParamToUrl({
-                                  "url": [
-                                      keycloakParams.url.replace(/\/$/, ""),
-                                      "realms",
-                                      keycloakParams.realm,
-                                      "account"
-                                  ].join("/"),
-                                  "name": "referrer",
-                                  "value": keycloakParams.clientId
-                              }).newUrl,
+                    "accountManagementUrl": addParamToUrl({
+                        "url": [oidcParams.issuerUri, "account"].join("/"),
+                        "name": "referrer",
+                        "value": oidcParams.clientId
+                    }).newUrl,
                     allOrganizations,
                     about,
                     isPublic

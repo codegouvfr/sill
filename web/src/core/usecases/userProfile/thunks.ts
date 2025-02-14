@@ -8,7 +8,7 @@ export const thunks = {
         async (...args) => {
             const { email } = params;
 
-            const [dispatch, getState, { sillApi, getUser, oidc }] = args;
+            const [dispatch, getState, { sillApi, oidc }] = args;
 
             {
                 const state = getState()[name];
@@ -41,7 +41,7 @@ export const thunks = {
 
             const isHimself = !oidc.isUserLoggedIn
                 ? false
-                : (await getUser()).email === email;
+                : (await sillApi.getCurrentUser()).email === email;
 
             dispatch(
                 actions.initializationCompleted({

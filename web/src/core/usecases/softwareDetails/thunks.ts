@@ -29,7 +29,7 @@ export const thunks = {
                 }
             }
 
-            const { sillApi, oidc, getUser, evtAction } = extraArg;
+            const { sillApi, oidc, evtAction } = extraArg;
 
             {
                 const context = getContext(extraArg);
@@ -72,7 +72,7 @@ export const thunks = {
 
                     const [{ agents }, user] = await Promise.all([
                         sillApi.getAgents(),
-                        getUser()
+                        sillApi.getCurrentUser()
                     ]);
 
                     const agent = agents.find(agent => agent.email === user.email);

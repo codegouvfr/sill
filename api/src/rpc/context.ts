@@ -1,27 +1,15 @@
-import { createValidateKeycloakSignature, type KeycloakParams } from "../tools/createValidateKeycloakSignature";
-import * as jwtSimple from "jwt-simple";
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
-import { type User, createAccessTokenToUser } from "./user";
+import { createDecodeAccessToken, OidcParams } from "../tools/oidc";
+import { type User } from "./user";
 
 export type Context = {
     user?: User;
 };
 
-export function createContextFactory(params: {
-    jwtClaimByUserKey: Record<keyof User, string>;
-    keycloakParams: KeycloakParams | undefined;
-}) {
-    const { jwtClaimByUserKey, keycloakParams } = params;
+export async function createContextFactory(params: { oidcParams: Pick<OidcParams, "issuerUri"> }) {
+    const { oidcParams } = params;
 
-    const { accessTokenToUser } = createAccessTokenToUser({
-        "decodeJwt": accessToken => jwtSimple.decode(accessToken, "", true),
-        jwtClaimByUserKey
-    });
-
-    const { validateKeycloakSignature } =
-        keycloakParams !== undefined
-            ? createValidateKeycloakSignature(keycloakParams)
-            : { "validateKeycloakSignature": undefined };
+    const { decodeAccessToken } = await createDecodeAccessToken(oidcParams.issuerUri);
 
     async function createContext({ req }: CreateExpressContextOptions): Promise<Context> {
         const { authorization } = req.headers;
@@ -30,13 +18,9 @@ export function createContextFactory(params: {
             return {};
         }
 
-        const accessToken = authorization.split(" ")[1];
+        const { sub, email } = decodeAccessToken({ authorizationHeaderValue: authorization });
 
-        await validateKeycloakSignature?.({ accessToken });
-
-        const user = accessTokenToUser({ accessToken });
-
-        return { user };
+        return { user: { id: sub, email } };
     }
 
     return { createContext };

@@ -2,21 +2,13 @@ import { usecases } from "./usecases";
 import type { LocalizedString } from "i18nifty";
 import type { Language } from "api";
 import type { Oidc } from "./ports/Oidc";
-import {
-    createCore,
-    type GenericCore,
-    createObjectThatThrowsIfAccessed
-} from "redux-clean-architecture";
-import { createGetUser } from "core/adapter/getUser";
-import type { GetUser } from "core/ports/GetUser";
+import { createCore, type GenericCore } from "redux-clean-architecture";
 import type { SillApi } from "core/ports/SillApi";
 
 type ParamsOfBootstrapCore = {
     /** Empty string for using mock */
     apiUrl: string;
     appUrl: string;
-    /** Default: false, only considered if using mocks */
-    isUserInitiallyLoggedIn?: boolean;
     transformUrlBeforeRedirectToLogin: (params: {
         url: string;
         termsOfServiceUrl: LocalizedString<Language>;
@@ -30,7 +22,6 @@ type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     sillApi: SillApi;
     oidc: Oidc;
-    getUser: GetUser;
 };
 
 type Core = GenericCore<typeof usecases, Context>;
@@ -42,13 +33,7 @@ export type CreateEvt = Core["types"]["CreateEvt"];
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
 ): Promise<{ core: Core }> {
-    const {
-        apiUrl,
-        appUrl,
-        isUserInitiallyLoggedIn = false,
-        transformUrlBeforeRedirectToLogin,
-        getCurrentLang
-    } = params;
+    const { apiUrl, appUrl, transformUrlBeforeRedirectToLogin, getCurrentLang } = params;
 
     let oidc: Oidc | undefined = undefined;
 
@@ -61,7 +46,7 @@ export async function bootstrapCore(
 
         const { createSillApi } = await import("core/adapter/sillApi");
 
-        const sillApi = createSillApi({
+        return createSillApi({
             "url": apiUrl,
             "getOidcAccessToken": () => {
                 if (oidc === undefined || !oidc.isUserLoggedIn) {
@@ -70,8 +55,6 @@ export async function bootstrapCore(
                 return oidc.getTokens().accessToken;
             }
         });
-
-        return sillApi;
     })();
 
     const redirectUrl = await sillApi.getRedirectUrl();
@@ -82,31 +65,17 @@ export async function bootstrapCore(
         await new Promise(() => {});
     }
 
-    const [{ keycloakParams, jwtClaimByUserKey }, termsOfServiceUrl] = await Promise.all([
+    const [oidcParams, termsOfServiceUrl] = await Promise.all([
         sillApi.getOidcParams(),
         sillApi.getTermsOfServiceUrl()
     ]);
 
     oidc = await (async () => {
-        if (keycloakParams === undefined) {
-            const { createOidc } = await import("core/adapter/oidcMock");
-
-            return createOidc({
-                isUserInitiallyLoggedIn,
-                jwtClaimByUserKey,
-                "user": {
-                    "email": "joseph.garrone@code.gouv.fr",
-                    "id": "xxxxx"
-                }
-            });
-        }
-
         const { createOidc } = await import("core/adapter/oidc");
 
         return createOidc({
-            "keycloakUrl": keycloakParams.url,
-            "keycloakRealm": keycloakParams.realm,
-            "clientId": keycloakParams.clientId,
+            "issuerUri": oidcParams.issuerUri,
+            "clientId": oidcParams.clientId,
             appUrl,
             "transformUrlBeforeRedirect": url =>
                 transformUrlBeforeRedirectToLogin({
@@ -117,26 +86,10 @@ export async function bootstrapCore(
         });
     })();
 
-    const getUser = (() => {
-        if (!oidc.isUserLoggedIn) {
-            return createObjectThatThrowsIfAccessed<GetUser>();
-        }
-
-        const oidcLoggedIn = oidc;
-
-        const { getUser } = createGetUser({
-            jwtClaimByUserKey,
-            "getOidcAccessToken": () => oidcLoggedIn.getTokens().accessToken
-        });
-
-        return getUser;
-    })();
-
     const context: Context = {
         "paramsOfBootstrapCore": params,
         sillApi,
-        oidc,
-        getUser
+        oidc
     };
 
     const { core, dispatch } = createCore({

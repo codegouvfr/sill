@@ -85,12 +85,14 @@ export const protectedThunks = {
     "initialize":
         () =>
         async (...args) => {
-            const [dispatch, , { sillApi, evtAction, getUser, oidc }] = args;
+            const [dispatch, , { sillApi, evtAction, oidc }] = args;
 
             const initialize = async () => {
                 const [apiSoftwares, { email: userEmail }] = await Promise.all([
                     sillApi.getSoftwares(),
-                    oidc.isUserLoggedIn ? getUser() : { "email": undefined }
+                    oidc.isUserLoggedIn
+                        ? sillApi.getCurrentUser()
+                        : { "email": undefined }
                 ] as const);
 
                 const { agents } =
@@ -110,7 +112,9 @@ export const protectedThunks = {
                             "userDeclaration":
                                 agents === undefined
                                     ? undefined
-                                    : (() => {
+                                    : (():
+                                          | { isReferent: boolean; isUser: boolean }
+                                          | undefined => {
                                           const agent = agents.find(
                                               agent => agent.email === userEmail
                                           );

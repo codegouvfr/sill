@@ -27,6 +27,7 @@ services:
     container_name: keycloak
     environment:
       DB_VENDOR: h2
+      KC_HTTP_RELATIVE_PATH: /auth
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: admin
       PROXY_ADDRESS_FORWARDING: "true"

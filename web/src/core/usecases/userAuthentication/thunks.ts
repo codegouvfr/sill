@@ -5,13 +5,13 @@ import { name, actions } from "./state";
 export const protectedThunks = {
     initialize:
         () =>
-        async (dispatch, getState, { sillApi, oidc, getUser }) => {
+        async (dispatch, getState, { sillApi, oidc }) => {
             console.log("OIDC : is user logged in ?", oidc.isUserLoggedIn);
             if (!oidc.isUserLoggedIn) return;
             const state = getState()[name];
             if (state.stateDescription === "ready" || state.isInitializing) return;
             dispatch(actions.initializationStarted());
-            const user = await getUser();
+            const user = await sillApi.getCurrentUser();
             const { agent } = await sillApi.getAgent({ "email": user.email });
             dispatch(actions.initialized({ agent }));
         }

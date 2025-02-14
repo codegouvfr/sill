@@ -81,12 +81,12 @@ export const thunks = {
         async (...args) => {
             const { declarationType } = props;
 
-            const [dispatch, getState, { sillApi, getUser }] = args;
+            const [dispatch, getState, { sillApi }] = args;
 
             redirect_if_declaration_already_exists: {
                 const [{ agents }, { email }] = await Promise.all([
                     sillApi.getAgents(),
-                    getUser()
+                    sillApi.getCurrentUser()
                 ]);
 
                 const agent = agents.find(agent => agent.email === email);

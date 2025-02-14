@@ -5,7 +5,7 @@ import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
 export type TrpcRouterInput = inferRouterInputs<TrpcRouter>;
 export type TrpcRouterOutput = inferRouterOutputs<TrpcRouter>;
 
-export { type User, createAccessTokenToUser } from "../rpc/user";
+export { type User } from "../rpc/user";
 export { type Language, type LocalizedString, languages } from "../core/ports/GetSoftwareExternalData";
 export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 

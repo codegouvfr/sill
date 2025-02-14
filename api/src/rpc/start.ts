@@ -20,19 +20,14 @@ import type {
     LocalizedString
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
-import type { User } from "./user";
 
 export async function startRpcService(params: {
-    keycloakParams?: {
-        url: string;
-        realm: string;
-        clientId: string;
-    };
+    oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
-    jwtClaimByUserKey: Record<keyof User, string>;
     githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
@@ -45,10 +40,9 @@ export async function startRpcService(params: {
 }) {
     const {
         redirectUrl,
-        keycloakParams,
+        oidcParams,
         termsOfServiceUrl,
         readmeUrl,
-        jwtClaimByUserKey,
         port,
         githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
@@ -66,34 +60,27 @@ export async function startRpcService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const { dbApi, useCases } = await bootstrapCore({
-        "dbConfig": {
-            "dbKind": "kysely",
-            "kyselyDb": kyselyDb
-        },
-        githubPersonalAccessTokenForApiRateLimit,
-        "doPerPerformPeriodicalCompilation": true,
-        // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
-        "doPerformCacheInitialization": redirectUrl === undefined,
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
-        "botAgentEmail": botAgentEmail,
-        "initializeSoftwareFromSource": initializeSoftwareFromSource,
-        "listToImport": listToImport ?? []
-    });
-
-    console.log("Core API initialized");
-
-    const { createContext } = createContextFactory({
-        jwtClaimByUserKey,
-        "keycloakParams":
-            keycloakParams === undefined
-                ? undefined
-                : {
-                      "url": keycloakParams.url,
-                      "realm": keycloakParams.realm,
-                      "clientId": keycloakParams.clientId
-                  }
-    });
+    const [{ dbApi, useCases }, { createContext }] = await Promise.all([
+        bootstrapCore({
+            "dbConfig": {
+                "dbKind": "kysely",
+                "kyselyDb": kyselyDb
+            },
+            githubPersonalAccessTokenForApiRateLimit,
+            "doPerPerformPeriodicalCompilation": true,
+            // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
+            "doPerformCacheInitialization": redirectUrl === undefined,
+            "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+            "botAgentEmail": botAgentEmail,
+            "initializeSoftwareFromSource": initializeSoftwareFromSource,
+            "listToImport": listToImport ?? []
+        }),
+        createContextFactory({
+            "oidcParams": {
+                "issuerUri": oidcParams.issuerUri
+            }
+        })
+    ]);
 
     const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
         getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
@@ -103,15 +90,7 @@ export async function startRpcService(params: {
         dbApi,
         getSoftwareExternalDataOptions,
         getSoftwareExternalData,
-        jwtClaimByUserKey,
-        "keycloakParams":
-            keycloakParams === undefined
-                ? undefined
-                : {
-                      "url": keycloakParams.url,
-                      "realm": keycloakParams.realm,
-                      "clientId": keycloakParams.clientId
-                  },
+        oidcParams,
         termsOfServiceUrl,
         readmeUrl,
         redirectUrl,
