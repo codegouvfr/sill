@@ -25,17 +25,16 @@ import {
     SoftwareFormData,
     SoftwareType
 } from "../core/usecases/readWriteSillData";
-import type { KeycloakParams } from "../tools/createValidateKeycloakSignature";
 import { getMonorepoRootPackageJson } from "../tools/getMonorepoRootPackageJson";
+import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
-import type { User } from "./user";
+import { User } from "./user";
 
 export function createRouter(params: {
     dbApi: DbApiV2;
     useCases: UseCases;
-    keycloakParams: KeycloakParams | undefined;
-    jwtClaimByUserKey: Record<keyof User, string>;
+    oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
     readmeUrl: LocalizedString;
     redirectUrl: string | undefined;
@@ -46,8 +45,7 @@ export function createRouter(params: {
     const {
         useCases,
         dbApi,
-        keycloakParams,
-        jwtClaimByUserKey,
+        oidcParams,
         termsOfServiceUrl,
         readmeUrl,
         redirectUrl,
@@ -86,24 +84,11 @@ export function createRouter(params: {
                 return () => out;
             })()
         ),
-        "getOidcParams": loggedProcedure.query(
-            (() => {
-                const out = {
-                    "keycloakParams": (() => {
-                        if (keycloakParams === undefined) {
-                            return undefined;
-                        }
-
-                        const { url, realm, clientId } = keycloakParams;
-
-                        return { url, realm, clientId };
-                    })(),
-                    jwtClaimByUserKey
-                };
-
-                return () => out;
-            })()
-        ),
+        "getOidcParams": loggedProcedure.query(() => oidcParams),
+        "getCurrentUser": loggedProcedure.query(({ ctx: { user } }): User => {
+            if (!user) throw new TRPCError({ "code": "UNAUTHORIZED" });
+            return user;
+        }),
         "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
@@ -465,8 +450,6 @@ export function createRouter(params: {
                 }
 
                 const { newEmail } = input;
-
-                assert(keycloakParams !== undefined);
 
                 const agent = await dbApi.agent.getByEmail(user.email);
                 if (!agent)

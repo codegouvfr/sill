@@ -12,17 +12,13 @@ export const sillApi: SillApi = {
     "getExternalSoftwareDataOrigin": memoize(async () => "wikidata" as const, {
         "promise": true
     }),
+    "getCurrentUser": memoize(async () => ({ email: "john.doe@email.com", id: "123" }), {
+        "promise": true
+    }),
     "getRedirectUrl": async () => undefined,
     "getApiVersion": memoize(async () => "0.0.0", { "promise": true }),
     "getOidcParams": memoize(
-        async () => ({
-            "keycloakParams": undefined,
-            "jwtClaimByUserKey": {
-                "organization": "a",
-                "email": "b",
-                "id": "c"
-            }
-        }),
+        async () => ({ clientId: "some-client-id", issuerUri: "http://fake.url" }),
         { "promise": true }
     ),
     "getSoftwares": memoize(() => Promise.resolve([...softwares]), { "promise": true }),

@@ -2,6 +2,12 @@ import { assert, type Equals } from "tsafe/assert";
 import type { TrpcRouterInput, TrpcRouterOutput } from "api";
 
 export type SillApi = {
+    getCurrentUser: {
+        (params: TrpcRouterInput["getCurrentUser"]): Promise<
+            TrpcRouterOutput["getCurrentUser"]
+        >;
+        clear: () => void;
+    };
     getExternalSoftwareDataOrigin: {
         (params: TrpcRouterInput["getExternalSoftwareDataOrigin"]): Promise<
             TrpcRouterOutput["getExternalSoftwareDataOrigin"]

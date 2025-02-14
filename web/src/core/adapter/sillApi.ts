@@ -40,6 +40,9 @@ export function createSillApi(params: {
     };
 
     const sillApi: SillApi = {
+        "getCurrentUser": memoize(() => trpcClient.getCurrentUser.query(), {
+            "promise": true
+        }),
         "getExternalSoftwareDataOrigin": memoize(
             () => trpcClient.getExternalSoftwareDataOrigin.query(),
             { "promise": true }

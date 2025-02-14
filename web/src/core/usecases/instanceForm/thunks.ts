@@ -17,7 +17,7 @@ export const thunks = {
                   }
         ) =>
         async (...args) => {
-            const [dispatch, getState, { sillApi, getUser, oidc }] = args;
+            const [dispatch, getState, { sillApi, oidc }] = args;
 
             {
                 const state = getState()[name];
@@ -79,7 +79,7 @@ export const thunks = {
 
                     assert(oidc.isUserLoggedIn);
 
-                    const user = await getUser();
+                    const user = await sillApi.getCurrentUser();
                     const { agent } = await sillApi.getAgent({ email: user.email });
 
                     dispatch(

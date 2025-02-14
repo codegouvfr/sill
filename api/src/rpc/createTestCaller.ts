@@ -34,21 +34,14 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
         "initializeSoftwareFromSource": false
     });
 
-    const jwtClaimByUserKey = {
-        "id": "sub",
-        "email": "email",
-        "organization": "organization"
-    };
-
     const { router } = createRouter({
         useCases,
         dbApi,
-        keycloakParams: undefined,
+        oidcParams: { issuerUri: "http://fake.url", clientId: "fake-client-id" },
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
         readmeUrl: "http://readme.url",
         termsOfServiceUrl: "http://terms.url",
-        jwtClaimByUserKey,
         getSoftwareExternalDataOptions: getWikidataSoftwareOptions,
         getSoftwareExternalData: getWikidataSoftware
     });
