@@ -193,7 +193,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         parentWikidataSoftware: parentExternalData,
                         keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                        referencePublication: softwareExternalData?.referencePublication,
+                        referencePublications: softwareExternalData?.referencePublications,
                         applicationCategories: software.categories.concat(
                             softwareExternalData?.applicationCategories ?? []
                         ),
@@ -298,7 +298,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             ),
                             categories: undefined, // merged in applicationCategories, set to undefined to remove it
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                            referencePublication: softwareExternalData?.referencePublication
+                            referencePublications: softwareExternalData?.referencePublications
                         });
                     }
                 );
@@ -433,7 +433,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     documentationUrl: ref("ext.documentationUrl"),
                     programmingLanguages: ref("ext.programmingLanguages"),
                     applicationCategories: ref("ext.applicationCategories"),
-                    referencePublication: ref("ext.referencePublication"),
+                    referencePublications: ref("ext.referencePublications"),
                     keywords: ref("ext.keywords"),
                     softwareVersion: ref("ext.softwareVersion"),
                     publicationTime: ref("ext.publicationTime")
@@ -568,7 +568,7 @@ const makeGetSoftwareById =
                     testUrl: testUrls[0]?.url,
                     parentWikidataSoftware: parentExternalData,
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                    referencePublication: softwareExternalData?.referencePublication,
+                    referencePublications: softwareExternalData?.referencePublications,
                     applicationCategories: filterDuplicate(
                         software.categories.concat(softwareExternalData?.applicationCategories ?? [])
                     ),

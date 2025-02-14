@@ -197,7 +197,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             publicationTime: halRawSoftware?.releasedDate_tdate
                 ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined,
-            referencePublication: codeMetaToReferencePublication(codemetaSoftware.referencePublication)
+            referencePublications: codeMetaToReferencePublication(codemetaSoftware.referencePublication)
         };
     },
     {

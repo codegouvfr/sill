@@ -32,7 +32,7 @@ export type SoftwareExternalData = {
     programmingLanguages: string[];
     applicationCategories: string[];
     publicationTime: Date;
-    referencePublication: SILL.ScholarlyArticle[];
+    referencePublications: SILL.ScholarlyArticle[];
 }>;
 
 export type SimilarSoftwareExternalData = Pick<

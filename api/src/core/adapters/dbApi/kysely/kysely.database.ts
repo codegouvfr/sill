@@ -95,7 +95,7 @@ type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguages: JSONColumnType<string[]> | null;
     applicationCategories: JSONColumnType<string[]> | null;
-    referencePublication: JSONColumnType<SILL.ScholarlyArticle[]> | null;
+    referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
 };
 
