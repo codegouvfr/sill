@@ -54,7 +54,7 @@ const softwareExternalData: SoftwareExternalData = {
     keywords: ["Usefull", "Daily"],
     programmingLanguages: ["C++"],
     applicationCategories: ["Software Cat I", "Software Cat II"],
-    referencePublication: undefined,
+    referencePublications: undefined,
     publicationTime: new Date(1561566581000)
 };
 
@@ -82,7 +82,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     keywords: ["Infra", "Adminsys"],
     programmingLanguages: ["Python3"],
     applicationCategories: ["Software Cat I", "Software Cat II"],
-    referencePublication: undefined,
+    referencePublications: undefined,
     publicationTime: new Date(1561566581000)
 };
 
@@ -446,7 +446,7 @@ describe("pgDbApi", () => {
                     keywords: JSON.stringify(softExtData.keywords),
                     applicationCategories: JSON.stringify(softExtData.applicationCategories),
                     programmingLanguages: JSON.stringify(softExtData.programmingLanguages),
-                    referencePublication: JSON.stringify(softExtData.referencePublication)
+                    referencePublications: JSON.stringify(softExtData.referencePublications)
                 }))
             )
             .execute();
