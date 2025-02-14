@@ -1,14 +1,11 @@
 {
     "header": {
-        "icons": [
-            {
-                "iconId": "fr-icon-bank-fill",
-                "linkProps": {
-                    "href": "https://code.gouv.fr"
-                },
-                "text": "Code Gouv"
-            }
-        ],
+        "link": {
+            "linkProps": {
+                "href": "https://code.gouv.fr"
+            },
+            "text": "Code Gouv"
+        },
         "menu": {
             "welcome": {
                 "enabled": true
