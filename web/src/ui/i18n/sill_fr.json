@@ -10,6 +10,7 @@
         "free software_other": "logiciels libres"
     },
     "app": {
+        "title": "Le socle interministériel de logiciels libres est un ensemble de logiciels libres préconisés par l'État français depuis 2013.",
         "yes": "Oui",
         "no": "Non",
         "not applicable": "Non applicable",

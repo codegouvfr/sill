@@ -18,10 +18,7 @@ import { LoadingFallback, loadingFallbackClassName } from "ui/shared/LoadingFall
 import { useDomRect } from "powerhooks/useDomRect";
 import { apiUrl, appUrl, appPath } from "urls";
 import { PromptForOrganization } from "./shared/PromptForOrganization";
-
-const title =
-    process.env.REACT_APP_SILL_WEBSITE_TITLE ??
-    "Le socle interministériel de logiciels libres est un ensemble de logiciels libres préconisés par l'État français depuis 2013.";
+import { useTranslation } from "react-i18next";
 
 const { CoreProvider } = createCoreProvider({
     apiUrl,
@@ -97,11 +94,11 @@ function ContextualizedApp() {
 
     const { classes } = useStyles({ headerHeight });
 
-    if (title) {
-        useEffect(() => {
-            document.title = title;
-        }, []);
-    }
+    const { t } = useTranslation();
+
+    useEffect(() => {
+        document.title = t("app.title");
+    }, []);
 
     return (
         <div className={classes.root}>
