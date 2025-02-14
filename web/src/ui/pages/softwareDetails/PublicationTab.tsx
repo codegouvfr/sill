@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { ApiTypes } from "api";
 
 export type Props = {
-    referencePublication?: ApiTypes.SILL.ScholarlyArticle[];
+    referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
 };
 
 export const PublicationTab = (props: Props) => {
-    const { referencePublication } = props;
+    const { referencePublications } = props;
 
     const { t } = useTranslation();
 
@@ -15,7 +15,7 @@ export const PublicationTab = (props: Props) => {
         <>
             <h6>{t("softwareDetails.tabReferencePublicationTitle")}</h6>
             <ul>
-                {referencePublication?.map(article => {
+                {referencePublications?.map(article => {
                     return (
                         <li>
                             <a
