@@ -81,7 +81,7 @@ export function AuthorCard(props: Props) {
                 );
             })}
             <div className={classes.externalLinkButtons}>
-                <LogoURLButton url={author.url} labelFromURL={true}></LogoURLButton>
+                <LogoURLButton url={author.url} labelFromURL={true} />
             </div>
         </Card>
     );

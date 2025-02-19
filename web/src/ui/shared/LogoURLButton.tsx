@@ -170,14 +170,14 @@ export function LogoURLButton(props: Props) {
                 href: urlString
             }}
         >
-            {URLlogo && <img alt="logo site" src={URLlogo.href} height="20px"></img>}
+            {URLlogo && <img alt="logo site" src={URLlogo.href} height="20px" />}
             <p className={classes.linkContent}>{resolvedLabel}</p>
         </Button>
     );
 }
 
 const useStyles = tss.withName({ LogoURLButton }).create({
-    "linkContent": {
-        "marginLeft": "7px"
+    linkContent: {
+        marginLeft: "7px"
     }
 });
