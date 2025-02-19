@@ -7,7 +7,12 @@ pre-commit:
       run: turbo lint
 
 pre-push:
+  parallel: true
   commands:
-    check:
-      run: turbo typecheck format:check lint
+    format:
+      run: turbo format:check
+    lint:
+      run: turbo lint
+    typecheck:
+      run: turbo typecheck
 
