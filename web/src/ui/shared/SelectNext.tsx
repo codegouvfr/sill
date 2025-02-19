@@ -136,16 +136,16 @@ function NonMemoizedNonForwardedSelect<T extends SelectProps.Option[]>(
                         ? []
                         : [
                               {
-                                  "label":
+                                  label:
                                       placeholder === undefined
                                           ? t("select an option")
                                           : placeholder,
                                   ...(nativeSelectProps?.value !== undefined
                                       ? undefined
-                                      : { "selected": true }),
-                                  "value": "",
-                                  "disabled": true,
-                                  "hidden": true
+                                      : { selected: true }),
+                                  value: "",
+                                  disabled: true,
+                                  hidden: true
                               }
                           ]),
                     ...options
@@ -175,8 +175,8 @@ export const SelectNext = memo(forwardRef(NonMemoizedNonForwardedSelect)) as <
 export default SelectNext;
 
 const { useTranslation, addSelectNextTranslations } = createComponentI18nApi({
-    "componentName": symToStr({ SelectNext }),
-    "frMessages": {
+    componentName: symToStr({ SelectNext }),
+    frMessages: {
         /* spell-checker: disable */
         "select an option": "Selectioner une option"
         /* spell-checker: enable */
@@ -184,8 +184,8 @@ const { useTranslation, addSelectNextTranslations } = createComponentI18nApi({
 });
 
 addSelectNextTranslations({
-    "lang": "en",
-    "messages": {
+    lang: "en",
+    messages: {
         "select an option": "Select an option"
     }
 });

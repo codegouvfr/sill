@@ -2,7 +2,7 @@ import { createGroup, defineRoute, createRouter, type Route } from "type-route";
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "readme": defineRoute(appPath + "/readme")
+    readme: defineRoute(appPath + "/readme")
 };
 
 export const routeGroup = createGroup(Object.values(createRouter(routeDefs).routes));

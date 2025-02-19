@@ -39,17 +39,17 @@ export default function Terms(props: Props) {
 }
 
 export const useStyles = tss.withName({ Terms }).create({
-    "root": {
-        "display": "flex",
-        "justifyContent": "center"
+    root: {
+        display: "flex",
+        justifyContent: "center"
     },
-    "markdown": {
-        "borderRadius": fr.spacing("2v"),
-        "maxWidth": 900,
-        "padding": fr.spacing("4v"),
+    markdown: {
+        borderRadius: fr.spacing("2v"),
+        maxWidth: 900,
+        padding: fr.spacing("4v"),
         "&:hover": {
-            "boxShadow": "0px 6px 10px 0px rgba(0,0,0,0.14)"
+            boxShadow: "0px 6px 10px 0px rgba(0,0,0,0.14)"
         },
-        "marginBottom": fr.spacing("2v")
+        marginBottom: fr.spacing("2v")
     }
 });

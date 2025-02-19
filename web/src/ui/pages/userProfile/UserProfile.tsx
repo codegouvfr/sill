@@ -28,7 +28,7 @@ export default function UserProfile(props: Props) {
     const { isReady, profile, softwares } = useCoreState("userProfile", "main");
 
     useEffect(() => {
-        userProfile.initialize({ "email": route.params.email });
+        userProfile.initialize({ email: route.params.email });
 
         return () => {
             userProfile.clear();
@@ -50,8 +50,8 @@ export default function UserProfile(props: Props) {
                 homeLinkProps={routes.home().link}
                 segments={[
                     {
-                        "label": "Users",
-                        "linkProps": {}
+                        label: "Users",
+                        linkProps: {}
                     }
                 ]}
             />
@@ -75,8 +75,8 @@ export default function UserProfile(props: Props) {
                 </a>
                 <h4 className={classes.headerTitle}>
                     {t("userProfile.agent profile", {
-                        "email": profile.email,
-                        "organization": profile.organization
+                        email: profile.email,
+                        organization: profile.organization
                     })}
                 </h4>
                 {profile.isHimself && (
@@ -102,7 +102,7 @@ export default function UserProfile(props: Props) {
                         <p>
                             <a
                                 {...routes.softwareDetails({
-                                    "name": softwareName
+                                    name: softwareName
                                 }).link}
                             >
                                 {softwareName}
@@ -110,19 +110,19 @@ export default function UserProfile(props: Props) {
                             &nbsp;
                             <Tag
                                 style={{
-                                    "position": "relative",
-                                    "top": 4,
-                                    "marginLeft": fr.spacing("2v")
+                                    position: "relative",
+                                    top: 4,
+                                    marginLeft: fr.spacing("2v")
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
                                 {isReferent && isTechnicalExpert
                                     ? t("userProfile.badge text_expert")
                                     : isReferent
-                                    ? t("userProfile.badge text_referent")
-                                    : isUser
-                                    ? t("userProfile.badge text_user")
-                                    : ""}
+                                      ? t("userProfile.badge text_referent")
+                                      : isUser
+                                        ? t("userProfile.badge text_user")
+                                        : ""}
                             </Tag>
                             <Markdown className={classes.usecaseDescription}>
                                 {usecaseDescription}
@@ -139,7 +139,7 @@ export default function UserProfile(props: Props) {
             <div className={classes.sendEmailButtonWrapper}>
                 <Button
                     linkProps={{
-                        "href": `mailto:${profile.email}`
+                        href: `mailto:${profile.email}`
                     }}
                 >
                     {t("userProfile.send email")}
@@ -150,35 +150,35 @@ export default function UserProfile(props: Props) {
 }
 
 const useStyles = tss.withName({ UserProfile }).create({
-    "header": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("10v")
+    header: {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: fr.spacing("10v")
     },
-    "headerTitle": {
-        "marginBottom": 0
+    headerTitle: {
+        marginBottom: 0
     },
-    "headerBackButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
+    headerBackButton: {
+        background: "none",
+        marginRight: fr.spacing("4v"),
         "&>i": {
             "&::before": {
                 "--icon-size": fr.spacing("8v")
             }
         }
     },
-    "editProfileButton": {
-        "marginLeft": fr.spacing("4v")
+    editProfileButton: {
+        marginLeft: fr.spacing("4v")
     },
-    "sendEmailButtonWrapper": {
-        ...fr.spacing("margin", { "topBottom": "15v" }),
-        "display": "flex",
-        "justifyContent": "center"
+    sendEmailButtonWrapper: {
+        ...fr.spacing("margin", { topBottom: "15v" }),
+        display: "flex",
+        justifyContent: "center"
     },
-    "softwareListing": {
-        "marginBottom": fr.spacing("10v")
+    softwareListing: {
+        marginBottom: fr.spacing("10v")
     },
-    "usecaseDescription": {
-        "marginTop": fr.spacing("4v")
+    usecaseDescription: {
+        marginTop: fr.spacing("4v")
     }
 });

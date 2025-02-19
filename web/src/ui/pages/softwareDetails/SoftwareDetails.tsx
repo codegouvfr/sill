@@ -46,7 +46,7 @@ export default function SoftwareDetails(props: Props) {
 
     useEffect(() => {
         softwareDetails.initialize({
-            "softwareName": route.params.name
+            softwareName: route.params.name
         });
 
         return () => softwareDetails.clear();
@@ -66,10 +66,10 @@ export default function SoftwareDetails(props: Props) {
                     <Breadcrumb
                         segments={[
                             {
-                                "linkProps": {
+                                linkProps: {
                                     ...routes.softwareCatalog().link
                                 },
-                                "label": t("softwareDetails.catalog breadcrumb")
+                                label: t("softwareDetails.catalog breadcrumb")
                             }
                         ]}
                         currentPageLabel={software.softwareName}
@@ -77,7 +77,7 @@ export default function SoftwareDetails(props: Props) {
                     />
                     <HeaderDetailCard
                         softwareLogoUrl={
-                            software?.logoUrl ?? config.softwareDetails.defaultLogo
+                            (software?.logoUrl ?? config.softwareDetails.defaultLogo)
                                 ? softwareLogoPlaceholder
                                 : undefined
                         }
@@ -103,9 +103,9 @@ export default function SoftwareDetails(props: Props) {
                     <Tabs
                         tabs={[
                             {
-                                "label": t("softwareDetails.tab title overview"),
-                                "isDefault": route.params.tab === undefined,
-                                "content": (
+                                label: t("softwareDetails.tab title overview"),
+                                isDefault: route.params.tab === undefined,
+                                content: (
                                     <PreviewTab
                                         softwareName={software.softwareName}
                                         wikiDataUrl={software.wikidataUrl}
@@ -160,19 +160,16 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t(
-                                              "softwareDetails.tab title instance",
-                                              {
-                                                  instanceCount: software.instances.length
-                                              }
-                                          ),
-                                          "isDefault": route.params.tab === "instances",
-                                          "content": (
+                                          label: t("softwareDetails.tab title instance", {
+                                              instanceCount: software.instances.length
+                                          }),
+                                          isDefault: route.params.tab === "instances",
+                                          content: (
                                               <ReferencedInstancesTab
                                                   instanceList={software.instances}
                                                   createInstanceLink={
                                                       routes.instanceCreationForm({
-                                                          "softwareName":
+                                                          softwareName:
                                                               software.softwareName
                                                       }).link
                                                   }
@@ -184,14 +181,14 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t(
+                                          label: t(
                                               "softwareDetails.tab service providers",
                                               {
                                                   serviceProvidersCount:
                                                       software.serviceProviders.length
                                               }
                                           ),
-                                          "content": (
+                                          content: (
                                               <div>
                                                   <p className={fr.cx("fr-text--bold")}>
                                                       {t(
@@ -220,7 +217,7 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t(
+                                          label: t(
                                               "softwareDetails.tab title alike software",
                                               {
                                                   alikeSoftwareCount:
@@ -228,26 +225,25 @@ export default function SoftwareDetails(props: Props) {
                                                       0
                                               }
                                           ),
-                                          "isDefault":
-                                              route.params.tab === "alternatives",
-                                          "content": (
+                                          isDefault: route.params.tab === "alternatives",
+                                          content: (
                                               <SimilarSoftwareTab
                                                   similarSoftwares={
                                                       software.similarSoftwares
                                                   }
                                                   getLinks={({ softwareName }) => ({
-                                                      "declarationForm":
+                                                      declarationForm:
                                                           routes.declarationForm({
-                                                              "name": softwareName
+                                                              name: softwareName
                                                           }).link,
-                                                      "softwareDetails":
+                                                      softwareDetails:
                                                           routes.softwareDetails({
-                                                              "name": softwareName
+                                                              name: softwareName
                                                           }).link,
-                                                      "softwareUsersAndReferents":
+                                                      softwareUsersAndReferents:
                                                           routes.softwareUsersAndReferents(
                                                               {
-                                                                  "name": softwareName
+                                                                  name: softwareName
                                                               }
                                                           ).link
                                                   })}
@@ -266,15 +262,15 @@ export default function SoftwareDetails(props: Props) {
                                 ? []
                                 : [
                                       {
-                                          "label": t(
+                                          label: t(
                                               "softwareDetails.tabReferencePublication"
                                           ),
-                                          "content": (
+                                          content: (
                                               <PublicationTab
                                                   referencePublications={
                                                       software.referencePublications
                                                   }
-                                              ></PublicationTab>
+                                              />
                                           )
                                       }
                                   ])
@@ -291,7 +287,7 @@ export default function SoftwareDetails(props: Props) {
                             seeUserAndReferent={
                                 software.referentCount > 0 || software.userCount > 0
                                     ? routes.softwareUsersAndReferents({
-                                          "name": software.softwareName
+                                          name: software.softwareName
                                       }).link
                                     : undefined
                             }
@@ -306,7 +302,7 @@ export default function SoftwareDetails(props: Props) {
                                     onClick={() => {
                                         if (!userAuthentication.getIsUserLoggedIn()) {
                                             userAuthentication.login({
-                                                "doesCurrentHrefRequiresAuth": false
+                                                doesCurrentHrefRequiresAuth: false
                                             });
                                             return;
                                         }
@@ -322,7 +318,7 @@ export default function SoftwareDetails(props: Props) {
                                         }
 
                                         softwareDetails.unreference({
-                                            "reason": userInput
+                                            reason: userInput
                                         });
                                     }}
                                 >
@@ -338,7 +334,7 @@ export default function SoftwareDetails(props: Props) {
                                 priority="secondary"
                                 linkProps={
                                     routes.softwareUpdateForm({
-                                        "name": software.softwareName
+                                        name: software.softwareName
                                     }).link
                                 }
                             >
@@ -348,15 +344,15 @@ export default function SoftwareDetails(props: Props) {
                                 const declarationType = userDeclaration?.isReferent
                                     ? "referent"
                                     : userDeclaration?.isUser
-                                    ? "user"
-                                    : undefined;
+                                      ? "user"
+                                      : undefined;
 
                                 if (declarationType === undefined) {
                                     return (
                                         <Button
                                             linkProps={
                                                 routes.declarationForm({
-                                                    "name": software.softwareName
+                                                    name: software.softwareName
                                                 }).link
                                             }
                                         >
@@ -372,8 +368,8 @@ export default function SoftwareDetails(props: Props) {
                                             onClick={() =>
                                                 openDeclarationRemovalModal({
                                                     declarationType,
-                                                    "softwareName": software.softwareName,
-                                                    "softwareId": software.softwareId
+                                                    softwareName: software.softwareName,
+                                                    softwareId: software.softwareId
                                                 })
                                             }
                                         >
@@ -387,8 +383,8 @@ export default function SoftwareDetails(props: Props) {
                                             <Button
                                                 linkProps={
                                                     routes.declarationForm({
-                                                        "name": software.softwareName,
-                                                        "declarationType": "referent"
+                                                        name: software.softwareName,
+                                                        declarationType: "referent"
                                                     }).link
                                                 }
                                             >
@@ -434,26 +430,26 @@ const ServiceProviderRow = ({
 );
 
 const useStyles = tss.withName({ SoftwareDetails }).create({
-    "breadcrumb": {
-        "marginBottom": fr.spacing("4v")
+    breadcrumb: {
+        marginBottom: fr.spacing("4v")
     },
-    "container": {
-        "display": "grid",
-        "gridTemplateColumns": `1fr 2fr`,
-        "columnGap": fr.spacing("6v"),
-        "marginBottom": fr.spacing("6v"),
+    container: {
+        display: "grid",
+        gridTemplateColumns: `1fr 2fr`,
+        columnGap: fr.spacing("6v"),
+        marginBottom: fr.spacing("6v"),
         [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`,
-            "gridRowGap": fr.spacing("6v")
+            gridTemplateColumns: `repeat(1, 1fr)`,
+            gridRowGap: fr.spacing("6v")
         }
     },
-    "buttons": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end",
-        "gap": fr.spacing("4v")
+    buttons: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "end",
+        gap: fr.spacing("4v")
     },
-    "detailUsersAndReferents": {
-        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
+    detailUsersAndReferents: {
+        color: fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });

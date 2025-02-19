@@ -75,7 +75,7 @@ export const PreviewTab = (props: Props) => {
     return (
         <>
             <section className={classes.tabContainer}>
-                <p style={{ "gridColumn": "span 2" }}>{softwareDescription}</p>
+                <p style={{ gridColumn: "span 2" }}>{softwareDescription}</p>
                 {config.softwareDetails.details.enabled && (
                     <div className="section">
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
@@ -116,7 +116,7 @@ export const PreviewTab = (props: Props) => {
                                         softwareDateCurrentVersion &&
                                         capitalize(
                                             shortEndMonthDate({
-                                                "time": softwareDateCurrentVersion,
+                                                time: softwareDateCurrentVersion,
                                                 lang
                                             })
                                         )}
@@ -133,9 +133,7 @@ export const PreviewTab = (props: Props) => {
                                     <span className={classes.labelDetail}>
                                         {t("previewTab.register")}
                                     </span>
-                                    {capitalize(
-                                        monthDate({ "time": registerDate, lang })
-                                    )}
+                                    {capitalize(monthDate({ time: registerDate, lang }))}
                                 </p>
                             )}
 
@@ -249,7 +247,7 @@ export const PreviewTab = (props: Props) => {
                                                             <a href="https://code.gouv.fr/fr/utiliser/marches-interministeriels-support-expertise-logiciels-libres/" />
                                                         )
                                                     }}
-                                                ></Trans>
+                                                />
                                             }
                                             arrow
                                         >
@@ -399,51 +397,51 @@ export const PreviewTab = (props: Props) => {
 };
 
 const useStyles = tss.withName({ PreviewTab }).create({
-    "tabContainer": {
-        "display": "grid",
-        "gridTemplateColumns": `repeat(2, 1fr)`,
-        "columnGap": fr.spacing("4v"),
-        "rowGap": fr.spacing("3v"),
+    tabContainer: {
+        display: "grid",
+        gridTemplateColumns: `repeat(2, 1fr)`,
+        columnGap: fr.spacing("4v"),
+        rowGap: fr.spacing("3v"),
         [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`
+            gridTemplateColumns: `repeat(1, 1fr)`
         }
     },
-    "section": {
-        "display": "flex",
-        "flexDirection": "column",
-        "alignItems": "flex-start"
+    section: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start"
     },
-    "item": {
+    item: {
         "&:not(:last-of-type)": {
-            "marginBottom": fr.spacing("4v")
+            marginBottom: fr.spacing("4v")
         }
     },
-    "prerogativeItem": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": "24px"
+    prerogativeItem: {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: "24px"
     },
-    "prerogativeItemDetail": {
-        "color": fr.colors.decisions.text.label.grey.default,
+    prerogativeItemDetail: {
+        color: fr.colors.decisions.text.label.grey.default,
         ...fr.spacing("margin", {
-            "left": "3v",
-            "right": "1v",
-            "bottom": 0
+            left: "3v",
+            right: "1v",
+            bottom: 0
         })
     },
-    "prerogativeStatusSuccess": {
-        "color": fr.colors.decisions.text.default.success.default
+    prerogativeStatusSuccess: {
+        color: fr.colors.decisions.text.default.success.default
     },
-    "prerogativeStatusError": {
-        "color": fr.colors.decisions.text.default.error.default
+    prerogativeStatusError: {
+        color: fr.colors.decisions.text.default.error.default
     },
-    "labelDetail": {
-        "color": fr.colors.decisions.text.mention.grey.default
+    labelDetail: {
+        color: fr.colors.decisions.text.mention.grey.default
     },
-    "badgeVersion": {
+    badgeVersion: {
         ...fr.spacing("margin", { rightLeft: "2v" })
     },
-    "externalLink": {
-        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
+    externalLink: {
+        color: fr.colors.decisions.text.actionHigh.blueFrance.default
     }
 });

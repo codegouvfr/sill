@@ -24,16 +24,16 @@ export const name = "userProfile" as const;
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not ready",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not ready",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": true
+    reducers: {
+        initializationStarted: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: true
         }),
-        "initializationCompleted": (
+        initializationCompleted: (
             _state,
             {
                 payload
@@ -50,7 +50,7 @@ export const { reducer, actions } = createUsecaseActions({
             const { about, email, organization, isHimself, declarations } = payload;
 
             return {
-                "stateDescription": "ready",
+                stateDescription: "ready",
                 email,
                 organization,
                 about,
@@ -58,9 +58,9 @@ export const { reducer, actions } = createUsecaseActions({
                 declarations
             };
         },
-        "cleared": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": false
+        cleared: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: false
         })
     }
 });

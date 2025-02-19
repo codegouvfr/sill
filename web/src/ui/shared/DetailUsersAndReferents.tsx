@@ -32,7 +32,7 @@ export function DetailUsersAndReferents(props: Props) {
             <i className={cx(fr.cx("fr-icon-user-line"), classes.detailsUsersIcon)} />
             <span>
                 {userCount !== 0 && t("detailUsersAndReferents.users", { userCount })}
-                <span style={{ "color": referentColor }}>
+                <span style={{ color: referentColor }}>
                     {t("detailUsersAndReferents.referents", { referentCount })}
                 </span>
             </span>
@@ -42,12 +42,12 @@ export function DetailUsersAndReferents(props: Props) {
 }
 
 const useStyles = tss.withName({ DetailUsersAndReferents }).create({
-    "root": {
-        "display": "flex",
-        "alignItems": "center",
-        "background": "none"
+    root: {
+        display: "flex",
+        alignItems: "center",
+        background: "none"
     },
-    "detailsUsersIcon": {
-        "marginRight": fr.spacing("2v")
+    detailsUsersIcon: {
+        marginRight: fr.spacing("2v")
     }
 });

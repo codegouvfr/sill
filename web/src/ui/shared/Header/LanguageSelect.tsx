@@ -34,7 +34,7 @@ export function LanguageSelect(props: Props) {
 i18n.languages.forEach(lang =>
     addLanguageSelectTranslations({
         lang,
-        "messages": {
+        messages: {
             "select language": (() => {
                 switch (lang) {
                     case "en":

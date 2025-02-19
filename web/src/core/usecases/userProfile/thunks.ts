@@ -3,7 +3,7 @@ import { assert } from "tsafe/assert";
 import { name, actions } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (params: { email: string }) =>
         async (...args) => {
             const { email } = params;
@@ -30,7 +30,7 @@ export const thunks = {
                 !(await sillApi.getIsAgentProfilePublic({ email }))
             ) {
                 await oidc.login({
-                    "doesCurrentHrefRequiresAuth": true
+                    doesCurrentHrefRequiresAuth: true
                 });
                 assert(false, "never");
             }
@@ -46,14 +46,14 @@ export const thunks = {
             dispatch(
                 actions.initializationCompleted({
                     email,
-                    "about": agent.about,
-                    "organization": agent.organization,
-                    "declarations": agent.declarations,
+                    about: agent.about,
+                    organization: agent.organization,
+                    declarations: agent.declarations,
                     isHimself
                 })
             );
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState] = args;

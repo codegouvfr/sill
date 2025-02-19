@@ -79,10 +79,10 @@ export const SimilarSoftwareTab = (props: Props) => {
                     return (
                         <SoftwareCatalogCard
                             className={css({
-                                "maxWidth": 600,
+                                maxWidth: 600,
                                 ...fr.spacing("margin", {
-                                    "rightLeft": "auto",
-                                    "topBottom": "6v"
+                                    rightLeft: "auto",
+                                    topBottom: "6v"
                                 })
                             })}
                             key={softwareName}
@@ -131,8 +131,8 @@ export const SimilarSoftwareTab = (props: Props) => {
                                         <li key={wikidataId}>
                                             <p
                                                 className={css({
-                                                    "display": "inline-block",
-                                                    "marginRight": fr.spacing("4v")
+                                                    display: "inline-block",
+                                                    marginRight: fr.spacing("4v")
                                                 })}
                                             >
                                                 <a

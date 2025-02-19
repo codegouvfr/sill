@@ -38,9 +38,9 @@ export function LoadingFallback(props: Props) {
         <div
             className={cx(
                 css({
-                    "display": "flex",
-                    "justifyContent": "center",
-                    "alignItems": "center"
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
                 }),
                 loadingFallbackClassName,
                 className

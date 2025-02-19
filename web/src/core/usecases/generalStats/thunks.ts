@@ -5,7 +5,7 @@ import { actions } from "./state";
 export const thunks = {};
 
 export const protectedThunks = {
-    "initialize":
+    initialize:
         () =>
         async (...args) => {
             const [dispatch, , { sillApi, evtAction }] = args;
@@ -20,9 +20,9 @@ export const protectedThunks = {
 
                 dispatch(
                     actions.update({
-                        "state": {
-                            "agentReferentCount": referentCount,
-                            "organizationCount": softwares
+                        state: {
+                            agentReferentCount: referentCount,
+                            organizationCount: softwares
                                 .map(software =>
                                     Object.keys(
                                         software.userAndReferentCountByOrganization
@@ -31,7 +31,7 @@ export const protectedThunks = {
                                 .flat()
                                 .reduce(...removeDuplicates()).length,
                             registeredUserCount,
-                            "softwareCount": softwares.filter(
+                            softwareCount: softwares.filter(
                                 software => software.dereferencing === undefined
                             ).length
                         }

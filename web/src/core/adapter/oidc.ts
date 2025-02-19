@@ -15,7 +15,7 @@ export async function createOidc(params: {
     return createOidcSpa({
         issuerUri,
         clientId,
-        "transformUrlBeforeRedirect": url =>
+        transformUrlBeforeRedirect: url =>
             // prettier-ignore
             [url]
                 .map(transformUrlBeforeRedirect)
@@ -28,6 +28,6 @@ export async function createOidc(params: {
                         }).newUrl
                 )
             [0],
-        "homeUrl": appUrl
+        homeUrl: appUrl
     });
 }

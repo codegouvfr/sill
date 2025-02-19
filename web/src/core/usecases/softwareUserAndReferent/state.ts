@@ -42,16 +42,16 @@ export const name = "softwareUserAndReferent" as const;
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not ready",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not ready",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": true
+    reducers: {
+        initializationStarted: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: true
         }),
-        "initializationCompleted": (
+        initializationCompleted: (
             _state,
             {
                 payload
@@ -67,16 +67,16 @@ export const { reducer, actions } = createUsecaseActions({
             const { softwareName, logoUrl, users, referents } = payload;
 
             return {
-                "stateDescription": "ready",
+                stateDescription: "ready",
                 softwareName,
                 logoUrl,
                 users,
                 referents
             };
         },
-        "cleared": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": false
+        cleared: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: false
         })
     }
 });

@@ -11,7 +11,7 @@ import { UpdateFilterParams } from "./state";
 import { name, actions, type State } from "./state";
 
 export const thunks = {
-    "updateFilter":
+    updateFilter:
         <K extends UpdateFilterParams.Key>(params: UpdateFilterParams<K>) =>
         async (...args) => {
             const [dispatch, getState] = args;
@@ -24,7 +24,7 @@ export const thunks = {
                 if (currentSearch === "" && newSearch !== "") {
                     dispatch(
                         actions.notifyRequestChangeSort({
-                            "sort": "best_match"
+                            sort: "best_match"
                         })
                     );
                 }
@@ -32,7 +32,7 @@ export const thunks = {
                 if (newSearch === "" && currentSearch !== "") {
                     dispatch(
                         actions.notifyRequestChangeSort({
-                            "sort": sortBackup
+                            sort: sortBackup
                         })
                     );
                 }
@@ -52,7 +52,7 @@ export const thunks = {
                 if (newSearch === "") {
                     dispatch(
                         actions.searchResultUpdated({
-                            "searchResults": undefined
+                            searchResults: undefined
                         })
                     );
 
@@ -70,19 +70,19 @@ export const thunks = {
                 );
             }
         },
-    "getDefaultSort":
+    getDefaultSort:
         () =>
         (...args) => {
             const [, getState] = args;
 
             return getDefaultSort({
-                "userEmail": getState()[name].userEmail
+                userEmail: getState()[name].userEmail
             });
         }
 } satisfies Thunks;
 
 export const protectedThunks = {
-    "initialize":
+    initialize:
         () =>
         async (...args) => {
             const [dispatch, , { sillApi, evtAction, oidc }] = args;
@@ -90,14 +90,12 @@ export const protectedThunks = {
             const initialize = async () => {
                 const [apiSoftwares, { email: userEmail }] = await Promise.all([
                     sillApi.getSoftwares(),
-                    oidc.isUserLoggedIn
-                        ? sillApi.getCurrentUser()
-                        : { "email": undefined }
+                    oidc.isUserLoggedIn ? sillApi.getCurrentUser() : { email: undefined }
                 ] as const);
 
                 const { agents } =
                     userEmail === undefined
-                        ? { "agents": undefined }
+                        ? { agents: undefined }
                         : await sillApi.getAgents();
 
                 const softwares = apiSoftwares
@@ -105,11 +103,11 @@ export const protectedThunks = {
                     .map(({ softwareName }) => {
                         const software = apiSoftwareToInternalSoftware({
                             apiSoftwares,
-                            "softwareRef": {
-                                "type": "name",
+                            softwareRef: {
+                                type: "name",
                                 softwareName
                             },
-                            "userDeclaration":
+                            userDeclaration:
                                 agents === undefined
                                     ? undefined
                                     : (():
@@ -124,7 +122,7 @@ export const protectedThunks = {
                                           }
 
                                           return {
-                                              "isReferent":
+                                              isReferent:
                                                   agent.declarations.find(
                                                       declaration =>
                                                           declaration.declarationType ===
@@ -132,7 +130,7 @@ export const protectedThunks = {
                                                           declaration.softwareName ===
                                                               softwareName
                                                   ) !== undefined,
-                                              "isUser":
+                                              isUser:
                                                   agent.declarations.find(
                                                       declaration =>
                                                           declaration.declarationType ===
@@ -153,7 +151,7 @@ export const protectedThunks = {
                     actions.initialized({
                         softwares,
                         userEmail,
-                        "defaultSort": getDefaultSort({ userEmail })
+                        defaultSort: getDefaultSort({ userEmail })
                     })
                 );
             };
@@ -239,8 +237,8 @@ function apiSoftwareToInternalSoftware(params: {
     >();
 
     const { resolveLocalizedString } = createResolveLocalizedString({
-        "currentLanguage": "fr",
-        "fallbackLanguage": "en"
+        currentLanguage: "fr",
+        fallbackLanguage: "en"
     });
 
     const parentSoftware: State.Software.Internal["parentSoftware"] = (() => {
@@ -258,8 +256,8 @@ function apiSoftwareToInternalSoftware(params: {
             }
 
             return {
-                "softwareName": software.softwareName,
-                "isInSill": true
+                softwareName: software.softwareName,
+                isInSill: true
             };
         }
 
@@ -272,18 +270,18 @@ function apiSoftwareToInternalSoftware(params: {
         console.log(parentWikidataSoftware);
 
         return {
-            "isInSill": false,
-            "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
+            isInSill: false,
+            softwareName: resolveLocalizedString(parentWikidataSoftware.label),
+            url: `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
         };
     })();
 
     console.log({
         userAndReferentCountByOrganization,
-        "referentCount": Object.values(userAndReferentCountByOrganization)
+        referentCount: Object.values(userAndReferentCountByOrganization)
             .map(({ referentCount }) => referentCount)
             .reduce((prev, curr) => prev + curr, 0),
-        "userCount": Object.values(userAndReferentCountByOrganization)
+        userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0)
     });
@@ -296,21 +294,21 @@ function apiSoftwareToInternalSoftware(params: {
             semVer: latestVersion?.semVer ?? "",
             publicationTime: latestVersion?.publicationTime
         },
-        "referentCount": Object.values(userAndReferentCountByOrganization)
+        referentCount: Object.values(userAndReferentCountByOrganization)
             .map(({ referentCount }) => referentCount)
             .reduce((prev, curr) => prev + curr, 0),
-        "userCount": Object.values(userAndReferentCountByOrganization)
+        userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         testUrl,
         addedTime,
         updateTime,
         applicationCategories,
-        "organizations": objectKeys(userAndReferentCountByOrganization),
+        organizations: objectKeys(userAndReferentCountByOrganization),
         parentSoftware,
         softwareType,
         prerogatives,
-        "search": (() => {
+        search: (() => {
             const search =
                 softwareName +
                 " (" +
@@ -345,16 +343,16 @@ const { filterBySearchMemoized } = (() => {
     const getFlexSearch = memoize(
         (softwares: State.Software.Internal[]) => {
             const index = new FlexSearch.Document<State.Software.Internal>({
-                "document": {
-                    "id": "softwareName",
-                    "field": ["search"]
+                document: {
+                    id: "softwareName",
+                    field: ["search"]
                 },
-                "cache": 100,
-                "tokenize": "full",
-                "context": {
-                    "resolution": 9,
-                    "depth": 2,
-                    "bidirectional": true
+                cache: 100,
+                tokenize: "full",
+                context: {
+                    resolution: 9,
+                    depth: 2,
+                    bidirectional: true
                 }
             });
 
@@ -362,7 +360,7 @@ const { filterBySearchMemoized } = (() => {
 
             return index;
         },
-        { "max": 1 }
+        { max: 1 }
     );
 
     function highlightMatches(params: { text: string; search: string }) {
@@ -397,9 +395,9 @@ const { filterBySearchMemoized } = (() => {
             const index = getFlexSearch(softwares);
 
             const searchResult = await index.searchAsync(search, {
-                "bool": "or",
-                "suggest": true,
-                "enrich": true
+                bool: "or",
+                suggest: true,
+                enrich: true
             });
 
             if (searchResult.length === 0) {
@@ -413,8 +411,8 @@ const { filterBySearchMemoized } = (() => {
                     assert(typeof softwareName === "string"),
                     {
                         softwareName,
-                        "positions": highlightMatches({
-                            "text": (() => {
+                        positions: highlightMatches({
+                            text: (() => {
                                 const software = softwares.find(
                                     software => software.softwareName === softwareName
                                 );
@@ -429,7 +427,7 @@ const { filterBySearchMemoized } = (() => {
                 )
             );
         },
-        { "max": 1, "promise": true }
+        { max: 1, promise: true }
     );
 
     return { filterBySearchMemoized };

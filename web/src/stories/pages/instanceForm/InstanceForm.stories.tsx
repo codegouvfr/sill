@@ -4,23 +4,23 @@ import { createMockRoute, getStoryFactory } from "stories/getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { InstanceForm }
+    wrappedComponent: { InstanceForm }
 });
 
 export default meta;
 
 export const VueCreation = getStory({
-    "route": createMockRoute("instanceCreationForm", {})
+    route: createMockRoute("instanceCreationForm", {})
 });
 
 export const VueCreationPreselectedSoftware = getStory({
-    "route": createMockRoute("instanceCreationForm", {
-        "softwareName": "NextCloud"
+    route: createMockRoute("instanceCreationForm", {
+        softwareName: "NextCloud"
     })
 });
 
 export const VueUpdate = getStory({
-    "route": createMockRoute("instanceUpdateForm", {
-        "id": 0
+    route: createMockRoute("instanceUpdateForm", {
+        id: 0
     })
 });

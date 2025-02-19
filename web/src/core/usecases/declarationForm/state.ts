@@ -38,34 +38,34 @@ export const name = "declarationForm";
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not ready",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not ready",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": state => {
+    reducers: {
+        initializationStarted: state => {
             assert(state.stateDescription === "not ready");
             state.isInitializing = true;
         },
-        "initializationCompleted": (
+        initializationCompleted: (
             _state,
             { payload }: { payload: { software: State.Ready["software"] } }
         ) => {
             const { software } = payload;
 
             return id<State.Ready>({
-                "stateDescription": "ready",
-                "declarationType": undefined,
-                "isSubmitting": false,
-                "step": 1,
+                stateDescription: "ready",
+                declarationType: undefined,
+                isSubmitting: false,
+                step: 1,
                 software
             });
         },
-        "cleared": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": false
+        cleared: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: false
         }),
-        "declarationTypeSet": (
+        declarationTypeSet: (
             state,
             { payload }: { payload: { declarationType: State.Ready["declarationType"] } }
         ) => {
@@ -79,18 +79,18 @@ export const { reducer, actions } = createUsecaseActions({
 
             state.declarationType = declarationType;
         },
-        "navigatedToPreviousStep": state => {
+        navigatedToPreviousStep: state => {
             assert(state.stateDescription === "ready");
             assert(state.step === 2);
 
             state.step = 1;
         },
-        "submissionStarted": state => {
+        submissionStarted: state => {
             assert(state.stateDescription === "ready");
 
             state.isSubmitting = true;
         },
-        "triggerRedirect": (
+        triggerRedirect: (
             _state,
             { payload: _payload }: { payload: { isFormSubmitted: boolean } }
         ) => {}

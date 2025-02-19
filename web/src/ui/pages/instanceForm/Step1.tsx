@@ -40,8 +40,8 @@ export function InstanceFormStep1(props: Step1Props) {
         };
         otherWikidataSoftwares: WikidataEntry[];
     }>({
-        "defaultValues": {
-            "mainSoftware": (() => {
+        defaultValues: {
+            mainSoftware: (() => {
                 const { mainSoftwareSillId } = initialFormData;
 
                 if (mainSoftwareSillId === undefined) {
@@ -79,13 +79,13 @@ export function InstanceFormStep1(props: Step1Props) {
             className={className}
             onSubmit={handleSubmit(data =>
                 onSubmit({
-                    "mainSoftwareSillId": data.mainSoftware.softwareSillId
+                    mainSoftwareSillId: data.mainSoftware.softwareSillId
                 })
             )}
         >
             <Controller
                 name="mainSoftware"
-                rules={{ "required": true }}
+                rules={{ required: true }}
                 control={control}
                 render={({ field }) => (
                     <AutocompleteInput
@@ -106,22 +106,22 @@ export function InstanceFormStep1(props: Step1Props) {
                         )}
                         noOptionText={t("app.no result")}
                         dsfrInputProps={{
-                            "label": t("instanceFormStep1.software instance"),
-                            "nativeInputProps": {
-                                "ref": field.ref,
-                                "onBlur": field.onBlur,
-                                "name": field.name
+                            label: t("instanceFormStep1.software instance"),
+                            nativeInputProps: {
+                                ref: field.ref,
+                                onBlur: field.onBlur,
+                                name: field.name
                             },
-                            "state":
+                            state:
                                 errors.mainSoftware === undefined ? undefined : "error",
-                            "stateRelatedMessage": t("app.required")
+                            stateRelatedMessage: t("app.required")
                         }}
                     />
                 )}
             />
 
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

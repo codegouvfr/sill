@@ -32,7 +32,7 @@ const main = createSelector(
     (isReady, step, formData, isSubmitting, isLastStep) => {
         if (!isReady) {
             return {
-                "isReady": false as const
+                isReady: false as const
             };
         }
 
@@ -42,7 +42,7 @@ const main = createSelector(
         assert(isLastStep !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             step,
             formData,
             isSubmitting,

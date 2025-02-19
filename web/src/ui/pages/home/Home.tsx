@@ -63,39 +63,39 @@ export default function Home(props: Props) {
 
     const softwareSelectionList = [
         {
-            "title": t("home.lastAdded"),
-            "linkProps": routes.softwareCatalog({
-                "sort": "added_time"
+            title: t("home.lastAdded"),
+            linkProps: routes.softwareCatalog({
+                sort: "added_time"
             }).link
         },
         {
-            "title": t("home.mostUsed"),
-            "linkProps": routes.softwareCatalog({
-                "sort": "user_count"
+            title: t("home.mostUsed"),
+            linkProps: routes.softwareCatalog({
+                sort: "user_count"
             }).link
         },
         {
-            "title": t("home.essential"),
-            "linkProps": routes.softwareCatalog({
-                "prerogatives": ["isInstallableOnUserComputer"]
+            title: t("home.essential"),
+            linkProps: routes.softwareCatalog({
+                prerogatives: ["isInstallableOnUserComputer"]
             }).link
         },
         {
-            "title": t("home.recentlyUpdated"),
-            "linkProps": routes.softwareCatalog({
-                "sort": "latest_version_publication_date"
+            title: t("home.recentlyUpdated"),
+            linkProps: routes.softwareCatalog({
+                sort: "latest_version_publication_date"
             }).link
         },
         {
-            "title": t("home.waitingForReferent"),
-            "linkProps": routes.softwareCatalog({
-                "sort": "referent_count_ASC"
+            title: t("home.waitingForReferent"),
+            linkProps: routes.softwareCatalog({
+                sort: "referent_count_ASC"
             }).link
         },
         {
-            "title": t("home.inSupportMarket"),
-            "linkProps": routes.softwareCatalog({
-                "prerogatives": ["isPresentInSupportContract"]
+            title: t("home.inSupportMarket"),
+            linkProps: routes.softwareCatalog({
+                prerogatives: ["isPresentInSupportContract"]
             }).link
         }
     ];
@@ -106,14 +106,14 @@ export default function Home(props: Props) {
 
             <div
                 style={{
-                    "position": "relative",
-                    "top": 7
+                    position: "relative",
+                    top: 7
                 }}
             >
                 <HomepageWaveSvg
                     className={css({
                         "& path": {
-                            "fill": fr.colors.decisions.background.alt.blueFrance.default
+                            fill: fr.colors.decisions.background.alt.blueFrance.default
                         }
                     })}
                 />
@@ -209,10 +209,10 @@ export default function Home(props: Props) {
                                 <Grid item xs={4}>
                                     <Card
                                         classes={{
-                                            "img": css({
+                                            img: css({
                                                 "& > img": {
-                                                    "objectFit": "unset",
-                                                    "background": "white"
+                                                    objectFit: "unset",
+                                                    background: "white"
                                                 }
                                             })
                                         }}
@@ -304,52 +304,70 @@ function AnimatedMetric(props: { className?: string; metricValue: number }) {
 }
 
 const useStyles = tss.withName({ Home }).create({
-    "section": {
+    section: {
         ...fr.spacing("padding", {
-            "topBottom": "30v"
+            topBottom: "30v"
         }),
         [fr.breakpoints.down("md")]: {
             ...fr.spacing("padding", {
-                "topBottom": "10v"
+                topBottom: "10v"
             })
         }
     },
-    "titleSection": {
-        "marginBottom": fr.spacing("10v"),
+    titleSection: {
+        marginBottom: fr.spacing("10v"),
         [fr.breakpoints.down("md")]: {
-            "marginBottom": fr.spacing("8v")
+            marginBottom: fr.spacing("8v")
         },
         "textAlign": "center"
     },
-    "softwareSelectionBackground": {
-        "backgroundColor": fr.colors.decisions.background.alt.blueFrance.default
+    softwareSelectionBackground: {
+        backgroundColor: fr.colors.decisions.background.alt.blueFrance.default
     },
-    "softwareSelection": {
-        "display": "grid",
-        "gridTemplateColumns": "repeat(3, 1fr)",
-        "columnGap": fr.spacing("6v"),
-        "rowGap": fr.spacing("8v"),
+    softwareSelection: {
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        columnGap: fr.spacing("6v"),
+        rowGap: fr.spacing("8v"),
         [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`
+            gridTemplateColumns: `repeat(1, 1fr)`
         }
     },
-    "sillNumbersBackground": {
-        "backgroundColor": fr.colors.decisions.background.actionHigh.blueFrance.default
+    sillNumbersBackground: {
+        backgroundColor: fr.colors.decisions.background.actionHigh.blueFrance.default
     },
-    "sillNumbersContainer": {
-        "textAlign": "center"
+    sillNumbersContainer: {
+        textAlign: "center"
     },
-    "whiteText": {
-        "color": fr.colors.decisions.text.inverted.grey.default
+    sillNumberList: {
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        columnGap: fr.spacing("6v"),
+        [fr.breakpoints.down("md")]: {
+            gridTemplateColumns: `repeat(1, 1fr)`,
+            rowGap: fr.spacing("4v")
+        }
     },
-    "SillNumberTitle": {
-        "marginBottom": fr.spacing("20v")
+    whiteText: {
+        color: fr.colors.decisions.text.inverted.grey.default
     },
-    "numberText": {
-        "marginBottom": fr.spacing("1v")
+    SillNumberTitle: {
+        marginBottom: fr.spacing("20v")
     },
-    "helpUsBackground": {
-        "backgroundColor": fr.colors.decisions.background.default.grey.hover
+    numberText: {
+        marginBottom: fr.spacing("1v")
+    },
+    helpUsBackground: {
+        backgroundColor: fr.colors.decisions.background.default.grey.hover
+    },
+    helpUsCards: {
+        display: "grid",
+        gridTemplateColumns: "repeat(3, 1fr)",
+        columnGap: fr.spacing("6v"),
+        [fr.breakpoints.down("md")]: {
+            gridTemplateColumns: `repeat(1, 1fr)`,
+            rowGap: fr.spacing("4v")
+        }
     }
 });
 
@@ -371,7 +389,7 @@ const { HeroSection } = (() => {
                     <h2 className={classes.title}>
                         <span
                             style={{
-                                "color": fr.colors.decisions.text.title.blueFrance.default
+                                color: fr.colors.decisions.text.title.blueFrance.default
                             }}
                         >
                             {t("home.title")}
@@ -389,33 +407,33 @@ const { HeroSection } = (() => {
     }
 
     const useStyles = tss.withName({ HeroSection }).create({
-        "root": {
-            "display": "flex",
+        root: {
+            display: "flex",
             [fr.breakpoints.down("md")]: {
-                "flexDirection": "column",
-                "marginTop": fr.spacing("10v")
+                flexDirection: "column",
+                marginTop: fr.spacing("10v")
             },
-            "marginTop": fr.spacing("20v"),
-            "marginBottom": fr.spacing("10v")
+            marginTop: fr.spacing("20v"),
+            marginBottom: fr.spacing("10v")
         },
-        "titleWrapper": {
-            "flex": 1,
-            "display": "flex",
-            "alignItems": "center",
-            "paddingRight": fr.spacing("10v"),
+        titleWrapper: {
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            paddingRight: fr.spacing("10v"),
             [fr.breakpoints.down("md")]: {
-                "marginBottom": fr.spacing("15v"),
-                "paddingRight": "unset"
+                marginBottom: fr.spacing("15v"),
+                paddingRight: "unset"
             }
         },
-        "title": {
-            "marginBottom": 0,
-            "maxWidth": 700
+        title: {
+            marginBottom: 0,
+            maxWidth: 700
         },
-        "illustration": {
+        illustration: {
             [fr.breakpoints.down("md")]: {
-                "width": "50%",
-                "margin": "0 auto"
+                width: "50%",
+                margin: "0 auto"
             }
         }
     });
@@ -473,7 +491,7 @@ const { WhatIsTheSillSection } = (() => {
                             }
                             /* eslint-enable jsx-a11y/anchor-has-content */
                         }
-                    ></Trans>
+                    />
                 </p>
             </section>
         );
@@ -483,10 +501,10 @@ const { WhatIsTheSillSection } = (() => {
         .withName({ WhatIsTheSillSection })
         .withParams<{ isVisible: boolean }>()
         .create(({ isVisible }) => ({
-            "root": {
-                "textAlign": "center",
-                "opacity": isVisible ? undefined : 0,
-                "animation": !isVisible
+            root: {
+                textAlign: "center",
+                opacity: isVisible ? undefined : 0,
+                animation: !isVisible
                     ? undefined
                     : `${keyframes`
         0% {
@@ -497,9 +515,9 @@ const { WhatIsTheSillSection } = (() => {
         }
         `} 1000ms`
             },
-            "paragraph": {
-                "maxWidth": 700,
-                "margin": "auto"
+            paragraph: {
+                maxWidth: 700,
+                margin: "auto"
             }
         }));
 

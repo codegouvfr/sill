@@ -2,9 +2,9 @@ import { createGroup, defineRoute, createRouter, param, type Route } from "type-
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "softwareUsersAndReferents": defineRoute(
+    softwareUsersAndReferents: defineRoute(
         {
-            "name": param.query.string
+            name: param.query.string
         },
         () => appPath + `/users-and-referents`
     )

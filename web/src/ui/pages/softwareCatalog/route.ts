@@ -12,11 +12,11 @@ import { assert, type Equals } from "tsafe";
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "softwareCatalog": defineRoute(
+    softwareCatalog: defineRoute(
         {
-            "search": param.query.optional.string.default(""),
-            "sort": param.query.optional.ofType({
-                "parse": raw => {
+            search: param.query.optional.string.default(""),
+            sort: param.query.optional.ofType({
+                parse: raw => {
                     const schema = z.union([
                         z.literal("added_time"),
                         z.literal("update_time"),
@@ -37,12 +37,12 @@ export const routeDefs = {
                         return noMatch;
                     }
                 },
-                "stringify": value => value
+                stringify: value => value
             }),
-            "organization": param.query.optional.string,
-            "category": param.query.optional.string,
-            "environment": param.query.optional.ofType({
-                "parse": raw => {
+            organization: param.query.optional.string,
+            category: param.query.optional.string,
+            environment: param.query.optional.ofType({
+                parse: raw => {
                     const schema: z.Schema<State.Environment> = z.union([
                         z.literal("linux"),
                         z.literal("windows"),
@@ -56,12 +56,12 @@ export const routeDefs = {
                         return noMatch;
                     }
                 },
-                "stringify": value => value
+                stringify: value => value
             }),
-            "programmingLanguage": param.query.optional.string,
-            "prerogatives": param.query.optional
+            programmingLanguage: param.query.optional.string,
+            prerogatives: param.query.optional
                 .ofType({
-                    "parse": raw => {
+                    parse: raw => {
                         const schema: z.Schema<State["prerogatives"][number][]> = z.array(
                             z.enum([
                                 "isPresentInSupportContract",
@@ -78,7 +78,7 @@ export const routeDefs = {
                             return noMatch;
                         }
                     },
-                    "stringify": value => JSON.stringify(value)
+                    stringify: value => JSON.stringify(value)
                 })
                 .default([])
         },

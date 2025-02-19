@@ -55,20 +55,20 @@ export const name = "softwareForm" as const;
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<SoftwareFormState>({
-        "stateDescription": "not ready",
-        "isInitializing": false
+    initialState: id<SoftwareFormState>({
+        stateDescription: "not ready",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializedForCreate": () =>
+    reducers: {
+        initializedForCreate: () =>
             id<SoftwareFormState.Ready>({
-                "stateDescription": "ready",
-                "formData": {},
-                "softwareSillId": undefined,
-                "step": 1,
-                "isSubmitting": false
+                stateDescription: "ready",
+                formData: {},
+                softwareSillId: undefined,
+                step: 1,
+                isSubmitting: false
             }),
-        "initializedForCreateWithPreSelectedSoftware": (
+        initializedForCreateWithPreSelectedSoftware: (
             _state,
             {
                 payload
@@ -97,9 +97,9 @@ export const { reducer, actions } = createUsecaseActions({
             } = payload;
 
             return id<SoftwareFormState.Ready>({
-                "stateDescription": "ready",
-                "formData": {
-                    "step2": {
+                stateDescription: "ready",
+                formData: {
+                    step2: {
                         externalId,
                         comptoirDuLibreId,
                         softwareName,
@@ -110,12 +110,12 @@ export const { reducer, actions } = createUsecaseActions({
                         softwareKeywords
                     }
                 },
-                "softwareSillId": undefined,
-                "step": 1,
-                "isSubmitting": false
+                softwareSillId: undefined,
+                step: 1,
+                isSubmitting: false
             });
         },
-        "initializedForUpdate": (
+        initializedForUpdate: (
             _state,
             {
                 payload
@@ -129,18 +129,18 @@ export const { reducer, actions } = createUsecaseActions({
             const { formData, softwareSillId } = payload;
 
             return {
-                "stateDescription": "ready",
-                "step": 1,
+                stateDescription: "ready",
+                step: 1,
                 softwareSillId,
                 formData,
-                "isSubmitting": false
+                isSubmitting: false
             };
         },
-        "initializationStarted": state => {
+        initializationStarted: state => {
             assert(state.stateDescription === "not ready");
             state.isInitializing = true;
         },
-        "step1DataSet": (
+        step1DataSet: (
             state,
             {
                 payload
@@ -157,7 +157,7 @@ export const { reducer, actions } = createUsecaseActions({
             state.formData.step1 = formDataStep1;
             state.step++;
         },
-        "step2DataSet": (
+        step2DataSet: (
             state,
             {
                 payload
@@ -174,7 +174,7 @@ export const { reducer, actions } = createUsecaseActions({
             state.formData.step2 = formDataStep2;
             state.step++;
         },
-        "step3DataSet": (
+        step3DataSet: (
             state,
             {
                 payload
@@ -191,16 +191,16 @@ export const { reducer, actions } = createUsecaseActions({
             state.formData.step3 = formDataStep3;
             state.step++;
         },
-        "navigatedToPreviousStep": state => {
+        navigatedToPreviousStep: state => {
             assert(state.stateDescription === "ready");
             state.step--;
         },
-        "submissionStarted": state => {
+        submissionStarted: state => {
             assert(state.stateDescription === "ready");
 
             state.isSubmitting = true;
         },
-        "formSubmitted": (
+        formSubmitted: (
             _state,
             {
                 //NOTE: To be registered by SoftwareCatalog
@@ -211,9 +211,9 @@ export const { reducer, actions } = createUsecaseActions({
                 };
             }
         ) => {},
-        "cleared": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": false
+        cleared: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: false
         })
     }
 });

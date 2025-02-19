@@ -2,23 +2,23 @@ import { createGroup, defineRoute, createRouter, param, type Route } from "type-
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "ogSill": defineRoute(
+    ogSill: defineRoute(
         {
-            "lang": param.path.string,
-            "id": param.query.optional.number
+            lang: param.path.string,
+            id: param.query.optional.number
         },
         ({ lang }) => appPath + `/${lang}/software`
     ),
-    "onyxiaUiSillCatalog": defineRoute(
+    onyxiaUiSillCatalog: defineRoute(
         {
-            "q": param.query.optional.string.default("")
+            q: param.query.optional.string.default("")
         },
         () => appPath + `/software`
     ),
-    "onyxiaUiSillCard": defineRoute(
+    onyxiaUiSillCard: defineRoute(
         {
             /** Can be the software name (string) or it's `${id}` (for legacy route compat)  */
-            "name": param.query.string
+            name: param.query.string
         },
         () => appPath + `/software`
     )

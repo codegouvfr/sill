@@ -7,8 +7,8 @@ export const createEvt = (({ evtAction, getState }) => {
         action.usecaseName === name && action.actionName === "triggerRedirect"
             ? [
                   {
-                      "action": "redirect" as const,
-                      "softwareName": (() => {
+                      action: "redirect" as const,
+                      softwareName: (() => {
                           const state = getState()[name];
 
                           assert(state.stateDescription === "ready");

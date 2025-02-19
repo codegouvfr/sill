@@ -29,14 +29,14 @@ export function SoftwareFormStep1(props: Step1Props) {
         softwareType: "cloud" | "stack" | "desktop/mobile";
         osCheckboxValues: string[] | undefined;
     }>({
-        "defaultValues": (() => {
+        defaultValues: (() => {
             if (initialFormData === undefined) {
                 return undefined;
             }
 
             return {
-                "softwareType": initialFormData.softwareType.type,
-                "osCheckboxValues":
+                softwareType: initialFormData.softwareType.type,
+                osCheckboxValues:
                     initialFormData.softwareType.type === "desktop/mobile"
                         ? Object.entries(initialFormData.softwareType.os)
                               .filter(([, value]) => value)
@@ -70,21 +70,21 @@ export function SoftwareFormStep1(props: Step1Props) {
                               assert(osCheckboxValues !== undefined);
 
                               return {
-                                  "softwareType": {
-                                      "type": softwareType,
-                                      "os": {
-                                          "windows": osCheckboxValues.includes("windows"),
-                                          "mac": osCheckboxValues.includes("mac"),
-                                          "linux": osCheckboxValues.includes("linux"),
-                                          "ios": osCheckboxValues.includes("ios"),
-                                          "android": osCheckboxValues.includes("android")
+                                  softwareType: {
+                                      type: softwareType,
+                                      os: {
+                                          windows: osCheckboxValues.includes("windows"),
+                                          mac: osCheckboxValues.includes("mac"),
+                                          linux: osCheckboxValues.includes("linux"),
+                                          ios: osCheckboxValues.includes("ios"),
+                                          android: osCheckboxValues.includes("android")
                                       }
                                   }
                               };
                           })()
                         : {
-                              "softwareType": {
-                                  "type": softwareType
+                              softwareType: {
+                                  type: softwareType
                               }
                           }
                 )
@@ -96,26 +96,26 @@ export function SoftwareFormStep1(props: Step1Props) {
                 stateRelatedMessage="This is field is required"
                 options={[
                     {
-                        "label": t("softwareFormStep1.software desktop"),
-                        "nativeInputProps": {
-                            ...register("softwareType", { "required": true }),
-                            "value": "desktop/mobile"
+                        label: t("softwareFormStep1.software desktop"),
+                        nativeInputProps: {
+                            ...register("softwareType", { required: true }),
+                            value: "desktop/mobile"
                         }
                     },
                     {
-                        "label": t("softwareFormStep1.software cloud"),
-                        "hintText": t("softwareFormStep1.software cloud hint"),
-                        "nativeInputProps": {
-                            ...register("softwareType", { "required": true }),
-                            "value": "cloud"
+                        label: t("softwareFormStep1.software cloud"),
+                        hintText: t("softwareFormStep1.software cloud hint"),
+                        nativeInputProps: {
+                            ...register("softwareType", { required: true }),
+                            value: "cloud"
                         }
                     },
                     {
-                        "label": t("softwareFormStep1.module"),
-                        "hintText": t("softwareFormStep1.module hint"),
-                        "nativeInputProps": {
-                            ...register("softwareType", { "required": true }),
-                            "value": "stack"
+                        label: t("softwareFormStep1.module"),
+                        hintText: t("softwareFormStep1.module hint"),
+                        nativeInputProps: {
+                            ...register("softwareType", { required: true }),
+                            value: "stack"
                         }
                     }
                 ]}
@@ -127,45 +127,45 @@ export function SoftwareFormStep1(props: Step1Props) {
                     stateRelatedMessage={t("app.required")}
                     options={[
                         {
-                            "label": "Windows",
-                            "nativeInputProps": {
-                                ...register("osCheckboxValues", { "required": true }),
-                                "value": "windows"
+                            label: "Windows",
+                            nativeInputProps: {
+                                ...register("osCheckboxValues", { required: true }),
+                                value: "windows"
                             }
                         },
                         {
-                            "label": "GNU/Linux",
-                            "nativeInputProps": {
-                                ...register("osCheckboxValues", { "required": true }),
-                                "value": "linux"
+                            label: "GNU/Linux",
+                            nativeInputProps: {
+                                ...register("osCheckboxValues", { required: true }),
+                                value: "linux"
                             }
                         },
                         {
-                            "label": "MacOS",
-                            "nativeInputProps": {
-                                ...register("osCheckboxValues", { "required": true }),
-                                "value": "mac"
+                            label: "MacOS",
+                            nativeInputProps: {
+                                ...register("osCheckboxValues", { required: true }),
+                                value: "mac"
                             }
                         },
                         {
-                            "label": "Android",
-                            "nativeInputProps": {
-                                ...register("osCheckboxValues", { "required": true }),
-                                "value": "android"
+                            label: "Android",
+                            nativeInputProps: {
+                                ...register("osCheckboxValues", { required: true }),
+                                value: "android"
                             }
                         },
                         {
-                            "label": "iOS (iPhone)",
-                            "nativeInputProps": {
-                                ...register("osCheckboxValues", { "required": true }),
-                                "value": "ios"
+                            label: "iOS (iPhone)",
+                            nativeInputProps: {
+                                ...register("osCheckboxValues", { required: true }),
+                                value: "ios"
                             }
                         }
                     ]}
                 />
             )}
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

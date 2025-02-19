@@ -84,7 +84,7 @@ const softwares = createSelector(
         if (searchResults !== undefined) {
             const filterResults = filterAndSortBySearch({
                 searchResults,
-                "softwares": tmpSoftwares
+                softwares: tmpSoftwares
             });
 
             tmpSoftwares = filterResults.map(({ software, positions }) => {
@@ -98,35 +98,35 @@ const softwares = createSelector(
 
         if (organization !== undefined) {
             tmpSoftwares = filterByOrganization({
-                "softwares": tmpSoftwares,
-                "organization": organization
+                softwares: tmpSoftwares,
+                organization: organization
             });
         }
 
         if (category !== undefined) {
             tmpSoftwares = filterByCategory({
-                "softwares": tmpSoftwares,
-                "category": category
+                softwares: tmpSoftwares,
+                category: category
             });
         }
 
         if (programmingLanguage) {
             tmpSoftwares = filterByProgrammingLanguage({
-                "softwares": tmpSoftwares,
-                "programmingLanguage": programmingLanguage
+                softwares: tmpSoftwares,
+                programmingLanguage: programmingLanguage
             });
         }
 
         if (environment !== undefined) {
             tmpSoftwares = filterByEnvironnement({
-                "softwares": tmpSoftwares,
-                "environment": environment
+                softwares: tmpSoftwares,
+                environment: environment
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -137,55 +137,55 @@ const softwares = createSelector(
                     switch (sort) {
                         case "added_time":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.addedTime,
-                                "order": "descending"
+                                getWeight: software => software.addedTime,
+                                order: "descending"
                             });
                         case "update_time":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.updateTime,
-                                "order": "descending"
+                                getWeight: software => software.updateTime,
+                                order: "descending"
                             });
                         case "latest_version_publication_date":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software =>
+                                getWeight: software =>
                                     software.latestVersion?.publicationTime ?? 0,
-                                "order": "descending",
-                                "tieBreaker": createCompareFn({
-                                    "getWeight": software => software.updateTime,
-                                    "order": "descending"
+                                order: "descending",
+                                tieBreaker: createCompareFn({
+                                    getWeight: software => software.updateTime,
+                                    order: "descending"
                                 })
                             });
                         case "referent_count":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.referentCount,
-                                "order": "descending"
+                                getWeight: software => software.referentCount,
+                                order: "descending"
                             });
                         case "referent_count_ASC":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.referentCount,
-                                "order": "ascending"
+                                getWeight: software => software.referentCount,
+                                order: "ascending"
                             });
                         case "user_count":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.userCount,
-                                "order": "descending"
+                                getWeight: software => software.userCount,
+                                order: "descending"
                             });
                         case "user_count_ASC":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software => software.userCount,
-                                "order": "ascending"
+                                getWeight: software => software.userCount,
+                                order: "ascending"
                             });
                         case "my_software":
                             return createCompareFn<State.Software.Internal>({
-                                "getWeight": software =>
+                                getWeight: software =>
                                     software.userDeclaration === undefined
                                         ? 0
                                         : software.userDeclaration.isReferent
-                                        ? 2
-                                        : software.userDeclaration.isUser
-                                        ? 1
-                                        : 0,
-                                "order": "descending"
+                                          ? 2
+                                          : software.userDeclaration.isUser
+                                            ? 1
+                                            : 0,
+                                order: "descending"
                             });
                     }
 
@@ -196,8 +196,8 @@ const softwares = createSelector(
 
         return tmpSoftwares.map(software =>
             internalSoftwareToExternalSoftware({
-                "internalSoftware": software,
-                "positions": (() => {
+                internalSoftware: software,
+                positions: (() => {
                     if (positionsBySoftwareName === undefined) {
                         return undefined;
                     }
@@ -242,34 +242,34 @@ const organizationOptions = createSelector(
         if (searchResults !== undefined) {
             tmpSoftwares = filterAndSortBySearch({
                 searchResults,
-                "softwares": tmpSoftwares
+                softwares: tmpSoftwares
             }).map(({ software }) => software);
         }
 
         if (category !== undefined) {
             tmpSoftwares = filterByCategory({
-                "softwares": tmpSoftwares,
-                "category": category
+                softwares: tmpSoftwares,
+                category: category
             });
         }
 
         if (programmingLanguage) {
             tmpSoftwares = filterByProgrammingLanguage({
-                "softwares": tmpSoftwares,
-                "programmingLanguage": programmingLanguage
+                softwares: tmpSoftwares,
+                programmingLanguage: programmingLanguage
             });
         }
 
         if (environment !== undefined) {
             tmpSoftwares = filterByEnvironnement({
-                "softwares": tmpSoftwares,
-                "environment": environment
+                softwares: tmpSoftwares,
+                environment: environment
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -327,34 +327,34 @@ const categoryOptions = createSelector(
         if (searchResults !== undefined) {
             tmpSoftwares = filterAndSortBySearch({
                 searchResults,
-                "softwares": tmpSoftwares
+                softwares: tmpSoftwares
             }).map(({ software }) => software);
         }
 
         if (organization !== undefined) {
             tmpSoftwares = filterByOrganization({
-                "softwares": tmpSoftwares,
-                "organization": organization
+                softwares: tmpSoftwares,
+                organization: organization
             });
         }
 
         if (programmingLanguage) {
             tmpSoftwares = filterByProgrammingLanguage({
-                "softwares": tmpSoftwares,
-                "programmingLanguage": programmingLanguage
+                softwares: tmpSoftwares,
+                programmingLanguage: programmingLanguage
             });
         }
 
         if (environment !== undefined) {
             tmpSoftwares = filterByEnvironnement({
-                "softwares": tmpSoftwares,
-                "environment": environment
+                softwares: tmpSoftwares,
+                environment: environment
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -422,35 +422,35 @@ const environmentOptions = createSelector(
 
         if (searchResults !== undefined) {
             tmpSoftwares = filterAndSortBySearch({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 searchResults
             }).map(({ software }) => software);
         }
 
         if (organization !== undefined) {
             tmpSoftwares = filterByOrganization({
-                "softwares": tmpSoftwares,
-                "organization": organization
+                softwares: tmpSoftwares,
+                organization: organization
             });
         }
 
         if (programmingLanguage) {
             tmpSoftwares = filterByProgrammingLanguage({
-                "softwares": tmpSoftwares,
-                "programmingLanguage": programmingLanguage
+                softwares: tmpSoftwares,
+                programmingLanguage: programmingLanguage
             });
         }
 
         if (category !== undefined) {
             tmpSoftwares = filterByCategory({
-                "softwares": tmpSoftwares,
-                "category": category
+                softwares: tmpSoftwares,
+                category: category
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -530,42 +530,42 @@ const prerogativeFilterOptions = createSelector(
 
         if (searchResults !== undefined) {
             tmpSoftwares = filterAndSortBySearch({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 searchResults
             }).map(({ software }) => software);
         }
 
         if (organization !== undefined) {
             tmpSoftwares = filterByOrganization({
-                "softwares": tmpSoftwares,
-                "organization": organization
+                softwares: tmpSoftwares,
+                organization: organization
             });
         }
 
         if (category !== undefined) {
             tmpSoftwares = filterByCategory({
-                "softwares": tmpSoftwares,
-                "category": category
+                softwares: tmpSoftwares,
+                category: category
             });
         }
 
         if (programmingLanguage) {
             tmpSoftwares = filterByProgrammingLanguage({
-                "softwares": tmpSoftwares,
-                "programmingLanguage": programmingLanguage
+                softwares: tmpSoftwares,
+                programmingLanguage: programmingLanguage
             });
         }
 
         if (environment !== undefined) {
             tmpSoftwares = filterByEnvironnement({
-                "softwares": tmpSoftwares,
-                "environment": environment
+                softwares: tmpSoftwares,
+                environment: environment
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -649,35 +649,35 @@ const programmingLanguageOptions = createSelector(
 
         if (searchResults !== undefined) {
             tmpSoftwares = filterAndSortBySearch({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 searchResults
             }).map(({ software }) => software);
         }
 
         if (organization !== undefined) {
             tmpSoftwares = filterByOrganization({
-                "softwares": tmpSoftwares,
-                "organization": organization
+                softwares: tmpSoftwares,
+                organization: organization
             });
         }
 
         if (category !== undefined) {
             tmpSoftwares = filterByCategory({
-                "softwares": tmpSoftwares,
-                "category": category
+                softwares: tmpSoftwares,
+                category: category
             });
         }
 
         if (environment !== undefined) {
             tmpSoftwares = filterByEnvironnement({
-                "softwares": tmpSoftwares,
-                "environment": environment
+                softwares: tmpSoftwares,
+                environment: environment
             });
         }
 
         for (const prerogative of prerogatives) {
             tmpSoftwares = filterByPrerogative({
-                "softwares": tmpSoftwares,
+                softwares: tmpSoftwares,
                 prerogative
             });
         }
@@ -734,7 +734,7 @@ const { filterAndSortBySearch } = (() => {
     const getIndexBySoftwareName = memoize(
         (softwares: State.Software.Internal[]) =>
             Object.fromEntries(softwares.map(({ softwareName }, i) => [softwareName, i])),
-        { "max": 1 }
+        { max: 1 }
     );
 
     function filterAndSortBySearch(params: {
@@ -751,8 +751,8 @@ const { filterAndSortBySearch } = (() => {
         return searchResults
             .map(({ softwareName }) => softwareName)
             .map((softwareName, i) => ({
-                "software": softwares[indexBySoftwareName[softwareName]],
-                "positions": new Set(searchResults[i].positions)
+                software: softwares[indexBySoftwareName[softwareName]],
+                positions: new Set(searchResults[i].positions)
             }));
     }
 
@@ -824,12 +824,12 @@ function filterByPrerogative(params: {
         software =>
             ({
                 ...internalSoftwareToExternalSoftware({
-                    "internalSoftware": software,
-                    "positions": undefined
+                    internalSoftware: software,
+                    positions: undefined
                 }).prerogatives,
                 ...software.prerogatives,
-                "isTestable": software.testUrl !== undefined
-            }[prerogative])
+                isTestable: software.testUrl !== undefined
+            })[prerogative]
     );
 }
 
@@ -883,8 +883,8 @@ function apiSoftwareToInternalSoftware(params: {
     >();
 
     const { resolveLocalizedString } = createResolveLocalizedString({
-        "currentLanguage": "fr",
-        "fallbackLanguage": "en"
+        currentLanguage: "fr",
+        fallbackLanguage: "en"
     });
 
     const parentSoftware: State.Software.Internal["parentSoftware"] = (() => {
@@ -902,15 +902,15 @@ function apiSoftwareToInternalSoftware(params: {
             }
 
             return {
-                "softwareName": software.softwareName,
-                "isInSill": true
+                softwareName: software.softwareName,
+                isInSill: true
             };
         }
 
         return {
-            "isInSill": false,
-            "softwareName": resolveLocalizedString(parentWikidataSoftware.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
+            isInSill: false,
+            softwareName: resolveLocalizedString(parentWikidataSoftware.label),
+            url: `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
         };
     })();
 
@@ -922,21 +922,21 @@ function apiSoftwareToInternalSoftware(params: {
             semVer: latestVersion?.semVer ?? "",
             publicationTime: latestVersion?.publicationTime
         },
-        "referentCount": Object.values(userAndReferentCountByOrganization)
+        referentCount: Object.values(userAndReferentCountByOrganization)
             .map(({ referentCount }) => referentCount)
             .reduce((prev, curr) => prev + curr, 0),
-        "userCount": Object.values(userAndReferentCountByOrganization)
+        userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         testUrl,
         addedTime,
         updateTime,
         applicationCategories,
-        "organizations": objectKeys(userAndReferentCountByOrganization),
+        organizations: objectKeys(userAndReferentCountByOrganization),
         parentSoftware,
         softwareType,
         prerogatives,
-        "search": (() => {
+        search: (() => {
             const search =
                 softwareName +
                 " (" +
@@ -1010,25 +1010,25 @@ function internalSoftwareToExternalSoftware(params: {
         referentCount,
         userCount,
         testUrl,
-        "prerogatives": {
+        prerogatives: {
             isFromFrenchPublicServices,
             isPresentInSupportContract,
             doRespectRgaa,
-            "isInstallableOnUserComputer":
+            isInstallableOnUserComputer:
                 softwareType.type === "desktop/mobile" &&
                 (softwareType.os.windows || softwareType.os.linux || softwareType.os.mac),
-            "isAvailableAsMobileApp":
+            isAvailableAsMobileApp:
                 softwareType.type === "desktop/mobile" &&
                 (softwareType.os.android || softwareType.os.ios),
-            "isTestable": testUrl !== undefined
+            isTestable: testUrl !== undefined
         },
         parentSoftware,
-        "searchHighlight":
+        searchHighlight:
             positions === undefined
                 ? undefined
                 : {
-                      "searchChars": search.normalize().split(""),
-                      "highlightedIndexes": Array.from(positions)
+                      searchChars: search.normalize().split(""),
+                      highlightedIndexes: Array.from(positions)
                   },
         userDeclaration,
         programmingLanguages,
@@ -1057,7 +1057,7 @@ export function apiSoftwareToExternalCatalogSoftware(params: {
     const internalSoftware = apiSoftwareToInternalSoftware({
         apiSoftwares,
         softwareRef,
-        "userDeclaration": undefined
+        userDeclaration: undefined
     });
 
     if (internalSoftware === undefined) {
@@ -1066,6 +1066,6 @@ export function apiSoftwareToExternalCatalogSoftware(params: {
 
     return internalSoftwareToExternalSoftware({
         internalSoftware,
-        "positions": undefined
+        positions: undefined
     });
 }

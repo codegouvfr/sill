@@ -15,7 +15,7 @@ type Props = {
     route: PageRoute;
 };
 
-const { useDebounce } = createUseDebounce({ "delay": 400 });
+const { useDebounce } = createUseDebounce({ delay: 400 });
 
 export default function SoftwareCatalog(props: Props) {
     const { className, route } = props;
@@ -38,7 +38,7 @@ export default function SoftwareCatalog(props: Props) {
     //TODO: Submit an issue to type route, this should be built in.
     const { updateRouteParams } = (function useClosure() {
         const refParams = useConst(() => ({
-            "ref": id<Param0<(typeof routes)["softwareCatalog"]>>(route.params)
+            ref: id<Param0<(typeof routes)["softwareCatalog"]>>(route.params)
         }));
 
         const updateRouteParams = useConstCallback(
@@ -80,8 +80,8 @@ export default function SoftwareCatalog(props: Props) {
 
     useDebounce(() => {
         softwareCatalog.updateFilter({
-            "key": "search",
-            "value": route.params.search
+            key: "search",
+            value: route.params.search
         });
     }, [route.params.search]);
 
@@ -91,15 +91,15 @@ export default function SoftwareCatalog(props: Props) {
         }
 
         softwareCatalog.updateFilter({
-            "key": "sort" as const,
-            "value": route.params.sort
+            key: "sort" as const,
+            value: route.params.sort
         });
     }, [route.params.sort]);
 
     useEffect(() => {
         softwareCatalog.updateFilter({
-            "key": "organization",
-            "value":
+            key: "organization",
+            value:
                 route.params.organization !== undefined
                     ? route.params.organization
                     : undefined
@@ -108,16 +108,15 @@ export default function SoftwareCatalog(props: Props) {
 
     useEffect(() => {
         softwareCatalog.updateFilter({
-            "key": "category",
-            "value":
-                route.params.category !== undefined ? route.params.category : undefined
+            key: "category",
+            value: route.params.category !== undefined ? route.params.category : undefined
         });
     }, [route.params.category]);
 
     useEffect(() => {
         softwareCatalog.updateFilter({
-            "key": "programmingLanguage",
-            "value":
+            key: "programmingLanguage",
+            value:
                 route.params.programmingLanguage !== undefined
                     ? route.params.programmingLanguage
                     : undefined
@@ -126,8 +125,8 @@ export default function SoftwareCatalog(props: Props) {
 
     useEffect(() => {
         softwareCatalog.updateFilter({
-            "key": "environment",
-            "value":
+            key: "environment",
+            value:
                 route.params.environment !== undefined
                     ? route.params.environment
                     : undefined
@@ -136,8 +135,8 @@ export default function SoftwareCatalog(props: Props) {
 
     useEffect(() => {
         softwareCatalog.updateFilter({
-            "key": "prerogatives",
-            "value": route.params.prerogatives
+            key: "prerogatives",
+            value: route.params.prerogatives
         });
     }, [route.params.prerogatives]);
 

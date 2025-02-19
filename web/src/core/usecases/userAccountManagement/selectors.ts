@@ -12,7 +12,7 @@ const main = (rootState: RootState) => {
 
     return {
         ...rest,
-        "doSupportAccountManagement": accountManagementUrl !== undefined
+        doSupportAccountManagement: accountManagementUrl !== undefined
     };
 };
 

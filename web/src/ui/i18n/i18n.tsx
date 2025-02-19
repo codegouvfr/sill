@@ -23,52 +23,52 @@ const {
 } = createI18nApi<typeof import("ui/App").i18n>()(
     { languages, fallbackLanguage },
     {
-        "en": {
-            "App": {
-                "yes": "Yes",
-                "no": "No",
+        en: {
+            App: {
+                yes: "Yes",
+                no: "No",
                 "not applicable": "Not applicable",
-                "previous": "Previous",
-                "next": "Next",
+                previous: "Previous",
+                next: "Next",
                 "add software": "Add Software",
                 "update software": "Update Software",
                 "add software or service": "Add Software or Service",
                 "add instance": "Add Instance",
                 "update instance": "Update Instance",
-                "required": "This field is required",
+                required: "This field is required",
                 "invalid url": 'Invalid URL. It must start with "http"',
                 "invalid version": "The value must be numeric (e.g., 2.0.1)",
-                "all": "All",
-                "allFeminine": "All",
-                "loading": "Loading...",
+                all: "All",
+                allFeminine: "All",
+                loading: "Loading...",
                 "no result": "No results",
-                "search": "Search",
-                "validate": "Validate",
+                search: "Search",
+                validate: "Validate",
                 "not provided": "Not provided"
             }
         },
-        "fr": {
+        fr: {
             /* spell-checker: disable */
-            "App": {
-                "yes": "Oui",
-                "no": "Non",
+            App: {
+                yes: "Oui",
+                no: "Non",
                 "not applicable": "Non applicable",
-                "previous": "Précédent",
-                "next": "Suivant",
+                previous: "Précédent",
+                next: "Suivant",
                 "add software": "Ajouter un logiciel",
                 "update software": "Mettre à jour un logiciel",
                 "add software or service": "Ajouter un logiciel ou un service",
                 "add instance": "Ajouter une instance",
                 "update instance": "Modifier une instance",
-                "required": "Ce champ est requis",
+                required: "Ce champ est requis",
                 "invalid url": 'URL invalide. Elle doit commencer par "http"',
                 "invalid version": "La valeur doit être numérique (Exemple : 2.0.1)",
-                "all": "Tous",
-                "allFeminine": "Toutes",
-                "loading": "Chargement...",
+                all: "Tous",
+                allFeminine: "Toutes",
+                loading: "Chargement...",
                 "no result": "Aucun Résultat",
-                "search": "Rechercher",
-                "validate": "Valider",
+                search: "Rechercher",
+                validate: "Valider",
                 "not provided": "Non Renseigné"
             }
         }
@@ -78,7 +78,7 @@ const {
 export { useTranslation, resolveLocalizedString, useLang, useResolveLocalizedString };
 
 export const evtLang = statefulObservableToStatefulEvt({
-    "statefulObservable": $lang
+    statefulObservable: $lang
 });
 
 export const zLocalizedString = z.union([
@@ -97,7 +97,7 @@ export const softwareCategoriesFrBySoftwareCategoryEn: Record<string, string> = 
     /* spell-checker: disable */
     "Operating Systems": "Systèmes d'exploitation",
     "Web Servers": "Serveurs Web",
-    "Databases": "Bases de données",
+    Databases: "Bases de données",
     "Programming Languages": "Langages de programmation",
     "Web Frameworks": "Frameworks Web",
     "Testing & CI/CD": "Tests & CI/CD",
@@ -114,8 +114,8 @@ export const softwareCategoriesFrBySoftwareCategoryEn: Record<string, string> = 
     "Web Browsers & Extensions": "Navigateurs Web & Extensions",
     "Email Clients & Servers": "Clients de messagerie & Serveurs",
     "API Management & Networking": "Gestion d'API & Réseautage",
-    "GeoSpatial": "GéoSpatial",
+    GeoSpatial: "GéoSpatial",
     "Other Development Tools": "Autres outils de développement",
-    "Miscellaneous": "Divers"
+    Miscellaneous: "Divers"
     /* spell-checker: enable */
 };

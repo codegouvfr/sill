@@ -7,8 +7,8 @@ import { useTranslation } from "react-i18next";
 import CircularProgress from "@mui/material/CircularProgress";
 
 const modal = createModal({
-    "id": "declaration-removal",
-    "isOpenedByDefault": false
+    id: "declaration-removal",
+    isOpenedByDefault: false
 });
 
 type Params = {
@@ -62,20 +62,20 @@ export function DeclarationRemovalModal() {
             }
             buttons={[
                 {
-                    "doClosesModal": true,
-                    "children": t("declarationRemovalModal.cancel")
+                    doClosesModal: true,
+                    children: t("declarationRemovalModal.cancel")
                 },
                 {
-                    "doClosesModal": false,
-                    "onClick": () =>
+                    doClosesModal: false,
+                    onClick: () =>
                         declarationRemoval.removeAgentAsReferentOrUserFromSoftware({
                             softwareId,
                             declarationType
                         }),
-                    "nativeButtonProps": {
-                        "disabled": isRemovingUserDeclaration
+                    nativeButtonProps: {
+                        disabled: isRemovingUserDeclaration
                     },
-                    "children": (
+                    children: (
                         <>
                             {t("declarationRemovalModal.confirm")}{" "}
                             {isRemovingUserDeclaration && (

@@ -72,9 +72,9 @@ export const SoftwareCatalogCard = memo((props: Props) => {
     const { t } = useTranslation();
     const { resolveLocalizedString } = useResolveLocalizedString();
     const { classes, cx } = useStyles({
-        "isSearchHighlighted": searchHighlight !== undefined
+        isSearchHighlighted: searchHighlight !== undefined
     });
-    const { fromNowText } = useFromNow({ "dateTime": latestVersion?.publicationTime });
+    const { fromNowText } = useFromNow({ dateTime: latestVersion?.publicationTime });
 
     return (
         <div className={cx(fr.cx("fr-card"), classes.root, className)}>
@@ -243,136 +243,136 @@ const useStyles = tss
     .withName({ SoftwareCatalogCard })
     .withParams<{ isSearchHighlighted: boolean }>()
     .create(({ isSearchHighlighted }) => ({
-        "root": {
-            "backgroundColor": fr.colors.decisions.background.default.grey.default,
+        root: {
+            backgroundColor: fr.colors.decisions.background.default.grey.default,
             "&&&": {
                 ...fr.spacing("padding", {
-                    "topBottom": "7v",
-                    "rightLeft": "6v"
+                    topBottom: "7v",
+                    rightLeft: "6v"
                 }),
                 [fr.breakpoints.down("md")]: {
                     ...fr.spacing("padding", {
-                        "topBottom": "5v",
-                        "rightLeft": "3v"
+                        topBottom: "5v",
+                        rightLeft: "3v"
                     })
                 }
             }
         },
-        "searchHighlight": {
-            "fontStyle": "italic",
-            "color": fr.colors.decisions.text.mention.grey.default,
+        searchHighlight: {
+            fontStyle: "italic",
+            color: fr.colors.decisions.text.mention.grey.default,
             "& > span": {
-                "color": fr.colors.decisions.text.active.blueFrance.default,
-                "fontWeight": "bold"
+                color: fr.colors.decisions.text.active.blueFrance.default,
+                fontWeight: "bold"
             }
         },
-        "cardBody": {
-            "height": "100%",
-            "display": "flex",
-            "flexDirection": "column",
-            "marginBottom": fr.spacing("8v")
+        cardBody: {
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            marginBottom: fr.spacing("8v")
         },
-        "headerContainer": {
-            "display": "flex",
-            "alignItems": "center",
-            "marginBottom": fr.spacing("4v"),
-            "backgroundImage": "unset"
+        headerContainer: {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: fr.spacing("4v"),
+            backgroundImage: "unset"
         },
-        "header": {
-            "width": "100%"
+        header: {
+            width: "100%"
         },
-        "logoWrapper": {
-            "width": fr.spacing("14v"),
-            "aspectRatio": "auto 1/1",
-            "marginRight": fr.spacing("3v"),
-            "overflow": "hidden"
+        logoWrapper: {
+            width: fr.spacing("14v"),
+            aspectRatio: "auto 1/1",
+            marginRight: fr.spacing("3v"),
+            overflow: "hidden"
         },
-        "logo": {
-            "height": "100%"
+        logo: {
+            height: "100%"
         },
-        "titleContainer": {
-            "display": "flex",
-            "justifyContent": "space-between"
+        titleContainer: {
+            display: "flex",
+            justifyContent: "space-between"
         },
-        "title": {
-            "margin": 0,
-            "color": fr.colors.decisions.text.title.grey.default,
-            "display": "-webkit-box",
-            "WebkitBoxOrient": "vertical",
-            "WebkitLineClamp": "1",
-            "whiteSpace": "pre-wrap",
-            "overflow": "hidden"
+        title: {
+            margin: 0,
+            color: fr.colors.decisions.text.title.grey.default,
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp: "1",
+            whiteSpace: "pre-wrap",
+            overflow: "hidden"
         },
-        "titleActionsContainer": {
-            "display": "flex",
-            "alignItems": "center",
-            "gap": fr.spacing("2v"),
+        titleActionsContainer: {
+            display: "flex",
+            alignItems: "center",
+            gap: fr.spacing("2v"),
             "&>i": {
-                "color": fr.colors.decisions.text.title.blueFrance.default,
+                color: fr.colors.decisions.text.title.blueFrance.default,
                 "&::before": {
                     "--icon-size": fr.spacing("4v")
                 }
             }
         },
-        "softwareVersionContainer": {
+        softwareVersionContainer: {
             [fr.breakpoints.down("md")]: {
-                "fontSize": fr.spacing("2v")
+                fontSize: fr.spacing("2v")
             }
         },
-        "badgeVersion": {
-            ...fr.spacing("margin", { "rightLeft": "1v" }),
-            "whiteSpace": "nowrap",
-            "overflow": "hidden",
-            "textOverflow": "ellipsis",
-            "maxWidth": "30%"
+        badgeVersion: {
+            ...fr.spacing("margin", { rightLeft: "1v" }),
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            maxWidth: "30%"
         },
-        "description": {
-            "marginTop": 0,
-            "marginBottom": fr.spacing("3v"),
-            "color": fr.colors.decisions.text.default.grey.default,
-            "overflow": "hidden",
-            "display": "-webkit-box",
-            "WebkitBoxOrient": "vertical",
-            "WebkitLineClamp":
+        description: {
+            marginTop: 0,
+            marginBottom: fr.spacing("3v"),
+            color: fr.colors.decisions.text.default.grey.default,
+            overflow: "hidden",
+            display: "-webkit-box",
+            WebkitBoxOrient: "vertical",
+            WebkitLineClamp:
                 isSearchHighlighted || !config.catalog.cardOptions.referentCount
                     ? "5"
                     : "3",
-            "whiteSpace": "pre-wrap"
+            whiteSpace: "pre-wrap"
         },
-        "detailUsersAndReferents": {
-            "order": 4,
-            "marginTop": "auto"
+        detailUsersAndReferents: {
+            order: 4,
+            marginTop: "auto"
         },
-        "footer": {
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "space-between",
+        footer: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
             [fr.breakpoints.down("md")]: {
-                "flexDirection": "column",
-                "justifyContent": "flex-start",
-                "alignItems": "flex-start"
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "flex-start"
             }
         },
-        "declareReferentOrUserButton": {
+        declareReferentOrUserButton: {
             [fr.breakpoints.down("md")]: {
-                "width": "100%",
-                "justifyContent": "center"
+                width: "100%",
+                justifyContent: "center"
             }
         },
-        "footerActionsContainer": {
-            "display": "flex",
-            "marginLeft": fr.spacing("4v"),
-            "flex": 1,
-            "justifyContent": "flex-end",
-            "color": fr.colors.decisions.text.title.blueFrance.default,
+        footerActionsContainer: {
+            display: "flex",
+            marginLeft: fr.spacing("4v"),
+            flex: 1,
+            justifyContent: "flex-end",
+            color: fr.colors.decisions.text.title.blueFrance.default,
             [fr.breakpoints.down("md")]: {
-                "marginLeft": 0,
-                "marginTop": fr.spacing("3v"),
-                "gap": fr.spacing("4v"),
-                "alignSelf": "end"
+                marginLeft: 0,
+                marginTop: fr.spacing("3v"),
+                gap: fr.spacing("4v"),
+                alignSelf: "end"
             }
         },
-        "footerActionLink": {
-            "background": "none"
+        footerActionLink: {
+            background: "none"
         }
     }));

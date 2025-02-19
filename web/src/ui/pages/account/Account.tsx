@@ -103,10 +103,10 @@ function AccountReady(props: { className?: string }) {
                 <Input
                     label={t("account.mail")}
                     nativeInputProps={{
-                        "value": email.value,
-                        "name": "email",
-                        "type": "email",
-                        "id": "email"
+                        value: email.value,
+                        name: "email",
+                        type: "email",
+                        id: "email"
                     }}
                     disabled={true}
                 />
@@ -127,9 +127,9 @@ function AccountReady(props: { className?: string }) {
                 <p> {t("account.about description")} </p>
                 <div
                     style={{
-                        "display": "flex",
-                        "alignItems": "end",
-                        "marginBottom": fr.spacing("6v")
+                        display: "flex",
+                        alignItems: "end",
+                        marginBottom: fr.spacing("6v")
                     }}
                 >
                     <Checkbox
@@ -137,10 +137,10 @@ function AccountReady(props: { className?: string }) {
                         disabled={aboutAndIsPublic.isBeingUpdated}
                         options={[
                             {
-                                "label": t("account.isPublic label"),
-                                "nativeInputProps": {
-                                    "checked": isPublicInputValue,
-                                    "onChange": event =>
+                                label: t("account.isPublic label"),
+                                nativeInputProps: {
+                                    checked: isPublicInputValue,
+                                    onChange: event =>
                                         setIsPublicInputValue(event.target.checked)
                                 }
                             }
@@ -154,30 +154,30 @@ function AccountReady(props: { className?: string }) {
                                         <a
                                             href={
                                                 routes.userProfile({
-                                                    "email": email.value
+                                                    email: email.value
                                                 }).link.href
                                             }
                                         />
                                     ),
                                     space: <span> </span>
                                 }}
-                            ></Trans>
+                            />
                         }
                     />
                     <Button
                         className={cx(
                             classes.updateButton,
                             css({
-                                "visibility": aboutAndIsPublic.isBeingUpdated
+                                visibility: aboutAndIsPublic.isBeingUpdated
                                     ? "hidden"
                                     : undefined
                             })
                         )}
                         onClick={() =>
                             userAccountManagement.updateField({
-                                "fieldName": "aboutAndIsPublic",
-                                "about": evtAboutInputValue.state,
-                                "isPublic": isPublicInputValue
+                                fieldName: "aboutAndIsPublic",
+                                about: evtAboutInputValue.state,
+                                isPublic: isPublicInputValue
                             })
                         }
                         disabled={
@@ -206,11 +206,11 @@ function AccountReady(props: { className?: string }) {
                 </div>
                 <a
                     {...routes.userProfile({
-                        "email": email.value
+                        email: email.value
                     }).link}
                     style={{
-                        "display": "inline-block",
-                        "marginBottom": fr.spacing("6v")
+                        display: "inline-block",
+                        marginBottom: fr.spacing("6v")
                     }}
                 >
                     {t("account.go to profile")}
@@ -221,41 +221,41 @@ function AccountReady(props: { className?: string }) {
 }
 
 const useStyles = tss.withName({ Account }).create({
-    "oidcInfos": {
-        "paddingTop": fr.spacing("6v"),
-        "maxWidth": 650,
-        "paddingBottom": fr.spacing("14v")
+    oidcInfos: {
+        paddingTop: fr.spacing("6v"),
+        maxWidth: 650,
+        paddingBottom: fr.spacing("14v")
     },
-    "title": {
-        "marginBottom": fr.spacing("10v"),
+    title: {
+        marginBottom: fr.spacing("10v"),
         [fr.breakpoints.down("md")]: {
-            "marginBottom": fr.spacing("8v")
+            marginBottom: fr.spacing("8v")
         }
     },
-    "isPublicCheckbox": {
-        "marginBottom": 0,
+    isPublicCheckbox: {
+        marginBottom: 0,
         [`&&& .${fr.cx("fr-message")}`]: {
-            "marginBottom": 0
+            marginBottom: 0
         },
-        "maxWidth": 700
+        maxWidth: 700
     },
-    "editorWrapper": {
-        "marginBottom": fr.spacing("10v"),
-        "position": "relative"
+    editorWrapper: {
+        marginBottom: fr.spacing("10v"),
+        position: "relative"
     },
-    "editorWrapperOverlay": {
-        "position": "absolute",
-        "top": 0,
-        "left": 0,
-        "width": "100%",
-        "height": "100%",
-        "backgroundColor": fr.colors.decisions.background.disabled.grey.default,
-        "opacity": 0.8,
-        "cursor": "not-allowed",
-        "zIndex": 1000
+    editorWrapperOverlay: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: fr.colors.decisions.background.disabled.grey.default,
+        opacity: 0.8,
+        cursor: "not-allowed",
+        zIndex: 1000
     },
-    "updateButton": {
-        "whiteSpace": "nowrap",
-        "marginLeft": fr.spacing("4v")
+    updateButton: {
+        whiteSpace: "nowrap",
+        marginLeft: fr.spacing("4v")
     }
 });

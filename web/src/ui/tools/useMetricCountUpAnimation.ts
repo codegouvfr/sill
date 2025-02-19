@@ -68,7 +68,7 @@ const { animate } = (() => {
         ) {
             await awaitDelay({
                 // eslint-disable-next-line no-loop-func
-                "delayMs": (() => {
+                delayMs: (() => {
                     if (
                         (metricValue < 40 && count <= metricValue - 7) ||
                         (metricValue >= 40 && count <= metricValue - 14)

@@ -7,8 +7,8 @@ import { fr } from "@codegouvfr/react-dsfr";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { [symToStr({ SearchMultiInput })]: Story },
-    "defaultContainerWidth": 0
+    wrappedComponent: { [symToStr({ SearchMultiInput })]: Story },
+    defaultContainerWidth: 0
 });
 
 function Story() {
@@ -41,8 +41,8 @@ function Story() {
             noOptionText="No result"
             loadingText="Loading..."
             dsfrInputProps={{
-                "label": "Favorites films",
-                "hintText": "Select a few movies that you like the most in the top 100"
+                label: "Favorites films",
+                hintText: "Select a few movies that you like the most in the top 100"
             }}
         />
     );

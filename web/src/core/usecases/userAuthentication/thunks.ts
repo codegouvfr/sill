@@ -12,19 +12,19 @@ export const protectedThunks = {
             if (state.stateDescription === "ready" || state.isInitializing) return;
             dispatch(actions.initializationStarted());
             const user = await sillApi.getCurrentUser();
-            const { agent } = await sillApi.getAgent({ "email": user.email });
+            const { agent } = await sillApi.getAgent({ email: user.email });
             dispatch(actions.initialized({ agent }));
         }
 } satisfies Thunks;
 
 export const thunks = {
-    "getIsUserLoggedIn":
+    getIsUserLoggedIn:
         () =>
         (...args): boolean => {
             const [, , { oidc }] = args;
             return oidc.isUserLoggedIn;
         },
-    "login":
+    login:
         (params: { doesCurrentHrefRequiresAuth: boolean }) =>
         (...args): Promise<never> => {
             const { doesCurrentHrefRequiresAuth } = params;
@@ -35,7 +35,7 @@ export const thunks = {
 
             return oidc.login({ doesCurrentHrefRequiresAuth });
         },
-    "register":
+    register:
         () =>
         (...args): Promise<never> => {
             const [, , { oidc }] = args;
@@ -43,8 +43,8 @@ export const thunks = {
             assert(!oidc.isUserLoggedIn);
 
             return oidc.login({
-                "doesCurrentHrefRequiresAuth": false,
-                "transformUrlBeforeRedirect": url => {
+                doesCurrentHrefRequiresAuth: false,
+                transformUrlBeforeRedirect: url => {
                     const urlObj = new URL(url);
 
                     urlObj.pathname = urlObj.pathname.replace(
@@ -56,7 +56,7 @@ export const thunks = {
                 }
             });
         },
-    "logout":
+    logout:
         (params: { redirectTo: "home" | "current page" }) =>
         (...args): Promise<never> => {
             const { redirectTo } = params;

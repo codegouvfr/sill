@@ -11,8 +11,8 @@ export const name = "redirect" as const;
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": createObjectThatThrowsIfAccessed<State>(),
-    "reducers": {
-        "initialized": (_state, { payload }: { payload: State }) => payload
+    initialState: createObjectThatThrowsIfAccessed<State>(),
+    reducers: {
+        initialized: (_state, { payload }: { payload: State }) => payload
     }
 });

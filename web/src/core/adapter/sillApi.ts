@@ -11,20 +11,20 @@ export function createSillApi(params: {
     const { url, getOidcAccessToken } = params;
 
     const trpcClient = createTRPCProxyClient<TrpcRouter>({
-        "transformer": superjson,
-        "links": [
+        transformer: superjson,
+        links: [
             loggerLink(),
             httpBatchLink({
                 url,
                 // You can pass any HTTP headers you wish here
-                "headers": async () => {
+                headers: async () => {
                     const oidcAccessToken = getOidcAccessToken();
 
                     if (oidcAccessToken === undefined) {
                         return {};
                     }
 
-                    return { "authorization": `Bearer ${oidcAccessToken}` };
+                    return { authorization: `Bearer ${oidcAccessToken}` };
                 }
             })
         ]
@@ -40,33 +40,33 @@ export function createSillApi(params: {
     };
 
     const sillApi: SillApi = {
-        "getCurrentUser": memoize(() => trpcClient.getCurrentUser.query(), {
-            "promise": true
+        getCurrentUser: memoize(() => trpcClient.getCurrentUser.query(), {
+            promise: true
         }),
-        "getExternalSoftwareDataOrigin": memoize(
+        getExternalSoftwareDataOrigin: memoize(
             () => trpcClient.getExternalSoftwareDataOrigin.query(),
-            { "promise": true }
+            { promise: true }
         ),
-        "getRedirectUrl": params => trpcClient.getRedirectUrl.query(params),
-        "getApiVersion": memoize(() => trpcClient.getApiVersion.query(), {
-            "promise": true
+        getRedirectUrl: params => trpcClient.getRedirectUrl.query(params),
+        getApiVersion: memoize(() => trpcClient.getApiVersion.query(), {
+            promise: true
         }),
-        "getOidcParams": memoize(() => trpcClient.getOidcParams.query(), {
-            "promise": true
+        getOidcParams: memoize(() => trpcClient.getOidcParams.query(), {
+            promise: true
         }),
-        "getSoftwares": memoize(() => trpcClient.getSoftwares.query(), {
-            "promise": true
+        getSoftwares: memoize(() => trpcClient.getSoftwares.query(), {
+            promise: true
         }),
-        "getInstances": memoize(() => trpcClient.getInstances.query(), {
-            "promise": true
+        getInstances: memoize(() => trpcClient.getInstances.query(), {
+            promise: true
         }),
-        "getExternalSoftwareOptions": params =>
+        getExternalSoftwareOptions: params =>
             trpcClient.getExternalSoftwareOptions.query(params),
-        "getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources": params =>
+        getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources: params =>
             trpcClient.getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources.query(
                 params
             ),
-        "createSoftware": async params => {
+        createSoftware: async params => {
             const out = await trpcClient.createSoftware
                 .mutate(params)
                 .catch(errorHandler);
@@ -75,7 +75,7 @@ export function createSillApi(params: {
 
             return out;
         },
-        "updateSoftware": async params => {
+        updateSoftware: async params => {
             const out = await trpcClient.updateSoftware
                 .mutate(params)
                 .catch(errorHandler);
@@ -84,7 +84,7 @@ export function createSillApi(params: {
 
             return out;
         },
-        "createUserOrReferent": async params => {
+        createUserOrReferent: async params => {
             const out = await trpcClient.createUserOrReferent
                 .mutate(params)
                 .catch(errorHandler);
@@ -95,7 +95,7 @@ export function createSillApi(params: {
 
             return out;
         },
-        "removeUserOrReferent": async params => {
+        removeUserOrReferent: async params => {
             const out = await trpcClient.removeUserOrReferent
                 .mutate(params)
                 .catch(errorHandler);
@@ -106,7 +106,7 @@ export function createSillApi(params: {
 
             return out;
         },
-        "createInstance": async params => {
+        createInstance: async params => {
             const out = await trpcClient.createInstance
                 .mutate(params)
                 .catch(errorHandler);
@@ -115,7 +115,7 @@ export function createSillApi(params: {
 
             return out;
         },
-        "updateInstance": async params => {
+        updateInstance: async params => {
             const out = await trpcClient.updateInstance
                 .mutate(params)
                 .catch(errorHandler);
@@ -124,36 +124,35 @@ export function createSillApi(params: {
 
             return out;
         },
-        "getAgents": memoize(() => trpcClient.getAgents.query(), { "promise": true }),
-        "updateEmail": async params => {
+        getAgents: memoize(() => trpcClient.getAgents.query(), { promise: true }),
+        updateEmail: async params => {
             const out = await trpcClient.updateEmail.mutate(params).catch(errorHandler);
 
             sillApi.getAgents.clear();
 
             return out;
         },
-        "getAllOrganizations": memoize(() => trpcClient.getAllOrganizations.query(), {
-            "promise": true
+        getAllOrganizations: memoize(() => trpcClient.getAllOrganizations.query(), {
+            promise: true
         }),
-        "getTotalReferentCount": memoize(() => trpcClient.getTotalReferentCount.query(), {
-            "promise": true
+        getTotalReferentCount: memoize(() => trpcClient.getTotalReferentCount.query(), {
+            promise: true
         }),
-        "getRegisteredUserCount": memoize(
-            () => trpcClient.getRegisteredUserCount.query(),
-            { "promise": true }
-        ),
-        "getTermsOfServiceUrl": memoize(() => trpcClient.getTermsOfServiceUrl.query(), {
-            "promise": true
+        getRegisteredUserCount: memoize(() => trpcClient.getRegisteredUserCount.query(), {
+            promise: true
         }),
-        "getMarkdown": params => trpcClient.getMarkdown.query(params),
-        "getAgent": params => trpcClient.getAgent.query(params),
-        "getIsAgentProfilePublic": params =>
+        getTermsOfServiceUrl: memoize(() => trpcClient.getTermsOfServiceUrl.query(), {
+            promise: true
+        }),
+        getMarkdown: params => trpcClient.getMarkdown.query(params),
+        getAgent: params => trpcClient.getAgent.query(params),
+        getIsAgentProfilePublic: params =>
             trpcClient.getIsAgentProfilePublic.query(params),
-        "updateAgentProfile": async params => {
+        updateAgentProfile: async params => {
             await trpcClient.updateAgentProfile.mutate(params).catch(errorHandler);
             sillApi.getAgents.clear();
         },
-        "unreferenceSoftware": async params => {
+        unreferenceSoftware: async params => {
             await trpcClient.unreferenceSoftware.mutate(params).catch(errorHandler);
 
             sillApi.getSoftwares.clear();

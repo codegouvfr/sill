@@ -131,12 +131,12 @@ export function SoftwareCatalogControlled(props: Props) {
                         label={t("softwareCatalogControlled.sortBy")}
                         className={classes.sort}
                         nativeSelectProps={{
-                            "value": sort,
-                            "onChange": event => onSortChange(event.target.value)
+                            value: sort,
+                            onChange: event => onSortChange(event.target.value)
                         }}
                         options={sortOptions.map(value => ({
                             value,
-                            "label": (() => {
+                            label: (() => {
                                 switch (value) {
                                     case "added_time":
                                         return t("softwareCatalogControlled.addedTime");
@@ -235,10 +235,10 @@ function RowVirtualizerDynamicWindow(
     const height = 332;
 
     const virtualizer = useWindowVirtualizer({
-        "count": softwaresGroupedByLine.length,
-        "estimateSize": () => height,
-        "scrollMargin": parentOffsetRef.current,
-        "overscan": 5
+        count: softwaresGroupedByLine.length,
+        estimateSize: () => height,
+        scrollMargin: parentOffsetRef.current,
+        overscan: 5
     });
     const items = virtualizer.getVirtualItems();
 
@@ -250,17 +250,17 @@ function RowVirtualizerDynamicWindow(
         <div ref={parentRef}>
             <div
                 style={{
-                    "height": virtualizer.getTotalSize(),
-                    "position": "relative"
+                    height: virtualizer.getTotalSize(),
+                    position: "relative"
                 }}
             >
                 <div
                     style={{
-                        "position": "absolute",
-                        "top": 0,
-                        "left": 0,
-                        "width": "100%",
-                        "transform": `translateY(${
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        transform: `translateY(${
                             items[0].start - virtualizer.options.scrollMargin
                         }px)`
                     }}
@@ -273,10 +273,10 @@ function RowVirtualizerDynamicWindow(
                         >
                             <div
                                 className={css({
-                                    "display": "grid",
-                                    "gridTemplateColumns": `repeat(${columnCount}, 1fr)`,
-                                    "gridGap": gutter,
-                                    "paddingTop": gutter
+                                    display: "grid",
+                                    gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+                                    gridGap: gutter,
+                                    paddingTop: gutter
                                 })}
                             >
                                 {softwaresGroupedByLine[virtualRow.index].map(
@@ -295,7 +295,7 @@ function RowVirtualizerDynamicWindow(
 
                                         return (
                                             <SoftwareCatalogCard
-                                                className={css({ "minHeight": height })}
+                                                className={css({ minHeight: height })}
                                                 key={softwareName}
                                                 declareFormLink={declareUsageForm}
                                                 softwareDetailsLink={softwareDetails}
@@ -317,37 +317,37 @@ function RowVirtualizerDynamicWindow(
 }
 
 const useStyles = tss.withName({ SoftwareCatalogControlled }).create({
-    "root": {
-        "paddingBottom": fr.spacing("30v"),
+    root: {
+        paddingBottom: fr.spacing("30v"),
         [fr.breakpoints.down("md")]: {
-            "paddingBottom": fr.spacing("20v")
+            paddingBottom: fr.spacing("20v")
         }
     },
-    "header": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "space-between",
+    header: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
         ...fr.spacing("margin", {
-            "topBottom": "4v"
+            topBottom: "4v"
         }),
         [fr.breakpoints.down("md")]: {
-            "flexWrap": "wrap"
+            flexWrap: "wrap"
         }
     },
-    "softwareCount": {
-        "marginBottom": 0
+    softwareCount: {
+        marginBottom: 0
     },
-    "sort": {
-        "display": "flex",
-        "alignItems": "center",
-        "gap": fr.spacing("2v"),
+    sort: {
+        display: "flex",
+        alignItems: "center",
+        gap: fr.spacing("2v"),
 
         "&&>select": {
-            "width": "auto",
-            "marginTop": 0
+            width: "auto",
+            marginTop: 0
         },
         [fr.breakpoints.down("md")]: {
-            "marginTop": fr.spacing("4v")
+            marginTop: fr.spacing("4v")
         }
     }
 });

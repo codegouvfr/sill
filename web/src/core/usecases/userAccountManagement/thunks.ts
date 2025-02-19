@@ -4,7 +4,7 @@ import { addParamToUrl } from "powerhooks/tools/urlSearchParams";
 import { name, actions } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         () =>
         async (...args) => {
             const [dispatch, getState, { oidc, sillApi }] = args;
@@ -26,19 +26,19 @@ export const thunks = {
             const [oidcParams, allOrganizations, { agent }] = await Promise.all([
                 sillApi.getOidcParams(),
                 sillApi.getAllOrganizations(),
-                sillApi.getAgent({ "email": user.email })
+                sillApi.getAgent({ email: user.email })
             ]);
 
             const { about = "", isPublic, organization } = agent;
 
             dispatch(
                 actions.initialized({
-                    "email": user.email,
-                    "organization": organization,
-                    "accountManagementUrl": addParamToUrl({
-                        "url": [oidcParams.issuerUri, "account"].join("/"),
-                        "name": "referrer",
-                        "value": oidcParams.clientId
+                    email: user.email,
+                    organization: organization,
+                    accountManagementUrl: addParamToUrl({
+                        url: [oidcParams.issuerUri, "account"].join("/"),
+                        name: "referrer",
+                        value: oidcParams.clientId
                     }).newUrl,
                     allOrganizations,
                     about,
@@ -46,7 +46,7 @@ export const thunks = {
                 })
             );
         },
-    "updateField":
+    updateField:
         (
             params:
                 | {
@@ -73,14 +73,14 @@ export const thunks = {
             switch (params.fieldName) {
                 case "organization": {
                     await sillApi.updateAgentProfile({
-                        "newOrganization": params.value
+                        newOrganization: params.value
                     });
                     break;
                 }
                 case "aboutAndIsPublic": {
                     await sillApi.updateAgentProfile({
-                        "about": params.about || undefined,
-                        "isPublic": params.isPublic
+                        about: params.about || undefined,
+                        isPublic: params.isPublic
                     });
                     break;
                 }
@@ -88,7 +88,7 @@ export const thunks = {
 
             dispatch(actions.updateFieldCompleted(params));
         },
-    "getAccountManagementUrl":
+    getAccountManagementUrl:
         () =>
         (...args): string => {
             const [
@@ -110,8 +110,8 @@ export const thunks = {
             {
                 const { newUrl } = addParamToUrl({
                     url,
-                    "name": "referrer_uri",
-                    "value": window.location.href
+                    name: "referrer_uri",
+                    value: window.location.href
                 });
 
                 url = newUrl;
@@ -120,8 +120,8 @@ export const thunks = {
             {
                 const { newUrl } = addParamToUrl({
                     url,
-                    "name": "kc_locale",
-                    "value": getCurrentLang()
+                    name: "kc_locale",
+                    value: getCurrentLang()
                 });
 
                 url = newUrl;
@@ -130,8 +130,8 @@ export const thunks = {
             {
                 const { newUrl } = addParamToUrl({
                     url,
-                    "name": "dark",
-                    "value": `${getIsDark()}`
+                    name: "dark",
+                    value: `${getIsDark()}`
                 });
 
                 url = newUrl;

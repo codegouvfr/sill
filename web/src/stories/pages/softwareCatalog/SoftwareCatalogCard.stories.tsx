@@ -5,73 +5,73 @@ import LogoNextCloud from "stories/assets/logo_nextcloud.png";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { SoftwareCatalogCard },
-    "defaultContainerWidth": 450
+    wrappedComponent: { SoftwareCatalogCard },
+    defaultContainerWidth: 450
 });
 
 export default meta;
 
 export const VueDefault = getStory({
-    "declareFormLink": {
+    declareFormLink: {
         href: "",
         onClick: () => {}
     },
-    "referentCount": 3,
-    "softwareUsersAndReferentsLink": {
-        "href": "",
-        onClick: () => {}
-    },
-    "softwareDetailsLink": {
+    referentCount: 3,
+    softwareUsersAndReferentsLink: {
         href: "",
         onClick: () => {}
     },
-    "userCount": 0,
-    "logoUrl": LogoNextCloud,
-    "softwareName": "NextCloud",
-    "softwareDescription": "Partage de fichiers",
-    "latestVersion": {
-        "semVer": "25.0.2",
-        "publicationTime": 1669985280
+    softwareDetailsLink: {
+        href: "",
+        onClick: () => {}
     },
-    "testUrl": undefined,
-    "prerogatives": {
-        "isFromFrenchPublicServices": true,
-        "isPresentInSupportContract": true,
-        "isInstallableOnUserComputer": true
+    userCount: 0,
+    logoUrl: LogoNextCloud,
+    softwareName: "NextCloud",
+    softwareDescription: "Partage de fichiers",
+    latestVersion: {
+        semVer: "25.0.2",
+        publicationTime: 1669985280
     },
-    "searchHighlight": undefined,
-    "userDeclaration": undefined
+    testUrl: undefined,
+    prerogatives: {
+        isFromFrenchPublicServices: true,
+        isPresentInSupportContract: true,
+        isInstallableOnUserComputer: true
+    },
+    searchHighlight: undefined,
+    userDeclaration: undefined
 });
 
 export const VueTooLongDescription = getStory({
-    "declareFormLink": {
+    declareFormLink: {
         href: "",
         onClick: () => {}
     },
-    "referentCount": 3,
-    "softwareUsersAndReferentsLink": {
-        "href": "",
-        onClick: () => {}
-    },
-    "softwareDetailsLink": {
+    referentCount: 3,
+    softwareUsersAndReferentsLink: {
         href: "",
         onClick: () => {}
     },
-    "userCount": 0,
-    "logoUrl": LogoNextCloud,
-    "softwareName": "NextCloud",
-    "softwareDescription":
+    softwareDetailsLink: {
+        href: "",
+        onClick: () => {}
+    },
+    userCount: 0,
+    logoUrl: LogoNextCloud,
+    softwareName: "NextCloud",
+    softwareDescription:
         "Partage de fichiers, suite d'une fausse description pour tester le comportement d'une carte avec un text trop long",
-    "latestVersion": {
-        "semVer": "25.0.2",
-        "publicationTime": 1669985280
+    latestVersion: {
+        semVer: "25.0.2",
+        publicationTime: 1669985280
     },
-    "testUrl": undefined,
-    "prerogatives": {
-        "isFromFrenchPublicServices": true,
-        "isPresentInSupportContract": true,
-        "isInstallableOnUserComputer": true
+    testUrl: undefined,
+    prerogatives: {
+        isFromFrenchPublicServices: true,
+        isPresentInSupportContract: true,
+        isInstallableOnUserComputer: true
     },
-    "searchHighlight": undefined,
-    "userDeclaration": undefined
+    searchHighlight: undefined,
+    userDeclaration: undefined
 });

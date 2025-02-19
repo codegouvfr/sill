@@ -53,8 +53,8 @@ export function DeclarationFormStep2Referent(props: Props) {
                     serviceUrlInputValue
                 }) =>
                     onSubmit({
-                        "declarationType": "referent",
-                        "isTechnicalExpert": (() => {
+                        declarationType: "referent",
+                        isTechnicalExpert: (() => {
                             switch (isTechnicalExpertInputValue) {
                                 case "true":
                                     return true;
@@ -63,7 +63,7 @@ export function DeclarationFormStep2Referent(props: Props) {
                             }
                         })(),
                         usecaseDescription,
-                        "serviceUrl":
+                        serviceUrl:
                             softwareType !== "cloud" ? undefined : serviceUrlInputValue
                     })
             )}
@@ -73,21 +73,21 @@ export function DeclarationFormStep2Referent(props: Props) {
                 hintText={t("declarationFormStep2Referent.legend hint")}
                 options={[
                     {
-                        "label": t("app.yes"),
-                        "nativeInputProps": {
+                        label: t("app.yes"),
+                        nativeInputProps: {
                             ...register("isTechnicalExpertInputValue", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "true"
+                            value: "true"
                         }
                     },
                     {
-                        "label": t("app.no"),
-                        "nativeInputProps": {
+                        label: t("app.no"),
+                        nativeInputProps: {
                             ...register("isTechnicalExpertInputValue", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "false"
+                            value: "false"
                         }
                     }
                 ]}
@@ -100,7 +100,7 @@ export function DeclarationFormStep2Referent(props: Props) {
             <Input
                 label={t("declarationFormStep2Referent.useCase")}
                 nativeInputProps={{
-                    ...register("usecaseDescription", { "required": true })
+                    ...register("usecaseDescription", { required: true })
                 }}
                 state={errors.usecaseDescription !== undefined ? "error" : undefined}
                 stateRelatedMessage={t("app.required")}
@@ -110,7 +110,7 @@ export function DeclarationFormStep2Referent(props: Props) {
                     label={t("declarationFormStep2Referent.service")}
                     nativeInputProps={{
                         ...register("serviceUrlInputValue", {
-                            "pattern": /^http/
+                            pattern: /^http/
                         })
                     }}
                     state={
@@ -120,7 +120,7 @@ export function DeclarationFormStep2Referent(props: Props) {
                 />
             )}
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

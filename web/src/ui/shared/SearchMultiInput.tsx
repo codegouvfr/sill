@@ -37,7 +37,7 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
     } = props;
 
     const { useDebounce, obsIsDebouncing } = useMemo(
-        () => createUseDebounce({ "delay": debounceDelay }),
+        () => createUseDebounce({ delay: debounceDelay }),
         [debounceDelay]
     );
     const [options, setOptions] = useState<readonly T[]>([]);
@@ -47,9 +47,9 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
         const [isOpenAccordingToMui, setIsOpenAccordingToMui] = useState(false);
 
         return {
-            "isOpen": isOpenAccordingToMui && inputValue !== "",
-            "onOpen": () => setIsOpenAccordingToMui(true),
-            "onClose": () => setIsOpenAccordingToMui(false)
+            isOpen: isOpenAccordingToMui && inputValue !== "",
+            onOpen: () => setIsOpenAccordingToMui(true),
+            onClose: () => setIsOpenAccordingToMui(false)
         };
     })();
 
@@ -59,7 +59,7 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
         const [isGettingOptions, setIsGettingOptions] = useState(false);
 
         return {
-            "isLoading": isGettingOptions || obsIsDebouncing.current,
+            isLoading: isGettingOptions || obsIsDebouncing.current,
             setIsGettingOptions
         };
     })();
@@ -121,14 +121,14 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
                                 {...dsfrInputProps}
                                 style={{
                                     ...style,
-                                    "width": params.size,
+                                    width: params.size,
                                     ...dsfrInputProps.style
                                 }}
                                 ref={params.InputProps.ref}
                                 nativeInputProps={{
                                     ...params.inputProps,
                                     ...dsfrInputProps.nativeInputProps,
-                                    "ref": element =>
+                                    ref: element =>
                                         [
                                             (params.inputProps as any).ref,
                                             dsfrInputProps.nativeInputProps?.ref
@@ -143,7 +143,7 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
                                                 (ref as any).current = element;
                                             }
                                         }),
-                                    "onKeyDown": (...args) => {
+                                    onKeyDown: (...args) => {
                                         {
                                             const [event] = args;
 
@@ -165,29 +165,29 @@ export function SearchMultiInput<T extends string | Record<string, unknown>>(
                                             )
                                         );
                                     },
-                                    "onBlur": (...args) =>
+                                    onBlur: (...args) =>
                                         params.inputProps.onBlur?.(...args) ??
                                         dsfrInputProps.nativeInputProps?.onBlur?.(
                                             ...args
                                         ),
-                                    "onChange": (...args) =>
+                                    onChange: (...args) =>
                                         params.inputProps.onChange?.(...args) ??
                                         dsfrInputProps.nativeInputProps?.onChange?.(
                                             ...args
                                         ),
-                                    "onFocus": (...args) =>
+                                    onFocus: (...args) =>
                                         params.inputProps.onFocus?.(...args) ??
                                         dsfrInputProps.nativeInputProps?.onFocus?.(
                                             ...args
                                         ),
-                                    "onMouseDown": (...args) =>
+                                    onMouseDown: (...args) =>
                                         params.inputProps.onMouseDown?.(...args) ??
                                         dsfrInputProps.nativeInputProps?.onMouseDown?.(
                                             ...args
                                         )
                                 }}
                             />
-                            <div style={{ "marginTop": fr.spacing("4v") }}>
+                            <div style={{ marginTop: fr.spacing("4v") }}>
                                 {params.InputProps.startAdornment}
                             </div>
                         </>

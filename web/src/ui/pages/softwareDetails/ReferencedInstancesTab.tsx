@@ -74,8 +74,8 @@ const ReferenceInstancesSection = ({
             <>
                 <p className={fr.cx("fr-text--bold", classname)}>
                     {t("referencedInstancesTab.privateInstanceCount", {
-                        "instanceCount": instances.length,
-                        "organizationCount": Object.keys(instancesByOrganisation).length
+                        instanceCount: instances.length,
+                        organizationCount: Object.keys(instancesByOrganisation).length
                     })}
                 </p>
                 <span className={fr.cx("fr-hint-text")}>
@@ -93,8 +93,8 @@ const ReferenceInstancesSection = ({
                         ? "referencedInstancesTab.publicInstanceCount"
                         : "referencedInstancesTab.privateInstanceCount",
                     {
-                        "instanceCount": instances.length,
-                        "organizationCount": Object.keys(instancesByOrganisation).length
+                        instanceCount: instances.length,
+                        organizationCount: Object.keys(instancesByOrganisation).length
                     }
                 )}
             </p>
@@ -181,33 +181,33 @@ const ReferenceInstancesSection = ({
 };
 
 const useStyles = tss.withName({ ReferencedInstancesTab }).create({
-    "accordionGrid": {
-        "display": "grid",
-        "gridTemplateColumns": `repeat(2, 1fr)`,
-        "columnGap": fr.spacing("7v"),
-        "rowGap": fr.spacing("3v"),
+    accordionGrid: {
+        display: "grid",
+        gridTemplateColumns: `repeat(2, 1fr)`,
+        columnGap: fr.spacing("7v"),
+        rowGap: fr.spacing("3v"),
         [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`
+            gridTemplateColumns: `repeat(1, 1fr)`
         }
     },
-    "card": {
+    card: {
         "&&&": {
-            "padding": fr.spacing("6v")
+            padding: fr.spacing("6v")
         }
     },
-    "name": {
-        "marginBottom": fr.spacing("3v"),
-        "color": fr.colors.decisions.text.title.grey.default
+    name: {
+        marginBottom: fr.spacing("3v"),
+        color: fr.colors.decisions.text.title.grey.default
     },
-    "concernedPublic": {
-        "color": fr.colors.decisions.text.mention.grey.default,
-        "marginBottom": fr.spacing("2v")
+    concernedPublic: {
+        color: fr.colors.decisions.text.mention.grey.default,
+        marginBottom: fr.spacing("2v")
     },
-    "description": {
-        "marginBottom": fr.spacing("3v")
+    description: {
+        marginBottom: fr.spacing("3v")
     },
-    "footer": {
-        "display": "flex",
-        "justifyContent": "flex-end"
+    footer: {
+        display: "flex",
+        justifyContent: "flex-end"
     }
 });

@@ -195,10 +195,10 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 &nbsp; &nbsp;
                                 <p className={classes.dereferencedText}>
                                     {t("headerDetailCard.software dereferenced", {
-                                        "when": getFormattedDate({
-                                            "time": softwareDereferencing.time,
+                                        when: getFormattedDate({
+                                            time: softwareDereferencing.time,
                                             lang,
-                                            "doAlwaysShowYear": true
+                                            doAlwaysShowYear: true
                                         })
                                     })}
                                     {softwareDereferencing.reason === undefined
@@ -251,23 +251,23 @@ export const HeaderDetailCard = memo((props: Props) => {
 });
 
 const useStyles = tss.withName({ HeaderDetailCard }).create({
-    "root": {
-        "display": "grid",
-        "gridTemplateColumns": `repeat(2, 1fr)`,
-        "columnGap": fr.spacing("6v"),
-        "marginBottom": fr.spacing("6v"),
+    root: {
+        display: "grid",
+        gridTemplateColumns: `repeat(2, 1fr)`,
+        columnGap: fr.spacing("6v"),
+        marginBottom: fr.spacing("6v"),
         [fr.breakpoints.down("md")]: {
-            "gridTemplateColumns": `repeat(1, 1fr)`,
-            "gridRowGap": fr.spacing("6v")
+            gridTemplateColumns: `repeat(1, 1fr)`,
+            gridRowGap: fr.spacing("6v")
         }
     },
-    "leftCol": {
-        "display": "flex",
-        "alignItems": "center"
+    leftCol: {
+        display: "flex",
+        alignItems: "center"
     },
-    "backButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
+    backButton: {
+        background: "none",
+        marginRight: fr.spacing("4v"),
 
         "&>i": {
             "&::before": {
@@ -275,47 +275,47 @@ const useStyles = tss.withName({ HeaderDetailCard }).create({
             }
         }
     },
-    "softwareInformation": {
-        "display": "flex",
-        "flex": "1"
+    softwareInformation: {
+        display: "flex",
+        flex: "1"
     },
-    "mainInfo": {
-        "display": "flex",
-        "flexDirection": "column",
-        "alignItems": "flex-start",
-        "justifyContent": "center"
+    mainInfo: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "center"
     },
-    "titleAndTagWrapper": {
-        "display": "flex",
-        "alignItems": "center"
+    titleAndTagWrapper: {
+        display: "flex",
+        alignItems: "center"
     },
-    "logoWrapper": {
-        "minWidth": 65,
-        "width": fr.spacing("14v"),
-        "height": fr.spacing("14v"),
-        "marginRight": fr.spacing("3v"),
-        "overflow": "hidden"
+    logoWrapper: {
+        minWidth: 65,
+        width: fr.spacing("14v"),
+        height: fr.spacing("14v"),
+        marginRight: fr.spacing("3v"),
+        overflow: "hidden"
     },
-    "logo": {
-        "height": "100%"
+    logo: {
+        height: "100%"
     },
-    "softwareName": {
-        "marginBottom": fr.spacing("1v")
+    softwareName: {
+        marginBottom: fr.spacing("1v")
     },
-    "authors": {
-        "color": fr.colors.decisions.text.mention.grey.default
+    authors: {
+        color: fr.colors.decisions.text.mention.grey.default
     },
-    "authorLink": {
-        "marginRight": fr.spacing("2v"),
-        "color": fr.colors.decisions.text.actionHigh.blueFrance.default
+    authorLink: {
+        marginRight: fr.spacing("2v"),
+        color: fr.colors.decisions.text.actionHigh.blueFrance.default
     },
-    "externalLinkButtons": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end",
-        "flexWrap": "wrap"
+    externalLinkButtons: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "end",
+        flexWrap: "wrap"
     },
-    "dereferencedText": {
-        "color": fr.colors.decisions.text.default.error.default
+    dereferencedText: {
+        color: fr.colors.decisions.text.default.error.default
     }
 });

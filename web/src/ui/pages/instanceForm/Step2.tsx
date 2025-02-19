@@ -37,11 +37,11 @@ export function InstanceFormStep2(props: Step1Props) {
         instanceUrl: string | undefined;
         isPublic: "true" | "false" | null;
     }>({
-        "defaultValues": {
-            "organization": initialFormData.organization,
-            "targetAudience": initialFormData.targetAudience,
-            "instanceUrl": initialFormData.instanceUrl,
-            "isPublic": initialFormData.isPublic
+        defaultValues: {
+            organization: initialFormData.organization,
+            targetAudience: initialFormData.targetAudience,
+            instanceUrl: initialFormData.instanceUrl,
+            isPublic: initialFormData.isPublic
         }
     });
 
@@ -79,21 +79,21 @@ export function InstanceFormStep2(props: Step1Props) {
                 hintText={t("instanceFormStep2.is in public access hint")}
                 options={[
                     {
-                        "label": t("app.yes"),
-                        "nativeInputProps": {
+                        label: t("app.yes"),
+                        nativeInputProps: {
                             ...register("isPublic", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "true"
+                            value: "true"
                         }
                     },
                     {
-                        "label": t("app.no"),
-                        "nativeInputProps": {
+                        label: t("app.no"),
+                        nativeInputProps: {
                             ...register("isPublic", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "false"
+                            value: "false"
                         }
                     }
                 ]}
@@ -106,8 +106,8 @@ export function InstanceFormStep2(props: Step1Props) {
                 hintText={t("instanceFormStep2.instance url hint")}
                 nativeInputProps={{
                     ...register("instanceUrl", {
-                        "required": watch("isPublic") === "true",
-                        "pattern": /^http/
+                        required: watch("isPublic") === "true",
+                        pattern: /^http/
                     })
                 }}
                 state={errors.instanceUrl !== undefined ? "error" : undefined}
@@ -120,7 +120,7 @@ export function InstanceFormStep2(props: Step1Props) {
                 label={t("instanceFormStep2.organization label")}
                 hintText={t("instanceFormStep2.organization hint")}
                 nativeInputProps={{
-                    ...register("organization", { "required": true })
+                    ...register("organization", { required: true })
                 }}
                 state={errors.organization !== undefined ? "error" : undefined}
                 stateRelatedMessage={t("app.required")}
@@ -129,13 +129,13 @@ export function InstanceFormStep2(props: Step1Props) {
                 label={t("instanceFormStep2.targeted public label")}
                 hintText={t("instanceFormStep2.targeted public hint")}
                 nativeInputProps={{
-                    ...register("targetAudience", { "required": true })
+                    ...register("targetAudience", { required: true })
                 }}
                 state={errors.targetAudience !== undefined ? "error" : undefined}
                 stateRelatedMessage={t("app.required")}
             />
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

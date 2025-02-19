@@ -43,16 +43,16 @@ export default function Readme(props: Props) {
 }
 
 const useStyles = tss.withName({ Readme }).create({
-    "root": {
-        "display": "flex",
-        "justifyContent": "center"
+    root: {
+        display: "flex",
+        justifyContent: "center"
     },
-    "markdown": {
-        "borderRadius": fr.spacing("2v"),
-        "maxWidth": 900,
-        "padding": fr.spacing("4v"),
+    markdown: {
+        borderRadius: fr.spacing("2v"),
+        maxWidth: 900,
+        padding: fr.spacing("4v"),
         ...fr.spacing("margin", {
-            "topBottom": "6v"
+            topBottom: "6v"
         })
     }
 });

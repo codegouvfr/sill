@@ -28,8 +28,8 @@ export function DeclarationFormStep2User(props: Props) {
         version: string;
         serviceUrlInputValue: string;
     }>({
-        "defaultValues": {
-            "osSelectValue": ""
+        defaultValues: {
+            osSelectValue: ""
         }
     });
 
@@ -55,14 +55,14 @@ export function DeclarationFormStep2User(props: Props) {
             onSubmit={handleSubmit(
                 ({ usecaseDescription, osSelectValue, version, serviceUrlInputValue }) =>
                     onSubmit({
-                        "declarationType": "user",
+                        declarationType: "user",
                         usecaseDescription,
-                        "os":
+                        os:
                             softwareType !== "desktop/mobile"
                                 ? undefined
                                 : (assert(osSelectValue !== ""), osSelectValue),
                         version,
-                        "serviceUrl":
+                        serviceUrl:
                             softwareType !== "cloud" ? undefined : serviceUrlInputValue
                     })
             )}
@@ -70,7 +70,7 @@ export function DeclarationFormStep2User(props: Props) {
             <Input
                 label={t("declarationFormStep2User.useCase")}
                 nativeInputProps={{
-                    ...register("usecaseDescription", { "required": true })
+                    ...register("usecaseDescription", { required: true })
                 }}
                 state={errors.usecaseDescription !== undefined ? "error" : undefined}
                 stateRelatedMessage={t("app.required")}
@@ -79,12 +79,12 @@ export function DeclarationFormStep2User(props: Props) {
                 <Select
                     label={t("declarationFormStep2User.environment")}
                     nativeSelectProps={{
-                        ...register("osSelectValue", { "required": true })
+                        ...register("osSelectValue", { required: true })
                     }}
                     state={errors.osSelectValue !== undefined ? "error" : undefined}
                     stateRelatedMessage={t("app.required")}
                 >
-                    <option value="" disabled hidden></option>
+                    <option value="" disabled hidden />
                     <option value="windows">Windows</option>
                     <option value="linux">GNU/Linux</option>
                     <option value="mac">MacOS</option>
@@ -93,7 +93,7 @@ export function DeclarationFormStep2User(props: Props) {
             <Input
                 label={t("declarationFormStep2User.version")}
                 nativeInputProps={{
-                    ...register("version", { "pattern": /^(\d+)((\.{1}\d+)*)(\.{0})$/ })
+                    ...register("version", { pattern: /^(\d+)((\.{1}\d+)*)(\.{0})$/ })
                 }}
                 state={errors.version !== undefined ? "error" : undefined}
                 stateRelatedMessage={t("app.invalid version")}
@@ -103,7 +103,7 @@ export function DeclarationFormStep2User(props: Props) {
                     label={t("declarationFormStep2User.service")}
                     nativeInputProps={{
                         ...register("serviceUrlInputValue", {
-                            "pattern": /^http/
+                            pattern: /^http/
                         })
                     }}
                     state={
@@ -113,7 +113,7 @@ export function DeclarationFormStep2User(props: Props) {
                 />
             )}
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />
