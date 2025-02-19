@@ -1,4 +1,9 @@
-import { useEffect } from "react";
+import {
+    ForwardRefExoticComponent,
+    MemoExoticComponent,
+    RefAttributes,
+    useEffect
+} from "react";
 import type { Meta, Story } from "@storybook/react";
 import type { ArgType } from "@storybook/addons";
 import { symToStr } from "tsafe/symToStr";
@@ -45,7 +50,15 @@ export const { createMockRoute } = createMockRouteFactory({
 
 export function getStoryFactory<Props extends Record<string, any>>(params: {
     sectionName: string;
-    wrappedComponent: Record<string, (props: Props) => JSX.Element | null>;
+    wrappedComponent: Record<
+        string,
+        | ((props: Props) => JSX.Element | null)
+        | MemoExoticComponent<(props: Props) => JSX.Element>
+        | MemoExoticComponent<
+              ForwardRefExoticComponent<Props & RefAttributes<HTMLDivElement>>
+          >
+    >;
+
     /** https://storybook.js.org/docs/react/essentials/controls */
     argTypes?: Partial<Record<keyof Props, ArgType>>;
     defaultContainerWidth?: number;
