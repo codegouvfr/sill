@@ -240,12 +240,10 @@ export default function Home(props: Props) {
                                                             <a
                                                                 href={link}
                                                                 style={{
-                                                                    "color":
-                                                                        fr.colors
-                                                                            .decisions
-                                                                            .text.title
-                                                                            .blueFrance
-                                                                            .default
+                                                                    color: fr.colors
+                                                                        .decisions.text
+                                                                        .title.blueFrance
+                                                                        .default
                                                                 }}
                                                             />
                                                         );
@@ -253,7 +251,7 @@ export default function Home(props: Props) {
                                                     },
                                                     {}
                                                 )}
-                                            ></Trans>
+                                            />
                                         }
                                         imageAlt={t("home.illustrationImage")}
                                         linkProps={link}
@@ -319,7 +317,7 @@ const useStyles = tss.withName({ Home }).create({
         [fr.breakpoints.down("md")]: {
             marginBottom: fr.spacing("8v")
         },
-        "textAlign": "center"
+        textAlign: "center"
     },
     softwareSelectionBackground: {
         backgroundColor: fr.colors.decisions.background.alt.blueFrance.default
@@ -339,15 +337,6 @@ const useStyles = tss.withName({ Home }).create({
     sillNumbersContainer: {
         textAlign: "center"
     },
-    sillNumberList: {
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        columnGap: fr.spacing("6v"),
-        [fr.breakpoints.down("md")]: {
-            gridTemplateColumns: `repeat(1, 1fr)`,
-            rowGap: fr.spacing("4v")
-        }
-    },
     whiteText: {
         color: fr.colors.decisions.text.inverted.grey.default
     },
@@ -359,15 +348,6 @@ const useStyles = tss.withName({ Home }).create({
     },
     helpUsBackground: {
         backgroundColor: fr.colors.decisions.background.default.grey.hover
-    },
-    helpUsCards: {
-        display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        columnGap: fr.spacing("6v"),
-        [fr.breakpoints.down("md")]: {
-            gridTemplateColumns: `repeat(1, 1fr)`,
-            rowGap: fr.spacing("4v")
-        }
     }
 });
 
@@ -478,9 +458,8 @@ const { WhatIsTheSillSection } = (() => {
                                             <a
                                                 href={link}
                                                 style={{
-                                                    "color":
-                                                        fr.colors.decisions.text.title
-                                                            .blueFrance.default
+                                                    color: fr.colors.decisions.text.title
+                                                        .blueFrance.default
                                                 }}
                                             />
                                         );
