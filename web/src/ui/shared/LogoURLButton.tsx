@@ -141,16 +141,23 @@ export function LogoURLButton(props: Props) {
 
     const { classes } = useStyles();
 
-    const { URLlogo, textFromURL } = type
-        ? resolveLogoFromType(type)
-        : url
-        ? resolveLogoFromURL(url)
-        : {
-              URLlogo: undefined,
-              textFromURL: undefined
-          };
+    const getUrlMetadata = () => {
+        if (type) return resolveLogoFromType(type);
+        if (url) return resolveLogoFromURL(url);
+        return {
+            URLlogo: undefined,
+            textFromURL: undefined
+        };
+    };
 
-    const resolvedLabel = label ? label : labelFromURL ? textFromURL ?? "" : "";
+    const { URLlogo, textFromURL } = getUrlMetadata();
+
+    const getLabel = () => {
+        if (label) return label;
+        if (labelFromURL) return textFromURL;
+        return "";
+    };
+    const resolvedLabel = getLabel();
 
     return (
         <Button
