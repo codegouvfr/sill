@@ -25,31 +25,25 @@ export default function AddSoftwareLanding(props: Props) {
         {
             label: t("addSoftwareLanding.discover as agent label"),
             description: (
-                <Trans
-                    i18nKey={"addSoftwareLanding.discover as agent description"}
-                />
+                <Trans i18nKey={"addSoftwareLanding.discover as agent description"} />
             )
         },
         {
             label: t("addSoftwareLanding.discover as DSI label"),
             description: (
-                <Trans i18nKey={"addSoftwareLanding.discover as DSI description"}/>
+                <Trans i18nKey={"addSoftwareLanding.discover as DSI description"} />
             )
         },
         {
             label: t("addSoftwareLanding.contribute as agent label"),
             description: (
-                <Trans
-                    i18nKey={"addSoftwareLanding.contribute as agent description"}
-                />
+                <Trans i18nKey={"addSoftwareLanding.contribute as agent description"} />
             )
         },
         {
             label: t("addSoftwareLanding.contribute as DSI label"),
             description: (
-                <Trans
-                    i18nKey={"addSoftwareLanding.contribute as DSI description"}
-                />
+                <Trans i18nKey={"addSoftwareLanding.contribute as DSI description"} />
             )
         }
     ];

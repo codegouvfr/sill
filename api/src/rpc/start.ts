@@ -99,7 +99,7 @@ export async function startRpcService(params: {
 
     express()
         .use(cors())
-        .use(compression())
+        .use(compression() as any)
         .use((req, _res, next) => (console.log("⬅", req.method, req.path, req.body ?? req.query), next()))
         .use("/public/healthcheck", (...[, res]) => res.sendStatus(200))
         .get(`*/sill.json`, async (req, res) => {

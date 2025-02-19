@@ -88,8 +88,8 @@ export function createCompileData(params: {
                     externalId === undefined
                         ? undefined
                         : cache?.softwareExternalData?.externalId === externalId
-                        ? cache.softwareExternalData
-                        : await getExternalSoftware(externalId);
+                          ? cache.softwareExternalData
+                          : await getExternalSoftware(externalId);
 
                 const cdlSoftware_prev = cdlSoftwares.find(({ id }) => cache?.comptoirDuLibreSoftware?.id === id);
 

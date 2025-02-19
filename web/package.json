@@ -101,9 +101,12 @@
             "no-lone-blocks": "off",
             "tss-unused-classes/unused-classes": "warn",
             "no-sequences": "off",
-            "react/self-closing-comp": ["error",{
-                "component": true
-            }]
+            "react/self-closing-comp": [
+                "error",
+                {
+                    "component": true
+                }
+            ]
         }
     },
     "browserslist": {
