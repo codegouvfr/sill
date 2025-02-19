@@ -32,7 +32,7 @@ export function SoftwareFormStep3(props: Step2Props) {
         isPublicInstanceInputValue: "true" | "false";
         targetAudience: string;
     }>({
-        "defaultValues": (() => {
+        defaultValues: (() => {
             if (initialFormData === undefined) {
                 return undefined;
             }
@@ -44,22 +44,22 @@ export function SoftwareFormStep3(props: Step2Props) {
             } = initialFormData;
 
             return {
-                "isPresentInSupportContractInputValue":
+                isPresentInSupportContractInputValue:
                     isPresentInSupportContract === undefined
                         ? undefined
                         : isPresentInSupportContract
-                        ? "true"
-                        : "false",
-                "doRespectRgaaInputValue": ((): DoRespectRgaaInputValue => {
+                          ? "true"
+                          : "false",
+                doRespectRgaaInputValue: ((): DoRespectRgaaInputValue => {
                     if (doRespectRgaa === null) return "not applicable";
                     return doRespectRgaa ? "true" : "false";
                 })(),
-                "isFromFrenchPublicServiceInputValue":
+                isFromFrenchPublicServiceInputValue:
                     isFromFrenchPublicService === undefined
                         ? undefined
                         : isFromFrenchPublicService
-                        ? "true"
-                        : "false"
+                          ? "true"
+                          : "false"
             };
         })()
     });
@@ -88,7 +88,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                     doRespectRgaaInputValue
                 }) =>
                     onSubmit({
-                        "isPresentInSupportContract": (() => {
+                        isPresentInSupportContract: (() => {
                             switch (isPresentInSupportContractInputValue) {
                                 case undefined:
                                     return undefined;
@@ -98,7 +98,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                                     return false;
                             }
                         })(),
-                        "doRespectRgaa": (() => {
+                        doRespectRgaa: (() => {
                             switch (doRespectRgaaInputValue) {
                                 case "not applicable":
                                     return null;
@@ -108,7 +108,7 @@ export function SoftwareFormStep3(props: Step2Props) {
                                     return false;
                             }
                         })(),
-                        "isFromFrenchPublicService": (() => {
+                        isFromFrenchPublicService: (() => {
                             switch (isFromFrenchPublicServiceInputValue) {
                                 case "true":
                                     return true;
@@ -123,17 +123,17 @@ export function SoftwareFormStep3(props: Step2Props) {
                 legend={t("softwareFormStep3.is present in support market")}
                 options={[
                     {
-                        "label": t("app.yes"),
-                        "nativeInputProps": {
+                        label: t("app.yes"),
+                        nativeInputProps: {
                             ...register("isPresentInSupportContractInputValue"),
-                            "value": "true"
+                            value: "true"
                         }
                     },
                     {
-                        "label": t("app.no"),
-                        "nativeInputProps": {
+                        label: t("app.no"),
+                        nativeInputProps: {
                             ...register("isPresentInSupportContractInputValue"),
-                            "value": "false"
+                            value: "false"
                         }
                     }
                 ]}
@@ -142,21 +142,21 @@ export function SoftwareFormStep3(props: Step2Props) {
                 legend={t("softwareFormStep3.is from french public service")}
                 options={[
                     {
-                        "label": t("app.yes"),
-                        "nativeInputProps": {
+                        label: t("app.yes"),
+                        nativeInputProps: {
                             ...register("isFromFrenchPublicServiceInputValue", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "true"
+                            value: "true"
                         }
                     },
                     {
-                        "label": t("app.no"),
-                        "nativeInputProps": {
+                        label: t("app.no"),
+                        nativeInputProps: {
                             ...register("isFromFrenchPublicServiceInputValue", {
-                                "required": true
+                                required: true
                             }),
-                            "value": "false"
+                            value: "false"
                         }
                     }
                 ]}
@@ -171,30 +171,30 @@ export function SoftwareFormStep3(props: Step2Props) {
                 legend={t("softwareFormStep3.do respect RGAA")}
                 options={[
                     {
-                        "label": t("app.yes"),
-                        "nativeInputProps": {
+                        label: t("app.yes"),
+                        nativeInputProps: {
                             ...register("doRespectRgaaInputValue"),
-                            "value": "true"
+                            value: "true"
                         }
                     },
                     {
-                        "label": t("app.no"),
-                        "nativeInputProps": {
+                        label: t("app.no"),
+                        nativeInputProps: {
                             ...register("doRespectRgaaInputValue"),
-                            "value": "false"
+                            value: "false"
                         }
                     },
                     {
-                        "label": t("app.not applicable"),
-                        "nativeInputProps": {
+                        label: t("app.not applicable"),
+                        nativeInputProps: {
                             ...register("doRespectRgaaInputValue"),
-                            "value": "not applicable"
+                            value: "not applicable"
                         }
                     }
                 ]}
             />
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

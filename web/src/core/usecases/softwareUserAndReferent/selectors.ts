@@ -26,7 +26,7 @@ const main = createSelector(
     (isReady, logoUrl, users, referents) => {
         if (!isReady) {
             return {
-                "isReady": false as const
+                isReady: false as const
             };
         }
 
@@ -35,7 +35,7 @@ const main = createSelector(
         assert(referents !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             logoUrl,
             users,
             referents

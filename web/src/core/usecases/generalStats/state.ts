@@ -14,11 +14,11 @@ export const name = "generalStats";
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": createObjectThatThrowsIfAccessed<State>({
-        "debugMessage": "Not yet initialized"
+    initialState: createObjectThatThrowsIfAccessed<State>({
+        debugMessage: "Not yet initialized"
     }),
-    "reducers": {
-        "update": (_state, { payload }: { payload: { state: State } }) => {
+    reducers: {
+        update: (_state, { payload }: { payload: { state: State } }) => {
             const { state } = payload;
             return state;
         }

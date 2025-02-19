@@ -31,45 +31,45 @@ export const Footer = memo(
                     termsLinkProps={routes.terms().link}
                     bottomItems={[
                         {
-                            "text": `sill-api: v${apiVersion}`,
-                            "linkProps": {
-                                "href": `https://github.com/codegouvfr/sill/tree/v${apiVersion}`
+                            text: `sill-api: v${apiVersion}`,
+                            linkProps: {
+                                href: `https://github.com/codegouvfr/sill/tree/v${apiVersion}`
                             }
                         },
                         {
-                            "text": `sill-web: v${webVersion}`,
-                            "linkProps": {
-                                "href": `https://github.com/codegouvfr/sill/tree/v${webVersion}`
+                            text: `sill-web: v${webVersion}`,
+                            linkProps: {
+                                href: `https://github.com/codegouvfr/sill/tree/v${webVersion}`
                             }
                         },
                         {
-                            "text": t("footer.contribute"),
-                            "linkProps": {
-                                "href": "https://github.com/codegouvfr/sill-web/issues/new"
+                            text: t("footer.contribute"),
+                            linkProps: {
+                                href: "https://github.com/codegouvfr/sill-web/issues/new"
                             }
                         },
                         {
-                            "text": "XML feed",
-                            "linkProps": {
-                                "href": `https://code.gouv.fr/data/latest-sill.xml`
+                            text: "XML feed",
+                            linkProps: {
+                                href: `https://code.gouv.fr/data/latest-sill.xml`
                             }
                         },
                         {
-                            "text": "json",
-                            "linkProps": {
-                                "href": `${apiUrl}/sill.json`
+                            text: "json",
+                            linkProps: {
+                                href: `${apiUrl}/sill.json`
                             }
                         },
                         {
-                            "text": "pdf",
-                            "linkProps": {
-                                "href": "https://code.gouv.fr/data/sill.pdf"
+                            text: "pdf",
+                            linkProps: {
+                                href: "https://code.gouv.fr/data/sill.pdf"
                             }
                         },
                         {
-                            "text": "tsv",
-                            "linkProps": {
-                                "href": "https://code.gouv.fr/data/sill.tsv"
+                            text: "tsv",
+                            linkProps: {
+                                href: "https://code.gouv.fr/data/sill.tsv"
                             }
                         },
                         headerFooterDisplayItem

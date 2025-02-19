@@ -9,8 +9,8 @@ import { capitalize } from "tsafe/capitalize";
 export const { getFormattedDate } = (() => {
     const getFormatByLang = (isSameYear: boolean) => ({
         /* spell-checker: disable */
-        "fr": `dddd Do MMMM${isSameYear ? "" : " YYYY"} à H[h]mm`,
-        "en": `dddd, MMMM Do${isSameYear ? "" : " YYYY"}, h:mm a`
+        fr: `dddd Do MMMM${isSameYear ? "" : " YYYY"} à H[h]mm`,
+        en: `dddd, MMMM Do${isSameYear ? "" : " YYYY"}, h:mm a`
         /* spell-checker: enable */
     });
 
@@ -92,8 +92,8 @@ export const { fromNow } = (() => {
 
             return [
                 {
-                    "max": 4 * SECOND,
-                    "divisor": 1,
+                    max: 4 * SECOND,
+                    divisor: 1,
                     ...(() => {
                         const text = (() => {
                             switch (lang) {
@@ -106,224 +106,224 @@ export const { fromNow } = (() => {
                         })();
 
                         return {
-                            "past1": text,
-                            "pastN": text,
-                            "future1": text,
-                            "futureN": text
+                            past1: text,
+                            pastN: text,
+                            future1: text,
+                            futureN: text
                         };
                     })()
                 },
                 {
-                    "max": MINUTE,
-                    "divisor": SECOND,
+                    max: MINUTE,
+                    divisor: SECOND,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "a second ago",
-                                    "pastN": "# seconds ago",
-                                    "future1": "in a second",
-                                    "futureN": "in # seconds"
+                                    past1: "a second ago",
+                                    pastN: "# seconds ago",
+                                    future1: "in a second",
+                                    futureN: "in # seconds"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "il y a une seconde",
-                                    "pastN": "il y a # secondes",
-                                    "future1": "dans une seconde",
-                                    "futureN": "dans # secondes"
+                                    past1: "il y a une seconde",
+                                    pastN: "il y a # secondes",
+                                    future1: "dans une seconde",
+                                    futureN: "dans # secondes"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": HOUR,
-                    "divisor": MINUTE,
+                    max: HOUR,
+                    divisor: MINUTE,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "a minute ago",
-                                    "pastN": "# minutes ago",
-                                    "future1": "in a minute",
-                                    "futureN": "in # minutes"
+                                    past1: "a minute ago",
+                                    pastN: "# minutes ago",
+                                    future1: "in a minute",
+                                    futureN: "in # minutes"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "il y a une minute",
-                                    "pastN": "il y a # minutes",
-                                    "future1": "dans une minute",
-                                    "futureN": "dans # minutes"
+                                    past1: "il y a une minute",
+                                    pastN: "il y a # minutes",
+                                    future1: "dans une minute",
+                                    futureN: "dans # minutes"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": DAY,
-                    "divisor": HOUR,
+                    max: DAY,
+                    divisor: HOUR,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "an hour ago",
-                                    "pastN": "# hours ago",
-                                    "future1": "in an hour",
-                                    "futureN": "in # hours"
+                                    past1: "an hour ago",
+                                    pastN: "# hours ago",
+                                    future1: "in an hour",
+                                    futureN: "in # hours"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "il y a une heure",
-                                    "pastN": "il y a # heures",
-                                    "future1": "dans une heure",
-                                    "futureN": "dans # heures"
+                                    past1: "il y a une heure",
+                                    pastN: "il y a # heures",
+                                    future1: "dans une heure",
+                                    futureN: "dans # heures"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": WEEK,
-                    "divisor": DAY,
+                    max: WEEK,
+                    divisor: DAY,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "yesterday",
-                                    "pastN": "# days ago",
-                                    "future1": "tomorrow",
-                                    "futureN": "in # days"
+                                    past1: "yesterday",
+                                    pastN: "# days ago",
+                                    future1: "tomorrow",
+                                    futureN: "in # days"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "hier",
-                                    "pastN": "il y a # jours",
-                                    "future1": "demain",
-                                    "futureN": "dans # jours"
+                                    past1: "hier",
+                                    pastN: "il y a # jours",
+                                    future1: "demain",
+                                    futureN: "dans # jours"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": 4 * WEEK,
-                    "divisor": WEEK,
+                    max: 4 * WEEK,
+                    divisor: WEEK,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "last week",
-                                    "pastN": "# weeks ago",
-                                    "future1": "in a week",
-                                    "futureN": "in # weeks"
+                                    past1: "last week",
+                                    pastN: "# weeks ago",
+                                    future1: "in a week",
+                                    futureN: "in # weeks"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "la semaine dernière",
-                                    "pastN": "il y a # semaines",
-                                    "future1": "dans une semaine",
-                                    "futureN": "dans # semaines"
+                                    past1: "la semaine dernière",
+                                    pastN: "il y a # semaines",
+                                    future1: "dans une semaine",
+                                    futureN: "dans # semaines"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": YEAR,
-                    "divisor": MONTH,
+                    max: YEAR,
+                    divisor: MONTH,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "last month",
-                                    "pastN": "# months ago",
-                                    "future1": "in a month",
-                                    "futureN": "in # months"
+                                    past1: "last month",
+                                    pastN: "# months ago",
+                                    future1: "in a month",
+                                    futureN: "in # months"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "le mois dernier",
-                                    "pastN": "il y a # mois",
-                                    "future1": "dans un mois",
-                                    "futureN": "dans # mois"
+                                    past1: "le mois dernier",
+                                    pastN: "il y a # mois",
+                                    future1: "dans un mois",
+                                    futureN: "dans # mois"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": 100 * YEAR,
-                    "divisor": YEAR,
+                    max: 100 * YEAR,
+                    divisor: YEAR,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "last year",
-                                    "pastN": "# years ago",
-                                    "future1": "in a year",
-                                    "futureN": "in # years"
+                                    past1: "last year",
+                                    pastN: "# years ago",
+                                    future1: "in a year",
+                                    futureN: "in # years"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "l'année dernière",
-                                    "pastN": "il y a # ans",
-                                    "future1": "dans un ans",
-                                    "futureN": "dans # ans"
+                                    past1: "l'année dernière",
+                                    pastN: "il y a # ans",
+                                    future1: "dans un ans",
+                                    futureN: "dans # ans"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": 1000 * YEAR,
-                    "divisor": 100 * YEAR,
+                    max: 1000 * YEAR,
+                    divisor: 100 * YEAR,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "last century",
-                                    "pastN": "# centuries ago",
-                                    "future1": "in a century",
-                                    "futureN": "in # centuries"
+                                    past1: "last century",
+                                    pastN: "# centuries ago",
+                                    future1: "in a century",
+                                    futureN: "in # centuries"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "le siècle dernier",
-                                    "pastN": "il y a # siècle",
-                                    "future1": "dans un siècle",
-                                    "futureN": "dans # siècle"
+                                    past1: "le siècle dernier",
+                                    pastN: "il y a # siècle",
+                                    future1: "dans un siècle",
+                                    futureN: "dans # siècle"
                                 } as const;
                             /* spell-checker: enable */
                         }
                     })()
                 },
                 {
-                    "max": Infinity,
-                    "divisor": 1000 * YEAR,
+                    max: Infinity,
+                    divisor: 1000 * YEAR,
                     ...(() => {
                         switch (lang) {
                             case "en":
                                 return {
-                                    "past1": "last millennium",
-                                    "pastN": "# millennia ago",
-                                    "future1": "in a millennium",
-                                    "futureN": "in # millennia"
+                                    past1: "last millennium",
+                                    pastN: "# millennia ago",
+                                    future1: "in a millennium",
+                                    futureN: "in # millennia"
                                 } as const;
                             /* spell-checker: disable */
                             case "fr":
                                 return {
-                                    "past1": "au cour du millénaire",
-                                    "pastN": "Il y a # millénaires",
-                                    "future1": "dans un millénaire",
-                                    "futureN": "dans # millétaire"
+                                    past1: "au cour du millénaire",
+                                    pastN: "Il y a # millénaires",
+                                    future1: "dans un millénaire",
+                                    futureN: "dans # millétaire"
                                 } as const;
                             /* spell-checker: enable */
                         }
@@ -358,7 +358,7 @@ export const { useFromNow } = (() => {
     function useFromNow(params: { dateTime: number | undefined }) {
         const { dateTime } = params;
 
-        if (dateTime === undefined) return { "fromNowText": "" };
+        if (dateTime === undefined) return { fromNowText: "" };
 
         const [trigger, forceUpdate] = useReducer(n => n + 1, 0);
 

@@ -37,10 +37,10 @@ export function SoftwareFormStep4(props: Step4Props) {
 
     const { t } = useTranslation();
     const { handleSubmit, control } = useForm<FormData["step4"]>({
-        "defaultValues": (() => {
+        defaultValues: (() => {
             if (initialFormData === undefined) {
                 return {
-                    "similarSoftwares": []
+                    similarSoftwares: []
                 };
             }
 
@@ -99,19 +99,19 @@ export function SoftwareFormStep4(props: Step4Props) {
                         noOptionText={t("app.no result")}
                         loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("softwareFormStep4.similar software"),
-                            "hintText": t("softwareFormStep4.similar software hint"),
-                            "nativeInputProps": {
-                                "ref": field.ref,
-                                "onBlur": field.onBlur,
-                                "name": field.name
+                            label: t("softwareFormStep4.similar software"),
+                            hintText: t("softwareFormStep4.similar software hint"),
+                            nativeInputProps: {
+                                ref: field.ref,
+                                onBlur: field.onBlur,
+                                name: field.name
                             }
                         }}
                     />
                 )}
             />
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

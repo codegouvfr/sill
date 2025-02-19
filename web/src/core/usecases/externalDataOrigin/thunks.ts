@@ -7,7 +7,7 @@ const { getContext, setContext } = createUsecaseContextApi<{
 }>();
 
 export const thunks = {
-    "getExternalDataOrigin":
+    getExternalDataOrigin:
         () =>
         (...args): ExternalDataOrigin => {
             const [, , rootContext] = args;
@@ -19,7 +19,7 @@ export const thunks = {
 } satisfies Thunks;
 
 export const protectedThunks = {
-    "initialize":
+    initialize:
         () =>
         async (...args) => {
             const [, , rootContext] = args;
@@ -27,7 +27,7 @@ export const protectedThunks = {
             const { sillApi } = rootContext;
 
             setContext(rootContext, {
-                "externalDataOrigin": await sillApi.getExternalSoftwareDataOrigin()
+                externalDataOrigin: await sillApi.getExternalSoftwareDataOrigin()
             });
         }
 } satisfies Thunks;

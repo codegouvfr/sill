@@ -4,7 +4,7 @@ import { exclude } from "tsafe/exclude";
 import { name, actions, type State } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (params: { softwareName: string }) =>
         async (...args) => {
             const { softwareName } = params;
@@ -42,11 +42,11 @@ export const thunks = {
                     }
 
                     users.push({
-                        "organization": agent.organization,
-                        "os": declaration.os,
-                        "serviceUrl": declaration.serviceUrl,
-                        "usecaseDescription": declaration.usecaseDescription,
-                        "version": declaration.version
+                        organization: agent.organization,
+                        os: declaration.os,
+                        serviceUrl: declaration.serviceUrl,
+                        usecaseDescription: declaration.usecaseDescription,
+                        version: declaration.version
                     });
                 }
 
@@ -70,10 +70,10 @@ export const thunks = {
 
                     referents.push({
                         email,
-                        "organization": agent.organization,
-                        "isTechnicalExpert": declaration.isTechnicalExpert,
-                        "serviceUrl": declaration.serviceUrl,
-                        "usecaseDescription": declaration.usecaseDescription
+                        organization: agent.organization,
+                        isTechnicalExpert: declaration.isTechnicalExpert,
+                        serviceUrl: declaration.serviceUrl,
+                        usecaseDescription: declaration.usecaseDescription
                     });
                 }
             }
@@ -87,13 +87,13 @@ export const thunks = {
             dispatch(
                 actions.initializationCompleted({
                     softwareName,
-                    "logoUrl": software.logoUrl,
+                    logoUrl: software.logoUrl,
                     users,
                     referents
                 })
             );
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState] = args;

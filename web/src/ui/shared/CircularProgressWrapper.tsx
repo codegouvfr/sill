@@ -16,20 +16,20 @@ export function CircularProgressWrapper(props: Props) {
             className={className}
             style={{
                 ...style,
-                "position": "relative"
+                position: "relative"
             }}
         >
             {renderChildren({
-                "style": {
-                    "marginBottom": 0
+                style: {
+                    marginBottom: 0
                 }
             })}
             {isInProgress && (
                 <CircularProgress
                     style={{
-                        "position": "absolute",
-                        "top": 0,
-                        "right": 0
+                        position: "absolute",
+                        top: 0,
+                        right: 0
                     }}
                     color="inherit"
                     size={20}

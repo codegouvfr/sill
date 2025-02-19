@@ -6,8 +6,8 @@ export const createEvt = (({ evtAction }) =>
         action.usecaseName === name && action.actionName === "formSubmitted"
             ? [
                   {
-                      "action": "redirect" as const,
-                      "softwareName": action.payload.softwareName
+                      action: "redirect" as const,
+                      softwareName: action.payload.softwareName
                   }
               ]
             : null

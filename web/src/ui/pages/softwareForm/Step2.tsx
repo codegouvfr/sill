@@ -67,7 +67,7 @@ export function SoftwareFormStep2(props: Step2Props) {
         softwareLogoUrl: string;
         keywordsInputValue: string;
     }>({
-        "defaultValues": (() => {
+        defaultValues: (() => {
             if (initialFormData === undefined) {
                 return undefined;
             }
@@ -77,19 +77,19 @@ export function SoftwareFormStep2(props: Step2Props) {
 
             return {
                 ...rest,
-                "wikidataEntry":
+                wikidataEntry:
                     externalId === undefined
                         ? undefined
                         : {
                               externalId,
-                              "description": "",
-                              "label": rest.softwareName
+                              description: "",
+                              label: rest.softwareName
                           },
-                "comptoirDuLibreIdInputValue":
+                comptoirDuLibreIdInputValue:
                     comptoirDuLibreId === undefined
                         ? ""
                         : comptoirDuLibreIdToComptoirDuLibreInputValue(comptoirDuLibreId),
-                "keywordsInputValue": softwareKeywords.join(", ")
+                keywordsInputValue: softwareKeywords.join(", ")
             };
         })()
     });
@@ -133,7 +133,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                     softwareMinimalVersion,
                     softwareLogoUrl
                 } = await getAutofillDataFromWikidata({
-                    "externalId": wikiDataEntry.externalId
+                    externalId: wikiDataEntry.externalId
                 });
 
                 if (!isActive) {
@@ -146,7 +146,7 @@ export function SoftwareFormStep2(props: Step2Props) {
 
                     assert(wikidataInputElement !== null);
 
-                    wikidataInputElement.scrollIntoView({ "behavior": "smooth" });
+                    wikidataInputElement.scrollIntoView({ behavior: "smooth" });
                 }
 
                 if (comptoirDuLibreId !== undefined) {
@@ -202,25 +202,25 @@ export function SoftwareFormStep2(props: Step2Props) {
                 }) =>
                     onSubmit({
                         ...rest,
-                        "softwareLogoUrl":
+                        softwareLogoUrl:
                             softwareLogoUrl === "" ? undefined : softwareLogoUrl,
-                        "softwareKeywords": keywordsInputValue
+                        softwareKeywords: keywordsInputValue
                             .split(",")
                             .map(s => s.trim()),
-                        "comptoirDuLibreId":
+                        comptoirDuLibreId:
                             comptoirDuLibreIdInputValue === ""
                                 ? undefined
                                 : comptoirDuLibreInputValueToComptoirDuLibreId(
                                       comptoirDuLibreIdInputValue
                                   ),
-                        "externalId": wikidataEntry?.externalId
+                        externalId: wikidataEntry?.externalId
                     })
             )}
         >
             <Controller
                 name="wikidataEntry"
                 control={control}
-                rules={{ "required": false }}
+                rules={{ required: false }}
                 render={({ field }) => (
                     <SearchInput
                         className={wikidataInputId}
@@ -249,8 +249,8 @@ export function SoftwareFormStep2(props: Step2Props) {
                         noOptionText={t("app.no result")}
                         loadingText={t("app.loading")}
                         dsfrInputProps={{
-                            "label": t("softwareFormStep2.external id"),
-                            "hintText": (
+                            label: t("softwareFormStep2.external id"),
+                            hintText: (
                                 <Trans
                                     i18nKey={"softwareFormStep2.external id hint_fill"}
                                     components={{
@@ -283,12 +283,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                                             </a>
                                         )
                                     }}
-                                ></Trans>
+                                />
                             ),
-                            "nativeInputProps": {
-                                "ref": field.ref,
-                                "onBlur": field.onBlur,
-                                "name": field.name
+                            nativeInputProps: {
+                                ref: field.ref,
+                                onBlur: field.onBlur,
+                                name: field.name
                             }
                         }}
                     />
@@ -297,25 +297,25 @@ export function SoftwareFormStep2(props: Step2Props) {
             <p className="fr-info-text">{t("softwareFormStep2.autofill notice")}</p>
             <div
                 style={{
-                    "display": "flex",
-                    "alignItems": "end"
+                    display: "flex",
+                    alignItems: "end"
                 }}
             >
                 <CircularProgressWrapper
-                    className={css({ "flex": 1 })}
+                    className={css({ flex: 1 })}
                     isInProgress={isAutocompleteInProgress}
                     renderChildren={({ style }) => (
                         <Input
                             disabled={isAutocompleteInProgress}
                             style={{
                                 ...style,
-                                "marginTop": fr.spacing("4v")
+                                marginTop: fr.spacing("4v")
                             }}
                             label={t("softwareFormStep2.logo url")}
                             hintText={t("softwareFormStep2.logo url hint")}
                             nativeInputProps={{
                                 ...register("softwareLogoUrl", {
-                                    "pattern": /^(?:https:)?\/\//
+                                    pattern: /^(?:https:)?\/\//
                                 })
                             }}
                             state={
@@ -330,12 +330,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                         src={watch("softwareLogoUrl")}
                         alt={t("softwareFormStep2.logo preview alt")}
                         style={{
-                            "marginLeft": fr.spacing("4v"),
-                            "border": `1px dotted ${fr.colors.decisions.border.default.grey.default}`,
-                            "width": 100,
-                            "height": 100,
-                            "objectFit": "cover",
-                            "objectPosition": "left"
+                            marginLeft: fr.spacing("4v"),
+                            border: `1px dotted ${fr.colors.decisions.border.default.grey.default}`,
+                            width: 100,
+                            height: 100,
+                            objectFit: "cover",
+                            objectPosition: "left"
                         }}
                     />
                 )}
@@ -347,13 +347,13 @@ export function SoftwareFormStep2(props: Step2Props) {
                         disabled={isAutocompleteInProgress}
                         style={{
                             ...style,
-                            "marginTop": fr.spacing("4v")
+                            marginTop: fr.spacing("4v")
                         }}
                         label={t("softwareFormStep2.comptoir du libre id")}
                         hintText={t("softwareFormStep2.comptoir du libre id hint")}
                         nativeInputProps={{
                             ...register("comptoirDuLibreIdInputValue", {
-                                "validate": value => {
+                                validate: value => {
                                     try {
                                         comptoirDuLibreInputValueToComptoirDuLibreId(
                                             value
@@ -384,11 +384,11 @@ export function SoftwareFormStep2(props: Step2Props) {
                         disabled={isAutocompleteInProgress}
                         style={{
                             ...style,
-                            "marginTop": fr.spacing("4v")
+                            marginTop: fr.spacing("4v")
                         }}
                         label={t("softwareFormStep2.software name")}
                         nativeInputProps={{
-                            ...register("softwareName", { "required": true })
+                            ...register("softwareName", { required: true })
                         }}
                         state={errors.softwareName !== undefined ? "error" : undefined}
                         stateRelatedMessage={t("app.required")}
@@ -402,12 +402,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                         disabled={isAutocompleteInProgress}
                         style={{
                             ...style,
-                            "marginTop": fr.spacing("4v")
+                            marginTop: fr.spacing("4v")
                         }}
                         label={t("softwareFormStep2.software feature")}
                         hintText={t("softwareFormStep2.software feature hint")}
                         nativeInputProps={{
-                            ...register("softwareDescription", { "required": true })
+                            ...register("softwareDescription", { required: true })
                         }}
                         state={
                             errors.softwareDescription !== undefined ? "error" : undefined
@@ -423,12 +423,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                         disabled={isAutocompleteInProgress}
                         style={{
                             ...style,
-                            "marginTop": fr.spacing("4v")
+                            marginTop: fr.spacing("4v")
                         }}
                         label={t("softwareFormStep2.license")}
                         hintText={t("softwareFormStep2.license hint")}
                         nativeInputProps={{
-                            ...register("softwareLicense", { "required": true })
+                            ...register("softwareLicense", { required: true })
                         }}
                         state={errors.softwareLicense !== undefined ? "error" : undefined}
                         stateRelatedMessage={t("app.required")}
@@ -442,12 +442,12 @@ export function SoftwareFormStep2(props: Step2Props) {
                         disabled={isAutocompleteInProgress}
                         style={{
                             ...style,
-                            "marginTop": fr.spacing("4v")
+                            marginTop: fr.spacing("4v")
                         }}
                         label={t("softwareFormStep2.minimal version")}
                         hintText={t("softwareFormStep2.minimal version hint")}
                         nativeInputProps={{
-                            ...register("softwareMinimalVersion", { "required": false })
+                            ...register("softwareMinimalVersion", { required: false })
                         }}
                         state={
                             errors.softwareMinimalVersion !== undefined
@@ -461,7 +461,7 @@ export function SoftwareFormStep2(props: Step2Props) {
             <Input
                 disabled={isAutocompleteInProgress}
                 style={{
-                    "marginTop": fr.spacing("4v")
+                    marginTop: fr.spacing("4v")
                 }}
                 label={t("softwareFormStep2.keywords")}
                 hintText={t("softwareFormStep2.keywords hint")}
@@ -470,7 +470,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                 }}
             />
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

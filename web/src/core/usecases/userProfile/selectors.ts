@@ -21,10 +21,10 @@ const profile = createSelector(readyState, readyState => {
     }
 
     return {
-        "email": readyState.email,
-        "organization": readyState.organization,
-        "about": readyState.about,
-        "isHimself": readyState.isHimself
+        email: readyState.email,
+        organization: readyState.organization,
+        about: readyState.about,
+        isHimself: readyState.isHimself
     };
 });
 
@@ -49,10 +49,10 @@ const softwares = createSelector(readyState, readyState => {
 
         if (software === undefined) {
             software = {
-                "softwareName": declaration.softwareName,
-                "isReferent": false,
-                "isUser": false,
-                "usecaseDescription": ""
+                softwareName: declaration.softwareName,
+                isReferent: false,
+                isUser: false,
+                usecaseDescription: ""
             };
 
             softwares.push(software);
@@ -101,7 +101,7 @@ const main = createSelector(
     (isReady, profile, softwares) => {
         if (!isReady) {
             return {
-                "isReady": false as const
+                isReady: false as const
             };
         }
 
@@ -109,7 +109,7 @@ const main = createSelector(
         assert(softwares !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             profile,
             softwares
         };

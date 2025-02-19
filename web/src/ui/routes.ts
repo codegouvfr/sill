@@ -26,7 +26,7 @@ export const { getPreviousRouteName } = (() => {
 })();
 
 const { createMockRouteFactory, routesProxy } = createTypeRouteMock({
-    "routes": realRoutes
+    routes: realRoutes
 });
 
 export const routes = isStorybook ? routesProxy : realRoutes;

@@ -4,7 +4,7 @@ import type { ApiTypes } from "api";
 import { name, actions } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (
             params:
                 | {
@@ -39,7 +39,7 @@ export const thunks = {
             const allSillSoftwares = softwares.map(
                 ({ softwareName, softwareId, softwareDescription }) => ({
                     softwareDescription,
-                    "softwareSillId": softwareId,
+                    softwareSillId: softwareId,
                     softwareName
                 })
             );
@@ -55,14 +55,14 @@ export const thunks = {
                     dispatch(
                         actions.initializationCompleted({
                             allSillSoftwares,
-                            "preFillData": {
-                                "type": "update",
-                                "instanceId": instance.id,
-                                "mainSoftwareSillId": instance.mainSoftwareSillId,
-                                "organization": instance.organization,
-                                "instanceUrl": instance.instanceUrl,
-                                "isPublic": instance.isPublic,
-                                "targetAudience": instance.targetAudience
+                            preFillData: {
+                                type: "update",
+                                instanceId: instance.id,
+                                mainSoftwareSillId: instance.mainSoftwareSillId,
+                                organization: instance.organization,
+                                instanceUrl: instance.instanceUrl,
+                                isPublic: instance.isPublic,
+                                targetAudience: instance.targetAudience
                             }
                         })
                     );
@@ -85,14 +85,14 @@ export const thunks = {
                     dispatch(
                         actions.initializationCompleted({
                             allSillSoftwares,
-                            "preFillData":
+                            preFillData:
                                 software === undefined
                                     ? undefined
                                     : {
-                                          "type": "navigated from software form",
-                                          "justRegisteredSoftwareSillId":
+                                          type: "navigated from software form",
+                                          justRegisteredSoftwareSillId:
                                               software.softwareId,
-                                          "userOrganization": agent.organization
+                                          userOrganization: agent.organization
                                       }
                         })
                     );
@@ -100,7 +100,7 @@ export const thunks = {
                     break;
             }
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState] = args;
@@ -115,7 +115,7 @@ export const thunks = {
 
             dispatch(actions.cleared());
         },
-    "completeStep1":
+    completeStep1:
         (props: { mainSoftwareSillId: number }) =>
         (...args) => {
             const { mainSoftwareSillId } = props;
@@ -124,11 +124,11 @@ export const thunks = {
 
             dispatch(
                 actions.step1Completed({
-                    "step1Data": { mainSoftwareSillId }
+                    step1Data: { mainSoftwareSillId }
                 })
             );
         },
-    "submit":
+    submit:
         (props: {
             targetAudience: string;
             organization: string;
@@ -149,7 +149,7 @@ export const thunks = {
             assert(step1Data !== undefined);
 
             const formData: ApiTypes.InstanceFormData = {
-                "mainSoftwareSillId": step1Data.mainSoftwareSillId,
+                mainSoftwareSillId: step1Data.mainSoftwareSillId,
                 organization,
                 instanceUrl,
                 targetAudience,
@@ -182,9 +182,9 @@ export const thunks = {
 
             assert(software !== undefined);
 
-            dispatch(actions.formSubmitted({ "softwareName": software.softwareName }));
+            dispatch(actions.formSubmitted({ softwareName: software.softwareName }));
         },
-    "returnToPreviousStep":
+    returnToPreviousStep:
         () =>
         (...args) => {
             const [dispatch] = args;

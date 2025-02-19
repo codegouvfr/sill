@@ -2,7 +2,7 @@ import { createGroup, defineRoute, createRouter, type Route } from "type-route";
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "account": defineRoute(appPath + "/account")
+    account: defineRoute(appPath + "/account")
 };
 
 export const routeGroup = createGroup(Object.values(createRouter(routeDefs).routes));

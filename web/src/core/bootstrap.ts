@@ -47,8 +47,8 @@ export async function bootstrapCore(
         const { createSillApi } = await import("core/adapter/sillApi");
 
         return createSillApi({
-            "url": apiUrl,
-            "getOidcAccessToken": () => {
+            url: apiUrl,
+            getOidcAccessToken: () => {
                 if (oidc === undefined || !oidc.isUserLoggedIn) {
                     return undefined;
                 }
@@ -74,20 +74,20 @@ export async function bootstrapCore(
         const { createOidc } = await import("core/adapter/oidc");
 
         return createOidc({
-            "issuerUri": oidcParams.issuerUri,
-            "clientId": oidcParams.clientId,
+            issuerUri: oidcParams.issuerUri,
+            clientId: oidcParams.clientId,
             appUrl,
-            "transformUrlBeforeRedirect": url =>
+            transformUrlBeforeRedirect: url =>
                 transformUrlBeforeRedirectToLogin({
                     url,
                     termsOfServiceUrl
                 }),
-            "getUiLocales": getCurrentLang
+            getUiLocales: getCurrentLang
         });
     })();
 
     const context: Context = {
-        "paramsOfBootstrapCore": params,
+        paramsOfBootstrapCore: params,
         sillApi,
         oidc
     };

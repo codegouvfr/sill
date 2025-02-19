@@ -62,7 +62,7 @@
         "i18nifty": "^3.2.0",
         "memoizee": "^0.4.15",
         "node-fetch": "^2.6.7",
-        "prettier": "^2.8.2",
+        "prettier": "^3.5.1",
         "run-exclusive": "^2.2.19",
         "superjson": "^1.12.2",
         "ts-node": "^10.9.1",

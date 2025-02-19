@@ -3,7 +3,7 @@ import type { Language } from "api";
 import { name, actions } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (params: { lang: Language }) =>
         async (...args) => {
             const { lang } = params;
@@ -24,8 +24,8 @@ export const thunks = {
             dispatch(actions.initializationStarted());
 
             const markdown = await sillApi.getMarkdown({
-                "name": "termsOfService",
-                "language": lang
+                name: "termsOfService",
+                language: lang
             });
 
             dispatch(actions.initialized({ markdown }));

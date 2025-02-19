@@ -6,7 +6,7 @@ import type { Language } from "api";
 import { name, actions, type FormData } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (
             params:
                 | {
@@ -62,12 +62,12 @@ export const thunks = {
                             actions.initializedForCreateWithPreSelectedSoftware({
                                 externalId,
                                 comptoirDuLibreId,
-                                "softwareName": softwareName ?? "",
-                                "softwareDescription": softwareDescription ?? "",
-                                "softwareLicense": softwareLicense ?? "",
-                                "softwareMinimalVersion": softwareMinimalVersion ?? "",
+                                softwareName: softwareName ?? "",
+                                softwareDescription: softwareDescription ?? "",
+                                softwareLicense: softwareLicense ?? "",
+                                softwareMinimalVersion: softwareMinimalVersion ?? "",
                                 softwareLogoUrl,
-                                "softwareKeywords": keywords
+                                softwareKeywords: keywords
                             })
                         );
                     }
@@ -84,34 +84,32 @@ export const thunks = {
 
                         dispatch(
                             actions.initializedForUpdate({
-                                "softwareSillId": software.softwareId,
-                                "formData": {
-                                    "step1": {
-                                        "softwareType": software.softwareType
+                                softwareSillId: software.softwareId,
+                                formData: {
+                                    step1: {
+                                        softwareType: software.softwareType
                                     },
-                                    "step2": {
-                                        "externalId": software.externalId,
-                                        "comptoirDuLibreId": software.comptoirDuLibreId,
-                                        "softwareDescription":
-                                            software.softwareDescription,
-                                        "softwareLicense": software.license,
-                                        "softwareMinimalVersion": software.versionMin,
-                                        "softwareName": software.softwareName,
-                                        "softwareLogoUrl": software.logoUrl,
-                                        "softwareKeywords": software.keywords
+                                    step2: {
+                                        externalId: software.externalId,
+                                        comptoirDuLibreId: software.comptoirDuLibreId,
+                                        softwareDescription: software.softwareDescription,
+                                        softwareLicense: software.license,
+                                        softwareMinimalVersion: software.versionMin,
+                                        softwareName: software.softwareName,
+                                        softwareLogoUrl: software.logoUrl,
+                                        softwareKeywords: software.keywords
                                     },
-                                    "step3": {
-                                        "isPresentInSupportContract":
+                                    step3: {
+                                        isPresentInSupportContract:
                                             software.prerogatives
                                                 .isPresentInSupportContract,
-                                        "isFromFrenchPublicService":
+                                        isFromFrenchPublicService:
                                             software.prerogatives
                                                 .isFromFrenchPublicServices,
-                                        "doRespectRgaa":
-                                            software.prerogatives.doRespectRgaa
+                                        doRespectRgaa: software.prerogatives.doRespectRgaa
                                     },
-                                    "step4": {
-                                        "similarSoftwares": software.similarSoftwares
+                                    step4: {
+                                        similarSoftwares: software.similarSoftwares
                                             .map(similarSoftware => {
                                                 if (!similarSoftware.isInSill) {
                                                     return similarSoftware;
@@ -130,12 +128,12 @@ export const thunks = {
                                                     }
 
                                                     return {
-                                                        "label": software.softwareName,
-                                                        "description":
+                                                        label: software.softwareName,
+                                                        description:
                                                             software.softwareDescription,
-                                                        "isLibreSoftware": true,
-                                                        "externalId": software.externalId,
-                                                        "externalDataOrigin":
+                                                        isLibreSoftware: true,
+                                                        externalId: software.externalId,
+                                                        externalDataOrigin:
                                                             software.externalDataOrigin
                                                     };
                                                 }
@@ -149,7 +147,7 @@ export const thunks = {
                     break;
             }
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState] = args;
@@ -164,7 +162,7 @@ export const thunks = {
 
             dispatch(actions.cleared());
         },
-    "setStep1Data":
+    setStep1Data:
         (props: { formDataStep1: FormData["step1"] }) =>
         (...args) => {
             const { formDataStep1 } = props;
@@ -173,7 +171,7 @@ export const thunks = {
 
             dispatch(actions.step1DataSet({ formDataStep1 }));
         },
-    "setStep2Data":
+    setStep2Data:
         (props: { formDataStep2: FormData["step2"] }) =>
         (...args) => {
             const { formDataStep2 } = props;
@@ -182,7 +180,7 @@ export const thunks = {
 
             dispatch(actions.step2DataSet({ formDataStep2 }));
         },
-    "setStep3Data":
+    setStep3Data:
         (props: { formDataStep3: FormData["step3"] }) =>
         (...args) => {
             const { formDataStep3 } = props;
@@ -191,7 +189,7 @@ export const thunks = {
 
             dispatch(actions.step3DataSet({ formDataStep3 }));
         },
-    "setStep4DataAndSubmit":
+    setStep4DataAndSubmit:
         (props: { formDataStep4: FormData["step4"] }) =>
         async (...args) => {
             const { formDataStep4 } = props;
@@ -209,44 +207,44 @@ export const thunks = {
             assert(step3 !== undefined);
 
             const formData: ApiTypes.SoftwareFormData = {
-                "softwareType": step1.softwareType,
-                "externalId": step2.externalId,
-                "comptoirDuLibreId": step2.comptoirDuLibreId,
-                "softwareName": step2.softwareName,
-                "softwareDescription": step2.softwareDescription,
-                "softwareLicense": step2.softwareLicense,
-                "softwareMinimalVersion": step2.softwareMinimalVersion ?? "",
-                "isPresentInSupportContract": step3.isPresentInSupportContract ?? false,
-                "isFromFrenchPublicService": step3.isFromFrenchPublicService,
-                "doRespectRgaa": step3.doRespectRgaa,
-                "similarSoftwareExternalDataIds": formDataStep4.similarSoftwares.map(
+                softwareType: step1.softwareType,
+                externalId: step2.externalId,
+                comptoirDuLibreId: step2.comptoirDuLibreId,
+                softwareName: step2.softwareName,
+                softwareDescription: step2.softwareDescription,
+                softwareLicense: step2.softwareLicense,
+                softwareMinimalVersion: step2.softwareMinimalVersion ?? "",
+                isPresentInSupportContract: step3.isPresentInSupportContract ?? false,
+                isFromFrenchPublicService: step3.isFromFrenchPublicService,
+                doRespectRgaa: step3.doRespectRgaa,
+                similarSoftwareExternalDataIds: formDataStep4.similarSoftwares.map(
                     ({ externalId }) => externalId
                 ),
-                "softwareLogoUrl": step2.softwareLogoUrl,
-                "softwareKeywords": step2.softwareKeywords
+                softwareLogoUrl: step2.softwareLogoUrl,
+                softwareKeywords: step2.softwareKeywords
             };
 
             dispatch(actions.submissionStarted());
 
             await (state.softwareSillId !== undefined
                 ? sillApi.updateSoftware({
-                      "softwareSillId": state.softwareSillId,
+                      softwareSillId: state.softwareSillId,
                       formData
                   })
                 : sillApi.createSoftware({
                       formData
                   }));
 
-            dispatch(actions.formSubmitted({ "softwareName": step2.softwareName }));
+            dispatch(actions.formSubmitted({ softwareName: step2.softwareName }));
         },
-    "returnToPreviousStep":
+    returnToPreviousStep:
         () =>
         (...args) => {
             const [dispatch] = args;
 
             dispatch(actions.navigatedToPreviousStep());
         },
-    "getExternalSoftwareOptions":
+    getExternalSoftwareOptions:
         (props: { queryString: string; language: Language }) =>
         async (...args) => {
             const { queryString, language } = props;
@@ -255,7 +253,7 @@ export const thunks = {
 
             return await sillApi.getExternalSoftwareOptions({ queryString, language });
         },
-    "getAutofillData":
+    getAutofillData:
         (props: { externalId: string }) =>
         (...args) => {
             const { externalId } = props;

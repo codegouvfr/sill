@@ -29,7 +29,7 @@ export default function SoftwareUserAndReferent(props: Props) {
     );
 
     useEffect(() => {
-        softwareUserAndReferent.initialize({ "softwareName": route.params.name });
+        softwareUserAndReferent.initialize({ softwareName: route.params.name });
 
         return () => {
             softwareUserAndReferent.clear();
@@ -38,7 +38,7 @@ export default function SoftwareUserAndReferent(props: Props) {
 
     useEffect(() => {
         softwareDetails.initialize({
-            "softwareName": route.params.name
+            softwareName: route.params.name
         });
 
         return () => softwareDetails.clear();
@@ -60,16 +60,16 @@ export default function SoftwareUserAndReferent(props: Props) {
 
     const menuTabs = [
         {
-            "id": 0,
-            "name": "referents" as const,
-            "label": `${t("common.referent", {
+            id: 0,
+            name: "referents" as const,
+            label: `${t("common.referent", {
                 count: referents.length
             })}`
         },
         {
-            "id": 1,
-            "name": "users" as const,
-            "label": `${t("common.user", {
+            id: 1,
+            name: "users" as const,
+            label: `${t("common.user", {
                 count: users.length
             })}`
         }
@@ -93,9 +93,9 @@ export default function SoftwareUserAndReferent(props: Props) {
                         {isTechnicalExpert && (
                             <Tag
                                 style={{
-                                    "position": "relative",
-                                    "top": 4,
-                                    "marginLeft": fr.spacing("2v")
+                                    position: "relative",
+                                    top: 4,
+                                    marginLeft: fr.spacing("2v")
                                 }}
                                 iconId="fr-icon-checkbox-circle-line"
                             >
@@ -168,15 +168,15 @@ export default function SoftwareUserAndReferent(props: Props) {
                 <Breadcrumb
                     segments={[
                         {
-                            "linkProps": {
+                            linkProps: {
                                 ...routes.softwareCatalog().link
                             },
                             label: t("softwareUserAndReferent.catalog breadcrumb")
                         },
                         {
-                            "linkProps": routes.softwareDetails({ "name": softwareName })
+                            linkProps: routes.softwareDetails({ name: softwareName })
                                 .link,
-                            "label": route.params.name
+                            label: route.params.name
                         }
                     ]}
                     currentPageLabel={t(
@@ -225,10 +225,10 @@ export default function SoftwareUserAndReferent(props: Props) {
                                 {t("softwareUserAndReferent.category")} (
                                 {activeMenu === 0
                                     ? t("common.referent", {
-                                          "count": referents.length
+                                          count: referents.length
                                       })
                                     : t("common.user", {
-                                          "count": users.length
+                                          count: users.length
                                       })}
                                 )
                             </button>
@@ -319,7 +319,7 @@ export default function SoftwareUserAndReferent(props: Props) {
                     iconId="fr-icon-eye-line"
                     priority="secondary"
                     className={classes.softwareDetails}
-                    {...routes.softwareDetails({ "name": softwareName }).link}
+                    {...routes.softwareDetails({ name: softwareName }).link}
                 >
                     {t("softwareUserAndReferent.softwareDetails")}
                 </Button>
@@ -327,8 +327,8 @@ export default function SoftwareUserAndReferent(props: Props) {
                     priority="primary"
                     linkProps={
                         routes.declarationForm({
-                            "name": route.params.name,
-                            "declarationType": activeMenu === 0 ? "referent" : "user"
+                            name: route.params.name,
+                            declarationType: activeMenu === 0 ? "referent" : "user"
                         }).link
                     }
                 >
@@ -342,17 +342,17 @@ export default function SoftwareUserAndReferent(props: Props) {
 }
 
 const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
-    "breadcrumb": {
-        "marginBottom": fr.spacing("4v")
+    breadcrumb: {
+        marginBottom: fr.spacing("4v")
     },
-    "header": {
-        "display": "flex",
-        "alignItems": "center",
-        "marginBottom": fr.spacing("10v")
+    header: {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: fr.spacing("10v")
     },
-    "backButton": {
-        "background": "none",
-        "marginRight": fr.spacing("4v"),
+    backButton: {
+        background: "none",
+        marginRight: fr.spacing("4v"),
 
         "&>i": {
             "&::before": {
@@ -360,55 +360,55 @@ const useStyles = tss.withName({ SoftwareUserAndReferent }).create({
             }
         }
     },
-    "title": {
-        "marginBottom": 0
+    title: {
+        marginBottom: 0
     },
-    "main": {
-        "display": "flex",
+    main: {
+        display: "flex",
         [fr.breakpoints.down("md")]: {
-            "flexDirection": "column"
+            flexDirection: "column"
         }
     },
-    "sidemenu": {
-        "flex": 1
+    sidemenu: {
+        flex: 1
     },
-    "sidemenuTitle": {
-        "display": "flex",
-        "alignItems": "center"
+    sidemenuTitle: {
+        display: "flex",
+        alignItems: "center"
     },
-    "sidemenuItemFlex": {
-        "display": "flex",
-        "justifyContent": "space-between"
+    sidemenuItemFlex: {
+        display: "flex",
+        justifyContent: "space-between"
     },
-    "logoWrapper": {
-        "height": fr.spacing("10v"),
-        "width": fr.spacing("10v"),
-        "minWidth": fr.spacing("10v"),
-        "marginRight": fr.spacing("2v"),
-        "overflow": "hidden",
+    logoWrapper: {
+        height: fr.spacing("10v"),
+        width: fr.spacing("10v"),
+        minWidth: fr.spacing("10v"),
+        marginRight: fr.spacing("2v"),
+        overflow: "hidden",
         [fr.breakpoints.down("md")]: {
-            "height": fr.spacing("5v"),
-            "width": fr.spacing("5v")
+            height: fr.spacing("5v"),
+            width: fr.spacing("5v")
         }
     },
-    "logo": {
-        "height": "100%"
+    logo: {
+        height: "100%"
     },
-    "contentMenuTab": {
-        "flex": 2
+    contentMenuTab: {
+        flex: 2
     },
-    "container": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end"
+    container: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "end"
     },
-    "softwareDetails": {
-        "marginRight": fr.spacing("4v"),
+    softwareDetails: {
+        marginRight: fr.spacing("4v"),
         "&&::before": {
             "--icon-size": fr.spacing("6v")
         }
     },
-    "infoLegend": {
-        "color": fr.colors.decisions.text.mention.grey.default
+    infoLegend: {
+        color: fr.colors.decisions.text.mention.grey.default
     }
 });

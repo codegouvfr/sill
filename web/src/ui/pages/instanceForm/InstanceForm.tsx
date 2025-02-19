@@ -49,13 +49,13 @@ export default function InstanceForm(props: Props) {
                 switch (route.name) {
                     case "instanceCreationForm":
                         return {
-                            "type": "create",
-                            "softwareName": route.params.softwareName
+                            type: "create",
+                            softwareName: route.params.softwareName
                         };
                     case "instanceUpdateForm":
                         return {
-                            "type": "update",
-                            "instanceId": route.params.id
+                            type: "update",
+                            instanceId: route.params.id
                         };
                 }
             })()
@@ -71,7 +71,7 @@ export default function InstanceForm(props: Props) {
                 ctx,
                 ({ softwareName }) =>
                     routes
-                        .softwareDetails({ "name": softwareName, "tab": "instances" })
+                        .softwareDetails({ name: softwareName, tab: "instances" })
                         .push()
             ),
         []
@@ -111,10 +111,10 @@ export default function InstanceForm(props: Props) {
                 <Breadcrumb
                     segments={[
                         {
-                            "linkProps": {
+                            linkProps: {
                                 ...routes.addSoftwareLanding().link
                             },
-                            "label": t("app.add software or service")
+                            label: t("app.add software or service")
                         }
                     ]}
                     currentPageLabel={translations.breadcrumbs}
@@ -140,7 +140,7 @@ export default function InstanceForm(props: Props) {
                 <InstanceFormStep1
                     className={cx(classes.step, classes.step1)}
                     initialFormData={{
-                        "mainSoftwareSillId": initializationData.mainSoftwareSillId
+                        mainSoftwareSillId: initializationData.mainSoftwareSillId
                     }}
                     onSubmit={({ mainSoftwareSillId }) =>
                         instanceForm.completeStep1({
@@ -153,15 +153,15 @@ export default function InstanceForm(props: Props) {
                 <InstanceFormStep2
                     className={cx(classes.step, classes.step2)}
                     initialFormData={{
-                        "organization": initializationData.organization,
-                        "targetAudience": initializationData.targetAudience,
-                        "instanceUrl": initializationData.instanceUrl,
-                        "isPublic":
+                        organization: initializationData.organization,
+                        targetAudience: initializationData.targetAudience,
+                        instanceUrl: initializationData.instanceUrl,
+                        isPublic:
                             initializationData.isPublic === null
                                 ? null
                                 : initializationData.isPublic
-                                ? "true"
-                                : "false"
+                                  ? "true"
+                                  : "false"
                     }}
                     onSubmit={({ organization, targetAudience, instanceUrl, isPublic }) =>
                         instanceForm.submit({
@@ -211,56 +211,56 @@ const useStyles = tss
     .withName({ InstanceForm })
     .withParams<{ step: number | undefined }>()
     .create(({ step }) => ({
-        "step": {
-            "flexDirection": "column",
-            "gap": fr.spacing("8v")
+        step: {
+            flexDirection: "column",
+            gap: fr.spacing("8v")
         },
-        "step1": {
-            "display": step !== 1 ? "none" : "flex"
+        step1: {
+            display: step !== 1 ? "none" : "flex"
         },
-        "step2": {
-            "display": step !== 2 ? "none" : "flex",
+        step2: {
+            display: step !== 2 ? "none" : "flex",
             "& .fr-input-group, & .fr-fieldset": {
                 ...fr.spacing("margin", {
-                    "topBottom": 0
+                    topBottom: 0
                 })
             }
         },
-        "breadcrumb": {
-            "marginBottom": fr.spacing("4v")
+        breadcrumb: {
+            marginBottom: fr.spacing("4v")
         },
-        "headerDeclareUserOrReferent": {
-            "display": "flex",
-            "alignItems": "center",
-            "marginBottom": fr.spacing("10v")
+        headerDeclareUserOrReferent: {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: fr.spacing("10v")
         },
-        "backButton": {
-            "background": "none",
-            "marginRight": fr.spacing("4v"),
+        backButton: {
+            background: "none",
+            marginRight: fr.spacing("4v"),
             "&>i": {
                 "&::before": {
                     "--icon-size": fr.spacing("8v")
                 }
             }
         },
-        "title": {
-            "marginBottom": fr.spacing("1v")
+        title: {
+            marginBottom: fr.spacing("1v")
         },
-        "stepper": {
-            "flex": "1"
+        stepper: {
+            flex: "1"
         },
-        "footerContainer": {
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "end"
+        footerContainer: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end"
         },
-        "softwareDetails": {
-            "marginRight": fr.spacing("4v"),
+        softwareDetails: {
+            marginRight: fr.spacing("4v"),
             "&&::before": {
                 "--icon-size": fr.spacing("6v")
             }
         },
-        "progressSubmit": {
-            "marginLeft": fr.spacing("4v")
+        progressSubmit: {
+            marginLeft: fr.spacing("4v")
         }
     }));

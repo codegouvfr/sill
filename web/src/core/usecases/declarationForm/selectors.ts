@@ -35,7 +35,7 @@ const main = createSelector(
     (isReady, step, isSubmitting, declarationType, software) => {
         if (!isReady) {
             return {
-                "isReady": false as const
+                isReady: false as const
             };
         }
 
@@ -44,7 +44,7 @@ const main = createSelector(
         assert(software !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             step,
             isSubmitting,
             declarationType,

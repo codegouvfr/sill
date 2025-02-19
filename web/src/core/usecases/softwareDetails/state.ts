@@ -108,16 +108,16 @@ export namespace State {
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not ready",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not ready",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": true
+    reducers: {
+        initializationStarted: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: true
         }),
-        "initializationCompleted": (
+        initializationCompleted: (
             _state,
             {
                 payload
@@ -136,27 +136,27 @@ export const { reducer, actions } = createUsecaseActions({
             const { software, userDeclaration } = payload;
 
             return {
-                "stateDescription": "ready",
+                stateDescription: "ready",
                 software,
-                "userDeclaration":
+                userDeclaration:
                     userDeclaration === undefined
                         ? undefined
                         : {
                               ...userDeclaration,
-                              "isRemovingRole": false
+                              isRemovingRole: false
                           },
-                "isUnreferencingOngoing": false
+                isUnreferencingOngoing: false
             };
         },
-        "cleared": () => ({
-            "stateDescription": "not ready" as const,
-            "isInitializing": false
+        cleared: () => ({
+            stateDescription: "not ready" as const,
+            isInitializing: false
         }),
-        "unreferencingStarted": state => {
+        unreferencingStarted: state => {
             assert(state.stateDescription === "ready");
             state.isUnreferencingOngoing = true;
         },
-        "unreferencingCompleted": (
+        unreferencingCompleted: (
             state,
             { payload }: { payload: { reason: string; time: number } }
         ) => {

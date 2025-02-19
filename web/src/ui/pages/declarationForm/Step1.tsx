@@ -22,8 +22,8 @@ export function DeclarationFormStep1(props: Props) {
     } = useForm<{
         declarationType: "user" | "referent" | undefined;
     }>({
-        "defaultValues": {
-            "declarationType": undefined
+        defaultValues: {
+            declarationType: undefined
         }
     });
 
@@ -56,19 +56,19 @@ export function DeclarationFormStep1(props: Props) {
                 name="radio"
                 options={[
                     {
-                        "label": t("declarationFormStep1.user type label"),
-                        "hintText": t("declarationFormStep1.user type hint"),
-                        "nativeInputProps": {
-                            ...register("declarationType", { "required": true }),
-                            "value": "user"
+                        label: t("declarationFormStep1.user type label"),
+                        hintText: t("declarationFormStep1.user type hint"),
+                        nativeInputProps: {
+                            ...register("declarationType", { required: true }),
+                            value: "user"
                         }
                     },
                     {
-                        "label": t("declarationFormStep1.referent type label"),
-                        "hintText": t("declarationFormStep1.referent type label"),
-                        "nativeInputProps": {
-                            ...register("declarationType", { "required": true }),
-                            "value": "referent"
+                        label: t("declarationFormStep1.referent type label"),
+                        hintText: t("declarationFormStep1.referent type label"),
+                        nativeInputProps: {
+                            ...register("declarationType", { required: true }),
+                            value: "referent"
                         }
                     }
                 ]}
@@ -76,7 +76,7 @@ export function DeclarationFormStep1(props: Props) {
                 stateRelatedMessage={t("app.required")}
             />
             <button
-                style={{ "display": "none" }}
+                style={{ display: "none" }}
                 ref={setSubmitButtonElement}
                 type="submit"
             />

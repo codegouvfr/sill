@@ -23,33 +23,33 @@ export default function AddSoftwareLanding(props: Props) {
 
     const whoCanAddAccordionList = [
         {
-            "label": t("addSoftwareLanding.discover as agent label"),
-            "description": (
+            label: t("addSoftwareLanding.discover as agent label"),
+            description: (
                 <Trans
                     i18nKey={"addSoftwareLanding.discover as agent description"}
-                ></Trans>
+                />
             )
         },
         {
-            "label": t("addSoftwareLanding.discover as DSI label"),
-            "description": (
-                <Trans i18nKey={"addSoftwareLanding.discover as DSI description"}></Trans>
+            label: t("addSoftwareLanding.discover as DSI label"),
+            description: (
+                <Trans i18nKey={"addSoftwareLanding.discover as DSI description"}/>
             )
         },
         {
-            "label": t("addSoftwareLanding.contribute as agent label"),
-            "description": (
+            label: t("addSoftwareLanding.contribute as agent label"),
+            description: (
                 <Trans
                     i18nKey={"addSoftwareLanding.contribute as agent description"}
-                ></Trans>
+                />
             )
         },
         {
-            "label": t("addSoftwareLanding.contribute as DSI label"),
-            "description": (
+            label: t("addSoftwareLanding.contribute as DSI label"),
+            description: (
                 <Trans
                     i18nKey={"addSoftwareLanding.contribute as DSI description"}
-                ></Trans>
+                />
             )
         }
     ];
@@ -62,8 +62,8 @@ export default function AddSoftwareLanding(props: Props) {
                         <h2 className={classes.title}>
                             <Trans
                                 i18nKey={"addSoftwareLanding.title"}
-                                components={{ span: <span></span> }}
-                            ></Trans>
+                                components={{ span: <span /> }}
+                            />
                         </h2>
                         <p className={fr.cx("fr-text--lg")}>
                             {t("addSoftwareLanding.subtitle")}
@@ -117,71 +117,71 @@ export default function AddSoftwareLanding(props: Props) {
 }
 
 const useStyles = tss.withName({ AddSoftwareLanding }).create({
-    "section": {
+    section: {
         ...fr.spacing("padding", {
-            "topBottom": "30v"
+            topBottom: "30v"
         }),
         [fr.breakpoints.down("md")]: {
             ...fr.spacing("padding", {
-                "topBottom": "10v"
+                topBottom: "10v"
             })
         }
     },
-    "titleSection": {
-        "marginBottom": fr.spacing("10v"),
+    titleSection: {
+        marginBottom: fr.spacing("10v"),
         [fr.breakpoints.down("md")]: {
-            "marginBottom": fr.spacing("8v")
+            marginBottom: fr.spacing("8v")
         }
     },
-    "titleContainer": {
-        "marginBottom": fr.spacing("10v"),
-        "display": "flex",
+    titleContainer: {
+        marginBottom: fr.spacing("10v"),
+        display: "flex",
         [fr.breakpoints.down("md")]: {
-            "flexDirection": "column"
+            flexDirection: "column"
         }
     },
-    "title": {
-        "marginRight": fr.spacing("30v"),
+    title: {
+        marginRight: fr.spacing("30v"),
         "&>span": {
-            "color": fr.colors.decisions.text.title.blueFrance.default
+            color: fr.colors.decisions.text.title.blueFrance.default
         },
         [fr.breakpoints.down("md")]: {
             ...fr.spacing("margin", {
-                "right": 0,
-                "bottom": "8v"
+                right: 0,
+                bottom: "8v"
             })
         }
     },
-    "clipart": {
+    clipart: {
         [fr.breakpoints.down("md")]: {
-            "width": "50%",
-            "margin": "0 auto"
+            width: "50%",
+            margin: "0 auto"
         }
     },
-    "whoCanAddBackground": {
-        "backgroundColor": fr.colors.decisions.background.alt.blueFrance.default
+    whoCanAddBackground: {
+        backgroundColor: fr.colors.decisions.background.alt.blueFrance.default
     },
-    "whoCanAddHeaderContainer": {
-        "display": "flex",
-        "alignItems": "center",
-        "gap": fr.spacing("2v"),
+    whoCanAddHeaderContainer: {
+        display: "flex",
+        alignItems: "center",
+        gap: fr.spacing("2v"),
         [fr.breakpoints.down("md")]: {
-            "gap": fr.spacing("8v"),
-            "flexDirection": "column"
+            gap: fr.spacing("8v"),
+            flexDirection: "column"
         }
     },
-    "whoCanAddTitle": {
-        "marginBottom": 0
+    whoCanAddTitle: {
+        marginBottom: 0
     },
-    "whoCanAddButtonContainer": {
-        "display": "flex",
-        "gap": fr.spacing("2v"),
-        "whiteSpace": "nowrap",
+    whoCanAddButtonContainer: {
+        display: "flex",
+        gap: fr.spacing("2v"),
+        whiteSpace: "nowrap",
         [fr.breakpoints.down("md")]: {
-            "whiteSpace": "normal"
+            whiteSpace: "normal"
         }
     },
-    "accordionDescription": {
-        "marginBottom": 0
+    accordionDescription: {
+        marginBottom: 0
     }
 });

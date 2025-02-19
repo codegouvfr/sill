@@ -36,30 +36,30 @@ const initializationData = createSelector(
 
         if (preFillData === undefined) {
             return {
-                "mainSoftwareSillId": undefined,
-                "organization": undefined,
-                "targetAudience": undefined,
-                "instanceUrl": undefined,
-                "isPublic": null
+                mainSoftwareSillId: undefined,
+                organization: undefined,
+                targetAudience: undefined,
+                instanceUrl: undefined,
+                isPublic: null
             };
         }
 
         switch (preFillData.type) {
             case "update":
                 return {
-                    "mainSoftwareSillId": preFillData.mainSoftwareSillId,
-                    "organization": preFillData.organization,
-                    "targetAudience": preFillData.targetAudience,
-                    "instanceUrl": preFillData.instanceUrl,
-                    "isPublic": preFillData.isPublic
+                    mainSoftwareSillId: preFillData.mainSoftwareSillId,
+                    organization: preFillData.organization,
+                    targetAudience: preFillData.targetAudience,
+                    instanceUrl: preFillData.instanceUrl,
+                    isPublic: preFillData.isPublic
                 };
             case "navigated from software form":
                 return {
-                    "mainSoftwareSillId": preFillData.justRegisteredSoftwareSillId,
-                    "organization": undefined,
-                    "instanceUrl": undefined,
-                    "targetAudience": undefined,
-                    "isPublic": null
+                    mainSoftwareSillId: preFillData.justRegisteredSoftwareSillId,
+                    organization: undefined,
+                    instanceUrl: undefined,
+                    targetAudience: undefined,
+                    isPublic: null
                 };
         }
     }
@@ -89,7 +89,7 @@ const main = createSelector(
     (isReady, step, initializationData, allSillSoftwares, isSubmitting, isLastStep) => {
         if (!isReady)
             return {
-                "isReady": false as const
+                isReady: false as const
             };
 
         assert(step !== undefined);
@@ -99,7 +99,7 @@ const main = createSelector(
         assert(isLastStep !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             step,
             initializationData,
             allSillSoftwares,

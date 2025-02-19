@@ -41,14 +41,14 @@ export function AutocompleteInput<T extends string | Record<string, unknown>>(
                 <Input
                     {...dsfrInputProps}
                     style={{
-                        "width": params.size,
+                        width: params.size,
                         ...dsfrInputProps.style
                     }}
                     ref={params.InputProps.ref}
                     nativeInputProps={{
                         ...params.inputProps,
                         ...dsfrInputProps.nativeInputProps,
-                        "ref": element =>
+                        ref: element =>
                             [
                                 (params.inputProps as any).ref,
                                 dsfrInputProps.nativeInputProps?.ref
@@ -63,16 +63,16 @@ export function AutocompleteInput<T extends string | Record<string, unknown>>(
                                     (ref as any).current = element;
                                 }
                             }),
-                        "onBlur": (...args) =>
+                        onBlur: (...args) =>
                             params.inputProps.onBlur?.(...args) ??
                             dsfrInputProps.nativeInputProps?.onBlur?.(...args),
-                        "onChange": (...args) =>
+                        onChange: (...args) =>
                             params.inputProps.onChange?.(...args) ??
                             dsfrInputProps.nativeInputProps?.onChange?.(...args),
-                        "onFocus": (...args) =>
+                        onFocus: (...args) =>
                             params.inputProps.onFocus?.(...args) ??
                             dsfrInputProps.nativeInputProps?.onFocus?.(...args),
-                        "onMouseDown": (...args) =>
+                        onMouseDown: (...args) =>
                             params.inputProps.onMouseDown?.(...args) ??
                             dsfrInputProps.nativeInputProps?.onMouseDown?.(...args)
                     }}

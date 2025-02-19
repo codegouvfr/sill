@@ -56,21 +56,21 @@ const useStyles = tss
     .withName({ ActionsFooter })
     .withParams<{ isSticky: boolean }>()
     .create(({ isSticky }) => ({
-        "root": {
-            "position": "sticky",
-            "bottom": "0",
-            "marginTop": fr.spacing("6v"),
-            "boxShadow": `${
+        root: {
+            position: "sticky",
+            bottom: "0",
+            marginTop: fr.spacing("6v"),
+            boxShadow: `${
                 isSticky
                     ? `0 -5px 5px -5px ${fr.colors.decisions.background.overlap.grey.active}`
                     : `0 0 5px -5px ${fr.colors.decisions.background.overlap.grey.active}`
             }`,
-            "transition": "box-shadow 0.3s ease",
+            transition: "box-shadow 0.3s ease",
             ...fr.spacing("padding", {
-                "top": "4v",
-                "bottom": "6v"
+                top: "4v",
+                bottom: "6v"
             }),
-            "background": fr.colors.decisions.background.default.grey.default,
-            "zIndex": 1
+            background: fr.colors.decisions.background.default.grey.default,
+            zIndex: 1
         }
     }));

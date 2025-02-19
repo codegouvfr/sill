@@ -2,7 +2,7 @@ import type { Thunks } from "core/bootstrap";
 import { actions } from "./state";
 
 export const thunks = {
-    "removeAgentAsReferentOrUserFromSoftware":
+    removeAgentAsReferentOrUserFromSoftware:
         (params: { softwareId: number; declarationType: "user" | "referent" }) =>
         async (...args) => {
             const { declarationType, softwareId } = params;

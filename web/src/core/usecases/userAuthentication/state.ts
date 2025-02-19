@@ -23,16 +23,16 @@ export namespace State {
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not initialized",
-        "currentAgent": null,
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not initialized",
+        currentAgent: null,
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": state => {
+    reducers: {
+        initializationStarted: state => {
             assert(state.stateDescription === "not initialized");
         },
-        "initialized": (_, action: { payload: { agent: Agent | null } }) => ({
+        initialized: (_, action: { payload: { agent: Agent | null } }) => ({
             stateDescription: "ready",
             currentAgent: action.payload.agent
         })

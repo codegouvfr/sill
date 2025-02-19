@@ -86,9 +86,9 @@ export function SoftwareTypeTable(props: Props) {
 }
 
 const useStyles = tss.withName({ SoftwareTypeTable }).create({
-    "item": {
+    item: {
         "&:not(:last-of-type)": {
-            "marginBottom": fr.spacing("4v")
+            marginBottom: fr.spacing("4v")
         }
     }
 });

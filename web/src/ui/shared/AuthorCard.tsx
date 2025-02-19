@@ -19,7 +19,7 @@ export function AuthorCard(props: Props) {
     const { t } = useTranslation();
 
     return (
-        <Card style={{ "padding": "20px" }}>
+        <Card style={{ padding: "20px" }}>
             <CardHeader
                 title={author.name}
                 action={
@@ -31,7 +31,7 @@ export function AuthorCard(props: Props) {
                         ""
                     )
                 }
-            ></CardHeader>
+            />
             <h6>{t("authorCard.affiliatedStructure")}</h6>
             {author?.affiliations?.map(affiliatedOrganization => {
                 return (
@@ -88,10 +88,10 @@ export function AuthorCard(props: Props) {
 }
 
 const useStyles = tss.withName({ AuthorCard }).create({
-    "externalLinkButtons": {
-        "display": "flex",
-        "alignItems": "center",
-        "justifyContent": "end",
-        "flexWrap": "wrap"
+    externalLinkButtons: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "end",
+        flexWrap: "wrap"
     }
 });

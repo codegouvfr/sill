@@ -3,7 +3,7 @@ import { assert } from "tsafe/assert";
 import { name, actions, type State, type FormData } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (params: { softwareName: string }) =>
         async (...args) => {
             const { softwareName } = params;
@@ -33,21 +33,21 @@ export const thunks = {
 
             dispatch(
                 actions.initializationCompleted({
-                    "software": {
-                        "logoUrl": software.logoUrl,
+                    software: {
+                        logoUrl: software.logoUrl,
                         softwareName,
                         softwareId: software.softwareId,
-                        "referentCount": Object.values(
+                        referentCount: Object.values(
                             software.userAndReferentCountByOrganization
                         )
                             .map(({ referentCount }) => referentCount)
                             .reduce((prev, curr) => prev + curr, 0),
-                        "userCount": Object.values(
+                        userCount: Object.values(
                             software.userAndReferentCountByOrganization
                         )
                             .map(({ userCount }) => userCount)
                             .reduce((prev, curr) => prev + curr, 0),
-                        "softwareType": (() => {
+                        softwareType: (() => {
                             switch (software.softwareType.type) {
                                 case "cloud":
                                     return "cloud";
@@ -61,7 +61,7 @@ export const thunks = {
                 })
             );
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState] = args;
@@ -76,7 +76,7 @@ export const thunks = {
 
             dispatch(actions.cleared());
         },
-    "setDeclarationType":
+    setDeclarationType:
         (props: { declarationType: State.Ready["declarationType"] }) =>
         async (...args) => {
             const { declarationType } = props;
@@ -115,19 +115,19 @@ export const thunks = {
                     break redirect_if_declaration_already_exists;
                 }
 
-                dispatch(actions.triggerRedirect({ "isFormSubmitted": false }));
+                dispatch(actions.triggerRedirect({ isFormSubmitted: false }));
             }
 
             dispatch(actions.declarationTypeSet({ declarationType }));
         },
-    "navigateToPreviousStep":
+    navigateToPreviousStep:
         () =>
         (...args) => {
             const [dispatch] = args;
 
             dispatch(actions.navigatedToPreviousStep());
         },
-    "submit":
+    submit:
         (props: { formData: FormData }) =>
         async (...args) => {
             const { formData } = props;
@@ -144,9 +144,9 @@ export const thunks = {
 
             await sillApi.createUserOrReferent({
                 formData,
-                "softwareId": state.software.softwareId
+                softwareId: state.software.softwareId
             });
 
-            dispatch(actions.triggerRedirect({ "isFormSubmitted": true }));
+            dispatch(actions.triggerRedirect({ isFormSubmitted: true }));
         }
 } satisfies Thunks;

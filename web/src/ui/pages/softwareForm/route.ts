@@ -2,12 +2,12 @@ import { createGroup, defineRoute, createRouter, param, type Route } from "type-
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "softwareCreationForm": defineRoute(
-        { "externalId": param.query.optional.string },
+    softwareCreationForm: defineRoute(
+        { externalId: param.query.optional.string },
         () => appPath + "/add"
     ),
-    "softwareUpdateForm": defineRoute(
-        { "name": param.query.string },
+    softwareUpdateForm: defineRoute(
+        { name: param.query.string },
         () => appPath + "/update"
     )
 };

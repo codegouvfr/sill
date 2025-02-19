@@ -36,7 +36,7 @@ export function createTypeRouteMock<
             );
 
             return new Proxy({} as ReturnType<(typeof routes)[Name]>, {
-                "get": (...args) => {
+                get: (...args) => {
                     const [, prop] = args;
 
                     switch (prop) {
@@ -61,7 +61,7 @@ export function createTypeRouteMock<
     }
 
     const routesProxy = new Proxy(routes, {
-        "get": (...args) => {
+        get: (...args) => {
             const [, prop] = args;
 
             const name = prop;
@@ -70,13 +70,13 @@ export function createTypeRouteMock<
                 return new Proxy(
                     {},
                     {
-                        "get": (...args) => {
+                        get: (...args) => {
                             const [, prop] = args;
 
                             if (prop === "link") {
                                 return {
                                     ...(routes as any)[name](params).link,
-                                    "onClick": (e: any) => {
+                                    onClick: (e: any) => {
                                         evtRoutes.post({
                                             name,
                                             params
@@ -101,9 +101,9 @@ export function createTypeRouteMock<
                 );
             };
 
-            Object.defineProperty(out, "name", { "value": name });
+            Object.defineProperty(out, "name", { value: name });
 
-            out["~internal"] = { "type": "RouteBuilder" };
+            out["~internal"] = { type: "RouteBuilder" };
 
             return out;
         }

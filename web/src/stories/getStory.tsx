@@ -18,27 +18,27 @@ import { assert } from "tsafe/assert";
 const evtTriggerReRender = Evt.create(0);
 
 setUseLang({
-    "useLang": () => {
+    useLang: () => {
         const { lang } = useLang();
         return lang;
     }
 });
 
 const { CoreProvider } = createCoreProvider({
-    "apiUrl": "",
-    "appUrl": "",
-    "transformUrlBeforeRedirectToLogin": () => {
+    apiUrl: "",
+    appUrl: "",
+    transformUrlBeforeRedirectToLogin: () => {
         assert(false);
     },
-    "getIsDark": () => false,
-    "getCurrentLang": () => "fr",
-    "onMoved": () => {
+    getIsDark: () => false,
+    getCurrentLang: () => "fr",
+    onMoved: () => {
         assert(false);
     }
 });
 
 export const { createMockRoute } = createMockRouteFactory({
-    "triggerReRender": () => {
+    triggerReRender: () => {
         evtTriggerReRender.state++;
     }
 });
@@ -96,7 +96,7 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
 
         if (containerWidth !== 0) {
             return (
-                <div className="container" style={{ "width": containerWidth }}>
+                <div className="container" style={{ width: containerWidth }}>
                     <Component {...props} />
                 </div>
             );
@@ -117,10 +117,9 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         const out = Template.bind({});
 
         out.args = {
-            "darkMode": window.matchMedia("(prefers-color-scheme: dark)").matches,
-            "containerWidth":
-                defaultContainerWidthStoryLevel ?? defaultContainerWidth ?? 0,
-            "lang": "fr" as const,
+            darkMode: window.matchMedia("(prefers-color-scheme: dark)").matches,
+            containerWidth: defaultContainerWidthStoryLevel ?? defaultContainerWidth ?? 0,
+            lang: "fr" as const,
             isFirstStory,
             ...props
         };
@@ -128,9 +127,9 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
         isFirstStory = false;
 
         out.parameters = {
-            "docs": {
-                "description": {
-                    "story": description
+            docs: {
+                description: {
+                    story: description
                 }
             }
         };
@@ -141,16 +140,16 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
     const componentName = symToStr(wrappedComponent);
 
     return {
-        "meta": id<Meta>({
-            "title": `${sectionName}/${componentName}`,
-            "component": Component,
-            "decorators": [
+        meta: id<Meta>({
+            title: `${sectionName}/${componentName}`,
+            component: Component,
+            decorators: [
                 Story => (
                     <CoreProvider>
                         <CacheProvider
                             value={createCache({
-                                "key": "css",
-                                "prepend": false
+                                key: "css",
+                                prepend: false
                             })}
                         >
                             <MuiDsfrThemeProvider>
@@ -160,38 +159,38 @@ export function getStoryFactory<Props extends Record<string, any>>(params: {
                     </CoreProvider>
                 )
             ],
-            "argTypes": {
-                "darkMode": {
-                    "table": {
-                        "disable": disabledProps.includes("darkMode")
+            argTypes: {
+                darkMode: {
+                    table: {
+                        disable: disabledProps.includes("darkMode")
                     },
-                    "description": "Global color scheme enabled, light or dark"
+                    description: "Global color scheme enabled, light or dark"
                 },
-                "containerWidth": {
-                    "control": {
-                        "type": "range",
-                        "min": 0,
-                        "max": 1920,
-                        "step": 10
+                containerWidth: {
+                    control: {
+                        type: "range",
+                        min: 0,
+                        max: 1920,
+                        step: 10
                     },
-                    "table": {
-                        "disable": disabledProps.includes("containerWidth")
+                    table: {
+                        disable: disabledProps.includes("containerWidth")
                     },
-                    "description": `Play with the width of the parent component. Note that this isn't meant for testing the
+                    description: `Play with the width of the parent component. Note that this isn't meant for testing the
                     responsiveness of the components. For that you have [the viewports](https://youtu.be/psLbgPfEzZY).`
                 },
-                "lang": {
-                    "options": ["fr", "en"],
-                    "control": {
-                        "type": "select"
+                lang: {
+                    options: ["fr", "en"],
+                    control: {
+                        type: "select"
                     },
-                    "table": {
-                        "disable": disabledProps.includes("lang")
+                    table: {
+                        disable: disabledProps.includes("lang")
                     }
                 },
-                "isFirstStory": {
-                    "table": {
-                        "disable": true
+                isFirstStory: {
+                    table: {
+                        disable: true
                     }
                 },
                 ...argTypes

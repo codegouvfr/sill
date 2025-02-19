@@ -23,14 +23,14 @@ import { useTranslation } from "react-i18next";
 const { CoreProvider } = createCoreProvider({
     apiUrl,
     appUrl,
-    "transformUrlBeforeRedirectToLogin": ({ url }) => {
+    transformUrlBeforeRedirectToLogin: ({ url }) => {
         const parsedUrl = new URL(url);
         parsedUrl.searchParams.set("dark", `${getIsDark()}`);
         return parsedUrl.toString();
     },
-    "getCurrentLang": () => evtLang.state,
+    getCurrentLang: () => evtLang.state,
     // TODO: Remove, this was to redirect to an other instance of the sill
-    "onMoved": ({ redirectUrl }) => {
+    onMoved: ({ redirectUrl }) => {
         const currentUrlObj = new URL(window.location.href);
 
         const newPathname = currentUrlObj.pathname.replace(appPath, "");
@@ -57,9 +57,7 @@ export default function App() {
     const { css } = useCss();
 
     return (
-        <CoreProvider
-            fallback={<LoadingFallback className={css({ "height": "100vh" })} />}
-        >
+        <CoreProvider fallback={<LoadingFallback className={css({ height: "100vh" })} />}>
             <RouteProvider>
                 <ContextualizedApp />
             </RouteProvider>
@@ -76,14 +74,14 @@ function ContextualizedApp() {
     const headerUserAuthenticationApi = useConst(() =>
         userAuthentication.getIsUserLoggedIn()
             ? {
-                  "isUserLoggedIn": true as const,
-                  "logout": () => userAuthentication.logout({ "redirectTo": "home" })
+                  isUserLoggedIn: true as const,
+                  logout: () => userAuthentication.logout({ redirectTo: "home" })
               }
             : {
-                  "isUserLoggedIn": false as const,
-                  "login": () =>
-                      userAuthentication.login({ "doesCurrentHrefRequiresAuth": false }),
-                  "register": () => userAuthentication.register()
+                  isUserLoggedIn: false as const,
+                  login: () =>
+                      userAuthentication.login({ doesCurrentHrefRequiresAuth: false }),
+                  register: () => userAuthentication.register()
               }
     );
 
@@ -120,7 +118,7 @@ function ContextualizedApp() {
                                     !userAuthentication.getIsUserLoggedIn()
                                 ) {
                                     userAuthentication.login({
-                                        "doesCurrentHrefRequiresAuth": true
+                                        doesCurrentHrefRequiresAuth: true
                                     });
                                     return <LoadingFallback />;
                                 }
@@ -158,19 +156,19 @@ const useStyles = tss
     .withName({ App })
     .withParams<{ headerHeight: number }>()
     .create(({ headerHeight }) => ({
-        "root": {
-            "height": "100vh",
-            "display": "flex",
-            "flexDirection": "column"
+        root: {
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column"
         },
-        "main": {
-            "flex": 1,
+        main: {
+            flex: 1,
             [`& .${loadingFallbackClassName}`]: {
-                "height": `calc(100vh - ${headerHeight}px)`
+                height: `calc(100vh - ${headerHeight}px)`
             }
         },
-        "page": {
-            "animation": `${keyframes`
+        page: {
+            animation: `${keyframes`
           0% {
               opacity: 0;
           }

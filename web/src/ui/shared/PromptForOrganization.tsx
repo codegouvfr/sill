@@ -60,8 +60,8 @@ export const OrganizationField = ({ firstTime }: PromptForOrganizationProps) => 
                     setOrganizationInputValue(value);
                 }}
                 dsfrInputProps={{
-                    "label": t("promptForOrganization.organization"),
-                    "disabled": organization.isBeingUpdated
+                    label: t("promptForOrganization.organization"),
+                    disabled: organization.isBeingUpdated
                 }}
                 disabled={organization.isBeingUpdated}
             />
@@ -73,8 +73,8 @@ export const OrganizationField = ({ firstTime }: PromptForOrganizationProps) => 
                         className={fr.cx("fr-ml-2w")}
                         onClick={() =>
                             userAccountManagement.updateField({
-                                "fieldName": "organization",
-                                "value": organizationInputValue
+                                fieldName: "organization",
+                                value: organizationInputValue
                             })
                         }
                         disabled={

@@ -2,7 +2,7 @@ import { createGroup, defineRoute, createRouter, type Route } from "type-route";
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "addSoftwareLanding": defineRoute(appPath + "/add-software")
+    addSoftwareLanding: defineRoute(appPath + "/add-software")
 };
 
 export const routeGroup = createGroup(Object.values(createRouter(routeDefs).routes));

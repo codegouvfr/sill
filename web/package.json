@@ -75,7 +75,7 @@
         "eslint-plugin-tss-unused-classes": "^1.0.3",
         "minimal-polyfills": "^2.2.3",
         "node-fetch": "^2.6.1",
-        "prettier": "^2.3.0",
+        "prettier": "^3.5.1",
         "react-app-rewired": "^2.2.1",
         "rimraf": "^5.0.5",
         "source-map-explorer": "^2.5.2",
@@ -100,7 +100,10 @@
             "prefer-const": "off",
             "no-lone-blocks": "off",
             "tss-unused-classes/unused-classes": "warn",
-            "no-sequences": "off"
+            "no-sequences": "off",
+            "react/self-closing-comp": ["error",{
+                "component": true
+            }]
         }
     },
     "browserslist": {

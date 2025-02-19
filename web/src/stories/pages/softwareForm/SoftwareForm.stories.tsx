@@ -4,19 +4,19 @@ import { createMockRoute, getStoryFactory } from "stories/getStory";
 
 const { meta, getStory } = getStoryFactory({
     sectionName,
-    "wrappedComponent": { SoftwareForm }
+    wrappedComponent: { SoftwareForm }
 });
 
 export default meta;
 
 export const VueCreation = getStory({
-    "route": createMockRoute("softwareCreationForm", {
-        "externalId": undefined
+    route: createMockRoute("softwareCreationForm", {
+        externalId: undefined
     })
 });
 
 export const VueUpdate = getStory({
-    "route": createMockRoute("softwareUpdateForm", {
-        "name": "NextCloud"
+    route: createMockRoute("softwareUpdateForm", {
+        name: "NextCloud"
     })
 });

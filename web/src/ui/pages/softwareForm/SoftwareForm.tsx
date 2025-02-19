@@ -49,13 +49,13 @@ export default function SoftwareForm(props: Props) {
                 switch (route.name) {
                     case "softwareCreationForm":
                         return {
-                            "scenario": "create",
-                            "externalId": route.params.externalId
+                            scenario: "create",
+                            externalId: route.params.externalId
                         };
                     case "softwareUpdateForm":
                         return {
-                            "scenario": "update",
-                            "softwareName": route.params.name
+                            scenario: "update",
+                            softwareName: route.params.name
                         };
                 }
             })()
@@ -70,7 +70,7 @@ export default function SoftwareForm(props: Props) {
                 action => action.action === "redirect",
                 ctx,
                 ({ softwareName }) =>
-                    routes.softwareDetails({ "name": softwareName }).push()
+                    routes.softwareDetails({ name: softwareName }).push()
             ),
         []
     );
@@ -92,10 +92,10 @@ export default function SoftwareForm(props: Props) {
                 <Breadcrumb
                     segments={[
                         {
-                            "linkProps": {
+                            linkProps: {
                                 ...routes.addSoftwareLanding().link
                             },
-                            "label": t("app.add software or service")
+                            label: t("app.add software or service")
                         }
                     ]}
                     currentPageLabel={(() => {
@@ -123,12 +123,12 @@ export default function SoftwareForm(props: Props) {
                                 case "softwareCreationForm":
                                     return formData.step2?.softwareName
                                         ? t("softwareForm.add software", {
-                                              "name": formData.step2.softwareName
+                                              name: formData.step2.softwareName
                                           })
                                         : t("softwareForm.add unamed software");
                                 case "softwareUpdateForm":
                                     return t("softwareForm.update software", {
-                                        "name": formData.step2?.softwareName ?? ""
+                                        name: formData.step2?.softwareName ?? ""
                                     });
                             }
                         })()}
@@ -194,7 +194,7 @@ export default function SoftwareForm(props: Props) {
                     initialFormData={formData.step1}
                     onSubmit={formData =>
                         softwareForm.setStep1Data({
-                            "formDataStep1": formData
+                            formDataStep1: formData
                         })
                     }
                     evtActionSubmit={evtActionSubmitStep.pipe(() => step === 1)}
@@ -205,13 +205,13 @@ export default function SoftwareForm(props: Props) {
                     initialFormData={formData.step2}
                     onSubmit={formData =>
                         softwareForm.setStep2Data({
-                            "formDataStep2": formData
+                            formDataStep2: formData
                         })
                     }
                     getAutofillDataFromWikidata={softwareForm.getAutofillData}
                     getLibreSoftwareWikidataOptions={queryString =>
                         softwareForm.getExternalSoftwareOptions({
-                            "language": lang,
+                            language: lang,
                             queryString
                         })
                     }
@@ -223,7 +223,7 @@ export default function SoftwareForm(props: Props) {
                     onSubmit={formData => {
                         console.log("formData : ", formData);
                         softwareForm.setStep3Data({
-                            "formDataStep3": formData
+                            formDataStep3: formData
                         });
                     }}
                     isCloudNativeSoftware={formData.step1?.softwareType.type === "cloud"}
@@ -235,12 +235,12 @@ export default function SoftwareForm(props: Props) {
                     evtActionSubmit={evtActionSubmitStep.pipe(() => step === 4)}
                     onSubmit={formData =>
                         softwareForm.setStep4DataAndSubmit({
-                            "formDataStep4": formData
+                            formDataStep4: formData
                         })
                     }
                     getExternalSoftwareOptions={queryString =>
                         softwareForm.getExternalSoftwareOptions({
-                            "language": lang,
+                            language: lang,
                             queryString
                         })
                     }
@@ -266,11 +266,11 @@ export default function SoftwareForm(props: Props) {
                                 switch (route.name) {
                                     case "softwareCreationForm":
                                         return t("softwareForm.add software", {
-                                            "name": formData.step2?.softwareName
+                                            name: formData.step2?.softwareName
                                         });
                                     case "softwareUpdateForm":
                                         return t("softwareForm.update software", {
-                                            "name": formData.step2?.softwareName ?? ""
+                                            name: formData.step2?.softwareName ?? ""
                                         });
                                 }
                             })()}
@@ -295,29 +295,29 @@ const useStyles = tss
     .withName({ SoftwareForm })
     .withParams<{ step: number | undefined }>()
     .create(({ step }) => ({
-        "step1": {
-            "display": step !== 1 ? "none" : undefined
+        step1: {
+            display: step !== 1 ? "none" : undefined
         },
-        "step2": {
-            "display": step !== 2 ? "none" : undefined
+        step2: {
+            display: step !== 2 ? "none" : undefined
         },
-        "step3": {
-            "display": step !== 3 ? "none" : undefined
+        step3: {
+            display: step !== 3 ? "none" : undefined
         },
-        "step4": {
-            "display": step !== 4 ? "none" : undefined
+        step4: {
+            display: step !== 4 ? "none" : undefined
         },
-        "breadcrumb": {
-            "marginBottom": fr.spacing("4v")
+        breadcrumb: {
+            marginBottom: fr.spacing("4v")
         },
-        "headerDeclareUserOrReferent": {
-            "display": "flex",
-            "alignItems": "center",
-            "marginBottom": fr.spacing("10v")
+        headerDeclareUserOrReferent: {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: fr.spacing("10v")
         },
-        "backButton": {
-            "background": "none",
-            "marginRight": fr.spacing("4v"),
+        backButton: {
+            background: "none",
+            marginRight: fr.spacing("4v"),
 
             "&>i": {
                 "&::before": {
@@ -325,24 +325,24 @@ const useStyles = tss
                 }
             }
         },
-        "title": {
-            "marginBottom": fr.spacing("1v")
+        title: {
+            marginBottom: fr.spacing("1v")
         },
-        "stepper": {
-            "flex": "1"
+        stepper: {
+            flex: "1"
         },
-        "footerContainer": {
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "end"
+        footerContainer: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end"
         },
-        "softwareDetails": {
-            "marginRight": fr.spacing("4v"),
+        softwareDetails: {
+            marginRight: fr.spacing("4v"),
             "&&::before": {
                 "--icon-size": fr.spacing("6v")
             }
         },
-        "progressSubmit": {
-            "marginLeft": fr.spacing("4v")
+        progressSubmit: {
+            marginLeft: fr.spacing("4v")
         }
     }));

@@ -124,8 +124,8 @@ export function SoftwareCatalogSearch(props: Props) {
     }, [areFiltersOpen]);
 
     const { classes, cx } = useStyles({
-        "filterWrapperMaxHeight": areFiltersOpen
-            ? filtersWrapperDivElement?.scrollHeight ?? 0
+        filterWrapperMaxHeight: areFiltersOpen
+            ? (filtersWrapperDivElement?.scrollHeight ?? 0)
             : 0
     });
 
@@ -199,20 +199,20 @@ export function SoftwareCatalogSearch(props: Props) {
                             </>
                         }
                         nativeSelectProps={{
-                            "onChange": event =>
+                            onChange: event =>
                                 onOrganizationChange(event.target.value || undefined),
-                            "value": organization ?? ""
+                            value: organization ?? ""
                         }}
                         disabled={organizationOptions.length === 0}
                         options={[
                             {
-                                "label": t("app.allFeminine"),
-                                "value": ""
+                                label: t("app.allFeminine"),
+                                value: ""
                             },
                             ...organizationOptions.map(
                                 ({ organization, softwareCount }) => ({
-                                    "value": organization,
-                                    "label": `${getOrganizationFullName(
+                                    value: organization,
+                                    label: `${getOrganizationFullName(
                                         organization
                                     )} (${softwareCount})`
                                 })
@@ -227,23 +227,23 @@ export function SoftwareCatalogSearch(props: Props) {
                         label={t("softwareCatalogSearch.categoriesLabel")}
                         disabled={categoryOptions.length === 0}
                         nativeSelectProps={{
-                            "onChange": event =>
+                            onChange: event =>
                                 onCategoryChange(event.target.value || undefined),
-                            "value": category ?? ""
+                            value: category ?? ""
                         }}
                         options={[
                             {
-                                "label": t("app.allFeminine"),
-                                "value": ""
+                                label: t("app.allFeminine"),
+                                value: ""
                             },
                             ...categoryOptions
                                 .map(({ category, softwareCount }) => ({
-                                    "value": category,
-                                    "label": `${
+                                    value: category,
+                                    label: `${
                                         lang === "fr"
-                                            ? softwareCategoriesFrBySoftwareCategoryEn[
+                                            ? (softwareCategoriesFrBySoftwareCategoryEn[
                                                   category
-                                              ] ?? category
+                                              ] ?? category)
                                             : category
                                     } (${softwareCount})`
                                 }))
@@ -263,19 +263,19 @@ export function SoftwareCatalogSearch(props: Props) {
                         className={classes.filterSelectGroup}
                         label={t("softwareCatalogSearch.environnement label")}
                         nativeSelectProps={{
-                            "onChange": event =>
+                            onChange: event =>
                                 onEnvironmentChange(event.target.value || undefined),
-                            "value": environment ?? ""
+                            value: environment ?? ""
                         }}
                         options={[
                             {
-                                "label": t("app.all"),
-                                "value": "" as const
+                                label: t("app.all"),
+                                value: "" as const
                             },
                             ...environmentOptions.map(
                                 ({ environment, softwareCount }) => ({
-                                    "value": environment,
-                                    "label": `${t(
+                                    value: environment,
+                                    label: `${t(
                                         `softwareCatalogSearch.${environment}`
                                     )} (${softwareCount})`
                                 })
@@ -306,7 +306,7 @@ export function SoftwareCatalogSearch(props: Props) {
                                 t(
                                     "softwareCatalogSearch.number of prerogatives selected",
                                     {
-                                        "count": prerogatives.length
+                                        count: prerogatives.length
                                     }
                                 )
                             }
@@ -362,21 +362,21 @@ export function SoftwareCatalogSearch(props: Props) {
                         className={classes.filterSelectGroup}
                         label={t("softwareCatalogSearch.programmingLanguages label")}
                         nativeSelectProps={{
-                            "onChange": event =>
+                            onChange: event =>
                                 onProgrammingLanguageChange(
                                     event.target.value || undefined
                                 ),
-                            "value": programmingLanguage ?? ""
+                            value: programmingLanguage ?? ""
                         }}
                         options={[
                             {
-                                "label": t("app.all"),
-                                "value": "" as const
+                                label: t("app.all"),
+                                value: "" as const
                             },
                             ...programmingLanguageOptions.map(
                                 ({ programmingLanguage, softwareCount }) => ({
-                                    "value": programmingLanguage,
-                                    "label": `${programmingLanguage} (${softwareCount})`
+                                    value: programmingLanguage,
+                                    label: `${programmingLanguage} (${softwareCount})`
                                 })
                             )
                         ]}
@@ -393,60 +393,58 @@ const useStyles = tss
     .withName({ SoftwareCatalogSearch })
     .withParams<{ filterWrapperMaxHeight: number }>()
     .create(({ filterWrapperMaxHeight }) => ({
-        "root": {
+        root: {
             "&:before": {
-                "content": "none"
+                content: "none"
             }
         },
-        "basicSearch": {
-            "display": "flex",
-            "paddingTop": fr.spacing("6v")
+        basicSearch: {
+            display: "flex",
+            paddingTop: fr.spacing("6v")
         },
-        "searchBar": {
-            "flex": 1
+        searchBar: {
+            flex: 1
         },
-        "filterButton": {
-            "backgroundColor":
-                fr.colors.decisions.background.actionLow.blueFrance.default,
+        filterButton: {
+            backgroundColor: fr.colors.decisions.background.actionLow.blueFrance.default,
             "&&&:hover": {
-                "backgroundColor":
-                    fr.colors.decisions.background.actionLow.blueFrance.hover
+                backgroundColor: fr.colors.decisions.background.actionLow.blueFrance.hover
             },
-            "color": fr.colors.decisions.text.actionHigh.blueFrance.default,
-            "marginLeft": fr.spacing("4v")
+            color: fr.colors.decisions.text.actionHigh.blueFrance.default,
+            marginLeft: fr.spacing("4v")
         },
-        "filtersWrapper": {
-            "transition": "max-height 0.2s ease-out",
-            "maxHeight": filterWrapperMaxHeight,
-            "overflow": "hidden",
-            "marginTop": fr.spacing("4v"),
-            "display": "grid",
-            "gridTemplateColumns": `repeat(4, minmax(20%, 1fr))`,
-            "columnGap": fr.spacing("4v"),
+        filtersWrapper: {
+            transition: "max-height 0.2s ease-out",
+            maxHeight: filterWrapperMaxHeight,
+            overflow: "hidden",
+            marginTop: fr.spacing("4v"),
+            display: "grid",
+            gridTemplateColumns: `repeat(4, minmax(20%, 1fr))`,
+            columnGap: fr.spacing("4v"),
             [fr.breakpoints.down("md")]: {
-                "gridTemplateColumns": `repeat(1, 1fr)`
+                gridTemplateColumns: `repeat(1, 1fr)`
             },
-            "paddingLeft": fr.spacing("1v")
+            paddingLeft: fr.spacing("1v")
         },
-        "filterSelectGroup": {
+        filterSelectGroup: {
             "&:not(:last-of-type)": {
-                "borderRight": `1px ${fr.colors.decisions.border.default.grey.default} solid`,
-                "paddingRight": fr.spacing("4v")
+                borderRight: `1px ${fr.colors.decisions.border.default.grey.default} solid`,
+                paddingRight: fr.spacing("4v")
             },
             [fr.breakpoints.down("md")]: {
                 "&:not(:last-of-type)": {
-                    "border": "none"
+                    border: "none"
                 }
             }
         },
-        "multiSelect": {
-            "marginTop": fr.spacing("2v"),
-            "paddingRight": 0,
+        multiSelect: {
+            marginTop: fr.spacing("2v"),
+            paddingRight: 0,
             "& > .MuiInputBase-input": {
-                "padding": 0
+                padding: 0
             },
             "& > .MuiSvgIcon-root": {
-                "display": "none"
+                display: "none"
             }
         }
     }));

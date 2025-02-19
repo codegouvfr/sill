@@ -15,7 +15,7 @@ export function useAsync<T>(
               }
             | undefined;
     }>({
-        "current": undefined
+        current: undefined
     });
 
     useEffect(() => {

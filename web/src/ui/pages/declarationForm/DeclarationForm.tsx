@@ -44,7 +44,7 @@ export default function DeclarationForm(props: Props) {
     );
 
     useEffect(() => {
-        declarationForm.initialize({ "softwareName": route.params.name });
+        declarationForm.initialize({ softwareName: route.params.name });
         return () => declarationForm.clear();
     }, []);
 
@@ -68,7 +68,7 @@ export default function DeclarationForm(props: Props) {
                 action => action.action === "redirect",
                 ctx,
                 ({ softwareName }) =>
-                    routes.softwareDetails({ "name": softwareName }).push()
+                    routes.softwareDetails({ name: softwareName }).push()
             ),
         []
     );
@@ -99,18 +99,18 @@ export default function DeclarationForm(props: Props) {
                 <Breadcrumb
                     segments={[
                         {
-                            "linkProps": {
+                            linkProps: {
                                 ...routes.softwareCatalog().link
                             },
-                            "label": t("declarationForm.catalog breadcrumb")
+                            label: t("declarationForm.catalog breadcrumb")
                         },
                         {
-                            "linkProps": {
+                            linkProps: {
                                 ...routes.softwareDetails({
-                                    "name": software.softwareName
+                                    name: software.softwareName
                                 }).link
                             },
-                            "label": software.softwareName
+                            label: software.softwareName
                         }
                     ]}
                     currentPageLabel={t(
@@ -154,7 +154,7 @@ export default function DeclarationForm(props: Props) {
                             )}
                             seeUserAndReferent={
                                 routes.softwareUsersAndReferents({
-                                    "name": software.softwareName
+                                    name: software.softwareName
                                 }).link
                             }
                             referentCount={software.referentCount}
@@ -274,26 +274,26 @@ const useStyles = tss
         declarationType: "user" | "referent" | undefined;
     }>()
     .create(({ step, declarationType }) => ({
-        "step1": {
-            "display": step !== 1 ? "none" : undefined
+        step1: {
+            display: step !== 1 ? "none" : undefined
         },
-        "step2User": {
-            "display": step !== 2 || declarationType !== "user" ? "none" : undefined
+        step2User: {
+            display: step !== 2 || declarationType !== "user" ? "none" : undefined
         },
-        "step2Referent": {
-            "display": step !== 2 || declarationType !== "referent" ? "none" : undefined
+        step2Referent: {
+            display: step !== 2 || declarationType !== "referent" ? "none" : undefined
         },
-        "breadcrumb": {
-            "marginBottom": fr.spacing("4v")
+        breadcrumb: {
+            marginBottom: fr.spacing("4v")
         },
-        "headerDeclareUserOrReferent": {
-            "display": "flex",
-            "alignItems": "center",
-            "marginBottom": fr.spacing("10v")
+        headerDeclareUserOrReferent: {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: fr.spacing("10v")
         },
-        "backButton": {
-            "background": "none",
-            "marginRight": fr.spacing("4v"),
+        backButton: {
+            background: "none",
+            marginRight: fr.spacing("4v"),
 
             "&>i": {
                 "&::before": {
@@ -301,68 +301,68 @@ const useStyles = tss
                 }
             }
         },
-        "title": {
-            "marginBottom": fr.spacing("1v")
+        title: {
+            marginBottom: fr.spacing("1v")
         },
-        "formContainer": {
-            "display": "grid",
-            "gridTemplateColumns": `repeat(2, 1fr)`,
+        formContainer: {
+            display: "grid",
+            gridTemplateColumns: `repeat(2, 1fr)`,
 
             [fr.breakpoints.down("md")]: {
-                "gridTemplateColumns": `repeat(1, 1fr)`
+                gridTemplateColumns: `repeat(1, 1fr)`
             }
         },
-        "leftCol": {
-            "marginLeft": fr.spacing("12v"),
-            "paddingRight": fr.spacing("16v"),
-            "borderRight": `1px ${fr.colors.decisions.border.default.grey.default} solid`,
+        leftCol: {
+            marginLeft: fr.spacing("12v"),
+            paddingRight: fr.spacing("16v"),
+            borderRight: `1px ${fr.colors.decisions.border.default.grey.default} solid`,
 
             [fr.breakpoints.down("md")]: {
-                "borderRight": "none",
-                "marginLeft": "0",
-                "paddingRight": "0"
+                borderRight: "none",
+                marginLeft: "0",
+                paddingRight: "0"
             }
         },
-        "softwareNameContainer": {
-            "display": "flex",
-            "alignItems": "center",
-            "marginBottom": fr.spacing("3v")
+        softwareNameContainer: {
+            display: "flex",
+            alignItems: "center",
+            marginBottom: fr.spacing("3v")
         },
-        "logoWrapper": {
-            "width": fr.spacing("14v"),
-            "height": fr.spacing("14v"),
-            "marginRight": fr.spacing("3v"),
-            "overflow": "hidden"
+        logoWrapper: {
+            width: fr.spacing("14v"),
+            height: fr.spacing("14v"),
+            marginRight: fr.spacing("3v"),
+            overflow: "hidden"
         },
-        "logo": {
-            "height": "100%"
+        logo: {
+            height: "100%"
         },
-        "softwareName": {
-            "marginBottom": 0
+        softwareName: {
+            marginBottom: 0
         },
-        "detailUserAndReferent": {
-            "color": fr.colors.decisions.text.actionHigh.blueFrance.default
+        detailUserAndReferent: {
+            color: fr.colors.decisions.text.actionHigh.blueFrance.default
         },
-        "rightCol": {
-            "marginLeft": fr.spacing("6v"),
-            "paddingLeft": fr.spacing("10v"),
+        rightCol: {
+            marginLeft: fr.spacing("6v"),
+            paddingLeft: fr.spacing("10v"),
             [fr.breakpoints.down("md")]: {
-                "marginLeft": "0",
-                "paddingLeft": "0"
+                marginLeft: "0",
+                paddingLeft: "0"
             }
         },
-        "stepper": {
-            "flex": "1"
+        stepper: {
+            flex: "1"
         },
-        "buttons": {
-            "display": "flex",
-            "alignItems": "center",
-            "justifyContent": "end"
+        buttons: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "end"
         },
-        "back": {
-            "marginRight": fr.spacing("4v")
+        back: {
+            marginRight: fr.spacing("4v")
         },
-        "progressSubmit": {
-            "marginLeft": fr.spacing("4v")
+        progressSubmit: {
+            marginLeft: fr.spacing("4v")
         }
     }));

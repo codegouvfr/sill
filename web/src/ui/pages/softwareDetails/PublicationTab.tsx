@@ -23,10 +23,9 @@ export const PublicationTab = (props: Props) => {
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{
-                                    "marginRight": fr.spacing("2v"),
-                                    "color":
-                                        fr.colors.decisions.text.actionHigh.blueFrance
-                                            .default
+                                    marginRight: fr.spacing("2v"),
+                                    color: fr.colors.decisions.text.actionHigh.blueFrance
+                                        .default
                                 }}
                             >
                                 {article["@id"]}

@@ -3,36 +3,36 @@ import type { TrpcRouterInput, TrpcRouterOutput } from "api";
 
 export type SillApi = {
     getCurrentUser: {
-        (params: TrpcRouterInput["getCurrentUser"]): Promise<
-            TrpcRouterOutput["getCurrentUser"]
-        >;
+        (
+            params: TrpcRouterInput["getCurrentUser"]
+        ): Promise<TrpcRouterOutput["getCurrentUser"]>;
         clear: () => void;
     };
     getExternalSoftwareDataOrigin: {
-        (params: TrpcRouterInput["getExternalSoftwareDataOrigin"]): Promise<
-            TrpcRouterOutput["getExternalSoftwareDataOrigin"]
-        >;
+        (
+            params: TrpcRouterInput["getExternalSoftwareDataOrigin"]
+        ): Promise<TrpcRouterOutput["getExternalSoftwareDataOrigin"]>;
         clear: () => void;
     };
     getRedirectUrl: (
         params: TrpcRouterInput["getRedirectUrl"]
     ) => Promise<TrpcRouterOutput["getRedirectUrl"]>;
     getApiVersion: {
-        (params: TrpcRouterInput["getApiVersion"]): Promise<
-            TrpcRouterOutput["getApiVersion"]
-        >;
+        (
+            params: TrpcRouterInput["getApiVersion"]
+        ): Promise<TrpcRouterOutput["getApiVersion"]>;
         clear: () => void;
     };
     getOidcParams: {
-        (params: TrpcRouterInput["getOidcParams"]): Promise<
-            TrpcRouterOutput["getOidcParams"]
-        >;
+        (
+            params: TrpcRouterInput["getOidcParams"]
+        ): Promise<TrpcRouterOutput["getOidcParams"]>;
         clear: () => void;
     };
     getSoftwares: {
-        (params: TrpcRouterInput["getSoftwares"]): Promise<
-            TrpcRouterOutput["getSoftwares"]
-        >;
+        (
+            params: TrpcRouterInput["getSoftwares"]
+        ): Promise<TrpcRouterOutput["getSoftwares"]>;
         clear: () => void;
     };
     getInstances: {
@@ -74,27 +74,27 @@ export type SillApi = {
     ) => Promise<TrpcRouterOutput["updateEmail"]>;
 
     getAllOrganizations: {
-        (params: TrpcRouterInput["getAllOrganizations"]): Promise<
-            TrpcRouterOutput["getAllOrganizations"]
-        >;
+        (
+            params: TrpcRouterInput["getAllOrganizations"]
+        ): Promise<TrpcRouterOutput["getAllOrganizations"]>;
         clear: () => void;
     };
     getTotalReferentCount: {
-        (params: TrpcRouterInput["getTotalReferentCount"]): Promise<
-            TrpcRouterOutput["getTotalReferentCount"]
-        >;
+        (
+            params: TrpcRouterInput["getTotalReferentCount"]
+        ): Promise<TrpcRouterOutput["getTotalReferentCount"]>;
         clear: () => void;
     };
     getRegisteredUserCount: {
-        (params: TrpcRouterInput["getRegisteredUserCount"]): Promise<
-            TrpcRouterOutput["getRegisteredUserCount"]
-        >;
+        (
+            params: TrpcRouterInput["getRegisteredUserCount"]
+        ): Promise<TrpcRouterOutput["getRegisteredUserCount"]>;
         clear: () => void;
     };
     getTermsOfServiceUrl: {
-        (params: TrpcRouterInput["getTermsOfServiceUrl"]): Promise<
-            TrpcRouterOutput["getTermsOfServiceUrl"]
-        >;
+        (
+            params: TrpcRouterInput["getTermsOfServiceUrl"]
+        ): Promise<TrpcRouterOutput["getTermsOfServiceUrl"]>;
         clear: () => void;
     };
     getMarkdown: (

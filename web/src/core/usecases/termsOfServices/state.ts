@@ -19,17 +19,17 @@ namespace State {
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not initialized",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not initialized",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializationStarted": state => {
+    reducers: {
+        initializationStarted: state => {
             if (state.stateDescription === "not initialized") {
                 state.isInitializing = true;
             }
         },
-        "initialized": (
+        initialized: (
             _state,
             {
                 payload
@@ -42,7 +42,7 @@ export const { reducer, actions } = createUsecaseActions({
             const { markdown } = payload;
 
             return {
-                "stateDescription": "ready",
+                stateDescription: "ready",
                 markdown
             };
         }

@@ -9,14 +9,14 @@ export const name = "declarationRemoval" as const;
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "isRemovingUserDeclaration": false
+    initialState: id<State>({
+        isRemovingUserDeclaration: false
     }),
-    "reducers": {
-        "declarationRemovalStarted": state => {
+    reducers: {
+        declarationRemovalStarted: state => {
             state.isRemovingUserDeclaration = true;
         },
-        "userOrReferentRemoved": state => {
+        userOrReferentRemoved: state => {
             state.isRemovingUserDeclaration = false;
         }
     }

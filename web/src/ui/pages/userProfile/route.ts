@@ -2,9 +2,9 @@ import { createGroup, defineRoute, createRouter, param, type Route } from "type-
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "userProfile": defineRoute(
+    userProfile: defineRoute(
         {
-            "email": param.query.string
+            email: param.query.string
         },
         () => appPath + "/user"
     )

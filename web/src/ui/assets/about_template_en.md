@@ -10,13 +10,13 @@ _(Describe your journey with open source software. When did you start using it? 
 
 _(Share your experiences and the ways you have been involved in open-source projects. You might have contributed translations, helped colleagues, participated in forums, or any other form of contribution.)_
 
--   **Project/Software Name**: Briefly describe your involvement.
+- **Project/Software Name**: Briefly describe your involvement.
 
 ## Further Reading
 
 _(Do you have a blog or articles you've written on the topic of open source software? Provide links and brief descriptions here.)_
 
--   [Blog Post/Article Title](link) - Short description of the content.
+- [Blog Post/Article Title](link) - Short description of the content.
 
 ## Contact Me
 

@@ -40,29 +40,29 @@ export const Header = memo(
         const navigations = [];
         if (config.header.menu.welcome.enabled) {
             navigations.push({
-                "isActive": routeName === routes.home.name,
-                "linkProps": routes.home().link,
-                "text": t("header.navigation welcome")
+                isActive: routeName === routes.home.name,
+                linkProps: routes.home().link,
+                text: t("header.navigation welcome")
             });
         }
         if (config.header.menu.catalog.enabled) {
             navigations.push({
-                "isActive":
+                isActive:
                     routeName === routes.softwareCatalog.name ||
                     routeName === routes.softwareDetails.name ||
                     routeName === routes.softwareUsersAndReferents.name,
-                "linkProps": routes.softwareCatalog().link,
-                "text": t("header.navigation catalog")
+                linkProps: routes.softwareCatalog().link,
+                text: t("header.navigation catalog")
             });
         }
         if (config.header.menu.addSoftware.enabled) {
             navigations.push({
-                "isActive":
+                isActive:
                     routeName === routes.addSoftwareLanding.name ||
                     routeName === routes.softwareUpdateForm.name ||
                     routeName === routes.softwareCreationForm.name,
-                "linkProps": routes.addSoftwareLanding().link,
-                "text":
+                linkProps: routes.addSoftwareLanding().link,
+                text:
                     routeName === routes.softwareUpdateForm.name
                         ? t("header.navigation update software")
                         : t("header.navigation add software")
@@ -70,22 +70,22 @@ export const Header = memo(
         }
         if (config.header.menu.about.enabled) {
             navigations.push({
-                "isActive": routeName === routes.readme.name,
-                "linkProps": routes.readme().link,
-                "text": t("header.navigation about")
+                isActive: routeName === routes.readme.name,
+                linkProps: routes.readme().link,
+                text: t("header.navigation about")
             });
         }
         if (config.header.menu.catalog.enabled) {
             navigations.push({
-                "linkProps": {
-                    "target": "_blank",
+                linkProps: {
+                    target: "_blank",
                     /* cSpell:disable */
-                    "href": `mailto:${contactEmail}?subject=${encodeURIComponent(
+                    href: `mailto:${contactEmail}?subject=${encodeURIComponent(
                         "Demande d'accompagnement"
                     )}`
                     /* cSpell:enable */
                 },
-                "text": t("header.navigation support request")
+                text: t("header.navigation support request")
             });
         }
 
@@ -120,7 +120,7 @@ export const Header = memo(
                 serviceTitle={t("header.title")}
                 homeLinkProps={{
                     ...routes.home().link,
-                    "title": t("header.home title")
+                    title: t("header.home title")
                 }}
                 quickAccessItems={quickAccess}
                 navigation={navigations}

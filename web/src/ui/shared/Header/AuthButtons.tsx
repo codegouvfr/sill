@@ -59,15 +59,15 @@ export function AuthButtons(props: Props) {
                 id={`account-${id}`}
                 quickAccessItem={
                     {
-                        "iconId": "fr-icon-account-fill",
-                        "linkProps": {
-                            "className": cx(
+                        iconId: "fr-icon-account-fill",
+                        linkProps: {
+                            className: cx(
                                 fr.cx("fr-btn--tertiary"),
                                 classes.myAccountButton
                             ),
                             ...routes.account().link
                         },
-                        "text": t("authButtons.account")
+                        text: t("authButtons.account")
                     } as const
                 }
             />
@@ -89,9 +89,9 @@ const useStyles = tss
     .withName({ AuthButtons })
     .withParams<{ isOnPageMyAccount: boolean }>()
     .create(({ isOnPageMyAccount }) => ({
-        "myAccountButton": {
+        myAccountButton: {
             "&&": {
-                "backgroundColor": !isOnPageMyAccount
+                backgroundColor: !isOnPageMyAccount
                     ? undefined
                     : fr.colors.decisions.background.default.grey.hover
             }

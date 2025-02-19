@@ -13,8 +13,8 @@ export function createOidc(params: {
 }): Oidc {
     const isUserLoggedIn = (() => {
         const result = retrieveParamFromUrl({
-            "url": window.location.href,
-            "name": urlParamName
+            url: window.location.href,
+            name: urlParamName
         });
 
         return result.wasPresent
@@ -24,12 +24,12 @@ export function createOidc(params: {
 
     if (!isUserLoggedIn) {
         return id<Oidc.NotLoggedIn>({
-            "isUserLoggedIn": false,
-            "login": async () => {
+            isUserLoggedIn: false,
+            login: async () => {
                 const { newUrl } = addParamToUrl({
-                    "url": window.location.href,
-                    "name": urlParamName,
-                    "value": "true"
+                    url: window.location.href,
+                    name: urlParamName,
+                    value: "true"
                 });
 
                 window.location.href = newUrl;
@@ -40,8 +40,8 @@ export function createOidc(params: {
     }
 
     return id<Oidc.LoggedIn>({
-        "isUserLoggedIn": true,
-        "getTokens": (() => {
+        isUserLoggedIn: true,
+        getTokens: (() => {
             const { jwtClaimByUserKey, user } = params;
 
             const accessToken = encodeJwt(
@@ -55,18 +55,18 @@ export function createOidc(params: {
 
             return () => ({ accessToken });
         })(),
-        "logout": () => {
+        logout: () => {
             const { newUrl } = addParamToUrl({
-                "url": window.location.href,
-                "name": urlParamName,
-                "value": "false"
+                url: window.location.href,
+                name: urlParamName,
+                value: "false"
             });
 
             window.location.href = newUrl;
 
             return new Promise<never>(() => {});
         },
-        "renewTokens": () => Promise.reject("Not implemented")
+        renewTokens: () => Promise.reject("Not implemented")
     });
 }
 

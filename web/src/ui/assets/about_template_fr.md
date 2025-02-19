@@ -10,13 +10,13 @@ _(Décrivez votre parcours avec les logiciels libres. Quand avez-vous commencé 
 
 _(Partagez vos expériences et les façons dont vous avez été impliqué(e) dans des projets open source. Vous avez peut-être contribué des traductions, aidé des collègues, participé à des forums, ou toute autre forme de contribution.)_
 
--   **Nom du Projet/Logiciel**: Décrivez brièvement votre implication.
+- **Nom du Projet/Logiciel**: Décrivez brièvement votre implication.
 
 ## Lectures Complémentaires
 
 _(Avez-vous un blog ou des articles que vous avez écrits sur le sujet des logiciels libres ? Fournissez ici des liens et de brèves descriptions.)_
 
--   [Titre du Blog/Article](lien) - Brève description du contenu.
+- [Titre du Blog/Article](lien) - Brève description du contenu.
 
 ## Contactez-Moi
 

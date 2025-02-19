@@ -7,7 +7,7 @@ import "./ui/i18n/i18next";
 import { handleOidcCallback } from "oidc-spa/oidc/handleOidcCallback";
 handleOidcCallback();
 
-startReactDsfr({ "defaultColorScheme": "system" });
+startReactDsfr({ defaultColorScheme: "system" });
 
 const App = lazy(() => import("ui/App"));
 

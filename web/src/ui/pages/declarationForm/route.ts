@@ -10,11 +10,11 @@ import { z } from "zod";
 import { appPath } from "urls";
 
 export const routeDefs = {
-    "declarationForm": defineRoute(
+    declarationForm: defineRoute(
         {
-            "name": param.query.string,
-            "declarationType": param.query.optional.ofType({
-                "parse": raw => {
+            name: param.query.string,
+            declarationType: param.query.optional.ofType({
+                parse: raw => {
                     const schema = z.union([z.literal("user"), z.literal("referent")]);
 
                     try {
@@ -23,7 +23,7 @@ export const routeDefs = {
                         return noMatch;
                     }
                 },
-                "stringify": value => value
+                stringify: value => value
             })
         },
         () => appPath + `/declaration`

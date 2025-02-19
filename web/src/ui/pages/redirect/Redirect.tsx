@@ -50,7 +50,7 @@ export default function Redirect(props: Props) {
                         return;
                     }
 
-                    routes.softwareDetails({ "name": softwareName }).replace();
+                    routes.softwareDetails({ name: softwareName }).replace();
                 }
                 break;
             case "onyxiaUiSillCatalog":
@@ -59,7 +59,7 @@ export default function Redirect(props: Props) {
 
                     const { search } = parseQuery(q);
 
-                    routes.softwareCatalog({ "search": search || undefined }).replace();
+                    routes.softwareCatalog({ search: search || undefined }).replace();
                 }
                 break;
             case "onyxiaUiSillCard":
@@ -88,8 +88,8 @@ type Query = {
 function parseQuery(queryString: string): Query {
     if (!queryString.startsWith("{")) {
         return {
-            "search": queryString,
-            "tags": []
+            search: queryString,
+            tags: []
         };
     }
 

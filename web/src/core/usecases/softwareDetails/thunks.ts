@@ -9,7 +9,7 @@ import { apiSoftwareToExternalCatalogSoftware } from "core/usecases/softwareCata
 import { name, actions, type State } from "./state";
 
 export const thunks = {
-    "initialize":
+    initialize:
         (params: { softwareName: string }) =>
         async (...args) => {
             const { softwareName } = params;
@@ -79,19 +79,19 @@ export const thunks = {
 
                     if (agent === undefined) {
                         return {
-                            "isReferent": false,
-                            "isUser": false
+                            isReferent: false,
+                            isUser: false
                         };
                     }
 
                     return {
-                        "isReferent":
+                        isReferent:
                             agent.declarations.find(
                                 d =>
                                     d.softwareName === softwareName &&
                                     d.declarationType === "referent"
                             ) !== undefined,
-                        "isUser":
+                        isUser:
                             agent.declarations.find(
                                 d =>
                                     d.softwareName === softwareName &&
@@ -102,7 +102,7 @@ export const thunks = {
 
             dispatch(actions.initializationCompleted({ software, userDeclaration }));
         },
-    "clear":
+    clear:
         () =>
         (...args) => {
             const [dispatch, getState, extraArg] = args;
@@ -127,7 +127,7 @@ export const thunks = {
 
             dispatch(actions.cleared());
         },
-    "unreference":
+    unreference:
         (params: { reason: string }) =>
         async (...args) => {
             const { reason } = params;
@@ -143,7 +143,7 @@ export const thunks = {
             const time = Date.now();
 
             await sillApi.unreferenceSoftware({
-                "softwareId": state.software.softwareId,
+                softwareId: state.software.softwareId,
                 reason
             });
 
@@ -152,7 +152,7 @@ export const thunks = {
 } satisfies Thunks;
 
 const { getContext } = createUsecaseContextApi(() => ({
-    "detachHandlers": id<undefined | (() => void)>(undefined)
+    detachHandlers: id<undefined | (() => void)>(undefined)
 }));
 
 function apiSoftwareToSoftware(params: {
@@ -201,8 +201,8 @@ function apiSoftwareToSoftware(params: {
     } = apiSoftware;
 
     const { resolveLocalizedString } = createResolveLocalizedString({
-        "currentLanguage": "fr",
-        "fallbackLanguage": "en"
+        currentLanguage: "fr",
+        fallbackLanguage: "en"
     });
 
     const parentSoftware: State.Software["parentSoftware"] = (() => {
@@ -220,8 +220,8 @@ function apiSoftwareToSoftware(params: {
             }
 
             return {
-                "softwareName": software.softwareName,
-                "isInSill": true
+                softwareName: software.softwareName,
+                isInSill: true
             };
         }
 
@@ -232,9 +232,9 @@ function apiSoftwareToSoftware(params: {
         );
 
         return {
-            "isInSill": false,
-            "softwareName": resolveLocalizedString(parentWikidataSoftware_api.label),
-            "url": `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.externalId}`
+            isInSill: false,
+            softwareName: resolveLocalizedString(parentWikidataSoftware_api.label),
+            url: `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.externalId}`
         };
     })();
 
@@ -253,51 +253,51 @@ function apiSoftwareToSoftware(params: {
         },
         dereferencing,
         serviceProviders: serviceProviders ?? [],
-        "referentCount": Object.values(userAndReferentCountByOrganization)
+        referentCount: Object.values(userAndReferentCountByOrganization)
             .map(({ referentCount }) => referentCount)
             .reduce((prev, curr) => prev + curr, 0),
-        "userCount": Object.values(userAndReferentCountByOrganization)
+        userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         parentSoftware,
         addedTime,
-        "comptoirDuLibreServiceProviderUrl":
+        comptoirDuLibreServiceProviderUrl:
             comptoirDuLibreId === undefined
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${comptoirDuLibreId}`,
-        "annuaireCnllServiceProviders": annuaireCnllServiceProviders ?? [],
-        "comptoirDuLibreUrl":
+        annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? [],
+        comptoirDuLibreUrl:
             comptoirDuLibreId === undefined
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
-        "wikidataUrl":
+        wikidataUrl:
             externalDataOrigin !== "wikidata" || externalId === undefined
                 ? undefined
                 : `https://www.wikidata.org/wiki/${externalId}`,
-        "instances":
+        instances:
             softwareType.type !== "cloud"
                 ? undefined
                 : apiInstances
                       .filter(instance => instance.mainSoftwareSillId === softwareId)
                       .map(instance => ({
-                          "id": instance.id,
-                          "instanceUrl": instance.instanceUrl,
-                          "organization": instance.organization,
-                          "targetAudience": instance.targetAudience,
-                          "isPublic": instance.isPublic
+                          id: instance.id,
+                          instanceUrl: instance.instanceUrl,
+                          organization: instance.organization,
+                          targetAudience: instance.targetAudience,
+                          isPublic: instance.isPublic
                       })),
-        "similarSoftwares": similarSoftwares_api.map(similarSoftware => {
+        similarSoftwares: similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
                 apiSoftwares,
-                "softwareRef": similarSoftware.isInSill
+                softwareRef: similarSoftware.isInSill
                     ? {
-                          "type": "name",
-                          "softwareName": similarSoftware.softwareName
+                          type: "name",
+                          softwareName: similarSoftware.softwareName
                       }
                     : {
-                          "type": "externalId",
-                          "externalId": similarSoftware.externalId,
-                          "externalDataOrigin": similarSoftware.externalDataOrigin
+                          type: "externalId",
+                          externalId: similarSoftware.externalId,
+                          externalDataOrigin: similarSoftware.externalDataOrigin
                       }
             });
 
@@ -305,32 +305,32 @@ function apiSoftwareToSoftware(params: {
                 assert(!similarSoftware.isInSill);
 
                 return {
-                    "isInSill": false,
-                    "wikidataId": similarSoftware.externalId,
-                    "label": similarSoftware.label,
-                    "description": similarSoftware.description,
-                    "isLibreSoftware": similarSoftware.isLibreSoftware
+                    isInSill: false,
+                    wikidataId: similarSoftware.externalId,
+                    label: similarSoftware.label,
+                    description: similarSoftware.description,
+                    isLibreSoftware: similarSoftware.isLibreSoftware
                 };
             }
 
             return {
-                "isInSill": true,
+                isInSill: true,
                 software
             };
         }),
         license,
-        "prerogatives": {
-            "isTestable": testUrl !== undefined,
-            "isInstallableOnUserComputer":
+        prerogatives: {
+            isTestable: testUrl !== undefined,
+            isInstallableOnUserComputer:
                 softwareType.type === "stack"
                     ? undefined
                     : softwareType.type === "desktop/mobile",
-            "isAvailableAsMobileApp":
+            isAvailableAsMobileApp:
                 softwareType.type === "desktop/mobile" &&
                 (softwareType.os.android || softwareType.os.ios),
-            "isPresentInSupportContract": prerogatives.isPresentInSupportContract,
-            "isFromFrenchPublicServices": prerogatives.isFromFrenchPublicServices,
-            "doRespectRgaa": prerogatives.doRespectRgaa ?? undefined
+            isPresentInSupportContract: prerogatives.isPresentInSupportContract,
+            isFromFrenchPublicServices: prerogatives.isFromFrenchPublicServices,
+            doRespectRgaa: prerogatives.doRespectRgaa ?? undefined
         },
         comptoirDuLibreServiceProviderCount,
         testUrl,

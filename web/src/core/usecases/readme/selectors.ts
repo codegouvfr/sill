@@ -15,14 +15,14 @@ const readyState = (rootState: RootState) => {
 const main = createSelector(readyState, state => {
     if (state === undefined) {
         return {
-            "isReady": false as const
+            isReady: false as const
         };
     }
 
     const { markdown } = state;
 
     return {
-        "isReady": true,
+        isReady: true,
         markdown
     };
 });

@@ -4,7 +4,7 @@ import { createUsecaseContextApi } from "redux-clean-architecture";
 const { getContext, setContext } = createUsecaseContextApi<{ version: string }>();
 
 export const thunks = {
-    "getSillApiVersion":
+    getSillApiVersion:
         () =>
         (...args): string => {
             const [, , rootContext] = args;
@@ -16,7 +16,7 @@ export const thunks = {
 } satisfies Thunks;
 
 export const protectedThunks = {
-    "initialize":
+    initialize:
         () =>
         async (...args) => {
             const [, , rootContext] = args;
@@ -24,7 +24,7 @@ export const protectedThunks = {
             const { sillApi } = rootContext;
 
             setContext(rootContext, {
-                "version": await sillApi.getApiVersion()
+                version: await sillApi.getApiVersion()
             });
         }
 } satisfies Thunks;

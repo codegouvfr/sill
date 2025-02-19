@@ -32,7 +32,7 @@ const main = createSelector(
     (isReady, software, userDeclaration, isUnreferencingOngoing) => {
         if (!isReady) {
             return {
-                "isReady": false as const
+                isReady: false as const
             };
         }
 
@@ -40,7 +40,7 @@ const main = createSelector(
         assert(isUnreferencingOngoing !== undefined);
 
         return {
-            "isReady": true as const,
+            isReady: true as const,
             software,
             userDeclaration,
             isUnreferencingOngoing

@@ -45,17 +45,17 @@ type UpdateFieldPayload =
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": id<State>({
-        "stateDescription": "not initialized",
-        "isInitializing": false
+    initialState: id<State>({
+        stateDescription: "not initialized",
+        isInitializing: false
     }),
-    "reducers": {
-        "initializeStarted": state => {
+    reducers: {
+        initializeStarted: state => {
             assert(state.stateDescription === "not initialized");
 
             state.isInitializing = true;
         },
-        "initialized": (
+        initialized: (
             _state,
             {
                 payload
@@ -80,36 +80,36 @@ export const { reducer, actions } = createUsecaseActions({
             } = payload;
 
             return {
-                "stateDescription": "ready",
+                stateDescription: "ready",
                 accountManagementUrl,
                 allOrganizations,
-                "organization": {
-                    "value": organization,
-                    "isBeingUpdated": false
+                organization: {
+                    value: organization,
+                    isBeingUpdated: false
                 },
-                "email": {
-                    "value": email,
-                    "isBeingUpdated": false
+                email: {
+                    value: email,
+                    isBeingUpdated: false
                 },
-                "about": {
-                    "value": about,
-                    "isBeingUpdated": false
+                about: {
+                    value: about,
+                    isBeingUpdated: false
                 },
-                "aboutAndIsPublic": {
+                aboutAndIsPublic: {
                     about,
                     isPublic,
-                    "isBeingUpdated": false
+                    isBeingUpdated: false
                 }
             };
         },
-        "updateFieldStarted": (state, { payload }: { payload: UpdateFieldPayload }) => {
+        updateFieldStarted: (state, { payload }: { payload: UpdateFieldPayload }) => {
             assert(state.stateDescription === "ready");
 
             if (payload.fieldName === "aboutAndIsPublic") {
                 state[payload.fieldName] = {
-                    "about": payload.about,
-                    "isPublic": payload.isPublic,
-                    "isBeingUpdated": true
+                    about: payload.about,
+                    isPublic: payload.isPublic,
+                    isBeingUpdated: true
                 };
 
                 return;
@@ -117,10 +117,10 @@ export const { reducer, actions } = createUsecaseActions({
 
             state[payload.fieldName] = {
                 value: payload.value,
-                "isBeingUpdated": true
+                isBeingUpdated: true
             };
         },
-        "updateFieldCompleted": (state, { payload }: { payload: UpdateFieldPayload }) => {
+        updateFieldCompleted: (state, { payload }: { payload: UpdateFieldPayload }) => {
             const { fieldName } = payload;
 
             assert(state.stateDescription === "ready");

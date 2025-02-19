@@ -134,12 +134,12 @@ export namespace UpdateFilterParams {
 
 export const { reducer, actions } = createUsecaseActions({
     name,
-    "initialState": createObjectThatThrowsIfAccessed<State>({
-        "debugMessage": "Software catalog usecase not initialized"
+    initialState: createObjectThatThrowsIfAccessed<State>({
+        debugMessage: "Software catalog usecase not initialized"
     }),
     //"initialState": {} as any as State,
-    "reducers": {
-        "initialized": (
+    reducers: {
+        initialized: (
             _state,
             {
                 payload
@@ -155,27 +155,27 @@ export const { reducer, actions } = createUsecaseActions({
 
             return {
                 softwares,
-                "search": "",
-                "searchResults": undefined,
-                "sort": defaultSort,
-                "sortBackup": defaultSort,
-                "organization": undefined,
-                "category": undefined,
-                "programmingLanguage": undefined,
-                "environment": undefined,
-                "prerogatives": [],
-                "referentCount": undefined,
-                "isRemovingUserOrReferent": false,
+                search: "",
+                searchResults: undefined,
+                sort: defaultSort,
+                sortBackup: defaultSort,
+                organization: undefined,
+                category: undefined,
+                programmingLanguage: undefined,
+                environment: undefined,
+                prerogatives: [],
+                referentCount: undefined,
+                isRemovingUserOrReferent: false,
                 userEmail
             };
         },
-        "filterUpdated": (state, { payload }: { payload: UpdateFilterParams }) => {
+        filterUpdated: (state, { payload }: { payload: UpdateFilterParams }) => {
             const { key, value } = payload;
 
             // @ts-expect-error
             state[key] = value;
         },
-        "searchResultUpdated": (
+        searchResultUpdated: (
             state,
             {
                 payload
@@ -195,7 +195,7 @@ export const { reducer, actions } = createUsecaseActions({
             state.searchResults = searchResults;
         },
         // NOTE: This is first and foremost an action for evtAction
-        "notifyRequestChangeSort": (
+        notifyRequestChangeSort: (
             state,
             { payload }: { payload: { sort: State.Sort } }
         ) => {
@@ -205,7 +205,7 @@ export const { reducer, actions } = createUsecaseActions({
                 state.sortBackup = state.sort;
             }
         },
-        "filterReset": state => {
+        filterReset: state => {
             state.prerogatives = [];
             state.organization = undefined;
             state.category = undefined;
