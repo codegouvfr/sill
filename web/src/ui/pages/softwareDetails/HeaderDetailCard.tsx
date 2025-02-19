@@ -181,7 +181,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                                                 handleClose={
                                                                     handlePopoverClose
                                                                 }
-                                                            ></AuthorCard>
+                                                            />
                                                         </Popover>
                                                     </>
                                                 )}
@@ -225,7 +225,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                         priority="secondary"
                         url={officialWebsite}
                         label={t("headerDetailCard.website")}
-                    ></LogoURLButton>
+                    />
                 )}
                 {documentationWebsite && (
                     <LogoURLButton
@@ -234,7 +234,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                         priority="secondary"
                         url={documentationWebsite}
                         label={t("headerDetailCard.documentation")}
-                    ></LogoURLButton>
+                    />
                 )}
                 {sourceCodeRepository && (
                     <LogoURLButton
@@ -243,7 +243,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                         priority="secondary"
                         url={sourceCodeRepository}
                         label={t("headerDetailCard.repository")}
-                    ></LogoURLButton>
+                    />
                 )}
             </div>
         </div>

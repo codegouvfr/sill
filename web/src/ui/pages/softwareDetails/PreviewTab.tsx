@@ -340,7 +340,7 @@ export const PreviewTab = (props: Props) => {
                                         <SoftwareTypeTable
                                             title="Test"
                                             softwareType={softwareType}
-                                        ></SoftwareTypeTable>
+                                        />
                                     )}
                                 </p>
                             )}
@@ -363,7 +363,7 @@ export const PreviewTab = (props: Props) => {
                                         priority="secondary"
                                         url={comptoireDuLibreUrl}
                                         label={t("previewTab.comptoire du libre sheet")}
-                                    ></LogoURLButton>
+                                    />
                                 )}
                                 {wikiDataUrl !== undefined && (
                                     <LogoURLButton
@@ -371,7 +371,7 @@ export const PreviewTab = (props: Props) => {
                                         priority="secondary"
                                         url={wikiDataUrl}
                                         label={t("previewTab.wikiData sheet")}
-                                    ></LogoURLButton>
+                                    />
                                 )}
                             </>
                         )}
@@ -383,7 +383,7 @@ export const PreviewTab = (props: Props) => {
                                         priority="secondary"
                                         url={identifier.url}
                                         labelFromURL={true}
-                                    ></LogoURLButton>
+                                    />
                                 ))}
                             </>
                         )}
