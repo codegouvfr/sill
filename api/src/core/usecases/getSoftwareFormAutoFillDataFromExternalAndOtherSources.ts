@@ -103,9 +103,12 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
 
         autoFillDataCache[externalId] = autoFillData;
 
-        setTimeout(() => {
-            delete autoFillDataCache[externalId];
-        }, 3 * 60 * 1000 /* 3 hours */);
+        setTimeout(
+            () => {
+                delete autoFillDataCache[externalId];
+            },
+            3 * 60 * 1000 /* 3 hours */
+        );
 
         return autoFillData;
     };

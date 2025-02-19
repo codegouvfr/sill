@@ -1,0 +1,13 @@
+pre-commit:
+  commands:
+    format:
+      run: yarn format
+      stage_fixed: true
+    lint:
+      run: turbo lint
+
+pre-push:
+  commands:
+    check:
+      run: turbo typecheck format:check lint
+

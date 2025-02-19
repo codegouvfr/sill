@@ -99,18 +99,18 @@ const makeGetOtherExternalData =
             softwareId: software.softwareId,
             serviceProviders:
                 software.externalDataOrigin === "wikidata"
-                    ? serviceProvidersBySoftwareId[software.softwareId.toString()] ?? []
+                    ? (serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [])
                     : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
                 software.externalDataOrigin === "wikidata"
-                    ? cnllPrestatairesSill
+                    ? (cnllPrestatairesSill
                           .find(({ sill_id }) => sill_id === software.softwareId)
                           ?.prestataires.map(({ nom, siren, url }) => ({
                               name: nom,
                               siren,
                               url
-                          })) ?? null
+                          })) ?? null)
                     : null,
             latestVersion: latestVersion ?? null
         };

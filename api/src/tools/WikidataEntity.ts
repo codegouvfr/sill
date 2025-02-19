@@ -17,12 +17,12 @@ export type DataValue<Type extends "wikibase-entityid" | "string" | "text-langua
               id: string;
           }
         : Type extends "string"
-        ? string
-        : Type extends "text-language"
-        ? { text: string; language: string }
-        : Type extends "time"
-        ? WikidataTime
-        : never;
+          ? string
+          : Type extends "text-language"
+            ? { text: string; language: string }
+            : Type extends "time"
+              ? WikidataTime
+              : never;
 };
 
 export type Snak<Type extends "wikibase-entityid" | "string" | "text-language" | "time"> = {

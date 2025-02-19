@@ -13,6 +13,7 @@
     "fullcheck": "turbo typecheck format:check lint test"
   },
   "devDependencies": {
+    "lefthook": "^1.10.10",
     "turbo": "^1.12.5"
   },
   "engines": {
