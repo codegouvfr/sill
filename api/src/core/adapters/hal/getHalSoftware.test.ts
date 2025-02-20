@@ -23,7 +23,6 @@ describe("HAL", () => {
                 ],
                 "documentationUrl": undefined,
                 "externalId": "1715545",
-                "framaLibreId": undefined,
                 "isLibreSoftware": true,
                 "label": {
                     "en": "Battleship exercise",

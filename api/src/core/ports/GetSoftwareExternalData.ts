@@ -22,7 +22,6 @@ export type SoftwareExternalData = {
     isLibreSoftware: boolean;
 } & PartialNoOptional<{
     logoUrl: string;
-    framaLibreId: string;
     websiteUrl: string;
     sourceUrl: string;
     documentationUrl: string;
