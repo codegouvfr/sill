@@ -420,7 +420,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     description: ref("ext.description"),
                     isLibreSoftware: ref("ext.isLibreSoftware"),
                     logoUrl: ref("ext.logoUrl"),
-                    framaLibreId: ref("ext.framaLibreId"),
                     websiteUrl: ref("ext.websiteUrl"),
                     sourceUrl: ref("ext.sourceUrl"),
                     documentationUrl: ref("ext.documentationUrl"),

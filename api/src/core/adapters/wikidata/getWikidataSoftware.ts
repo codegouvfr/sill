@@ -110,6 +110,22 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             ? wikidataTimeToJSDate(publicationTimeDateValue)
             : undefined;
 
+        const framaLibreId = getClaimDataValue<"string">("P4107")[0];
+
+        const makeFramaIndentifer = (framaLibreId: string): SILL.Identification => {
+            return {
+                url: new URL(framaLibreId),
+                "@type": "PropertyValue",
+                value: framaLibreId,
+                subjectOf: {
+                    url: new URL("https://framalibre.org"),
+                    name: "FramaLibre Official instance",
+                    "@type": "Website",
+                    additionalType: "FramaLibre"
+                }
+            };
+        };
+
         return {
             externalId: wikidataId,
             externalDataOrigin: "wikidata",
@@ -178,7 +194,6 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
                 return url;
             })(),
-            "framaLibreId": getClaimDataValue<"string">("P4107")[0],
             ...(() => {
                 const websiteUrl = getClaimDataValue<"string">("P856")[0];
                 const sourceUrl = getClaimDataValue<"string">("P1324")[0];
@@ -257,7 +272,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             applicationCategories: undefined, // doesn't exit on wiki data
             referencePublications: undefined, // doesn't exit on wiki data
             publicationTime: publicationTimeDate,
-            identifiers: undefined
+            identifiers: framaLibreId?.includes("https") ? [makeFramaIndentifer(framaLibreId)] : []
         };
     },
     {
