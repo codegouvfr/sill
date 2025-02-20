@@ -226,7 +226,6 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
                             description: JSON.stringify(softwareExternalData?.description ?? {}),
                             isLibreSoftware: softwareExternalData?.isLibreSoftware ?? false,
                             logoUrl: softwareExternalData?.logoUrl ?? null,
-                            framaLibreId: softwareExternalData?.framaLibreId ?? null,
                             websiteUrl: softwareExternalData?.websiteUrl ?? null,
                             sourceUrl: softwareExternalData?.sourceUrl ?? null,
                             documentationUrl: softwareExternalData?.documentationUrl ?? null,

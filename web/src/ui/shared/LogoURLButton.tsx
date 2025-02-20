@@ -115,7 +115,14 @@ const resolveLogoFromType = (
                 URLlogo: new URL(
                     "https://comptoir-du-libre.org/img/favicon/CDL-Favicon.16_16.png?v2.13.2_DEV"
                 ),
-                textFromURL: "GitComptoir Du Libre"
+                textFromURL: "Comptoir Du Libre"
+            };
+        case "FramaLibre":
+            return {
+                URLlogo: new URL(
+                    "https://framasoft.org/nav/img/icons/favicon/sites/libre.png"
+                ),
+                textFromURL: "FramaLibre"
             };
         default:
             sourceType satisfies never;
