@@ -230,7 +230,6 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             isLibreSoftware: halRawSoftware.openAccess_bool,
             // Optionnal
             logoUrl: undefined,
-            framaLibreId: undefined,
             websiteUrl: halRawSoftware.uri_s,
             sourceUrl: halRawSoftware?.softCodeRepository_s?.[0],
             documentationUrl: undefined, // TODO no info about documentation in HAL check on SWH or Repo ?
