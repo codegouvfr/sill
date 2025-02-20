@@ -183,7 +183,6 @@ describe("fetches software extra data (from different providers)", () => {
                     documentationUrl: null,
                     externalDataOrigin: "wikidata",
                     externalId: craSoftwareFormData.externalId,
-                    framaLibreId: null,
                     isLibreSoftware: true,
                     keywords: [],
                     label: "create-react-app",
@@ -193,7 +192,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguages: [],
                     referencePublications: null,
-                    identifiers: null,
+                    identifiers: [],
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
@@ -211,7 +210,6 @@ describe("fetches software extra data (from different providers)", () => {
                     documentationUrl: "https://vitejs.dev/guide/",
                     externalDataOrigin: "wikidata",
                     externalId: "Q111590996",
-                    framaLibreId: null,
                     isLibreSoftware: true,
 
                     keywords: [],
@@ -223,7 +221,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: null,
-                    identifiers: null,
+                    identifiers: [],
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date)
                 }
@@ -269,7 +267,6 @@ describe("fetches software extra data (from different providers)", () => {
                     documentationUrl: null,
                     externalDataOrigin: "wikidata",
                     externalId: "Q11354",
-                    framaLibreId: null,
                     isLibreSoftware: false,
                     keywords: [],
                     label: "Apache HTTP Server",
@@ -279,7 +276,7 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
                     referencePublications: null,
-                    identifiers: null,
+                    identifiers: [],
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z")
