@@ -40,8 +40,7 @@ const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) 
        "comptoirDuLibreId", name, description, license, "versionMin",
        "isPresentInSupportContract", "isFromFrenchPublicService", "logoUrl",
        keywords, "doRespectRgaa", "isStillInObservation",
-       "parentSoftwareWikidataId", "catalogNumeriqueGouvFrId", "workshopUrls",
-       "testUrls", categories, "generalInfoMd", "addedByAgentId",
+       "parentSoftwareWikidataId", "workshopUrls", categories, "generalInfoMd", "addedByAgentId",
        dereferencing, "referencedSinceTime", "updateTime")
       VALUES (${apacheSoftwareId},
               '{"os": {"ios": false, "mac": false, "linux": true, "android": false, "windows": false}, "type": "desktop/mobile"}',
@@ -49,7 +48,7 @@ const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) 
               'Serveur Web & Reverse Proxy', 'Apache-2.0', '212', true, false,
               'https://sill.code.gouv.fr/logo/apache-http.png',
               '["serveur", "http", "web", "server", "apache"]', false, false,
-              null, null, '[]', '[]', '[]', null, ${agentId}, null,
+              null, '[]', '[]', null, ${agentId}, null,
               1728462232094,
               1728462232094);
   `.execute(db);
@@ -66,8 +65,7 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
                              keywords, "doRespectRgaa",
                              "isStillInObservation",
                              "parentSoftwareWikidataId",
-                             "catalogNumeriqueGouvFrId",
-                             "workshopUrls", "testUrls", categories,
+                             "workshopUrls", categories,
                              "generalInfoMd", "addedByAgentId",
                              dereferencing, "referencedSinceTime",
                              "updateTime")
@@ -76,7 +74,7 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
               'Outil et/ou plugin de génération de tout ou partie du code',
               'EPL-2.0', '3.7.8', false, false, null,
               '["modélisation", "génération", "code", "modeling", "code generation"]',
-              false, false, null, null, '[]', '[]',
+              false, false, null, '[]',
               '["Other Development Tools"]', null, ${agentId}, null,
               1514764800000,
               1514764800000);

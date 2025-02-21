@@ -25,7 +25,6 @@ export type Software = {
               publicationTime?: number;
           }
         | undefined;
-    testUrl: string | undefined;
     addedTime: number;
     updateTime: number;
     dereferencing:

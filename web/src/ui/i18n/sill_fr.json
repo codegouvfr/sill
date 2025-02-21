@@ -192,7 +192,6 @@
         "isFromFrenchPublicServices": "Développé par le service public",
         "doRespectRgaa": "Respecte les normes RGAA",
         "isPresentInSupportContract": "Présent dans le marché de support",
-        "isTestable": "Est essayable",
         "organization filter hint": "Afficher uniquement les logiciels ayant au mois référent dans une organisation donnée",
         "linux": "GNU/Linux",
         "mac": "MacOS",

@@ -228,7 +228,6 @@ describe("pgDbApi", () => {
                     },
                     type: "desktop/mobile"
                 },
-                testUrl: undefined,
                 userAndReferentCountByOrganization: {
                     [insertedAgent.organization]: {
                         userCount: 1,

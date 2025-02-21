@@ -131,7 +131,6 @@ describe("RPC e2e tests", () => {
                 "name": softwareFormData.softwareName,
                 "softwareType": softwareFormData.softwareType,
                 "versionMin": softwareFormData.softwareMinimalVersion ?? undefined,
-                "testUrls": [],
                 "workshopUrls": [],
                 "categories": [],
                 "isStillInObservation": false,
