@@ -76,12 +76,6 @@ const zSoftwareType = z.union([
 //     "catalogNumeriqueGouvFrId": z.string().optional(),
 //     "versionMin": z.string(),
 //     "workshopUrls": z.array(z.string()),
-//     "testUrls": z.array(
-//       z.object({
-//           "description": z.string(),
-//           "url": z.string()
-//       })
-//     ),
 //     "categories": z.array(z.string()),
 //     "generalInfoMd": z.string().optional(),
 //     "addedByAgentEmail": z.string(),
@@ -113,15 +107,8 @@ const zSoftwareRow = z.object({
     "comptoirDuLibreId": z.number().optional(),
     "license": z.string(),
     "softwareType": zSoftwareType,
-    "catalogNumeriqueGouvFrId": z.string().optional(),
     "versionMin": z.string().optional(),
     "workshopUrls": z.array(z.string()),
-    "testUrls": z.array(
-        z.object({
-            "description": z.string(),
-            "url": z.string()
-        })
-    ),
     "categories": z.array(z.string()),
     "generalInfoMd": z.string().optional(),
     "addedByAgentEmail": z.string(),
@@ -165,10 +152,8 @@ fs.writeFileSync(
                     externalDataOrigin,
                     comptoirDuLibreId,
                     license,
-                    catalogNumeriqueGouvFrId,
                     versionMin,
                     workshopUrls,
-                    testUrls,
                     generalInfoMd,
                     updateTime,
                     doRespectRgaa,
@@ -206,10 +191,8 @@ fs.writeFileSync(
                     externalDataOrigin,
                     comptoirDuLibreId,
                     license,
-                    catalogNumeriqueGouvFrId,
                     versionMin,
                     workshopUrls,
-                    testUrls,
                     generalInfoMd,
                     updateTime,
                     doRespectRgaa,

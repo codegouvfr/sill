@@ -521,8 +521,7 @@ const prerogativeFilterOptions = createSelector(
                             .reduce((prev, curr) => [...prev, ...curr], [])
                     )
                 ),
-                "isInstallableOnUserComputer" as const,
-                "isTestable" as const
+                "isInstallableOnUserComputer" as const
             ].map(prerogative => [prerogative, id<number>(0)] as const)
         );
 
@@ -570,7 +569,7 @@ const prerogativeFilterOptions = createSelector(
             });
         }
 
-        tmpSoftwares.forEach(({ prerogatives, softwareType, testUrl }) => {
+        tmpSoftwares.forEach(({ prerogatives, softwareType }) => {
             objectKeys(prerogatives)
                 .filter(prerogative => prerogatives[prerogative])
                 .forEach(prerogative => {
@@ -585,38 +584,31 @@ const prerogativeFilterOptions = createSelector(
                     );
                 });
 
-            (["isInstallableOnUserComputer", "isTestable"] as const).forEach(
-                prerogativeName => {
-                    switch (prerogativeName) {
-                        case "isInstallableOnUserComputer":
-                            if (softwareType.type !== "desktop/mobile") {
-                                return;
-                            }
-                            break;
-                        case "isTestable":
-                            if (testUrl === undefined) {
-                                return;
-                            }
-                            break;
-                    }
-
-                    const currentCount =
-                        softwareCountInCurrentFilterByPrerogative.get(prerogativeName);
-
-                    assert(currentCount !== undefined);
-
-                    softwareCountInCurrentFilterByPrerogative.set(
-                        prerogativeName,
-                        currentCount + 1
-                    );
+            (["isInstallableOnUserComputer"] as const).forEach(prerogativeName => {
+                switch (prerogativeName) {
+                    case "isInstallableOnUserComputer":
+                        if (softwareType.type !== "desktop/mobile") {
+                            return;
+                        }
+                        break;
                 }
-            );
+
+                const currentCount =
+                    softwareCountInCurrentFilterByPrerogative.get(prerogativeName);
+
+                assert(currentCount !== undefined);
+
+                softwareCountInCurrentFilterByPrerogative.set(
+                    prerogativeName,
+                    currentCount + 1
+                );
+            });
         });
 
         /** prettier-ignore */
-        return Array.from(softwareCountInCurrentFilterByPrerogative.entries())
-            .map(([prerogative, softwareCount]) => ({ prerogative, softwareCount }))
-            .filter(({ prerogative }) => prerogative !== "isTestable"); //NOTE: remove when we reintroduce Onyxia SILL
+        return Array.from(softwareCountInCurrentFilterByPrerogative.entries()).map(
+            ([prerogative, softwareCount]) => ({ prerogative, softwareCount })
+        );
     }
 );
 
@@ -827,8 +819,7 @@ function filterByPrerogative(params: {
                     internalSoftware: software,
                     positions: undefined
                 }).prerogatives,
-                ...software.prerogatives,
-                isTestable: software.testUrl !== undefined
+                ...software.prerogatives
             })[prerogative]
     );
 }
@@ -865,7 +856,6 @@ function apiSoftwareToInternalSoftware(params: {
         softwareDescription,
         latestVersion,
         parentWikidataSoftware,
-        testUrl,
         addedTime,
         updateTime,
         applicationCategories,
@@ -928,7 +918,6 @@ function apiSoftwareToInternalSoftware(params: {
         userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
-        testUrl,
         addedTime,
         updateTime,
         applicationCategories,
@@ -981,7 +970,6 @@ function internalSoftwareToExternalSoftware(params: {
         latestVersion,
         referentCount,
         userCount,
-        testUrl,
         addedTime,
         updateTime,
         applicationCategories,
@@ -1009,7 +997,6 @@ function internalSoftwareToExternalSoftware(params: {
         latestVersion,
         referentCount,
         userCount,
-        testUrl,
         prerogatives: {
             isFromFrenchPublicServices,
             isPresentInSupportContract,
@@ -1019,8 +1006,7 @@ function internalSoftwareToExternalSoftware(params: {
                 (softwareType.os.windows || softwareType.os.linux || softwareType.os.mac),
             isAvailableAsMobileApp:
                 softwareType.type === "desktop/mobile" &&
-                (softwareType.os.android || softwareType.os.ios),
-            isTestable: testUrl !== undefined
+                (softwareType.os.android || softwareType.os.ios)
         },
         parentSoftware,
         searchHighlight:

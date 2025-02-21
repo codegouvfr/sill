@@ -190,7 +190,6 @@
         "isFromFrenchPublicServices": "Is from French public services",
         "doRespectRgaa": "Is compliant with RGAA rules",
         "isPresentInSupportContract": "Comes with possible support",
-        "isTestable": "Is testable",
         "organization filter hint": "Only show software that have at least one referent from a given organization",
         "linux": "GNU/Linux",
         "mac": "MacOS",

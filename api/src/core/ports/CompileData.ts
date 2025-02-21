@@ -48,10 +48,8 @@ export namespace CompiledData {
             | "isPresentInSupportContract"
             | "license"
             | "softwareType"
-            | "catalogNumeriqueGouvFrId"
             | "versionMin"
             | "workshopUrls"
-            | "testUrls"
             | "categories"
             | "generalInfoMd"
             | "logoUrl"
@@ -112,7 +110,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             users,
             instances,
             annuaireCnllServiceProviders,
-            catalogNumeriqueGouvFrId,
             categories,
             comptoirDuLibreSoftware,
             dereferencing,
@@ -129,7 +126,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             name,
             referencedSinceTime,
             softwareType,
-            testUrls,
             latestVersion,
             updateTime,
             versionMin,
@@ -143,7 +139,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
         return {
             serviceProviders,
             annuaireCnllServiceProviders,
-            catalogNumeriqueGouvFrId,
             categories,
             comptoirDuLibreSoftware,
             dereferencing,
@@ -160,7 +155,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             name,
             referencedSinceTime,
             softwareType,
-            testUrls,
             latestVersion,
             updateTime,
             versionMin,

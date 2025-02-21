@@ -63,9 +63,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         externalDataOrigin: externalDataOrigin,
                         comptoirDuLibreId: comptoirDuLibreId,
                         softwareType: JSON.stringify(softwareType),
-                        catalogNumeriqueGouvFrId: undefined,
                         workshopUrls: JSON.stringify([]),
-                        testUrls: JSON.stringify([]),
                         categories: JSON.stringify([]),
                         generalInfoMd: undefined,
                         addedByAgentId: agentId,
@@ -141,9 +139,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     externalId: externalId,
                     comptoirDuLibreId: comptoirDuLibreId,
                     softwareType: JSON.stringify(softwareType),
-                    catalogNumeriqueGouvFrId: undefined,
                     workshopUrls: JSON.stringify([]),
-                    testUrls: JSON.stringify([]),
                     categories: JSON.stringify([]),
                     generalInfoMd: undefined,
                     addedByAgentId: agentId,
@@ -159,7 +155,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .then((result): Software | undefined => {
                     if (!result) return;
                     const {
-                        testUrls,
                         serviceProviders,
                         parentExternalData,
                         updateTime,
@@ -189,7 +184,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             software.comptoirDuLibreSoftware?.external_resources.repository,
                         documentationUrl: softwareExternalData?.documentationUrl,
                         comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                        testUrl: testUrls[0]?.url,
                         parentWikidataSoftware: parentExternalData,
                         keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
@@ -245,7 +239,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
                 return softwares.map(
                     ({
-                        testUrls,
                         serviceProviders,
                         parentExternalData,
                         updateTime,
@@ -292,7 +285,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
                             comptoirDuLibreServiceProviderCount:
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            testUrl: testUrls[0]?.url,
                             parentWikidataSoftware: parentExternalData ?? undefined,
                             applicationCategories: software.categories.concat(
                                 softwareExternalData?.applicationCategories ?? []
@@ -385,7 +377,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.description as softwareDescription",
             "cs.serviceProviders",
             "cs.latestVersion",
-            "s.testUrls",
             "s.referencedSinceTime as addedTime",
             "s.updateTime",
             "s.lastExtraDataFetchAt",
@@ -538,7 +529,6 @@ const makeGetSoftwareById =
             .then((result): Software | undefined => {
                 if (!result) return;
                 const {
-                    testUrls,
                     serviceProviders,
                     parentExternalData,
                     updateTime,
@@ -568,7 +558,6 @@ const makeGetSoftwareById =
                         software.comptoirDuLibreSoftware?.external_resources.repository,
                     documentationUrl: softwareExternalData?.documentationUrl,
                     comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                    testUrl: testUrls[0]?.url,
                     parentWikidataSoftware: parentExternalData,
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                     referencePublications: softwareExternalData?.referencePublications,
