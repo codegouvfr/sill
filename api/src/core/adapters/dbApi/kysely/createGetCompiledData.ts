@@ -37,7 +37,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         .select([
             "s.id",
             "s.addedByAgentId",
-            "s.catalogNumeriqueGouvFrId",
             "s.categories",
             "s.dereferencing",
             "s.description",
@@ -54,7 +53,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "s.name",
             "s.referencedSinceTime",
             "s.softwareType",
-            "s.testUrls",
             "s.updateTime",
             "s.versionMin",
             "s.workshopUrls",

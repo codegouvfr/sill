@@ -44,13 +44,8 @@ export namespace Db {
         softwareType: SoftwareType;
         //Lien vers catalogue.numerique.gouv.fr
         /* cspell: disable-next-line */
-        catalogNumeriqueGouvFrId: string | undefined;
         versionMin: string | undefined;
         workshopUrls: string[];
-        testUrls: {
-            description: string;
-            url: string;
-        }[];
         categories: string[];
         generalInfoMd: string | undefined;
         addedByAgentEmail: string;

@@ -336,10 +336,6 @@ export function SoftwareCatalogSearch(props: Props) {
                                                     return `${t(
                                                         "softwareCatalogSearch.isInstallableOnUserComputer"
                                                     )} (${softwareCount})`;
-                                                case "isTestable":
-                                                    return `${t(
-                                                        "softwareCatalogSearch.isTestable"
-                                                    )} (${softwareCount})`;
                                                 case "isPresentInSupportContract":
                                                     return `${t(
                                                         "softwareCatalogSearch.isPresentInSupportContract"

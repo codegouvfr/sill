@@ -33,7 +33,6 @@ export const VueDefault = getStory({
         semVer: "25.0.2",
         publicationTime: 1669985280
     },
-    testUrl: undefined,
     prerogatives: {
         isFromFrenchPublicServices: true,
         isPresentInSupportContract: true,
@@ -66,7 +65,6 @@ export const VueTooLongDescription = getStory({
         semVer: "25.0.2",
         publicationTime: 1669985280
     },
-    testUrl: undefined,
     prerogatives: {
         isFromFrenchPublicServices: true,
         isPresentInSupportContract: true,

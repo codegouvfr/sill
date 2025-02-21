@@ -178,7 +178,6 @@ function apiSoftwareToSoftware(params: {
         softwareDescription,
         latestVersion,
         parentWikidataSoftware: parentWikidataSoftware_api,
-        testUrl,
         addedTime,
         dereferencing,
         prerogatives,
@@ -320,7 +319,6 @@ function apiSoftwareToSoftware(params: {
         }),
         license,
         prerogatives: {
-            isTestable: testUrl !== undefined,
             isInstallableOnUserComputer:
                 softwareType.type === "stack"
                     ? undefined
@@ -333,7 +331,6 @@ function apiSoftwareToSoftware(params: {
             doRespectRgaa: prerogatives.doRespectRgaa ?? undefined
         },
         comptoirDuLibreServiceProviderCount,
-        testUrl,
         versionMin,
         programmingLanguages,
         keywords,

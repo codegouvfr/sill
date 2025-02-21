@@ -67,8 +67,7 @@ export const routeDefs = {
                                 "isPresentInSupportContract",
                                 "isFromFrenchPublicServices",
                                 "doRespectRgaa",
-                                "isInstallableOnUserComputer",
-                                "isTestable"
+                                "isInstallableOnUserComputer"
                             ] as const)
                         );
 

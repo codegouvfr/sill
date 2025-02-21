@@ -31,7 +31,6 @@ export type Props = {
     referentCount: number;
     softwareUsersAndReferentsLink: Link;
     declareFormLink: Link;
-    testUrl?: string;
     softwareDetailsLink: Link;
     searchHighlight:
         | {
@@ -60,7 +59,6 @@ export const SoftwareCatalogCard = memo((props: Props) => {
         softwareUsersAndReferentsLink,
         softwareDetailsLink,
         declareFormLink,
-        testUrl,
         searchHighlight,
         userDeclaration,
         ...rest

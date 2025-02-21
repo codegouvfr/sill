@@ -65,7 +65,6 @@ const insertSoftwares = async (
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
                     softwareType: JSON.stringify(row.softwareType),
                     workshopUrls: JSON.stringify(row.workshopUrls),
-                    testUrls: JSON.stringify(row.testUrls),
                     categories: JSON.stringify(row.categories),
                     keywords: JSON.stringify(row.keywords)
                 }))
