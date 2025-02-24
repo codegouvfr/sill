@@ -53,13 +53,23 @@ export async function fetchHalSoftwareById(halDocid: string): Promise<HAL.API.So
 
     return json.response.docs[0];
 }
+type Props = {
+    queryString?: string;
+    SWHFilter?: boolean;
+};
 
-export async function fetchHalSoftwares(queryString: string = ""): Promise<Array<HAL.API.Software>> {
-    // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
-    let url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}&fq=swhidId_s:["" TO *]`;
+export async function fetchHalSoftwares(params: Props): Promise<Array<HAL.API.Software>> {
+    const { queryString, SWHFilter } = params;
+
+    let url = `https://api.archives-ouvertes.fr/search/?fq=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}`;
 
     if (queryString) {
         url = url + `&q=${encodeURIComponent(queryString)}`;
+    }
+
+    // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
+    if (SWHFilter) {
+        url = url + `&fq=swhidId_s:["" TO *]`;
     }
 
     const res = await fetch(url).catch(err => {
@@ -69,7 +79,7 @@ export async function fetchHalSoftwares(queryString: string = ""): Promise<Array
 
     if (res.status === 429) {
         await new Promise(resolve => setTimeout(resolve, 100));
-        return fetchHalSoftwares();
+        return fetchHalSoftwares(params);
     }
 
     if (res.status === 404) {

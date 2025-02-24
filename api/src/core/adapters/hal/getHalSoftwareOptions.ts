@@ -33,7 +33,7 @@ export const rawHalSoftwareToExternalOption =
 // HAL documentation is here : https://api.archives-ouvertes.fr/docs/search
 
 export const getHalSoftwareOptions: GetSoftwareExternalDataOptions = async ({ queryString, language }) => {
-    const rawHalSoftwares = await halAPIGateway.software.getAll(queryString);
+    const rawHalSoftwares = await halAPIGateway.software.getAll({ queryString });
 
     return rawHalSoftwares.map(rawHalSoftwareToExternalOption(language));
 };

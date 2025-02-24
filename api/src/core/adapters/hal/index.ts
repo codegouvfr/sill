@@ -1,11 +1,17 @@
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
 import { getHalSoftwareExternalData } from "./getHalSoftwareExternalData";
+import { getHalSoftwareForm } from "./getSoftwareForm";
+import { Adapter } from "../type";
 
-export const halAdapter = {
+export const halAdapter: Adapter = {
+    sourceType: "HAL",
     softwareExternalData: {
-        getByHalId: getHalSoftwareExternalData
+        getById: getHalSoftwareExternalData
     },
     softwareOptions: {
-        getByHalId: getHalSoftwareOptions
+        getById: getHalSoftwareOptions
+    },
+    softwareForm: {
+        getById: getHalSoftwareForm
     }
 };
