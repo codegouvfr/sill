@@ -40,5 +40,5 @@ export async function startImportService(params: {
         "listToImport": listToImport ?? []
     });
 
-    success ? console.log("Core API initialized") : console.error("Error");
+    success ? console.log("Importation successful") : console.error("Error");
 }
