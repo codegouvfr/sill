@@ -67,7 +67,7 @@ export namespace HAL {
                 Object.setPrototypeOf(this, new.target.prototype);
             }
         }
-        
+
         export type Software = {
             // the following fields are the ones that we use
             docid: string;
@@ -92,9 +92,9 @@ export namespace HAL {
             softProgrammingLanguage_s: string[];
             softVersion_s: string[];
             licence_s: string[];
-        
+
             // The following is the complete list of fields that could be returned by the HAL API
-        
+
             // label_s: string;
             // citationRef_s: string;
             // citationFull_s: string;
@@ -219,7 +219,7 @@ export namespace HAL {
             // softDevelopmentStatus_s: string[];
             // softRuntimePlatform_s: string[];
         };
-        
+
         export type Domain = {
             docid: number;
             haveNext_bool: boolean;
@@ -231,7 +231,7 @@ export namespace HAL {
             dateLastIndexed_tdate: string; // ISO date
             level_i: number;
         };
-        
+
         export type Structure = {
             acronym_s: string[];
             acronym_sci: string[];
@@ -272,7 +272,7 @@ export namespace HAL {
             url_s: string;
             valid_s: string;
         };
-        
+
         export type Author = {
             accountAssociated_bool: boolean;
             affPref_i: number;

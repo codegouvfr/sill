@@ -1,3 +1,4 @@
+import memoize from "memoizee";
 import { SoftwareFormData, SoftwareType } from "../../usecases/readWriteSillData";
 import { halAPIGateway } from "../../../connectors/HAL";
 import { HAL } from "../../../connectors/HAL/types/HAL";
@@ -52,3 +53,17 @@ export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software
 
     return formData;
 };
+
+export const getHalSoftwareForm = memoize(async (halDocId: string): Promise<SoftwareFormData | undefined> => {
+    const halRawSoftware = await halAPIGateway.software.getById(halDocId).catch(error => {
+        if (!(error instanceof HAL.API.FetchError)) throw error;
+        if (error.status === 404 || error.status === undefined) return;
+        throw error;
+    });
+
+    if (!halRawSoftware) {
+        throw Error();
+    }
+
+    return halRawSoftwareToSoftwareForm(halRawSoftware);
+});

@@ -17,7 +17,7 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
                   about: "This is a bot user created to import data."
               });
 
-        const softwares = await halAPIGateway.software.getAll();
+        const softwares = await halAPIGateway.software.getAll({ SWHFilter: true });
         const dbSoftwares = await dbApi.software.getAll();
         const dbSoftwaresNames = dbSoftwares.map(software => {
             return software.softwareName;
