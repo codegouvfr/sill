@@ -35,5 +35,5 @@ export async function startUpdateService(params: {
         "externalSoftwareDataOrigin": externalSoftwareDataOrigin
     });
 
-    console.log("Core API initialized", result);
+    console.log("Update sucessfull", result);
 }

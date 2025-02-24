@@ -11,8 +11,8 @@ services:
       POSTGRES_DB: sill
       POSTGRES_USER: sill
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_password}
-#    volumes:
-#      - ./docker-data:/var/lib/postgresql/data
+    volumes:
+      - ./docker-data:/var/lib/postgresql/data
 
 #  To create an easy-to-use interface for PostgreSQL administration,
 #  you can use the Adminer web interface.
@@ -42,5 +42,3 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-
-
