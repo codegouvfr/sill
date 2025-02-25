@@ -525,11 +525,6 @@ describe("fetches software extra data (from different providers)", () => {
                             website: "https://cap-rel.fr"
                         },
                         {
-                            name: "YPOK",
-                            siren: "434940763",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/434940763"
-                        },
-                        {
                             name: "Entr'ouvert",
                             siren: "443170139",
                             cnllUrl: "https://annuaire.cnll.fr/societes/443170139"
