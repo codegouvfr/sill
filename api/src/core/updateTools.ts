@@ -5,7 +5,6 @@ import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
-import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVersion";
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
@@ -35,11 +34,7 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 };
 
 export async function updateTool(params: ParamsOfUpdateService): Promise<boolean> {
-    const { dbConfig, githubPersonalAccessTokenForApiRateLimit, externalSoftwareDataOrigin } = params;
-
-    const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
-        githubPersonalAccessTokenForApiRateLimit
-    });
+    const { dbConfig, externalSoftwareDataOrigin } = params;
 
     const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
@@ -49,7 +44,6 @@ export async function updateTool(params: ParamsOfUpdateService): Promise<boolean
         getSoftwareExternalData,
         getCnllPrestatairesSill,
         comptoirDuLibreApi,
-        getSoftwareLatestVersion,
         getServiceProviders,
         dbApi
     });

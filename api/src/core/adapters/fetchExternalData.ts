@@ -3,7 +3,6 @@ import { DbApiV2, OtherSoftwareExtraData } from "../ports/DbApiV2";
 import type { GetCnllPrestatairesSill } from "../ports/GetCnllPrestatairesSill";
 import { GetServiceProviders } from "../ports/GetServiceProviders";
 import type { GetSoftwareExternalData, SoftwareExternalData } from "../ports/GetSoftwareExternalData";
-import type { GetSoftwareLatestVersion } from "../ports/GetSoftwareLatestVersion";
 import { Software } from "../usecases/readWriteSillData";
 import { PgComptoirDuLibre } from "./dbApi/kysely/kysely.database";
 
@@ -13,7 +12,6 @@ type SoftwareExternalDataCacheBySoftwareId = Partial<Record<ExternalId, Software
 type FetchOtherExternalDataDependencies = {
     getCnllPrestatairesSill: GetCnllPrestatairesSill;
     comptoirDuLibreApi: ComptoirDuLibreApi;
-    getSoftwareLatestVersion: GetSoftwareLatestVersion;
     getServiceProviders: GetServiceProviders;
 };
 
@@ -83,10 +81,9 @@ const makeGetOtherExternalData =
         software: Software,
         existingOtherSoftwareExtraData: OtherSoftwareExtraData | undefined
     ): Promise<OtherSoftwareExtraData | undefined> => {
-        const [serviceProvidersBySoftwareId, cnllPrestatairesSill, latestVersion] = await Promise.all([
+        const [serviceProvidersBySoftwareId, cnllPrestatairesSill] = await Promise.all([
             deps.getServiceProviders(),
-            deps.getCnllPrestatairesSill(),
-            software.codeRepositoryUrl ? deps.getSoftwareLatestVersion(software.codeRepositoryUrl, "quick") : undefined
+            deps.getCnllPrestatairesSill()
         ]);
 
         const comptoirDuLibreSoftware = await getNewComptoirDuLibre({
@@ -112,7 +109,7 @@ const makeGetOtherExternalData =
                               url
                           })) ?? null)
                     : null,
-            latestVersion: latestVersion ?? null
+            latestVersion: null
         };
 
         if (

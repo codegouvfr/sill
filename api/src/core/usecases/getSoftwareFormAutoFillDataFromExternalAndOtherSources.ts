@@ -24,7 +24,7 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         const cachedAutoFillData = autoFillDataCache[externalId];
         if (cachedAutoFillData !== undefined) return cachedAutoFillData;
 
-        const { getSoftwareLatestVersion, comptoirDuLibreApi, getSoftwareExternalData } = context;
+        const { comptoirDuLibreApi, getSoftwareExternalData } = context;
 
         const [softwareExternalData, comptoirDuLibre] = await Promise.all([
             getSoftwareExternalData(externalId),
@@ -87,16 +87,7 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
                     ? undefined
                     : resolveLocalizedString(softwareExternalData.description),
             "softwareLicense": softwareExternalData.license ?? comptoirDuLibreSoftware?.licence,
-            "softwareMinimalVersion": await (async () => {
-                const repoUrl =
-                    softwareExternalData.sourceUrl ??
-                    comptoirDuLibreSoftware?.external_resources.repository ??
-                    undefined;
-
-                return repoUrl === undefined
-                    ? undefined
-                    : getSoftwareLatestVersion(repoUrl, "quick").then(resp => resp?.semVer);
-            })(),
+            "softwareMinimalVersion": undefined,
             "softwareLogoUrl": softwareExternalData.logoUrl ?? comptoirDuLibreLogoUrl,
             "keywords": comptoirDuLibreKeywords ?? []
         };

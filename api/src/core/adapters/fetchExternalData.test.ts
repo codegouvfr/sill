@@ -10,7 +10,6 @@ import { createPgDialect } from "./dbApi/kysely/kysely.dialect";
 import { makeFetchAndSaveSoftwareExtraData } from "./fetchExternalData";
 import { getCnllPrestatairesSill } from "./getCnllPrestatairesSill";
 import { getServiceProviders } from "./getServiceProviders";
-import { createGetSoftwareLatestVersion } from "./getSoftwareLatestVersion";
 import { getWikidataSoftware } from "./wikidata/getWikidataSoftware";
 
 const craSoftwareFormData = {
@@ -117,17 +116,12 @@ describe("fetches software extra data (from different providers)", () => {
         await insertApacheWithCorrectId(db, agentId);
         await insertAcceleroWithCorrectId(db, agentId);
 
-        const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
-            githubPersonalAccessTokenForApiRateLimit: ""
-        });
-
         fetchAndSaveSoftwareExtraData = makeFetchAndSaveSoftwareExtraData({
             dbApi,
             getSoftwareExternalData: getWikidataSoftware,
             comptoirDuLibreApi,
             getCnllPrestatairesSill: getCnllPrestatairesSill,
-            getServiceProviders: getServiceProviders,
-            getSoftwareLatestVersion
+            getServiceProviders: getServiceProviders
         });
     });
 
