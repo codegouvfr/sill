@@ -1,10 +1,10 @@
 import fetch from "node-fetch";
-import { HalFetchError, HalRawSoftware } from "./type";
+import { HAL } from "./types/HAL";
 
 // HAL documentation is here : https://api.archives-ouvertes.fr/docs/search
 
 // Move to get data from API
-const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
+const halSoftwareFieldsToReturn: (keyof HAL.API.Software)[] = [
     "en_abstract_s",
     "en_title_s",
     "fr_abstract_s",
@@ -31,13 +31,13 @@ const halSoftwareFieldsToReturn: (keyof HalRawSoftware)[] = [
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
 
-export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoftware | undefined> {
+export async function fetchHalSoftwareById(halDocid: string): Promise<HAL.API.Software | undefined> {
     const res = await fetch(
         `https://api.archives-ouvertes.fr/search/?q=docid:${halDocid}&wt=json&fl=${halSoftwareFieldsToReturnAsString}&sort=docid%20asc`
     ).catch(() => undefined);
 
     if (res === undefined) {
-        throw new HalFetchError(undefined);
+        throw new HAL.API.FetchError(undefined);
     }
 
     if (res.status === 429) {
@@ -46,7 +46,7 @@ export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoft
     }
 
     if (res.status === 404) {
-        throw new HalFetchError(res.status);
+        throw new HAL.API.FetchError(res.status);
     }
 
     const json = await res.json();
@@ -54,13 +54,17 @@ export async function fetchHalSoftwareById(halDocid: string): Promise<HalRawSoft
     return json.response.docs[0];
 }
 
-export async function fetchHalSoftwares(): Promise<Array<HalRawSoftware>> {
+export async function fetchHalSoftwares(queryString: string = ""): Promise<Array<HAL.API.Software>> {
     // Filter only software who have an swhidId to filter clean data on https://hal.science, TODO remove and set it as an option to be generic
-    const url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}&fq=swhidId_s:["" TO *]`;
+    let url = `https://api.archives-ouvertes.fr/search/?q=docType_s:SOFTWARE&rows=10000&fl=${halSoftwareFieldsToReturnAsString}&fq=swhidId_s:["" TO *]`;
+
+    if (queryString) {
+        url = url + `&q=${encodeURIComponent(queryString)}`;
+    }
 
     const res = await fetch(url).catch(err => {
         console.error(err);
-        throw new HalFetchError(undefined);
+        throw new HAL.API.FetchError(undefined);
     });
 
     if (res.status === 429) {
@@ -69,7 +73,7 @@ export async function fetchHalSoftwares(): Promise<Array<HalRawSoftware>> {
     }
 
     if (res.status === 404) {
-        throw new HalFetchError(res.status);
+        throw new HAL.API.FetchError(res.status);
     }
 
     const json = await res.json();
