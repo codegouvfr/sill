@@ -1,5 +1,5 @@
 import { DbApiV2 } from "../ports/DbApiV2";
-import { halAPIGateway } from "../adapters/hal/HalAPI";
+import { halAPIGateway } from "../../connectors/HAL";
 import { halRawSoftwareToSoftwareForm } from "../adapters/hal/getSoftwareForm";
 import { getWikidataForm } from "../adapters/wikidata/getSoftwareForm";
 

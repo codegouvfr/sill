@@ -1,6 +1,6 @@
 import { SoftwareFormData, SoftwareType } from "../../usecases/readWriteSillData";
-import { halAPIGateway } from "./HalAPI";
-import { HalRawSoftware } from "./HalAPI/type";
+import { halAPIGateway } from "../../../connectors/HAL";
+import { HAL } from "../../../connectors/HAL/types/HAL";
 
 const stringOfArrayIncluded = (stringArray: Array<string>, text: string): boolean => {
     return stringArray.some((arg: string) => {
@@ -28,7 +28,7 @@ const textToSoftwareType = (text: string): SoftwareType => {
     };
 };
 
-export const halRawSoftwareToSoftwareForm = async (halSoftware: HalRawSoftware): Promise<SoftwareFormData> => {
+export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software): Promise<SoftwareFormData> => {
     const codemetaSoftware = await halAPIGateway.software.getCodemetaByUrl(halSoftware.uri_s);
 
     const formData: SoftwareFormData = {
