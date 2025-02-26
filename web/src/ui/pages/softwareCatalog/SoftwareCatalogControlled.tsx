@@ -139,7 +139,9 @@ export function SoftwareCatalogControlled(props: Props) {
                             label: (() => {
                                 switch (value) {
                                     case "added_time":
-                                        return t("softwareCatalogControlled.addedTime");
+                                        return t(
+                                            "softwareCatalogControlled.referencedSinceTime"
+                                        );
                                     case "update_time":
                                         return t("softwareCatalogControlled.updateTime");
                                     case "referent_count":

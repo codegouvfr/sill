@@ -163,7 +163,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         serviceProviders,
                         parentExternalData,
                         updateTime,
-                        addedTime,
+                        referencedSinceTime,
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
@@ -171,7 +171,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     return stripNullOrUndefinedValues({
                         ...software,
                         updateTime: new Date(+updateTime).getTime(),
-                        addedTime: new Date(+addedTime).getTime(),
+                        referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
                         serviceProviders: serviceProviders ?? [],
                         similarSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
@@ -249,7 +249,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         serviceProviders,
                         parentExternalData,
                         updateTime,
-                        addedTime,
+                        referencedSinceTime,
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
@@ -257,7 +257,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         return stripNullOrUndefinedValues({
                             ...software,
                             updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
+                            referencedSinceTime: referencedSinceTime
+                                ? new Date(+referencedSinceTime).getTime()
+                                : undefined,
                             serviceProviders: serviceProviders ?? [],
                             similarSoftwares: similarExternalSoftwares,
                             // (similarSoftwares ?? []).map(
@@ -386,7 +388,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "cs.serviceProviders",
             "cs.latestVersion",
             "s.testUrls",
-            "s.referencedSinceTime as addedTime",
+            "s.referencedSinceTime",
             "s.updateTime",
             "s.lastExtraDataFetchAt",
             "s.dereferencing",
@@ -542,7 +544,7 @@ const makeGetSoftwareById =
                     serviceProviders,
                     parentExternalData,
                     updateTime,
-                    addedTime,
+                    referencedSinceTime,
                     softwareExternalData,
                     similarExternalSoftwares,
                     ...software
@@ -550,7 +552,7 @@ const makeGetSoftwareById =
                 return stripNullOrUndefinedValues({
                     ...software,
                     updateTime: new Date(+updateTime).getTime(),
-                    addedTime: new Date(+addedTime).getTime(),
+                    referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
                     serviceProviders: serviceProviders ?? [],
                     similarSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},

@@ -137,7 +137,7 @@ export default function SoftwareDetails(props: Props) {
                                             software.prerogatives.doRespectRgaa
                                         }
                                         minimalVersionRequired={software.versionMin}
-                                        registerDate={software.addedTime}
+                                        registerDate={software.referencedSinceTime}
                                         softwareDateCurrentVersion={
                                             software.latestVersion?.publicationTime
                                         }

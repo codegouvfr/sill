@@ -112,7 +112,7 @@ type SoftwaresTable = {
     id: Generated<number>;
     name: string;
     description: string;
-    referencedSinceTime: number;
+    referencedSinceTime: number | null;
     updateTime: number;
     lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{

@@ -103,7 +103,7 @@ export namespace State {
         };
 
         export type Internal = Common & {
-            addedTime: number;
+            referencedSinceTime: number | undefined;
             updateTime: number;
             organizations: string[];
             prerogatives: OmitFromExisting<

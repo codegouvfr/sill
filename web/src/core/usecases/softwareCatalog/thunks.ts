@@ -221,7 +221,7 @@ function apiSoftwareToInternalSoftware(params: {
         latestVersion,
         parentWikidataSoftware,
         testUrl,
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         prerogatives,
@@ -301,7 +301,7 @@ function apiSoftwareToInternalSoftware(params: {
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         testUrl,
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         organizations: objectKeys(userAndReferentCountByOrganization),
