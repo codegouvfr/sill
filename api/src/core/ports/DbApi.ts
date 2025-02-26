@@ -20,7 +20,7 @@ export namespace Db {
         id: number;
         name: string;
         description: string;
-        referencedSinceTime: number;
+        referencedSinceTime: number | undefined;
         updateTime: number;
         dereferencing?: {
             reason?: string;

@@ -52,7 +52,7 @@ export namespace State {
                   publicationTime?: number;
               }
             | undefined;
-        addedTime: number;
+        referencedSinceTime: number | undefined;
         versionMin: string | undefined;
         license: string;
         comptoirDuLibreServiceProviderCount: number;

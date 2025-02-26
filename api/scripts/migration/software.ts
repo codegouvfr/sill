@@ -87,7 +87,7 @@ const zSoftwareRow = z.object({
     "id": z.number(),
     "name": z.string(),
     "description": z.string(),
-    "referencedSinceTime": z.number(),
+    "referencedSinceTime": z.number().optional(),
     "updateTime": z.number(),
     "dereferencing": z
         .object({

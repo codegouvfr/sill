@@ -167,7 +167,7 @@ describe("pgDbApi", () => {
             const actualSoftware = softwares[0];
 
             expectToEqual(actualSoftware, {
-                addedTime: expect.any(Number),
+                referencedSinceTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
