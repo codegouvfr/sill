@@ -281,7 +281,8 @@ describe("pgDbApi", () => {
             const softwareId = await dbApi.software.create({
                 formData: softwareFormData,
                 agentId,
-                externalDataOrigin: "wikidata"
+                externalDataOrigin: "wikidata",
+                isReferenced: true
             });
 
             await db
@@ -456,7 +457,8 @@ describe("pgDbApi", () => {
         const softwareId = await dbApi.software.create({
             formData: softwareFormData,
             agentId,
-            externalDataOrigin: "wikidata"
+            externalDataOrigin: "wikidata",
+            isReferenced: true
         });
 
         return {

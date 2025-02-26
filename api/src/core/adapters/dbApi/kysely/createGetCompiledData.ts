@@ -56,6 +56,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "s.updateTime",
             "s.versionMin",
             "s.workshopUrls",
+            "s.isReferenced",
             "csft.softwareId as externalDataSoftwareId",
             "csft.annuaireCnllServiceProviders",
             "csft.comptoirDuLibreSoftware",

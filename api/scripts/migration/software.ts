@@ -113,7 +113,8 @@ const zSoftwareRow = z.object({
     "generalInfoMd": z.string().optional(),
     "addedByAgentEmail": z.string(),
     "logoUrl": z.string().optional(),
-    "keywords": z.array(z.string())
+    "keywords": z.array(z.string()),
+    "isReferenced": z.boolean()
 });
 
 {
@@ -163,6 +164,7 @@ fs.writeFileSync(
                     addedByAgentEmail,
                     logoUrl,
                     keywords,
+                    isReferenced,
                     ...rest
                 } = softwareRow;
 
@@ -201,7 +203,8 @@ fs.writeFileSync(
                     categories,
                     addedByAgentEmail,
                     logoUrl,
-                    keywords
+                    keywords,
+                    isReferenced
                 });
             }),
             null,

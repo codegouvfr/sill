@@ -20,7 +20,7 @@ const dateParser = (str: string | Date | undefined | null) => {
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
-        create: async ({ formData, externalDataOrigin, agentId }) => {
+        create: async ({ formData, externalDataOrigin, agentId, isReferenced }) => {
             const {
                 softwareName,
                 softwareDescription,
@@ -67,7 +67,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         categories: JSON.stringify([]),
                         generalInfoMd: undefined,
                         addedByAgentId: agentId,
-                        keywords: JSON.stringify(softwareKeywords)
+                        keywords: JSON.stringify(softwareKeywords),
+                        isReferenced: isReferenced
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();

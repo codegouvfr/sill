@@ -51,6 +51,7 @@ export namespace Db {
         addedByAgentEmail: string;
         logoUrl: string | undefined;
         keywords: string[];
+        isReferenced: boolean;
     };
 
     export type AgentRow = {

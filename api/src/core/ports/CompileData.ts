@@ -56,6 +56,7 @@ export namespace CompiledData {
             | "keywords"
             | "externalId"
             | "externalDataOrigin"
+            | "isReferenced"
         > & {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
@@ -133,7 +134,8 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             softwareExternalData,
             similarExternalSoftwares,
             parentWikidataSoftware,
-            serviceProviders
+            serviceProviders,
+            isReferenced
         } = software;
 
         return {
@@ -162,6 +164,7 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             softwareExternalData,
             similarExternalSoftwares,
             parentWikidataSoftware,
+            isReferenced,
             "hasExpertReferent": referents.find(({ isExpert }) => isExpert) !== undefined,
             "userAndReferentCountByOrganization": (() => {
                 const out: CompiledData.Software.Public["userAndReferentCountByOrganization"] = {};

@@ -110,7 +110,8 @@ describe("fetches software extra data (from different providers)", () => {
         craSoftwareId = await dbApi.software.create({
             formData: craSoftwareFormData,
             externalDataOrigin: "wikidata",
-            agentId
+            agentId,
+            isReferenced: true
         });
 
         await insertApacheWithCorrectId(db, agentId);

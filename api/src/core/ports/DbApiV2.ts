@@ -24,6 +24,7 @@ export interface SoftwareRepository {
         params: {
             formData: SoftwareFormData;
             externalDataOrigin: ExternalDataOrigin;
+            isReferenced: boolean;
         } & WithAgentId
     ) => Promise<number>;
     update: (

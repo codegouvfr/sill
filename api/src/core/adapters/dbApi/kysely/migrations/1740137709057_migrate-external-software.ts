@@ -7,9 +7,18 @@ export async function up(db: Kysely<any>): Promise<void> {
         .addColumn("isReferenced", "boolean")
         .alterColumn("referencedSinceTime", c => c.dropNotNull())
         .execute();
+
+    await db
+        .updateTable("softwares")
+        .set({
+            isReferenced: true
+        })
+        .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+    await db.deleteFrom("softwares").where("softwares.isReferenced", "=", "false").execute();
+
     await db.schema
         .alterTable("softwares")
         .dropColumn("isReferenced")
