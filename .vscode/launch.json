@@ -10,7 +10,31 @@
             "name": "yarn dev",
             "runtimeExecutable": "yarn",
             "cwd": "${workspaceFolder}",
-            "runtimeArgs": ["dev"],
+            "runtimeArgs": [
+                "dev"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Import Data",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}/api",
+            "runtimeArgs": [
+                "run",
+                "import"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Update Data",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}/api",
+            "runtimeArgs": [
+                "run",
+                "update"
+            ],
         }
     ]
 }
