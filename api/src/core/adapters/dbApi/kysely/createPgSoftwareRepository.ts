@@ -223,7 +223,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             .as("similarSoftwaresIds")
                 ])
                 .groupBy("s.id")
-                .where("id", "=", softwareId)
+                .where("s.id", "=", softwareId)
                 .executeTakeFirstOrThrow();
 
             return {
@@ -541,7 +541,7 @@ const makeGetSoftwareById =
     (db: Kysely<Database>) =>
     async (softwareId: number): Promise<Software | undefined> =>
         makeGetSoftwareBuilder(db)
-            .where("id", "=", softwareId)
+            .where("s.id", "=", softwareId)
             .executeTakeFirst()
             .then((result): Software | undefined => {
                 if (!result) return;
