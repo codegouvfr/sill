@@ -11,14 +11,14 @@ import { createPgDialect } from "./kysely.dialect";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalId = "external-id-111";
-const similarExternalId = "external-id-222";
+const similarSoftwareExternalDataId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalId,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: [similarExternalId],
+    similarSoftwareExternalDataIds: [similarSoftwareExternalDataId],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -59,7 +59,7 @@ const softwareExternalData: SoftwareExternalData = {
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
-    externalId: similarExternalId,
+    externalId: similarSoftwareExternalDataId,
     externalDataOrigin: "wikidata",
     developers: [
         {
@@ -109,6 +109,7 @@ describe("pgDbApi", () => {
         dbApi = createKyselyPgDbApi(db);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
+        await db.deleteFrom("softwares__similar_software_external_datas").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
         await db.deleteFrom("instances").execute();
@@ -149,7 +150,7 @@ describe("pgDbApi", () => {
 
             await db
                 .updateTable("softwares")
-                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId)
+                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId.toString())
                 .where("id", "=", softwareId)
                 .execute();
 

@@ -1189,7 +1189,6 @@ const softwares = [
         },
         similarSoftwares: [],
         referencedSinceTime: 1674739365178,
-        addedTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],

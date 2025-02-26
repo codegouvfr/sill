@@ -66,7 +66,7 @@ type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
     softwareId: number;
-    similarExternalId: ExternalId;
+    similarSoftwareId: number;
 };
 
 type SoftwareExternalDatasTable = {

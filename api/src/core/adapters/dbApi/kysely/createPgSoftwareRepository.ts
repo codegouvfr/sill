@@ -2,7 +2,7 @@ import { Kysely, sql } from "kysely";
 import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { SoftwareRepository } from "../../../ports/DbApiV2";
-import { ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import { ExternalDataOrigin, ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
@@ -79,7 +79,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 );
 
                 if (similarSoftwareExternalDataIds.length > 0) {
-                    await trx
+                    // TODO Auto import sofware
+                    /*  await trx
                         .insertInto("softwares__similar_software_external_datas")
                         .values(
                             similarSoftwareExternalDataIds.map(similarExternalId => ({
@@ -87,7 +88,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 similarExternalId
                             }))
                         )
-                        .execute();
+                        .execute(); */
                 }
 
                 console.log("all good");
@@ -197,21 +198,29 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     });
                 }),
         getById: getBySoftwareId,
-        getByIdWithLinkedSoftwaresExternalIds: async softwareId => {
+        getIdBySourceIdentifier: async (externalDataOrigin: ExternalDataOrigin, externalId: string) => {
+            return db
+                .selectFrom("softwares as s")
+                .select("s.id")
+                .where("s.externalDataOrigin", "=", externalDataOrigin)
+                .where("s.externalId", "=", externalId)
+                .executeTakeFirstOrThrow();
+        },
+        getByIdWithLinkedSoftwaresIds: async softwareId => {
             const software = await getBySoftwareId(softwareId);
             if (!software) return;
 
-            const { parentSoftwareExternalId, similarSoftwaresExternalIds } = await db
+            const { parentSoftwareExternalId, similarSoftwaresIds } = await db
                 .selectFrom("softwares as s")
                 .leftJoin("softwares__similar_software_external_datas as sim", "sim.softwareId", "s.id")
                 .select([
                     "s.parentSoftwareWikidataId as parentSoftwareExternalId",
                     qb =>
                         qb.fn
-                            .jsonAgg(qb.ref("sim.similarExternalId"))
-                            .filterWhere("sim.similarExternalId", "is not", null)
+                            .jsonAgg(qb.ref("sim.softwareId"))
+                            .filterWhere("sim.softwareId", "is not", null)
                             .$castTo<string[]>()
-                            .as("similarSoftwaresExternalIds")
+                            .as("similarSoftwaresIds")
                 ])
                 .groupBy("s.id")
                 .where("id", "=", softwareId)
@@ -219,7 +228,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
             return {
                 software,
-                similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? [],
+                similarSoftwaresIds: similarSoftwaresIds ?? [],
                 parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
             };
         },
@@ -229,8 +238,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             builder = onlyIfUpdatedMoreThan3HoursAgo
                 ? builder.where(eb =>
                       eb.or([
-                          eb("lastExtraDataFetchAt", "is", null),
-                          eb("lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
+                          eb("s.lastExtraDataFetchAt", "is", null),
+                          eb("s.lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
                       ])
                   )
                 : builder;
@@ -335,6 +344,19 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 })
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
+        },
+        registerSimilarSoftware: async ({ softwareId, similarSoftwareIds }) => {
+            const values = similarSoftwareIds.map(similarId => {
+                return {
+                    softwareId,
+                    similarSoftwareId: similarId
+                };
+            });
+
+            // TODO Transaction
+            await db.insertInto("softwares__similar_software_external_datas").values(values).execute();
+
+            return Promise.resolve();
         }
     };
 };
@@ -345,16 +367,9 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
         .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
         .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
         .leftJoin("software_external_datas as parentExt", "s.parentSoftwareWikidataId", "parentExt.externalId")
-        .leftJoin(
-            "softwares__similar_software_external_datas",
-            "softwares__similar_software_external_datas.softwareId",
-            "s.id"
-        )
-        .leftJoin(
-            "software_external_datas as similarExt",
-            "softwares__similar_software_external_datas.similarExternalId",
-            "similarExt.externalId"
-        )
+        .leftJoin("softwares__similar_software_external_datas as sse", "sse.softwareId", "s.id")
+        .leftJoin("softwares as similarSoft", "sse.similarSoftwareId", "similarSoft.id")
+        .leftJoin("software_external_datas as similarExt", "similarSoft.externalId", "similarExt.externalId")
         .groupBy([
             "s.id",
             "cs.softwareId",
@@ -387,9 +402,9 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.categories",
             ({ ref }) =>
                 jsonBuildObject({
-                    isPresentInSupportContract: ref("isPresentInSupportContract"),
-                    isFromFrenchPublicServices: ref("isFromFrenchPublicService"),
-                    doRespectRgaa: ref("doRespectRgaa")
+                    isPresentInSupportContract: ref("s.isPresentInSupportContract"),
+                    isFromFrenchPublicServices: ref("s.isFromFrenchPublicService"),
+                    doRespectRgaa: ref("s.doRespectRgaa")
                 }).as("prerogatives"),
             "s.comptoirDuLibreId",
             "cs.comptoirDuLibreSoftware",

@@ -36,10 +36,14 @@ export interface SoftwareRepository {
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
-    getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
+    getIdBySourceIdentifier: (
+        externalDataOrigin: ExternalDataOrigin,
+        externalId: string
+    ) => Promise<{ id: number } | undefined>;
+    getByIdWithLinkedSoftwaresIds: (id: number) => Promise<
         | {
               software: Software;
-              similarSoftwaresExternalIds: string[];
+              similarSoftwaresIds: string[];
               parentSoftwareExternalId: string | undefined;
           }
         | undefined
@@ -48,6 +52,7 @@ export interface SoftwareRepository {
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
+    registerSimilarSoftware: (params: { softwareId: number; similarSoftwareIds: number[] }) => Promise<void>;
 }
 
 export interface SoftwareExternalDataRepository {
