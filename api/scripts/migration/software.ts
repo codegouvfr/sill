@@ -48,47 +48,6 @@ const zSoftwareType = z.union([
     assert<Equals<Got, Expected>>();
 }
 
-// Previous version, kept until the new one reach production :
-
-// const zSoftwareRow = z.object({
-//     "id": z.number(),
-//     "name": z.string(),
-//     "description": z.string(),
-//     "referencedSinceTime": z.number(),
-//     "updateTime": z.number(),
-//     "dereferencing": z
-//       .object({
-//           "reason": z.string().optional(),
-//           "time": z.number(),
-//           "lastRecommendedVersion": z.string().optional()
-//       })
-//       .optional(),
-//     "isStillInObservation": z.boolean(),
-//     "parentSoftwareWikidataId": z.string().optional(),
-//     "doRespectRgaa": z.boolean().or(z.null()),
-//     "isFromFrenchPublicService": z.boolean(),
-//     "isPresentInSupportContract": z.boolean(),
-//     "similarSoftwareWikidataIds": z.array(z.string()),
-//     "wikidataId": z.string().optional(),
-//     "comptoirDuLibreId": z.number().optional(),
-//     "license": z.string(),
-//     "softwareType": zSoftwareType,
-//     "catalogNumeriqueGouvFrId": z.string().optional(),
-//     "versionMin": z.string(),
-//     "workshopUrls": z.array(z.string()),
-//     "testUrls": z.array(
-//       z.object({
-//           "description": z.string(),
-//           "url": z.string()
-//       })
-//     ),
-//     "categories": z.array(z.string()),
-//     "generalInfoMd": z.string().optional(),
-//     "addedByAgentEmail": z.string(),
-//     "logoUrl": z.string().optional(),
-//     "keywords": z.array(z.string())
-// });
-
 const zSoftwareRow = z.object({
     "id": z.number(),
     "name": z.string(),
@@ -107,7 +66,7 @@ const zSoftwareRow = z.object({
     "doRespectRgaa": z.boolean().or(z.null()),
     "isFromFrenchPublicService": z.boolean(),
     "isPresentInSupportContract": z.boolean(),
-    "similarSoftwareExternalDataIds": z.array(z.string()),
+    "similarSoftwareIds": z.array(z.number()),
     "externalId": z.string().optional(),
     "externalDataOrigin": z.enum(["wikidata", "HAL"]).optional(),
     "comptoirDuLibreId": z.number().optional(),
@@ -126,7 +85,8 @@ const zSoftwareRow = z.object({
     "generalInfoMd": z.string().optional(),
     "addedByAgentEmail": z.string(),
     "logoUrl": z.string().optional(),
-    "keywords": z.array(z.string())
+    "keywords": z.array(z.string()),
+    "isReferenced": z.boolean()
 });
 
 {
@@ -172,12 +132,13 @@ fs.writeFileSync(
                     generalInfoMd,
                     updateTime,
                     doRespectRgaa,
-                    similarSoftwareExternalDataIds,
+                    similarSoftwareIds,
                     softwareType,
                     categories,
                     addedByAgentEmail,
                     logoUrl,
                     keywords,
+                    isReferenced,
                     ...rest
                 } = softwareRow;
 
@@ -213,12 +174,13 @@ fs.writeFileSync(
                     generalInfoMd,
                     updateTime,
                     doRespectRgaa,
-                    similarSoftwareExternalDataIds,
+                    similarSoftwareIds,
                     softwareType,
                     categories,
                     addedByAgentEmail,
                     logoUrl,
-                    keywords
+                    keywords,
+                    isReferenced
                 });
             }),
             null,

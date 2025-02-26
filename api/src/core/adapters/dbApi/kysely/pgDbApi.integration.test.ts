@@ -11,14 +11,14 @@ import { createPgDialect } from "./kysely.dialect";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalId = "external-id-111";
-const similarExternalId = "external-id-222";
+const similarSoftwareExternalDataId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalId,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: [similarExternalId],
+    similarSoftwareExternalDataIds: [similarSoftwareExternalDataId],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -60,7 +60,7 @@ const softwareExternalData: SoftwareExternalData = {
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
-    externalId: similarExternalId,
+    externalId: similarSoftwareExternalDataId,
     externalDataOrigin: "wikidata",
     developers: [
         {
@@ -111,6 +111,7 @@ describe("pgDbApi", () => {
         dbApi = createKyselyPgDbApi(db);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
+        await db.deleteFrom("softwares__similar_software_external_datas").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
         await db.deleteFrom("instances").execute();
@@ -151,7 +152,7 @@ describe("pgDbApi", () => {
 
             await db
                 .updateTable("softwares")
-                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId)
+                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId.toString())
                 .where("id", "=", softwareId)
                 .execute();
 
@@ -169,7 +170,7 @@ describe("pgDbApi", () => {
             const actualSoftware = softwares[0];
 
             expectToEqual(actualSoftware, {
-                addedTime: expect.any(Number),
+                referencedSinceTime: expect.any(Number),
                 updateTime: expect.any(Number),
                 annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
@@ -228,7 +229,6 @@ describe("pgDbApi", () => {
                     },
                     type: "desktop/mobile"
                 },
-                testUrl: undefined,
                 userAndReferentCountByOrganization: {
                     [insertedAgent.organization]: {
                         userCount: 1,
@@ -284,7 +284,8 @@ describe("pgDbApi", () => {
             const softwareId = await dbApi.software.create({
                 formData: softwareFormData,
                 agentId,
-                externalDataOrigin: "wikidata"
+                externalDataOrigin: "wikidata",
+                isReferenced: true
             });
 
             await db
@@ -459,7 +460,8 @@ describe("pgDbApi", () => {
         const softwareId = await dbApi.software.create({
             formData: softwareFormData,
             agentId,
-            externalDataOrigin: "wikidata"
+            externalDataOrigin: "wikidata",
+            isReferenced: true
         });
 
         return {

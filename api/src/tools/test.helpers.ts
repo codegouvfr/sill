@@ -57,7 +57,7 @@ export const createSoftwareFormData = makeObjectFactory<SoftwareFormData>({
     softwareMinimalVersion: "1.0.0",
     isPresentInSupportContract: true,
     isFromFrenchPublicService: true,
-    similarSoftwareExternalDataIds: ["some-external-id"],
+    similarSoftwareExternalDataIds: ["Q19399674", "Q24589705"],
     softwareLogoUrl: "https://example.com/logo.png",
     softwareKeywords: ["some", "keywords"],
     doRespectRgaa: true

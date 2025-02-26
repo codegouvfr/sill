@@ -147,12 +147,21 @@ describe("RPC e2e tests", () => {
             const similars = await kyselyDb
                 .selectFrom("softwares__similar_software_external_datas")
                 .selectAll()
+                .where("softwareId", "=", actualSoftwareId)
                 .execute();
+
             expect(similars).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
-            softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
+
+            softwareFormData.similarSoftwareExternalDataIds.forEach(async similarSoftwareExternalDataId => {
+                const similarSoftware = await kyselyDb
+                    .selectFrom("softwares")
+                    .selectAll()
+                    .where("externalId", "=", similarSoftwareExternalDataId)
+                    .executeTakeFirstOrThrow();
+
                 expectToMatchObject(similars[0], {
                     softwareId: actualSoftwareId,
-                    similarExternalId
+                    similarSoftwareId: similarSoftware.id
                 });
             });
         });

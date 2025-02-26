@@ -25,7 +25,6 @@ export type Software = {
               publicationTime?: number;
           }
         | undefined;
-    testUrl: string | undefined;
     referencedSinceTime: number | undefined;
     updateTime: number;
     dereferencing:
@@ -132,7 +131,7 @@ export type SoftwareFormData = {
     comptoirDuLibreId: number | undefined;
     softwareLicense: string;
     softwareMinimalVersion: string | undefined;
-    similarSoftwareExternalDataIds: string[];
+    similarSoftwareExternalDataIds: string[]; // Wikidata Specific // TODO Change for generic external Id + Source
     softwareLogoUrl: string | undefined;
     softwareKeywords: string[];
 

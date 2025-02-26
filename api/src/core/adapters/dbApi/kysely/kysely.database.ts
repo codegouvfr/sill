@@ -66,7 +66,7 @@ type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
     softwareId: number;
-    similarExternalId: ExternalId;
+    similarSoftwareId: number;
 };
 
 type SoftwareExternalDatasTable = {
@@ -144,6 +144,7 @@ type SoftwaresTable = {
     addedByAgentId: number;
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
+    isReferenced: boolean;
 };
 
 // ---------- compiled data ----------
