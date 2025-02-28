@@ -16,11 +16,9 @@
         "test": "vitest --watch=false --no-file-parallelism",
         "dev": "yarn build && yarn start",
         "build": "tsc",
-        "start": "yarn db:up && dotenv -e ../.env -- node dist/src/main.js",
-        "update": "dotenv -e ../.env -- node dist/src/update.js",
-        "import": "dotenv -e ../.env -- node dist/src/import.js",
-        "build-prod": "esbuild src/main.ts --bundle --platform=node --target=node20 --outfile=dist/index.js",
-        "start-prod": "yarn db:up && dotenv -e ../.env -- node dist/index.js",
+        "start": "yarn db:up && dotenv -e ../.env -- node dist/src/entrypoints/start-api.js",
+        "update": "dotenv -e ../.env -- node dist/src/entrypoints/update.js",
+        "import": "dotenv -e ../.env -- node dist/src/entrypoints/import.js",
         "_format": "prettier \"**/*.{ts,tsx,json,md}\"",
         "format": "yarn run _format --write",
         "format:check": "yarn run _format --list-different",
@@ -30,7 +28,7 @@
         "load-git-repo-in-pg": "dotenv -e ../.env -- node --loader ts-node/esm --experimental-specifier-resolution=node scripts/load-git-repo-in-pg.ts",
         "typecheck": "tsc --noEmit",
         "dev:db": "docker compose -f ../docker-compose.resources.yml up -d",
-        "dev:reset": "docker stop sill-postgres-1 && docker rm sill-postgres-1 && docker compose -f ../docker-compose.resources.yml up -d"
+        "dev:reset": "docker compose -f ../docker-compose.resources.yml down && rm -rf ../docker-data && docker compose -f ../docker-compose.resources.yml up -d"
     },
     "author": "DINUM",
     "license": "MIT",
