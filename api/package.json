@@ -24,8 +24,6 @@
         "format": "yarn run _format --write",
         "format:check": "yarn run _format --list-different",
         "link-in-web": "ts-node --skipProject scripts/link-in-app.ts sill-web",
-        "reset-data-test": "ts-node --skipProject scripts/reset-data-test.ts",
-        "compile-data": "./.env.local.sh ts-node --skipProject scripts/compile-data.ts",
         "load-git-repo-in-pg": "dotenv -e ../.env -- node --loader ts-node/esm --experimental-specifier-resolution=node scripts/load-git-repo-in-pg.ts",
         "typecheck": "tsc --noEmit",
         "dev:db": "docker compose -f ../docker-compose.resources.yml up -d",
