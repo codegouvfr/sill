@@ -1,5 +1,7 @@
 services:
   api:
+    depends_on:
+      - postgres
     build:
       context: "."
       dockerfile: Dockerfile.api
@@ -8,14 +10,20 @@ services:
     command: yarn start
 
   update:
+    depends_on:
+      - api
+      - postgres
     build:
       context: "."
       dockerfile: Dockerfile.api
     env_file: .env
-    restart: unless-stopped
-    command: yarn update
+    restart: always
+    # runs every 4 hours (240 minutes)
+    command: yarn update-then-wait 240
 
   web:
+    depends_on:
+      - api
     build:
       context: "."
       dockerfile: Dockerfile.web

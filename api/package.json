@@ -18,6 +18,7 @@
         "build": "tsc",
         "start": "yarn db:up && dotenv -e ../.env -- node dist/src/entrypoints/start-api.js",
         "update": "dotenv -e ../.env -- node dist/src/entrypoints/update.js",
+        "update-then-wait": "./update-then-wait.sh",
         "import": "dotenv -e ../.env -- node dist/src/entrypoints/import.js",
         "_format": "prettier \"**/*.{ts,tsx,json,md}\"",
         "format": "yarn run _format --write",
