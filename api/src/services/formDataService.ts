@@ -1,4 +1,4 @@
-import { Adapter } from "../core/adapters/type";
+import type { SourceGateway } from "../core/ports/SourceGateway";
 import { DbApiV2 } from "../core/ports/DbApiV2";
 import { SoftwareFormData } from "../lib/ApiTypes";
 
@@ -6,7 +6,7 @@ export type FormDataService = {
     create: (softwareForm: SoftwareFormData, agentId: number) => Promise<number>;
 };
 
-export const formDataServiceMake = (dbApi: DbApiV2, externalDataService: Adapter) => {
+export const formDataServiceMake = (dbApi: DbApiV2, externalDataService: SourceGateway) => {
     return {
         create: async (softwareForm: SoftwareFormData, agentId: number) => {
             // Get or Create similars software Ids

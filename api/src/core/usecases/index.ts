@@ -6,4 +6,5 @@ export type UseCases = {
     getSoftwareFormAutoFillDataFromExternalAndOtherSources: GetSoftwareFormAutoFillDataFromExternalAndOtherSources;
     fetchAndSaveExternalDataForAllSoftwares: FetchAndSaveExternalDataForAllSoftwares;
     getAgent: GetAgent;
+    createSoftware: CreateSoftware;
 };
