@@ -1,9 +1,9 @@
-import { Adapter } from "../type";
+import type { SourceGateway } from "../../ports/SourceGateway";
 import { getWikidataForm } from "./getSoftwareForm";
 import { getWikidataSoftware } from "./getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./getWikidataSoftwareOptions";
 
-export const wikidataAdapter: Adapter = {
+export const wikidataAdapter: SourceGateway = {
     sourceType: "wikidata",
     softwareExternalData: {
         getById: getWikidataSoftware

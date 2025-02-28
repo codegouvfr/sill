@@ -90,6 +90,7 @@ describe("RPC e2e tests", () => {
             await kyselyDb.deleteFrom("software_referents").execute();
             await kyselyDb.deleteFrom("software_users").execute();
             await kyselyDb.deleteFrom("instances").execute();
+            await kyselyDb.deleteFrom("softwares__similar_software_external_datas").execute();
             await kyselyDb.deleteFrom("softwares").execute();
             await kyselyDb.deleteFrom("agents").execute();
         });
@@ -146,12 +147,21 @@ describe("RPC e2e tests", () => {
             const similars = await kyselyDb
                 .selectFrom("softwares__similar_software_external_datas")
                 .selectAll()
+                .where("softwareId", "=", actualSoftwareId)
                 .execute();
+
             expect(similars).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
-            softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
+
+            softwareFormData.similarSoftwareExternalDataIds.forEach(async similarSoftwareExternalDataId => {
+                const similarSoftware = await kyselyDb
+                    .selectFrom("softwares")
+                    .selectAll()
+                    .where("externalId", "=", similarSoftwareExternalDataId)
+                    .executeTakeFirstOrThrow();
+
                 expectToMatchObject(similars[0], {
                     softwareId: actualSoftwareId,
-                    similarExternalId
+                    similarSoftwareId: similarSoftware.id
                 });
             });
         });
@@ -199,7 +209,8 @@ describe("RPC e2e tests", () => {
 
         it("adds an instance of the software", async () => {
             instanceFormData = createInstanceFormData({ mainSoftwareSillId: actualSoftwareId });
-            expect(await getSoftwareRows()).toHaveLength(1);
+            const rows = await getSoftwareRows();
+            expect(rows).toHaveLength(1);
             expect(await getInstanceRows()).toHaveLength(0);
             await apiCaller.createInstance({
                 formData: instanceFormData

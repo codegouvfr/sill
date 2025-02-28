@@ -59,7 +59,7 @@ const insertSoftwares = async (
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => ({
+                softwareRows.map(({ similarSoftwareIds: _, addedByAgentEmail, ...row }) => ({
                     ...row,
                     addedByAgentId: agentIdByEmail[addedByAgentEmail],
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
@@ -72,7 +72,8 @@ const insertSoftwares = async (
             .executeTakeFirst();
         await sql`SELECT setval('softwares_id_seq', (SELECT MAX(id) FROM softwares))`.execute(trx);
 
-        await trx
+        // TODO Insert software
+        /* await trx
             .insertInto("softwares__similar_software_external_datas")
             .values(
                 softwareRows.flatMap(row =>
@@ -82,7 +83,7 @@ const insertSoftwares = async (
                     }))
                 )
             )
-            .execute();
+            .execute(); */
     });
 };
 

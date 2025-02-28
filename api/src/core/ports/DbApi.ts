@@ -20,7 +20,7 @@ export namespace Db {
         id: number;
         name: string;
         description: string;
-        referencedSinceTime: number;
+        referencedSinceTime: number | undefined;
         updateTime: number;
         dereferencing?: {
             reason?: string;
@@ -32,7 +32,7 @@ export namespace Db {
         doRespectRgaa: boolean | null;
         isFromFrenchPublicService: boolean;
         isPresentInSupportContract: boolean;
-        similarSoftwareExternalDataIds: string[];
+        similarSoftwareIds: number[];
         externalId?: string;
         externalDataOrigin?: "wikidata" | "HAL";
         //Example https://comptoir-du-libre.org/en/softwares/461 -> 461
@@ -51,6 +51,7 @@ export namespace Db {
         addedByAgentEmail: string;
         logoUrl: string | undefined;
         keywords: string[];
+        isReferenced: boolean;
     };
 
     export type AgentRow = {

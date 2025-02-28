@@ -32,10 +32,10 @@ export const makeFetchAndSaveSoftwareExtraData = ({
     });
 
     return async (softwareId: number, softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId) => {
-        const data = await dbApi.software.getByIdWithLinkedSoftwaresExternalIds(softwareId);
+        const data = await dbApi.software.getByIdWithLinkedSoftwaresIds(softwareId);
         if (!data) return;
 
-        const { software, similarSoftwaresExternalIds, parentSoftwareExternalId } = data;
+        const { software, similarSoftwaresIds, parentSoftwareExternalId } = data;
         console.log(`🚀${software.softwareName}`);
 
         if (software.externalId) {
@@ -48,10 +48,12 @@ export const makeFetchAndSaveSoftwareExtraData = ({
             await getSoftwareExternalDataAndSaveIt(parentSoftwareExternalId, softwareExternalDataCache);
         }
 
-        if (similarSoftwaresExternalIds.length > 0) {
-            for (const similarExternalId of similarSoftwaresExternalIds) {
-                console.log(" • Similar wiki : ", similarExternalId);
-                await getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache);
+        if (similarSoftwaresIds.length > 0) {
+            for (const similarSoftwareId of similarSoftwaresIds) {
+                console.log(" • Similar in catalog : ", similarSoftwareId);
+                const similarSoftware = await dbApi.software.getById(similarSoftwareId);
+                if (similarSoftware && similarSoftware.externalId)
+                    await getSoftwareExternalDataAndSaveIt(similarSoftware.externalId, softwareExternalDataCache);
             }
         }
 

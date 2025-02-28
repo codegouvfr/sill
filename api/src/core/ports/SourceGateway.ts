@@ -1,8 +1,8 @@
-import { ExternalDataOrigin, GetSoftwareExternalData } from "../ports/GetSoftwareExternalData";
-import { GetSoftwareExternalDataOptions } from "../ports/GetSoftwareExternalDataOptions";
+import { ExternalDataOrigin, GetSoftwareExternalData } from "./GetSoftwareExternalData";
+import { GetSoftwareExternalDataOptions } from "./GetSoftwareExternalDataOptions";
 import { SoftwareFormData } from "../usecases/readWriteSillData";
 
-export type Adapter = {
+export type SourceGateway = {
     sourceType: ExternalDataOrigin;
     softwareExternalData: {
         getById: GetSoftwareExternalData;
