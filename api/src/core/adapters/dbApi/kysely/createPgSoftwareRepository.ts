@@ -73,26 +73,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
 
-                console.log(
-                    `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to insert similars : `,
-                    similarSoftwareExternalDataIds
-                );
-
-                if (similarSoftwareExternalDataIds.length > 0) {
-                    // TODO Auto import sofware
-                    /*  await trx
-                        .insertInto("softwares__similar_software_external_datas")
-                        .values(
-                            similarSoftwareExternalDataIds.map(similarExternalId => ({
-                                softwareId,
-                                similarExternalId
-                            }))
-                        )
-                        .execute(); */
-                }
-
-                console.log("all good");
-
                 return softwareId;
             });
         },
@@ -152,7 +132,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
         },
         getByName: async (softwareName: string): Promise<Software | undefined> =>
             makeGetSoftwareBuilder(db)
-                .where("name", "=", softwareName)
+                .where("s.name", "=", softwareName)
                 .executeTakeFirst()
                 .then((result): Software | undefined => {
                     if (!result) return;
@@ -199,12 +179,14 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 }),
         getById: getBySoftwareId,
         getIdBySourceIdentifier: async (externalDataOrigin: ExternalDataOrigin, externalId: string) => {
-            return db
+            const result = await db
                 .selectFrom("softwares as s")
                 .select("s.id")
                 .where("s.externalDataOrigin", "=", externalDataOrigin)
                 .where("s.externalId", "=", externalId)
-                .executeTakeFirstOrThrow();
+                .executeTakeFirst();
+
+            return result?.id;
         },
         getByIdWithLinkedSoftwaresIds: async softwareId => {
             const software = await getBySoftwareId(softwareId);
@@ -219,7 +201,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         qb.fn
                             .jsonAgg(qb.ref("sim.softwareId"))
                             .filterWhere("sim.softwareId", "is not", null)
-                            .$castTo<string[]>()
+                            .$castTo<number[]>()
                             .as("similarSoftwaresIds")
                 ])
                 .groupBy("s.id")
@@ -344,19 +326,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 })
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
-        },
-        registerSimilarSoftware: async ({ softwareId, similarSoftwareIds }) => {
-            const values = similarSoftwareIds.map(similarId => {
-                return {
-                    softwareId,
-                    similarSoftwareId: similarId
-                };
-            });
-
-            // TODO Transaction
-            await db.insertInto("softwares__similar_software_external_datas").values(values).execute();
-
-            return Promise.resolve();
         }
     };
 };

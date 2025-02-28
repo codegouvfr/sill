@@ -29,7 +29,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await db.schema
         .alterTable("softwares__similar_software_external_datas")
-        .addColumn("similarSoftwareId", "serial", col => col.references("softwares.id"))
+        .addColumn("similarSoftwareId", "serial", col => col.references("softwares.id").onDelete("cascade"))
         .execute();
 
     // Add the composite primary key
@@ -73,17 +73,9 @@ export async function up(db: Kysely<any>): Promise<void> {
             .from("softwares")
             .where("softwares__similar_software_external_datas.similarExternalId", "=", "softwares.externalId")
             .execute();
-
-        await db.schema
-            .alterTable("softwares__similar_software_external_datas")
-            .dropColumn("similarExternalId")
-            .execute();
-    } else {
-        await db.schema
-            .alterTable("softwares__similar_software_external_datas")
-            .dropColumn("similarExternalId")
-            .execute();
     }
+
+    await db.schema.alterTable("softwares__similar_software_external_datas").dropColumn("similarExternalId").execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

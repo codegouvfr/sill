@@ -30,9 +30,9 @@ import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
 import { User } from "./user";
-import { makeSoftwareController } from "../controllers/software";
 import { wikidataAdapter } from "../core/adapters/wikidata";
 import { halAdapter } from "../core/adapters/hal";
+import { formDataServiceMake } from "../services/formDataService";
 
 export function createRouter(params: {
     dbApi: DbApiV2;
@@ -77,7 +77,7 @@ export function createRouter(params: {
 
     const externalService = externalDataOrigin === "HAL" ? halAdapter : wikidataAdapter;
 
-    const sofwareController = makeSoftwareController(dbApi, externalService);
+    const formDataService = formDataServiceMake(dbApi, externalService);
 
     const router = t.router({
         "getRedirectUrl": loggedProcedure.query(() => redirectUrl),
@@ -177,7 +177,7 @@ export function createRouter(params: {
                         });
                     }
 
-                    await sofwareController.createByFormData(formData, agentId);
+                    await formDataService.create(formData, agentId);
                 } catch (e) {
                     throw new TRPCError({
                         "code": "INTERNAL_SERVER_ERROR",

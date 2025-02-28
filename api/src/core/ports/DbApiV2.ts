@@ -39,11 +39,11 @@ export interface SoftwareRepository {
     getIdBySourceIdentifier: (
         externalDataOrigin: ExternalDataOrigin,
         externalId: string
-    ) => Promise<{ id: number } | undefined>;
+    ) => Promise<number | undefined>;
     getByIdWithLinkedSoftwaresIds: (id: number) => Promise<
         | {
               software: Software;
-              similarSoftwaresIds: string[];
+              similarSoftwaresIds: number[];
               parentSoftwareExternalId: string | undefined;
           }
         | undefined
@@ -52,7 +52,16 @@ export interface SoftwareRepository {
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
-    registerSimilarSoftware: (params: { softwareId: number; similarSoftwareIds: number[] }) => Promise<void>;
+}
+
+export interface SimilarSoftwareRepository {
+    create: (
+        similarSoftwares: {
+            softwareId: number;
+            similarSoftwareId: number;
+        }[]
+    ) => Promise<void>;
+    getBySoftwareId: (id: number) => Promise<number[]>;
 }
 
 export interface SoftwareExternalDataRepository {
@@ -130,5 +139,6 @@ export type DbApiV2 = {
     agent: AgentRepository;
     softwareReferent: SoftwareReferentRepository;
     softwareUser: SoftwareUserRepository;
+    similarSoftware: SimilarSoftwareRepository;
     getCompiledDataPrivate: () => Promise<CompiledData<"private">>;
 };

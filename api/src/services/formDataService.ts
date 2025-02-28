@@ -2,28 +2,33 @@ import { Adapter } from "../core/adapters/type";
 import { DbApiV2 } from "../core/ports/DbApiV2";
 import { SoftwareFormData } from "../lib/ApiTypes";
 
-export const makeSoftwareController = (dabaseService: DbApiV2, externalDataService: Adapter) => {
+export type FormDataService = {
+    create: (softwareForm: SoftwareFormData, agentId: number) => Promise<number>;
+};
+
+export const formDataServiceMake = (dbApi: DbApiV2, externalDataService: Adapter) => {
     return {
-        createByFormData: async (softwareForm: SoftwareFormData, agentId: number) => {
+        create: async (softwareForm: SoftwareFormData, agentId: number) => {
             // Get or Create similars software Ids
-            const similarSoftwareExternalDataIds = softwareForm.similarSoftwareExternalDataIds;
+            const similarSoftwareExternalDataIds = softwareForm.similarSoftwareExternalDataIds ?? [];
             const similarIds = await Promise.all(
                 similarSoftwareExternalDataIds.map(async similarSoftwareExternalDataId => {
-                    const softwareId = await dabaseService.software.getIdBySourceIdentifier(
+                    const softwareId = await dbApi.software.getIdBySourceIdentifier(
                         externalDataService.sourceType,
                         similarSoftwareExternalDataId
                     );
 
-                    if (softwareId) return softwareId.id;
+                    if (softwareId) return softwareId;
                     else {
                         const similarSoftwareForm =
                             await externalDataService.softwareForm.getById(similarSoftwareExternalDataId);
 
                         if (!similarSoftwareForm) {
                             throw new Error("Not found on the source.");
+                            // ingore instead of throw
                         }
 
-                        const createdSoftwareId = await dabaseService.software.create({
+                        const createdSoftwareId = await dbApi.software.create({
                             formData: similarSoftwareForm,
                             externalDataOrigin: externalDataService.sourceType,
                             agentId,
@@ -36,18 +41,26 @@ export const makeSoftwareController = (dabaseService: DbApiV2, externalDataServi
             );
 
             // Add the software
-            const newSoftId = await dabaseService.software.create({
+            const newSoftId = await dbApi.software.create({
                 formData: softwareForm,
                 agentId,
                 externalDataOrigin: externalDataService.sourceType,
                 isReferenced: true
             });
 
+            console.log(`inserted software correctly, softwareId is : ${newSoftId} (${softwareForm.softwareName})`);
+
             // Add the links
-            await dabaseService.software.registerSimilarSoftware({
-                softwareId: newSoftId,
-                similarSoftwareIds: similarIds
-            });
+            await dbApi.similarSoftware.create(
+                similarIds.map(similarId => {
+                    return {
+                        softwareId: newSoftId,
+                        similarSoftwareId: similarId
+                    };
+                })
+            );
+
+            return newSoftId;
         }
     };
 };

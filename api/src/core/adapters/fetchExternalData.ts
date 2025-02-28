@@ -49,9 +49,11 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         }
 
         if (similarSoftwaresIds.length > 0) {
-            for (const similarExternalId of similarSoftwaresIds) {
-                console.log(" • Similar wiki : ", similarExternalId);
-                await getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache);
+            for (const similarSoftwareId of similarSoftwaresIds) {
+                console.log(" • Similar in catalog : ", similarSoftwareId);
+                const similarSoftware = await dbApi.software.getById(similarSoftwareId);
+                if (similarSoftware && similarSoftware.externalId)
+                    await getSoftwareExternalDataAndSaveIt(similarSoftware.externalId, softwareExternalDataCache);
             }
         }
 

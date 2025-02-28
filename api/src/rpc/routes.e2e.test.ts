@@ -90,6 +90,7 @@ describe("RPC e2e tests", () => {
             await kyselyDb.deleteFrom("software_referents").execute();
             await kyselyDb.deleteFrom("software_users").execute();
             await kyselyDb.deleteFrom("instances").execute();
+            await kyselyDb.deleteFrom("softwares__similar_software_external_datas").execute();
             await kyselyDb.deleteFrom("softwares").execute();
             await kyselyDb.deleteFrom("agents").execute();
         });
@@ -208,7 +209,8 @@ describe("RPC e2e tests", () => {
 
         it("adds an instance of the software", async () => {
             instanceFormData = createInstanceFormData({ mainSoftwareSillId: actualSoftwareId });
-            expect(await getSoftwareRows()).toHaveLength(1);
+            const rows = await getSoftwareRows();
+            expect(rows).toHaveLength(1);
             expect(await getInstanceRows()).toHaveLength(0);
             await apiCaller.createInstance({
                 formData: instanceFormData
