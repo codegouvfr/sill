@@ -4,6 +4,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import translationEn from "./sill_en.json";
 import translationFr from "./sill_fr.json";
+import cnrsEn from "./cnrs_en.json";
+import cnrsFr from "./cnrs_fr.json";
 
 export const fallbackNS = "sill";
 
@@ -12,8 +14,14 @@ export const fallbackNS = "sill";
 const _isAssignable = (fr: typeof translationFr): typeof translationEn => fr;
 
 export const resources = {
-    en: { sill: translationEn },
-    fr: { sill: translationFr }
+    en: {
+        sill: translationEn,
+        cnrs: cnrsEn
+    },
+    fr: {
+        sill: translationFr,
+        cnrs: cnrsFr
+    }
 } as const;
 
 i18next
@@ -23,7 +31,7 @@ i18next
         supportedLngs: ["en", "fr"],
         resources,
         fallbackLng: ["en", "fr"],
-        defaultNS: "sill",
+        defaultNS: "cnrs",
         fallbackNS: "sill",
 
         interpolation: {

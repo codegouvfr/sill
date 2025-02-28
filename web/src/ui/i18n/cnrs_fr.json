@@ -2,5 +2,27 @@
     "softwareFormStep2": {
         "external id": "Fiche HAL",
         "external id hint_fill": "Renseignez le nom du logiciel ou directement l'identifiant  (attention, les identifiants HAL sont de la forme  hal-123123v1, il faut fournir uniquement le numéro (sans  'hal-' et sans version), dans ce cas '123123') pour associer  le logiciel à une fiche existante<space /><dataSource>HAL</dataSource>. <br /> La plupart des informations générales, telles que l'URL du  dépôt de code, sont extraites de HAL. Si le logiciel que vous  souhaitez ajouter ne possède pas encore de fiche sur HAL, vous  pouvez en créer une. Vous trouverez ici un <space /><exampleUrl>exemple de fiche HAL </exampleUrl>  ."
+    },
+    "home": {
+        "title": "Référencement de logiciels libres",
+        "subTitle": "développés dans l'enseignement supérieur et la recherche.",
+        "helpUs": "Aidez-nous à enrichir le catalogue !",
+        "theSillInAFewWords": "Le SILL en quelques mots",
+        "theSillInAFewWordsParagraph": "<p>Le logiciel est aujourd’hui devenu indispensable dans tous les domaines de la recherche scientifique, à la fois comme outil pour la recherche, comme produit de la recherche et comme objet de recherche.</p><p>Un des objectifs majeurs du collège <a1>« Codes sources et logiciel »</a1> est de mettre en lumière ces productions et leur importance pour la recherche.</p><p>Ce catalogue est par ailleurs inscrit dans les ambitions du <a2>Plan National pour la Science Ouverte</a2>.</p>",
+        "addSoftwareOrServiceTitle": "Ajouter un logiciel / Contribuer",
+        "addSoftwareOrServiceDesc": "<p>Le catalogue se base sur les notices logicielles déposées dans l'archive ouverte <a1>HAL</a1>.</p><p>Pour déposer une notice logicielle, vous pouvez vous reporter à la documentation de HAL.</p>",
+        "addSoftwareOrServiceButtonLabel": "Voir documentation HAL",
+        "editSoftwareTitle": "Modifier une fiche logiciel",
+        "editSoftwareDesc": "<p>Le catalogue se base sur les notices logicielles déposées dans l'archive ouverte <a1>HAL</a1>.</p><p>Pour modifier une fiche logicielle, il faut donc aller modifier sa notice dans HAL.</p>",
+        "editSoftwareButtonLabel": "Se connecter à HAL"
+    },
+    "header": {
+        "home title": "Accueil - Catalogue des logiciels de la recherche académique",
+        "title": "Catalogue des logiciels de la recherche académique",
+        "navigation welcome": "Bienvenue sur le catalogue",
+        "navigation support request": "Contribuez !"
+    },
+    "headerDetailCard": {
+        "website": "Notice HAL"
     }
 }
