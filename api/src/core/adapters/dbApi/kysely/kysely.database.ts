@@ -86,7 +86,6 @@ type SoftwareExternalDatasTable = {
     description: string | JSONColumnType<LocalizedString>;
     isLibreSoftware: boolean;
     logoUrl: string | null;
-    framaLibreId: string | null;
     websiteUrl: string | null;
     sourceUrl: string | null;
     documentationUrl: string | null;
