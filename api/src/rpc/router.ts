@@ -171,7 +171,8 @@ export function createRouter(params: {
                     await dbApi.software.create({
                         formData,
                         agentId,
-                        externalDataOrigin
+                        externalDataOrigin,
+                        isReferenced: true
                     });
                 } catch (e) {
                     throw new TRPCError({

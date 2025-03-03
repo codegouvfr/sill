@@ -51,7 +51,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         license: softwareLicense,
                         logoUrl: softwareLogoUrl,
                         versionMin: softwareMinimalVersion,
-                        referencedSinceTime: now,
+                        referencedSinceTime: isReferenced ? now : null,
                         updateTime: now,
                         dereferencing: undefined,
                         isStillInObservation: false,
@@ -67,8 +67,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         categories: JSON.stringify([]),
                         generalInfoMd: undefined,
                         addedByAgentId: agentId,
-                        keywords: JSON.stringify(softwareKeywords),
-                        isReferenced: isReferenced
+                        keywords: JSON.stringify(softwareKeywords)
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
@@ -224,7 +223,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             };
         },
         getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
+            // Only software that are referenced in catalog
             let builder = makeGetSoftwareBuilder(db);
+
+            builder.where("s.referencedSinceTime", "is not", null);
 
             builder = onlyIfUpdatedMoreThan3HoursAgo
                 ? builder.where(eb =>
@@ -543,6 +545,7 @@ const makeGetSoftwareById =
                     ...software,
                     updateTime: new Date(+updateTime).getTime(),
                     referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
+                    isReferenced: referencedSinceTime ? true : false,
                     serviceProviders: serviceProviders ?? [],
                     similarSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},

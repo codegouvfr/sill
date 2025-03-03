@@ -136,7 +136,6 @@ type SoftwaresTable = {
     addedByAgentId: number;
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
-    isReferenced: boolean;
 };
 
 // ---------- compiled data ----------
