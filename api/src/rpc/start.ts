@@ -10,9 +10,7 @@ import { bootstrapCore } from "../core";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
 import { halAdapter } from "../core/adapters/hal";
-import { getHalSoftwareOptions } from "../core/adapters/hal/getHalSoftwareOptions";
-import { getWikidataSoftware } from "../core/adapters/wikidata/getWikidataSoftware";
-import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidataSoftwareOptions";
+import { wikidataAdapter } from "../core/adapters/wikidata";
 import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
 import type {
     ExternalDataOrigin,
@@ -132,13 +130,13 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
     switch (externalSoftwareDataOrigin) {
         case "wikidata":
             return {
-                "getSoftwareExternalDataOptions": getWikidataSoftwareOptions,
-                "getSoftwareExternalData": getWikidataSoftware
+                "getSoftwareExternalDataOptions": wikidataAdapter.softwareOptions.getById,
+                "getSoftwareExternalData": wikidataAdapter.softwareExternalData.getById
             };
         case "HAL":
             return {
-                "getSoftwareExternalDataOptions": getHalSoftwareOptions,
-                "getSoftwareExternalData": halAdapter.softwareExternalData.getByHalId
+                "getSoftwareExternalDataOptions": halAdapter.softwareOptions.getById,
+                "getSoftwareExternalData": halAdapter.softwareExternalData.getById
             };
         default:
             const unreachableCase: never = externalSoftwareDataOrigin;

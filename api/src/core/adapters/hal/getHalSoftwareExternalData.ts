@@ -1,10 +1,8 @@
 import memoize from "memoizee";
 import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
-import { fetchHalSoftwareById } from "./HalAPI/getHalSoftware";
 import { halAPIGateway } from "./HalAPI";
-import { HalFetchError } from "./HalAPI/type";
 import { SILL } from "../../../types/SILL";
-import { HAL } from "./types/HAL";
+import { HAL } from "./HalAPI/types/HAL";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -122,8 +120,8 @@ const DOISource: SILL.WebSite = {
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
     async (halDocId): Promise<SoftwareExternalData | undefined> => {
-        const halRawSoftware = await fetchHalSoftwareById(halDocId).catch(error => {
-            if (!(error instanceof HalFetchError)) throw error;
+        const halRawSoftware = await halAPIGateway.software.getById(halDocId).catch(error => {
+            if (!(error instanceof HAL.API.FetchError)) throw error;
             if (error.status === 404 || error.status === undefined) return;
             throw error;
         });
