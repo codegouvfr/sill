@@ -1,5 +1,4 @@
-import { HAL } from "../types/HAL";
-import { HalFetchError } from "./type";
+import { HAL } from "./types/HAL";
 
 export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.SoftwareApplication | undefined> {
     const res = await fetch(`${url}/codemeta`, {
@@ -9,7 +8,7 @@ export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.Softw
     });
 
     if (res === undefined) {
-        throw new HalFetchError(undefined);
+        throw new HAL.API.FetchError(undefined);
     }
 
     if (res.status === 429) {
@@ -18,7 +17,7 @@ export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.Softw
     }
 
     if (res.status === 404) {
-        throw new HalFetchError(res.status);
+        throw new HAL.API.FetchError(res.status);
     }
 
     const json = await res.json();

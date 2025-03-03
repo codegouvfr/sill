@@ -5,8 +5,7 @@ import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
-import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
-import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
+import { wikidataAdapter } from "./adapters/wikidata";
 import { halAdapter } from "./adapters/hal";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
@@ -83,13 +82,13 @@ function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDa
     switch (externalSoftwareDataOrigin) {
         case "wikidata":
             return {
-                "getSoftwareExternalDataOptions": getWikidataSoftwareOptions,
-                "getSoftwareExternalData": getWikidataSoftware
+                "getSoftwareExternalDataOptions": wikidataAdapter.softwareOptions.getById,
+                "getSoftwareExternalData": wikidataAdapter.softwareExternalData.getById
             };
         case "HAL":
             return {
-                "getSoftwareExternalDataOptions": halAdapter.softwareOptions.getByHalId,
-                "getSoftwareExternalData": halAdapter.softwareExternalData.getByHalId
+                "getSoftwareExternalDataOptions": halAdapter.softwareOptions.getById,
+                "getSoftwareExternalData": halAdapter.softwareExternalData.getById
             };
         default:
             const unreachableCase: never = externalSoftwareDataOrigin;

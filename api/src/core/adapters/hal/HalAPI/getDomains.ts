@@ -1,13 +1,13 @@
 import fetch from "node-fetch";
-import { HalAPIDomain, HalFetchError } from "./type";
+import { HAL } from "./types/HAL";
 
-export async function getAllDomains(): Promise<HalAPIDomain[]> {
+export async function getAllDomains(): Promise<HAL.API.Domain[]> {
     // Get all domains
     const url = "http://api.archives-ouvertes.fr/ref/domain/?fl=*";
 
     const res = await fetch(url).catch(err => {
         console.error(err);
-        throw new HalFetchError(undefined);
+        throw new HAL.API.FetchError(undefined);
     });
 
     if (res.status === 429) {
@@ -16,7 +16,7 @@ export async function getAllDomains(): Promise<HalAPIDomain[]> {
     }
 
     if (res.status === 404) {
-        throw new HalFetchError(res.status);
+        throw new HAL.API.FetchError(res.status);
     }
 
     const json = await res.json();
@@ -24,13 +24,13 @@ export async function getAllDomains(): Promise<HalAPIDomain[]> {
     return json.response.docs;
 }
 
-export async function getDomainByCode(code: string): Promise<HalAPIDomain> {
+export async function getDomainByCode(code: string): Promise<HAL.API.Domain> {
     // Get domain using code
     const url = `http://api.archives-ouvertes.fr/ref/domain/?q=code_s:${code}&fl=*`;
 
     const res = await fetch(url).catch(err => {
         console.error(err);
-        throw new HalFetchError(undefined);
+        throw new HAL.API.FetchError(undefined);
     });
 
     if (res.status === 429) {
@@ -39,7 +39,7 @@ export async function getDomainByCode(code: string): Promise<HalAPIDomain> {
     }
 
     if (res.status === 404) {
-        throw new HalFetchError(res.status);
+        throw new HAL.API.FetchError(res.status);
     }
 
     const json = await res.json();
