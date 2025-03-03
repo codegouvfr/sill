@@ -25,7 +25,7 @@ export type Software = {
               publicationTime?: number;
           }
         | undefined;
-    addedTime: number;
+    referencedSinceTime: number | undefined;
     updateTime: number;
     dereferencing:
         | {

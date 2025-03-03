@@ -137,7 +137,7 @@ const softwares = createSelector(
                     switch (sort) {
                         case "added_time":
                             return createCompareFn<State.Software.Internal>({
-                                getWeight: software => software.addedTime,
+                                getWeight: software => software.referencedSinceTime ?? 0,
                                 order: "descending"
                             });
                         case "update_time":
@@ -856,7 +856,7 @@ function apiSoftwareToInternalSoftware(params: {
         softwareDescription,
         latestVersion,
         parentWikidataSoftware,
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         prerogatives,
@@ -918,7 +918,7 @@ function apiSoftwareToInternalSoftware(params: {
         userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         organizations: objectKeys(userAndReferentCountByOrganization),
@@ -970,7 +970,7 @@ function internalSoftwareToExternalSoftware(params: {
         latestVersion,
         referentCount,
         userCount,
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         organizations,

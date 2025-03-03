@@ -168,7 +168,7 @@
     "softwareCatalogControlled": {
         "searchResults": "{{count}} free software",
         "sortBy": "Sort by",
-        "addedTime": "Last added",
+        "referencedSinceTime": "Last added",
         "updateTime": "Last updated",
         "referentCount": "Referent count",
         "referentCountASC": "Referent count ASC",

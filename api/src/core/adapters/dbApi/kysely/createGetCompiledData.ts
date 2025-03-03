@@ -130,7 +130,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         ...stripNullOrUndefinedValues(software),
                         addedByAgentEmail: agentById[addedByAgentId].email,
                         updateTime: new Date(+updateTime).getTime(),
-                        referencedSinceTime: new Date(+referencedSinceTime).getTime(),
+                        referencedSinceTime: referencedSinceTime ? new Date(referencedSinceTime).getTime() : undefined,
                         doRespectRgaa,
                         softwareExternalData: softwareExternalData ?? undefined,
                         annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? undefined,
