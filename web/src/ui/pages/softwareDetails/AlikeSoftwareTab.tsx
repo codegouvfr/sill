@@ -65,7 +65,6 @@ export const SimilarSoftwareTab = (props: Props) => {
                         softwareDescription,
                         userCount,
                         referentCount,
-                        testUrl,
                         prerogatives,
                         userDeclaration
                     } = software;
@@ -91,7 +90,6 @@ export const SimilarSoftwareTab = (props: Props) => {
                             latestVersion={latestVersion}
                             softwareDescription={softwareDescription}
                             prerogatives={prerogatives}
-                            testUrl={testUrl}
                             userCount={userCount}
                             referentCount={referentCount}
                             declareFormLink={declarationForm}

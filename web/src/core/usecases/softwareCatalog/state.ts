@@ -57,7 +57,6 @@ export namespace State {
         doRespectRgaa: boolean | null;
         isInstallableOnUserComputer: boolean;
         isAvailableAsMobileApp: boolean;
-        isTestable: boolean;
     };
     export type Prerogative = keyof Prerogatives;
 
@@ -80,7 +79,6 @@ export namespace State {
                       | { isInSill: false; url: string }
                   ))
                 | undefined;
-            testUrl: string | undefined;
             userDeclaration:
                 | {
                       isUser: boolean;
@@ -108,7 +106,7 @@ export namespace State {
             organizations: string[];
             prerogatives: OmitFromExisting<
                 Prerogatives,
-                "isInstallableOnUserComputer" | "isTestable" | "isAvailableAsMobileApp"
+                "isInstallableOnUserComputer" | "isAvailableAsMobileApp"
             >;
             softwareType: ApiTypes.SoftwareType;
             search: string;

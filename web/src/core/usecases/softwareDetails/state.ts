@@ -74,7 +74,6 @@ export namespace State {
         prerogatives: Record<SoftwareCatalogState.Prerogative, boolean | undefined>;
         userCount: number;
         referentCount: number;
-        testUrl: string | undefined;
         instances:
             | {
                   id: number;

@@ -130,15 +130,8 @@ type SoftwaresTable = {
     comptoirDuLibreId: number | null;
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
-    catalogNumeriqueGouvFrId: string | null;
     versionMin: string | null;
     workshopUrls: JSONColumnType<string[]>;
-    testUrls: JSONColumnType<
-        {
-            description: string;
-            url: string;
-        }[]
-    >;
     categories: JSONColumnType<string[]>;
     generalInfoMd: string | null;
     addedByAgentId: number;
