@@ -5,7 +5,6 @@ import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
 import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
 import { getServiceProviders } from "./adapters/getServiceProviders";
-import { createGetSoftwareLatestVersion } from "./adapters/getSoftwareLatestVersion";
 import { getWikidataSoftware } from "./adapters/wikidata/getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./adapters/wikidata/getWikidataSoftwareOptions";
 import { halAdapter } from "./adapters/hal";
@@ -13,7 +12,6 @@ import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
-import type { GetSoftwareLatestVersion } from "./ports/GetSoftwareLatestVersion";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
@@ -33,7 +31,6 @@ export type Context = {
     dbApi: DbApiV2;
     comptoirDuLibreApi: ComptoirDuLibreApi;
     getSoftwareExternalData: GetSoftwareExternalData;
-    getSoftwareLatestVersion: GetSoftwareLatestVersion;
 };
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
@@ -50,11 +47,7 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
 ): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
-    const { dbConfig, githubPersonalAccessTokenForApiRateLimit, externalSoftwareDataOrigin } = params;
-
-    const { getSoftwareLatestVersion } = createGetSoftwareLatestVersion({
-        githubPersonalAccessTokenForApiRateLimit
-    });
+    const { dbConfig, externalSoftwareDataOrigin } = params;
 
     const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
@@ -64,8 +57,7 @@ export async function bootstrapCore(
         "paramsOfBootstrapCore": params,
         dbApi,
         comptoirDuLibreApi,
-        getSoftwareExternalData,
-        getSoftwareLatestVersion
+        getSoftwareExternalData
     };
 
     const useCases: UseCases = {
@@ -75,7 +67,6 @@ export async function bootstrapCore(
             getSoftwareExternalData,
             getCnllPrestatairesSill,
             comptoirDuLibreApi,
-            getSoftwareLatestVersion,
             getServiceProviders,
             dbApi
         }),
