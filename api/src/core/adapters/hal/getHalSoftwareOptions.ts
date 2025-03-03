@@ -1,15 +1,14 @@
-import fetch from "node-fetch";
 import type {
     GetSoftwareExternalDataOptions,
     SoftwareExternalDataOption
 } from "../../ports/GetSoftwareExternalDataOptions";
-import { halSoftwareFieldsToReturnAsString } from "./HalAPI/getHalSoftware";
-import { HalRawSoftware } from "./HalAPI/type";
 import { Language } from "../../ports/GetSoftwareExternalData";
+import { HAL } from "./HalAPI/types/HAL";
+import { halAPIGateway } from "./HalAPI";
 
 export const rawHalSoftwareToExternalOption =
     (language: Language) =>
-    (halSoftware: HalRawSoftware): SoftwareExternalDataOption => {
+    (halSoftware: HAL.API.Software): SoftwareExternalDataOption => {
         const enLabel = halSoftware?.en_title_s?.[0] ?? halSoftware?.title_s?.[0] ?? "-";
         const labelByLang = {
             "en": enLabel,
@@ -34,14 +33,7 @@ export const rawHalSoftwareToExternalOption =
 // HAL documentation is here : https://api.archives-ouvertes.fr/docs/search
 
 export const getHalSoftwareOptions: GetSoftwareExternalDataOptions = async ({ queryString, language }) => {
-    const rawHalSoftwares: HalRawSoftware[] = await fetch(
-        [
-            `https://api.archives-ouvertes.fr/search/?fq=docType_s:SOFTWARE&wt=json&fl=${halSoftwareFieldsToReturnAsString}&sort=docid%20asc`,
-            `q=${encodeURIComponent(queryString)}`
-        ].join("&")
-    )
-        .then(response => response.json())
-        .then(results => results.response.docs);
+    const rawHalSoftwares = await halAPIGateway.software.getAll({ queryString });
 
     return rawHalSoftwares.map(rawHalSoftwareToExternalOption(language));
 };
