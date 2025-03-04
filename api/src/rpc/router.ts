@@ -30,6 +30,9 @@ import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
 import { User } from "./user";
+import { wikidataAdapter } from "../core/adapters/wikidata";
+import { halAdapter } from "../core/adapters/hal";
+import { formDataServiceMake } from "../services/formDataService";
 
 export function createRouter(params: {
     dbApi: DbApiV2;
@@ -69,6 +72,10 @@ export function createRouter(params: {
             return result;
         })
     );
+
+    const externalService = externalDataOrigin === "HAL" ? halAdapter : wikidataAdapter;
+
+    const formDataService = formDataServiceMake(dbApi, externalService);
 
     const router = t.router({
         "getRedirectUrl": loggedProcedure.query(() => redirectUrl),
@@ -168,7 +175,7 @@ export function createRouter(params: {
                         });
                     }
 
-                    await dbApi.software.create({
+                    await dbApi.software.createByForm({
                         formData,
                         agentId,
                         externalDataOrigin,

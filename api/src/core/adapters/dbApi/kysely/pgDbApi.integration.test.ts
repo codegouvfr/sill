@@ -7,18 +7,20 @@ import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWri
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+import { wikidataAdapter } from "../../wikidata";
+import { FormDataService, formDataServiceMake } from "../../../../services/formDataService";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalId = "external-id-111";
-const similarExternalId = "external-id-222";
+const similarSoftwareExternalDataId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalId,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: [similarExternalId],
+    similarSoftwareExternalDataIds: ["Q1136882"],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -59,7 +61,7 @@ const softwareExternalData: SoftwareExternalData = {
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
-    externalId: similarExternalId,
+    externalId: similarSoftwareExternalDataId,
     externalDataOrigin: "wikidata",
     developers: [
         {
@@ -104,11 +106,14 @@ const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
+    let formDataService: FormDataService;
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
+        formDataService = formDataServiceMake(dbApi, wikidataAdapter);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
+        await db.deleteFrom("softwares__similar_software_external_datas").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
         await db.deleteFrom("instances").execute();
@@ -162,9 +167,7 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
-
-            const actualSoftware = softwares[0];
+            const actualSoftware = await dbApi.software.getById(softwareId);
 
             expectToEqual(actualSoftware, {
                 referencedSinceTime: expect.any(Number),
@@ -278,12 +281,8 @@ describe("pgDbApi", () => {
             console.log("------ agent scenario------");
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
-            const softwareId = await dbApi.software.create({
-                formData: softwareFormData,
-                agentId,
-                externalDataOrigin: "wikidata",
-                isReferenced: true
-            });
+
+            const softwareId = await formDataService.create(softwareFormData, agentId);
 
             await db
                 .insertInto("software_users")
@@ -454,12 +453,7 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await dbApi.software.create({
-            formData: softwareFormData,
-            agentId,
-            externalDataOrigin: "wikidata",
-            isReferenced: true
-        });
+        const softwareId = await formDataService.create(softwareFormData, agentId);
 
         return {
             softwareId,

@@ -8,6 +8,7 @@ import { createPgSoftwareExternalDataRepository } from "./createPgSoftwareExtern
 import { createPgSoftwareRepository } from "./createPgSoftwareRepository";
 import { createPgReferentRepository, createPgUserRepository } from "./createPgUserAndReferentRepository";
 import { Database } from "./kysely.database";
+import { createPgSimilarSoftwareRepository } from "./createPgSimilarSoftwareRepository";
 
 export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
     return {
@@ -18,6 +19,7 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
         agent: createPgAgentRepository(db),
         softwareReferent: createPgReferentRepository(db),
         softwareUser: createPgUserRepository(db),
+        similarSoftware: createPgSimilarSoftwareRepository(db),
         getCompiledDataPrivate: createGetCompiledData(db)
     };
 };

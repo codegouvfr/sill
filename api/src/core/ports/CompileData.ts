@@ -15,7 +15,11 @@ export type CompileData = (params: {
 export namespace CompileData {
     export type PartialSoftware = Pick<
         CompiledData.Software<"private">,
-        "softwareExternalData" | "latestVersion" | "similarExternalSoftwares" | "parentWikidataSoftware"
+        | "softwareExternalData"
+        | "latestVersion"
+        | "similarSoftwares"
+        | "similarExternalSoftwares"
+        | "parentWikidataSoftware"
     > & {
         comptoirDuLibreSoftware:
             | {
@@ -35,7 +39,7 @@ export namespace CompiledData {
 
     export namespace Software {
         export type Common = Pick<
-            Db.SoftwareRow,
+            Db.ComposedSoftwareRow,
             | "id"
             | "name"
             | "description"
@@ -60,6 +64,7 @@ export namespace CompiledData {
         > & {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
+            similarSoftwares: number[];
             similarExternalSoftwares: SimilarSoftwareExternalData[];
             parentWikidataSoftware: ParentSoftwareExternalData | undefined;
             comptoirDuLibreSoftware:
@@ -132,6 +137,7 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             versionMin,
             workshopUrls,
             softwareExternalData,
+            similarSoftwares,
             similarExternalSoftwares,
             parentWikidataSoftware,
             serviceProviders,
@@ -162,6 +168,7 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             versionMin,
             workshopUrls,
             softwareExternalData,
+            similarSoftwares,
             similarExternalSoftwares,
             parentWikidataSoftware,
             isReferenced,

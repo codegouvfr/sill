@@ -32,7 +32,7 @@ export type Context = {
     getSoftwareExternalData: GetSoftwareExternalData;
 };
 
-const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
+export const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     if (dbConfig.dbKind === "kysely") {
         return {
             dbApi: createKyselyPgDbApi(dbConfig.kyselyDb)
