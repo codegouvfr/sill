@@ -97,6 +97,13 @@ type SoftwareExternalDatasTable = {
     referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
     identifiers: JSONColumnType<SILL.Identification[]> | null;
+    repoMetadata: JSONColumnType<{
+        healthCheck?: {
+            lastCommit?: number;
+            lastClosedIssue?: number;
+            lastClosedIssuePullRequest?: number;
+        };
+    }> | null;
 };
 
 type SoftwareType =
