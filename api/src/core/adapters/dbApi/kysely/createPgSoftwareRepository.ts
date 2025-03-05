@@ -189,6 +189,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                         referencePublications: softwareExternalData?.referencePublications,
                         identifiers: softwareExternalData?.identifiers,
+                        repoMetadata: softwareExternalData?.repoMetadata,
                         applicationCategories: software.categories.concat(
                             softwareExternalData?.applicationCategories ?? []
                         ),
@@ -292,7 +293,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             categories: undefined, // merged in applicationCategories, set to undefined to remove it
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                             referencePublications: softwareExternalData?.referencePublications,
-                            identifiers: softwareExternalData?.identifiers
+                            identifiers: softwareExternalData?.identifiers,
+                            repoMetadata: softwareExternalData?.repoMetadata
                         });
                     }
                 );
@@ -427,6 +429,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     applicationCategories: ref("ext.applicationCategories"),
                     referencePublications: ref("ext.referencePublications"),
                     identifiers: ref("ext.identifiers"),
+                    repoMetadata: ref("ext.repoMetadata"),
                     keywords: ref("ext.keywords"),
                     softwareVersion: ref("ext.softwareVersion"),
                     publicationTime: ref("ext.publicationTime")
@@ -561,6 +564,7 @@ const makeGetSoftwareById =
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                     referencePublications: softwareExternalData?.referencePublications,
                     identifiers: softwareExternalData?.identifiers,
+                    repoMetadata: softwareExternalData?.repoMetadata,
                     applicationCategories: filterDuplicate(
                         software.categories.concat(softwareExternalData?.applicationCategories ?? [])
                     ),
