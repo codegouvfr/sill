@@ -186,6 +186,7 @@ describe("fetches software extra data (from different providers)", () => {
                     programmingLanguages: [],
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
@@ -215,6 +216,7 @@ describe("fetches software extra data (from different providers)", () => {
                     programmingLanguages: ["JavaScript"],
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date)
                 }
@@ -270,6 +272,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://httpd.apache.org/",
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z")
