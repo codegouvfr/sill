@@ -7,6 +7,8 @@ import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
+import { repoAnalyser, RepoType } from "../../../tools/repoAnalyser";
+import { projectEndpointMaker } from "../GitLab/api/project";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -196,6 +198,35 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 }
             }) ?? [];
 
+        const repoType = await repoAnalyser(halRawSoftware?.softCodeRepository_s?.[0]);
+
+        const getRepoMetadata = async (repoType: RepoType | undefined) => {
+            switch (repoType) {
+                case "GitLab":
+                    const apiProject = projectEndpointMaker(halRawSoftware?.softCodeRepository_s?.[0]);
+                    const lastCommit = await apiProject.commits.getLastCommit();
+                    const lastIssue = await apiProject.issues.getLastClosedIssue();
+                    const lastMergeRequest = await apiProject.mergeRequests.getLast();
+                    return {
+                        healthCheck: {
+                            lastCommit: lastCommit ? new Date(lastCommit.created_at) : undefined,
+                            lastClosedIssue:
+                                lastIssue && lastIssue.closed_at ? new Date(lastIssue.closed_at) : undefined,
+                            lastClosedIssuePullRequest: lastMergeRequest
+                                ? new Date(lastMergeRequest.updated_at)
+                                : undefined
+                        }
+                    };
+                case "GitHub":
+                    return undefined;
+                case undefined:
+                    return undefined;
+                default:
+                    repoType satisfies never;
+                    return undefined;
+            }
+        };
+
         return {
             externalId: halRawSoftware.docid,
             sourceSlug: source.slug,
@@ -229,7 +260,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
                     )
                 ).filter(val => val !== undefined),
-            identifiers: identifiers
+            identifiers: identifiers,
+            repoMetadata: await getRepoMetadata(repoType)
         };
     },
     {

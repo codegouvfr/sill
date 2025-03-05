@@ -35,6 +35,17 @@
                 "run",
                 "update"
             ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Fullcheck",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}",
+            "runtimeArgs": [
+                "run",
+                "fullcheck"
+            ],
         }
     ]
 }
