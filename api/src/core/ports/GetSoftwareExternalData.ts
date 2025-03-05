@@ -33,6 +33,13 @@ export type SoftwareExternalData = {
     publicationTime: Date;
     referencePublications: SILL.ScholarlyArticle[];
     identifiers: SILL.Identification[];
+    repoMetadata?: {
+        healthCheck?: {
+            lastCommit?: Date;
+            lastClosedIssue?: Date;
+            lastClosedIssuePullRequest?: Date;
+        };
+    };
 }>;
 
 export type SimilarSoftwareExternalData = Pick<

@@ -70,6 +70,7 @@
         "vitest": "^1.2.2"
     },
     "dependencies": {
+        "@gitbeaker/core": "^42.1.0",
         "@octokit/graphql": "^7.0.2",
         "@trpc/server": "^10.18.0",
         "@types/pg": "^8.11.6",
