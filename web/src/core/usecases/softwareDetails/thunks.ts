@@ -196,7 +196,8 @@ function apiSoftwareToSoftware(params: {
         keywords,
         referencePublications,
         applicationCategories,
-        identifiers
+        identifiers,
+        repoMetadata
     } = apiSoftware;
 
     const { resolveLocalizedString } = createResolveLocalizedString({
@@ -337,6 +338,7 @@ function apiSoftwareToSoftware(params: {
         applicationCategories,
         referencePublications,
         softwareType,
-        identifiers: identifiers ?? []
+        identifiers: identifiers ?? [],
+        repoMetadata
     };
 }
