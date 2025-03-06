@@ -226,11 +226,11 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                     const lastMergeRequest = await apiProject.mergeRequests.getLast();
                     return {
                         healthCheck: {
-                            lastCommit: lastCommit ? new Date(lastCommit.created_at) : undefined,
+                            lastCommit: lastCommit ? new Date(lastCommit.created_at).valueOf() : undefined,
                             lastClosedIssue:
-                                lastIssue && lastIssue.closed_at ? new Date(lastIssue.closed_at) : undefined,
+                                lastIssue && lastIssue.closed_at ? new Date(lastIssue.closed_at).valueOf() : undefined,
                             lastClosedIssuePullRequest: lastMergeRequest
-                                ? new Date(lastMergeRequest.updated_at)
+                                ? new Date(lastMergeRequest.updated_at).valueOf()
                                 : undefined
                         }
                     };
