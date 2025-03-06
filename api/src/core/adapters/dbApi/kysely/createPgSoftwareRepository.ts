@@ -5,6 +5,7 @@ import { SoftwareRepository } from "../../../ports/DbApiV2";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
+import { SILL } from "../../../../types/SILL";
 
 const dateParser = (str: string | Date | undefined | null) => {
     if (str && typeof str === "string") {
@@ -14,6 +15,19 @@ const dateParser = (str: string | Date | undefined | null) => {
     if (str && str instanceof Date) {
         return str.valueOf();
     }
+};
+
+const computeRepoMetadata = (repoMetadata: SILL.RepoMetadata | undefined | null): SILL.RepoMetadata | undefined => {
+    const newMedata = repoMetadata;
+    if (!newMedata || !newMedata.healthCheck) return undefined;
+
+    let score = 0;
+    if (repoMetadata.healthCheck?.lastClosedIssue) score += 1;
+    if (repoMetadata.healthCheck?.lastClosedIssuePullRequest) score += 1;
+    if (repoMetadata.healthCheck?.lastCommit) score += 1;
+    newMedata.healthCheck.score = score / 3;
+
+    return newMedata;
 };
 
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
@@ -195,7 +209,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                         referencePublications: softwareExternalData?.referencePublications,
                         identifiers: softwareExternalData?.identifiers,
-                        repoMetadata: softwareExternalData?.repoMetadata,
+                        repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata),
                         applicationCategories: software.categories.concat(
                             softwareExternalData?.applicationCategories ?? []
                         ),
@@ -305,7 +319,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                             referencePublications: softwareExternalData?.referencePublications,
                             identifiers: softwareExternalData?.identifiers,
-                            repoMetadata: softwareExternalData?.repoMetadata
+                            repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata)
                         });
                     }
                 );
@@ -566,7 +580,7 @@ const makeGetSoftwareById =
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                     referencePublications: softwareExternalData?.referencePublications,
                     identifiers: softwareExternalData?.identifiers,
-                    repoMetadata: softwareExternalData?.repoMetadata,
+                    repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata),
                     applicationCategories: filterDuplicate(
                         software.categories.concat(softwareExternalData?.applicationCategories ?? [])
                     ),

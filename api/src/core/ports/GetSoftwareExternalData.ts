@@ -36,9 +36,9 @@ export type SoftwareExternalData = {
     identifiers: SILL.Identification[];
     repoMetadata?: {
         healthCheck?: {
-            lastCommit?: Date;
-            lastClosedIssue?: Date;
-            lastClosedIssuePullRequest?: Date;
+            lastCommit?: number;
+            lastClosedIssue?: number;
+            lastClosedIssuePullRequest?: number;
         };
     };
 }>;
