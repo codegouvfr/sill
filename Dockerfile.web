@@ -5,13 +5,14 @@ COPY package.json yarn.lock ./
 COPY api/package.json api/
 COPY web/package.json web/
 COPY web/public/ web/public/
+COPY web/index.html web/
 
 RUN yarn install --frozen-lockfile
 
 COPY turbo.json ./
 COPY api/ api/
 COPY web/src/ web/src/
-COPY web/config-overrides.js web/tsconfig.json web/
+COPY web/vite.config.ts web/tsconfig.json web/
 
 WORKDIR /app
 RUN yarn build
