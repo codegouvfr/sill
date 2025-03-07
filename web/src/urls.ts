@@ -4,14 +4,15 @@
  * ''
  **/
 export const appPath = (() => {
-    const envValue = process.env["PUBLIC_URL"];
-
-    if (envValue === ".") {
-        // Storybook
+    // For Vite, use import.meta.env.BASE_URL instead of process.env["PUBLIC_URL"]
+    if (import.meta.env.BASE_URL === "/") {
         return "";
     }
 
-    return envValue;
+    // Remove trailing slash if present
+    return import.meta.env.BASE_URL.endsWith("/")
+        ? import.meta.env.BASE_URL.slice(0, -1)
+        : import.meta.env.BASE_URL;
 })();
 
 console.log({ appPath });

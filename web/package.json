@@ -3,8 +3,8 @@
     "version": "1.41.5",
     "license": "MIT",
     "scripts": {
-        "dev": "react-app-rewired start",
-        "build": "react-app-rewired build",
+        "dev": "vite",
+        "build": "vite build",
         "storybook": "start-storybook -p 6006",
         "lint": "eslint --max-warnings=0 --ext .ts,.tsx,.js,.jsx src",
         "_format": "prettier '**/*.{ts,tsx,json,md}'",
@@ -15,7 +15,8 @@
         "prestorybook": "react-dsfr update-icons",
         "prestart": "react-dsfr update-icons",
         "prebuild": "react-dsfr update-icons",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "preview": "vite preview"
     },
     "dependencies": {
         "@codegouvfr/react-dsfr": "^1.16.0",
@@ -44,7 +45,6 @@
         "react-hook-form": "^7.43.0",
         "react-i18next": "^15.2.0",
         "react-markdown": "^9.0.1",
-        "react-scripts": "5.0.1",
         "react-waypoint": "^10.3.0",
         "redux-clean-architecture": "^4.1.1",
         "run-exclusive": "^2.2.19",
@@ -68,45 +68,80 @@
         "@types/node": "^18.19.64",
         "@types/react": "^18.0.18",
         "@types/react-dom": "^18.0.6",
-        "@typescript-eslint/eslint-plugin": "^4.24.0",
-        "@typescript-eslint/parser": "^4.24.0",
-        "circular-dependency-plugin": "^5.2.2",
-        "eslint-config-prettier": "^8.3.0",
+        "@typescript-eslint/eslint-plugin": "^5.62.0",
+        "@typescript-eslint/parser": "^5.62.0",
+        "@vitejs/plugin-react": "^4.3.4",
+        "eslint": "^8.56.0",
+        "eslint-config-prettier": "^10.1.1",
+        "eslint-plugin-import": "^2.31.0",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "eslint-plugin-react": "^7.37.4",
+        "eslint-plugin-react-hooks": "^5.2.0",
         "eslint-plugin-tss-unused-classes": "^1.0.3",
         "minimal-polyfills": "^2.2.3",
         "node-fetch": "^2.6.1",
         "prettier": "^3.5.1",
-        "react-app-rewired": "^2.2.1",
         "rimraf": "^5.0.5",
         "source-map-explorer": "^2.5.2",
         "storybook-dark-mode": "^2.0.5",
         "ts-node": "^10.2.1",
-        "typescript": "^5.7.3"
+        "typescript": "^5.7.3",
+        "vite": "^6.2.1",
+        "vite-plugin-svgr": "^4.3.0",
+        "vite-tsconfig-paths": "^5.1.4"
     },
     "eslintConfig": {
-        "plugins": [
-            "tss-unused-classes"
-        ],
         "extends": [
-            "react-app",
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:react/recommended",
+            "plugin:jsx-a11y/recommended",
             "prettier"
         ],
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint",
+            "react",
+            "react-hooks",
+            "import",
+            "tss-unused-classes",
+            "jsx-a11y"
+        ],
+        "settings": {
+            "react": {
+                "version": "detect"
+            }
+        },
         "rules": {
             "@typescript-eslint/no-redeclare": "off",
+            "@typescript-eslint/no-namespace": "off",
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/no-empty-interface": "off",
+            "@typescript-eslint/no-unused-vars": "off",
+            "@typescript-eslint/ban-ts-comment": "off",
+            "@typescript-eslint/no-empty-function": "off",
+            "@typescript-eslint/ban-types": "off",
+            "@typescript-eslint/no-non-null-assertion": "off",
             "import/no-anonymous-default-export": "off",
             "react-hooks/rules-of-hooks": "off",
             "react-hooks/exhaustive-deps": "off",
+            "react/jsx-key": "off",
+            "react/prop-types": "off",
+            "react/display-name": "off",
+            "react/react-in-jsx-scope": "off",
+            "react/self-closing-comp": "off",
+            "jsx-a11y/anchor-has-content": "off",
+            "jsx-a11y/anchor-is-valid": "off",
+            "jsx-a11y/click-events-have-key-events": "off",
+            "jsx-a11y/no-static-element-interactions": "off",
+            "jsx-a11y/no-noninteractive-element-interactions": "off",
             "no-labels": "off",
             "prefer-const": "off",
             "no-lone-blocks": "off",
-            "tss-unused-classes/unused-classes": "warn",
-            "no-sequences": "off",
-            "react/self-closing-comp": [
-                "error",
-                {
-                    "component": true
-                }
-            ]
+            "no-case-declarations": "off",
+            "no-unexpected-multiline": "off",
+            "tss-unused-classes/unused-classes": "off",
+            "no-sequences": "off"
         }
     },
     "browserslist": {

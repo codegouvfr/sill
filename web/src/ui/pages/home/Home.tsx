@@ -13,7 +13,8 @@ import { useCoreState } from "core";
 import type { PageRoute } from "./route";
 import { useMetricCountUpAnimation } from "ui/tools/useMetricCountUpAnimation";
 import { Waypoint } from "react-waypoint";
-import { ReactComponent as HomepageWaveSvg } from "ui/assets/homepage_wave.svg";
+import HomepageWaveSvg from "ui/assets/homepage_wave.svg?react";
+
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
