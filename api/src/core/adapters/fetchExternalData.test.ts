@@ -308,11 +308,6 @@ describe("fetches software extra data (from different providers)", () => {
                             siren: "820266211"
                         },
                         {
-                            url: "https://annuaire.cnll.fr/societes/437827959",
-                            name: "ézéo",
-                            siren: "437827959"
-                        },
-                        {
                             url: "https://annuaire.cnll.fr/societes/483494589",
                             name: "CENTREON",
                             siren: "483494589"
