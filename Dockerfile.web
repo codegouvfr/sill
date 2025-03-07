@@ -3,7 +3,6 @@ FROM node:20-alpine as build
 WORKDIR /app
 COPY package.json yarn.lock ./
 COPY api/package.json api/
-COPY api/.env.sh api/
 COPY web/package.json web/
 COPY web/public/ web/public/
 

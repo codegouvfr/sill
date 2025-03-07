@@ -12,7 +12,6 @@
         "migrate": "dotenv -e ../.env -- kysely migrate",
         "migrate:down": "dotenv -e ../.env -- kysely migrate down",
         "db:up": "yarn migrate latest",
-        "prepare": "[ ! -f .env.local.sh ] && cp .env.sh .env.local.sh || true",
         "test": "vitest --watch=false --no-file-parallelism",
         "dev": "yarn build && yarn start",
         "build": "tsc",
