@@ -4,7 +4,8 @@ import { type PageRoute } from "./route";
 import { id } from "tsafe/id";
 import { LoadingFallback } from "ui/shared/LoadingFallback";
 import { typeGuard } from "tsafe/typeGuard";
-import { type Language, languages, evtLang } from "ui/i18n";
+import { languages, evtLang } from "ui/i18n";
+import { type Language } from "api";
 import { useCoreState } from "core";
 import { assert } from "tsafe/assert";
 

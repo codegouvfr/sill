@@ -1,14 +1,13 @@
 import { createI18nApi, declareComponentKeys } from "i18nifty";
-import { languages, type Language } from "api";
+import type { Language } from "api";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { statefulObservableToStatefulEvt } from "powerhooks/tools/StatefulObservable/statefulObservableToStatefulEvt";
 import { z } from "zod";
 import { createUnionSchema } from "ui/tools/zod/createUnionSchema";
 
+export const languages = ["fr", "en"] as const satisfies Language[];
 export { declareComponentKeys };
-export { languages };
-export type { Language };
 
 export const fallbackLanguage = "en";
 

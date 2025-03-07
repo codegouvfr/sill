@@ -4,15 +4,15 @@ pre-commit:
       run: yarn format
       stage_fixed: true
     lint:
-      run: turbo lint
+      run: yarn turbo lint
 
 pre-push:
   parallel: true
   commands:
     format:
-      run: turbo format:check
+      run: yarn turbo format:check
     lint:
-      run: turbo lint
+      run: yarn turbo lint
     typecheck:
-      run: turbo typecheck
+      run: yarn turbo typecheck
 
