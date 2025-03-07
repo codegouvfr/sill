@@ -28,7 +28,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-    await db.schema.alterTable("software_external_datas").addColumn("softwareId", "text").execute();
+    await db.schema.alterTable("software_external_datas").addColumn("framaLibreId", "text").execute();
 
     // The data on software_external_datas will update themselves on the next update
 }
