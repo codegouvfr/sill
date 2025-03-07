@@ -47,33 +47,20 @@ cd sill
 sudo apt-get install git
 git clone https://github.com/codegouvfr/sill-api
 git clone https://github.com/codegouvfr/sill-web
+````
 
-# You can look at 
-# https://github.com/codegouvfr/sill-api/blob/main/.env.sh
-# and https://github.com/codegouvfr/sill-api/blob/main/src/env.ts  
-# For more info on the configuration available.  
-cat << EOF > sill-api/.env.local
-export SILL_KEYCLOAK_URL=https://auth.code.gouv.fr/auth
-export SILL_KEYCLOAK_REALM=codegouv
-export SILL_KEYCLOAK_CLIENT_ID=sill
-export SILL_KEYCLOAK_ADMIN_PASSWORD=xxxxxx
-export SILL_KEYCLOAK_ORGANIZATION_USER_PROFILE_ATTRIBUTE_NAME=agencyName
-export SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
-export SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
-export SILL_JWT_ID=sub
-export SILL_JWT_EMAIL=email
-export SILL_JWT_ORGANIZATION=organization
-export SILL_DATA_REPO_SSH_URL=git@github.com:codegouvfr/sill-data.git
-export SILL_SSH_NAME=id_ed25xxxxx
-export SILL_SSH_PRIVATE_KEY="-----BEGIN OPENSSH PRIVATE KEY-----\nxxxx\nxxxx\nxxxx\nAxxxx\nxxxx\n-----END OPENSSH PRIVATE KEY-----\n"
-export SILL_GITHUB_TOKEN=ghp_xxxxxx
-export SILL_WEBHOOK_SECRET=xxxxxxx
-export SILL_API_PORT=3084
-export SILL_IS_DEV_ENVIRONNEMENT=false
-# Can be "wikidata" or "HAL" (See: https://hal.science/)
-export SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN=wikidata 
-EOF
+Create a `.env` file with a content like this
 ```
+OIDC_ISSUER_URI=http://localhost:8081/auth/realms/codegouv
+OIDC_CLIENT_ID=sill
+SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
+SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
+SILL_GITHUB_TOKEN=ghp_xxxxxx
+SILL_API_PORT=3084
+SILL_IS_DEV_ENVIRONNEMENT=true
+DATABASE_URL=postgresql://sill:pg_password@localhost:5432/sill
+```
+
 
 ### Ngnix configuration
 
@@ -169,7 +156,7 @@ These are the step to start both the frontend and the backend respectively on po
 cd sill/sill-api
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/sill-data
-source .env.local
+source .env
 screen -S sill-api
 yarn start
 # <CTRL>+A to exit the screen session, it can be restores with 'screen -r sill-api'
