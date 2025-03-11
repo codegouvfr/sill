@@ -27,7 +27,6 @@ import { createRouter } from "./router";
 export async function startRpcService(params: {
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
-    readmeUrl: LocalizedString;
     githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
@@ -42,7 +41,6 @@ export async function startRpcService(params: {
         redirectUrl,
         oidcParams,
         termsOfServiceUrl,
-        readmeUrl,
         port,
         githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
@@ -87,7 +85,6 @@ export async function startRpcService(params: {
         getSoftwareExternalData,
         oidcParams,
         termsOfServiceUrl,
-        readmeUrl,
         redirectUrl,
         externalSoftwareDataOrigin
     });

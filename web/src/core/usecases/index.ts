@@ -9,7 +9,6 @@ import * as softwareUserAndReferent from "./softwareUserAndReferent";
 import * as generalStats from "./generalStats";
 import * as userAuthentication from "./userAuthentication";
 import * as termsOfServices from "./termsOfServices";
-import * as readme from "./readme";
 import * as redirect from "./redirect";
 import * as declarationRemoval from "./declarationRemoval";
 import * as userProfile from "./userProfile";
@@ -28,7 +27,6 @@ export const usecases = {
     generalStats,
     userAuthentication,
     termsOfServices,
-    readme,
     redirect,
     declarationRemoval,
     userProfile

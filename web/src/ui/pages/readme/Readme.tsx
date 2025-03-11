@@ -1,11 +1,8 @@
-import { useEffect } from "react";
 import Markdown from "react-markdown";
-import { useCoreState, useCore } from "core";
 import { tss } from "tss-react";
 import { fr } from "@codegouvfr/react-dsfr";
 import type { PageRoute } from "./route";
-import { useLang } from "ui/i18n";
-import { LoadingFallback } from "ui/shared/LoadingFallback";
+import { useTranslation } from "react-i18next";
 
 type Props = {
     className?: string;
@@ -15,29 +12,13 @@ type Props = {
 export default function Readme(props: Props) {
     const { className } = props;
 
-    const {
-        readme: { initialize }
-    } = useCore().functions;
-
-    const { lang } = useLang();
-
-    useEffect(() => {
-        initialize({ lang });
-    }, [lang]);
-
-    const { isReady, markdown } = useCoreState("readme", "main");
-
     const { classes, cx } = useStyles();
 
-    if (!isReady) {
-        return <LoadingFallback />;
-    }
+    const { t } = useTranslation();
 
     return (
         <div className={cx(classes.root, className)}>
-            <Markdown className={classes.markdown}>
-                {markdown.split("---").reverse()[0]}
-            </Markdown>
+            <Markdown className={classes.markdown}>{t("about.text")}</Markdown>
         </div>
     );
 }
