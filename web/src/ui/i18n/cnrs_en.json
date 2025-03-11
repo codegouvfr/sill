@@ -8,6 +8,9 @@
         "subTitle": "developped by French universities and French National Centre for Scientific Research",
         "helpUs": "Help us to enhance the research software list !"
     },
+    "about": {
+        "text": "# About the Software Catalog  \nSoftware has become essential in all fields of scientific research, serving as both a tool for research, a product of research, and a subject of research.  \n\nOne of the main objectives of the [«Source Code and software group»](https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/) is to highlight these productions and their importance to research.\n\nMoreover, this catalog is aligned with the ambitions of the [National Plan for Open Science](https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/)."
+    },
     "header": {
         "home title": "Home - Catalog of academic research software",
         "title": "Catalog of academic research software",

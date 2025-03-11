@@ -16,6 +16,9 @@
         "editSoftwareDesc": "<p>Le catalogue se base sur les notices logicielles déposées dans l'archive ouverte <a1>HAL</a1>.</p><p>Pour modifier une fiche logicielle, il faut donc aller modifier sa notice dans HAL.</p>",
         "editSoftwareButtonLabel": "Se connecter à HAL"
     },
+    "about": {
+        "text": "# A propos du catalogue  \nLe logiciel est aujourd’hui devenu indispensable dans tous les domaines de la recherche scientifique, à la fois comme outil pour la recherche, comme produit de la recherche et comme objet de recherche.  \n\nUn des objectifs majeurs du collège [«Codes sources et logiciel »](https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/) est de mettre en lumière ces productions et leur importance pour la recherche.  \n\nCe catalogue est par ailleurs inscrit dans les ambitions du [Plan National pour la Science Ouverte](https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/)."
+    },
     "header": {
         "home title": "Accueil - Catalogue des logiciels de la recherche académique",
         "title": "Catalogue des logiciels de la recherche académique",
