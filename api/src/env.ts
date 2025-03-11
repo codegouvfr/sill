@@ -7,7 +7,6 @@ const zEnvConfiguration = z.object({
         "clientId": z.string().nonempty()
     }),
     "termsOfServiceUrl": zLocalizedString,
-    "readmeUrl": zLocalizedString,
     // Only for increasing the rate limit on GitHub API
     // we use the GitHub API for pre filling the version when adding a software
     "githubPersonalAccessTokenForApiRateLimit": z.string().nonempty(),
@@ -29,7 +28,6 @@ const envConfiguration = zEnvConfiguration.parse({
             process.env.OIDC_ISSUER_URI ?? `${process.env.SILL_KEYCLOAK_URL}/realms/${process.env.SILL_KEYCLOAK_REALM}`,
         "clientId": process.env.OIDC_CLIENT_ID ?? process.env.SILL_KEYCLOAK_CLIENT_ID
     },
-    "readmeUrl": process.env.SILL_README_URL,
     "termsOfServiceUrl": process.env.SILL_TERMS_OF_SERVICE_URL,
     "githubPersonalAccessTokenForApiRateLimit": process.env.SILL_GITHUB_TOKEN,
     "port": parseInt(process.env.SILL_API_PORT ?? ""),

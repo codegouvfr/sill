@@ -62,6 +62,9 @@
         "editSoftwareButtonLabel": "Search for software",
         "addSoftwareOrServiceButtonLabel": "Complete the addition form"
     },
+    "about": {
+        "text": "# A Software Catalog application  \nThis repository contains a software catalog application.  \nIt is used on [code.gouv.fr/sill](https://code.gouv.fr/sill/) for the list of recommanded Free Software for French administrations.  \n# Code organization  \nThis \"monorepo\" is made of several directories:  \n- api: Application API  \n- web: Web frontend  \n- docs: Documentation, as deployed [here](https://codegouvfr.github.io/sill/)  \n# Governance and contributions  \n[![img](https://img.shields.io/badge/code.gouv.fr-contributif-blue.svg)](https://code.gouv.fr/documentation/#quels-degres-douverture-pour-les-codes-sources)  \nSee [GOVERNANCE.md](GOVERNANCE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).  \n# License  \n2021-2025 Direction interministérielle du numérique, mission logiciels libres.  \nThe code in this repository is published under [licence MIT](LICENSES/MIT.txt).  \nThe documentation is published under [licence Ouverte 2.0](LICENSES/Etalab-2.0.md)."
+    },
     "addSoftwareLanding": {
         "title": "<span>Are you a public servant ?</span> Add free software or instances of free software used or deployed in your organization!",
         "subtitle": "Contribute to the creation of a reference platform for public service software equipment and share valuable information with agents and CIOs in the administration",

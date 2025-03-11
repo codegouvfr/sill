@@ -36,7 +36,6 @@ export function createRouter(params: {
     useCases: UseCases;
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
-    readmeUrl: LocalizedString;
     redirectUrl: string | undefined;
     externalSoftwareDataOrigin: ExternalDataOrigin;
     getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
@@ -47,7 +46,6 @@ export function createRouter(params: {
         dbApi,
         oidcParams,
         termsOfServiceUrl,
-        readmeUrl,
         redirectUrl,
         externalSoftwareDataOrigin: externalDataOrigin,
         getSoftwareExternalDataOptions
@@ -469,7 +467,7 @@ export function createRouter(params: {
             .input(
                 z.object({
                     "language": zLanguage,
-                    "name": z.union([z.literal("readme"), z.literal("termsOfService")])
+                    "name": z.literal("termsOfService")
                 })
             )
             .query(
@@ -488,7 +486,7 @@ export function createRouter(params: {
               "currentLanguage": lang,
               "fallbackLanguage": "en"
             }))
-            .map(({resolveLocalizedString}) => [termsOfServiceUrl, readmeUrl].map(resolveLocalizedString))
+            .map(({resolveLocalizedString}) => [termsOfServiceUrl].map(resolveLocalizedString))
             .flat()
             .forEach(async function callee(url) {
 
@@ -512,8 +510,6 @@ export function createRouter(params: {
                             resolveLocalizedString(
                                 (() => {
                                     switch (name) {
-                                        case "readme":
-                                            return readmeUrl;
                                         case "termsOfService":
                                             return termsOfServiceUrl;
                                     }

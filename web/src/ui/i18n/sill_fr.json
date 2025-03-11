@@ -64,6 +64,9 @@
         "editSoftwareButtonLabel": "Rechercher un logiciel",
         "addSoftwareOrServiceButtonLabel": "Compléter le formulaire d'ajout"
     },
+    "about": {
+        "text": "# Un catalogue d'applications logicielles  \nCe dépôt contient une application de catalogue de logiciels.  \nIl est utilisé sur [code.gouv.fr/sill](https://code.gouv.fr/sill/) pour la liste des logiciels libres recommandés pour les administrations française.  \n# Structure du code  \nCe \"monorepo\" est composé de plusieurs dossiers :  \n- api : API de l'application  \n- web : Interface web  \n- docs : Documentation, accessible [ici](https://codegouvfr.github.io/sill/)  \n# Gouvernance et contributions  \n[![img](https://img.shields.io/badge/code.gouv.fr-contributif-blue.svg)](https://code.gouv.fr/documentation/#quels-degres-douverture-pour-les-sources-code)  \nVoir [GOUVERNANCE.md](GOUVERNANCE.md) et [CONTRIBUTING.md](CONTRIBUTING.md).  \n# Licence  \n2021-2025 Direction interministérielle du numérique, mission logiciels libres.  \nLe code de ce dépôt est publié sous [licence MIT](LICENSES/MIT.txt).  \nLa documentation est publiée sous [licence Ouverte 2.0](LICENSES/Etalab-2.0.md)."
+    },
     "addSoftwareLanding": {
         "title": "<span>Vous êtes agent public ? </span>Ajoutez des logiciels libres ou des instances de logiciels libres utilisés ou déployés dans votre organisation !",
         "subtitle": "Contribuez à la création d'une plateforme de référence pour les logiciels du service public et partagez des informations utiles aux agents et aux DSI de l'administration.",
