@@ -38,6 +38,13 @@ describe("HAL", () => {
                 "programmingLanguages": undefined,
                 "applicationCategories": ["Computer Science [cs]"],
                 "referencePublications": undefined,
+                "repoMetadata": {
+                    "healthCheck": {
+                        "lastClosedIssue": undefined,
+                        "lastClosedIssuePullRequest": undefined,
+                        "lastCommit": 1729459216000
+                    }
+                },
                 "identifiers": [
                     {
                         "@type": "PropertyValue",
