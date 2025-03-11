@@ -12,7 +12,7 @@
         "migrate": "dotenv -e ../.env -- kysely migrate",
         "migrate:down": "dotenv -e ../.env -- kysely migrate down",
         "db:up": "yarn migrate latest",
-        "test": "vitest --watch=false --no-file-parallelism",
+        "test": "dotenv -e ../.env -- vitest --watch=false --no-file-parallelism",
         "dev": "yarn build && yarn start",
         "build": "tsc",
         "start": "yarn db:up && dotenv -e ../.env -- node dist/src/entrypoints/start-api.js",
