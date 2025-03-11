@@ -397,7 +397,7 @@ export const PreviewTab = (props: Props) => {
                         )}
                     </div>
                 )}
-                {repoMetadata && (
+                {config.softwareDetails.repoMetadata.enabled && repoMetadata && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.repoMetadata")}
