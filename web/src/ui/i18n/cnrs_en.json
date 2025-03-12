@@ -6,10 +6,18 @@
     "home": {
         "title": "Listing of free software",
         "subTitle": "developped by French universities and French National Centre for Scientific Research",
-        "helpUs": "Help us to enhance the research software list !"
+        "helpUs": "Help us to enhance the research software list !",
+        "theSillInAFewWords": "The SILL in a Nutshell",
+        "theSillInAFewWordsParagraph": "<p>Software has become essential in all scientific research fields, serving as both a tool for research, a product of research, and a subject of research.</p><p>A major objective of the <a1>Software and Source Code Committee</a1> is to highlight these productions and their significance to research.</p><p>This catalog is also part of the broader goals of the <a2>French National Plan for Open Science</a2>.</p>",
+        "addSoftwareOrServiceTitle": "Add Software / Contribute",
+        "addSoftwareOrServiceDesc": "<p>The catalog relies on software notices uploaded to the open archive <a1>HAL</a1>.</p><p>For submitting a software notice, please refer to HAL's documentation.</p>",
+        "addSoftwareOrServiceButtonLabel": "View HAL Documentation",
+        "editSoftwareTitle": "Edit Software Sheet",
+        "editSoftwareDesc": "<p>The catalog is based on software notices deposited in the open archive <a1>HAL</a1>.</p><p>To edit a software sheet, you must go to modify its notice in HAL.</p>",
+        "editSoftwareButtonLabel": "Connect to HAL"
     },
     "about": {
-        "text": "# About the Software Catalog  \nSoftware has become essential in all fields of scientific research, serving as both a tool for research, a product of research, and a subject of research.  \n\nOne of the main objectives of the [«Source Code and software group»](https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/) is to highlight these productions and their importance to research.\n\nMoreover, this catalog is aligned with the ambitions of the [National Plan for Open Science](https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/)."
+        "text": "# About the Software Catalog  \nSoftware has become essential in all fields of scientific research, serving as both a tool for research, a product of research, and a subject of research.  \n\nOne of the main objectives of the [«Source Code and software Committee](https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/) is to highlight these productions and their importance to research.\n\nMoreover, this catalog is aligned with the ambitions of the [National Plan for Open Science](https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/)."
     },
     "header": {
         "home title": "Home - Catalog of academic research software",
