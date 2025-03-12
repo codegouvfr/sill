@@ -86,12 +86,12 @@ export async function down(db: Kysely<any>): Promise<void> {
         })
         .execute();
 
-    await db.schema.alterTable("softwares__similar_software_external_datas").dropColumn("similarSoftwareId").execute();
-
     await db.schema
         .alterTable("softwares__similar_software_external_datas")
         .dropConstraint("softwares__similar_software_external_datas_pkey")
         .execute();
+
+    await db.schema.alterTable("softwares__similar_software_external_datas").dropColumn("similarSoftwareId").execute();
 
     await db.deleteFrom("softwares").where("referencedSinceTime.", "is", null).execute();
 

@@ -7,7 +7,7 @@ import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialec
 import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
 import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
-import { getOrPopulateFromIds } from "../src/services/formDataService";
+import { getOrPopulateFromIds } from "../src/core/usecases/createSoftwareFromForm";
 import { wikidataAdapter } from "../src/core/adapters/wikidata";
 import { getDbApiAndInitializeCache } from "../src/core/bootstrap";
 import { DbApiV2 } from "../src/core/ports/DbApiV2";
@@ -67,10 +67,10 @@ const insertSoftwares = async (
     await db.transaction().execute(async trx => {
         await trx.deleteFrom("softwares").execute();
         await trx.deleteFrom("softwares__similar_software_external_datas").execute();
-        const softId = await trx
+        await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ addedByAgentEmail, ...row }) => ({
+                softwareRows.map(({ similarSoftwareIds: _, addedByAgentEmail, ...row }) => ({
                     ...row,
                     addedByAgentId: agentIdByEmail[addedByAgentEmail],
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
@@ -83,7 +83,8 @@ const insertSoftwares = async (
             .executeTakeFirst();
         await sql`SELECT setval('softwares_id_seq', (SELECT MAX(id) FROM softwares))`.execute(trx);
 
-        const similarSoftware: Array<{ softwareId: number; similarSoftwareIds: Array<number> } | undefined> =
+        // Array<{ softwareId: number; similarSoftwareIds: Array<number> } | undefined>
+        const similarSoftware = await Promise.all(
             softwareRows.map(async software => {
                 const softwareDbRow = await dbApi.software.getByName(software.name);
 
@@ -102,17 +103,23 @@ const insertSoftwares = async (
                     console.error("Importation faiiled or record cannot be found.");
                     return undefined;
                 }
-            });
-
-        const similarArray = softwareRows.flatMap(row =>
-            Array.from(new Set(row.similarSoftwareExternalDataIds)).map(externalId => ({
-                softwareId: row.id,
-                similarExternalId: externalId
-            }))
+            })
         );
 
+        const dbSimilarSoftware = similarSoftware
+            .filter(software => software !== undefined)
+            .map(similarCouple => {
+                return similarCouple.similarSoftwareIds.map(similarSoftwareId => {
+                    return {
+                        softwareId: similarCouple.softwareId,
+                        similarSoftwareId: similarSoftwareId
+                    };
+                });
+            })
+            .flat();
+
         // TODO Insert software
-        await trx.insertInto("softwares__similar_software_external_datas").values([]).execute();
+        await trx.insertInto("softwares__similar_software_external_datas").values(dbSimilarSoftware).execute();
     });
 };
 

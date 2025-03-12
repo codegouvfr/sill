@@ -73,6 +73,7 @@ export function createGitDbApi(params: GitDbApiParams): { dbApi: DbApi; initiali
                         ).then(buffers => buffers.map(buffer => JSON.parse(buffer.toString("utf8"))));
 
                     dOut.resolve({
+                        softwareRows: [], // Doesn't exist in GitRepo
                         composedSoftwareRows: softwareRows,
                         agentRows,
                         softwareReferentRows,

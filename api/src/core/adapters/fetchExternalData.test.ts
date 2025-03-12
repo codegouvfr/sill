@@ -11,7 +11,7 @@ import { makeFetchAndSaveSoftwareExtraData } from "./fetchExternalData";
 import { getCnllPrestatairesSill } from "./getCnllPrestatairesSill";
 import { getServiceProviders } from "./getServiceProviders";
 import { getWikidataSoftware } from "./wikidata/getWikidataSoftware";
-import { FormDataService, formDataServiceMake } from "../../services/formDataService";
+import { CreateSoftwareFromForm, makeCreateSoftwareFromForm } from "../usecases/createSoftwareFromForm";
 import { wikidataAdapter } from "./wikidata";
 
 const craSoftwareFormData = {
@@ -88,7 +88,7 @@ describe("fetches software extra data (from different providers)", () => {
     let dbApi: DbApiV2;
     let db: Kysely<Database>;
     let craSoftwareId: number;
-    let formDataService: FormDataService;
+    let createSoftwareFromForm: CreateSoftwareFromForm;
 
     beforeEach(async () => {
         db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
@@ -103,7 +103,7 @@ describe("fetches software extra data (from different providers)", () => {
         await sql`SELECT setval('softwares_id_seq', 11, false)`.execute(db);
 
         dbApi = createKyselyPgDbApi(db);
-        formDataService = formDataServiceMake(dbApi, wikidataAdapter);
+        createSoftwareFromForm = makeCreateSoftwareFromForm(dbApi, wikidataAdapter);
 
         const agentId = await dbApi.agent.add({
             email: "myuser@example.com",
@@ -112,7 +112,7 @@ describe("fetches software extra data (from different providers)", () => {
             isPublic: false
         });
 
-        craSoftwareId = await formDataService.create(craSoftwareFormData, agentId);
+        craSoftwareId = await createSoftwareFromForm(craSoftwareFormData, agentId);
 
         await insertApacheWithCorrectId(db, agentId);
         await insertAcceleroWithCorrectId(db, agentId);

@@ -31,6 +31,7 @@ export interface SoftwareRepository {
         params: {
             softwareSillId: number;
             formData: SoftwareFormData;
+            isReferenced?: boolean;
         } & WithAgentId
     ) => Promise<void>;
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
@@ -52,6 +53,16 @@ export interface SoftwareRepository {
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
+}
+
+export interface SimilarSoftwareRepository {
+    create: (
+        similarSoftwares: {
+            softwareId: number;
+            similarSoftwareId: number;
+        }[]
+    ) => Promise<void>;
+    getBySoftwareId: (id: number) => Promise<number[]>;
 }
 
 export interface SimilarSoftwareRepository {

@@ -82,7 +82,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
         },
-        update: async ({ formData, softwareSillId, agentId }) => {
+        update: async ({ formData, softwareSillId, agentId, isReferenced }) => {
             const {
                 softwareName,
                 softwareDescription,
@@ -124,7 +124,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     categories: JSON.stringify([]),
                     generalInfoMd: undefined,
                     addedByAgentId: agentId,
-                    keywords: JSON.stringify(softwareKeywords)
+                    keywords: JSON.stringify(softwareKeywords),
+                    ...(isReferenced !== undefined
+                        ? isReferenced
+                            ? { referencedSinceTime: now }
+                            : { referencedSinceTime: null }
+                        : {})
                 })
                 .where("id", "=", softwareSillId)
                 .execute();
@@ -217,7 +222,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             // Only software that are referenced in catalog
             let builder = makeGetSoftwareBuilder(db);
 
-            builder.where("s.referencedSinceTime", "is not", null);
+            builder = builder.where("s.referencedSinceTime", "is not", null);
 
             builder = onlyIfUpdatedMoreThan3HoursAgo
                 ? builder.where(eb =>

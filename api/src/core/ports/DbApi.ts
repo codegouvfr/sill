@@ -67,6 +67,7 @@ export namespace Db {
         doRespectRgaa: boolean | null;
         isFromFrenchPublicService: boolean;
         isPresentInSupportContract: boolean;
+        similarSoftwareIds: number[];
         similarSoftwareExternalDataIds: string[];
         externalId?: string;
         externalDataOrigin?: "wikidata" | "HAL";

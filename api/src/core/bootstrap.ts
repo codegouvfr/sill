@@ -14,6 +14,7 @@ import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternal
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import { makeCreateSoftwareFromForm } from "./usecases/createSoftwareFromForm";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -69,7 +70,11 @@ export async function bootstrapCore(
             getServiceProviders,
             dbApi
         }),
-        getAgent: makeGetAgent({ agentRepository: dbApi.agent })
+        getAgent: makeGetAgent({ agentRepository: dbApi.agent }),
+        createSoftwareFromForm: makeCreateSoftwareFromForm(
+            dbApi,
+            externalSoftwareDataOrigin === "wikidata" ? wikidataAdapter : halAdapter
+        )
     };
 
     return { dbApi, context, useCases };

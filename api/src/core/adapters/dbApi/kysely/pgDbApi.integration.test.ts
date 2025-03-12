@@ -8,7 +8,7 @@ import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 import { wikidataAdapter } from "../../wikidata";
-import { FormDataService, formDataServiceMake } from "../../../../services/formDataService";
+import { CreateSoftwareFromForm, makeCreateSoftwareFromForm } from "../../../usecases/createSoftwareFromForm";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
@@ -106,11 +106,11 @@ const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
-    let formDataService: FormDataService;
+    let createSoftwareFromForm: CreateSoftwareFromForm;
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
-        formDataService = formDataServiceMake(dbApi, wikidataAdapter);
+        createSoftwareFromForm = makeCreateSoftwareFromForm(dbApi, wikidataAdapter);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
         await db.deleteFrom("softwares__similar_software_external_datas").execute();
@@ -282,7 +282,7 @@ describe("pgDbApi", () => {
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
 
-            const softwareId = await formDataService.create(softwareFormData, agentId);
+            const softwareId = await createSoftwareFromForm(softwareFormData, agentId);
 
             await db
                 .insertInto("software_users")
@@ -453,7 +453,7 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await formDataService.create(softwareFormData, agentId);
+        const softwareId = await createSoftwareFromForm(softwareFormData, agentId);
 
         return {
             softwareId,
