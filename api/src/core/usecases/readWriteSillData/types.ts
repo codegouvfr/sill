@@ -19,7 +19,7 @@ export type Software = {
     softwareName: string;
     softwareDescription: string;
     serviceProviders: ServiceProvider[];
-    latestVersion:
+    latestVersion?:
         | {
               semVer?: string;
               publicationTime?: number;
@@ -27,7 +27,7 @@ export type Software = {
         | undefined;
     referencedSinceTime: number | undefined;
     updateTime: number;
-    dereferencing:
+    dereferencing?:
         | {
               reason?: string;
               time: number;
@@ -44,7 +44,7 @@ export type Software = {
     versionMin: string | undefined;
     license: string;
     comptoirDuLibreServiceProviderCount: number;
-    annuaireCnllServiceProviders:
+    annuaireCnllServiceProviders?:
         | {
               name: string;
               siren: string;
@@ -56,7 +56,7 @@ export type Software = {
     externalDataOrigin: ExternalDataOrigin | undefined;
     softwareType: SoftwareType;
     parentWikidataSoftware: ParentSoftwareExternalData | undefined;
-    similarSoftwares: Software.SimilarSoftware[];
+    similarExternalSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
     referencePublications?: SILL.ScholarlyArticle[];

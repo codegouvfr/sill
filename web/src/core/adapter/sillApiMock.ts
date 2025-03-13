@@ -90,7 +90,7 @@ export const sillApi: SillApi = {
             latestVersion: undefined,
             parentWikidataSoftware: undefined,
             softwareType: formData.softwareType,
-            similarSoftwares: [],
+            similarExternalSoftwares: [],
             referencedSinceTime: Date.now(),
             updateTime: Date.now(),
             applicationCategories: [],
@@ -144,7 +144,7 @@ export const sillApi: SillApi = {
                 latestVersion: undefined,
                 parentWikidataSoftware: undefined,
                 softwareType: formData.softwareType,
-                similarSoftwares: [],
+                similarExternalSoftwares: [],
                 referencedSinceTime: Date.now(),
                 updateTime: Date.now(),
                 applicationCategories: [],
@@ -293,7 +293,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 29,
         comptoirDuLibreId: 117,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -350,7 +350,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 22,
         comptoirDuLibreId: 33,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -425,7 +425,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 24,
         comptoirDuLibreId: 38,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q10135",
         externalDataOrigin: "wikidata",
         softwareType: {
@@ -479,7 +479,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 5,
         comptoirDuLibreId: 62,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q171477",
         externalDataOrigin: "wikidata",
         license: "GPL-2.0-only",
@@ -531,7 +531,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 16,
         comptoirDuLibreId: 241,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -621,7 +621,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -666,7 +666,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 14,
         comptoirDuLibreId: 60,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q1329181",
         externalDataOrigin: "wikidata",
         license: "GPL-2.0-or-later",
@@ -771,7 +771,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         userAndReferentCountByOrganization: {
             DINUM: { referentCount: 2, userCount: 43 }
         },
@@ -800,7 +800,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 17,
         comptoirDuLibreId: 123,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q192490",
         externalDataOrigin: "wikidata",
         license: "PostgreSQL",
@@ -847,7 +847,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 5,
         comptoirDuLibreId: 140,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q50938515",
         externalDataOrigin: "wikidata",
         license: "AGPL-3.0-or-later",
@@ -911,7 +911,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -957,7 +957,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1003,7 +1003,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1049,7 +1049,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1095,7 +1095,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1141,7 +1141,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1187,7 +1187,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
@@ -1233,7 +1233,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,

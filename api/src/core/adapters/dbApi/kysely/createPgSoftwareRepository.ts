@@ -154,7 +154,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         updateTime: new Date(+updateTime).getTime(),
                         referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
                         serviceProviders: serviceProviders ?? [],
-                        similarSoftwares: similarExternalSoftwares,
+                        similarExternalSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
                             "@type": "Person",
@@ -251,7 +251,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 ? new Date(+referencedSinceTime).getTime()
                                 : undefined,
                             serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
+                            similarExternalSoftwares: similarExternalSoftwares,
                             // (similarSoftwares ?? []).map(
                             //     (s): SimilarSoftware => ({
                             //         softwareName:
@@ -534,7 +534,7 @@ const makeGetSoftwareById =
                     referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
                     isReferenced: referencedSinceTime ? true : false,
                     serviceProviders: serviceProviders ?? [],
-                    similarSoftwares: similarExternalSoftwares,
+                    similarExternalSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
                         "@type": "Person",

@@ -183,7 +183,7 @@ function apiSoftwareToSoftware(params: {
         prerogatives,
         comptoirDuLibreServiceProviderCount,
         comptoirDuLibreId,
-        similarSoftwares: similarSoftwares_api,
+        similarExternalSoftwares: similarSoftwares_api,
         externalDataOrigin,
         externalId,
         license,

@@ -172,7 +172,6 @@ describe("pgDbApi", () => {
             expectToEqual(actualSoftware, {
                 referencedSinceTime: expect.any(Number),
                 updateTime: expect.any(Number),
-                annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
@@ -183,16 +182,11 @@ describe("pgDbApi", () => {
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,
                 comptoirDuLibreServiceProviderCount: 0,
-                dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,
                 externalDataOrigin: "wikidata",
                 externalId,
                 isReferenced: true,
                 keywords: ["bob", "l'éponge"],
-                latestVersion: {
-                    "publicationTime": 1561566581000,
-                    "semVer": "1.0.0"
-                },
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
@@ -208,7 +202,16 @@ describe("pgDbApi", () => {
                 },
                 programmingLanguages: ["C++"],
                 serviceProviders: [],
-                similarSoftwares: [],
+                similarExternalSoftwares: [
+                    {
+                        externalDataOrigin: "wikidata",
+                        externalId: similarSoftwareExternalData.externalId,
+                        label: similarSoftwareExternalData.label,
+                        description: similarSoftwareExternalData.description,
+                        isLibreSoftware: similarSoftwareExternalData.isLibreSoftware,
+                        isInSill: false
+                    }
+                ],
                 softwareDescription: "Super software",
                 softwareId: expect.any(Number),
                 softwareName: softwareFormData.softwareName,

@@ -226,7 +226,7 @@ function apiSoftwareToInternalSoftware(params: {
         prerogatives,
         softwareType,
         userAndReferentCountByOrganization,
-        similarSoftwares,
+        similarExternalSoftwares,
         keywords,
         programmingLanguages
     } = apiSoftware;
@@ -312,7 +312,7 @@ function apiSoftwareToInternalSoftware(params: {
                 " (" +
                 [
                     ...keywords,
-                    ...similarSoftwares
+                    ...similarExternalSoftwares
                         .map(similarSoftware =>
                             similarSoftware.isInSill
                                 ? similarSoftware.softwareName
