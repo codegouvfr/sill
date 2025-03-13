@@ -98,7 +98,7 @@ const makeGetOtherExternalData =
             softwareId: software.softwareId,
             serviceProviders:
                 software.externalDataOrigin === "wikidata"
-                    ? (serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [])
+                    ? (serviceProvidersBySoftwareId[software.softwareId] ?? [])
                     : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
@@ -159,7 +159,7 @@ export type FetchAndSaveExternalDataForAllSoftwares = ReturnType<typeof makeFetc
 export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
     const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {
-        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true, referenced: true });
 
         console.info(`About to update ${softwares.length} softwares`);
 

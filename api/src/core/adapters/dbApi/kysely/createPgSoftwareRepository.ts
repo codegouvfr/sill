@@ -196,33 +196,31 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             const software = await getBySoftwareId(softwareId);
             if (!software) return;
 
-            const { parentSoftwareExternalId, similarSoftwaresIds } = await db
+            const similarSoftwaresIds = await db
+                .selectFrom("softwares__similar_software_external_datas")
+                .select("similarSoftwareId")
+                .where("softwareId", "=", softwareId)
+                .execute();
+
+            const { parentSoftwareExternalId } = await db
                 .selectFrom("softwares as s")
-                .leftJoin("softwares__similar_software_external_datas as sim", "sim.softwareId", "s.id")
-                .select([
-                    "s.parentSoftwareWikidataId as parentSoftwareExternalId",
-                    qb =>
-                        qb.fn
-                            .jsonAgg(qb.ref("sim.softwareId"))
-                            .filterWhere("sim.softwareId", "is not", null)
-                            .$castTo<number[]>()
-                            .as("similarSoftwaresIds")
-                ])
-                .groupBy("s.id")
+                .select("s.parentSoftwareWikidataId as parentSoftwareExternalId")
                 .where("s.id", "=", softwareId)
                 .executeTakeFirstOrThrow();
 
             return {
                 software,
-                similarSoftwaresIds: similarSoftwaresIds ?? [],
+                similarSoftwaresIds: similarSoftwaresIds.map(obj => obj.similarSoftwareId),
                 parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
             };
         },
-        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
+        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo, referenced } = {}): Promise<Software[]> => {
             // Only software that are referenced in catalog
             let builder = makeGetSoftwareBuilder(db);
 
-            builder = builder.where("s.referencedSinceTime", "is not", null);
+            if (referenced) {
+                builder = builder.where("s.referencedSinceTime", "is not", null);
+            }
 
             builder = onlyIfUpdatedMoreThan3HoursAgo
                 ? builder.where(eb =>

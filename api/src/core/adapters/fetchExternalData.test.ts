@@ -167,9 +167,15 @@ describe("fetches software extra data (from different providers)", () => {
                 .executeTakeFirstOrThrow();
             expect(initialLastExtraDataFetchAt).toBe(null);
 
+            const { viteSoftwareId } = await db
+                .selectFrom("softwares")
+                .select("id as viteSoftwareId")
+                .where("externalId", "=", craSoftwareFormData.similarSoftwareExternalDataIds[0])
+                .executeTakeFirstOrThrow();
+
             await db
                 .updateTable("softwares__similar_software_external_datas")
-                .set({ softwareId: craSoftwareId, similarSoftwareId: apacheSoftwareId })
+                .set({ softwareId: craSoftwareId, similarSoftwareId: viteSoftwareId })
                 .execute();
 
             await fetchAndSaveSoftwareExtraData(craSoftwareId, {});

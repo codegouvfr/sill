@@ -7,10 +7,16 @@ export const createPgSimilarSoftwareRepository = (db: Kysely<Database>): Similar
         similars: {
             softwareId: number;
             similarSoftwareId: number;
-        }[]
+        }[],
+        ignore?: boolean
     ) => {
         return db.transaction().execute(async trx => {
-            await trx.insertInto("softwares__similar_software_external_datas").values(similars).execute();
+            let reqest = trx.insertInto("softwares__similar_software_external_datas");
+            if (ignore) {
+                reqest = reqest.ignore();
+            }
+
+            await reqest.values(similars).execute();
 
             return Promise.resolve();
         });

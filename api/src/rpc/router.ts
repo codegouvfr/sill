@@ -87,7 +87,7 @@ export function createRouter(params: {
             if (!user) throw new TRPCError({ "code": "UNAUTHORIZED" });
             return user;
         }),
-        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
+        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll({ referenced: true })),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
             .input(

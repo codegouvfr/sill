@@ -61,6 +61,7 @@ export type Software = {
     programmingLanguages: string[];
     referencePublications?: SILL.ScholarlyArticle[];
     identifiers?: SILL.Identification[];
+    isReferenced?: boolean;
 };
 
 export namespace Software {

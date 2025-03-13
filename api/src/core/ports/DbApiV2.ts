@@ -17,6 +17,7 @@ export type WithAgentId = { agentId: number };
 
 type GetSoftwareFilters = {
     onlyIfUpdatedMoreThan3HoursAgo?: true;
+    referenced?: boolean;
 };
 
 export interface SoftwareRepository {
@@ -60,17 +61,8 @@ export interface SimilarSoftwareRepository {
         similarSoftwares: {
             softwareId: number;
             similarSoftwareId: number;
-        }[]
-    ) => Promise<void>;
-    getBySoftwareId: (id: number) => Promise<number[]>;
-}
-
-export interface SimilarSoftwareRepository {
-    create: (
-        similarSoftwares: {
-            softwareId: number;
-            similarSoftwareId: number;
-        }[]
+        }[],
+        ignore?: boolean
     ) => Promise<void>;
     getBySoftwareId: (id: number) => Promise<number[]>;
 }
