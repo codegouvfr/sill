@@ -176,6 +176,7 @@ describe("pgDbApi", () => {
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
+                    affiliations: undefined,
                     name: dev.name,
                     url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
@@ -186,6 +187,7 @@ describe("pgDbApi", () => {
                 documentationUrl: softwareExternalData.documentationUrl,
                 externalDataOrigin: "wikidata",
                 externalId,
+                isReferenced: true,
                 keywords: ["bob", "l'éponge"],
                 latestVersion: {
                     "publicationTime": 1561566581000,
@@ -206,16 +208,7 @@ describe("pgDbApi", () => {
                 },
                 programmingLanguages: ["C++"],
                 serviceProviders: [],
-                similarSoftwares: [
-                    {
-                        externalDataOrigin: "wikidata",
-                        externalId: similarSoftwareExternalData.externalId,
-                        label: similarSoftwareExternalData.label,
-                        description: similarSoftwareExternalData.description,
-                        isLibreSoftware: similarSoftwareExternalData.isLibreSoftware,
-                        isInSill: false
-                    }
-                ],
+                similarSoftwares: [],
                 softwareDescription: "Super software",
                 softwareId: expect.any(Number),
                 softwareName: softwareFormData.softwareName,
@@ -229,12 +222,7 @@ describe("pgDbApi", () => {
                     },
                     type: "desktop/mobile"
                 },
-                userAndReferentCountByOrganization: {
-                    [insertedAgent.organization]: {
-                        userCount: 1,
-                        referentCount: 0
-                    }
-                },
+                userAndReferentCountByOrganization: {},
                 versionMin: ""
             });
 

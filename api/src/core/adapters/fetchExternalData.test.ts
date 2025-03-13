@@ -234,7 +234,21 @@ describe("fetches software extra data (from different providers)", () => {
             ]);
 
             const otherExtraData = await db.selectFrom("compiled_softwares").selectAll().execute();
-            expectToEqual(otherExtraData, []);
+            expectToEqual(otherExtraData, [
+                {
+                    "annuaireCnllServiceProviders": null,
+                    "comptoirDuLibreSoftware": null,
+                    "latestVersion": null,
+                    "serviceProviders": [
+                        {
+                            "cdlUrl": "https://comptoir-du-libre.org/fr/users/3886",
+                            "name": "Jérôme Kowalczyk",
+                            "website": ""
+                        }
+                    ],
+                    "softwareId": 12
+                }
+            ]);
 
             const { lastExtraDataFetchAt } = await db
                 .selectFrom("softwares")
