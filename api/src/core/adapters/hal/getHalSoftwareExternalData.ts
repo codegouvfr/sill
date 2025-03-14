@@ -5,6 +5,9 @@ import { halAPIGateway } from "./HalAPI";
 import { HalFetchError } from "./HalAPI/type";
 import { SILL } from "../../../types/SILL";
 import { HAL } from "./types/HAL";
+import { repoAnalyser, RepoType } from "../../../tools/repoAnalyser";
+import { projectGitLabApiMaker } from "../GitLab/api/project";
+import { repoGitHubEndpointMaker } from "../GitHub/api/repo";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -215,6 +218,60 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 }
             }) ?? [];
 
+        const repoType = await repoAnalyser(halRawSoftware?.softCodeRepository_s?.[0]);
+
+        const getRepoMetadata = async (repoType: RepoType | undefined) => {
+            switch (repoType) {
+                case "GitLab":
+                    const gitLabProjectapi = projectGitLabApiMaker(halRawSoftware?.softCodeRepository_s?.[0]);
+                    const lastGLCommit = await gitLabProjectapi.commits.getLastCommit();
+                    const lastFLIssue = await gitLabProjectapi.issues.getLastClosedIssue();
+                    const lastGLMergeRequest = await gitLabProjectapi.mergeRequests.getLast();
+                    return {
+                        healthCheck: {
+                            lastCommit: lastGLCommit ? new Date(lastGLCommit.created_at).valueOf() : undefined,
+                            lastClosedIssue:
+                                lastFLIssue && lastFLIssue.closed_at
+                                    ? new Date(lastFLIssue.closed_at).valueOf()
+                                    : undefined,
+                            lastClosedIssuePullRequest: lastGLMergeRequest
+                                ? new Date(lastGLMergeRequest.updated_at).valueOf()
+                                : undefined
+                        }
+                    };
+                case "GitHub":
+                    const gitHubApi = repoGitHubEndpointMaker(halRawSoftware?.softCodeRepository_s?.[0]);
+                    if (!gitHubApi) {
+                        console.error("Bad URL string");
+                        return undefined;
+                    }
+
+                    const lastGHCommit = await gitHubApi.commits.getLastCommit();
+                    const lastGHCloseIssue = await gitHubApi.issues.getLastClosedIssue();
+                    const lastGHClosedPull = await gitHubApi.mergeRequests.getLast();
+
+                    return {
+                        healthCheck: {
+                            lastCommit: lastGHCommit?.commit?.author?.date
+                                ? new Date(lastGHCommit.commit.author.date).valueOf()
+                                : undefined,
+                            lastClosedIssue: lastGHCloseIssue?.closed_at
+                                ? new Date(lastGHCloseIssue.closed_at).valueOf()
+                                : undefined,
+                            lastClosedIssuePullRequest: lastGHClosedPull?.closed_at
+                                ? new Date(lastGHClosedPull.closed_at).valueOf()
+                                : undefined
+                        }
+                    };
+
+                case undefined:
+                    return undefined;
+                default:
+                    repoType satisfies never;
+                    return undefined;
+            }
+        };
+
         return {
             externalId: halRawSoftware.docid,
             externalDataOrigin: "HAL",
@@ -242,7 +299,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined,
             referencePublications: codeMetaToReferencePublication(codemetaSoftware.referencePublication),
-            identifiers: identifiers
+            identifiers: identifiers,
+            repoMetadata: await getRepoMetadata(repoType)
         };
     },
     {
