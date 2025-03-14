@@ -142,7 +142,7 @@ function ContextualizedApp() {
             </main>
             <Footer
                 webVersion={(() => {
-                    const webVersion = process.env.VERSION;
+                    const webVersion = import.meta.env.VERSION;
                     assert(webVersion !== undefined);
                     return webVersion;
                 })()}

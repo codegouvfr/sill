@@ -29,10 +29,10 @@ export default defineConfig(async () => {
             })
         ],
         define: {
-            "process.env.VERSION": JSON.stringify(getRootPackageJsonVersion()),
-            "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
+            "import.meta.env.VERSION": JSON.stringify(getRootPackageJsonVersion()),
+            "import.meta.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
             // Define any other environment variables needed
-            "process.env.PUBLIC_URL": JSON.stringify("")
+            "import.meta.env.PUBLIC_URL": JSON.stringify("")
         },
         resolve: {
             alias: {
