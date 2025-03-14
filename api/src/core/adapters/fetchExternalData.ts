@@ -32,10 +32,10 @@ export const makeFetchAndSaveSoftwareExtraData = ({
     });
 
     return async (softwareId: number, softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId) => {
-        const data = await dbApi.software.getByIdWithLinkedSoftwaresExternalIds(softwareId);
+        const data = await dbApi.software.getByIdWithLinkedSoftwaresIds(softwareId);
         if (!data) return;
 
-        const { software, similarSoftwaresExternalIds, parentSoftwareExternalId } = data;
+        const { software, similarSoftwaresIds, parentSoftwareExternalId } = data;
         console.log(`🚀${software.softwareName}`);
 
         if (software.externalId) {
@@ -48,10 +48,12 @@ export const makeFetchAndSaveSoftwareExtraData = ({
             await getSoftwareExternalDataAndSaveIt(parentSoftwareExternalId, softwareExternalDataCache);
         }
 
-        if (similarSoftwaresExternalIds.length > 0) {
-            for (const similarExternalId of similarSoftwaresExternalIds) {
-                console.log(" • Similar wiki : ", similarExternalId);
-                await getSoftwareExternalDataAndSaveIt(similarExternalId, softwareExternalDataCache);
+        if (similarSoftwaresIds.length > 0) {
+            for (const similarSoftwareId of similarSoftwaresIds) {
+                console.log(" • Similar in catalog : ", similarSoftwareId);
+                const similarSoftware = await dbApi.software.getById(similarSoftwareId);
+                if (similarSoftware && similarSoftware.externalId)
+                    await getSoftwareExternalDataAndSaveIt(similarSoftware.externalId, softwareExternalDataCache);
             }
         }
 
@@ -96,7 +98,7 @@ const makeGetOtherExternalData =
             softwareId: software.softwareId,
             serviceProviders:
                 software.externalDataOrigin === "wikidata"
-                    ? (serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [])
+                    ? (serviceProvidersBySoftwareId[software.softwareId] ?? [])
                     : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
@@ -157,7 +159,7 @@ export type FetchAndSaveExternalDataForAllSoftwares = ReturnType<typeof makeFetc
 export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
     const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {
-        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true, referenced: true });
 
         console.info(`About to update ${softwares.length} softwares`);
 

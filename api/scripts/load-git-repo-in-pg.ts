@@ -7,7 +7,10 @@ import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialec
 import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
 import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
-import SoftwareRow = Db.SoftwareRow;
+import { getOrPopulateFromIds } from "../src/core/usecases/createSoftwareFromForm";
+import { wikidataAdapter } from "../src/core/adapters/wikidata";
+import { getDbApiAndInitializeCache } from "../src/core/bootstrap";
+import { DbApiV2 } from "../src/core/ports/DbApiV2";
 
 export type Params = {
     pgConfig: { dbUrl: string };
@@ -18,14 +21,21 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     const { dbApi: gitDbApi } = createGitDbApi(gitDbConfig);
     if (!pgConfig.dbUrl) throw new Error("Missing PG database url, please set the DATABASE_URL environnement variable");
     const pgDb = new Kysely<Database>({ dialect: createPgDialect(pgConfig.dbUrl) });
+    const { dbApi } = getDbApiAndInitializeCache({ dbKind: "kysely", kyselyDb: pgDb });
 
-    const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
+    const {
+        composedSoftwareRows: softwareRows,
+        agentRows,
+        softwareReferentRows,
+        softwareUserRows,
+        instanceRows
+    } = await gitDbApi.fetchDb();
 
     await insertAgents(agentRows, pgDb);
 
     const agentIdByEmail = await makeGetAgentIdByEmail(pgDb);
 
-    await insertSoftwares(softwareRows, agentIdByEmail, pgDb);
+    await insertSoftwares(softwareRows, agentIdByEmail, pgDb, dbApi);
     await insertSoftwareReferents({
         softwareReferentRows: softwareReferentRows,
         agentIdByEmail,
@@ -47,9 +57,10 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 };
 
 const insertSoftwares = async (
-    softwareRows: SoftwareRow[],
+    softwareRows: Db.ComposedSoftwareRow[],
     agentIdByEmail: Record<string, number>,
-    db: Kysely<Database>
+    db: Kysely<Database>,
+    dbApi: DbApiV2
 ) => {
     console.info("Deleting than Inserting softwares");
     console.info("Number of softwares to insert : ", softwareRows.length);
@@ -59,7 +70,7 @@ const insertSoftwares = async (
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => ({
+                softwareRows.map(({ similarSoftwareIds: _, addedByAgentEmail, ...row }) => ({
                     ...row,
                     addedByAgentId: agentIdByEmail[addedByAgentEmail],
                     dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
@@ -72,17 +83,43 @@ const insertSoftwares = async (
             .executeTakeFirst();
         await sql`SELECT setval('softwares_id_seq', (SELECT MAX(id) FROM softwares))`.execute(trx);
 
-        await trx
-            .insertInto("softwares__similar_software_external_datas")
-            .values(
-                softwareRows.flatMap(row =>
-                    Array.from(new Set(row.similarSoftwareExternalDataIds)).map(externalId => ({
-                        softwareId: row.id,
-                        similarExternalId: externalId
-                    }))
-                )
-            )
-            .execute();
+        // Array<{ softwareId: number; similarSoftwareIds: Array<number> } | undefined>
+        const similarSoftware = await Promise.all(
+            softwareRows.map(async software => {
+                const softwareDbRow = await dbApi.software.getByName(software.name);
+
+                if (softwareDbRow) {
+                    const fetchedSimilarSoftwareIds = await getOrPopulateFromIds({
+                        dbApi,
+                        externalDataService: wikidataAdapter,
+                        similarSoftwareExternalDataIds: software.similarSoftwareExternalDataIds,
+                        agentId: agentIdByEmail[software.addedByAgentEmail]
+                    });
+                    return {
+                        softwareId: softwareDbRow.softwareId,
+                        similarSoftwareIds: fetchedSimilarSoftwareIds
+                    };
+                } else {
+                    console.error("Importation faiiled or record cannot be found.");
+                    return undefined;
+                }
+            })
+        );
+
+        const dbSimilarSoftware = similarSoftware
+            .filter(software => software !== undefined)
+            .map(similarCouple => {
+                return similarCouple.similarSoftwareIds.map(similarSoftwareId => {
+                    return {
+                        softwareId: similarCouple.softwareId,
+                        similarSoftwareId: similarSoftwareId
+                    };
+                });
+            })
+            .flat();
+
+        // TODO Insert software
+        await trx.insertInto("softwares__similar_software_external_datas").values(dbSimilarSoftware).execute();
     });
 };
 

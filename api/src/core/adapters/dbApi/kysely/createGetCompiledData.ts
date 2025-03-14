@@ -23,16 +23,9 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
         .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
         .leftJoin("software_external_datas as parentExt", "parentExt.externalId", "s.parentSoftwareWikidataId")
-        .leftJoin(
-            "softwares__similar_software_external_datas",
-            "softwares__similar_software_external_datas.softwareId",
-            "s.id"
-        )
-        .leftJoin(
-            "software_external_datas as similarExt",
-            "softwares__similar_software_external_datas.similarExternalId",
-            "similarExt.externalId"
-        )
+        .leftJoin("softwares__similar_software_external_datas as sse", "sse.softwareId", "s.id")
+        .leftJoin("softwares as similarSoft", "sse.similarSoftwareId", "similarSoft.id")
+        .leftJoin("software_external_datas as similarExt", "similarSoft.externalId", "similarExt.externalId")
         .groupBy(["s.id", "csft.softwareId", "parentExt.externalId", "ext.externalId"])
         .select([
             "s.id",
@@ -97,6 +90,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     )
                     .end()
                     .as("softwareExternalData"),
+            ({ fn }) => fn.jsonAgg("similarSoft").distinct().as("similarSoftwares"),
             ({ fn }) => fn.jsonAgg("similarExt").distinct().as("similarExternalSoftwares"),
             ({ fn }) => fn.jsonAgg("users").distinct().as("users"),
             ({ fn }) => fn.jsonAgg("referents").distinct().as("referents"),
@@ -115,6 +109,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     latestVersion,
                     parentWikidataSoftware,
                     serviceProviders,
+                    similarSoftwares,
                     similarExternalSoftwares,
                     dereferencing,
                     doRespectRgaa,
@@ -130,7 +125,8 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         ...stripNullOrUndefinedValues(software),
                         addedByAgentEmail: agentById[addedByAgentId].email,
                         updateTime: new Date(+updateTime).getTime(),
-                        referencedSinceTime: new Date(+referencedSinceTime).getTime(),
+                        referencedSinceTime: referencedSinceTime ? new Date(referencedSinceTime).getTime() : undefined,
+                        isReferenced: referencedSinceTime ? true : false,
                         doRespectRgaa,
                         softwareExternalData: softwareExternalData ?? undefined,
                         annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? undefined,
@@ -139,6 +135,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         parentWikidataSoftware: parentWikidataSoftware ?? undefined,
                         dereferencing: dereferencing ?? undefined,
                         serviceProviders: serviceProviders ?? [],
+                        similarSoftwares: similarSoftwares?.map(software => software.id ?? 3), // TODOO
                         similarExternalSoftwares: (similarExternalSoftwares ?? [])
                             .filter(isNotNull)
                             .map(similar => ({

@@ -11,6 +11,8 @@ import { makeFetchAndSaveSoftwareExtraData } from "./fetchExternalData";
 import { getCnllPrestatairesSill } from "./getCnllPrestatairesSill";
 import { getServiceProviders } from "./getServiceProviders";
 import { getWikidataSoftware } from "./wikidata/getWikidataSoftware";
+import { CreateSoftwareFromForm, makeCreateSoftwareFromForm } from "../usecases/createSoftwareFromForm";
+import { wikidataAdapter } from "./wikidata";
 
 const craSoftwareFormData = {
     softwareType: {
@@ -86,6 +88,7 @@ describe("fetches software extra data (from different providers)", () => {
     let dbApi: DbApiV2;
     let db: Kysely<Database>;
     let craSoftwareId: number;
+    let createSoftwareFromForm: CreateSoftwareFromForm;
 
     beforeEach(async () => {
         db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
@@ -93,12 +96,14 @@ describe("fetches software extra data (from different providers)", () => {
         await db.deleteFrom("software_external_datas").execute();
         await db.deleteFrom("software_users").execute();
         await db.deleteFrom("software_referents").execute();
+        await db.deleteFrom("softwares__similar_software_external_datas").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("agents").execute();
 
         await sql`SELECT setval('softwares_id_seq', 11, false)`.execute(db);
 
         dbApi = createKyselyPgDbApi(db);
+        createSoftwareFromForm = makeCreateSoftwareFromForm(dbApi, wikidataAdapter);
 
         const agentId = await dbApi.agent.add({
             email: "myuser@example.com",
@@ -107,11 +112,7 @@ describe("fetches software extra data (from different providers)", () => {
             isPublic: false
         });
 
-        craSoftwareId = await dbApi.software.create({
-            formData: craSoftwareFormData,
-            externalDataOrigin: "wikidata",
-            agentId
-        });
+        craSoftwareId = await createSoftwareFromForm(craSoftwareFormData, agentId);
 
         await insertApacheWithCorrectId(db, agentId);
         await insertAcceleroWithCorrectId(db, agentId);
@@ -165,6 +166,17 @@ describe("fetches software extra data (from different providers)", () => {
                 .where("id", "=", craSoftwareId)
                 .executeTakeFirstOrThrow();
             expect(initialLastExtraDataFetchAt).toBe(null);
+
+            const { viteSoftwareId } = await db
+                .selectFrom("softwares")
+                .select("id as viteSoftwareId")
+                .where("externalId", "=", craSoftwareFormData.similarSoftwareExternalDataIds[0])
+                .executeTakeFirstOrThrow();
+
+            await db
+                .updateTable("softwares__similar_software_external_datas")
+                .set({ softwareId: craSoftwareId, similarSoftwareId: viteSoftwareId })
+                .execute();
 
             await fetchAndSaveSoftwareExtraData(craSoftwareId, {});
 
@@ -222,7 +234,21 @@ describe("fetches software extra data (from different providers)", () => {
             ]);
 
             const otherExtraData = await db.selectFrom("compiled_softwares").selectAll().execute();
-            expectToEqual(otherExtraData, []);
+            expectToEqual(otherExtraData, [
+                {
+                    "annuaireCnllServiceProviders": null,
+                    "comptoirDuLibreSoftware": null,
+                    "latestVersion": null,
+                    "serviceProviders": [
+                        {
+                            "cdlUrl": "https://comptoir-du-libre.org/fr/users/3886",
+                            "name": "Jérôme Kowalczyk",
+                            "website": ""
+                        }
+                    ],
+                    "softwareId": 12
+                }
+            ]);
 
             const { lastExtraDataFetchAt } = await db
                 .selectFrom("softwares")

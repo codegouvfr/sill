@@ -170,7 +170,7 @@
     "softwareCatalogControlled": {
         "searchResults": "{{count}} $t(common.free software, {\"count\" : {{count}})",
         "sortBy": "Trier par",
-        "addedTime": "Dernier ajouté",
+        "referencedSinceTime": "Dernier ajouté",
         "updateTime": "Dernier mis à jour",
         "referentCount": "Nombre de référents",
         "referentCountASC": "Nombre de référents croissant",

@@ -2,7 +2,7 @@ import { Kysely, sql } from "kysely";
 import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { SoftwareRepository } from "../../../ports/DbApiV2";
-import { ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import { ExternalDataOrigin, ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
@@ -20,7 +20,7 @@ const dateParser = (str: string | Date | undefined | null) => {
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
-        create: async ({ formData, externalDataOrigin, agentId }) => {
+        createByForm: async ({ formData, externalDataOrigin, agentId, isReferenced }) => {
             const {
                 softwareName,
                 softwareDescription,
@@ -51,7 +51,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         license: softwareLicense,
                         logoUrl: softwareLogoUrl,
                         versionMin: softwareMinimalVersion,
-                        referencedSinceTime: now,
+                        referencedSinceTime: isReferenced ? now : null,
                         updateTime: now,
                         dereferencing: undefined,
                         isStillInObservation: false,
@@ -72,25 +72,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
 
-                console.log(
-                    `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to insert similars : `,
-                    similarSoftwareExternalDataIds
-                );
-
-                if (similarSoftwareExternalDataIds.length > 0) {
-                    await trx
-                        .insertInto("softwares__similar_software_external_datas")
-                        .values(
-                            similarSoftwareExternalDataIds.map(similarExternalId => ({
-                                softwareId,
-                                similarExternalId
-                            }))
-                        )
-                        .execute();
-                }
-
-                console.log("all good");
-
                 return softwareId;
             });
         },
@@ -101,7 +82,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
         },
-        update: async ({ formData, softwareSillId, agentId }) => {
+        update: async ({ formData, softwareSillId, agentId, isReferenced }) => {
             const {
                 softwareName,
                 softwareDescription,
@@ -143,14 +124,19 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     categories: JSON.stringify([]),
                     generalInfoMd: undefined,
                     addedByAgentId: agentId,
-                    keywords: JSON.stringify(softwareKeywords)
+                    keywords: JSON.stringify(softwareKeywords),
+                    ...(isReferenced !== undefined
+                        ? isReferenced
+                            ? { referencedSinceTime: now }
+                            : { referencedSinceTime: null }
+                        : {})
                 })
                 .where("id", "=", softwareSillId)
                 .execute();
         },
         getByName: async (softwareName: string): Promise<Software | undefined> =>
             makeGetSoftwareBuilder(db)
-                .where("name", "=", softwareName)
+                .where("s.name", "=", softwareName)
                 .executeTakeFirst()
                 .then((result): Software | undefined => {
                     if (!result) return;
@@ -158,7 +144,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         serviceProviders,
                         parentExternalData,
                         updateTime,
-                        addedTime,
+                        referencedSinceTime,
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
@@ -166,9 +152,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     return stripNullOrUndefinedValues({
                         ...software,
                         updateTime: new Date(+updateTime).getTime(),
-                        addedTime: new Date(+addedTime).getTime(),
+                        referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
                         serviceProviders: serviceProviders ?? [],
-                        similarSoftwares: similarExternalSoftwares,
+                        similarExternalSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
                             "@type": "Person",
@@ -196,40 +182,51 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     });
                 }),
         getById: getBySoftwareId,
-        getByIdWithLinkedSoftwaresExternalIds: async softwareId => {
+        getIdBySourceIdentifier: async (externalDataOrigin: ExternalDataOrigin, externalId: string) => {
+            const result = await db
+                .selectFrom("softwares as s")
+                .select("s.id")
+                .where("s.externalDataOrigin", "=", externalDataOrigin)
+                .where("s.externalId", "=", externalId)
+                .executeTakeFirst();
+
+            return result?.id;
+        },
+        getByIdWithLinkedSoftwaresIds: async softwareId => {
             const software = await getBySoftwareId(softwareId);
             if (!software) return;
 
-            const { parentSoftwareExternalId, similarSoftwaresExternalIds } = await db
+            const similarSoftwaresIds = await db
+                .selectFrom("softwares__similar_software_external_datas")
+                .select("similarSoftwareId")
+                .where("softwareId", "=", softwareId)
+                .execute();
+
+            const { parentSoftwareExternalId } = await db
                 .selectFrom("softwares as s")
-                .leftJoin("softwares__similar_software_external_datas as sim", "sim.softwareId", "s.id")
-                .select([
-                    "s.parentSoftwareWikidataId as parentSoftwareExternalId",
-                    qb =>
-                        qb.fn
-                            .jsonAgg(qb.ref("sim.similarExternalId"))
-                            .filterWhere("sim.similarExternalId", "is not", null)
-                            .$castTo<string[]>()
-                            .as("similarSoftwaresExternalIds")
-                ])
-                .groupBy("s.id")
-                .where("id", "=", softwareId)
+                .select("s.parentSoftwareWikidataId as parentSoftwareExternalId")
+                .where("s.id", "=", softwareId)
                 .executeTakeFirstOrThrow();
 
             return {
                 software,
-                similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? [],
+                similarSoftwaresIds: similarSoftwaresIds.map(obj => obj.similarSoftwareId),
                 parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
             };
         },
-        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
+        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo, referenced } = {}): Promise<Software[]> => {
+            // Only software that are referenced in catalog
             let builder = makeGetSoftwareBuilder(db);
+
+            if (referenced) {
+                builder = builder.where("s.referencedSinceTime", "is not", null);
+            }
 
             builder = onlyIfUpdatedMoreThan3HoursAgo
                 ? builder.where(eb =>
                       eb.or([
-                          eb("lastExtraDataFetchAt", "is", null),
-                          eb("lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
+                          eb("s.lastExtraDataFetchAt", "is", null),
+                          eb("s.lastExtraDataFetchAt", "<", sql<Date>`now() - interval '3 hours'`)
                       ])
                   )
                 : builder;
@@ -242,7 +239,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         serviceProviders,
                         parentExternalData,
                         updateTime,
-                        addedTime,
+                        referencedSinceTime,
                         softwareExternalData,
                         similarExternalSoftwares,
                         ...software
@@ -250,9 +247,11 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         return stripNullOrUndefinedValues({
                             ...software,
                             updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
+                            referencedSinceTime: referencedSinceTime
+                                ? new Date(+referencedSinceTime).getTime()
+                                : undefined,
                             serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
+                            similarExternalSoftwares: similarExternalSoftwares,
                             // (similarSoftwares ?? []).map(
                             //     (s): SimilarSoftware => ({
                             //         softwareName:
@@ -342,16 +341,9 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
         .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
         .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
         .leftJoin("software_external_datas as parentExt", "s.parentSoftwareWikidataId", "parentExt.externalId")
-        .leftJoin(
-            "softwares__similar_software_external_datas",
-            "softwares__similar_software_external_datas.softwareId",
-            "s.id"
-        )
-        .leftJoin(
-            "software_external_datas as similarExt",
-            "softwares__similar_software_external_datas.similarExternalId",
-            "similarExt.externalId"
-        )
+        .leftJoin("softwares__similar_software_external_datas as sse", "sse.softwareId", "s.id")
+        .leftJoin("softwares as similarSoft", "sse.similarSoftwareId", "similarSoft.id")
+        .leftJoin("software_external_datas as similarExt", "similarSoft.externalId", "similarExt.externalId")
         .groupBy([
             "s.id",
             "cs.softwareId",
@@ -377,16 +369,16 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.description as softwareDescription",
             "cs.serviceProviders",
             "cs.latestVersion",
-            "s.referencedSinceTime as addedTime",
+            "s.referencedSinceTime",
             "s.updateTime",
             "s.lastExtraDataFetchAt",
             "s.dereferencing",
             "s.categories",
             ({ ref }) =>
                 jsonBuildObject({
-                    isPresentInSupportContract: ref("isPresentInSupportContract"),
-                    isFromFrenchPublicServices: ref("isFromFrenchPublicService"),
-                    doRespectRgaa: ref("doRespectRgaa")
+                    isPresentInSupportContract: ref("s.isPresentInSupportContract"),
+                    isFromFrenchPublicServices: ref("s.isFromFrenchPublicService"),
+                    doRespectRgaa: ref("s.doRespectRgaa")
                 }).as("prerogatives"),
             "s.comptoirDuLibreId",
             "cs.comptoirDuLibreSoftware",
@@ -523,7 +515,7 @@ const makeGetSoftwareById =
     (db: Kysely<Database>) =>
     async (softwareId: number): Promise<Software | undefined> =>
         makeGetSoftwareBuilder(db)
-            .where("id", "=", softwareId)
+            .where("s.id", "=", softwareId)
             .executeTakeFirst()
             .then((result): Software | undefined => {
                 if (!result) return;
@@ -531,7 +523,7 @@ const makeGetSoftwareById =
                     serviceProviders,
                     parentExternalData,
                     updateTime,
-                    addedTime,
+                    referencedSinceTime,
                     softwareExternalData,
                     similarExternalSoftwares,
                     ...software
@@ -539,9 +531,10 @@ const makeGetSoftwareById =
                 return stripNullOrUndefinedValues({
                     ...software,
                     updateTime: new Date(+updateTime).getTime(),
-                    addedTime: new Date(+addedTime).getTime(),
+                    referencedSinceTime: referencedSinceTime ? new Date(+referencedSinceTime).getTime() : undefined,
+                    isReferenced: referencedSinceTime ? true : false,
                     serviceProviders: serviceProviders ?? [],
-                    similarSoftwares: similarExternalSoftwares,
+                    similarExternalSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
                         "@type": "Person",

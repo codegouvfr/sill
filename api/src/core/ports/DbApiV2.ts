@@ -17,28 +17,35 @@ export type WithAgentId = { agentId: number };
 
 type GetSoftwareFilters = {
     onlyIfUpdatedMoreThan3HoursAgo?: true;
+    referenced?: boolean;
 };
 
 export interface SoftwareRepository {
-    create: (
+    createByForm: (
         params: {
             formData: SoftwareFormData;
             externalDataOrigin: ExternalDataOrigin;
+            isReferenced: boolean;
         } & WithAgentId
     ) => Promise<number>;
     update: (
         params: {
             softwareSillId: number;
             formData: SoftwareFormData;
+            isReferenced?: boolean;
         } & WithAgentId
     ) => Promise<void>;
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
-    getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
+    getIdBySourceIdentifier: (
+        externalDataOrigin: ExternalDataOrigin,
+        externalId: string
+    ) => Promise<number | undefined>;
+    getByIdWithLinkedSoftwaresIds: (id: number) => Promise<
         | {
               software: Software;
-              similarSoftwaresExternalIds: string[];
+              similarSoftwaresIds: number[];
               parentSoftwareExternalId: string | undefined;
           }
         | undefined
@@ -47,6 +54,17 @@ export interface SoftwareRepository {
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
+}
+
+export interface SimilarSoftwareRepository {
+    create: (
+        similarSoftwares: {
+            softwareId: number;
+            similarSoftwareId: number;
+        }[],
+        ignore?: boolean
+    ) => Promise<void>;
+    getBySoftwareId: (id: number) => Promise<number[]>;
 }
 
 export interface SoftwareExternalDataRepository {
@@ -124,5 +142,6 @@ export type DbApiV2 = {
     agent: AgentRepository;
     softwareReferent: SoftwareReferentRepository;
     softwareUser: SoftwareUserRepository;
+    similarSoftware: SimilarSoftwareRepository;
     getCompiledDataPrivate: () => Promise<CompiledData<"private">>;
 };

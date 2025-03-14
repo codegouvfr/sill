@@ -73,7 +73,8 @@ export function createGitDbApi(params: GitDbApiParams): { dbApi: DbApi; initiali
                         ).then(buffers => buffers.map(buffer => JSON.parse(buffer.toString("utf8"))));
 
                     dOut.resolve({
-                        softwareRows,
+                        softwareRows: [], // Doesn't exist in GitRepo
+                        composedSoftwareRows: softwareRows,
                         agentRows,
                         softwareReferentRows,
                         softwareUserRows,
@@ -95,7 +96,7 @@ export function createGitDbApi(params: GitDbApiParams): { dbApi: DbApi; initiali
                     await Promise.all(
                         (
                             [
-                                [softwareJsonRelativeFilePath, newDb.softwareRows],
+                                [softwareJsonRelativeFilePath, newDb.composedSoftwareRows],
                                 [agentJsonRelativeFilePath, newDb.agentRows],
                                 [softwareReferentJsonRelativeFilePath, newDb.softwareReferentRows],
                                 [softwareUserJsonRelativeFilePath, newDb.softwareUserRows],

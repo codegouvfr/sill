@@ -90,8 +90,8 @@ export const sillApi: SillApi = {
             latestVersion: undefined,
             parentWikidataSoftware: undefined,
             softwareType: formData.softwareType,
-            similarSoftwares: [],
-            addedTime: Date.now(),
+            similarExternalSoftwares: [],
+            referencedSinceTime: Date.now(),
             updateTime: Date.now(),
             applicationCategories: [],
             prerogatives: {
@@ -144,8 +144,8 @@ export const sillApi: SillApi = {
                 latestVersion: undefined,
                 parentWikidataSoftware: undefined,
                 softwareType: formData.softwareType,
-                similarSoftwares: [],
-                addedTime: Date.now(),
+                similarExternalSoftwares: [],
+                referencedSinceTime: Date.now(),
                 updateTime: Date.now(),
                 applicationCategories: [],
                 prerogatives: {
@@ -293,7 +293,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 29,
         comptoirDuLibreId: 117,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -313,7 +313,7 @@ const softwares = [
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras feugiat, ex sit amet pretium blandit, tortor eros dapibus sem, ultricies tempor nunc magna in dolor. Curabitur non tincidunt ex. Nulla facilisi. Integer vestibulum ultricies risus eu blandit. Duis accumsan dolor sit amet arcu semper ultrices. Cras tincidunt commodo mauris quis iaculis. Morbi iaculis massa sit amet nunc porttitor malesuada. Sed venenatis congue dolor eu posuere. Praesent nec pulvinar massa. Ut id diam congue, elementum nulla in, varius mi.",
         latestVersion: undefined,
         parentWikidataSoftware: undefined,
-        addedTime: 1670416144,
+        referencedSinceTime: 1670416144,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["messaging"],
@@ -350,7 +350,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 22,
         comptoirDuLibreId: 33,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -373,7 +373,7 @@ const softwares = [
             publicationTime: 1670503742
         },
         parentWikidataSoftware: undefined,
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["traitement de texte"],
@@ -425,7 +425,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 24,
         comptoirDuLibreId: 38,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q10135",
         externalDataOrigin: "wikidata",
         softwareType: {
@@ -440,7 +440,7 @@ const softwares = [
             publicationTime: 1667911742
         },
         parentWikidataSoftware: undefined,
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud", "software"],
@@ -479,7 +479,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 5,
         comptoirDuLibreId: 62,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q171477",
         externalDataOrigin: "wikidata",
         license: "GPL-2.0-only",
@@ -501,7 +501,7 @@ const softwares = [
                 ios: true
             }
         },
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["player"],
@@ -531,7 +531,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 16,
         comptoirDuLibreId: 241,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -556,7 +556,7 @@ const softwares = [
         softwareType: {
             type: "stack"
         },
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -621,7 +621,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [
+        similarExternalSoftwares: [
             {
                 description:
                     "team collaboration and videoconferencing application developed by Microsoft",
@@ -632,7 +632,7 @@ const softwares = [
                 isInSill: false
             }
         ],
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -666,7 +666,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 14,
         comptoirDuLibreId: 60,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q1329181",
         externalDataOrigin: "wikidata",
         license: "GPL-2.0-or-later",
@@ -688,7 +688,7 @@ const softwares = [
             }
         },
         parentWikidataSoftware: undefined,
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -752,7 +752,7 @@ const softwares = [
             publicationTime: 1633524542
         },
         parentWikidataSoftware: undefined,
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -771,7 +771,7 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         userAndReferentCountByOrganization: {
             DINUM: { referentCount: 2, userCount: 43 }
         },
@@ -800,7 +800,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 17,
         comptoirDuLibreId: 123,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q192490",
         externalDataOrigin: "wikidata",
         license: "PostgreSQL",
@@ -812,7 +812,7 @@ const softwares = [
             publicationTime: 1633524542
         },
         parentWikidataSoftware: undefined,
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -847,7 +847,7 @@ const softwares = [
         comptoirDuLibreServiceProviderCount: 5,
         comptoirDuLibreId: 140,
         annuaireCnllServiceProviders: [],
-        similarSoftwares: [],
+        similarExternalSoftwares: [],
         externalId: "Q50938515",
         externalDataOrigin: "wikidata",
         license: "AGPL-3.0-or-later",
@@ -862,7 +862,7 @@ const softwares = [
         softwareType: {
             type: "cloud"
         },
-        addedTime: 1674739365178,
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -911,8 +911,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -957,8 +957,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1003,8 +1003,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1049,8 +1049,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1095,8 +1095,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1141,8 +1141,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1187,8 +1187,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],
@@ -1233,8 +1233,8 @@ const softwares = [
                 ios: true
             }
         },
-        similarSoftwares: [],
-        addedTime: 1674739365178,
+        similarExternalSoftwares: [],
+        referencedSinceTime: 1674739365178,
         updateTime: 1674739365178,
         dereferencing: undefined,
         applicationCategories: ["cloud"],

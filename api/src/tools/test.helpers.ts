@@ -1,6 +1,7 @@
 import { expect } from "vitest";
 import { Db } from "../core/ports/DbApi";
 import { DeclarationFormData, InstanceFormData, SoftwareFormData } from "../core/usecases/readWriteSillData";
+import { DatabaseRow } from "../core/adapters/dbApi/kysely/kysely.database";
 
 export const testPgUrl = "postgresql://sill:pg_password@localhost:5432/sill";
 
@@ -57,11 +58,12 @@ export const createSoftwareFormData = makeObjectFactory<SoftwareFormData>({
     softwareMinimalVersion: "1.0.0",
     isPresentInSupportContract: true,
     isFromFrenchPublicService: true,
-    similarSoftwareExternalDataIds: ["some-external-id"],
+    similarSoftwareExternalDataIds: [],
     softwareLogoUrl: "https://example.com/logo.png",
     softwareKeywords: ["some", "keywords"],
     doRespectRgaa: true
 });
+
 export const createInstanceFormData = makeObjectFactory<InstanceFormData>({
     organization: "Default organization",
     targetAudience: "Default audience",
@@ -69,3 +71,62 @@ export const createInstanceFormData = makeObjectFactory<InstanceFormData>({
     instanceUrl: "https://example.com",
     isPublic: true
 });
+
+export const testSoftwareData: DatabaseRow.Softwares[] = [
+    {
+        name: "Software 1",
+        description: "Description 1",
+        license: "License 1",
+        logoUrl: "Logo URL 1",
+        versionMin: "1.0.0",
+        referencedSinceTime: 1728462232094,
+        updateTime: 1728462232094,
+        dereferencing: undefined,
+        isStillInObservation: true,
+        parentSoftwareWikidataId: "Wikidata ID 1",
+        doRespectRgaa: true,
+        isFromFrenchPublicService: true,
+        isPresentInSupportContract: true,
+        externalId: "External ID 1",
+        externalDataOrigin: "wikidata",
+        comptoirDuLibreId: 4,
+        softwareType: {
+            "os": { "ios": false, "mac": false, "linux": true, "android": false, "windows": false },
+            "type": "desktop/mobile"
+        },
+        workshopUrls: [],
+        categories: [],
+        generalInfoMd: "General Info 1",
+        addedByAgentId: 1,
+        keywords: [],
+        lastExtraDataFetchAt: undefined
+    },
+    {
+        name: "Software 2",
+        description: "Description 2",
+        license: "License",
+        logoUrl: "Logo URL",
+        versionMin: "1.0.0",
+        referencedSinceTime: 1728462232094,
+        updateTime: 1728462232094,
+        dereferencing: undefined,
+        isStillInObservation: true,
+        parentSoftwareWikidataId: "Wikidata ID 1",
+        doRespectRgaa: true,
+        isFromFrenchPublicService: true,
+        isPresentInSupportContract: true,
+        externalId: "External ID 1",
+        externalDataOrigin: "wikidata",
+        comptoirDuLibreId: 8,
+        softwareType: {
+            "os": { "ios": false, "mac": false, "linux": true, "android": false, "windows": false },
+            "type": "desktop/mobile"
+        },
+        workshopUrls: [],
+        categories: [],
+        generalInfoMd: "General Info 1",
+        addedByAgentId: 1,
+        keywords: [],
+        lastExtraDataFetchAt: undefined
+    }
+];

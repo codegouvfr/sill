@@ -220,13 +220,13 @@ function apiSoftwareToInternalSoftware(params: {
         softwareDescription,
         latestVersion,
         parentWikidataSoftware,
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         prerogatives,
         softwareType,
         userAndReferentCountByOrganization,
-        similarSoftwares,
+        similarExternalSoftwares,
         keywords,
         programmingLanguages
     } = apiSoftware;
@@ -299,7 +299,7 @@ function apiSoftwareToInternalSoftware(params: {
         userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
-        addedTime,
+        referencedSinceTime,
         updateTime,
         applicationCategories,
         organizations: objectKeys(userAndReferentCountByOrganization),
@@ -312,7 +312,7 @@ function apiSoftwareToInternalSoftware(params: {
                 " (" +
                 [
                     ...keywords,
-                    ...similarSoftwares
+                    ...similarExternalSoftwares
                         .map(similarSoftware =>
                             similarSoftware.isInSill
                                 ? similarSoftware.softwareName

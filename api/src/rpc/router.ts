@@ -87,7 +87,7 @@ export function createRouter(params: {
             if (!user) throw new TRPCError({ "code": "UNAUTHORIZED" });
             return user;
         }),
-        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
+        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll({ referenced: true })),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
             .input(
@@ -149,7 +149,7 @@ export function createRouter(params: {
 
                 const existingSoftware = await dbApi.software.getByName(formData.softwareName.trim());
 
-                if (existingSoftware) {
+                if (existingSoftware && existingSoftware?.referencedSinceTime) {
                     throw new TRPCError({
                         "code": "CONFLICT",
                         "message": `Software already exists with name : ${formData.softwareName.trim()}`
@@ -168,11 +168,7 @@ export function createRouter(params: {
                         });
                     }
 
-                    await dbApi.software.create({
-                        formData,
-                        agentId,
-                        externalDataOrigin
-                    });
+                    await useCases.createSoftwareFromForm(formData, agentId);
                 } catch (e) {
                     throw new TRPCError({
                         "code": "INTERNAL_SERVER_ERROR",

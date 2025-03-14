@@ -109,36 +109,39 @@ export const thunks = {
                                         doRespectRgaa: software.prerogatives.doRespectRgaa
                                     },
                                     step4: {
-                                        similarSoftwares: software.similarSoftwares
-                                            .map(similarSoftware => {
-                                                if (!similarSoftware.isInSill) {
-                                                    return similarSoftware;
-                                                } else {
-                                                    const software = softwares.find(
-                                                        software =>
-                                                            software.softwareName ===
-                                                            similarSoftware.softwareName
-                                                    );
+                                        similarSoftwares:
+                                            software.similarExternalSoftwares
+                                                .map(similarSoftware => {
+                                                    if (!similarSoftware.isInSill) {
+                                                        return similarSoftware;
+                                                    } else {
+                                                        const software = softwares.find(
+                                                            software =>
+                                                                software.softwareName ===
+                                                                similarSoftware.softwareName
+                                                        );
 
-                                                    if (
-                                                        software === undefined ||
-                                                        software.externalId === undefined
-                                                    ) {
-                                                        return undefined;
+                                                        if (
+                                                            software === undefined ||
+                                                            software.externalId ===
+                                                                undefined
+                                                        ) {
+                                                            return undefined;
+                                                        }
+
+                                                        return {
+                                                            label: software.softwareName,
+                                                            description:
+                                                                software.softwareDescription,
+                                                            isLibreSoftware: true,
+                                                            externalId:
+                                                                software.externalId,
+                                                            externalDataOrigin:
+                                                                software.externalDataOrigin
+                                                        };
                                                     }
-
-                                                    return {
-                                                        label: software.softwareName,
-                                                        description:
-                                                            software.softwareDescription,
-                                                        isLibreSoftware: true,
-                                                        externalId: software.externalId,
-                                                        externalDataOrigin:
-                                                            software.externalDataOrigin
-                                                    };
-                                                }
-                                            })
-                                            .filter(exclude(undefined))
+                                                })
+                                                .filter(exclude(undefined))
                                     }
                                 }
                             })

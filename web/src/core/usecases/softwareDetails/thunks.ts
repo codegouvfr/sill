@@ -178,12 +178,12 @@ function apiSoftwareToSoftware(params: {
         softwareDescription,
         latestVersion,
         parentWikidataSoftware: parentWikidataSoftware_api,
-        addedTime,
+        referencedSinceTime,
         dereferencing,
         prerogatives,
         comptoirDuLibreServiceProviderCount,
         comptoirDuLibreId,
-        similarSoftwares: similarSoftwares_api,
+        similarExternalSoftwares: similarSoftwares_api,
         externalDataOrigin,
         externalId,
         license,
@@ -259,7 +259,7 @@ function apiSoftwareToSoftware(params: {
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         parentSoftware,
-        addedTime,
+        referencedSinceTime,
         comptoirDuLibreServiceProviderUrl:
             comptoirDuLibreId === undefined
                 ? undefined

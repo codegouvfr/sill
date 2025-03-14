@@ -7,18 +7,20 @@ import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWri
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+import { wikidataAdapter } from "../../wikidata";
+import { CreateSoftwareFromForm, makeCreateSoftwareFromForm } from "../../../usecases/createSoftwareFromForm";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalId = "external-id-111";
-const similarExternalId = "external-id-222";
+const similarSoftwareExternalDataId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalId,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
-    similarSoftwareExternalDataIds: [similarExternalId],
+    similarSoftwareExternalDataIds: ["Q1136882"],
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
@@ -59,7 +61,7 @@ const softwareExternalData: SoftwareExternalData = {
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
-    externalId: similarExternalId,
+    externalId: similarSoftwareExternalDataId,
     externalDataOrigin: "wikidata",
     developers: [
         {
@@ -104,11 +106,14 @@ const db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
 describe("pgDbApi", () => {
     let dbApi: DbApiV2;
+    let createSoftwareFromForm: CreateSoftwareFromForm;
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
+        createSoftwareFromForm = makeCreateSoftwareFromForm(dbApi, wikidataAdapter);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
+        await db.deleteFrom("softwares__similar_software_external_datas").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
         await db.deleteFrom("instances").execute();
@@ -162,32 +167,26 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
-
-            const actualSoftware = softwares[0];
+            const actualSoftware = await dbApi.software.getById(softwareId);
 
             expectToEqual(actualSoftware, {
-                addedTime: expect.any(Number),
+                referencedSinceTime: expect.any(Number),
                 updateTime: expect.any(Number),
-                annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
+                    affiliations: undefined,
                     name: dev.name,
                     url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: 50,
                 comptoirDuLibreServiceProviderCount: 0,
-                dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,
                 externalDataOrigin: "wikidata",
                 externalId,
+                isReferenced: true,
                 keywords: ["bob", "l'éponge"],
-                latestVersion: {
-                    "publicationTime": 1561566581000,
-                    "semVer": "1.0.0"
-                },
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
@@ -203,7 +202,7 @@ describe("pgDbApi", () => {
                 },
                 programmingLanguages: ["C++"],
                 serviceProviders: [],
-                similarSoftwares: [
+                similarExternalSoftwares: [
                     {
                         externalDataOrigin: "wikidata",
                         externalId: similarSoftwareExternalData.externalId,
@@ -226,12 +225,7 @@ describe("pgDbApi", () => {
                     },
                     type: "desktop/mobile"
                 },
-                userAndReferentCountByOrganization: {
-                    [insertedAgent.organization]: {
-                        userCount: 1,
-                        referentCount: 0
-                    }
-                },
+                userAndReferentCountByOrganization: {},
                 versionMin: ""
             });
 
@@ -278,11 +272,8 @@ describe("pgDbApi", () => {
             console.log("------ agent scenario------");
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
-            const softwareId = await dbApi.software.create({
-                formData: softwareFormData,
-                agentId,
-                externalDataOrigin: "wikidata"
-            });
+
+            const softwareId = await createSoftwareFromForm(softwareFormData, agentId);
 
             await db
                 .insertInto("software_users")
@@ -453,11 +444,7 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await dbApi.software.create({
-            formData: softwareFormData,
-            agentId,
-            externalDataOrigin: "wikidata"
-        });
+        const softwareId = await createSoftwareFromForm(softwareFormData, agentId);
 
         return {
             softwareId,
