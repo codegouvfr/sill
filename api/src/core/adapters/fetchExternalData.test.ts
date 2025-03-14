@@ -305,11 +305,6 @@ describe("fetches software extra data (from different providers)", () => {
                             siren: "820266211"
                         },
                         {
-                            url: "https://annuaire.cnll.fr/societes/437827959",
-                            name: "ézéo",
-                            siren: "437827959"
-                        },
-                        {
                             url: "https://annuaire.cnll.fr/societes/483494589",
                             name: "CENTREON",
                             siren: "483494589"
@@ -432,11 +427,6 @@ describe("fetches software extra data (from different providers)", () => {
                             name: "CIGALL",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/270",
                             website: "Https://www.cigall.fr"
-                        },
-                        {
-                            name: "ézéo",
-                            siren: "437827959",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/437827959"
                         },
                         {
                             name: "ALTER WAY",
