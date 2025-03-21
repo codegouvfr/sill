@@ -1,6 +1,7 @@
 import { SILL } from "../../../types/SILL";
 import type {
     ExternalDataOrigin,
+    LocalizedString,
     ParentSoftwareExternalData,
     SimilarSoftwareExternalData
 } from "../../ports/GetSoftwareExternalData";
@@ -64,10 +65,17 @@ export type Software = {
 };
 
 export namespace Software {
-    export type SimilarSoftware = SimilarSoftware.ExternalSoftwareData | SimilarSoftware.Sill;
+    export type SimilarSoftware = SimilarSoftware.SimilarSoftwareNotInSill | SimilarSoftware.Sill;
 
     export namespace SimilarSoftware {
-        export type ExternalSoftwareData = { isInSill: false } & SimilarSoftwareExternalData;
+        export type SimilarSoftwareNotInSill = {
+            isInSill: false;
+            externalDataOrigin: ExternalDataOrigin;
+            externalId: string;
+            isLibreSoftware: boolean;
+            label: LocalizedString;
+            description: LocalizedString;
+        };
 
         export type Sill = {
             isInSill: true;

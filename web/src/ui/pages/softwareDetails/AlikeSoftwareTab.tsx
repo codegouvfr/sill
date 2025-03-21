@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
-import { Equals } from "tsafe";
+import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
-import type { State as softwareDetails } from "core/usecases/softwareDetails";
+import type { State as SoftwareDetails } from "core/usecases/softwareDetails";
 import { SoftwareCatalogCard } from "ui/pages/softwareCatalog/SoftwareCatalogCard";
 import type { Link } from "type-route";
 import { capitalize } from "tsafe/capitalize";
@@ -13,7 +13,7 @@ import { Tag } from "@codegouvfr/react-dsfr/Tag";
 
 export type Props = {
     className?: string;
-    similarSoftwares: softwareDetails.Software["similarSoftwares"];
+    similarSoftwares: SoftwareDetails.Software["similarSoftwares"];
     getLinks: (params: {
         softwareName: string;
     }) => Record<
@@ -42,7 +42,7 @@ export const SimilarSoftwareTab = (props: Props) => {
     const { resolveLocalizedString } = useResolveLocalizedString();
 
     const similarSoftwaresNotInSill = similarSoftwares.filter(
-        (similarSoftware): similarSoftware is softwareDetails.SimilarSoftwareNotInSill =>
+        (similarSoftware): similarSoftware is SoftwareDetails.SimilarSoftwareNotInSill =>
             !similarSoftware.isInSill
     );
 
@@ -124,9 +124,9 @@ export const SimilarSoftwareTab = (props: Props) => {
                                 }
                             )
                             .map(
-                                ({ wikidataId, label, description, isLibreSoftware }) => {
+                                ({ externalId, label, description, isLibreSoftware }) => {
                                     return (
-                                        <li key={wikidataId}>
+                                        <li key={externalId}>
                                             <p
                                                 className={css({
                                                     display: "inline-block",
@@ -134,7 +134,7 @@ export const SimilarSoftwareTab = (props: Props) => {
                                                 })}
                                             >
                                                 <a
-                                                    href={`https://www.wikidata.org/wiki/${wikidataId}`}
+                                                    href={`https://www.wikidata.org/wiki/${externalId}`}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                 >
@@ -149,9 +149,7 @@ export const SimilarSoftwareTab = (props: Props) => {
                                                 <Tag
                                                     iconId="ri-check-fill"
                                                     linkProps={getAddWikipediaSoftwareToSillLink(
-                                                        {
-                                                            externalId: wikidataId
-                                                        }
+                                                        { externalId }
                                                     )}
                                                 >
                                                     {t(

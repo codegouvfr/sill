@@ -305,11 +305,12 @@ function apiSoftwareToSoftware(params: {
 
                 return {
                     isInSill: false,
-                    wikidataId: similarSoftware.externalId,
+                    externalDataOrigin: "wikidata",
+                    externalId: similarSoftware.externalId,
                     label: similarSoftware.label,
                     description: similarSoftware.description,
                     isLibreSoftware: similarSoftware.isLibreSoftware
-                };
+                } satisfies State.SimilarSoftwareNotInSill;
             }
 
             return {
