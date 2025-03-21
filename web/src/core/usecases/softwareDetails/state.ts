@@ -2,21 +2,15 @@ import { createUsecaseActions } from "redux-clean-architecture";
 import { id } from "tsafe/id";
 import { assert } from "tsafe/assert";
 import { type State as SoftwareCatalogState } from "core/usecases/softwareCatalog";
-import { LocalizedString } from "i18nifty";
-import type { Language, ApiTypes } from "api";
+import type { ApiTypes } from "api";
 
 export const name = "softwareDetails";
 
 export type State = State.NotReady | State.Ready;
 
 export namespace State {
-    export type SimilarSoftwareNotInSill = {
-        isInSill: false;
-        isLibreSoftware: boolean;
-        wikidataId: string;
-        label: LocalizedString<Language>;
-        description: LocalizedString<Language>;
-    };
+    export type SimilarSoftwareNotInSill =
+        ApiTypes.Software.SimilarSoftware.SimilarSoftwareNotInSill;
 
     export type NotReady = {
         stateDescription: "not ready";

@@ -59,15 +59,19 @@ const insertSoftwares = async (
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => ({
-                    ...row,
-                    addedByAgentId: agentIdByEmail[addedByAgentEmail],
-                    dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
-                    softwareType: JSON.stringify(row.softwareType),
-                    workshopUrls: JSON.stringify(row.workshopUrls),
-                    categories: JSON.stringify(row.categories),
-                    keywords: JSON.stringify(row.keywords)
-                }))
+                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => {
+                    // @ts-ignore
+                    const { testUrls: _1, catalogNumeriqueGouvFrId: _2, ...sanitizedRow } = row; // removing fields that have been deleted since
+                    return {
+                        ...sanitizedRow,
+                        addedByAgentId: agentIdByEmail[addedByAgentEmail],
+                        dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
+                        softwareType: JSON.stringify(row.softwareType),
+                        workshopUrls: JSON.stringify(row.workshopUrls),
+                        categories: JSON.stringify(row.categories),
+                        keywords: JSON.stringify(row.keywords)
+                    };
+                })
             )
             .executeTakeFirst();
         await sql`SELECT setval('softwares_id_seq', (SELECT MAX(id) FROM softwares))`.execute(trx);
