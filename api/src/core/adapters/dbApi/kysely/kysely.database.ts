@@ -19,6 +19,7 @@ export type Database = {
     software_external_datas: SoftwareExternalDatasTable;
     softwares__similar_software_external_datas: SimilarExternalSoftwareExternalDataTable;
     compiled_softwares: CompiledSoftwaresTable;
+    sources: SourcesTable;
 };
 
 type AgentsTable = {
@@ -61,7 +62,7 @@ type InstancesTable = {
 };
 
 type ExternalId = string;
-type ExternalDataOrigin = "wikidata" | "HAL";
+type ExternalDataOriginKind = "wikidata" | "HAL";
 type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
@@ -69,9 +70,26 @@ type SimilarExternalSoftwareExternalDataTable = {
     similarExternalId: ExternalId;
 };
 
+type SourcesTable = {
+    slug: string;
+    kind: ExternalDataOriginKind;
+    url: string;
+    priority: number;
+    description: JSONColumnType<LocalizedString> | null;
+};
+
+type SourcesTable = {
+    slug: string;
+    kind: ExternalDataOriginKind;
+    url: string;
+    priority: number;
+    description: JSONColumnType<LocalizedString> | null;
+};
+
 type SoftwareExternalDatasTable = {
     externalId: ExternalId;
-    externalDataOrigin: ExternalDataOrigin;
+    sourceId: string;
+    softwareId: number;
     developers: JSONColumnType<
         {
             "@type": "Organization" | "Person";
@@ -124,8 +142,6 @@ type SoftwaresTable = {
     isFromFrenchPublicService: boolean;
     isPresentInSupportContract: boolean;
     parentSoftwareWikidataId: string | null;
-    externalId: string | null;
-    externalDataOrigin: "wikidata" | "HAL" | null;
     comptoirDuLibreId: number | null;
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
