@@ -3327,17 +3327,17 @@
     "@svgr/hast-util-to-babel-ast" "8.0.0"
     svg-parser "^2.0.4"
 
-"@tanstack/react-virtual@3.0.0-beta.39":
-  version "3.0.0-beta.39"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.0.0-beta.39.tgz#5356f63f5633e1da90ed9fb3d13b615bc730a1bb"
-  integrity sha512-odun31XKT4gQyJXw0ipsNmXL7AAO+mbg2omoxZyW+JJyqU5m1S3BeLpZQKMCv+Ek59mPGeGWPZXxaZd7TalnHg==
+"@tanstack/react-virtual@3.13.4":
+  version "3.13.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-virtual/-/react-virtual-3.13.4.tgz#1188d4e452c8c7569cf42d0f605018ed67941e5c"
+  integrity sha512-jPWC3BXvVLHsMX67NEHpJaZ+/FySoNxFfBEiF4GBc1+/nVwdRm+UcSCYnKP3pXQr0eEsDpXi/PQZhNfJNopH0g==
   dependencies:
-    "@tanstack/virtual-core" "3.0.0-beta.39"
+    "@tanstack/virtual-core" "3.13.4"
 
-"@tanstack/virtual-core@3.0.0-beta.39":
-  version "3.0.0-beta.39"
-  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.0.0-beta.39.tgz#f767c3a2abb76485e4eff2d471e5e714dc46c0b4"
-  integrity sha512-VZ1ESIo+PAPOsxqGzccFPWDD/gsJAViSTU6glhd5pLSMkYDsmtdklfYrE3bWLC3dsbLWI689yzpLgh436v26mQ==
+"@tanstack/virtual-core@3.13.4":
+  version "3.13.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.13.4.tgz#31ac7710d102ed59463f922ab088dde5a9e62010"
+  integrity sha512-fNGO9fjjSLns87tlcto106enQQLycCKR4DPNpgq3djP5IdcPFdPAmaKjsgzIeRhH7hWrELgW12hYnRthS5kLUw==
 
 "@trpc/client@^10.18.0":
   version "10.45.2"
