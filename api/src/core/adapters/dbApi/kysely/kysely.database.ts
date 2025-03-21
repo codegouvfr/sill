@@ -80,8 +80,8 @@ type SourcesTable = {
 
 type SoftwareExternalDatasTable = {
     externalId: ExternalId;
-    sourceId: string;
-    softwareId: number;
+    sourceSlug: string;
+    softwareId: number | null;
     developers: JSONColumnType<
         {
             "@type": "Organization" | "Person";
