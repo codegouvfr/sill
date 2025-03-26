@@ -9,10 +9,6 @@ pre-commit:
 pre-push:
   parallel: true
   commands:
-    format:
-      run: yarn turbo format:check
-    lint:
-      run: yarn turbo lint
-    typecheck:
-      run: yarn turbo typecheck
+    format-lint-typecheck:
+      run: yarn turbo format:check lint typecheck
 

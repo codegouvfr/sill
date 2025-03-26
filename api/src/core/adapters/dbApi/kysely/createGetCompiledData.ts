@@ -1,7 +1,7 @@
 import { Kysely } from "kysely";
 import { CompiledData } from "../../../ports/CompileData";
 import { Db } from "../../../ports/DbApi";
-import { ParentSoftwareExternalData, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import type { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, isNotNull, jsonBuildObject, jsonStripNulls } from "./kysely.utils";
 
@@ -22,7 +22,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         .leftJoin("software_users as users", "s.id", "users.softwareId")
         .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
         .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
-        .leftJoin("software_external_datas as parentExt", "parentExt.externalId", "s.parentSoftwareWikidataId")
         .leftJoin(
             "softwares__similar_software_external_datas",
             "softwares__similar_software_external_datas.softwareId",
@@ -33,7 +32,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "softwares__similar_software_external_datas.similarExternalId",
             "similarExt.externalId"
         )
-        .groupBy(["s.id", "csft.softwareId", "parentExt.externalId", "ext.externalId"])
+        .groupBy(["s.id", "csft.softwareId", "ext.externalId"])
         .select([
             "s.id",
             "s.addedByAgentId",
@@ -61,19 +60,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "csft.comptoirDuLibreSoftware",
             "csft.latestVersion",
             "csft.serviceProviders",
-            ({ ref, ...qb }) =>
-                qb
-                    .case()
-                    .when("parentExt.externalId", "is not", null)
-                    .then(
-                        jsonBuildObject({
-                            externalId: ref("parentExt.externalId"),
-                            label: ref("parentExt.label"),
-                            description: ref("parentExt.description")
-                        }).$castTo<ParentSoftwareExternalData>()
-                    )
-                    .end()
-                    .as("parentWikidataSoftware"),
             ({ ref, ...qb }) =>
                 qb
                     .case()
@@ -113,7 +99,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     annuaireCnllServiceProviders,
                     comptoirDuLibreSoftware,
                     latestVersion,
-                    parentWikidataSoftware,
                     serviceProviders,
                     similarExternalSoftwares,
                     dereferencing,
@@ -136,7 +121,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? undefined,
                         comptoirDuLibreSoftware: comptoirDuLibreSoftware ?? undefined,
                         latestVersion: latestVersion ?? undefined,
-                        parentWikidataSoftware: parentWikidataSoftware ?? undefined,
                         dereferencing: dereferencing ?? undefined,
                         serviceProviders: serviceProviders ?? [],
                         similarExternalSoftwares: (similarExternalSoftwares ?? [])

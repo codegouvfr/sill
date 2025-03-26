@@ -1,10 +1,6 @@
 import { ServiceProvider } from "../usecases/readWriteSillData";
 import type { Db } from "./DbApi";
-import {
-    ParentSoftwareExternalData,
-    SimilarSoftwareExternalData,
-    SoftwareExternalData
-} from "./GetSoftwareExternalData";
+import { SimilarSoftwareExternalData, SoftwareExternalData } from "./GetSoftwareExternalData";
 import type { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
 export type CompileData = (params: {
@@ -15,7 +11,7 @@ export type CompileData = (params: {
 export namespace CompileData {
     export type PartialSoftware = Pick<
         CompiledData.Software<"private">,
-        "softwareExternalData" | "latestVersion" | "similarExternalSoftwares" | "parentWikidataSoftware"
+        "softwareExternalData" | "latestVersion" | "similarExternalSoftwares"
     > & {
         comptoirDuLibreSoftware:
             | {
@@ -60,7 +56,6 @@ export namespace CompiledData {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
             similarExternalSoftwares: SimilarSoftwareExternalData[];
-            parentWikidataSoftware: ParentSoftwareExternalData | undefined;
             comptoirDuLibreSoftware:
                 | (ComptoirDuLibre.Software & { logoUrl: string | undefined; keywords: string[] | undefined })
                 | undefined;
@@ -132,7 +127,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             workshopUrls,
             softwareExternalData,
             similarExternalSoftwares,
-            parentWikidataSoftware,
             serviceProviders
         } = software;
 
@@ -161,7 +155,6 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             workshopUrls,
             softwareExternalData,
             similarExternalSoftwares,
-            parentWikidataSoftware,
             "hasExpertReferent": referents.find(({ isExpert }) => isExpert) !== undefined,
             "userAndReferentCountByOrganization": (() => {
                 const out: CompiledData.Software.Public["userAndReferentCountByOrganization"] = {};

@@ -177,7 +177,6 @@ function apiSoftwareToSoftware(params: {
         codeRepositoryUrl,
         softwareDescription,
         latestVersion,
-        parentWikidataSoftware: parentWikidataSoftware_api,
         addedTime,
         dereferencing,
         prerogatives,
@@ -198,44 +197,6 @@ function apiSoftwareToSoftware(params: {
         applicationCategories,
         identifiers
     } = apiSoftware;
-
-    const { resolveLocalizedString } = createResolveLocalizedString({
-        currentLanguage: "fr",
-        fallbackLanguage: "en"
-    });
-
-    const parentSoftware: State.Software["parentSoftware"] = (() => {
-        if (parentWikidataSoftware_api === undefined) {
-            return undefined;
-        }
-
-        in_sill: {
-            const software = apiSoftwares.find(
-                software => software.externalId === parentWikidataSoftware_api.externalId
-            );
-
-            if (software === undefined) {
-                break in_sill;
-            }
-
-            return {
-                softwareName: software.softwareName,
-                isInSill: true
-            };
-        }
-
-        console.log(
-            "resolving localized string in SOFTWARE DETAILS : ",
-            parentWikidataSoftware_api.label,
-            ` ( for software ${softwareId} - ${softwareName})`
-        );
-
-        return {
-            isInSill: false,
-            softwareName: resolveLocalizedString(parentWikidataSoftware_api.label),
-            url: `https://www.wikidata.org/wiki/${parentWikidataSoftware_api.externalId}`
-        };
-    })();
 
     return {
         softwareId,
@@ -258,7 +219,6 @@ function apiSoftwareToSoftware(params: {
         userCount: Object.values(userAndReferentCountByOrganization)
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
-        parentSoftware,
         addedTime,
         comptoirDuLibreServiceProviderUrl:
             comptoirDuLibreId === undefined

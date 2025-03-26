@@ -1,9 +1,8 @@
 import { SILL } from "../../../types/SILL";
 import type {
     ExternalDataOrigin,
-    LocalizedString,
-    ParentSoftwareExternalData,
-    SimilarSoftwareExternalData
+    SimilarSoftwareExternalData,
+    LocalizedString
 } from "../../ports/GetSoftwareExternalData";
 
 export type ServiceProvider = {
@@ -56,7 +55,6 @@ export type Software = {
     externalId: string | undefined;
     externalDataOrigin: ExternalDataOrigin | undefined;
     softwareType: SoftwareType;
-    parentWikidataSoftware: ParentSoftwareExternalData | undefined;
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];

@@ -39,7 +39,6 @@ export interface SoftwareRepository {
         | {
               software: Software;
               similarSoftwaresExternalIds: string[];
-              parentSoftwareExternalId: string | undefined;
           }
         | undefined
     >;

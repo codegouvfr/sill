@@ -86,13 +86,6 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     publicationTime: new Date(1561566581000)
 };
 
-const parentSoftwareExternalData: SoftwareExternalData = {
-    ...similarSoftwareExternalData,
-    externalId: "Q-parent-external-id",
-    label: "Some parent software label",
-    description: { en: "Some parent software description" }
-};
-
 const insertedAgent = {
     email: "test@test.com",
     organization: "test-organization",
@@ -147,12 +140,6 @@ describe("pgDbApi", () => {
             console.log("------ software scenario ------");
             const { softwareId, agentId } = await insertSoftwareExternalDataAndSoftwareAndAgent();
 
-            await db
-                .updateTable("softwares")
-                .set("parentSoftwareWikidataId", parentSoftwareExternalData.externalId)
-                .where("id", "=", softwareId)
-                .execute();
-
             await dbApi.softwareUser.add({
                 agentId,
                 softwareId,
@@ -191,11 +178,6 @@ describe("pgDbApi", () => {
                 license: "MIT",
                 logoUrl: "https://example.com/logo.png",
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
-                parentWikidataSoftware: {
-                    label: parentSoftwareExternalData.label,
-                    description: parentSoftwareExternalData.description,
-                    externalId: parentSoftwareExternalData.externalId
-                },
                 prerogatives: {
                     doRespectRgaa: true,
                     isFromFrenchPublicServices: false,
@@ -437,7 +419,7 @@ describe("pgDbApi", () => {
         await db
             .insertInto("software_external_datas")
             .values(
-                [softwareExternalData, similarSoftwareExternalData, parentSoftwareExternalData].map(softExtData => ({
+                [softwareExternalData, similarSoftwareExternalData].map(softExtData => ({
                     ...softExtData,
                     developers: JSON.stringify(softExtData.developers),
                     label: JSON.stringify(softExtData.label),

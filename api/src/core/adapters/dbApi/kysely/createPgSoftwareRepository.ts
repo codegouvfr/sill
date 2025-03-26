@@ -2,7 +2,6 @@ import { Kysely, sql } from "kysely";
 import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { SoftwareRepository } from "../../../ports/DbApiV2";
-import { ParentSoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
@@ -55,7 +54,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         updateTime: now,
                         dereferencing: undefined,
                         isStillInObservation: false,
-                        parentSoftwareWikidataId: undefined,
                         doRespectRgaa: doRespectRgaa,
                         isFromFrenchPublicService: isFromFrenchPublicService,
                         isPresentInSupportContract: isPresentInSupportContract,
@@ -132,7 +130,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     versionMin: softwareMinimalVersion || null,
                     updateTime: now,
                     isStillInObservation: false,
-                    parentSoftwareWikidataId: undefined,
                     doRespectRgaa: doRespectRgaa,
                     isFromFrenchPublicService: isFromFrenchPublicService,
                     isPresentInSupportContract: isPresentInSupportContract,
@@ -156,7 +153,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     if (!result) return;
                     const {
                         serviceProviders,
-                        parentExternalData,
                         updateTime,
                         addedTime,
                         softwareExternalData,
@@ -184,7 +180,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             software.comptoirDuLibreSoftware?.external_resources.repository,
                         documentationUrl: softwareExternalData?.documentationUrl,
                         comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                        parentWikidataSoftware: parentExternalData,
                         keywords: software?.keywords ?? softwareExternalData?.keywords ?? [],
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                         referencePublications: softwareExternalData?.referencePublications,
@@ -200,11 +195,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             const software = await getBySoftwareId(softwareId);
             if (!software) return;
 
-            const { parentSoftwareExternalId, similarSoftwaresExternalIds } = await db
+            const { similarSoftwaresExternalIds } = await db
                 .selectFrom("softwares as s")
                 .leftJoin("softwares__similar_software_external_datas as sim", "sim.softwareId", "s.id")
                 .select([
-                    "s.parentSoftwareWikidataId as parentSoftwareExternalId",
                     qb =>
                         qb.fn
                             .jsonAgg(qb.ref("sim.similarExternalId"))
@@ -218,8 +212,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 
             return {
                 software,
-                similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? [],
-                parentSoftwareExternalId: parentSoftwareExternalId ?? undefined
+                similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? []
             };
         },
         getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
@@ -240,7 +233,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 return softwares.map(
                     ({
                         serviceProviders,
-                        parentExternalData,
                         updateTime,
                         addedTime,
                         softwareExternalData,
@@ -285,7 +277,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
                             comptoirDuLibreServiceProviderCount:
                                 software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            parentWikidataSoftware: parentExternalData ?? undefined,
                             applicationCategories: software.categories.concat(
                                 softwareExternalData?.applicationCategories ?? []
                             ),
@@ -341,7 +332,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
         .selectFrom("softwares as s")
         .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
         .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
-        .leftJoin("software_external_datas as parentExt", "s.parentSoftwareWikidataId", "parentExt.externalId")
         .leftJoin(
             "softwares__similar_software_external_datas",
             "softwares__similar_software_external_datas.softwareId",
@@ -359,8 +349,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "cs.comptoirDuLibreSoftware",
             "cs.latestVersion",
             "cs.serviceProviders",
-            "ext.externalId",
-            "parentExt.externalId"
+            "ext.externalId"
         ])
         .orderBy("s.id", "asc")
         .select([
@@ -396,20 +385,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.externalId",
             "s.externalDataOrigin",
             "s.softwareType",
-            ({ ref, ...qb }) =>
-                qb
-                    .case()
-                    .when("parentExt.externalId", "is not", null)
-                    .then(
-                        jsonBuildObject({
-                            externalId: ref("parentExt.externalId"),
-                            label: ref("parentExt.label"),
-                            description: ref("parentExt.description")
-                        }).$castTo<ParentSoftwareExternalData>()
-                    )
-                    .else(null)
-                    .end()
-                    .as("parentExternalData"),
             "s.keywords",
             ({ ref }) =>
                 jsonBuildObject({
@@ -529,7 +504,6 @@ const makeGetSoftwareById =
                 if (!result) return;
                 const {
                     serviceProviders,
-                    parentExternalData,
                     updateTime,
                     addedTime,
                     softwareExternalData,
@@ -557,7 +531,6 @@ const makeGetSoftwareById =
                         software.comptoirDuLibreSoftware?.external_resources.repository,
                     documentationUrl: softwareExternalData?.documentationUrl,
                     comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                    parentWikidataSoftware: parentExternalData,
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                     referencePublications: softwareExternalData?.referencePublications,
                     identifiers: softwareExternalData?.identifiers,

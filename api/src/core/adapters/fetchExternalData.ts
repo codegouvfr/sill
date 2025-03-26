@@ -35,17 +35,12 @@ export const makeFetchAndSaveSoftwareExtraData = ({
         const data = await dbApi.software.getByIdWithLinkedSoftwaresExternalIds(softwareId);
         if (!data) return;
 
-        const { software, similarSoftwaresExternalIds, parentSoftwareExternalId } = data;
+        const { software, similarSoftwaresExternalIds } = data;
         console.log(`🚀${software.softwareName}`);
 
         if (software.externalId) {
             console.log(" • Soft: ", software.softwareName, " - Own wiki : ", software.externalId);
             await getSoftwareExternalDataAndSaveIt(software.externalId, softwareExternalDataCache);
-        }
-
-        if (parentSoftwareExternalId) {
-            console.log(" • Parent wiki : ", parentSoftwareExternalId);
-            await getSoftwareExternalDataAndSaveIt(parentSoftwareExternalId, softwareExternalDataCache);
         }
 
         if (similarSoftwaresExternalIds.length > 0) {

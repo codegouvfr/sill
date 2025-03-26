@@ -28,7 +28,6 @@ export namespace Db {
             lastRecommendedVersion?: string;
         };
         isStillInObservation: boolean;
-        parentSoftwareWikidataId: string | undefined;
         doRespectRgaa: boolean | null;
         isFromFrenchPublicService: boolean;
         isPresentInSupportContract: boolean;
