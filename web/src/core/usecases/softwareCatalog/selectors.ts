@@ -1005,7 +1005,7 @@ function internalSoftwareToExternalSoftware(params: {
 type SoftwareRef =
     | {
           type: "externalId";
-          externalDataOrigin: ApiTypes.ExternalDataOrigin;
+          sourceSlug: string;
           externalId: string;
       }
     | {

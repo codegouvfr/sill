@@ -4,6 +4,7 @@ import type { ApiTypes } from "api";
 import { exclude } from "tsafe/exclude";
 import type { Language } from "api";
 import { name, actions, type FormData } from "./state";
+import { selectors as sourceSelectors } from "core/usecases/source.slice";
 
 export const thunks = {
     initialize:
@@ -133,8 +134,7 @@ export const thunks = {
                                                             software.softwareDescription,
                                                         isLibreSoftware: true,
                                                         externalId: software.externalId,
-                                                        externalDataOrigin:
-                                                            software.externalDataOrigin
+                                                        sourceSlug: software.sourceSlug
                                                     };
                                                 }
                                             })
@@ -196,9 +196,13 @@ export const thunks = {
 
             const [dispatch, getState, { sillApi }] = args;
 
-            const state = getState()[name];
+            const rootState = getState();
+            const state = rootState[name];
 
             assert(state.stateDescription === "ready");
+
+            const mainSource = sourceSelectors.main(rootState);
+            assert(mainSource !== undefined);
 
             const { step1, step2, step3 } = state.formData;
 
@@ -208,7 +212,8 @@ export const thunks = {
 
             const formData: ApiTypes.SoftwareFormData = {
                 softwareType: step1.softwareType,
-                externalId: step2.externalId,
+                externalIdForSource: step2.externalId,
+                sourceSlug: mainSource.slug,
                 comptoirDuLibreId: step2.comptoirDuLibreId,
                 softwareName: step2.softwareName,
                 softwareDescription: step2.softwareDescription,

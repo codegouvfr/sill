@@ -46,7 +46,7 @@ export type FormData = {
             label: LocalizedString<Language>;
             description: LocalizedString<Language>;
             externalId: string;
-            externalDataOrigin: ApiTypes.ExternalDataOrigin | undefined;
+            sourceSlug: string | undefined;
         }[];
     };
 };

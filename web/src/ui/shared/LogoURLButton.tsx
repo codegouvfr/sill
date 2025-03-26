@@ -14,7 +14,7 @@ export type Props = {
     url: URL | string | undefined;
     labelFromURL?: boolean;
     label?: string;
-    type?: ApiTypes.SILL.Sources;
+    type?: ApiTypes.SILL.SourceKind;
 };
 
 const resolveLogoFromURL = (
@@ -27,7 +27,7 @@ const resolveLogoFromURL = (
     }
 
     if (urlString.includes("wikidata")) {
-        return resolveLogoFromType("WikiData");
+        return resolveLogoFromType("wikidata");
     }
 
     if (urlString.includes("doi.org")) {
@@ -61,7 +61,7 @@ const resolveLogoFromURL = (
 };
 
 const resolveLogoFromType = (
-    sourceType: ApiTypes.SILL.Sources
+    sourceType: ApiTypes.SILL.SourceKind
 ): { URLlogo: URL | undefined; textFromURL: string | undefined } => {
     switch (sourceType) {
         case "HAL":
@@ -78,7 +78,7 @@ const resolveLogoFromType = (
                 ),
                 textFromURL: "ORCID"
             };
-        case "WikiData":
+        case "wikidata":
             return {
                 URLlogo: new URL(
                     "https://www.wikidata.org/static/apple-touch/wikidata.png"
