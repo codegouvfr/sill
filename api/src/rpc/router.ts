@@ -87,6 +87,7 @@ export function createRouter(params: {
             if (!user) throw new TRPCError({ "code": "UNAUTHORIZED" });
             return user;
         }),
+        "getMainSource": loggedProcedure.query(() => dbApi.source.getMainSource()),
         "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
@@ -103,19 +104,20 @@ export function createRouter(params: {
                 }
 
                 const { queryString, language } = input;
+                const mainSource = await dbApi.source.getMainSource();
 
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
-                    getSoftwareExternalDataOptions({ queryString, language }),
-                    dbApi.software.getAllSillSoftwareExternalIds(externalDataOrigin)
+                    getSoftwareExternalDataOptions({ queryString, language, source: mainSource }),
+                    dbApi.software.getAllSillSoftwareExternalIds(mainSource.slug)
                 ]);
 
-                return queryResults.map(({ externalId, description, label, isLibreSoftware, externalDataOrigin }) => ({
-                    "externalId": externalId,
-                    "description": description,
-                    "label": label,
-                    "isInSill": softwareExternalDataIds.includes(externalId),
+                return queryResults.map(({ externalId, description, label, isLibreSoftware, sourceSlug }) => ({
+                    externalId: externalId,
+                    description: description,
+                    label: label,
+                    isInSill: softwareExternalDataIds.includes(externalId),
                     isLibreSoftware,
-                    "externalDataOrigin": externalDataOrigin
+                    sourceSlug
                 }));
             }),
         "getSoftwareFormAutoFillDataFromExternalSoftwareAndOtherSources": loggedProcedure
@@ -170,8 +172,7 @@ export function createRouter(params: {
 
                     await dbApi.software.create({
                         formData,
-                        agentId,
-                        externalDataOrigin
+                        agentId
                     });
                 } catch (e) {
                     throw new TRPCError({
@@ -584,7 +585,8 @@ const zOs = z.enum(["windows", "linux", "mac", "android", "ios"]);
 const zSoftwareFormData = (() => {
     const zOut = z.object({
         "softwareType": zSoftwareType,
-        "externalId": z.string().optional(),
+        "externalIdForSource": z.string().optional(),
+        "sourceSlug": z.string().optional(),
         "comptoirDuLibreId": z.number().optional(),
         "softwareName": z.string(),
         "softwareDescription": z.string(),

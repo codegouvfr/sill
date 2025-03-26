@@ -13,8 +13,10 @@ import * as redirect from "./redirect";
 import * as declarationRemoval from "./declarationRemoval";
 import * as userProfile from "./userProfile";
 import * as externalDataOrigin from "./externalDataOrigin";
+import * as source from "./source.slice";
 
 export const usecases = {
+    source,
     softwareCatalog,
     softwareDetails,
     softwareForm,
