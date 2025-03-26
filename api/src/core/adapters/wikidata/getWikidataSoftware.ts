@@ -17,13 +17,14 @@ import {
     type LocalizedString
 } from "../../ports/GetSoftwareExternalData";
 import {
-    type Entity,
+    type WikidataEntity,
     type DataValue,
     type LocalizedString as WikiDataLocalizedString,
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
 import { SILL } from "../../../types/SILL";
+import { Source } from "../../usecases/readWriteSillData";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
@@ -40,7 +41,7 @@ const compareVersion = (version1: string[], version2: string[]): boolean => {
     return Number(version1[0]) > Number(version2[0]);
 };
 
-const lastestVersionClaim = (ent: Entity) => {
+const lastestVersionClaim = (ent: WikidataEntity) => {
     return ent?.claims?.P348?.reduce((acc, statementClaim) => {
         const versionString = statementClaim.mainsnak.datavalue?.value;
         const oldversionString = acc.mainsnak.datavalue.value;
@@ -55,10 +56,16 @@ const lastestVersionClaim = (ent: Entity) => {
 };
 
 export const getWikidataSoftware: GetSoftwareExternalData = memoize(
-    async (wikidataId): Promise<SoftwareExternalData | undefined> => {
-        console.info(`   -> fetching wiki soft : ${wikidataId}`);
+    async ({
+        externalId,
+        source
+    }: {
+        externalId: string;
+        source: Source;
+    }): Promise<SoftwareExternalData | undefined> => {
+        console.info(`   -> fetching wiki soft : ${source.slug}`);
         const { entity } =
-            (await fetchEntity(wikidataId).catch(error => {
+            (await fetchEntity(externalId).catch(error => {
                 if (error instanceof WikidataFetchError) {
                     if (error.status === 404 || error.status === undefined) {
                         return undefined;
@@ -127,8 +134,8 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
         };
 
         return {
-            externalId: wikidataId,
-            externalDataOrigin: "wikidata",
+            externalId,
+            sourceSlug: source.slug,
             "label": wikidataSingleLocalizedStringToLocalizedString(entity.labels) ?? {
                 "en": "No label"
             },
@@ -142,7 +149,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     return undefined;
                 }
 
-                const previewUrl = encodeURI(`https://www.wikidata.org/wiki/${wikidataId}#/media/File:${value}`);
+                const previewUrl = encodeURI(`${source.url}/wiki/${externalId}#/media/File:${value}`);
 
                 const raw = await (async function callee(): Promise<string | undefined> {
                     const res = await fetch(previewUrl).catch(() => undefined);
@@ -306,7 +313,7 @@ export class WikidataFetchError extends Error {
     }
 }
 
-export async function fetchEntity(wikidataId: string): Promise<{ entity: Entity }> {
+export async function fetchEntity(wikidataId: string): Promise<{ entity: WikidataEntity }> {
     const res = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${wikidataId}.json`).catch(
         () => undefined
     );
@@ -326,12 +333,12 @@ export async function fetchEntity(wikidataId: string): Promise<{ entity: Entity 
 
     const json = await res.json();
 
-    const entity = Object.values(json["entities"])[0] as Entity;
+    const entity = Object.values(json["entities"])[0] as WikidataEntity;
 
     return { entity };
 }
 
-export function createGetClaimDataValue(params: { entity: Entity }) {
+export function createGetClaimDataValue(params: { entity: WikidataEntity }) {
     const { entity } = params;
 
     function getClaimDataValue<Type extends "string" | "wikibase-entityid" | "text-language" | "time">(

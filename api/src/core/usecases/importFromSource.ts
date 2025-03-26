@@ -31,7 +31,7 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
             } else {
                 console.info("Importing HAL : ", software.docid);
                 const newSoft = await halRawSoftwareToSoftwareForm(software);
-                return dbApi.software.create({ formData: newSoft, externalDataOrigin: "HAL", agentId: agentId });
+                return dbApi.software.create({ formData: newSoft, agentId: agentId });
             }
         });
     };
@@ -68,7 +68,7 @@ export const importFromWikidataSource: (
                 return dbSoftwares[index].softwareId;
             } else {
                 console.log("Importing wikidata : ", softwareId);
-                return dbApi.software.create({ formData: newSoft, externalDataOrigin: "wikidata", agentId: agentId });
+                return dbApi.software.create({ formData: newSoft, agentId: agentId });
             }
         });
     };

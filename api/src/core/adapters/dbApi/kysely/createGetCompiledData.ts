@@ -68,7 +68,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         jsonStripNulls(
                             jsonBuildObject({
                                 externalId: ref("ext.externalId"),
-                                externalDataOrigin: ref("ext.externalDataOrigin"),
+                                sourceSlug: ref("ext.sourceSlug"),
                                 developers: ref("ext.developers"),
                                 label: ref("ext.label"),
                                 description: ref("ext.description"),
@@ -127,7 +127,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             .filter(isNotNull)
                             .map(similar => ({
                                 "externalId": similar.externalId!,
-                                "externalDataOrigin": similar.externalDataOrigin!,
+                                "sourceSlug": similar.sourceSlug!,
                                 "label": similar.label!,
                                 "description": similar.description!,
                                 "isLibreSoftware": similar.isLibreSoftware!

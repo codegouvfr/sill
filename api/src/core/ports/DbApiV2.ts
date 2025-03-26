@@ -5,13 +5,14 @@ import type {
     InstanceFormData,
     ServiceProvider,
     Software,
-    SoftwareFormData
+    SoftwareFormData,
+    Source
 } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
-import type { ExternalDataOrigin, SoftwareExternalData } from "./GetSoftwareExternalData";
+import type { SoftwareExternalData } from "./GetSoftwareExternalData";
 
 export type WithAgentId = { agentId: number };
 
@@ -23,7 +24,6 @@ export interface SoftwareRepository {
     create: (
         params: {
             formData: SoftwareFormData;
-            externalDataOrigin: ExternalDataOrigin;
         } & WithAgentId
     ) => Promise<number>;
     update: (
@@ -44,7 +44,7 @@ export interface SoftwareRepository {
     >;
     getByName: (name: string) => Promise<Software | undefined>;
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
-    getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
+    getAllSillSoftwareExternalIds: (sourceSlug: string) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
 }
 
@@ -115,7 +115,13 @@ export interface SoftwareUserRepository {
     countSoftwaresForAgent: (params: { agentId: number }) => Promise<number>;
 }
 
+export interface SourceRepository {
+    getMainSource: () => Promise<Source>;
+    getWikidataSource: () => Promise<Source | undefined>;
+}
+
 export type DbApiV2 = {
+    source: SourceRepository;
     software: SoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
     otherSoftwareExtraData: OtherSoftwareExtraDataRepository;

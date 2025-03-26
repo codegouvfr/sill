@@ -119,6 +119,8 @@ type SoftwareType =
 
 type SoftwaresTable = {
     id: Generated<number>;
+    externalIdForSource: ExternalId | null;
+    sourceSlug: string | null;
     name: string;
     description: string;
     referencedSinceTime: number;

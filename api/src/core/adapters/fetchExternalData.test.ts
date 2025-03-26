@@ -1,8 +1,9 @@
 import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
 import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
-import { DbApiV2 } from "../ports/DbApiV2";
-import { SoftwareFormData } from "../usecases/readWriteSillData";
+import type { DbApiV2 } from "../ports/DbApiV2";
+import { ExternalDataOrigin } from "../ports/GetSoftwareExternalData";
+import type { SoftwareFormData, Source } from "../usecases/readWriteSillData";
 import { comptoirDuLibreApi } from "./comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./dbApi/kysely/createPgDbApi";
 import type { Database } from "./dbApi/kysely/kysely.database";
@@ -16,7 +17,8 @@ const craSoftwareFormData = {
     softwareType: {
         type: "stack"
     },
-    externalId: "Q118629387",
+    externalIdForSource: "Q118629387",
+    sourceSlug: "wikidata",
     comptoirDuLibreId: 1,
     softwareName: "Create react app",
     softwareDescription: "To create React apps.",
@@ -80,8 +82,16 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
     return acceleroId;
 };
 
+const source = {
+    slug: "wikidata",
+    priority: 1,
+    url: "https://www.wikidata.org",
+    description: null,
+    kind: "wikidata"
+} satisfies Source;
+
 describe("fetches software extra data (from different providers)", () => {
-    let fetchAndSaveSoftwareExtraData: ReturnType<typeof makeFetchAndSaveSoftwareExtraData>;
+    let fetchAndSaveSoftwareExtraData: Awaited<ReturnType<typeof makeFetchAndSaveSoftwareExtraData>>;
     let dbApi: DbApiV2;
     let db: Kysely<Database>;
     let craSoftwareId: number;
@@ -94,6 +104,15 @@ describe("fetches software extra data (from different providers)", () => {
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("softwares").execute();
         await db.deleteFrom("agents").execute();
+        await db.deleteFrom("sources").execute();
+
+        await db
+            .insertInto("sources")
+            .values({
+                ...source,
+                kind: source.kind as ExternalDataOrigin
+            })
+            .execute();
 
         await sql`SELECT setval('softwares_id_seq', 11, false)`.execute(db);
 
@@ -108,19 +127,19 @@ describe("fetches software extra data (from different providers)", () => {
 
         craSoftwareId = await dbApi.software.create({
             formData: craSoftwareFormData,
-            externalDataOrigin: "wikidata",
             agentId
         });
 
         await insertApacheWithCorrectId(db, agentId);
         await insertAcceleroWithCorrectId(db, agentId);
 
-        fetchAndSaveSoftwareExtraData = makeFetchAndSaveSoftwareExtraData({
+        fetchAndSaveSoftwareExtraData = await makeFetchAndSaveSoftwareExtraData({
             dbApi,
             getSoftwareExternalData: getWikidataSoftware,
             comptoirDuLibreApi,
             getCnllPrestatairesSill: getCnllPrestatairesSill,
-            getServiceProviders: getServiceProviders
+            getServiceProviders: getServiceProviders,
+            wikidataSource: source
         });
     });
 
@@ -158,11 +177,19 @@ describe("fetches software extra data (from different providers)", () => {
             const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expect(softwareExternalDatas).toHaveLength(0);
 
+            const source = await db
+                .selectFrom("sources")
+                .selectAll()
+                .orderBy("priority", "desc")
+                .executeTakeFirstOrThrow();
+            if (!source) throw new Error("Source not found");
+
             const { lastExtraDataFetchAt: initialLastExtraDataFetchAt } = await db
                 .selectFrom("softwares")
                 .select("lastExtraDataFetchAt")
                 .where("id", "=", craSoftwareId)
                 .executeTakeFirstOrThrow();
+
             expect(initialLastExtraDataFetchAt).toBe(null);
 
             await fetchAndSaveSoftwareExtraData(craSoftwareId, {});
@@ -174,8 +201,9 @@ describe("fetches software extra data (from different providers)", () => {
                     description: "deprecated tool for creating React SPA using webpack as bundler",
                     developers: [],
                     documentationUrl: null,
-                    externalDataOrigin: "wikidata",
-                    externalId: craSoftwareFormData.externalId,
+                    softwareId: craSoftwareId,
+                    sourceSlug: source.slug,
+                    externalId: craSoftwareFormData.externalIdForSource,
                     isLibreSoftware: true,
                     keywords: [],
                     label: "create-react-app",
@@ -201,7 +229,8 @@ describe("fetches software extra data (from different providers)", () => {
                         }
                     ],
                     documentationUrl: "https://vitejs.dev/guide/",
-                    externalDataOrigin: "wikidata",
+                    sourceSlug: source.slug,
+                    softwareId: null,
                     externalId: "Q111590996",
                     isLibreSoftware: true,
 
@@ -236,6 +265,13 @@ describe("fetches software extra data (from different providers)", () => {
     it(
         "gets software external data and saves it, and save other extra data",
         async () => {
+            const source = await db
+                .selectFrom("sources")
+                .selectAll()
+                .orderBy("priority", "desc")
+                .executeTakeFirstOrThrow();
+            if (!source) throw new Error("Source not found");
+
             const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expect(softwareExternalDatas).toHaveLength(0);
 
@@ -254,11 +290,12 @@ describe("fetches software extra data (from different providers)", () => {
                             "@type": "Organization",
                             identifier: "Q489709",
                             name: "Apache Software Foundation",
-                            url: `https://www.wikidata.org/wiki/Q489709`
+                            url: "https://www.wikidata.org/wiki/Q489709"
                         }
                     ],
                     documentationUrl: null,
-                    externalDataOrigin: "wikidata",
+                    sourceSlug: source.slug,
+                    softwareId: apacheSoftwareId,
                     externalId: "Q11354",
                     isLibreSoftware: false,
                     keywords: [],
