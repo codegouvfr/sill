@@ -47,7 +47,7 @@ export type StatementClaim<Type extends "wikibase-entityid" | "string" | "text-l
     qualifiers?: { [k: string]: Snak<Type>[] };
 };
 
-export type Entity = {
+export type WikidataEntity = {
     pageid: number;
     ns: number;
     title: string;

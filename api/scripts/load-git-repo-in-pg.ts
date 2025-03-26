@@ -7,6 +7,7 @@ import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialec
 import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
 import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
+import { Source } from "../src/core/usecases/readWriteSillData";
 import SoftwareRow = Db.SoftwareRow;
 
 export type Params = {
@@ -20,6 +21,10 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     const pgDb = new Kysely<Database>({ dialect: createPgDialect(pgConfig.dbUrl) });
 
     const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
+
+    const mainSource = await pgDb.selectFrom("sources").selectAll().orderBy("priority", "desc").executeTakeFirst();
+
+    if (!mainSource) throw new Error("No source found, there should be at least one source");
 
     await insertAgents(agentRows, pgDb);
 
@@ -43,7 +48,11 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     });
 
     const compiledSoftwares = await gitDbApi.fetchCompiledData();
-    await insertCompiledSoftwaresAndSoftwareExternalData(compiledSoftwares, pgDb);
+    await insertCompiledSoftwaresAndSoftwareExternalData({
+        compiledSoftwares: compiledSoftwares,
+        pgDb: pgDb,
+        mainSource
+    });
 };
 
 const insertSoftwares = async (
@@ -191,10 +200,15 @@ const insertInstances = async ({
     });
 };
 
-const insertCompiledSoftwaresAndSoftwareExternalData = async (
-    compiledSoftwares: CompiledData.Software<"private">[],
-    pgDb: Kysely<Database>
-) => {
+const insertCompiledSoftwaresAndSoftwareExternalData = async ({
+    compiledSoftwares,
+    pgDb,
+    mainSource
+}: {
+    compiledSoftwares: CompiledData.Software<"private">[];
+    pgDb: Kysely<Database>;
+    mainSource: Source;
+}) => {
     console.info("Deleting than Inserting compiled softwares");
     console.info("Number of compiled softwares to insert : ", compiledSoftwares.length);
     await pgDb.transaction().execute(async trx => {
@@ -230,12 +244,12 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
                             };
                         } =>
                             software.softwareExternalData?.externalId !== undefined &&
-                            software.softwareExternalData?.externalDataOrigin !== undefined
+                            software.softwareExternalData?.sourceSlug !== undefined
                     )
                     .map(
                         ({ softwareExternalData }): InsertObject<Database, "software_external_datas"> => ({
                             externalId: softwareExternalData.externalId,
-                            externalDataOrigin: softwareExternalData.externalDataOrigin,
+                            sourceSlug: mainSource.slug,
                             developers: JSON.stringify(softwareExternalData?.developers ?? []),
                             label: JSON.stringify(softwareExternalData?.label ?? {}),
                             description: JSON.stringify(softwareExternalData?.description ?? {}),
@@ -259,7 +273,7 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async (
                     .flatMap(s =>
                         (s.similarExternalSoftwares ?? []).map(similarExternalSoftware => ({
                             externalId: similarExternalSoftware.externalId,
-                            externalDataOrigin: similarExternalSoftware.externalDataOrigin,
+                            sourceSlug: similarExternalSoftware.sourceSlug,
                             developers: JSON.stringify([]),
                             label: JSON.stringify(similarExternalSoftware?.label ?? {}),
                             description: JSON.stringify(similarExternalSoftware?.description ?? {}),
