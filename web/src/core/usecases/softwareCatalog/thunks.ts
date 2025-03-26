@@ -219,7 +219,6 @@ function apiSoftwareToInternalSoftware(params: {
         logoUrl,
         softwareDescription,
         latestVersion,
-        parentWikidataSoftware,
         addedTime,
         updateTime,
         applicationCategories,
@@ -240,41 +239,6 @@ function apiSoftwareToInternalSoftware(params: {
         fallbackLanguage: "en"
     });
 
-    const parentSoftware: State.Software.Internal["parentSoftware"] = (() => {
-        if (parentWikidataSoftware === undefined) {
-            return undefined;
-        }
-
-        in_sill: {
-            const software = apiSoftwares.find(
-                software => software.externalId === parentWikidataSoftware.externalId
-            );
-
-            if (software === undefined) {
-                break in_sill;
-            }
-
-            return {
-                softwareName: software.softwareName,
-                isInSill: true
-            };
-        }
-
-        console.log(
-            "resolving localized string in SOFTWARE CATALOG : ",
-            parentWikidataSoftware.label,
-            ` ( for software  ${softwareName})`
-        );
-
-        console.log(parentWikidataSoftware);
-
-        return {
-            isInSill: false,
-            softwareName: resolveLocalizedString(parentWikidataSoftware.label),
-            url: `https://www.wikidata.org/wiki/${parentWikidataSoftware.externalId}`
-        };
-    })();
-
     return {
         logoUrl,
         softwareName,
@@ -293,7 +257,6 @@ function apiSoftwareToInternalSoftware(params: {
         updateTime,
         applicationCategories,
         organizations: objectKeys(userAndReferentCountByOrganization),
-        parentSoftware,
         softwareType,
         prerogatives,
         search: (() => {
@@ -313,8 +276,7 @@ function apiSoftwareToInternalSoftware(params: {
                                 ? ["vscode", "tVisual Studio Code", "VSCodium"]
                                 : name
                         )
-                        .flat(),
-                    parentSoftware === undefined ? undefined : parentSoftware.softwareName
+                        .flat()
                 ]
                     .filter(exclude(undefined))
                     .join(", ") +

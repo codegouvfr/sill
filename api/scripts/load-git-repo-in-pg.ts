@@ -59,11 +59,22 @@ const insertSoftwares = async (
         await trx
             .insertInto("softwares")
             .values(
-                softwareRows.map(({ similarSoftwareExternalDataIds: _, addedByAgentEmail, ...row }) => {
-                    // @ts-ignore
-                    const { testUrls: _1, catalogNumeriqueGouvFrId: _2, ...sanitizedRow } = row; // removing fields that have been deleted since
+                softwareRows.map(originalRow => {
+                    const {
+                        // @ts-ignore
+                        similarSoftwareExternalDataIds,
+                        // @ts-ignore
+                        testUrls,
+                        // @ts-ignore
+                        parentSoftwareWikidataId,
+                        // @ts-ignore
+                        catalogNumeriqueGouvFrId,
+                        addedByAgentEmail,
+                        ...row
+                    } = originalRow;
+
                     return {
-                        ...sanitizedRow,
+                        ...row,
                         addedByAgentId: agentIdByEmail[addedByAgentEmail],
                         dereferencing: row.dereferencing ? JSON.stringify(row.dereferencing) : null,
                         softwareType: JSON.stringify(row.softwareType),

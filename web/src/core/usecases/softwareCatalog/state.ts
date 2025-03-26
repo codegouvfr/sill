@@ -73,12 +73,6 @@ export namespace State {
                 | undefined;
             referentCount: number;
             userCount: number;
-            parentSoftware:
-                | ({ softwareName: string } & (
-                      | { isInSill: true }
-                      | { isInSill: false; url: string }
-                  ))
-                | undefined;
             userDeclaration:
                 | {
                       isUser: boolean;

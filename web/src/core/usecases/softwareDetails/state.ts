@@ -77,12 +77,6 @@ export namespace State {
                   isPublic: boolean;
               }[]
             | undefined;
-        parentSoftware:
-            | ({ softwareName: string } & (
-                  | { isInSill: true }
-                  | { isInSill: false; url: string }
-              ))
-            | undefined;
         similarSoftwares: (
             | {
                   isInSill: true;

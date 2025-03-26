@@ -123,7 +123,6 @@ type SoftwaresTable = {
     doRespectRgaa: boolean | null;
     isFromFrenchPublicService: boolean;
     isPresentInSupportContract: boolean;
-    parentSoftwareWikidataId: string | null;
     externalId: string | null;
     externalDataOrigin: "wikidata" | "HAL" | null;
     comptoirDuLibreId: number | null;
