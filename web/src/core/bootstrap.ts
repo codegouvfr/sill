@@ -3,7 +3,8 @@ import type { LocalizedString } from "i18nifty";
 import type { Language } from "api";
 import type { Oidc } from "./ports/Oidc";
 import { createCore, type GenericCore } from "redux-clean-architecture";
-import type { SillApi } from "core/ports/SillApi";
+import { createSillApi } from "core/adapter/sillApi";
+import { SillApi } from "./ports/SillApi";
 
 type ParamsOfBootstrapCore = {
     /** Empty string for using mock */
@@ -37,25 +38,15 @@ export async function bootstrapCore(
 
     let oidc: Oidc | undefined = undefined;
 
-    const sillApi = await (async () => {
-        if (apiUrl === "") {
-            const { sillApi } = await import("core/adapter/sillApiMock");
-
-            return sillApi;
-        }
-
-        const { createSillApi } = await import("core/adapter/sillApi");
-
-        return createSillApi({
-            url: apiUrl,
-            getOidcAccessToken: () => {
-                if (oidc === undefined || !oidc.isUserLoggedIn) {
-                    return undefined;
-                }
-                return oidc.getTokens().accessToken;
+    const sillApi = createSillApi({
+        url: apiUrl,
+        getOidcAccessToken: () => {
+            if (oidc === undefined || !oidc.isUserLoggedIn) {
+                return undefined;
             }
-        });
-    })();
+            return oidc.getTokens().accessToken;
+        }
+    });
 
     const redirectUrl = await sillApi.getRedirectUrl();
 
