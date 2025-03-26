@@ -1,9 +1,6 @@
 import { SILL } from "../../../types/SILL";
-import type {
-    ExternalDataOrigin,
-    SimilarSoftwareExternalData,
-    LocalizedString
-} from "../../ports/GetSoftwareExternalData";
+import type { LocalizedString, SimilarSoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import SourceKind = SILL.SourceKind;
 
 export type ServiceProvider = {
     name: string;
@@ -53,7 +50,7 @@ export type Software = {
         | undefined;
     comptoirDuLibreId: number | undefined;
     externalId: string | undefined;
-    externalDataOrigin: ExternalDataOrigin | undefined;
+    sourceSlug: string | undefined;
     softwareType: SoftwareType;
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
@@ -62,13 +59,21 @@ export type Software = {
     identifiers?: SILL.Identification[];
 };
 
+export type Source = {
+    slug: string;
+    kind: SourceKind;
+    url: string;
+    priority: number;
+    description: LocalizedString | null;
+};
+
 export namespace Software {
     export type SimilarSoftware = SimilarSoftware.SimilarSoftwareNotInSill | SimilarSoftware.Sill;
 
     export namespace SimilarSoftware {
         export type SimilarSoftwareNotInSill = {
             isInSill: false;
-            externalDataOrigin: ExternalDataOrigin;
+            sourceSlug: string;
             externalId: string;
             isLibreSoftware: boolean;
             label: LocalizedString;
@@ -133,7 +138,8 @@ export type SoftwareFormData = {
     softwareName: string;
     softwareDescription: string;
     softwareType: SoftwareType;
-    externalId: string | undefined;
+    externalIdForSource: string | undefined;
+    sourceSlug: string | undefined;
     comptoirDuLibreId: number | undefined;
     softwareLicense: string;
     softwareMinimalVersion: string | undefined;

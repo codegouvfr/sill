@@ -19,7 +19,7 @@ const dateParser = (str: string | Date | undefined | null) => {
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
-        create: async ({ formData, externalDataOrigin, agentId }) => {
+        create: async ({ formData, agentId }) => {
             const {
                 softwareName,
                 softwareDescription,
@@ -31,7 +31,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 doRespectRgaa,
                 similarSoftwareExternalDataIds,
                 softwareType,
-                externalId,
+                externalIdForSource,
+                sourceSlug,
                 comptoirDuLibreId,
                 softwareKeywords,
                 ...rest
@@ -57,8 +58,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         doRespectRgaa: doRespectRgaa,
                         isFromFrenchPublicService: isFromFrenchPublicService,
                         isPresentInSupportContract: isPresentInSupportContract,
-                        externalId: externalId,
-                        externalDataOrigin: externalDataOrigin,
+                        sourceSlug: sourceSlug,
+                        externalIdForSource: externalIdForSource,
                         comptoirDuLibreId: comptoirDuLibreId,
                         softwareType: JSON.stringify(softwareType),
                         workshopUrls: JSON.stringify([]),
@@ -111,7 +112,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 doRespectRgaa,
                 similarSoftwareExternalDataIds,
                 softwareType,
-                externalId,
+                externalIdForSource,
+                sourceSlug,
                 comptoirDuLibreId,
                 softwareKeywords,
                 ...rest
@@ -133,7 +135,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     doRespectRgaa: doRespectRgaa,
                     isFromFrenchPublicService: isFromFrenchPublicService,
                     isPresentInSupportContract: isPresentInSupportContract,
-                    externalId: externalId,
+                    sourceSlug,
+                    externalIdForSource,
                     comptoirDuLibreId: comptoirDuLibreId,
                     softwareType: JSON.stringify(softwareType),
                     workshopUrls: JSON.stringify([]),
@@ -157,10 +160,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         addedTime,
                         softwareExternalData,
                         similarExternalSoftwares,
+                        externalIdForSource,
                         ...software
                     } = result;
                     return stripNullOrUndefinedValues({
                         ...software,
+                        externalId: externalIdForSource,
                         updateTime: new Date(+updateTime).getTime(),
                         addedTime: new Date(+addedTime).getTime(),
                         serviceProviders: serviceProviders ?? [],
@@ -172,6 +177,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             url: dev.url,
                             affiliations: dev.affiliations
                         })),
+                        logoUrl: softwareExternalData?.logoUrl,
                         officialWebsiteUrl:
                             softwareExternalData?.websiteUrl ??
                             software.comptoirDuLibreSoftware?.external_resources.website,
@@ -237,27 +243,21 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         addedTime,
                         softwareExternalData,
                         similarExternalSoftwares,
+                        externalIdForSource,
                         ...software
                     }): Software => {
                         return stripNullOrUndefinedValues({
                             ...software,
+                            externalId: externalIdForSource,
                             updateTime: new Date(+updateTime).getTime(),
                             addedTime: new Date(+addedTime).getTime(),
                             serviceProviders: serviceProviders ?? [],
                             similarSoftwares: similarExternalSoftwares,
-                            // (similarSoftwares ?? []).map(
-                            //     (s): SimilarSoftware => ({
-                            //         softwareName:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         softwareDescription:
-                            //             typeof s.label === "string" ? s.label : Object.values(s.label)[0]!,
-                            //         isInSill: true // TODO: check if this is true
-                            //     })
-                            // ) ?? [],
                             latestVersion: software.latestVersion ?? {
                                 semVer: softwareExternalData?.softwareVersion ?? undefined,
                                 publicationTime: dateParser(softwareExternalData.publicationTime)
                             },
+                            logoUrl: softwareExternalData?.logoUrl,
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
@@ -289,11 +289,11 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 );
             });
         },
-        getAllSillSoftwareExternalIds: async externalDataOrigin =>
+        getAllSillSoftwareExternalIds: async sourceSlug =>
             db
                 .selectFrom("softwares")
                 .select("externalId")
-                .where("externalDataOrigin", "=", externalDataOrigin)
+                .where("sourceSlug", "=", sourceSlug)
                 .execute()
                 .then(rows => rows.map(row => row.externalId!)),
 
@@ -330,7 +330,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
 const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
     db
         .selectFrom("softwares as s")
-        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
+        .leftJoin("software_external_datas as ext", "ext.softwareId", "s.id")
+        .leftJoin("sources", "sources.slug", "ext.sourceSlug")
         .leftJoin("compiled_softwares as cs", "cs.softwareId", "s.id")
         .leftJoin(
             "softwares__similar_software_external_datas",
@@ -352,16 +353,17 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "ext.externalId"
         ])
         .orderBy("s.id", "asc")
+        .orderBy("sources.priority", "desc")
         .select([
             "s.id as softwareId",
-            ({ fn, ref }) =>
-                fn
-                    .coalesce(
-                        ref("s.logoUrl"),
-                        ref("ext.logoUrl"),
-                        sql<string>`${ref("cs.comptoirDuLibreSoftware")} ->> 'logoUrl'`
-                    )
-                    .as("logoUrl"),
+            // ({ fn, ref }) =>
+            //     fn
+            //         .coalesce(
+            //             ref("s.logoUrl"),
+            //             ref("ext.logoUrl"),
+            //             sql<string>`${ref("cs.comptoirDuLibreSoftware")} ->> 'logoUrl'`
+            //         )
+            //         .as("logoUrl"),
             "s.name as softwareName",
             "s.description as softwareDescription",
             "cs.serviceProviders",
@@ -382,14 +384,14 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "s.versionMin",
             "s.license",
             "annuaireCnllServiceProviders",
-            "s.externalId",
-            "s.externalDataOrigin",
+            "s.externalIdForSource",
+            "s.sourceSlug",
             "s.softwareType",
             "s.keywords",
             ({ ref }) =>
                 jsonBuildObject({
                     externalId: ref("ext.externalId"),
-                    externalDataOrigin: ref("ext.externalDataOrigin"),
+                    sourceSlug: ref("ext.sourceSlug"),
                     developers: ref("ext.developers"),
                     label: ref("ext.label"),
                     description: ref("ext.description"),
@@ -406,24 +408,25 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     softwareVersion: ref("ext.softwareVersion"),
                     publicationTime: ref("ext.publicationTime")
                 }).as("softwareExternalData"),
-            ({ ref, fn }) =>
-                fn
-                    .coalesce(
-                        fn
-                            .jsonAgg(
-                                jsonBuildObject({
-                                    isInSill: sql<false>`false`,
-                                    externalId: ref("similarExt.externalId"),
-                                    label: ref("similarExt.label"),
-                                    description: ref("similarExt.description"),
-                                    isLibreSoftware: ref("similarExt.isLibreSoftware"),
-                                    externalDataOrigin: ref("similarExt.externalDataOrigin")
-                                }).$castTo<Software.SimilarSoftware>()
-                            )
-                            .filterWhere("similarExt.externalId", "is not", null),
-                        sql<[]>`'[]'`
-                    )
-                    .as("similarExternalSoftwares")
+            sql<[]>`'[]'`.as("similarExternalSoftwares")
+            // ({ ref, fn }) =>
+            //     fn
+            //         .coalesce(
+            //             fn
+            //                 .jsonAgg(
+            //                     jsonBuildObject({
+            //                         isInSill: sql<false>`false`,
+            //                         externalId: ref("similarExt.externalId"),
+            //                         label: ref("similarExt.label"),
+            //                         description: ref("similarExt.description"),
+            //                         isLibreSoftware: ref("similarExt.isLibreSoftware"),
+            //                         externalDataOrigin: ref("similarExt.sourceSlug")
+            //                     }).$castTo<Software.SimilarSoftware>()
+            //                 )
+            //                 .filterWhere("similarExt.externalId", "is not", null),
+            //             sql<[]>`'[]'`
+            //         )
+            //         .as("similarExternalSoftwares")
         ]);
 
 type CountForOrganisationAndSoftwareId = {
@@ -508,10 +511,12 @@ const makeGetSoftwareById =
                     addedTime,
                     softwareExternalData,
                     similarExternalSoftwares,
+                    externalIdForSource,
                     ...software
                 } = result;
                 return stripNullOrUndefinedValues({
                     ...software,
+                    externalId: externalIdForSource,
                     updateTime: new Date(+updateTime).getTime(),
                     addedTime: new Date(+addedTime).getTime(),
                     serviceProviders: serviceProviders ?? [],
@@ -523,6 +528,7 @@ const makeGetSoftwareById =
                         url: dev.url,
                         affiliations: dev.affiliations
                     })),
+                    logoUrl: softwareExternalData?.logoUrl,
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??
                         software.comptoirDuLibreSoftware?.external_resources.website,

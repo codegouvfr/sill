@@ -3,7 +3,7 @@ import { DbApiV2, OtherSoftwareExtraData } from "../ports/DbApiV2";
 import type { GetCnllPrestatairesSill } from "../ports/GetCnllPrestatairesSill";
 import { GetServiceProviders } from "../ports/GetServiceProviders";
 import type { GetSoftwareExternalData, SoftwareExternalData } from "../ports/GetSoftwareExternalData";
-import { Software } from "../usecases/readWriteSillData";
+import { Software, Source } from "../usecases/readWriteSillData";
 import { PgComptoirDuLibre } from "./dbApi/kysely/kysely.database";
 
 type ExternalId = string;
@@ -13,6 +13,7 @@ type FetchOtherExternalDataDependencies = {
     getCnllPrestatairesSill: GetCnllPrestatairesSill;
     comptoirDuLibreApi: ComptoirDuLibreApi;
     getServiceProviders: GetServiceProviders;
+    wikidataSource: Source | undefined;
 };
 
 type FetchAndSaveSoftwareExtraDataDependencies = FetchOtherExternalDataDependencies & {
@@ -20,15 +21,17 @@ type FetchAndSaveSoftwareExtraDataDependencies = FetchOtherExternalDataDependenc
     dbApi: DbApiV2;
 };
 
-export const makeFetchAndSaveSoftwareExtraData = ({
+export const makeFetchAndSaveSoftwareExtraData = async ({
     getSoftwareExternalData,
     dbApi,
     ...otherExternalDataDeps
 }: FetchAndSaveSoftwareExtraDataDependencies) => {
+    const mainSource = await dbApi.source.getMainSource();
     const getOtherExternalData = makeGetOtherExternalData(otherExternalDataDeps);
     const getSoftwareExternalDataAndSaveIt = makeGetSoftwareExternalData({
         dbApi,
-        getSoftwareExternalData
+        getSoftwareExternalData,
+        mainSource
     });
 
     return async (softwareId: number, softwareExternalDataCache: SoftwareExternalDataCacheBySoftwareId) => {
@@ -59,11 +62,11 @@ export const makeFetchAndSaveSoftwareExtraData = ({
 };
 
 const makeGetSoftwareExternalData =
-    (deps: { getSoftwareExternalData: GetSoftwareExternalData; dbApi: DbApiV2 }) =>
+    (deps: { getSoftwareExternalData: GetSoftwareExternalData; dbApi: DbApiV2; mainSource: Source }) =>
     async (externalId: ExternalId, cache: SoftwareExternalDataCacheBySoftwareId) => {
         if (cache[externalId]) return cache[externalId];
 
-        const softwareExternalData = await deps.getSoftwareExternalData(externalId);
+        const softwareExternalData = await deps.getSoftwareExternalData({ externalId, source: deps.mainSource });
         if (softwareExternalData) {
             await deps.dbApi.softwareExternalData.save(softwareExternalData);
             cache[externalId] = softwareExternalData;
@@ -90,12 +93,12 @@ const makeGetOtherExternalData =
         const otherSoftwareExtraData: OtherSoftwareExtraData = {
             softwareId: software.softwareId,
             serviceProviders:
-                software.externalDataOrigin === "wikidata"
+                deps.wikidataSource && software.sourceSlug === deps.wikidataSource.slug
                     ? (serviceProvidersBySoftwareId[software.softwareId.toString()] ?? [])
                     : [],
             comptoirDuLibreSoftware,
             annuaireCnllServiceProviders:
-                software.externalDataOrigin === "wikidata"
+                deps.wikidataSource && software.sourceSlug === deps.wikidataSource.slug
                     ? (cnllPrestatairesSill
                           .find(({ sill_id }) => sill_id === software.softwareId)
                           ?.prestataires.map(({ nom, siren, url }) => ({
@@ -148,9 +151,11 @@ const getNewComptoirDuLibre = async ({
     return { ...comptoirDuLibreSoftware, logoUrl, keywords };
 };
 
-export type FetchAndSaveExternalDataForAllSoftwares = ReturnType<typeof makeFetchAndSaveExternalDataForAllSoftwares>;
-export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
-    const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
+export type FetchAndSaveExternalDataForAllSoftwares = Awaited<
+    ReturnType<typeof makeFetchAndSaveExternalDataForAllSoftwares>
+>;
+export const makeFetchAndSaveExternalDataForAllSoftwares = async (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
+    const fetchOtherExternalData = await makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {
         const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
 

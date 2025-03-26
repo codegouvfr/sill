@@ -1,8 +1,8 @@
 export namespace SILL {
-    export type Sources =
+    export type SourceKind =
         | "GitLab"
         | "HAL"
-        | "WikiData"
+        | "wikidata"
         | "SWH"
         | "Orcid"
         | "doi"
@@ -23,7 +23,7 @@ export namespace SILL {
         "@type": "Website";
         name: string;
         url: URL;
-        additionalType?: Sources;
+        additionalType?: SourceKind;
     };
 
     // from https://schema.org/ScholarlyArticle

@@ -26,8 +26,10 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
 
         const { comptoirDuLibreApi, getSoftwareExternalData } = context;
 
+        const mainSource = await context.dbApi.source.getMainSource();
+
         const [softwareExternalData, comptoirDuLibre] = await Promise.all([
-            getSoftwareExternalData(externalId),
+            getSoftwareExternalData({ externalId, source: mainSource }),
             comptoirDuLibreApi.getComptoirDuLibre()
         ]);
 

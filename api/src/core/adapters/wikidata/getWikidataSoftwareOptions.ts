@@ -4,7 +4,9 @@ import { freeSoftwareLicensesWikidataIds } from "./getWikidataSoftware";
 
 const useAgent = "Socle interministériel de logiciels libres - Ap";
 
-export const getWikidataSoftwareOptions: GetSoftwareExternalDataOptions = async ({ queryString, language }) => {
+export const getWikidataSoftwareOptions: GetSoftwareExternalDataOptions = async ({ queryString, language, source }) => {
+    if (source.kind !== "wikidata") throw new Error(`Not a wikidata source, was : ${source.kind}`);
+
     const results: {
         search: {
             id: string;
@@ -13,7 +15,7 @@ export const getWikidataSoftwareOptions: GetSoftwareExternalDataOptions = async 
         }[];
     } = (await fetch(
         [
-            "https://www.wikidata.org/w/api.php?action=wbsearchentities&format=json",
+            `${source.url}/w/api.php?action=wbsearchentities&format=json`,
             `search=${encodeURIComponent(queryString)}`,
             `language=${language}`
         ].join("&"),
@@ -34,7 +36,7 @@ export const getWikidataSoftwareOptions: GetSoftwareExternalDataOptions = async 
 
     return arr.map(({ id, label, description }) => ({
         externalId: id,
-        externalDataOrigin: "wikidata",
+        sourceSlug: source.slug,
         label,
         description,
         "isLibreSoftware": (() => {

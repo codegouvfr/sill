@@ -3,19 +3,20 @@ import type { LocalizedString as LocalizedString_generic } from "i18nifty/Locali
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
 import { SILL } from "../../types/SILL";
+import { Source } from "../usecases/readWriteSillData";
 
 type ExternalId = string;
 
 export type ExternalDataOrigin = "wikidata" | "HAL";
 
 export type GetSoftwareExternalData = {
-    (externalId: ExternalId): Promise<SoftwareExternalData | undefined>;
+    (params: { externalId: ExternalId; source: Source }): Promise<SoftwareExternalData | undefined>;
     clear: (externalId: ExternalId) => void;
 };
 
 export type SoftwareExternalData = {
     externalId: ExternalId;
-    externalDataOrigin: ExternalDataOrigin;
+    sourceSlug: string;
     developers: Array<SILL.Person | SILL.Organization>;
     label: LocalizedString;
     description: LocalizedString;
@@ -37,7 +38,7 @@ export type SoftwareExternalData = {
 
 export type SimilarSoftwareExternalData = Pick<
     SoftwareExternalData,
-    "externalId" | "label" | "description" | "isLibreSoftware" | "externalDataOrigin"
+    "externalId" | "label" | "description" | "isLibreSoftware" | "sourceSlug"
 >;
 
 export const languages = ["fr", "en"] as const;

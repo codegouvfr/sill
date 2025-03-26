@@ -1,9 +1,9 @@
 import memoize from "memoizee";
 import { JSDOM } from "jsdom";
-
-import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
-import { halAPIGateway } from "./HalAPI";
 import { SILL } from "../../../types/SILL";
+import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
+import { Source } from "../../usecases/readWriteSillData";
+import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
@@ -91,8 +91,14 @@ const DOISource: SILL.WebSite = {
 };
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
-    async (halDocId): Promise<SoftwareExternalData | undefined> => {
-        const halRawSoftware = await halAPIGateway.software.getById(halDocId).catch(error => {
+    async ({
+        externalId,
+        source
+    }: {
+        externalId: string;
+        source: Source;
+    }): Promise<SoftwareExternalData | undefined> => {
+        const halRawSoftware = await halAPIGateway.software.getById(externalId).catch(error => {
             if (!(error instanceof HAL.API.FetchError)) throw error;
             if (error.status === 404 || error.status === undefined) return;
             throw error;
@@ -110,7 +116,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
 
         const codemetaSoftware = await halAPIGateway.software.getCodemetaByUrl(halRawSoftware.uri_s);
         if (!codemetaSoftware) {
-            throw Error(`No codemeta found for doc : ${halDocId}`);
+            throw Error(`No codemeta found for doc : ${externalId} - (source: ${source.slug})`);
         }
 
         const labelXmlDoc = new JSDOM(halRawSoftware.label_xml, { contentType: "application/xml" });
@@ -156,12 +162,12 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 }
 
                 if (id) {
-                    return { ...base, "url": `https://hal.science/search/index/q/*/authIdHal_s/${id}` };
+                    return { ...base, "url": `${source.url}/search/index/q/*/authIdHal_s/${id}` };
                 }
 
                 return {
                     ...base,
-                    "url": `https://hal.science/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                    "url": `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
                 };
             })
         );
@@ -192,7 +198,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
 
         return {
             externalId: halRawSoftware.docid,
-            externalDataOrigin: "HAL",
+            sourceSlug: source.slug,
             developers: authors ?? [],
             label: {
                 "en": halRawSoftware?.en_title_s?.[0] ?? halRawSoftware?.title_s?.[0] ?? "-",
