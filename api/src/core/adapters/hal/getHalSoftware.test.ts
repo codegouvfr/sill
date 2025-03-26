@@ -1,14 +1,24 @@
 import { describe, it } from "vitest";
 import { expectToEqual } from "../../../tools/test.helpers";
+import { Source } from "../../usecases/readWriteSillData";
 import { getHalSoftwareExternalData } from "./getHalSoftwareExternalData";
 import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
 
 describe("HAL", () => {
+    const halSource: Source = {
+        slug: "hal-science",
+        kind: "HAL",
+        url: "https://hal.science",
+        priority: 1,
+        description: null
+    };
     describe("getHalSoftwareExternalData", () => {
         it("gets data from Hal and converts it to ExternalSoftware", async () => {
             // https://api.archives-ouvertes.fr/search/?q=docid:1510897&wt=json&fl=*&sort=docid%20asc
-
-            const result = await getHalSoftwareExternalData("1715545");
+            const result = await getHalSoftwareExternalData({
+                externalId: "1715545",
+                source: halSource
+            });
 
             expectToEqual(result, {
                 "description": { "en": "-", "fr": undefined },
@@ -30,7 +40,7 @@ describe("HAL", () => {
                 },
                 "license": "MIT License",
                 "logoUrl": undefined,
-                "externalDataOrigin": "HAL",
+                "sourceSlug": halSource.slug,
                 "sourceUrl": "https://github.com/moranegg/Battleship",
                 "websiteUrl": "https://inria.hal.science/hal-01715545v1",
                 "softwareVersion": undefined,
@@ -72,25 +82,33 @@ describe("HAL", () => {
 
     describe("getHalSoftwareOption", () => {
         it("gets data from Hal and converts it to ExternalSoftwareOption, and returns the provided language", async () => {
-            const enOptions = await getHalSoftwareOptions({ queryString: "multisensi", language: "en" });
+            const enOptions = await getHalSoftwareOptions({
+                queryString: "multisensi",
+                language: "en",
+                source: halSource
+            });
             expectToEqual(enOptions, [
                 {
-                    "externalId": "2801278",
-                    "label": "multisensi",
-                    "description": "Functions to perform sensitivity analysis on a model with multivariate output.",
-                    "isLibreSoftware": true,
-                    "externalDataOrigin": "HAL"
+                    externalId: "2801278",
+                    label: "multisensi",
+                    description: "Functions to perform sensitivity analysis on a model with multivariate output.",
+                    isLibreSoftware: true,
+                    sourceSlug: halSource.slug
                 }
             ]);
 
-            const frOptions = await getHalSoftwareOptions({ queryString: "multisensi", language: "fr" });
+            const frOptions = await getHalSoftwareOptions({
+                queryString: "multisensi",
+                language: "fr",
+                source: halSource
+            });
             expectToEqual(frOptions, [
                 {
-                    "externalId": "2801278",
-                    "label": "multisensi : Analyse de sensibilité multivariée",
-                    "description": "Functions to perform sensitivity analysis on a model with multivariate output.",
-                    "isLibreSoftware": true,
-                    "externalDataOrigin": "HAL"
+                    externalId: "2801278",
+                    label: "multisensi : Analyse de sensibilité multivariée",
+                    description: "Functions to perform sensitivity analysis on a model with multivariate output.",
+                    isLibreSoftware: true,
+                    sourceSlug: halSource.slug
                 }
             ]);
         });

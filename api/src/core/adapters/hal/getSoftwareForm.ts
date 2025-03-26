@@ -38,7 +38,8 @@ export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software
         softwareType: textToSoftwareType(
             halSoftware.softPlatform_s ? halSoftware.softPlatform_s.join("").toLocaleLowerCase() : ""
         ),
-        externalId: halSoftware.docid,
+        externalIdForSource: halSoftware.docid,
+        sourceSlug: "hal",
         comptoirDuLibreId: undefined,
         softwareLicense: codemetaSoftware?.license?.[0] ?? "undefined", // TODO 1 case to copyright
         softwareMinimalVersion: undefined,

@@ -121,7 +121,7 @@ describe("RPC e2e tests", () => {
             expect(softwareRows).toHaveLength(1);
             const expectedSoftware: Partial<CompiledData.Software<"public">> = {
                 "description": softwareFormData.softwareDescription,
-                "externalId": softwareFormData.externalId,
+                "externalId": softwareFormData.externalIdForSource,
                 "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
                 "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
                 "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,

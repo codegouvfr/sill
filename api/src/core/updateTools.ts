@@ -39,11 +39,14 @@ export async function updateTool(params: ParamsOfUpdateService): Promise<boolean
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
-    const fetchAndSaveExternalDataForAllSoftwares = makeFetchAndSaveExternalDataForAllSoftwares({
+    const wikidataSource = await dbApi.source.getWikidataSource();
+
+    const fetchAndSaveExternalDataForAllSoftwares = await makeFetchAndSaveExternalDataForAllSoftwares({
         getSoftwareExternalData,
         getCnllPrestatairesSill,
         comptoirDuLibreApi,
         getServiceProviders,
+        wikidataSource,
         dbApi
     });
     console.info("------ Updating software external data started ------");

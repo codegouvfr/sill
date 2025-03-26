@@ -55,7 +55,8 @@ export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormD
                 type: "desktop/mobile",
                 os: { "linux": true, "windows": true, "android": false, "ios": false, "mac": false }
             },
-            externalId: wikidataId,
+            externalIdForSource: wikidataId,
+            sourceSlug: "wikidata",
             comptoirDuLibreId: undefined,
             softwareLicense: license?.label ?? "Copyright",
             softwareMinimalVersion: undefined,
