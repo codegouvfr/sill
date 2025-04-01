@@ -27,6 +27,18 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
             const index = dbSoftwaresNames.indexOf(software.title_s[0]);
 
             if (index != -1) {
+                if (dbSoftwares[index].externalId === software.docid) {
+                    return dbSoftwares[index].softwareId;
+                }
+
+                // Not equal -> new HAL notice version, need to update
+                const newSoft = await halRawSoftwareToSoftwareForm(software);
+                await dbApi.software.update({
+                    softwareSillId: dbSoftwares[index].softwareId,
+                    formData: newSoft,
+                    agentId: agentId
+                });
+
                 return dbSoftwares[index].softwareId;
             } else {
                 console.info("Importing HAL : ", software.docid);
