@@ -2,8 +2,11 @@ import { getHalSoftwareOptions } from "./getHalSoftwareOptions";
 import { getHalSoftwareExternalData } from "./getHalSoftwareExternalData";
 import { getHalSoftwareForm } from "./getSoftwareForm";
 import { SourceGateway } from "../../ports/SourceGateway";
+import { getScholarlyArticle } from "./getScholarlyArticle";
 
-export const halAdapter: SourceGateway = {
+type HALSourceGateway = SourceGateway;
+
+export const halSourceGateway: HALSourceGateway = {
     sourceType: "HAL",
     softwareExternalData: {
         getById: getHalSoftwareExternalData
@@ -13,5 +16,8 @@ export const halAdapter: SourceGateway = {
     },
     softwareForm: {
         getById: getHalSoftwareForm
+    },
+    scholarlyArticle: {
+        getById: getScholarlyArticle
     }
 };

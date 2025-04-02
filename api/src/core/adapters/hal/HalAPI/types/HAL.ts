@@ -68,7 +68,7 @@ export namespace HAL {
             }
         }
 
-        export type Software = {
+        type Document = {
             // the following fields are the ones that we use
             docid: string;
             title_s: string[];
@@ -93,9 +93,9 @@ export namespace HAL {
             softVersion_s: string[];
             licence_s: string[];
             label_xml: string;
-            relatedData_s: string[];
-            relatedPublication_s: string[];
-            relatedSoftware_s: string[];
+            relatedData_s?: string[];
+            relatedPublication_s?: string[];
+            relatedSoftware_s?: string[];
 
             // The following is the complete list of fields that could be returned by the HAL API
 
@@ -222,6 +222,10 @@ export namespace HAL {
             // softDevelopmentStatus_s: string[];
             // softRuntimePlatform_s: string[];
         };
+
+        export type Software = Document;
+
+        export type Article = Pick<Document, "title_s" | "en_title_s" | "docid" | "fr_title_s">;
 
         export type Domain = {
             docid: number;
