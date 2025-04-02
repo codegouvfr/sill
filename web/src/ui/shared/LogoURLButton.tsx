@@ -22,10 +22,6 @@ const resolveLogoFromURL = (
 ): { URLlogo: URL | undefined; textFromURL: string | undefined } => {
     const urlString = typeof linkURL === "string" ? linkURL : linkURL.href;
 
-    if (urlString.includes("hal.science")) {
-        return resolveLogoFromType("HAL");
-    }
-
     if (urlString.includes("orcid")) {
         return resolveLogoFromType("Orcid");
     }
@@ -52,6 +48,10 @@ const resolveLogoFromURL = (
 
     if (urlString.includes("comptoir-du-libre.org")) {
         return resolveLogoFromType("ComptoirDuLibre");
+    }
+
+    if (urlString.includes("hal")) {
+        return resolveLogoFromType("HAL");
     }
 
     return {
