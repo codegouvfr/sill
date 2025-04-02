@@ -209,7 +209,7 @@ describe("fetches software extra data (from different providers)", () => {
                     label: "Vite",
                     license: "MIT licence",
                     logoUrl:
-                        "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
+                        "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/250px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
@@ -342,11 +342,6 @@ describe("fetches software extra data (from different providers)", () => {
                             url: "https://annuaire.cnll.fr/societes/449989573",
                             name: "WebGeoDataVore",
                             siren: "449989573"
-                        },
-                        {
-                            url: "https://annuaire.cnll.fr/societes/490932308",
-                            name: "ALTER WAY",
-                            siren: "490932308"
                         },
                         {
                             url: "https://annuaire.cnll.fr/societes/443170139",
