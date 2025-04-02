@@ -28,7 +28,7 @@ export const PublicationTab = (props: Props) => {
                                         .default
                                 }}
                             >
-                                {article["@id"]}
+                                {article.headline ?? article["@id"]}
                             </a>
                         </li>
                     );

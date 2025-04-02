@@ -3,6 +3,8 @@ import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSo
 import { halAPIGateway } from "./HalAPI";
 import { SILL } from "../../../types/SILL";
 import { HAL } from "./HalAPI/types/HAL";
+import { crossRefSourceGateway } from "../CrossRef";
+import { halSourceGateway as halSourceGateway } from ".";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -27,31 +29,16 @@ const buildParentOrganizationTree = async (
     );
 };
 
-const buildReferencePublication = (source: HAL.ArticleIdentifierOrigin, valueId: string): SILL.ScholarlyArticle => {
+const buildReferencePublication = async (
+    source: HAL.ArticleIdentifierOrigin,
+    valueId: string
+): Promise<SILL.ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
-            return {
-                "@id": valueId,
-                "@type": "ScholarlyArticle",
-                identifier: {
-                    "@type": "PropertyValue",
-                    value: valueId,
-                    propertyID: "HAL",
-                    url: new URL(`https://hal.science/${valueId}`)
-                }
-            };
+            return halSourceGateway.scholarlyArticle.getById(valueId);
 
         case "doi":
-            return {
-                "@id": valueId,
-                "@type": "ScholarlyArticle",
-                identifier: {
-                    "@type": "PropertyValue",
-                    value: valueId,
-                    propertyID: "doi",
-                    url: URL.parse(`https://doi.org/${valueId}`)
-                }
-            };
+            return crossRefSourceGateway.scholarlyArticle.getById(valueId);
 
         default:
             source satisfies never;
@@ -207,9 +194,13 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             publicationTime: halRawSoftware?.releasedDate_tdate
                 ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined,
-            referencePublications: halRawSoftware.relatedPublication_s.map(id =>
-                buildReferencePublication(parseScolarId(id), id)
-            ),
+            referencePublications:
+                halRawSoftware.relatedPublication_s &&
+                (
+                    await Promise.all(
+                        halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
+                    )
+                ).filter(val => val !== undefined),
             identifiers: identifiers
         };
     },
