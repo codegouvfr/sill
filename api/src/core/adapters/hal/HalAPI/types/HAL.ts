@@ -17,7 +17,7 @@ export namespace HAL {
         affiliation?: HAL.Organization[];
     };
 
-    export type ArticleIdentifierOrigin = "doi" | "arxiv" | "hal";
+    export type ArticleIdentifierOrigin = "doi" | "hal";
 
     // HAL implementation of https://codemeta.github.io/terms/
     export type SoftwareApplication = {
@@ -92,6 +92,9 @@ export namespace HAL {
             softProgrammingLanguage_s: string[];
             softVersion_s: string[];
             licence_s: string[];
+            relatedData_s: string[];
+            relatedPublication_s: string[];
+            relatedSoftware_s: string[];
 
             // The following is the complete list of fields that could be returned by the HAL API
 
