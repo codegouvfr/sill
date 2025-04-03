@@ -401,19 +401,6 @@ export const PreviewTab = (props: Props) => {
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.repoMetadata")}
-                            {repoMetadata?.healthCheck?.score && (
-                                <Chip
-                                    label={
-                                        (
-                                            Math.round(
-                                                repoMetadata.healthCheck.score * 10000
-                                            ) / 100
-                                        ).toFixed(2) + " %"
-                                    }
-                                    color={scoreToLabel(repoMetadata.healthCheck.score)}
-                                    style={{ marginLeft: "10px" }}
-                                />
-                            )}
                         </p>
                         {repoMetadata?.healthCheck?.lastClosedIssue && (
                             <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
@@ -422,7 +409,8 @@ export const PreviewTab = (props: Props) => {
                                 </span>
                                 <span>
                                     {useFormattedDate({
-                                        time: repoMetadata.healthCheck.lastClosedIssue
+                                        time: repoMetadata.healthCheck.lastClosedIssue,
+                                        showTime: false
                                     })}
                                 </span>
                             </p>
@@ -436,7 +424,8 @@ export const PreviewTab = (props: Props) => {
                                 <span>
                                     {useFormattedDate({
                                         time: repoMetadata.healthCheck
-                                            .lastClosedIssuePullRequest
+                                            .lastClosedIssuePullRequest,
+                                        showTime: false
                                     })}
                                 </span>
                             </p>
@@ -448,7 +437,8 @@ export const PreviewTab = (props: Props) => {
                                 </span>
                                 <span>
                                     {useFormattedDate({
-                                        time: repoMetadata.healthCheck.lastCommit
+                                        time: repoMetadata.healthCheck.lastCommit,
+                                        showTime: false
                                     })}
                                 </span>
                             </p>
