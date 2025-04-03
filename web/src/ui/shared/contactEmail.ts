@@ -1,1 +1,1 @@
-export const contactEmail = "sill@code.gouv.fr";
+export const contactEmail = "floss@numerique.gouv.fr";

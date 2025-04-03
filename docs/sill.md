@@ -13,7 +13,7 @@ Ce catalogue aide les administrations à s'y retrouver dans les logiciels libres
 
 Il est publié par la [mission logiciels libres](https://code.gouv.fr) de la ([DINUM](https://www.numerique.gouv.fr)) sur le site [code.gouv.fr/sill](https://code.gouv.fr/sill). Il est construit de façon collaborative par une communauté d'agents publics qui se proposent comme référents, experts techniques ou non, ou se déclarent utilisateurs. Ces agents publics peuvent être des agents des trois fonctions publiques : d'État, hospitalière et territoriale.
 
-Pour toute question, vous pouvez écrire à la mission logiciels libres qui anime cette communauté : <sill@code.gouv.fr>
+Pour toute question, vous pouvez écrire à la mission logiciels libres qui anime cette communauté : <floss@numerique.gouv.fr>
 
 ## Les critères d'entrée d'un logiciel dans le SILL
 

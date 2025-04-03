@@ -13,7 +13,7 @@ This catalogue helps government departments find their way around the Free Softw
 
 It is published by the [Free Software unit](https://code.gouv.fr) of the ([DINUM](https://www.numerique.gouv.fr)) on the website [code.gouv.fr/sill](https://code.gouv.fr/sill). It is built in a collaborative way by a community of public servants who propose themselves as referents, technical experts or not, or declare themselves users. These public servants may be from the three civil services: the State, hospitals and local authorities.
 
-If you have any questions, you can write to the Free Software unit that leads this community: <sill@code.gouv.fr>
+If you have any questions, you can write to the Free Software unit that leads this community: <floss@numerique.gouv.fr>
 
 ## Criteria for inclusion of Free Software in the catalog
 

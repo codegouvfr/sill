@@ -12,3 +12,5 @@ The buisness logic is in `api/src/core`. Which is split in different parts:
 - `api/src/core/helpers`: contains the helpers that are used by the usecases. This can contain all the reusable business logic.
 - `api/src/core/ports`: the contracts to discuss with the outside world and infrastructure (database, external APIs, etc.)
 - `api/src/core/adapters`: the implementations of the ports. This is the only place where we should have code specific to the sources for example.
+
+If you wish, you can also send your suggestions directly to `floss@numerique.gouv.fr`.

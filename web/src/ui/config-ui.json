@@ -21,7 +21,7 @@
             },
             "contribute": {
                 "enabled": true,
-                "href": "mailto:sill@code.gouv.fr?subject=Contribute"
+                "href": "mailto:floss@numerique.gouv.fr?subject=Contribute"
             }
         }
     },

@@ -24,7 +24,7 @@ authentification.  L'inscription et l'authentification peuvent être
 réalisées grâce au service AgentConnect.  Seul les agents publics ont
 accès au services.  Si vous êtes agent public et que votre email n'est
 pas accepté dans le formulaire d'inscription vous pouvez nous écrire à
-[sill@code.gouv.fr](mailto:sill@code.gouv.fr).
+[floss@numerique.gouv.fr](mailto:floss@numerique.gouv.fr).
 
 ## Propriété intellectuelle
 
@@ -115,4 +115,4 @@ français seront compétents.
 
 Pour toute question sur les logiciels libres en général, vous pouvez
 contacter la mission logiciels libres de la DINUM via l'adresse
-[contact@code.gouv.fr](mailto:contact@code.gouv.fr).
+[floss@numerique.gouv.fr](mailto:floss@numerique.gouv.fr).
