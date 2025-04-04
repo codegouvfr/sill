@@ -3,6 +3,8 @@ import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSo
 import { halAPIGateway } from "./HalAPI";
 import { SILL } from "../../../types/SILL";
 import { HAL } from "./HalAPI/types/HAL";
+import { crossRefSourceGateway } from "../CrossRef";
+import { halSourceGateway as halSourceGateway } from ".";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -27,74 +29,27 @@ const buildParentOrganizationTree = async (
     );
 };
 
-const parseReferencePublication = (
+const buildReferencePublication = async (
     source: HAL.ArticleIdentifierOrigin,
-    value: string | string[]
-): SILL.ScholarlyArticle[] => {
-    const arrayValue = typeof value === "string" ? value.split(",") : value;
+    valueId: string
+): Promise<SILL.ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
-            return arrayValue.map((halThing): SILL.ScholarlyArticle => {
-                return {
-                    "@id": halThing,
-                    "@type": "ScholarlyArticle",
-                    identifier: {
-                        "@type": "PropertyValue",
-                        value: halThing,
-                        propertyID: "HAL",
-                        url: halThing.includes("https") ? new URL(halThing) : new URL(`https://hal.science/${halThing}`)
-                    }
-                };
-            });
+            return halSourceGateway.scholarlyArticle.getById(valueId);
+
         case "doi":
-            return arrayValue.map((doi): SILL.ScholarlyArticle => {
-                return {
-                    "@id": doi,
-                    "@type": "ScholarlyArticle",
-                    identifier: {
-                        "@type": "PropertyValue",
-                        value: doi,
-                        propertyID: "doi",
-                        url: doi.includes("https") ? URL.parse(doi) : URL.parse(`https://doi.org/${doi}`)
-                    }
-                };
-            });
-        case "arxiv":
-            return arrayValue.map((arxivId): SILL.ScholarlyArticle => {
-                return {
-                    "@id": arxivId,
-                    "@type": "ScholarlyArticle",
-                    identifier: {
-                        "@type": "PropertyValue",
-                        value: arxivId,
-                        propertyID: "arxiv",
-                        url: arxivId.includes("https")
-                            ? URL.parse(arxivId)
-                            : URL.parse(`https://arxiv.org/abs/${arxivId}`)
-                    }
-                };
-            });
+            return crossRefSourceGateway.scholarlyArticle.getById(valueId);
+
         default:
             source satisfies never;
-            return [];
+            throw Error();
     }
 };
 
-const codeMetaToReferencePublication = (HALReferencePublication: string[] | Object | undefined) => {
-    if (HALReferencePublication) {
-        if (Array.isArray(HALReferencePublication)) {
-            console.error("Issue with HAL data. This data need to be curated", HALReferencePublication);
-            return undefined;
-        }
+const parseScolarId = (scholarId: string): HAL.ArticleIdentifierOrigin => {
+    if (scholarId.startsWith("10.")) return "doi";
 
-        return Object.entries(HALReferencePublication).reduce(
-            (publicationArray: SILL.ScholarlyArticle[], [key, value]) => {
-                return publicationArray.concat(parseReferencePublication(key as HAL.ArticleIdentifierOrigin, value));
-            },
-            []
-        );
-    }
-    return undefined;
+    return "hal";
 };
 
 const HALSource: SILL.WebSite = {
@@ -239,7 +194,13 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             publicationTime: halRawSoftware?.releasedDate_tdate
                 ? new Date(halRawSoftware?.releasedDate_tdate)
                 : undefined,
-            referencePublications: codeMetaToReferencePublication(codemetaSoftware.referencePublication),
+            referencePublications:
+                halRawSoftware.relatedPublication_s &&
+                (
+                    await Promise.all(
+                        halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
+                    )
+                ).filter(val => val !== undefined),
             identifiers: identifiers
         };
     },

@@ -31,6 +31,7 @@ export namespace SILL {
         "@id": string;
         "@type": "ScholarlyArticle";
         identifier: ArticleIdentifier;
+        headline?: string;
     };
 
     export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";

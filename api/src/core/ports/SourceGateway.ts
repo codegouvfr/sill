@@ -1,3 +1,4 @@
+import { SILL } from "../../types/SILL";
 import { ExternalDataOrigin, GetSoftwareExternalData } from "./GetSoftwareExternalData";
 import { GetSoftwareExternalDataOptions } from "./GetSoftwareExternalDataOptions";
 import { GetSoftwareFormData } from "./GetSoftwareFormData";
@@ -12,5 +13,8 @@ export type SourceGateway = {
     };
     softwareForm: {
         getById: GetSoftwareFormData;
+    };
+    scholarlyArticle: {
+        getById: (articleId: string) => Promise<SILL.ScholarlyArticle | undefined>;
     };
 };
