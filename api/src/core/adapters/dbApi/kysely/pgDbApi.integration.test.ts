@@ -110,8 +110,8 @@ describe("pgDbApi", () => {
         dbApi = createKyselyPgDbApi(db);
         await db.deleteFrom("software_referents").execute();
         await db.deleteFrom("software_users").execute();
-        await db.deleteFrom("softwares").execute();
         await db.deleteFrom("software_external_datas").execute();
+        await db.deleteFrom("softwares").execute();
         await db.deleteFrom("instances").execute();
         await db.deleteFrom("agents").execute();
         await db.deleteFrom("sources").execute();
