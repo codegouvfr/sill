@@ -7,10 +7,10 @@ import type { Language } from "api";
 import { capitalize } from "tsafe/capitalize";
 
 export const { getFormattedDate } = (() => {
-    const getFormatByLang = (isSameYear: boolean) => ({
+    const getFormatByLang = (isSameYear: boolean, showTime: boolean) => ({
         /* spell-checker: disable */
-        fr: `dddd Do MMMM${isSameYear ? "" : " YYYY"} à H[h]mm`,
-        en: `dddd, MMMM Do${isSameYear ? "" : " YYYY"}, h:mm a`
+        fr: `dddd Do MMMM${isSameYear ? "" : " YYYY"}${showTime ? " à H[h]mm" : ""}`,
+        en: `dddd, MMMM Do${isSameYear ? "" : " YYYY"}${showTime ? ", h:mm a" : ""}`
         /* spell-checker: enable */
     });
 
@@ -18,8 +18,9 @@ export const { getFormattedDate } = (() => {
         time: number;
         lang: Language;
         doAlwaysShowYear?: boolean;
+        showTime?: boolean;
     }): string {
-        const { time, lang, doAlwaysShowYear } = params;
+        const { time, lang, doAlwaysShowYear, showTime = true } = params;
 
         const date = new Date(time);
 
@@ -28,7 +29,7 @@ export const { getFormattedDate } = (() => {
             : date.getFullYear() === new Date().getFullYear();
 
         return capitalize(
-            moment(date).locale(lang).format(getFormatByLang(isSameYear)[lang])
+            moment(date).locale(lang).format(getFormatByLang(isSameYear, showTime)[lang])
         );
     }
 
@@ -38,13 +39,14 @@ export const { getFormattedDate } = (() => {
 export function useFormattedDate(params: {
     time: number;
     doAlwaysShowYear?: boolean;
+    showTime?: boolean;
 }): string {
-    const { time, doAlwaysShowYear } = params;
+    const { time, doAlwaysShowYear, showTime } = params;
 
     const { lang } = useLang();
 
     return useMemo(
-        () => getFormattedDate({ time, lang, doAlwaysShowYear }),
+        () => getFormattedDate({ time, lang, doAlwaysShowYear, showTime }),
         [time, lang]
     );
 }

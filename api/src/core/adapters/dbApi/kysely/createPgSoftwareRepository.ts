@@ -5,6 +5,7 @@ import { SoftwareRepository } from "../../../ports/DbApiV2";
 import { Software } from "../../../usecases/readWriteSillData";
 import { Database } from "./kysely.database";
 import { stripNullOrUndefinedValues, jsonBuildObject } from "./kysely.utils";
+import { SILL } from "../../../../types/SILL";
 
 const dateParser = (str: string | Date | undefined | null) => {
     if (str && typeof str === "string") {
@@ -14,6 +15,19 @@ const dateParser = (str: string | Date | undefined | null) => {
     if (str && str instanceof Date) {
         return str.valueOf();
     }
+};
+
+const computeRepoMetadata = (repoMetadata: SILL.RepoMetadata | undefined | null): SILL.RepoMetadata | undefined => {
+    const newMedata = repoMetadata;
+    if (!newMedata || !newMedata.healthCheck) return undefined;
+
+    let score = 0;
+    if (repoMetadata.healthCheck?.lastClosedIssue) score += 1;
+    if (repoMetadata.healthCheck?.lastClosedIssuePullRequest) score += 1;
+    if (repoMetadata.healthCheck?.lastCommit) score += 1;
+    newMedata.healthCheck.score = score / 3;
+
+    return newMedata;
 };
 
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
@@ -184,6 +198,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                         referencePublications: softwareExternalData?.referencePublications,
                         identifiers: softwareExternalData?.identifiers,
+                        repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata),
                         applicationCategories: software.categories.concat(
                             softwareExternalData?.applicationCategories ?? []
                         ),
@@ -283,7 +298,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             categories: undefined, // merged in applicationCategories, set to undefined to remove it
                             programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                             referencePublications: softwareExternalData?.referencePublications,
-                            identifiers: softwareExternalData?.identifiers
+                            identifiers: softwareExternalData?.identifiers,
+                            repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata)
                         });
                     }
                 );
@@ -402,6 +418,7 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
                     applicationCategories: ref("ext.applicationCategories"),
                     referencePublications: ref("ext.referencePublications"),
                     identifiers: ref("ext.identifiers"),
+                    repoMetadata: ref("ext.repoMetadata"),
                     keywords: ref("ext.keywords"),
                     softwareVersion: ref("ext.softwareVersion"),
                     publicationTime: ref("ext.publicationTime")
@@ -534,6 +551,7 @@ const makeGetSoftwareById =
                     programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
                     referencePublications: softwareExternalData?.referencePublications,
                     identifiers: softwareExternalData?.identifiers,
+                    repoMetadata: computeRepoMetadata(softwareExternalData?.repoMetadata),
                     applicationCategories: filterDuplicate(
                         software.categories.concat(softwareExternalData?.applicationCategories ?? [])
                     ),

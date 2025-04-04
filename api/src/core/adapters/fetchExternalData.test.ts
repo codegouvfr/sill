@@ -186,6 +186,7 @@ describe("fetches software extra data (from different providers)", () => {
                     programmingLanguages: [],
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z")
                 },
@@ -209,12 +210,13 @@ describe("fetches software extra data (from different providers)", () => {
                     label: "Vite",
                     license: "MIT licence",
                     logoUrl:
-                        "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/220px-Vitejs-logo.svg.png",
+                        "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/250px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date)
                 }
@@ -270,6 +272,7 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://httpd.apache.org/",
                     referencePublications: null,
                     identifiers: [],
+                    repoMetadata: null,
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z")
@@ -342,11 +345,6 @@ describe("fetches software extra data (from different providers)", () => {
                             url: "https://annuaire.cnll.fr/societes/449989573",
                             name: "WebGeoDataVore",
                             siren: "449989573"
-                        },
-                        {
-                            url: "https://annuaire.cnll.fr/societes/490932308",
-                            name: "ALTER WAY",
-                            siren: "490932308"
                         },
                         {
                             url: "https://annuaire.cnll.fr/societes/443170139",

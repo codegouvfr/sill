@@ -2,15 +2,16 @@ import { useLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
-import { shortEndMonthDate, monthDate } from "ui/useMoment";
+import { shortEndMonthDate, monthDate, useFormattedDate } from "ui/useMoment";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
 import config from "../../config-ui.json";
-import { SILL, SoftwareType } from "api/dist/src/lib/ApiTypes";
+import type { ApiTypes } from "api";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
+import { Chip } from "@mui/material";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead
 // so we are sure that we don't forget to provide some props
@@ -39,8 +40,9 @@ export type Props = {
     programmingLanguages: string[];
     keywords?: string[];
     applicationCategories: string[];
-    softwareType: SoftwareType;
-    identifiers: SILL.Identification[];
+    softwareType: ApiTypes.SoftwareType;
+    identifiers: ApiTypes.SILL.Identification[];
+    repoMetadata?: ApiTypes.SILL.RepoMetadata;
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -64,13 +66,21 @@ export const PreviewTab = (props: Props) => {
         keywords,
         applicationCategories,
         softwareType,
-        identifiers
+        identifiers,
+        repoMetadata
     } = props;
 
     const { classes, cx } = useStyles();
 
     const { t } = useTranslation();
     const { lang } = useLang();
+
+    const scoreToLabel = (score: number) => {
+        if (score < 0.1) return "error";
+        if (score < 0.34) return "warning";
+        if (score < 0.67) return "info";
+        return "success";
+    };
 
     return (
         <>
@@ -384,6 +394,54 @@ export const PreviewTab = (props: Props) => {
                                     />
                                 ))}
                             </>
+                        )}
+                    </div>
+                )}
+                {config.softwareDetails.repoMetadata.enabled && repoMetadata && (
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("previewTab.repoMetadata")}
+                        </p>
+                        {repoMetadata?.healthCheck?.lastClosedIssue && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastClosedIssue")} :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck.lastClosedIssue,
+                                        showTime: false
+                                    })}
+                                </span>
+                            </p>
+                        )}
+                        {repoMetadata?.healthCheck?.lastClosedIssuePullRequest && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastClosedIssuePullRequest")}{" "}
+                                    :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck
+                                            .lastClosedIssuePullRequest,
+                                        showTime: false
+                                    })}
+                                </span>
+                            </p>
+                        )}
+                        {repoMetadata?.healthCheck?.lastCommit && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastCommit")} :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck.lastCommit,
+                                        showTime: false
+                                    })}
+                                </span>
+                            </p>
                         )}
                     </div>
                 )}
