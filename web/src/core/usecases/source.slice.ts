@@ -1,0 +1,52 @@
+import type { ApiTypes } from "api";
+import { createSelector, createUsecaseActions } from "redux-clean-architecture";
+import type { State as RootState, Thunks } from "../bootstrap";
+import { id } from "tsafe";
+
+export const name = "source";
+
+export type State = State.NotReady | State.Ready;
+
+export namespace State {
+    export type NotReady = {
+        stateDescription: "not initialized";
+    };
+
+    export type Ready = {
+        stateDescription: "initialized";
+        mainSource: ApiTypes.Source;
+    };
+}
+
+export const { reducer, actions } = createUsecaseActions({
+    name,
+    initialState: id<State>({ stateDescription: "not initialized" }),
+    reducers: {
+        fetchMainSourceStarted: state => state,
+        fetchMainSourceSucceeded: (
+            _,
+            action: { payload: { mainSource: ApiTypes.Source } }
+        ) => ({ stateDescription: "initialized", mainSource: action.payload.mainSource })
+    }
+});
+
+const readyState = (rootState: RootState) => {
+    const state = rootState[name];
+    if (state.stateDescription !== "initialized") return;
+    return state;
+};
+
+export const selectors = {
+    main: createSelector(readyState, state => state?.mainSource)
+};
+
+export const thunks = {};
+
+export const protectedThunks = {
+    initialize:
+        () =>
+        async (dispatch, _, { sillApi }) => {
+            const mainSource = await sillApi.getMainSource();
+            dispatch(actions.fetchMainSourceSucceeded({ mainSource }));
+        }
+} satisfies Thunks;

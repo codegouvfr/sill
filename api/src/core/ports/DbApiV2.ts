@@ -5,13 +5,14 @@ import type {
     InstanceFormData,
     ServiceProvider,
     Software,
-    SoftwareFormData
+    SoftwareFormData,
+    Source
 } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
-import type { ExternalDataOrigin, SoftwareExternalData } from "./GetSoftwareExternalData";
+import type { SoftwareExternalData } from "./GetSoftwareExternalData";
 
 export type WithAgentId = { agentId: number };
 
@@ -23,7 +24,6 @@ export interface SoftwareRepository {
     create: (
         params: {
             formData: SoftwareFormData;
-            externalDataOrigin: ExternalDataOrigin;
         } & WithAgentId
     ) => Promise<number>;
     update: (
@@ -35,6 +35,10 @@ export interface SoftwareRepository {
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
+    getSoftwareIdByExternalIdAndSlug: (params: {
+        externalId: string;
+        sourceSlug: string;
+    }) => Promise<number | undefined>;
     getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
         | {
               software: Software;
@@ -44,12 +48,12 @@ export interface SoftwareRepository {
     >;
     getByName: (name: string) => Promise<Software | undefined>;
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
-    getAllSillSoftwareExternalIds: (externalDataOrigin: ExternalDataOrigin) => Promise<string[]>;
+    getAllSillSoftwareExternalIds: (sourceSlug: string) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
 }
 
 export interface SoftwareExternalDataRepository {
-    save: (softwareExternalData: SoftwareExternalData) => Promise<void>;
+    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>;
 }
 
 type CnllPrestataire = {
@@ -115,7 +119,13 @@ export interface SoftwareUserRepository {
     countSoftwaresForAgent: (params: { agentId: number }) => Promise<number>;
 }
 
+export interface SourceRepository {
+    getMainSource: () => Promise<Source>;
+    getWikidataSource: () => Promise<Source | undefined>;
+}
+
 export type DbApiV2 = {
+    source: SourceRepository;
     software: SoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
     otherSoftwareExtraData: OtherSoftwareExtraDataRepository;

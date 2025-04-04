@@ -51,7 +51,7 @@ export namespace CompiledData {
             | "logoUrl"
             | "keywords"
             | "externalId"
-            | "externalDataOrigin"
+            | "sourceSlug"
         > & {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;

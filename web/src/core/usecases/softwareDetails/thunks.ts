@@ -53,7 +53,8 @@ export const thunks = {
 
             dispatch(actions.initializationStarted());
 
-            const [apiSoftwares, apiInstances] = await Promise.all([
+            const [mainSource, apiSoftwares, apiInstances] = await Promise.all([
+                sillApi.getMainSource(),
                 sillApi.getSoftwares(),
                 sillApi.getInstances()
             ]);
@@ -61,7 +62,8 @@ export const thunks = {
             const software = apiSoftwareToSoftware({
                 apiSoftwares,
                 apiInstances,
-                softwareName
+                softwareName,
+                mainSource
             });
 
             const userDeclaration: { isReferent: boolean; isUser: boolean } | undefined =
@@ -159,6 +161,7 @@ function apiSoftwareToSoftware(params: {
     apiSoftwares: ApiTypes.Software[];
     apiInstances: ApiTypes.Instance[];
     softwareName: string;
+    mainSource: ApiTypes.Source;
 }): State.Software {
     const { apiSoftwares, apiInstances, softwareName } = params;
 
@@ -183,7 +186,7 @@ function apiSoftwareToSoftware(params: {
         comptoirDuLibreServiceProviderCount,
         comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
-        externalDataOrigin,
+        sourceSlug,
         externalId,
         license,
         versionMin,
@@ -230,7 +233,7 @@ function apiSoftwareToSoftware(params: {
                 ? undefined
                 : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
         wikidataUrl:
-            externalDataOrigin !== "wikidata" || externalId === undefined
+            sourceSlug !== "wikidata" || externalId === undefined
                 ? undefined
                 : `https://www.wikidata.org/wiki/${externalId}`,
         instances:
@@ -256,7 +259,7 @@ function apiSoftwareToSoftware(params: {
                     : {
                           type: "externalId",
                           externalId: similarSoftware.externalId,
-                          externalDataOrigin: similarSoftware.externalDataOrigin
+                          sourceSlug: similarSoftware.sourceSlug
                       }
             });
 
@@ -265,7 +268,7 @@ function apiSoftwareToSoftware(params: {
 
                 return {
                     isInSill: false,
-                    externalDataOrigin: "wikidata",
+                    sourceSlug: similarSoftware.sourceSlug,
                     externalId: similarSoftware.externalId,
                     label: similarSoftware.label,
                     description: similarSoftware.description,

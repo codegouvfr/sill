@@ -21,7 +21,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         .leftJoin("software_referents as referents", "s.id", "referents.softwareId")
         .leftJoin("software_users as users", "s.id", "users.softwareId")
         .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
-        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
+        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalIdForSource")
         .leftJoin(
             "softwares__similar_software_external_datas",
             "softwares__similar_software_external_datas.softwareId",
@@ -40,8 +40,8 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "s.dereferencing",
             "s.description",
             "s.doRespectRgaa",
-            "s.externalDataOrigin",
-            "s.externalId",
+            "s.sourceSlug",
+            "s.externalIdForSource",
             "s.generalInfoMd",
             "s.isFromFrenchPublicService",
             "s.isPresentInSupportContract",
@@ -68,7 +68,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         jsonStripNulls(
                             jsonBuildObject({
                                 externalId: ref("ext.externalId"),
-                                externalDataOrigin: ref("ext.externalDataOrigin"),
+                                sourceSlug: ref("ext.sourceSlug"),
                                 developers: ref("ext.developers"),
                                 label: ref("ext.label"),
                                 description: ref("ext.description"),
@@ -127,7 +127,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                             .filter(isNotNull)
                             .map(similar => ({
                                 "externalId": similar.externalId!,
-                                "externalDataOrigin": similar.externalDataOrigin!,
+                                "sourceSlug": similar.sourceSlug!,
                                 "label": similar.label!,
                                 "description": similar.description!,
                                 "isLibreSoftware": similar.isLibreSoftware!

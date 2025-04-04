@@ -3,9 +3,10 @@ import { SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
 import { Database } from "./kysely.database";
 
 export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): SoftwareExternalDataRepository => ({
-    save: async softwareExternalData => {
+    save: async ({ softwareExternalData, softwareId }) => {
         const pgValues = {
             ...softwareExternalData,
+            softwareId,
             developers: JSON.stringify(softwareExternalData.developers),
             label: JSON.stringify(softwareExternalData.label),
             keywords: JSON.stringify(softwareExternalData.keywords),

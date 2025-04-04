@@ -8,6 +8,12 @@ export type SillApi = {
         ): Promise<TrpcRouterOutput["getCurrentUser"]>;
         clear: () => void;
     };
+    getMainSource: {
+        (
+            params: TrpcRouterInput["getMainSource"]
+        ): Promise<TrpcRouterOutput["getMainSource"]>;
+        clear: () => void;
+    };
     getExternalSoftwareDataOrigin: {
         (
             params: TrpcRouterInput["getExternalSoftwareDataOrigin"]

@@ -59,15 +59,18 @@ export async function bootstrapCore(
         getSoftwareExternalData
     };
 
+    const wikidataSource = await dbApi.source.getWikidataSource();
+
     const useCases: UseCases = {
         getSoftwareFormAutoFillDataFromExternalAndOtherSources:
             makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
-        fetchAndSaveExternalDataForAllSoftwares: makeFetchAndSaveExternalDataForAllSoftwares({
+        fetchAndSaveExternalDataForAllSoftwares: await makeFetchAndSaveExternalDataForAllSoftwares({
             getSoftwareExternalData,
             getCnllPrestatairesSill,
             comptoirDuLibreApi,
             getServiceProviders,
-            dbApi
+            dbApi,
+            wikidataSource
         }),
         getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
