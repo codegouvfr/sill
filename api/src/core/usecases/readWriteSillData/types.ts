@@ -139,7 +139,7 @@ export type SoftwareFormData = {
     softwareDescription: string;
     softwareType: SoftwareType;
     externalIdForSource: string | undefined;
-    sourceSlug: string | undefined;
+    sourceSlug: string;
     comptoirDuLibreId: number | undefined;
     softwareLicense: string;
     softwareMinimalVersion: string | undefined;

@@ -2,9 +2,8 @@ import { Kysely } from "kysely";
 import { beforeAll, describe, expect, it } from "vitest";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
-import { CompiledData } from "../core/ports/CompileData";
 import type { DbAgent } from "../core/ports/DbApiV2";
-import type { InstanceFormData } from "../core/usecases/readWriteSillData";
+import type { InstanceFormData, Source } from "../core/usecases/readWriteSillData";
 import {
     createDeclarationFormData,
     createInstanceFormData,
@@ -14,7 +13,14 @@ import {
 } from "../tools/test.helpers";
 import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 
-const softwareFormData = createSoftwareFormData();
+const mainSource = {
+    slug: "wikidata",
+    priority: 1,
+    url: "https://www.wikidata.org",
+    description: null,
+    kind: "wikidata"
+} satisfies Source;
+const softwareFormData = createSoftwareFormData({ sourceSlug: mainSource.slug });
 const declarationFormData = createDeclarationFormData();
 
 describe("RPC e2e tests", () => {
@@ -90,8 +96,12 @@ describe("RPC e2e tests", () => {
             await kyselyDb.deleteFrom("software_referents").execute();
             await kyselyDb.deleteFrom("software_users").execute();
             await kyselyDb.deleteFrom("instances").execute();
+            await kyselyDb.deleteFrom("software_external_datas").execute();
             await kyselyDb.deleteFrom("softwares").execute();
             await kyselyDb.deleteFrom("agents").execute();
+            await kyselyDb.deleteFrom("sources").execute();
+
+            await kyselyDb.insertInto("sources").values(mainSource).executeTakeFirst();
         });
 
         it("gets the list of agents, which is initially empty", async () => {
@@ -119,9 +129,12 @@ describe("RPC e2e tests", () => {
 
             const softwareRows = await getSoftwareRows();
             expect(softwareRows).toHaveLength(1);
-            const expectedSoftware: Partial<CompiledData.Software<"public">> = {
+
+            actualSoftwareId = softwareRows[0].id;
+
+            expectToMatchObject(softwareRows[0], {
                 "description": softwareFormData.softwareDescription,
-                "externalId": softwareFormData.externalIdForSource,
+                "externalIdForSource": softwareFormData.externalIdForSource,
                 "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
                 "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
                 "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
@@ -134,22 +147,18 @@ describe("RPC e2e tests", () => {
                 "workshopUrls": [],
                 "categories": [],
                 "isStillInObservation": false,
-                "id": expect.any(Number)
-            };
-
-            actualSoftwareId = softwareRows[0].id;
-
-            expectToMatchObject(softwareRows[0], {
-                ...expectedSoftware,
+                "id": expect.any(Number),
                 "addedByAgentId": agent.id
             });
-            const similars = await kyselyDb
+
+            const similarSoftsInDb = await kyselyDb
                 .selectFrom("softwares__similar_software_external_datas")
                 .selectAll()
                 .execute();
-            expect(similars).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
+
+            expect(similarSoftsInDb).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
             softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
-                expectToMatchObject(similars[0], {
+                expectToMatchObject(similarSoftsInDb[0], {
                     softwareId: actualSoftwareId,
                     similarExternalId
                 });

@@ -41,6 +41,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     await db.insertInto("sources").values(mainSource).executeTakeFirst();
     await db.updateTable("software_external_datas").set({ sourceSlug: mainSource.slug }).execute();
 
+    await db.schema
+        .alterTable("softwares__similar_software_external_datas")
+        .addColumn("sourceSlug", "text", col => col.references("sources.slug"))
+        .execute();
+    await db.updateTable("softwares__similar_software_external_datas").set({ sourceSlug: mainSource.slug }).execute();
+    await db.schema
+        .alterTable("softwares__similar_software_external_datas")
+        .alterColumn("sourceSlug", col => col.setNotNull())
+        .execute();
+
     // add unique contraint on sourceSlug + externalId + softwareId
     await db.schema
         .alterTable("software_external_datas")
@@ -110,6 +120,8 @@ export async function down(db: Kysely<any>): Promise<void> {
     await db.schema.alterTable("softwares").renameColumn("externalIdForSource", "externalId").execute();
 
     await db.schema.alterTable("softwares").dropColumn("sourceSlug").execute();
+
+    await db.schema.alterTable("softwares__similar_software_external_datas").dropColumn("sourceSlug").execute();
 
     await db.schema.dropTable("sources").execute();
 }

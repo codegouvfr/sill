@@ -67,8 +67,13 @@ const makeGetSoftwareExternalData =
         if (cache[externalId]) return cache[externalId];
 
         const softwareExternalData = await deps.getSoftwareExternalData({ externalId, source: deps.mainSource });
+        const softwareId = await deps.dbApi.software.getSoftwareIdByExternalIdAndSlug({
+            externalId,
+            sourceSlug: deps.mainSource.slug
+        });
+
         if (softwareExternalData) {
-            await deps.dbApi.softwareExternalData.save(softwareExternalData);
+            await deps.dbApi.softwareExternalData.save({ softwareExternalData, softwareId });
             cache[externalId] = softwareExternalData;
         }
     };
