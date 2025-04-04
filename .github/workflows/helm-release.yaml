@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish-helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          git config user.name "actions"
+          git config user.email "actions@github.com"
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.7.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+  icons:
+    runs-on: ubuntu-latest
+    needs: publish-helm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v2.1.3
+        with:
+          node-version: '20'
+      - run: git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${{github.repository}}.git
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npx -y -p gh-pages@3.0.0 gh-pages -d ./icons --dest icons --add -u "github-actions-bot <actions@github.com>"
