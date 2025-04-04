@@ -586,7 +586,7 @@ const zSoftwareFormData = (() => {
     const zOut = z.object({
         "softwareType": zSoftwareType,
         "externalIdForSource": z.string().optional(),
-        "sourceSlug": z.string().optional(),
+        "sourceSlug": z.string(),
         "comptoirDuLibreId": z.number().optional(),
         "softwareName": z.string(),
         "softwareDescription": z.string(),

@@ -8,7 +8,6 @@ import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
 import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
 import { Source } from "../src/core/usecases/readWriteSillData";
-import SoftwareRow = Db.SoftwareRow;
 
 export type Params = {
     pgConfig: { dbUrl: string };
@@ -30,7 +29,12 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 
     const agentIdByEmail = await makeGetAgentIdByEmail(pgDb);
 
-    await insertSoftwares(softwareRows, agentIdByEmail, pgDb);
+    await insertSoftwares({
+        softwareRows: softwareRows,
+        agentIdByEmail: agentIdByEmail,
+        db: pgDb,
+        mainSource
+    });
     await insertSoftwareReferents({
         softwareReferentRows: softwareReferentRows,
         agentIdByEmail,
@@ -55,11 +59,17 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
     });
 };
 
-const insertSoftwares = async (
-    softwareRows: SoftwareRow[],
-    agentIdByEmail: Record<string, number>,
-    db: Kysely<Database>
-) => {
+const insertSoftwares = async ({
+    softwareRows,
+    agentIdByEmail,
+    db,
+    mainSource
+}: {
+    softwareRows: Db.SoftwareRow[];
+    agentIdByEmail: Record<string, number>;
+    db: Kysely<Database>;
+    mainSource: Source;
+}) => {
     console.info("Deleting than Inserting softwares");
     console.info("Number of softwares to insert : ", softwareRows.length);
     await db.transaction().execute(async trx => {
@@ -102,7 +112,8 @@ const insertSoftwares = async (
                 softwareRows.flatMap(row =>
                     Array.from(new Set(row.similarSoftwareExternalDataIds)).map(externalId => ({
                         softwareId: row.id,
-                        similarExternalId: externalId
+                        similarExternalId: externalId,
+                        sourceSlug: mainSource.slug
                     }))
                 )
             )

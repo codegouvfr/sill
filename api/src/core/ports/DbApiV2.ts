@@ -35,6 +35,10 @@ export interface SoftwareRepository {
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
+    getSoftwareIdByExternalIdAndSlug: (params: {
+        externalId: string;
+        sourceSlug: string;
+    }) => Promise<number | undefined>;
     getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
         | {
               software: Software;
@@ -49,7 +53,7 @@ export interface SoftwareRepository {
 }
 
 export interface SoftwareExternalDataRepository {
-    save: (softwareExternalData: SoftwareExternalData) => Promise<void>;
+    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>;
 }
 
 type CnllPrestataire = {

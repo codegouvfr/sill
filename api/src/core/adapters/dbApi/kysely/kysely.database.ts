@@ -68,6 +68,7 @@ type LocalizedString = Partial<Record<string, string>>;
 type SimilarExternalSoftwareExternalDataTable = {
     softwareId: number;
     similarExternalId: ExternalId;
+    sourceSlug: string;
 };
 
 type SourcesTable = {
@@ -119,8 +120,6 @@ type SoftwareType =
 
 type SoftwaresTable = {
     id: Generated<number>;
-    externalIdForSource: ExternalId | null;
-    sourceSlug: string | null;
     name: string;
     description: string;
     referencedSinceTime: number;
@@ -135,8 +134,8 @@ type SoftwaresTable = {
     doRespectRgaa: boolean | null;
     isFromFrenchPublicService: boolean;
     isPresentInSupportContract: boolean;
-    externalId: string | null;
-    externalDataOrigin: "wikidata" | "HAL" | null;
+    externalIdForSource: ExternalId | null;
+    sourceSlug: string | null;
     comptoirDuLibreId: number | null;
     license: string;
     softwareType: JSONColumnType<SoftwareType>;

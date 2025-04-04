@@ -81,17 +81,13 @@ export function SoftwareFormStep4(props: Step4Props) {
                         getOptionLabel={wikidataEntry =>
                             resolveLocalizedString(wikidataEntry.label)
                         }
-                        renderOption={(liProps, wikidataEntity) => (
+                        renderOption={(liProps, entity) => (
                             <li {...liProps}>
                                 <div>
-                                    <span>
-                                        {resolveLocalizedString(wikidataEntity.label)}
-                                    </span>
+                                    <span>{resolveLocalizedString(entity.label)}</span>
                                     <br />
                                     <span className={fr.cx("fr-text--xs")}>
-                                        {resolveLocalizedString(
-                                            wikidataEntity.description
-                                        )}
+                                        {resolveLocalizedString(entity.description)}
                                     </span>
                                 </div>
                             </li>

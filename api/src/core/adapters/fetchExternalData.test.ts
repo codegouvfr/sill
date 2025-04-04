@@ -35,50 +35,67 @@ const craSoftwareFormData = {
 const apacheSoftwareId = 6;
 
 const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
-    await sql`
-      INSERT INTO public.softwares
-      (id, "softwareType", "externalId", "externalDataOrigin",
-       "comptoirDuLibreId", name, description, license, "versionMin",
-       "isPresentInSupportContract", "isFromFrenchPublicService", "logoUrl",
-       keywords, "doRespectRgaa", "isStillInObservation",
-       "workshopUrls", categories, "generalInfoMd", "addedByAgentId",
-       dereferencing, "referencedSinceTime", "updateTime")
-      VALUES (${apacheSoftwareId},
-              '{"os": {"ios": false, "mac": false, "linux": true, "android": false, "windows": false}, "type": "desktop/mobile"}',
-              'Q11354', 'wikidata', 3737, 'Apache HTTP Server',
-              'Serveur Web & Reverse Proxy', 'Apache-2.0', '212', true, false,
-              'https://sill.code.gouv.fr/logo/apache-http.png',
-              '["serveur", "http", "web", "server", "apache"]', false, false,
-              '[]', '[]', null, ${agentId}, null,
-              1728462232094,
-              1728462232094);
-  `.execute(db);
+    await db
+        .insertInto("softwares")
+        .values({
+            id: apacheSoftwareId,
+            softwareType: JSON.stringify({
+                type: "desktop/mobile",
+                os: { ios: false, mac: false, linux: true, android: false, windows: false }
+            }),
+            externalIdForSource: "Q11354",
+            sourceSlug: "wikidata",
+            comptoirDuLibreId: 3737,
+            name: "Apache HTTP Server",
+            description: "Serveur Web & Reverse Proxy",
+            license: "Apache-2.0",
+            versionMin: "212",
+            isPresentInSupportContract: true,
+            isFromFrenchPublicService: false,
+            logoUrl: "https://sill.code.gouv.fr/logo/apache-http.png",
+            keywords: JSON.stringify(["serveur", "http", "web", "server", "apache"]),
+            doRespectRgaa: false,
+            isStillInObservation: false,
+            workshopUrls: JSON.stringify([]),
+            categories: JSON.stringify([]),
+            generalInfoMd: null,
+            addedByAgentId: agentId,
+            dereferencing: null,
+            referencedSinceTime: 1728462232094,
+            updateTime: 1728462232094
+        })
+        .execute();
 };
 
 const acceleroId = 2;
 const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number) => {
-    await sql`
-      INSERT INTO softwares (id, "softwareType", "externalId",
-                             "externalDataOrigin", "comptoirDuLibreId",
-                             name, description, license, "versionMin",
-                             "isPresentInSupportContract",
-                             "isFromFrenchPublicService", "logoUrl",
-                             keywords, "doRespectRgaa",
-                             "isStillInObservation",
-                             "workshopUrls", categories,
-                             "generalInfoMd", "addedByAgentId",
-                             dereferencing, "referencedSinceTime",
-                             "updateTime")
-      VALUES (${acceleroId}, '{"type": "stack"}', 'Q2822666', 'wikidata', 304,
-              'Acceleo',
-              'Outil et/ou plugin de génération de tout ou partie du code',
-              'EPL-2.0', '3.7.8', false, false, null,
-              '["modélisation", "génération", "code", "modeling", "code generation"]',
-              false, false, '[]',
-              '["Other Development Tools"]', null, ${agentId}, null,
-              1514764800000,
-              1514764800000);
-  `.execute(db);
+    await db
+        .insertInto("softwares")
+        .values({
+            id: acceleroId,
+            softwareType: JSON.stringify({ type: "stack" }),
+            externalIdForSource: "Q2822666",
+            sourceSlug: "wikidata",
+            comptoirDuLibreId: 304,
+            name: "Acceleo",
+            description: "Outil et/ou plugin de génération de tout ou partie du code",
+            license: "EPL-2.0",
+            versionMin: "3.7.8",
+            isPresentInSupportContract: false,
+            isFromFrenchPublicService: false,
+            logoUrl: null,
+            keywords: JSON.stringify(["modélisation", "génération", "code", "modeling", "code generation"]),
+            doRespectRgaa: false,
+            isStillInObservation: false,
+            workshopUrls: JSON.stringify([]),
+            categories: JSON.stringify(["Other Development Tools"]),
+            generalInfoMd: null,
+            addedByAgentId: agentId,
+            dereferencing: null,
+            referencedSinceTime: 1514764800000,
+            updateTime: 1514764800000
+        })
+        .execute();
     return acceleroId;
 };
 

@@ -21,7 +21,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
         .leftJoin("software_referents as referents", "s.id", "referents.softwareId")
         .leftJoin("software_users as users", "s.id", "users.softwareId")
         .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
-        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalId")
+        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalIdForSource")
         .leftJoin(
             "softwares__similar_software_external_datas",
             "softwares__similar_software_external_datas.softwareId",
@@ -40,8 +40,8 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "s.dereferencing",
             "s.description",
             "s.doRespectRgaa",
-            "s.externalDataOrigin",
-            "s.externalId",
+            "s.sourceSlug",
+            "s.externalIdForSource",
             "s.generalInfoMd",
             "s.isFromFrenchPublicService",
             "s.isPresentInSupportContract",

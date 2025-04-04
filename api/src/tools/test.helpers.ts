@@ -50,7 +50,7 @@ export const createSoftwareFormData = makeObjectFactory<SoftwareFormData>({
         }
     },
     externalIdForSource: "Q171985",
-    sourceSlug: undefined,
+    sourceSlug: "some-source-slug",
     comptoirDuLibreId: undefined,
     softwareName: "Some software",
     softwareDescription: "Some software description",
