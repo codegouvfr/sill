@@ -2,7 +2,7 @@ import { useLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
-import { shortEndMonthDate, monthDate } from "ui/useMoment";
+import { shortEndMonthDate, monthDate } from "ui/datetimeUtils";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";

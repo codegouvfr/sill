@@ -5,7 +5,7 @@ import { tss } from "tss-react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import { fr } from "@codegouvfr/react-dsfr";
-import { getFormattedDate } from "ui/useMoment";
+import { getFormattedDate } from "ui/datetimeUtils";
 import type { ApiTypes } from "api";
 import { Popover } from "@mui/material";
 import React from "react";
