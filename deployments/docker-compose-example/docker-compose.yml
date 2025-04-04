@@ -1,14 +1,28 @@
 version: "3.8"
 services:
+  postgres:
+    image: postgres:16
+    shm_size: 256m
+    environment:
+      POSTGRES_LOG_STATEMENTS: all
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg}
+    volumes:
+      - ./docker-data:/var/lib/postgresql/data
+    restart: unless-stopped
+
   api:
+    depends_on:
+      - postgres
     platform: linux/amd64
-    image: codegouvfr/sill-api:1.43.6
+    image: codegouvfr/sill-api:1.43.20
     env_file: .env
     restart: unless-stopped
 
   web:
     platform: linux/amd64
-    image: codegouvfr/sill-web:1.43.6
+    image: codegouvfr/sill-web:1.43.20
     restart: unless-stopped
 
   nginx:
@@ -21,3 +35,4 @@ services:
       - api
       - web
     restart: unless-stopped
+
