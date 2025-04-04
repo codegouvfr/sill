@@ -1,25 +1,17 @@
 import { useMemo, useEffect, useReducer } from "react";
-import moment from "moment";
-import "moment/locale/fr";
 import { useLang } from "ui/i18n";
 import { assert } from "tsafe/assert";
 import type { Language } from "api";
 import { capitalize } from "tsafe/capitalize";
 
 export const { getFormattedDate } = (() => {
-    const getFormatByLang = (isSameYear: boolean) => ({
-        /* spell-checker: disable */
-        fr: `dddd Do MMMM${isSameYear ? "" : " YYYY"} à H[h]mm`,
-        en: `dddd, MMMM Do${isSameYear ? "" : " YYYY"}, h:mm a`
-        /* spell-checker: enable */
-    });
-
     function getFormattedDate(params: {
         time: number;
         lang: Language;
         doAlwaysShowYear?: boolean;
+        showTime?: boolean;
     }): string {
-        const { time, lang, doAlwaysShowYear } = params;
+        const { time, lang, doAlwaysShowYear, showTime = true } = params;
 
         const date = new Date(time);
 
@@ -28,7 +20,13 @@ export const { getFormattedDate } = (() => {
             : date.getFullYear() === new Date().getFullYear();
 
         return capitalize(
-            moment(date).locale(lang).format(getFormatByLang(isSameYear)[lang])
+            new Intl.DateTimeFormat(lang, {
+                weekday: "long",
+                year: isSameYear ? undefined : "numeric",
+                month: "long",
+                day: "numeric",
+                timeStyle: showTime ? "short" : undefined
+            }).format(date)
         );
     }
 
@@ -47,25 +45,6 @@ export function useFormattedDate(params: {
         () => getFormattedDate({ time, lang, doAlwaysShowYear }),
         [time, lang]
     );
-}
-
-export function useValidUntil(params: { millisecondsLeft: number }): string {
-    const { millisecondsLeft } = params;
-
-    const { lang } = useLang();
-
-    const validUntil = useMemo(
-        () =>
-            moment()
-                .locale(lang)
-                .add(millisecondsLeft, "milliseconds")
-                .calendar()
-                .toLowerCase(),
-
-        [lang, millisecondsLeft]
-    );
-
-    return validUntil;
 }
 
 export const { fromNow } = (() => {
@@ -387,11 +366,17 @@ export const { useFromNow } = (() => {
 export const shortEndMonthDate = (params: { time: number; lang: string }): string => {
     const { time, lang } = params;
 
-    return moment(time).locale(lang).format(`MMM YYYY`);
+    return new Intl.DateTimeFormat(lang, {
+        year: "numeric",
+        month: "short"
+    }).format(time);
 };
 
 export const monthDate = (params: { time: number; lang: string }): string => {
     const { time, lang } = params;
 
-    return moment(time).locale(lang).format(`MMMM YYYY`);
+    return new Intl.DateTimeFormat(lang, {
+        year: "numeric",
+        month: "long"
+    }).format(time);
 };

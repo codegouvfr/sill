@@ -4,7 +4,7 @@ import { useResolveLocalizedString } from "ui/i18n";
 import type { Link } from "type-route";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
-import { useFromNow } from "ui/useMoment";
+import { useFromNow } from "ui/datetimeUtils";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
 import Tooltip from "@mui/material/Tooltip";
