@@ -271,7 +271,7 @@ export const PreviewTab = (props: Props) => {
                 {config.softwareDetails.metadata.enabled && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
-                            {"Metadata"}
+                            {t("previewTab.metadata")}
                         </p>
                         {config.softwareDetails.metadata.fields.keywords &&
                             keywords &&

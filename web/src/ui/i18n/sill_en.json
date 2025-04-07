@@ -180,7 +180,7 @@
         "mySoftware": "My software"
     },
     "softwareCatalogSearch": {
-        "placeholder": "Search a software",
+        "placeholder": "Search a software (by name and keywords)",
         "filtersButton": "Filters",
         "organizationLabel": "Organization",
         "categoriesLabel": "Categories",
@@ -254,6 +254,7 @@
         "last version": "Last version",
         "register": "In sill since: ",
         "minimal version": "Minimal required version: ",
+        "metadata": "Software Metadata",
         "license": "License : ",
         "hasDesktopApp": "Installable on agent computer",
         "isAvailableAsMobileApp": "Mobile app available",

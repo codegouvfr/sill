@@ -182,7 +182,7 @@
         "mySoftware": "Mes logiciels"
     },
     "softwareCatalogSearch": {
-        "placeholder": "Rechercher un logiciel",
+        "placeholder": "Rechercher un logiciel (par nom et mots clés)",
         "filtersButton": "Filtres",
         "organizationLabel": "Organisation",
         "categoriesLabel": "Catégories",
@@ -257,6 +257,7 @@
         "last version": "Dernière version : ",
         "register": "Date de l'ajout: ",
         "minimal version": "Version minimale requise : ",
+        "metadata": "Métadonnées du logiciel",
         "license": "Licence : ",
         "hasDesktopApp": "Installable sur poste agent",
         "isAvailableAsMobileApp": "Application mobile disponible",
