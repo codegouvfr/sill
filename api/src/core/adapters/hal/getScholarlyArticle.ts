@@ -1,7 +1,7 @@
-import { SILL } from "../../../types/SILL";
+import { GetScholarlyArticle } from "../../ports/GetScholarlyArticle";
 import { halAPIGateway } from "./HalAPI";
 
-export const getScholarlyArticle = async (halDocId: string): Promise<SILL.ScholarlyArticle | undefined> => {
+export const getScholarlyArticle: GetScholarlyArticle = async halDocId => {
     const articleData = await halAPIGateway.article.getById(halDocId).catch(error => {
         if (error.message == "404") return undefined;
         throw error;

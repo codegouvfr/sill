@@ -1,7 +1,7 @@
-import { SILL } from "../../../types/SILL";
+import { GetScholarlyArticle } from "../../../ports/GetScholarlyArticle";
 import { crossRef } from "./api";
 
-export const getScholarlyArticle = async (doi: string): Promise<SILL.ScholarlyArticle | undefined> => {
+export const getScholarlyArticle: GetScholarlyArticle = async doi => {
     const workData = await crossRef.work.get(doi).catch(error => {
         if (error.message == "404") return undefined;
         throw error;
