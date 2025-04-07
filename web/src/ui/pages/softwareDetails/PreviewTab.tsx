@@ -42,6 +42,7 @@ export type Props = {
     softwareType: ApiTypes.SoftwareType;
     identifiers: ApiTypes.SILL.Identification[];
     repoMetadata?: ApiTypes.SILL.RepoMetadata;
+    officialWebsiteUrl?: string;
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -66,7 +67,8 @@ export const PreviewTab = (props: Props) => {
         applicationCategories,
         softwareType,
         identifiers,
-        repoMetadata
+        repoMetadata,
+        officialWebsiteUrl
     } = props;
 
     const { classes, cx } = useStyles();
@@ -377,14 +379,25 @@ export const PreviewTab = (props: Props) => {
                         )}
                         {identifiers && (
                             <>
-                                {identifiers.map(identifier => (
-                                    <LogoURLButton
-                                        className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
-                                        priority="secondary"
-                                        url={identifier.url}
-                                        labelFromURL={true}
-                                    />
-                                ))}
+                                {identifiers
+                                    .filter(identifier => {
+                                        const identifierURLString =
+                                            identifier.url.toString();
+                                        return (
+                                            officialWebsiteUrl &&
+                                            !officialWebsiteUrl.startsWith(
+                                                identifierURLString
+                                            )
+                                        );
+                                    })
+                                    .map(identifier => (
+                                        <LogoURLButton
+                                            className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
+                                            priority="secondary"
+                                            url={identifier.url}
+                                            labelFromURL={true}
+                                        />
+                                    ))}
                             </>
                         )}
                     </div>
