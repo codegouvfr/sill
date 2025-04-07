@@ -2,7 +2,7 @@ import { useLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
-import { shortEndMonthDate, monthDate } from "ui/datetimeUtils";
+import { shortEndMonthDate, monthDate, useFormattedDate } from "ui/datetimeUtils";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
@@ -11,7 +11,6 @@ import config from "../../config-ui.json";
 import type { ApiTypes } from "api";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
-import { Chip } from "@mui/material";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead
 // so we are sure that we don't forget to provide some props
@@ -74,13 +73,6 @@ export const PreviewTab = (props: Props) => {
 
     const { t } = useTranslation();
     const { lang } = useLang();
-
-    const scoreToLabel = (score: number) => {
-        if (score < 0.1) return "error";
-        if (score < 0.34) return "warning";
-        if (score < 0.67) return "info";
-        return "success";
-    };
 
     return (
         <>
