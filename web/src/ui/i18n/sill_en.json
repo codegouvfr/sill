@@ -5,7 +5,8 @@
         "referent_one": "referent",
         "referent_other": "referents",
         "provider_one": "provider",
-        "providers_other": "providers"
+        "providers_other": "providers",
+        "appAccronym": "SILL"
     },
     "app": {
         "title": "The Interministerial Free Software Base is a set of free software recommended by the French State since 2013.",
@@ -41,7 +42,7 @@
         "recentlyUpdated": "Recently updated",
         "waitingForReferent": "Awaiting a referent",
         "inSupportMarket": "Support available",
-        "SILLNumbers": "The SILL in figures",
+        "SILLNumbers": "The $t(common.appAccronym) in figures",
         "softwareCount": "referenced software",
         "registeredUserCount": "registered users",
         "agentReferentCount": "software referents",
@@ -49,15 +50,15 @@
         "programmerCount": "",
         "institutionCount": "",
         "helpUs": "You are a public servant? Help us enrich the catalog",
-        "theSillInAFewWords": "The SILL in a nutshell",
+        "theSillInAFewWords": "The $t(common.appAccronym) in a nutshell",
         "theSillInAFewWordsParagraph": "<p>The Interministerial Free Software Catalog (SILL) is the reference catalog of free software recommended by DINUM for the French administration.</p> <p>It is used to help administrations navigate and select the <space /><a1>free software</a1><space /> to use, in accordance with <space /><a2> Article 16 of the Digital Republic Act </a2>. </p> <p>The <space /><a3>entry criteria</a3><space />for software in the SILL include the publication of its source code under an<space /><a4>accepted free software license</a4><space />and its deployment by a public institution or installation by a public agent. </p> <p>The SILL referents are public agents who volunteer to manage and update information on the software included in the catalog.</p>",
         "illustrationImage": "Illustration image",
         "declareReferentTitle": "Declare yourself as a referent",
         "editSoftwareTitle": "Edit a software entry",
         "addSoftwareOrServiceTitle": "Add a software or service",
-        "declareReferentDesc": "Become a volunteer public agent to manage and update information on SILL software",
-        "editSoftwareDesc": "Modify the information of an existing software in the SILL catalog",
-        "addSoftwareOrServiceDesc": "Propose a new software or service for inclusion in the SILL catalog",
+        "declareReferentDesc": "Become a volunteer public agent to manage and update information on $t(common.appAccronym) software",
+        "editSoftwareDesc": "Modify the information of an existing software in the $t(common.appAccronym) catalog",
+        "addSoftwareOrServiceDesc": "Propose a new software or service for inclusion in the $t(common.appAccronym) catalog",
         "declareReferentButtonLabel": "Access the form",
         "editSoftwareButtonLabel": "Search for software",
         "addSoftwareOrServiceButtonLabel": "Complete the addition form"
@@ -91,7 +92,7 @@
         "add unamed software": "Add software",
         "add software": "Add {{name}}",
         "update software": "Update {{name}}",
-        "add software button": "Add {{name}} to the SILL",
+        "add software button": "Add {{name}} to the $t(common.appAccronym)",
         "update software button": "Update {{name}}"
     },
     "softwareFormStep1": {
@@ -180,7 +181,7 @@
         "mySoftware": "My software"
     },
     "softwareCatalogSearch": {
-        "placeholder": "Search a software",
+        "placeholder": "Search a software (by name, description, authors and keywords)",
         "filtersButton": "Filters",
         "organizationLabel": "Organization",
         "categoriesLabel": "Categories",
@@ -233,7 +234,7 @@
         "stop being user": "Stop being user",
         "stop being referent": "Stop being referent",
         "become referent": "Become referent",
-        "please provide a reason for unreferencing this software": "Please provide a reason why you think this software should not be in the SILL anymore",
+        "please provide a reason for unreferencing this software": "Please provide a reason why you think this software should not be in the $t(common.appAccronym) anymore",
         "unreference software": "Dereference the software"
     },
     "headerDetailCard": {
@@ -251,9 +252,10 @@
         "about": "About",
         "use full links": "Use full links",
         "prerogatives": "Prerogatives",
-        "last version": "Last version",
-        "register": "In sill since: ",
-        "minimal version": "Minimal required version: ",
+        "last version": "Last version : ",
+        "register": "In catalog since : ",
+        "minimal version": "Minimal required version : ",
+        "metadata": "Software Metadata",
         "license": "License : ",
         "hasDesktopApp": "Installable on agent computer",
         "isAvailableAsMobileApp": "Mobile app available",
@@ -286,9 +288,9 @@
         "connect to see private instances": "You must be logged in to see private instances"
     },
     "similarSoftwareTab": {
-        "similar software in sill": "Alike software in the SILL",
-        "similar software not in sill": "Other similar software that are not in the SILL, they might be proprietary or not",
-        "libre software": "Libre software - click to add to the SILL"
+        "similar software in sill": "Alike software in the $t(common.appAccronym)",
+        "similar software not in sill": "Other similar software that are not in the $t(common.appAccronym), they might be proprietary or not",
+        "libre software": "Libre software - click to add to the $t(common.appAccronym)"
     },
     "cnllServiceProviderModal": {
         "close": "Close",
@@ -349,9 +351,9 @@
         "not a valid email": "Doesn't seem to be a valid email",
         "email domain not allowed": "The domain {{domain}} is not allowed yet",
         "about title": "Open Source Profile",
-        "about description": "Sketch out an overview of your journey and commitments to open source. Share your experiences here, how you use or contribute to open source, and any information you wish to highlight within the SILL community.",
+        "about description": "Sketch out an overview of your journey and commitments to open source. Share your experiences here, how you use or contribute to open source, and any information you wish to highlight within the $t(common.appAccronym) community.",
         "isPublic label": "Public Profile",
-        "isPublic hint": "By enabling this option <space /><a>your SILL profile 2 - 1   </a><space /> will be made publicly accessible.'",
+        "isPublic hint": "By enabling this option <space /><a>your $t(common.appAccronym) profile 2 - 1   </a><space /> will be made publicly accessible.'",
         "go to profile": "Go to public profile"
     },
     "userProfile": {
@@ -367,7 +369,7 @@
     "header": {
         "home title": "Home - Interministerial Free Software Catalog",
         "title": "Interministerial Free Software Catalog",
-        "navigation welcome": "Welcome to the SILL",
+        "navigation welcome": "Welcome to the $t(common.appAccronym)",
         "navigation catalog": "Software catalog",
         "navigation add software": "Add software or instance",
         "navigation update software": "Update software or instance",
