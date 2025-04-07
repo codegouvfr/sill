@@ -5,8 +5,8 @@ import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSo
 import { halAPIGateway } from "./HalAPI";
 import { SILL } from "../../../types/SILL";
 import { HAL } from "./HalAPI/types/HAL";
-import { crossRefSourceGateway } from "../CrossRef";
-import { halSourceGateway as halSourceGateway } from ".";
+import { crossRefSource } from "./CrossRef";
+import { getScholarlyArticle } from "./getScholarlyArticle";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -37,10 +37,10 @@ const buildReferencePublication = async (
 ): Promise<SILL.ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
-            return halSourceGateway.scholarlyArticle.getById(valueId);
+            return getScholarlyArticle(valueId);
 
         case "doi":
-            return crossRefSourceGateway.scholarlyArticle.getById(valueId);
+            return crossRefSource.scholarlyArticle.getById(valueId);
 
         default:
             source satisfies never;
