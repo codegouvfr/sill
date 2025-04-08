@@ -7,7 +7,8 @@
         "provider_one": "fournisseur",
         "providers_other": "fournisseurs",
         "free software_one": "logiciel libre",
-        "free software_other": "logiciels libres"
+        "free software_other": "logiciels libres",
+        "appAccronym": "$t(common.appAccronym)"
     },
     "app": {
         "title": "Le socle interministériel de logiciels libres est un ensemble de logiciels libres préconisés par l'État français depuis 2013.",
@@ -43,7 +44,7 @@
         "recentlyUpdated": "Mises à jour récentes",
         "waitingForReferent": "En attente d'un référent",
         "inSupportMarket": "Disponible dans le marché du support",
-        "SILLNumbers": "Le SILL en chiffres",
+        "SILLNumbers": "Le $t(common.appAccronym) en chiffres",
         "softwareCount": "logiciels référencés",
         "registeredUserCount": "utilisateurs inscrits",
         "agentReferentCount": "référents logiciels",
@@ -53,13 +54,13 @@
         "helpUs": "Vous êtes agent public ? Aidez-nous à enrichir le catalogue !",
         "declareReferentTitle": "Se déclarer utilisateur ou référent d'un logiciel",
         "editSoftwareTitle": "Modifier une fiche logiciel",
-        "theSillInAFewWords": "Le SILL en quelques mots",
-        "theSillInAFewWordsParagraph": "<p>Le Socle Interministériel de Logiciels Libres (SILL) est un catalogue de référence des logiciels libres recommandés pour l' administration française.</p><p>Il est utilisé pour aider les administrations à naviguer et sélectionner les <a1>logiciels libres</a1> à utiliser, conformément à l'<a2>article 16 de la loi pour une République numérique</a2>.</p><p>Les <a3>critères d'entrées</a3> d'un logiciel dans le SILL comprennent la publication de son code source sous une <a4>licence libre acceptée</a4> et son déploiement par un établissement public ou son installation par un agent public.</p><p>Les référents SILL sont des agents publics qui se portent volontaires pour gérer et mettre à jour les informations sur les logiciels inclus dans le catalogue.</p>",
+        "theSillInAFewWords": "Le $t(common.appAccronym) en quelques mots",
+        "theSillInAFewWordsParagraph": "<p>Le Socle Interministériel de Logiciels Libres SILL est un catalogue de référence des logiciels libres recommandés pour l' administration française.</p><p>Il est utilisé pour aider les administrations à naviguer et sélectionner les <a1>logiciels libres</a1> à utiliser, conformément à l'<a2>article 16 de la loi pour une République numérique</a2>.</p><p>Les <a3>critères d'entrées</a3> d'un logiciel dans le $t(common.appAccronym) comprennent la publication de son code source sous une <a4>licence libre acceptée</a4> et son déploiement par un établissement public ou son installation par un agent public.</p><p>Les référents $t(common.appAccronym) sont des agents publics qui se portent volontaires pour gérer et mettre à jour les informations sur les logiciels inclus dans le catalogue.</p>",
         "illustrationImage": "Image d'illustration",
         "addSoftwareOrServiceTitle": "Ajouter un logiciel ou un service",
-        "declareReferentDesc": "Se porter volontaire pour gérer et mettre à jour les informations sur les logiciels du SILL",
-        "editSoftwareDesc": "Modifier les informations d'un logiciel existant dans le catalogue SILL",
-        "addSoftwareOrServiceDesc": "Proposer un nouveau logiciel ou service pour inclusion dans le catalogue SILL",
+        "declareReferentDesc": "Se porter volontaire pour gérer et mettre à jour les informations sur les logiciels du $t(common.appAccronym)",
+        "editSoftwareDesc": "Modifier les informations d'un logiciel existant dans le catalogue $t(common.appAccronym)",
+        "addSoftwareOrServiceDesc": "Proposer un nouveau logiciel ou service pour inclusion dans le catalogue $t(common.appAccronym)",
         "declareReferentButtonLabel": "Accéder au formulaire",
         "editSoftwareButtonLabel": "Rechercher un logiciel",
         "addSoftwareOrServiceButtonLabel": "Compléter le formulaire d'ajout",
@@ -94,7 +95,7 @@
         "add unamed software": "Ajouter un logiciel",
         "add software": "Ajouter {{name}}",
         "update software": "Mettre à jour {{name}}",
-        "add software button": "Ajouter {{name}} au SILL",
+        "add software button": "Ajouter {{name}} au $t(common.appAccronym)",
         "update software button": "Mettre à jour {{name}}"
     },
     "softwareFormStep1": {
@@ -237,7 +238,7 @@
         "stop being user": "Ne plus être utilisateur",
         "stop being referent": "Ne plus être référent",
         "become referent": "Devenir référent",
-        "please provide a reason for unreferencing this software": "Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le SILL",
+        "please provide a reason for unreferencing this software": "Merci de préciser la raison pour laquelle vous estimez que ce logiciel ne devrait plus être référencé dans le $t(common.appAccronym)",
         "unreference software": "Dé-référencer le logiciel"
     },
     "headerDetailCard": {
@@ -299,9 +300,9 @@
         "connect to see private instances": "Vous devez vous connecter pour voir les instances privées"
     },
     "similarSoftwareTab": {
-        "similar software in sill": "Logiciels similaires dans le SILL",
-        "similar software not in sill": "Logiciels similaires qui ne font pas partie du SILL, ils peuvent être propriétaires ou libres",
-        "libre software": "Logiciels libres - cliquez pour ajouter au SILL"
+        "similar software in sill": "Logiciels similaires dans le $t(common.appAccronym)",
+        "similar software not in sill": "Logiciels similaires qui ne font pas partie du $t(common.appAccronym), ils peuvent être propriétaires ou libres",
+        "libre software": "Logiciels libres - cliquez pour ajouter au $t(common.appAccronym)"
     },
     "cnllServiceProviderModal": {
         "close": "Fermer",
@@ -362,9 +363,9 @@
         "not a valid email": "Ceci ne semble pas être une adresse e-mail valide",
         "email domain not allowed": "Le domaine {{domain}} n'est pas autorisé pour le moment",
         "about title": "Profil Logiciels Libres",
-        "about description": "Dressez un panorama de votre parcours et de vos engagements envers les logiciels libres. Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations que vous souhaitez mettre en avant au sein de la communauté du SILL.",
+        "about description": "Dressez un panorama de votre parcours et de vos engagements envers les logiciels libres. Partagez ici vos expériences, comment vous utilisez ou contribuez à l'open source, et toutes les informations que vous souhaitez mettre en avant au sein de la communauté du $t(common.appAccronym).",
         "isPublic label": "Profil Public",
-        "isPublic hint": "En activant cette option, <space /><a>votre profil SILL</a><space /> sera publiquement accessible.",
+        "isPublic hint": "En activant cette option, <space /><a>votre profil $t(common.appAccronym)</a><space /> sera publiquement accessible.",
         "go to profile": "Voir mon profil public"
     },
     "userProfile": {
@@ -380,7 +381,7 @@
     "header": {
         "home title": "Accueil - Socle Interministériel des Logiciels Libres",
         "title": "Socle Interministériel des Logiciels Libres",
-        "navigation welcome": "Bienvenue sur le SILL",
+        "navigation welcome": "Bienvenue sur le $t(common.appAccronym)",
         "navigation catalog": "Catalogue de logiciels",
         "navigation add software": "Ajouter un logiciel ou une instance ",
         "navigation update software": "Mettre à jour un logiciel ou une instance",
