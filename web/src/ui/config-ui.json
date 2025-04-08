@@ -1,6 +1,7 @@
 {
     "header": {
         "link": {
+            "enabled": false,
             "linkProps": {
                 "href": "https://code.gouv.fr"
             },

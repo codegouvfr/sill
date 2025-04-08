@@ -90,7 +90,7 @@ export const Header = memo(
             });
         }
 
-        const link: HeaderProps.QuickAccessItem | null = config.header.link
+        const link: HeaderProps.QuickAccessItem | null = config.header.link.enabled
             ? {
                   iconId: "fr-icon-bank-fill",
                   linkProps: config.header.link.linkProps,

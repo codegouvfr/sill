@@ -10,7 +10,6 @@
         "title": "Listing of free software",
         "subTitle": "developped by French universities and French National Centre for Scientific Research",
         "helpUs": "Help us to enhance the research software list !",
-        "theSillInAFewWords": "The SILL in a Nutshell",
         "theSillInAFewWordsParagraph": "<p>Software has become essential in all scientific research fields, serving as both a tool for research, a product of research, and a subject of research.</p><p>A major objective of the <a1>Software and Source Code Committee</a1> is to highlight these productions and their significance to research.</p><p>This catalog is also part of the broader goals of the <a2>French National Plan for Open Science</a2>.</p>",
         "addSoftwareOrServiceTitle": "Add Software / Contribute",
         "addSoftwareOrServiceDesc": "<p>The catalog relies on software notices uploaded to the open archive <a1>HAL</a1>.</p><p>For submitting a software notice, please refer to HAL's documentation.</p>",

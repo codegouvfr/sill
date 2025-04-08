@@ -10,7 +10,6 @@
         "title": "Référencement de logiciels libres",
         "subTitle": "développés dans l'enseignement supérieur et la recherche.",
         "helpUs": "Aidez-nous à enrichir le catalogue !",
-        "theSillInAFewWords": "Le SILL en quelques mots",
         "theSillInAFewWordsParagraph": "<p>Le logiciel est aujourd’hui devenu indispensable dans tous les domaines de la recherche scientifique, à la fois comme outil pour la recherche, comme produit de la recherche et comme objet de recherche.</p><p>Un des objectifs majeurs du collège <a1>« Codes sources et logiciel »</a1> est de mettre en lumière ces productions et leur importance pour la recherche.</p><p>Ce catalogue est par ailleurs inscrit dans les ambitions du <a2>Plan National pour la Science Ouverte</a2>.</p>",
         "addSoftwareOrServiceTitle": "Ajouter un logiciel / Contribuer",
         "addSoftwareOrServiceDesc": "<p>Le catalogue se base sur les notices logicielles déposées dans l'archive ouverte <a1>HAL</a1>.</p><p>Pour déposer une notice logicielle, vous pouvez vous reporter à la documentation de HAL.</p>",
