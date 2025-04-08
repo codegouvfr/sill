@@ -26,6 +26,9 @@ const halSoftwareFieldsToReturn: (keyof HAL.API.Software)[] = [
     "softProgrammingLanguage_s",
     "softVersion_s",
     "authIdForm_i",
+    "relatedData_s",
+    "relatedPublication_s",
+    "relatedSoftware_s",
     "domainAllCode_s"
 ];
 
