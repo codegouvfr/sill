@@ -3,7 +3,12 @@ import { getWikidataForm } from "./getSoftwareForm";
 import { getWikidataSoftware } from "./getWikidataSoftware";
 import { getWikidataSoftwareOptions } from "./getWikidataSoftwareOptions";
 
-export const wikidataAdapter: SourceGateway = {
+type WikidataSourceGateway = Pick<
+    SourceGateway,
+    "sourceType" | "softwareExternalData" | "softwareOptions" | "softwareForm"
+>;
+
+export const wikidataSourceGateway: WikidataSourceGateway = {
     sourceType: "wikidata",
     softwareExternalData: {
         getById: getWikidataSoftware
