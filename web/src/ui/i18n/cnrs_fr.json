@@ -1,4 +1,7 @@
 {
+    "common": {
+        "appAccronym": "Catalogue des logiciels de la recherche académique"
+    },
     "softwareFormStep2": {
         "external id": "Fiche HAL",
         "external id hint_fill": "Renseignez le nom du logiciel ou directement l'identifiant  (attention, les identifiants HAL sont de la forme  hal-123123v1, il faut fournir uniquement le numéro (sans  'hal-' et sans version), dans ce cas '123123') pour associer  le logiciel à une fiche existante<space /><dataSource>HAL</dataSource>. <br /> La plupart des informations générales, telles que l'URL du  dépôt de code, sont extraites de HAL. Si le logiciel que vous  souhaitez ajouter ne possède pas encore de fiche sur HAL, vous  pouvez en créer une. Vous trouverez ici un <space /><exampleUrl>exemple de fiche HAL </exampleUrl>  ."

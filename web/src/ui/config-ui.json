@@ -34,7 +34,7 @@
             "https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/"
         ],
         "searchBar": {
-            "enabled": false
+            "enabled": true
         },
         "statistics": {
             "catgegories": ["softwareCount"]
@@ -60,7 +60,7 @@
             }
         },
         "quickAccess": {
-            "enabled": false
+            "enabled": true
         }
     },
     "softwareDetails": {
