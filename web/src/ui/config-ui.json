@@ -33,6 +33,9 @@
             "https://www.ouvrirlascience.fr/college-codes-sources-et-logiciels/",
             "https://www.ouvrirlascience.fr/deuxieme-plan-national-pour-la-science-ouverte/"
         ],
+        "searchBar": {
+            "enabled": false
+        },
         "statistics": {
             "catgegories": ["softwareCount"]
         },
@@ -55,6 +58,9 @@
                 "buttonEnabled": true,
                 "buttonLink": "https://doc.hal.science/en/deposer/deposer-le-code-source"
             }
+        },
+        "quickAccess": {
+            "enabled": false
         }
     },
     "softwareDetails": {
