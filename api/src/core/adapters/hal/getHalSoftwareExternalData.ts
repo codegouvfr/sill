@@ -6,8 +6,8 @@ import { HAL } from "./HalAPI/types/HAL";
 import { repoAnalyser, RepoType } from "../../../tools/repoAnalyser";
 import { projectGitLabApiMaker } from "../GitLab/api/project";
 import { repoGitHubEndpointMaker } from "../GitHub/api/repo";
-import { crossRefSourceGateway } from "../CrossRef";
-import { halSourceGateway as halSourceGateway } from ".";
+import { crossRefSource } from "./CrossRef";
+import { getScholarlyArticle } from "./getScholarlyArticle";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -38,10 +38,10 @@ const buildReferencePublication = async (
 ): Promise<SILL.ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
-            return halSourceGateway.scholarlyArticle.getById(valueId);
+            return getScholarlyArticle(valueId);
 
         case "doi":
-            return crossRefSourceGateway.scholarlyArticle.getById(valueId);
+            return crossRefSource.scholarlyArticle.getById(valueId);
 
         default:
             source satisfies never;

@@ -1,4 +1,4 @@
-import { SILL } from "../../../types/SILL";
+import { SILL } from "../../../../types/SILL";
 import { crossRef } from "./api";
 
 export const getScholarlyArticle = async (doi: string): Promise<SILL.ScholarlyArticle | undefined> => {
