@@ -379,6 +379,7 @@
         "badge text_user": "Utilisateur"
     },
     "header": {
+        "siteTitle": "République <br /> Française",
         "home title": "Accueil - Socle Interministériel des Logiciels Libres",
         "title": "Socle Interministériel des Logiciels Libres",
         "navigation welcome": "Bienvenue sur le $t(common.appAccronym)",

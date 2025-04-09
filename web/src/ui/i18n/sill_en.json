@@ -372,6 +372,7 @@
         "badge text_user": "User"
     },
     "header": {
+        "siteTitle": "République <br /> Française",
         "home title": "Home - Interministerial Free Software Catalog",
         "title": "Interministerial Free Software Catalog",
         "navigation welcome": "Welcome to the $t(common.appAccronym)",

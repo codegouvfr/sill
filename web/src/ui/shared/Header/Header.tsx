@@ -1,7 +1,7 @@
 import { memo, forwardRef } from "react";
 import { assert } from "tsafe/assert";
 import type { Equals } from "tsafe";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { Header as HeaderDsfr, HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { routes } from "ui/routes";
@@ -106,13 +106,7 @@ export const Header = memo(
             <HeaderDsfr
                 ref={ref}
                 className={className}
-                brandTop={
-                    // cspell: disable-next-line
-                    <>
-                        {" "}
-                        République <br /> Française{" "}
-                    </>
-                }
+                brandTop={<Trans i18nKey={"header.siteTitle"} />}
                 serviceTitle={
                     <>
                         {t("header.title")}{" "}
