@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { Header as HeaderDsfr, HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { Badge } from "@codegouvfr/react-dsfr/Badge";
 import { routes } from "ui/routes";
-import { contactEmail } from "ui/shared/contactEmail";
 import { LanguageSelect } from "./LanguageSelect";
 import { AuthButtons } from "./AuthButtons";
 import config from "../../config-ui.json";
@@ -76,15 +75,11 @@ export const Header = memo(
                 text: t("header.navigation about")
             });
         }
-        if (config.header.menu.catalog.enabled) {
+        if (config.header.menu.contribute.enabled) {
             navigations.push({
                 linkProps: {
                     target: "_blank",
-                    /* cSpell:disable */
-                    href: `mailto:${contactEmail}?subject=${encodeURIComponent(
-                        "Demande d'accompagnement"
-                    )}`
-                    /* cSpell:enable */
+                    href: config.header.menu.contribute.href
                 },
                 text: t("header.navigation support request")
             });

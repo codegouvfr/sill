@@ -22,7 +22,7 @@
             },
             "contribute": {
                 "enabled": true,
-                "href": "mailto:contact-logiciels-catalogue-esr@groupes.renater.fr?subject=Contact"
+                "href": "mailto:floss@numerique.gouv.fr?subject=Demande d'accompagnement"
             }
         }
     },
