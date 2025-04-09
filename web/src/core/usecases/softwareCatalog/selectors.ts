@@ -864,7 +864,8 @@ function apiSoftwareToInternalSoftware(params: {
         similarSoftwares,
         keywords,
         programmingLanguages,
-        referencePublications
+        referencePublications,
+        authors
     } = apiSoftware;
 
     assert<
@@ -902,6 +903,16 @@ function apiSoftwareToInternalSoftware(params: {
                 " (" +
                 [
                     ...keywords,
+                    ...applicationCategories,
+                    softwareDescription,
+                    ...authors.map(author => author.name),
+                    ...authors.map(author => {
+                        if (author["@type"] === "Organization") {
+                            return author.parentOrganizations?.map(orga => orga.name);
+                        }
+
+                        return author.affiliations?.map(orga => orga.name);
+                    }),
                     ...similarSoftwares
                         .map(similarSoftware =>
                             similarSoftware.isInSill
