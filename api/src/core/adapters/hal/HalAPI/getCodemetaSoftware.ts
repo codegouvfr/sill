@@ -2,7 +2,7 @@ import { HAL } from "./types/HAL";
 
 export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.SoftwareApplication | undefined> {
     const res = await fetch(`${url}/codemeta`, {
-        signal: AbortSignal.timeout(10000)
+        signal: AbortSignal.timeout(60000)
     }).catch(err => {
         console.error(url, err);
     });
@@ -12,7 +12,7 @@ export async function fetchCodeMetaSoftwareByURL(url: string): Promise<HAL.Softw
     }
 
     if (res.status === 429) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         return fetchCodeMetaSoftwareByURL(url);
     }
 
