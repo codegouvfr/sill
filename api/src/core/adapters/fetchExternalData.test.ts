@@ -373,6 +373,11 @@ describe("fetches software extra data (from different providers)", () => {
                             cnllUrl: "https://annuaire.cnll.fr/societes/813965662"
                         },
                         {
+                            "cdlUrl": "https://comptoir-du-libre.org/fr/users/2225",
+                            "name": "Boscop",
+                            "website": "https://www.boscop.fr"
+                        },
+                        {
                             name: "INNO3",
                             siren: "538420753",
                             cnllUrl: "https://annuaire.cnll.fr/societes/538420753"
@@ -398,11 +403,6 @@ describe("fetches software extra data (from different providers)", () => {
                             website: ""
                         },
                         {
-                            name: "Empreinte Digitale SCOP SA",
-                            cdlUrl: "https://comptoir-du-libre.org/fr/users/2225",
-                            website: "https://www.empreintedigitale.fr"
-                        },
-                        {
                             name: "APITUX",
                             siren: "452887441",
                             cnllUrl: "https://annuaire.cnll.fr/societes/452887441"
@@ -423,14 +423,9 @@ describe("fetches software extra data (from different providers)", () => {
                             website: "Https://www.cigall.fr"
                         },
                         {
-                            name: "ALTER WAY",
-                            siren: "490932308",
-                            cnllUrl: "https://annuaire.cnll.fr/societes/490932308"
-                        },
-                        {
                             name: "Azure Informatique",
                             cdlUrl: "https://comptoir-du-libre.org/fr/users/3962",
-                            website: "https://www.azure-informatique.fr"
+                            website: ""
                         },
                         {
                             name: "Your Own Net",
