@@ -277,7 +277,7 @@
         "softwareType-stack": "Stack",
         "softwareType-cloud": "Application cloud",
         "supportedOS": "Système d'exploitation supporté",
-        "repoMetadata": "Meta données de la forge logicielle",
+        "repoMetadata": "Metadonnées de la forge logicielle",
         "repoLastCommit": "Denrier commit",
         "repoLastClosedIssuePullRequest": "Dernier demande de merge",
         "repoLastClosedIssue": "Dernière ticket fermé"

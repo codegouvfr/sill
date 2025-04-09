@@ -274,7 +274,7 @@
         "softwareType-stack": "Stack",
         "softwareType-cloud": "Cloud Hosted App",
         "supportedOS": "Supported OS",
-        "repoMetadata": "Medata from repository",
+        "repoMetadata": "Metadata from repository",
         "repoLastCommit": "Last commit",
         "repoLastClosedIssuePullRequest": "Last merged request",
         "repoLastClosedIssue": "Last closed issue"
