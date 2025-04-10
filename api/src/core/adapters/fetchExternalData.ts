@@ -152,7 +152,9 @@ export type FetchAndSaveExternalDataForAllSoftwares = ReturnType<typeof makeFetc
 export const makeFetchAndSaveExternalDataForAllSoftwares = (deps: FetchAndSaveSoftwareExtraDataDependencies) => {
     const fetchOtherExternalData = makeFetchAndSaveSoftwareExtraData(deps);
     return async () => {
-        const softwares = await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+        const softwares = (await deps.dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true })).filter(
+            soft => !soft.softwareName.includes("airGRteaching")
+        );
 
         console.info(`About to update ${softwares.length} softwares`);
 
