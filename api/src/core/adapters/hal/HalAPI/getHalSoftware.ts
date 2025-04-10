@@ -26,7 +26,8 @@ const halSoftwareFieldsToReturn: (keyof HAL.API.Software)[] = [
     "softProgrammingLanguage_s",
     "softVersion_s",
     "authIdForm_i",
-    "domainAllCode_s"
+    "domainAllCode_s",
+    "label_xml"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
