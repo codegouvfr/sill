@@ -1,4 +1,6 @@
 import memoize from "memoizee";
+import { JSDOM } from "jsdom";
+
 import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { halAPIGateway } from "./HalAPI";
 import { SILL } from "../../../types/SILL";
@@ -55,6 +57,21 @@ const parseScolarId = (scholarId: string): HAL.ArticleIdentifierOrigin => {
     return "hal";
 };
 
+const resolveStructId = (parsedXMLLabel: JSDOM, structAcronym: string) => {
+    const orgs = parsedXMLLabel.window.document.getElementsByTagName("org");
+
+    const org = Array.from(orgs).filter((org: Element) => {
+        const orgNames = org.getElementsByTagName("orgName");
+        const acronymNode = Array.from(orgNames).filter((node: Element) => {
+            return node.getAttribute("type") === "acronym";
+        });
+
+        return acronymNode[0]?.textContent === structAcronym;
+    });
+
+    return Number(org[0].getAttribute("xml:id")?.split("-")[1]);
+};
+
 const HALSource: SILL.WebSite = {
     "@type": "Website" as const,
     name: "HAL instance",
@@ -99,6 +116,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             throw Error(`No codemeta found for doc : ${halDocId}`);
         }
 
+        const labelXmlDoc = new JSDOM(halRawSoftware.label_xml, { contentType: "application/xml" });
+
         const authors = await Promise.all(
             codemetaSoftware.author.map(async role => {
                 const author = role.author;
@@ -117,7 +136,10 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         affiliation
                             .filter(affilatiedStructure => affilatiedStructure.name)
                             .map(async affilatiedStructure => {
-                                const structure = await halAPIGateway.structure.getByAcronym(affilatiedStructure?.name);
+                                const structure = await halAPIGateway.structure.getById(
+                                    resolveStructId(labelXmlDoc, affilatiedStructure?.name)
+                                );
+
                                 if (!structure) {
                                     throw new Error(`Structure not found : name = ${affilatiedStructure?.name}`);
                                 }

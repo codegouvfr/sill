@@ -29,7 +29,8 @@ const halSoftwareFieldsToReturn: (keyof HAL.API.Software)[] = [
     "relatedData_s",
     "relatedPublication_s",
     "relatedSoftware_s",
-    "domainAllCode_s"
+    "domainAllCode_s",
+    "label_xml"
 ];
 
 export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");

@@ -95,6 +95,7 @@ export namespace HAL {
             relatedData_s?: string[];
             relatedPublication_s?: string[];
             relatedSoftware_s?: string[];
+            label_xml: string;
 
             // The following is the complete list of fields that could be returned by the HAL API
 
@@ -218,7 +219,6 @@ export namespace HAL {
             // fileType_s: string[];
             // _version_: bigint;
             // dateLastIndexed_tdate: string;
-            // label_xml: string;
             // softDevelopmentStatus_s: string[];
             // softRuntimePlatform_s: string[];
         };
