@@ -278,9 +278,9 @@
         "softwareType-cloud": "Application cloud",
         "supportedOS": "Système d'exploitation supporté",
         "repoMetadata": "Metadonnées de la forge logicielle",
-        "repoLastCommit": "Denrier commit",
-        "repoLastClosedIssuePullRequest": "Dernier demande de merge",
-        "repoLastClosedIssue": "Dernière ticket fermé"
+        "repoLastCommit": "Dernier commit",
+        "repoLastClosedIssuePullRequest": "Dernière demande de merge",
+        "repoLastClosedIssue": "Dernier ticket fermé"
     },
     "referencedInstancesTab": {
         "publicInstanceCount": "{{instanceCount}} $t(referencedInstancesTab.instance, {\"count\": {{instanceCount}} }) web $t(referencedInstancesTab.maintain, {\"count\": {{instanceCount}} }) par {{organizationCount}} $t(referencedInstancesTab.organization, {\"count\": {{organizationCount}} }) $t(referencedInstancesTab.public, {\"count\": {{organizationCount}} }",
