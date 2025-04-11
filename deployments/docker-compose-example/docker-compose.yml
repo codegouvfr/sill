@@ -1,14 +1,43 @@
-version: "3.8"
 services:
+  postgres:
+    image: postgres:16
+    shm_size: 256m
+    environment:
+      POSTGRES_LOG_STATEMENTS: all
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg}
+    volumes:
+      - ./docker-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   api:
+    depends_on:
+      postgres:
+        condition: service_healthy
     platform: linux/amd64
-    image: codegouvfr/sill-api:1.43.6
+    image: codegouvfr/sill-api:1.43.20
     env_file: .env
     restart: unless-stopped
 
+  update:
+    depends_on:
+      - api
+      - postgres
+    image: codegouvfr/sill-api:1.43.20
+    env_file: .env
+    restart: always
+    # runs every 4 hours (240 minutes)
+    command: yarn update-then-wait 1
+
   web:
     platform: linux/amd64
-    image: codegouvfr/sill-web:1.43.6
+    image: codegouvfr/sill-web:1.43.20
     restart: unless-stopped
 
   nginx:
@@ -18,6 +47,6 @@ services:
     volumes:
       - ./nginx/:/etc/nginx/conf.d/
     depends_on:
-      - api
       - web
+      - api
     restart: unless-stopped
