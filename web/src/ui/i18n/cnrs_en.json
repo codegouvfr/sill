@@ -1,9 +1,9 @@
 {
     "common": {
-        "appAccronym": "Catalog of academic research software"
+        "appAccronym": "Catalog of academic research free software"
     },
     "app": {
-        "title": "Catalog of academic research software"
+        "title": "Catalog of academic research free software"
     },
     "softwareFormStep2": {
         "external id": "HAL item",
@@ -11,7 +11,7 @@
     },
     "home": {
         "title": "Listing of free software",
-        "subTitle": "developped by French universities and French National Centre for Scientific Research",
+        "subTitle": "developped by French universities and French national research organizations",
         "helpUs": "Help us to enhance the research software list !",
         "theSillInAFewWordsParagraph": "<p>Software has become essential in all scientific research fields, serving as both a tool for research, a product of research, and a subject of research.</p><p>A major objective of the <a1>Software and Source Code Committee</a1> is to highlight these productions and their significance to research.</p><p>This catalog is also part of the broader goals of the <a2>French National Plan for Open Science</a2>.</p>",
         "addSoftwareOrServiceTitle": "Add Software / Contribute",
@@ -26,8 +26,8 @@
     },
     "header": {
         "siteTitle": "Ministère<br />chargé<br />de l'enseignement <br />supérieur <br />et de la recherche<br />",
-        "home title": "Home - Catalog of academic research software",
-        "title": "Catalog of academic research software",
+        "home title": "Home - Catalog of academic research free software",
+        "title": "Catalog of academic research free software",
         "navigation welcome": "Welcome on the catalog",
         "navigation support request": "Contact us !"
     },

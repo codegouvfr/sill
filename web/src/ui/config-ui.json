@@ -28,7 +28,7 @@
                 "enabled": true
             },
             "register": {
-                "enabled": true
+                "enabled": false
             }
         }
     },

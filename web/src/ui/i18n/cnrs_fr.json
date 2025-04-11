@@ -1,9 +1,9 @@
 {
     "common": {
-        "appAccronym": "Catalogue des logiciels de la recherche académique"
+        "appAccronym": "Catalogue des logiciels libres de la recherche académique"
     },
     "app": {
-        "title": "Catalogue des logiciels de la recherche académique"
+        "title": "Catalogue des logiciels libres de la recherche académique"
     },
     "softwareFormStep2": {
         "external id": "Fiche HAL",
@@ -26,8 +26,8 @@
     },
     "header": {
         "siteTitle": "Ministère<br/>chargé<br />de l'enseignement <br />supérieur <br />et de la recherche<br />",
-        "home title": "Accueil - Catalogue des logiciels de la recherche académique",
-        "title": "Catalogue des logiciels de la recherche académique",
+        "home title": "Accueil - Catalogue des logiciels libres de la recherche académique",
+        "title": "Catalogue des logiciels libres de la recherche académique",
         "navigation welcome": "Bienvenue sur le catalogue",
         "navigation support request": "Contact !"
     },
