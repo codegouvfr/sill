@@ -184,7 +184,7 @@
         "mySoftware": "Mes logiciels"
     },
     "softwareCatalogSearch": {
-        "placeholder": "Rechercher un logiciel (par nom, description, auteurs et mots clés)",
+        "placeholder": "Rechercher un logiciel (par nom, description, auteurs ou mots clés)",
         "filtersButton": "Filtres",
         "organizationLabel": "Organisation",
         "categoriesLabel": "Catégories",

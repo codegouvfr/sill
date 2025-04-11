@@ -182,7 +182,7 @@
         "mySoftware": "My software"
     },
     "softwareCatalogSearch": {
-        "placeholder": "Search a software (by name, description, authors and keywords)",
+        "placeholder": "Search for software (by name, description, authors or keywords)",
         "filtersButton": "Filters",
         "organizationLabel": "Organization",
         "categoriesLabel": "Categories",
@@ -213,7 +213,7 @@
         "tab title overview": "Overview",
         "tab title instance": "Referenced instance {{instanceCount}}",
         "tab service providers": "Service providers {{serviceProvidersCount}}",
-        "tab title alike software": "Alike or equivalent proprietary software {{alikeSoftwareCount}}",
+        "tab title alike software": "Alike or equivalent proprietary software packages {{alikeSoftwareCount}}",
         "list of service providers": "List of service providers",
         "prerogatives": "Prerogatives",
         "last version": "Last version",
