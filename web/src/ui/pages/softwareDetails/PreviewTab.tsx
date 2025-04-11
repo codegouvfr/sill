@@ -2,13 +2,13 @@ import { useLang } from "ui/i18n";
 import { Trans, useTranslation } from "react-i18next";
 import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
-import { shortEndMonthDate, monthDate } from "ui/datetimeUtils";
+import { shortEndMonthDate, monthDate, useFormattedDate } from "ui/datetimeUtils";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
 import config from "../../config-ui.json";
-import { SILL, SoftwareType } from "api/dist/src/lib/ApiTypes";
+import type { ApiTypes } from "api";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
 
@@ -39,9 +39,10 @@ export type Props = {
     programmingLanguages: string[];
     keywords?: string[];
     applicationCategories: string[];
-    softwareType: SoftwareType;
-    identifiers: SILL.Identification[];
+    softwareType: ApiTypes.SoftwareType;
+    identifiers: ApiTypes.SILL.Identification[];
     officialWebsiteUrl?: string;
+    repoMetadata?: ApiTypes.SILL.RepoMetadata;
 };
 export const PreviewTab = (props: Props) => {
     const {
@@ -66,7 +67,8 @@ export const PreviewTab = (props: Props) => {
         applicationCategories,
         softwareType,
         identifiers,
-        officialWebsiteUrl
+        officialWebsiteUrl,
+        repoMetadata
     } = props;
 
     const { classes, cx } = useStyles();
@@ -397,6 +399,57 @@ export const PreviewTab = (props: Props) => {
                                         />
                                     ))}
                             </>
+                        )}
+                    </div>
+                )}
+                {config.softwareDetails.repoMetadata.enabled && repoMetadata && (
+                    <div className={classes.section}>
+                        <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
+                            {t("previewTab.repoMetadata")}
+                        </p>
+                        {repoMetadata?.healthCheck?.lastClosedIssue && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastClosedIssue")} :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck.lastClosedIssue,
+                                        showTime: false,
+                                        doAlwaysShowYear: true
+                                    })}
+                                </span>
+                            </p>
+                        )}
+                        {repoMetadata?.healthCheck?.lastClosedIssuePullRequest && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastClosedIssuePullRequest")}{" "}
+                                    :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck
+                                            .lastClosedIssuePullRequest,
+                                        showTime: false,
+                                        doAlwaysShowYear: true
+                                    })}
+                                </span>
+                            </p>
+                        )}
+                        {repoMetadata?.healthCheck?.lastCommit && (
+                            <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
+                                <span className={classes.labelDetail}>
+                                    {t("previewTab.repoLastCommit")} :{" "}
+                                </span>
+                                <span>
+                                    {useFormattedDate({
+                                        time: repoMetadata.healthCheck.lastCommit,
+                                        showTime: false,
+                                        doAlwaysShowYear: true
+                                    })}
+                                </span>
+                            </p>
                         )}
                     </div>
                 )}
