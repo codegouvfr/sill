@@ -4,6 +4,8 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { tss } from "tss-react";
 import { routes } from "ui/routes";
 
+import config from "../../config-ui.json";
+
 type Props = {
     id?: string;
     isOnPageMyAccount: boolean;
@@ -29,26 +31,31 @@ export function AuthButtons(props: Props) {
     if (!userAuthenticationApi.isUserLoggedIn) {
         return (
             <>
-                <HeaderQuickAccessItem
-                    id={`login-${id}`}
-                    quickAccessItem={{
-                        iconId: "fr-icon-lock-line",
-                        buttonProps: {
-                            onClick: () => userAuthenticationApi.login()
-                        },
-                        text: t("authButtons.login")
-                    }}
-                />
-                <HeaderQuickAccessItem
-                    id={`register-${id}`}
-                    quickAccessItem={{
-                        iconId: "ri-id-card-line",
-                        buttonProps: {
-                            onClick: () => userAuthenticationApi.register()
-                        },
-                        text: t("authButtons.register")
-                    }}
-                />
+                {config.header.menu.login.enabled && (
+                    <HeaderQuickAccessItem
+                        id={`login-${id}`}
+                        quickAccessItem={{
+                            iconId: "fr-icon-lock-line",
+                            buttonProps: {
+                                onClick: () => userAuthenticationApi.login()
+                            },
+                            text: t("authButtons.login")
+                        }}
+                    />
+                )}
+
+                {config.header.menu.register.enabled && (
+                    <HeaderQuickAccessItem
+                        id={`register-${id}`}
+                        quickAccessItem={{
+                            iconId: "ri-id-card-line",
+                            buttonProps: {
+                                onClick: () => userAuthenticationApi.register()
+                            },
+                            text: t("authButtons.register")
+                        }}
+                    />
+                )}
             </>
         );
     }

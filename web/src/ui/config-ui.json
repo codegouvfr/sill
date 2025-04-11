@@ -23,6 +23,12 @@
             "contribute": {
                 "enabled": true,
                 "href": "mailto:contact-logiciels-catalogue-esr@groupes.renater.fr?subject=Contact"
+            },
+            "login": {
+                "enabled": true
+            },
+            "register": {
+                "enabled": true
             }
         }
     },
