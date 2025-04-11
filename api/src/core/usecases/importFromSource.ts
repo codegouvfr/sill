@@ -17,32 +17,32 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
                   about: "This is a bot user created to import data."
               });
 
-        const softwares = await halAPIGateway.software.getAll({ SWHFilter: true });
+        const rawHALSoftware = await halAPIGateway.software.getAll({ SWHFilter: true });
         const dbSoftwares = await dbApi.software.getAll();
         const dbSoftwaresNames = dbSoftwares.map(software => {
             return software.softwareName;
         });
 
-        return softwares.map(async software => {
-            const index = dbSoftwaresNames.indexOf(software.title_s[0]);
+        return rawHALSoftware.map(async rawHALSoftwareItem => {
+            const index = dbSoftwaresNames.indexOf(rawHALSoftwareItem.title_s[0]);
 
             if (index != -1) {
-                if (dbSoftwares[index].externalId === software.docid) {
+                if (dbSoftwares[index].externalId === rawHALSoftwareItem.docid) {
                     return dbSoftwares[index].softwareId;
                 }
 
                 // Not equal -> new HAL notice version, need to update
-                const newSoft = await halRawSoftwareToSoftwareForm(software);
+                const newHALSoftwareForm = await halRawSoftwareToSoftwareForm(rawHALSoftwareItem);
                 await dbApi.software.update({
                     softwareSillId: dbSoftwares[index].softwareId,
-                    formData: newSoft,
+                    formData: newHALSoftwareForm,
                     agentId: agentId
                 });
 
                 return dbSoftwares[index].softwareId;
             } else {
-                console.info("Importing HAL : ", software.docid);
-                const newSoft = await halRawSoftwareToSoftwareForm(software);
+                console.info("Importing HAL : ", rawHALSoftwareItem.docid);
+                const newSoft = await halRawSoftwareToSoftwareForm(rawHALSoftwareItem);
                 return dbApi.software.create({ formData: newSoft, externalDataOrigin: "HAL", agentId: agentId });
             }
         });
