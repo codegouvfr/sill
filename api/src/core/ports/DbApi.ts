@@ -38,7 +38,7 @@ export namespace Db {
         //Example https://comptoir-du-libre.org/en/softwares/461 -> 461
         /* cspell: disable-next-line */
         comptoirDuLibreId: number | undefined;
-        //// https://spdxexternalDataOrigin.org/licenses/
+        //// https://spdx.org/licenses/:
         //// https://www.data.gouv.fr/fr/pages/legal/licences/
         license: string;
         softwareType: SoftwareType;
