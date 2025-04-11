@@ -177,7 +177,7 @@ export default function Home(props: Props) {
                 className={cx(fr.cx("fr-container"), classes.section)}
             />
 
-            {config?.home?.quickAccess?.enabled && (
+            {config?.home?.searchBar?.enabled && (
                 <section className={cx(fr.cx("fr-container"), classes.section)}>
                     <Grid
                         container
