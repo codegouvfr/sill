@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEventHandler, useState } from "react";
 import { tss } from "tss-react";
 import { keyframes } from "tss-react";
 import { assert } from "tsafe/assert";
@@ -8,6 +8,7 @@ import { fr } from "@codegouvfr/react-dsfr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import Tile from "@codegouvfr/react-dsfr/Tile";
 import Card from "@codegouvfr/react-dsfr/Card";
+import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
 import illustration_sill from "ui/assets/illustration_sill.svg";
 import { useCoreState } from "core";
 import type { PageRoute } from "./route";
@@ -18,6 +19,7 @@ import HomepageWaveSvg from "ui/assets/homepage_wave.svg?react";
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
 import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
+
 import { Trans, useTranslation } from "react-i18next";
 import config from "../../../ui/config-ui.json";
 import { Grid } from "@mui/material";
@@ -36,6 +38,15 @@ export default function Home(props: Props) {
     const { t } = useTranslation();
 
     const stats = useCoreState("generalStats", "main");
+
+    const [search, setSearch] = useState<string>("");
+    const [linkSearch, setLinkSearch] = useState<string>("");
+
+    const updateSearchLink = (searchEvent: React.ChangeEvent<HTMLInputElement>) => {
+        const value = searchEvent.target.value;
+        setSearch(value);
+        setLinkSearch(`/list?search=${value}&sort=best_match`);
+    };
 
     type AvailableStat =
         | "softwareCount"
@@ -137,9 +148,90 @@ export default function Home(props: Props) {
                 </section>
             )}
 
+            {config?.home?.quickAccess?.enabled && (
+                <section
+                    className={cx(classes.softwareSelectionBackground, classes.section)}
+                >
+                    <div className={fr.cx("fr-container")}>
+                        <Grid
+                            container
+                            direction="row"
+                            sx={{
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <Button
+                                size="large"
+                                priority="secondary"
+                                linkProps={routes.softwareCatalog().link}
+                            >
+                                {t("home.accessCatalog")}
+                            </Button>
+                        </Grid>
+                    </div>
+                </section>
+            )}
+
             <WhatIsTheSillSection
                 className={cx(fr.cx("fr-container"), classes.section)}
             />
+
+            {config?.home?.quickAccess?.enabled && (
+                <section className={cx(fr.cx("fr-container"), classes.section)}>
+                    <Grid
+                        container
+                        direction="row"
+                        columnSpacing={1}
+                        sx={{
+                            justifyContent: "center",
+                            alignItems: "center",
+                            alignContent: "stretch"
+                        }}
+                    >
+                        <Grid item xs={8}>
+                            <SearchBar
+                                className={classes.searchBar}
+                                label={t("softwareCatalogSearch.placeholder")}
+                                renderInput={({ className, id, placeholder, type }) => {
+                                    const [inputElement, setInputElement] =
+                                        useState<HTMLInputElement | null>(null);
+
+                                    return (
+                                        <input
+                                            ref={setInputElement}
+                                            className={className}
+                                            id={id}
+                                            placeholder={placeholder}
+                                            type={type}
+                                            value={search}
+                                            onChange={updateSearchLink}
+                                            onKeyDown={event => {
+                                                if (event.key === "Escape") {
+                                                    assert(inputElement !== null);
+                                                    inputElement.blur();
+                                                }
+                                                if (event.key === "Enter") {
+                                                    window.location.href = linkSearch;
+                                                }
+                                            }}
+                                        />
+                                    );
+                                }}
+                            />
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                linkProps={{
+                                    href: linkSearch
+                                }}
+                            >
+                                {t("app.search")}
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </section>
+            )}
 
             <section className={cx(classes.sillNumbersBackground, classes.section)}>
                 <div className={cx(fr.cx("fr-container"), classes.sillNumbersContainer)}>
@@ -349,6 +441,9 @@ const useStyles = tss.withName({ Home }).create({
     },
     helpUsBackground: {
         backgroundColor: fr.colors.decisions.background.default.grey.hover
+    },
+    searchBar: {
+        flex: 1
     }
 });
 
