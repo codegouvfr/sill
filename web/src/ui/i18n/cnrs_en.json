@@ -1,6 +1,6 @@
 {
     "common": {
-        "appAccronym": "Catalog of academic research free software"
+        "appAccronym": "Catalog of free software "
     },
     "app": {
         "title": "Catalog of academic research free software"
@@ -11,7 +11,7 @@
     },
     "home": {
         "title": "Listing of free software",
-        "subTitle": "developped by French universities and French national research organizations",
+        "subTitle": "developped in academic research.",
         "helpUs": "Help us to enhance the research software list !",
         "theSillInAFewWordsParagraph": "<p>Software has become essential in all scientific research fields, serving as both a tool for research, a product of research, and a subject of research.</p><p>A major objective of the <a1>Software and Source Code Committee</a1> is to highlight these productions and their significance to research.</p><p>This catalog is also part of the broader goals of the <a2>French National Plan for Open Science</a2>.</p>",
         "addSoftwareOrServiceTitle": "Add Software / Contribute",
