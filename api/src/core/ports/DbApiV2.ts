@@ -2,14 +2,13 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import type { Database } from "../adapters/dbApi/kysely/kysely.database";
+import type { Database, DatabaseRow } from "../adapters/dbApi/kysely/kysely.database";
 import type {
     Agent,
     Instance,
     InstanceFormData,
     ServiceProvider,
     Software,
-    SoftwareFormData,
     Source
 } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
@@ -24,18 +23,32 @@ type GetSoftwareFilters = {
     onlyIfUpdatedMoreThan3HoursAgo?: true;
 };
 
+// Other data, intrinsic are managed internally by the database
+export type SoftwareExtrinsicRow = Pick<
+    DatabaseRow.SoftwareRow,
+    | "name"
+    | "description"
+    | "license"
+    | "logoUrl"
+    | "versionMin"
+    | "dereferencing"
+    | "isStillInObservation"
+    | "doRespectRgaa"
+    | "isFromFrenchPublicService"
+    | "isPresentInSupportContract"
+    | "softwareType"
+    | "workshopUrls"
+    | "categories"
+    | "generalInfoMd"
+    | "keywords"
+    | "addedByAgentId"
+>;
+
+export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow & Pick<DatabaseRow.SoftwareRow, "referencedSinceTime">;
+
 export interface SoftwareRepository {
-    create: (
-        params: {
-            formData: SoftwareFormData;
-        } & WithAgentId
-    ) => Promise<number>;
-    update: (
-        params: {
-            softwareSillId: number;
-            formData: SoftwareFormData;
-        } & WithAgentId
-    ) => Promise<void>;
+    create: (params: { software: SoftwareExtrinsicCreation }) => Promise<number>;
+    update: (params: { softwareId: number; software: SoftwareExtrinsicRow }) => Promise<void>;
     updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
     getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
@@ -57,6 +70,13 @@ export interface SoftwareRepository {
 }
 
 export interface SoftwareExternalDataRepository {
+    insert: (params: { softwareId?: number; sourceSlug: string; externalId: string }) => Promise<void>;
+    update: (params: {
+        sourceSlug: string;
+        externalId: string;
+        softwareId?: number;
+        softwareExternalData: SoftwareExternalData;
+    }) => Promise<void>;
     save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>;
 }
 
@@ -128,9 +148,18 @@ export interface SourceRepository {
     getWikidataSource: () => Promise<Source | undefined>;
 }
 
+export interface SimilarSoftwareRepository {
+    insert: (params: {
+        softwareId: number;
+        externalIds: { sourceSlug: string; externalId: string }[];
+    }) => Promise<void>;
+    getById: (params: { softwareId: number }) => Promise<{ sourceSlug: string; externalId: string }[]>;
+}
+
 export type DbApiV2 = {
     source: SourceRepository;
     software: SoftwareRepository;
+    similarSoftware: SimilarSoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
     otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;

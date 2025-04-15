@@ -12,12 +12,14 @@ import { createPgSoftwareExternalDataRepository } from "./createPgSoftwareExtern
 import { createPgSoftwareRepository } from "./createPgSoftwareRepository";
 import { createPgSourceRepository } from "./createPgSourceRepository";
 import { createPgReferentRepository, createPgUserRepository } from "./createPgUserAndReferentRepository";
+import { createPgSimilarSoftwareRepository } from "./createPgSimilarSoftware";
 import { Database } from "./kysely.database";
 
 export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
     return {
         source: createPgSourceRepository(db),
         software: createPgSoftwareRepository(db),
+        similarSoftware: createPgSimilarSoftwareRepository(db),
         softwareExternalData: createPgSoftwareExternalDataRepository(db),
         otherSoftwareExtraData: createPgOtherSoftwareExtraDataRepository(db),
         instance: createPgInstanceRepository(db),

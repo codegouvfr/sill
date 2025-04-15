@@ -26,6 +26,8 @@ import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
 import { User } from "./user";
+import { makeCreateSofware } from "../core/usecases/createSoftware";
+import { makeUpdateSoftware } from "../core/usecases/updateSoftware";
 
 export function createRouter(params: {
     dbApi: DbApiV2;
@@ -167,7 +169,9 @@ export function createRouter(params: {
                         });
                     }
 
-                    await dbApi.software.create({
+                    const createSoftware = makeCreateSofware(dbApi);
+
+                    await createSoftware({
                         formData,
                         agentId
                     });
@@ -199,8 +203,10 @@ export function createRouter(params: {
                         message: "Agent not found"
                     });
 
-                await dbApi.software.update({
-                    softwareSillId,
+                const updateSoftware = makeUpdateSoftware(dbApi);
+
+                await updateSoftware({
+                    softwareId: softwareSillId,
                     formData,
                     agentId: agent.id
                 });

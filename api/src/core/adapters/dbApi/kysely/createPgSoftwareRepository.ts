@@ -23,24 +23,27 @@ const dateParser = (str: string | Date | undefined | null) => {
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
-        create: async ({ formData, agentId }) => {
+        create: async ({ software }) => {
             const {
-                softwareName,
-                softwareDescription,
-                softwareLicense,
-                softwareLogoUrl,
-                softwareMinimalVersion,
-                isPresentInSupportContract,
-                isFromFrenchPublicService,
+                name,
+                description,
+                license,
+                logoUrl,
+                versionMin,
+                referencedSinceTime,
+                isStillInObservation,
+                dereferencing,
                 doRespectRgaa,
-                similarSoftwareExternalDataIds,
+                isFromFrenchPublicService,
+                isPresentInSupportContract,
                 softwareType,
-                externalIdForSource,
-                sourceSlug,
-                comptoirDuLibreId,
-                softwareKeywords,
+                workshopUrls,
+                categories,
+                generalInfoMd,
+                keywords,
+                addedByAgentId,
                 ...rest
-            } = formData;
+            } = software;
 
             assert<Equals<typeof rest, {}>>();
 
@@ -50,51 +53,27 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 const { softwareId } = await trx
                     .insertInto("softwares")
                     .values({
-                        name: softwareName,
-                        description: softwareDescription,
-                        license: softwareLicense,
-                        logoUrl: softwareLogoUrl,
-                        versionMin: softwareMinimalVersion,
-                        referencedSinceTime: now,
+                        name,
+                        description,
+                        license,
+                        logoUrl,
+                        versionMin,
+                        referencedSinceTime,
                         updateTime: now,
-                        dereferencing: undefined,
-                        isStillInObservation: false,
-                        doRespectRgaa: doRespectRgaa,
-                        isFromFrenchPublicService: isFromFrenchPublicService,
-                        isPresentInSupportContract: isPresentInSupportContract,
-                        sourceSlug: sourceSlug,
-                        externalIdForSource: externalIdForSource,
-                        comptoirDuLibreId: comptoirDuLibreId,
+                        dereferencing: JSON.stringify(dereferencing),
+                        isStillInObservation, // Legacy field from SILL imported
+                        doRespectRgaa,
+                        isFromFrenchPublicService,
+                        isPresentInSupportContract,
                         softwareType: JSON.stringify(softwareType),
-                        workshopUrls: JSON.stringify([]),
-                        categories: JSON.stringify([]),
-                        generalInfoMd: undefined,
-                        addedByAgentId: agentId,
-                        keywords: JSON.stringify(softwareKeywords)
+                        workshopUrls: JSON.stringify(workshopUrls), // Legacy field from SILL imported
+                        categories: JSON.stringify(categories), // Legacy field from SILL imported
+                        generalInfoMd, // Legacy field from SILL imported
+                        addedByAgentId,
+                        keywords: JSON.stringify(keywords)
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
-
-                console.log(
-                    `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to insert similars : `,
-                    similarSoftwareExternalDataIds
-                );
-
-                if (similarSoftwareExternalDataIds.length > 0 && sourceSlug) {
-                    await trx
-                        .insertInto("softwares__similar_software_external_datas")
-                        .values(
-                            similarSoftwareExternalDataIds.map(similarExternalId => ({
-                                softwareId,
-                                similarExternalId,
-                                sourceSlug
-                            }))
-                        )
-                        .execute();
-                }
-
-                console.log("all good");
-
                 return softwareId;
             });
         },
@@ -109,24 +88,26 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
         },
-        update: async ({ formData, softwareSillId, agentId }) => {
+        update: async ({ software, softwareId }) => {
             const {
-                softwareName,
-                softwareDescription,
-                softwareLicense,
-                softwareLogoUrl,
-                softwareMinimalVersion,
-                isPresentInSupportContract,
-                isFromFrenchPublicService,
+                name,
+                description,
+                license,
+                logoUrl,
+                versionMin,
+                dereferencing,
+                isStillInObservation,
                 doRespectRgaa,
-                similarSoftwareExternalDataIds,
+                isFromFrenchPublicService,
+                isPresentInSupportContract,
                 softwareType,
-                externalIdForSource,
-                sourceSlug,
-                comptoirDuLibreId,
-                softwareKeywords,
+                workshopUrls,
+                categories,
+                generalInfoMd,
+                keywords,
+                addedByAgentId,
                 ...rest
-            } = formData;
+            } = software;
 
             assert<Equals<typeof rest, {}>>();
 
@@ -134,27 +115,25 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             await db
                 .updateTable("softwares")
                 .set({
-                    name: softwareName,
-                    description: softwareDescription,
-                    license: softwareLicense,
-                    logoUrl: softwareLogoUrl,
-                    versionMin: softwareMinimalVersion || null,
+                    name,
+                    description,
+                    license,
+                    logoUrl,
+                    versionMin,
+                    dereferencing: JSON.stringify(dereferencing),
                     updateTime: now,
                     isStillInObservation: false,
-                    doRespectRgaa: doRespectRgaa,
-                    isFromFrenchPublicService: isFromFrenchPublicService,
-                    isPresentInSupportContract: isPresentInSupportContract,
-                    sourceSlug,
-                    externalIdForSource,
-                    comptoirDuLibreId: comptoirDuLibreId,
+                    doRespectRgaa,
+                    isFromFrenchPublicService,
+                    isPresentInSupportContract,
                     softwareType: JSON.stringify(softwareType),
-                    workshopUrls: JSON.stringify([]),
-                    categories: JSON.stringify([]),
-                    generalInfoMd: undefined,
-                    addedByAgentId: agentId,
-                    keywords: JSON.stringify(softwareKeywords)
+                    workshopUrls: JSON.stringify(workshopUrls),
+                    categories: JSON.stringify(categories),
+                    generalInfoMd: generalInfoMd,
+                    addedByAgentId,
+                    keywords: JSON.stringify(keywords)
                 })
-                .where("id", "=", softwareSillId)
+                .where("id", "=", softwareId)
                 .execute();
         },
         getByName: async (softwareName: string): Promise<Software | undefined> =>

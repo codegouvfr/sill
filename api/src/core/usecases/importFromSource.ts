@@ -6,6 +6,8 @@ import { DbApiV2 } from "../ports/DbApiV2";
 import { halAPIGateway } from "../adapters/hal/HalAPI";
 import { halRawSoftwareToSoftwareForm } from "../adapters/hal/getSoftwareForm";
 import { getWikidataForm } from "../adapters/wikidata/getSoftwareForm";
+import { makeUpdateSoftware } from "./updateSoftware";
+import { makeCreateSofware } from "./createSoftware";
 
 export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Promise<Promise<number | undefined>[]> = (
     dbApi: DbApiV2
@@ -37,8 +39,9 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
 
                 // Not equal -> new HAL notice version, need to update
                 const newHALSoftwareForm = await halRawSoftwareToSoftwareForm(rawHALSoftwareItem);
-                await dbApi.software.update({
-                    softwareSillId: dbSoftwares[index].softwareId,
+                const updateSoftware = makeUpdateSoftware(dbApi);
+                await updateSoftware({
+                    softwareId: dbSoftwares[index].softwareId,
                     formData: newHALSoftwareForm,
                     agentId: agentId
                 });
@@ -47,7 +50,8 @@ export const importFromHALSource: (dbApi: DbApiV2) => (agentEmail: string) => Pr
             } else {
                 console.info("Importing HAL : ", rawHALSoftwareItem.docid);
                 const newSoft = await halRawSoftwareToSoftwareForm(rawHALSoftwareItem);
-                return dbApi.software.create({ formData: newSoft, agentId: agentId });
+                const createSoftware = makeCreateSofware(dbApi);
+                return createSoftware({ formData: newSoft, agentId: agentId });
             }
         });
     };
@@ -84,7 +88,8 @@ export const importFromWikidataSource: (
                 return dbSoftwares[index].softwareId;
             } else {
                 console.log("Importing wikidata : ", softwareId);
-                return dbApi.software.create({ formData: newSoft, agentId: agentId });
+                const createSoftware = makeCreateSofware(dbApi);
+                return createSoftware({ formData: newSoft, agentId: agentId });
             }
         });
     };
