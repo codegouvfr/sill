@@ -12,6 +12,7 @@ import { makeFetchAndSaveSoftwareExtraData } from "./fetchExternalData";
 import { getCnllPrestatairesSill } from "./getCnllPrestatairesSill";
 import { getServiceProviders } from "./getServiceProviders";
 import { getWikidataSoftware } from "./wikidata/getWikidataSoftware";
+import { makeCreateSofware } from "../usecases/createSoftware";
 
 const craSoftwareFormData = {
     softwareType: {
@@ -142,7 +143,8 @@ describe("fetches software extra data (from different providers)", () => {
             isPublic: false
         });
 
-        craSoftwareId = await dbApi.software.create({
+        const makeSoftware = makeCreateSofware(dbApi);
+        craSoftwareId = await makeSoftware({
             formData: craSoftwareFormData,
             agentId
         });
@@ -232,7 +234,8 @@ describe("fetches software extra data (from different providers)", () => {
                     referencePublications: null,
                     identifiers: [],
                     softwareVersion: "5.0.1",
-                    publicationTime: new Date("2022-04-12T00:00:00.000Z")
+                    publicationTime: new Date("2022-04-12T00:00:00.000Z"),
+                    lastDataFetchAt: null
                 },
                 {
                     applicationCategories: null,
@@ -262,7 +265,8 @@ describe("fetches software extra data (from different providers)", () => {
                     referencePublications: null,
                     identifiers: [],
                     softwareVersion: expect.any(String),
-                    publicationTime: expect.any(Date)
+                    publicationTime: expect.any(Date),
+                    lastDataFetchAt: null
                 }
             ]);
 
@@ -326,7 +330,8 @@ describe("fetches software extra data (from different providers)", () => {
                     identifiers: [],
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
-                    publicationTime: new Date("2017-11-08T00:00:00.000Z")
+                    publicationTime: new Date("2017-11-08T00:00:00.000Z"),
+                    lastDataFetchAt: null
                 }
             ]);
 
