@@ -1,4 +1,13 @@
-import { Expression, FunctionModule, RawBuilder, SelectExpression, Simplify, sql } from "kysely";
+import {
+    Expression,
+    FunctionModule,
+    JSONColumnType,
+    RawBuilder,
+    SelectExpression,
+    Simplify,
+    sql,
+    Generated
+} from "kysely";
 
 export const jsonBuildObject = <O extends Record<string, Expression<unknown>>>(
     obj: O
@@ -32,3 +41,17 @@ export const stripNullOrUndefinedValues = <T extends Record<string, unknown>>(
     obj: T
 ): { [K in keyof T]: null extends T[K] ? Exclude<T[K], null> | undefined : T[K] } =>
     Object.fromEntries(Object.entries(obj).filter(([_, value]) => value !== null && value !== undefined)) as any;
+
+// Utility type to convert null to undefined
+type NullToUndefined<T> = T extends null ? undefined : T;
+
+// Utility type to remove JSONColumnType
+type RemoveJSONColumnType<T> = T extends JSONColumnType<infer U> ? U : T;
+
+// Utility type to remove Generated
+type RemoveGeneratedType<T> = T extends Generated<infer U> ? U : T;
+
+// Transform the SoftwaresTable type
+export type TransformRepoToRaw<R> = {
+    [K in keyof R]: RemoveGeneratedType<NullToUndefined<RemoveJSONColumnType<R[K]>>>;
+};
