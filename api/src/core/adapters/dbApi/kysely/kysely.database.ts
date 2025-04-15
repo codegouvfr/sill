@@ -1,6 +1,7 @@
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
 import { Catalogi } from "../../../../types/Catalogi";
+import { TransformRepoToRaw } from "./kysely.utils";
 
 // from https://schema.org/Organization
 type SchemaOrganization = {
@@ -95,7 +96,7 @@ type SoftwareExternalDatasTable = {
     >;
     label: string | JSONColumnType<LocalizedString>;
     description: string | JSONColumnType<LocalizedString>;
-    isLibreSoftware: boolean;
+    isLibreSoftware: boolean | null;
     logoUrl: string | null;
     websiteUrl: string | null;
     sourceUrl: string | null;
@@ -108,6 +109,7 @@ type SoftwareExternalDatasTable = {
     referencePublications: JSONColumnType<Catalogi.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
     identifiers: JSONColumnType<Catalogi.Identification[]> | null;
+    lastDataFetchAt: Date | null;
 };
 
 type SoftwareType =
@@ -147,6 +149,18 @@ type SoftwaresTable = {
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
 };
+
+export namespace DatabaseRow {
+    export type AgentRow = TransformRepoToRaw<AgentsTable>;
+    export type SoftwareReferentRow = TransformRepoToRaw<SoftwareReferentsTable>;
+    export type SoftwareUsertRow = TransformRepoToRaw<SoftwareUsersTable>;
+    export type InstanceRow = TransformRepoToRaw<InstancesTable>;
+    export type SoftwareRow = TransformRepoToRaw<SoftwaresTable>;
+    export type SoftwareExternalDataRow = TransformRepoToRaw<SoftwareExternalDatasTable>;
+    export type SimilarExternalSoftwareExternalDataRow = TransformRepoToRaw<SimilarExternalSoftwareExternalDataTable>;
+    export type CompiledSoftwaresRow = TransformRepoToRaw<CompiledSoftwaresTable>;
+    export type SourceRow = TransformRepoToRaw<SourcesTable>;
+}
 
 // ---------- compiled data ----------
 
