@@ -11,6 +11,7 @@ import { DeclarationFormData, SoftwareFormData, Source } from "../../../usecases
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+import { makeCreateSofware } from "../../../usecases/createSoftware";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
@@ -281,7 +282,9 @@ describe("pgDbApi", () => {
             console.log("------ agent scenario------");
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
-            const softwareId = await dbApi.software.create({
+
+            const makeSoftware = makeCreateSofware(dbApi);
+            const softwareId = await makeSoftware({
                 formData: softwareFormData,
                 agentId
             });
@@ -456,7 +459,8 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await dbApi.software.create({
+        const makeSoftware = makeCreateSofware(dbApi);
+        const softwareId = await makeSoftware({
             formData: softwareFormData,
             agentId
         });
