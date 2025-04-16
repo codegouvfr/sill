@@ -8,6 +8,7 @@ import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
 import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
 import { Source } from "../src/core/usecases/readWriteSillData";
+import { stripNullOrUndefinedValues } from "../src/core/adapters/dbApi/kysely/kysely.utils";
 
 export type Params = {
     pgConfig: { dbUrl: string };
@@ -21,7 +22,12 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 
     const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
 
-    const mainSource = await pgDb.selectFrom("sources").selectAll().orderBy("priority", "desc").executeTakeFirst();
+    const mainSource = await pgDb
+        .selectFrom("sources")
+        .selectAll()
+        .orderBy("priority", "desc")
+        .executeTakeFirst()
+        .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
 
     if (!mainSource) throw new Error("No source found, there should be at least one source");
 
