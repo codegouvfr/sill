@@ -21,7 +21,7 @@ const mainSource = {
     slug: "wikidata",
     priority: 1,
     url: "https://www.wikidata.org",
-    description: null,
+    description: undefined,
     kind: "wikidata"
 } satisfies Source;
 const softwareFormData = createSoftwareFormData({ sourceSlug: mainSource.slug });
