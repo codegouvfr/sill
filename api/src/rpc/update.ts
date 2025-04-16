@@ -3,15 +3,29 @@ import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
-import { updateTool } from "../core/updateTools";
+import { refreshExternalData } from "../core/usecases/refreshExternalData";
+import { createKyselyPgDbApi } from "../core/adapters/dbApi/kysely/createPgDbApi";
+import { DbApiV2 } from "../core/ports/DbApiV2";
 
-export async function startUpdateService(params: {
-    isDevEnvironnement: boolean;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
-    databaseUrl: string;
-}) {
-    const { isDevEnvironnement, externalSoftwareDataOrigin, databaseUrl, ...rest } = params;
+type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
+
+type DbConfig = PgDbConfig;
+
+const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
+    if (dbConfig.dbKind === "kysely") {
+        return {
+            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb)
+        };
+    }
+
+    const shouldNotBeReached: never = dbConfig.dbKind;
+    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+};
+
+export async function startUpdateService(params: { isDevEnvironnement: boolean; databaseUrl: string }) {
+    console.log("Starting fetching of external data on remote sources");
+    console.time("Starting fetching of external data on remote sources: Done");
+    const { isDevEnvironnement, databaseUrl, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -19,13 +33,15 @@ export async function startUpdateService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const result = await updateTool({
-        "dbConfig": {
-            "dbKind": "kysely",
-            "kyselyDb": kyselyDb
-        },
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+    const { dbApi } = getDbApiAndInitializeCache({
+        "dbKind": "kysely",
+        "kyselyDb": kyselyDb
     });
 
-    console.log("Update sucessfull", result);
+    await refreshExternalData({
+        dbApi,
+        skipSince: 180
+    });
+
+    console.timeEnd("Starting fetching of external data on remote sources: Done");
 }
