@@ -109,7 +109,7 @@ type SoftwareExternalDatasTable = {
     referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
     identifiers: JSONColumnType<SILL.Identification[]> | null;
-    lastDataFetchAt: Date | null;
+    lastDataFetchAt: number | null;
 };
 
 type SoftwareType =
