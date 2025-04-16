@@ -1,11 +1,4 @@
-import {
-    Expression,
-    JSONColumnType,
-    RawBuilder,
-    Simplify,
-    sql,
-    Generated
-} from "kysely";
+import { Expression, JSONColumnType, RawBuilder, Simplify, sql, Generated } from "kysely";
 
 export const jsonBuildObject = <O extends Record<string, Expression<unknown>>>(
     obj: O
