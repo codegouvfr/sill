@@ -73,7 +73,18 @@ export interface SoftwareExternalDataRepository {
         softwareId?: number;
         softwareExternalData: SoftwareExternalData;
     }) => Promise<void>;
-    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>;
+    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>; // TODO
+    get: (params: {
+        sourceSlug: string;
+        externalId: string;
+    }) => Promise<DatabaseRow.SoftwareExternalDataRow | undefined>;
+    getBySoftwareIdAndSource: (params: {
+        sourceSlug: string;
+        softwareId: number;
+    }) => Promise<DatabaseRow.SoftwareExternalDataRow | undefined>;
+    getBySoftwareId: (params: { softwareId: number }) => Promise<DatabaseRow.SoftwareExternalDataRow[] | undefined>;
+    getBySource: (params: { sourceSlug: string }) => Promise<DatabaseRow.SoftwareExternalDataRow[] | undefined>;
+    getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
 }
 
 type CnllPrestataire = {
