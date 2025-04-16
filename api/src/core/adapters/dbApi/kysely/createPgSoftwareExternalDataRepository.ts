@@ -5,6 +5,7 @@
 import { Kysely } from "kysely";
 import { SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
 import { Database } from "./kysely.database";
+import { stripNullOrUndefinedValues } from "./kysely.utils";
 
 export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): SoftwareExternalDataRepository => ({
     insert: async params => {
@@ -62,5 +63,47 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .values(pgValues)
             .onConflict(oc => oc.column("externalId").doUpdateSet(pgValues))
             .executeTakeFirst();
+    },
+    get: async ({ sourceSlug, externalId }) => {
+        return db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .where("externalId", "=", externalId)
+            .where("sourceSlug", "=", sourceSlug)
+            .executeTakeFirst()
+            .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
+    },
+    getBySoftwareIdAndSource: async ({ softwareId, sourceSlug }) => {
+        return db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .where("softwareId", "=", softwareId)
+            .where("sourceSlug", "=", sourceSlug)
+            .executeTakeFirst()
+            .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
+    },
+    getBySoftwareId: async ({ softwareId }) => {
+        return db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .where("softwareId", "=", softwareId)
+            .execute()
+            .then(rows => rows.map(row => stripNullOrUndefinedValues(row)));
+    },
+    getIdsBySource: async ({ sourceSlug }) => {
+        return db
+            .selectFrom("software_external_datas")
+            .select("externalId")
+            .where("sourceSlug", "=", sourceSlug)
+            .execute()
+            .then(rows => rows.map(row => row.externalId));
+    },
+    getBySource: async ({ sourceSlug }) => {
+        return db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .where("sourceSlug", "=", sourceSlug)
+            .execute()
+            .then(rows => rows.map(row => stripNullOrUndefinedValues(row)));
     }
 });

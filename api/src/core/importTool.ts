@@ -6,8 +6,7 @@ import { Kysely } from "kysely";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { DbApiV2 } from "./ports/DbApiV2";
-import type { ExternalDataOrigin } from "./ports/GetSoftwareExternalData";
-import { importFromHALSource, importFromWikidataSource } from "./usecases/importFromSource";
+import { importFromSource } from "./usecases/importFromSource";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -15,7 +14,6 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfImportTool = {
     dbConfig: DbConfig;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     botAgentEmail: string | undefined;
     listToImport?: string[];
 };
@@ -32,30 +30,23 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 };
 
 export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
-    const { dbConfig, externalSoftwareDataOrigin, botAgentEmail, listToImport } = params;
+    const { dbConfig, botAgentEmail, listToImport } = params;
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
     if (!botAgentEmail) throw new Error("No bot agent email provided");
-    if (externalSoftwareDataOrigin === "HAL") {
-        console.info(" ------ Feeding database with HAL software started ------");
-        const importHAL = importFromHALSource(dbApi);
-        return importHAL(botAgentEmail).then(promises =>
+
+    // Todo Choose Source
+    const mainSource = await dbApi.source.getMainSource();
+
+    const importService = importFromSource(dbApi);
+
+    console.time(`[Import] Feeding database with software package from ${mainSource.slug}`);
+    return importService({ agentEmail: botAgentEmail, source: mainSource, softwareIdOnSource: listToImport }).then(
+        promises =>
             Promise.all(promises).then(() => {
-                console.info(" ------ Feeding database with HAL software finished ------");
+                console.timeEnd(`[Import] Feeding database with software package from ${mainSource.slug}`);
                 return true;
             })
-        );
-    } else if (externalSoftwareDataOrigin === "wikidata") {
-        console.info(" ------ Feeding database with Wikidata software started ------");
-        const importWikidata = importFromWikidataSource(dbApi);
-        return importWikidata(botAgentEmail, listToImport ?? []).then(promises =>
-            Promise.all(promises).then(() => {
-                console.info(" ------ Feeding database with Wikidata software finished ------");
-                return true;
-            })
-        );
-    } else {
-        return Promise.reject(`${externalSoftwareDataOrigin} not supported`);
-    }
+    );
 }
