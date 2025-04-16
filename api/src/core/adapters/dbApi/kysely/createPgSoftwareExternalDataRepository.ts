@@ -69,6 +69,18 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .executeTakeFirst()
             .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
     },
+    getIds: async ({ skipSince }) => {
+        let request = db.selectFrom("software_external_datas").select(["externalId", "sourceSlug"]);
+
+        if (skipSince) {
+            const dateNum = new Date().valueOf() - skipSince * 1000;
+            request = request.where(eb =>
+                eb.or([eb("lastDataFetchAt", "is", null), eb("lastDataFetchAt", "<", dateNum)])
+            );
+        }
+
+        return request.execute().then(rows => rows.map(row => stripNullOrUndefinedValues(row)));
+    },
     getBySoftwareIdAndSource: async ({ softwareId, sourceSlug }) => {
         return db
             .selectFrom("software_external_datas")
