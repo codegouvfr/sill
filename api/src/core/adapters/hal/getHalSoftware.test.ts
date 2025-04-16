@@ -14,7 +14,7 @@ describe("HAL", () => {
         kind: "HAL",
         url: "https://hal.science",
         priority: 1,
-        description: null
+        description: undefined
     };
     describe("getHalSoftwareExternalData", () => {
         it("gets data from Hal and converts it to ExternalSoftware", async () => {

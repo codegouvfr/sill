@@ -68,7 +68,7 @@ export type Source = {
     kind: SourceKind;
     url: string;
     priority: number;
-    description: LocalizedString | null;
+    description: LocalizedString | undefined;
 };
 
 export namespace Software {

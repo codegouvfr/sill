@@ -20,7 +20,7 @@ const source = {
     slug: "wikidata",
     priority: 1,
     url: "https://www.wikidata.org",
-    description: null,
+    description: undefined,
     kind: "wikidata"
 } satisfies Source;
 const similarExternalId = "external-id-222";
