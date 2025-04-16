@@ -113,7 +113,7 @@ type SoftwareExternalDatasTable = {
     referencePublications: JSONColumnType<Catalogi.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
     identifiers: JSONColumnType<Catalogi.Identification[]> | null;
-    lastDataFetchAt: Date | null;
+    lastDataFetchAt: number | null;
 };
 
 type SoftwareType =
