@@ -7,6 +7,7 @@ import type { GetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./g
 import type { CreateSoftware } from "./createSoftware";
 import type { UpdateSoftware } from "./updateSoftware";
 import { ImportFromSource } from "./importFromSource";
+import { GetPopulatedSoftware } from "./getPopulatedSoftware";
 
 export type UseCases = {
     getSoftwareFormAutoFillDataFromExternalAndOtherSources: GetSoftwareFormAutoFillDataFromExternalAndOtherSources;
@@ -16,4 +17,5 @@ export type UseCases = {
     importFromSource: ImportFromSource;
     createSoftware: CreateSoftware;
     updateSoftware: UpdateSoftware;
+    getPopulateSoftware: GetPopulatedSoftware;
 };
