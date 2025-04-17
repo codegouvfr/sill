@@ -30,6 +30,7 @@ export type UseCasesUsedOnRouter = Pick<
     | "createSoftware"
     | "updateSoftware"
     | "fetchAndSaveExternalDataForOneSoftwarePackage"
+    | "getPopulateSoftware"
 >;
 
 export function createRouter(params: {
@@ -79,7 +80,9 @@ export function createRouter(params: {
         }),
         "getUiConfig": loggedProcedure.query(() => uiConfig),
         "getMainSource": loggedProcedure.query(() => dbApi.source.getMainSource()),
-        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
+        "getSoftwares": loggedProcedure.query(() => {
+            return useCases.getPopulateSoftware();
+        }),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
             .input(
