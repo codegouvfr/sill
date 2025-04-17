@@ -23,6 +23,7 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
     });
 
     const externalDataToUpdate = await dbApi.softwareExternalData.getIds({ skipSince });
+    console.log(`[UC.refreshExternalData] ${externalDataToUpdate.length} software to update`);
 
     for (const { sourceSlug, externalId } of externalDataToUpdate) {
         console.time(`💾[UC.refreshExternalData](${externalId} on ${sourceSlug}) : Done 💾`);
@@ -36,6 +37,7 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
             await dbApi.softwareExternalData.update({
                 sourceSlug: source.slug,
                 externalId: externalId,
+                lastDataFetchAt: new Date().valueOf(),
                 softwareExternalData: externalData
             });
         }
