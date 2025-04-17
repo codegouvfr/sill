@@ -2,9 +2,6 @@ import { Kysely } from "kysely";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
-import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
-import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
-import { getServiceProviders } from "./adapters/getServiceProviders";
 import { wikidataSourceGateway } from "./adapters/wikidata";
 import { halSourceGateway } from "./adapters/hal";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
@@ -12,7 +9,7 @@ import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import { UiConfig, uiConfigSchema } from "./uiConfigSchema";
-import { UseCases } from "./usecases";
+import { UseCasesUsedOnRouter } from "../rpc/router";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 import rawUiConfig from "../customization/ui-config.json";
@@ -47,7 +44,7 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
-): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases; uiConfig: UiConfig }> {
+): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCasesUsedOnRouter; uiConfig: UiConfig }> {
     const { dbConfig, externalSoftwareDataOrigin } = params;
     const uiConfig = uiConfigSchema.parse(rawUiConfig);
 
@@ -62,19 +59,9 @@ export async function bootstrapCore(
         getSoftwareExternalData
     };
 
-    const wikidataSource = await dbApi.source.getWikidataSource();
-
-    const useCases: UseCases = {
+    const useCases: UseCasesUsedOnRouter = {
         getSoftwareFormAutoFillDataFromExternalAndOtherSources:
             makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
-        fetchAndSaveExternalDataForAllSoftwares: await makeFetchAndSaveExternalDataForAllSoftwares({
-            getSoftwareExternalData,
-            getCnllPrestatairesSill,
-            comptoirDuLibreApi,
-            getServiceProviders,
-            dbApi,
-            wikidataSource
-        }),
         getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
 
