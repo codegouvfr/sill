@@ -19,6 +19,10 @@ const dateParser = (str: string | Date | undefined | null) => {
 export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareRepository => {
     const getBySoftwareId = makeGetSoftwareById(db);
     return {
+        getAllO: async () => {
+            const rows = await db.selectFrom("softwares").selectAll().execute();
+            return rows.map(row => stripNullOrUndefinedValues(row));
+        },
         create: async ({ software }) => {
             const {
                 name,
@@ -190,12 +194,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
         getById: getBySoftwareId,
         getSoftwareIdByExternalIdAndSlug: async ({ externalId, sourceSlug }) => {
             const result = await db
-                .selectFrom("softwares")
-                .select("softwares.id")
+                .selectFrom("software_external_datas")
+                .select("softwareId")
                 .where("sourceSlug", "=", sourceSlug)
-                .where("externalIdForSource", "=", externalId)
+                .where("externalId", "=", externalId)
                 .executeTakeFirst();
-            return result?.id;
+            return result?.softwareId ?? undefined;
         },
         getByIdWithLinkedSoftwaresExternalIds: async softwareId => {
             const software = await getBySoftwareId(softwareId);
@@ -283,6 +287,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     );
                 });
         },
+        // TO Remove ?
         getAllSillSoftwareExternalIds: async sourceSlug =>
             db
                 .selectFrom("softwares")
