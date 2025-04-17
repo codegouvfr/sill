@@ -12,6 +12,7 @@ import rawUiConfig from "../customization/ui-config.json";
 import { makeCreateSofware } from "./usecases/createSoftware";
 import { makeUpdateSoftware } from "./usecases/updateSoftware";
 import { makeRefreshExternalDataForSoftware } from "./usecases/refreshExternalData";
+import { makeGetPopulatedSoftware } from "./usecases/getPopulatedSoftware";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -58,7 +59,8 @@ export async function bootstrapCore(
         getAgent: makeGetAgent({ agentRepository: dbApi.agent }),
         fetchAndSaveExternalDataForOneSoftwarePackage: makeRefreshExternalDataForSoftware({ dbApi }),
         createSoftware: makeCreateSofware(dbApi),
-        updateSoftware: makeUpdateSoftware(dbApi)
+        updateSoftware: makeUpdateSoftware(dbApi),
+        getPopulateSoftware: makeGetPopulatedSoftware(dbApi)
     };
 
     return { dbApi, context, useCases, uiConfig };

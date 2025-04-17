@@ -56,6 +56,7 @@ export interface SoftwareRepository {
         externalId: string;
         sourceSlug: string;
     }) => Promise<number | undefined>;
+    getAllO: () => Promise<DatabaseDataType.SoftwareRow[]>;
     // Save = insert or update
     saveSimilarSoftwares: (
         params: {
@@ -81,6 +82,9 @@ export interface SoftwareRepository {
     getAllSillSoftwareExternalIds: (sourceSlug: string) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
 }
+
+export type PopulatedExternalData = DatabaseDataType.SoftwareExternalDataRow &
+    Pick<DatabaseDataType.SourceRow, "url" | "kind" | "slug" | "priority">;
 
 export interface SoftwareExternalDataRepository {
     saveIds: (params: { sourceSlug: string; externalId: string; softwareId?: number }[]) => Promise<void>;
@@ -109,6 +113,7 @@ export interface SoftwareExternalDataRepository {
     getBySoftwareId: (params: {
         softwareId: number;
     }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    getPopulatedBySoftwareId: (params: { softwareId: number }) => Promise<PopulatedExternalData[] | undefined>;
     getBySource: (params: { sourceSlug: string }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
     getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
