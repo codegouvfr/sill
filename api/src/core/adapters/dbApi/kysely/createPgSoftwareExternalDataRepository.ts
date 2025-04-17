@@ -24,7 +24,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .executeTakeFirst();
     },
     update: async params => {
-        const { externalId, sourceSlug, softwareExternalData, softwareId } = params;
+        const { externalId, sourceSlug, softwareExternalData, softwareId, lastDataFetchAt } = params;
 
         await db
             .updateTable("software_external_datas")
@@ -33,6 +33,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .set({
                 ...softwareExternalData,
                 softwareId,
+                lastDataFetchAt,
                 developers: JSON.stringify(softwareExternalData.developers),
                 label: JSON.stringify(softwareExternalData.label),
                 keywords: JSON.stringify(softwareExternalData.keywords),
