@@ -113,6 +113,16 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .execute()
             .then(rows => rows.map(cleanDataForExternalData));
     },
+    getPopulatedBySoftwareId: async ({ softwareId }) => {
+        const result = await db
+            .selectFrom("software_external_datas as ext")
+            .selectAll("ext")
+            .innerJoin("sources as s", "s.slug", "ext.sourceSlug")
+            .select(["s.kind", "s.priority", "s.url", "s.slug"])
+            .where("softwareId", "=", softwareId)
+            .execute();
+        return result.map(row => transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"])));
+    },
     getIdsBySource: async ({ sourceSlug }) => {
         return db
             .selectFrom("software_external_datas")
