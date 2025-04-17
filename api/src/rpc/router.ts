@@ -34,9 +34,14 @@ import { User } from "./user";
 import { makeCreateSofware } from "../core/usecases/createSoftware";
 import { makeUpdateSoftware } from "../core/usecases/updateSoftware";
 
+export type UseCasesUsedOnRouter = Pick<
+    UseCases,
+    "getAgent" | "getSoftwareFormAutoFillDataFromExternalAndOtherSources"
+>;
+
 export function createRouter(params: {
     dbApi: DbApiV2;
-    useCases: UseCases;
+    useCases: UseCasesUsedOnRouter;
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
     redirectUrl: string | undefined;
