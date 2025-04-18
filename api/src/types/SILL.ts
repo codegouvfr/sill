@@ -61,4 +61,14 @@ export namespace SILL {
         url?: string;
         affiliations?: Organization[];
     };
+
+    // Created from nowhere
+    export type RepoMetadata = {
+        healthCheck?: {
+            score?: number;
+            lastCommit?: number;
+            lastClosedIssue?: number;
+            lastClosedIssuePullRequest?: number;
+        };
+    };
 }
