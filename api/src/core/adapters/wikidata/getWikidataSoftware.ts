@@ -25,6 +25,7 @@ import {
 } from "../../../tools/WikidataEntity";
 import { SILL } from "../../../types/SILL";
 import { Source } from "../../usecases/readWriteSillData";
+import { SchemaIdentifier, SchemaOrganization, SchemaPerson } from "../dbApi/kysely/kysely.database";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
@@ -119,17 +120,13 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
         const framaLibreId = getClaimDataValue<"string">("P4107")[0];
 
-        const makeFramaIndentifer = (framaLibreId: string): SILL.Identification => {
+        const makeFramaIndentifer = (framaLibreId: string): SchemaIdentifier => {
             return {
-                url: new URL(framaLibreId),
                 "@type": "PropertyValue",
+                name: "ID of FramaLibre",
                 value: framaLibreId,
-                subjectOf: {
-                    url: new URL("https://framalibre.org"),
-                    name: "FramaLibre Official instance",
-                    "@type": "Website",
-                    additionalType: "FramaLibre"
-                }
+                url: new URL(framaLibreId),
+                subjectOf: SILL.framaLibreSource
             };
         };
 
@@ -219,7 +216,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P170"),
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
-                ].map(async ({ id }): Promise<SILL.Person | SILL.Organization | undefined> => {
+                ].map(async ({ id }): Promise<SchemaPerson | SchemaOrganization | undefined> => {
                     console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {
@@ -254,11 +251,36 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                         return undefined;
                     }
 
+                    if (getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5") {
+                        return {
+                            "@type": "Person",
+                            name,
+                            identifiers: [
+                                {
+                                    value: entity.id,
+                                    "@type": "PropertyValue",
+                                    url: `https://www.wikidata.org/wiki/${entity.id}`,
+                                    subjectOf: SILL.wikidataSource,
+                                    name: "Wikidata Id"
+                                }
+                            ],
+                            url: `https://www.wikidata.org/wiki/${entity.id}`
+                        };
+                    }
+
                     return {
-                        "@type":
-                            getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5" ? "Person" : "Organization", // Q5 : Humans
+                        "@type": "Organization",
                         name,
-                        identifier: entity.id,
+                        identifiers: [
+                            {
+                                value: entity.id,
+                                "@type": "PropertyValue",
+                                url: `https://www.wikidata.org/wiki/${entity.id}`,
+                                subjectOf: SILL.wikidataSource,
+                                name: "Wikidata Id",
+                                additionalType: "Organization"
+                            }
+                        ],
                         url: `https://www.wikidata.org/wiki/${entity.id}`
                     };
                 })
