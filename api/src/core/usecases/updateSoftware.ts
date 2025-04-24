@@ -26,9 +26,9 @@ export const makeUpdateSoftware: (dbApi: DbApiV2) => Updateoftware =
             doRespectRgaa,
             similarSoftwareExternalDataIds,
             softwareType,
-            externalIdForSource,
-            sourceSlug,
-            comptoirDuLibreId,
+            externalIdForSource, // TODO Remove
+            sourceSlug, // TODO Remove
+            comptoirDuLibreId, // TODO Remove
             softwareKeywords,
             ...rest
         } = formData;
@@ -52,7 +52,9 @@ export const makeUpdateSoftware: (dbApi: DbApiV2) => Updateoftware =
                 categories: [],
                 generalInfoMd: undefined,
                 addedByAgentId: agentId,
-                keywords: softwareKeywords
+                keywords: softwareKeywords,
+                externalIdForSource, // TODO Remove
+                sourceSlug // TODO Remove
             },
             softwareId: softwareId
         });

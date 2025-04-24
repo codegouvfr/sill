@@ -53,7 +53,9 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                 categories: [],
                 generalInfoMd: undefined,
                 addedByAgentId: agentId,
-                keywords: softwareKeywords
+                keywords: softwareKeywords,
+                externalIdForSource, // TODO Remove
+                sourceSlug // TODO Remove
             }
         });
 
