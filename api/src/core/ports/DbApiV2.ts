@@ -85,7 +85,7 @@ export interface SoftwareExternalDataRepository {
         sourceSlug: string;
         externalId: string;
     }) => Promise<DatabaseRow.SoftwareExternalDataRow | undefined>;
-    getIds: (params: { skipSince?: number }) => Promise<
+    getIds: (params: { minuteSkipSince?: number }) => Promise<
         {
             sourceSlug: string;
             externalId: string;

@@ -27,8 +27,8 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 };
 
 export async function startUpdateService(params: { isDevEnvironnement: boolean; databaseUrl: string }) {
-    console.log("Starting fetching of external data on remote sources");
-    console.time("Starting fetching of external data on remote sources: Done");
+    console.log("[RPC:Update] Starting fetching of external data on remote sources");
+    console.time("[RPC:Update] Fetching of external data on remote sources: Done");
     const { isDevEnvironnement, databaseUrl, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
@@ -44,8 +44,8 @@ export async function startUpdateService(params: { isDevEnvironnement: boolean; 
 
     await refreshExternalData({
         dbApi,
-        skipSince: 180
+        minuteSkipSince: 180
     });
 
-    console.timeEnd("Starting fetching of external data on remote sources: Done");
+    console.timeEnd("[RPC:Update] Fetching of external data on remote sources: Done");
 }
