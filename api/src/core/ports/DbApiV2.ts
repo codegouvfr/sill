@@ -42,6 +42,8 @@ export type SoftwareExtrinsicRow = Pick<
     | "generalInfoMd"
     | "keywords"
     | "addedByAgentId"
+    | "externalIdForSource" // TODO Remove
+    | "sourceSlug" // TODO Remove
 >;
 
 export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow & Pick<DatabaseRow.SoftwareRow, "referencedSinceTime">;
