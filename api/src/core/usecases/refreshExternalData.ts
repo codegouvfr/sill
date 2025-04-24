@@ -8,12 +8,12 @@ import { Catalogi } from "../../types/Catalogi";
 
 type ParamsOfrefreshExternalDataUseCase = {
     dbApi: DbApiV2;
-    skipSince?: number;
+    minuteSkipSince?: number;
 };
 
 export async function refreshExternalData(params: ParamsOfrefreshExternalDataUseCase): Promise<boolean> {
-    console.time(`[UC.refreshExternalData]Finsihed fetching external data`);
-    const { dbApi, skipSince } = params;
+    console.time(`[UC.refreshExternalData] Finsihed fetching external data`);
+    const { dbApi, minuteSkipSince } = params;
 
     const sources = await dbApi.source.getAll();
     const sourceIndex: Record<string, DatabaseRow.SourceRow> = buildIndex({
@@ -21,12 +21,12 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
         fieldObject: "slug"
     });
 
-    const externalDataToUpdate = await dbApi.softwareExternalData.getIds({ skipSince });
+    const externalDataToUpdate = await dbApi.softwareExternalData.getIds({ minuteSkipSince });
     console.log(`[UC.refreshExternalData] ${externalDataToUpdate.length} software to update`);
 
     for (const { sourceSlug, externalId } of externalDataToUpdate) {
-        console.time(`💾[UC.refreshExternalData](${externalId} on ${sourceSlug}) : Done 💾`);
-        console.log(`🚀[UC.refreshExternalData](${externalId} on ${sourceSlug}) : Starting 🚀`);
+        console.time(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
+        console.log(`[UC.refreshExternalData] 🚀 Update for ${externalId} on ${sourceSlug} : Starting 🚀`);
         const source = sourceIndex[sourceSlug];
 
         const getCaller = getSoftwareExternalDataFunction(source.kind);
@@ -40,9 +40,9 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
                 softwareExternalData: externalData
             });
         }
-        console.timeEnd(`💾[UC.refreshExternalData](${externalId} on ${sourceSlug}) : Done 💾`);
+        console.timeEnd(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
     }
-    console.timeEnd(`[UC.refreshExternalData]Finsihed fetching external data`);
+    console.timeEnd(`[UC.refreshExternalData] Finsihed fetching external data`);
     return true;
 }
 
