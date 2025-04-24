@@ -38,6 +38,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 generalInfoMd,
                 keywords,
                 addedByAgentId,
+                externalIdForSource, // TODO Remove
+                sourceSlug, // TODO Remove
                 ...rest
             } = software;
 
@@ -66,7 +68,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         categories: JSON.stringify(categories), // Legacy field from SILL imported
                         generalInfoMd, // Legacy field from SILL imported
                         addedByAgentId,
-                        keywords: JSON.stringify(keywords)
+                        keywords: JSON.stringify(keywords),
+                        externalIdForSource, // TODO Remove
+                        sourceSlug // TODO Remove
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
@@ -102,6 +106,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 generalInfoMd,
                 keywords,
                 addedByAgentId,
+                externalIdForSource, // TODO Remove
+                sourceSlug, // TODO Remove
                 ...rest
             } = software;
 
@@ -127,7 +133,9 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     categories: JSON.stringify(categories),
                     generalInfoMd: generalInfoMd,
                     addedByAgentId,
-                    keywords: JSON.stringify(keywords)
+                    keywords: JSON.stringify(keywords),
+                    externalIdForSource, // TODO Remove
+                    sourceSlug // TODO Remove
                 })
                 .where("id", "=", softwareId)
                 .execute();
