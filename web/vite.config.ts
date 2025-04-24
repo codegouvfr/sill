@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { viteEnvs } from "vite-envs";
 import { readFileSync } from "fs";
 import path from "path";
 import svgr from "vite-plugin-svgr";
@@ -18,6 +19,9 @@ export default defineConfig(async () => {
     return {
         plugins: [
             react(),
+            viteEnvs({
+                declarationFile: ".env.declaration"
+            }),
             tsconfigPaths(),
             svgr({
                 svgrOptions: {

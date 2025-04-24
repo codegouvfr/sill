@@ -4,7 +4,7 @@
  * ''
  **/
 export const appPath = (() => {
-    const envValue = import.meta.env["PUBLIC_URL"];
+    const envValue = import.meta.env.PUBLIC_URL;
 
     if (envValue === ".") {
         // Storybook

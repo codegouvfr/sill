@@ -52,6 +52,7 @@
         "tsafe": "^1.7.2",
         "tss-react": "^4.9.12",
         "type-route": "^1.0.1",
+        "vite-envs": "^4.6.0",
         "zod": "^3.21.4"
     },
     "devDependencies": {
