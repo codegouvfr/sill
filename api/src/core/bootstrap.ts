@@ -13,6 +13,8 @@ import { UseCasesUsedOnRouter } from "../rpc/router";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
 import rawUiConfig from "../customization/ui-config.json";
+import { makeCreateSofware } from "./usecases/createSoftware";
+import { makeUpdateSoftware } from "./usecases/updateSoftware";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -62,7 +64,9 @@ export async function bootstrapCore(
     const useCases: UseCasesUsedOnRouter = {
         getSoftwareFormAutoFillDataFromExternalAndOtherSources:
             makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
-        getAgent: makeGetAgent({ agentRepository: dbApi.agent })
+        getAgent: makeGetAgent({ agentRepository: dbApi.agent }),
+        createSoftware: makeCreateSofware(dbApi),
+        updateSoftware: makeUpdateSoftware(dbApi)
     };
 
     return { dbApi, context, useCases, uiConfig };

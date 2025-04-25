@@ -360,7 +360,8 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "cs.comptoirDuLibreSoftware",
             "cs.latestVersion",
             "cs.serviceProviders",
-            "ext.externalId"
+            "ext.externalId",
+            "ext.sourceSlug"
         ])
         .orderBy("s.id", "asc")
         .orderBy("sources.priority", "desc")
