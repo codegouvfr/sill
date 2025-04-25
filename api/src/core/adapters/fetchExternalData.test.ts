@@ -4,19 +4,15 @@
 
 import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
-import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
+import { expectToEqual, testPgUrl } from "../../tools/test.helpers";
 import type { DbApiV2 } from "../ports/DbApiV2";
 import { ExternalDataOrigin } from "../ports/GetSoftwareExternalData";
 import type { SoftwareFormData, Source } from "../usecases/readWriteSillData";
-import { comptoirDuLibreApi } from "./comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./dbApi/kysely/createPgDbApi";
 import type { Database } from "./dbApi/kysely/kysely.database";
 import { createPgDialect } from "./dbApi/kysely/kysely.dialect";
-import { makeFetchAndSaveSoftwareExtraData } from "./fetchExternalData";
-import { getCnllPrestatairesSill } from "./getCnllPrestatairesSill";
-import { getServiceProviders } from "./getServiceProviders";
-import { getWikidataSoftware } from "./wikidata/getWikidataSoftware";
 import { makeCreateSofware } from "../usecases/createSoftware";
+import { makeRefreshExternalData } from "../usecases/refreshExternalData";
 
 const craSoftwareFormData = {
     softwareType: {
@@ -112,8 +108,33 @@ const source = {
     kind: "wikidata"
 } satisfies Source;
 
+const emptyExternalData = [
+    {
+        "applicationCategories": null,
+        "description": {},
+        "developers": [],
+        "documentationUrl": null,
+        "externalId": "Q118629387",
+        "identifiers": null,
+        "isLibreSoftware": null,
+        "keywords": null,
+        "label": {},
+        "lastDataFetchAt": null,
+        "license": null,
+        "logoUrl": null,
+        "programmingLanguages": null,
+        "publicationTime": null,
+        "referencePublications": null,
+        "softwareId": 11,
+        "softwareVersion": null,
+        "sourceSlug": "wikidata",
+        "sourceUrl": null,
+        "websiteUrl": null
+    }
+];
+
 describe("fetches software extra data (from different providers)", () => {
-    let fetchAndSaveSoftwareExtraData: Awaited<ReturnType<typeof makeFetchAndSaveSoftwareExtraData>>;
+    let fetchAndSaveSoftwareExtraData: Awaited<ReturnType<typeof makeRefreshExternalData>>;
     let dbApi: DbApiV2;
     let db: Kysely<Database>;
     let craSoftwareId: number;
@@ -156,49 +177,26 @@ describe("fetches software extra data (from different providers)", () => {
         await insertApacheWithCorrectId(db, agentId);
         await insertAcceleroWithCorrectId(db, agentId);
 
-        fetchAndSaveSoftwareExtraData = await makeFetchAndSaveSoftwareExtraData({
-            dbApi,
-            getSoftwareExternalData: getWikidataSoftware,
-            comptoirDuLibreApi,
-            getCnllPrestatairesSill: getCnllPrestatairesSill,
-            getServiceProviders: getServiceProviders,
-            wikidataSource: source
+        fetchAndSaveSoftwareExtraData = await makeRefreshExternalData({
+            dbApi
         });
     });
 
     it("does nothing if the software is not found", async () => {
         const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(softwareExternalDatas, []);
+        expectToEqual(softwareExternalDatas, emptyExternalData);
 
-        await fetchAndSaveSoftwareExtraData(404, {});
+        await fetchAndSaveSoftwareExtraData.bySoftwareId({ softwareId: 404 });
 
         const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(updatedSoftwareExternalDatas, []);
+        expectToEqual(updatedSoftwareExternalDatas, emptyExternalData);
     });
-
-    it(
-        "fetches correctly the logoUrl from comptoir du libre",
-        async () => {
-            const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-            expectToEqual(softwareExternalDatas, []);
-
-            await fetchAndSaveSoftwareExtraData(acceleroId, {});
-
-            const results = await db.selectFrom("compiled_softwares").select("comptoirDuLibreSoftware").execute();
-            expect(results).toHaveLength(1);
-            expectToMatchObject(results[0]!.comptoirDuLibreSoftware, {
-                name: "Acceleo",
-                logoUrl: "https://comptoir-du-libre.org//img/files/Softwares/Acceleo/avatar/Acceleo.png"
-            });
-        },
-        { timeout: 10_000 }
-    );
 
     it(
         "gets software external data and saves it, and does not save other extra data if there is nothing relevant",
         async () => {
             const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-            expect(softwareExternalDatas).toHaveLength(0);
+            expect(softwareExternalDatas).toHaveLength(1);
 
             const source = await db
                 .selectFrom("sources")
@@ -215,7 +213,7 @@ describe("fetches software extra data (from different providers)", () => {
 
             expect(initialLastExtraDataFetchAt).toBe(null);
 
-            await fetchAndSaveSoftwareExtraData(craSoftwareId, {});
+            await fetchAndSaveSoftwareExtraData.bySoftwareId({ softwareId: craSoftwareId });
 
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [
@@ -300,7 +298,7 @@ describe("fetches software extra data (from different providers)", () => {
             const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expect(softwareExternalDatas).toHaveLength(0);
 
-            await fetchAndSaveSoftwareExtraData(apacheSoftwareId, {});
+            await fetchAndSaveSoftwareExtraData.bySoftwareId({ softwareId: apacheSoftwareId });
 
             const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
             expectToEqual(updatedSoftwareExternalDatas, [

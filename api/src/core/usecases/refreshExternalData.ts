@@ -15,9 +15,53 @@ type ParamsOfrefreshExternalDataUseCase = {
     minuteSkipSince?: number;
 };
 
-export async function refreshExternalData(params: ParamsOfrefreshExternalDataUseCase): Promise<boolean> {
-    console.time(`[UC.refreshExternalData] Finsihed fetching external data`);
-    const { dbApi, minuteSkipSince } = params;
+const useCaseLogTitle = "[UC.refreshExternalData]";
+const useCaseLogTimer = `${useCaseLogTitle} Finsihed fetching external data`;
+
+export type FetchAndSaveExternalDataForAllSoftware = () => Promise<boolean>;
+export type FetchAndSaveExternalDataForSoftware = (args: { softwareId: number }) => Promise<boolean>;
+
+export const makeRefreshExternalDataAll: (
+    params: ParamsOfrefreshExternalDataUseCase
+) => FetchAndSaveExternalDataForAllSoftware = (params: ParamsOfrefreshExternalDataUseCase) => {
+    const { dbApi, minuteSkipSince = 0 } = params;
+
+    return async () => {
+        console.time(useCaseLogTimer);
+        const externalDataToUpdate = await dbApi.softwareExternalData.getIds({ minuteSkipSince });
+        return refreshExternalDataByExternalIdAndSlug({ dbApi, ids: externalDataToUpdate });
+    };
+};
+
+export const makeRefreshExternalDataForSoftware: (
+    params: ParamsOfrefreshExternalDataUseCase
+) => FetchAndSaveExternalDataForSoftware = (params: ParamsOfrefreshExternalDataUseCase) => {
+    const { dbApi } = params;
+
+    return async (args: { softwareId: number }) => {
+        console.time(useCaseLogTimer);
+        const { softwareId } = args;
+
+        const externalDataBinded = await dbApi.softwareExternalData.getBySoftwareId({ softwareId });
+
+        if (!externalDataBinded) {
+            console.error(`${useCaseLogTitle} No external data found for this software`);
+            return false;
+        }
+
+        const idsArray = externalDataBinded.map(externdalDataItem => ({
+            externalId: externdalDataItem.externalId,
+            sourceSlug: externdalDataItem.sourceSlug
+        }));
+        return refreshExternalDataByExternalIdAndSlug({ dbApi, ids: idsArray });
+    };
+};
+
+const refreshExternalDataByExternalIdAndSlug = async (args: {
+    dbApi: DbApiV2;
+    ids: { externalId: string; sourceSlug: string }[];
+}): Promise<boolean> => {
+    const { dbApi, ids } = args;
 
     const sources = await dbApi.source.getAll();
     const sourceIndex: Record<string, DatabaseRow.SourceRow> = buildIndex({
@@ -25,10 +69,9 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
         fieldObject: "slug"
     });
 
-    const externalDataToUpdate = await dbApi.softwareExternalData.getIds({ minuteSkipSince });
-    console.log(`[UC.refreshExternalData] ${externalDataToUpdate.length} software to update`);
+    console.log(`[UC.refreshExternalData] ${ids.length} software to update`);
 
-    for (const { sourceSlug, externalId } of externalDataToUpdate) {
+    for (const { sourceSlug, externalId } of ids) {
         console.time(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
         console.log(`[UC.refreshExternalData] 🚀 Update for ${externalId} on ${sourceSlug} : Starting 🚀`);
         const source = sourceIndex[sourceSlug];
@@ -46,11 +89,11 @@ export async function refreshExternalData(params: ParamsOfrefreshExternalDataUse
         }
         console.timeEnd(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
     }
-    console.timeEnd(`[UC.refreshExternalData] Finsihed fetching external data`);
+    console.timeEnd(useCaseLogTimer);
     return true;
-}
+};
 
-function getSoftwareExternalDataFunction(sourceKind: Catalogi.SourceKind): GetSoftwareExternalData {
+const getSoftwareExternalDataFunction = (sourceKind: Catalogi.SourceKind): GetSoftwareExternalData => {
     switch (sourceKind) {
         case "wikidata":
             return wikidataSourceGateway.softwareExternalData.getById;
@@ -68,4 +111,4 @@ function getSoftwareExternalDataFunction(sourceKind: Catalogi.SourceKind): GetSo
             const unreachableCase: never = sourceKind;
             throw new Error(`Unreachable case: ${unreachableCase}`);
     }
-}
+};
