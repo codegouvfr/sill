@@ -8,14 +8,14 @@ import type { Equals } from "tsafe";
 import { DbApiV2, WithAgentId } from "../ports/DbApiV2";
 import { SoftwareFormData } from "./readWriteSillData";
 
-export type Updateoftware = (
+export type UpdateSoftware = (
     params: {
         formData: SoftwareFormData;
         softwareId: number;
     } & WithAgentId
 ) => Promise<void>;
 
-export const makeUpdateSoftware: (dbApi: DbApiV2) => Updateoftware =
+export const makeUpdateSoftware: (dbApi: DbApiV2) => UpdateSoftware =
     (dbApi: DbApiV2) =>
     async ({ formData, agentId, softwareId }) => {
         // Push in software

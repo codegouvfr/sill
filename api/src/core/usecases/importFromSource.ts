@@ -9,13 +9,13 @@ import { getWikidataForm } from "../adapters/wikidata/getSoftwareForm";
 import { makeCreateSofware } from "./createSoftware";
 import { Source } from "./readWriteSillData";
 
-export const importFromSource: (
-    dbApi: DbApiV2
-) => (params: {
+export type ImportFromSource = (params: {
     agentEmail: string;
     source: Source;
     softwareIdOnSource?: string[];
-}) => Promise<Promise<number | undefined>[]> = (dbApi: DbApiV2) => {
+}) => Promise<Promise<number | undefined>[]>;
+
+export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: DbApiV2) => {
     return async ({ agentEmail, source, softwareIdOnSource }) => {
         const agent = await dbApi.agent.getByEmail(agentEmail);
         const agentId = agent

@@ -77,7 +77,7 @@ export interface SoftwareExternalDataRepository {
         sourceSlug: string;
         externalId: string;
         softwareId?: number;
-        lastDataFetchAt: number;
+        lastDataFetchAt?: number;
         softwareExternalData: SoftwareExternalData;
     }) => Promise<void>;
     save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>; // TODO

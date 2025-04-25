@@ -24,8 +24,8 @@ export type SoftwareExternalData = {
     developers: Array<Catalogi.Person | Catalogi.Organization>;
     label: LocalizedString;
     description: LocalizedString;
-    isLibreSoftware: boolean;
 } & PartialNoOptional<{
+    isLibreSoftware: boolean;
     logoUrl: string;
     websiteUrl: string;
     sourceUrl: string;
