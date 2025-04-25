@@ -3,7 +3,7 @@ import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import { refreshExternalData } from "../core/usecases/refreshExternalData";
+import { makeRefreshExternalDataAll } from "../core/usecases/refreshExternalData";
 import { createKyselyPgDbApi } from "../core/adapters/dbApi/kysely/createPgDbApi";
 import { DbApiV2 } from "../core/ports/DbApiV2";
 
@@ -38,10 +38,12 @@ export async function startUpdateService(params: { isDevEnvironnement: boolean; 
         "kyselyDb": kyselyDb
     });
 
-    await refreshExternalData({
+    const refreshExternalData = await makeRefreshExternalDataAll({
         dbApi,
         minuteSkipSince: 180
     });
+
+    await refreshExternalData();
 
     console.timeEnd("[RPC:Update] Fetching of external data on remote sources: Done");
 }
