@@ -64,11 +64,25 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
         );
 
         if (externalIdForSource) {
-            dbApi.softwareExternalData.insert({
-                externalId: externalIdForSource,
+            const savedExternalData = await dbApi.softwareExternalData.get({
                 sourceSlug,
-                softwareId: softwareId
+                externalId: externalIdForSource
             });
+            if (savedExternalData && savedExternalData.softwareId === undefined) {
+                await dbApi.softwareExternalData.update({
+                    sourceSlug,
+                    externalId: externalIdForSource,
+                    softwareId,
+                    lastDataFetchAt: savedExternalData?.lastDataFetchAt,
+                    softwareExternalData: savedExternalData
+                });
+            } else {
+                await dbApi.softwareExternalData.insert({
+                    externalId: externalIdForSource,
+                    sourceSlug,
+                    softwareId: softwareId
+                });
+            }
         }
 
         console.log(
@@ -77,7 +91,7 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
         );
 
         if (similarSoftwareExternalDataIds && similarSoftwareExternalDataIds.length > 0) {
-            dbApi.similarSoftware.insert({
+            await dbApi.similarSoftware.insert({
                 softwareId,
                 externalIds: similarSoftwareExternalDataIds.map(similarId => ({
                     externalId: similarId,

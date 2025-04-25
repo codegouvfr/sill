@@ -75,7 +75,7 @@ export namespace Software {
             isInSill: false;
             sourceSlug: string;
             externalId: string;
-            isLibreSoftware: boolean;
+            isLibreSoftware: boolean | undefined;
             label: LocalizedString;
             description: LocalizedString;
         };
