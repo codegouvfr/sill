@@ -74,19 +74,17 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
+
+                await trx
+                    .insertInto("compiled_softwares")
+                    .values({
+                        softwareId,
+                        serviceProviders: JSON.stringify([])
+                    })
+                    .execute();
+
                 return softwareId;
             });
-        },
-        updateLastExtraDataFetchAt: async ({ softwareId }) => {
-            await db
-                .updateTable("softwares")
-                .set(
-                    "lastExtraDataFetchAt",
-                    sql`now
-              ()`
-                )
-                .where("id", "=", softwareId)
-                .executeTakeFirstOrThrow();
         },
         update: async ({ software, softwareId }) => {
             const {
@@ -222,26 +220,12 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? []
             };
         },
-        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
-            let builder = makeGetSoftwareBuilder(db);
-
-            builder = onlyIfUpdatedMoreThan3HoursAgo
-                ? builder.where(eb =>
-                      eb.or([
-                          eb("lastExtraDataFetchAt", "is", null),
-                          eb(
-                              "lastExtraDataFetchAt",
-                              "<",
-                              sql<Date>`now
-                  ()
-                  - interval '3 hours'`
-                          )
-                      ])
-                  )
-                : builder;
-
-            return builder.execute().then(async softwares => {
-                const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
+        getAll: (): Promise<Software[]> => {
+            return makeGetSoftwareBuilder(db)
+                .execute()
+                .then(async softwares => {
+                    const userAndReferentCountByOrganization =
+                        await getUserAndReferentCountByOrganizationBySoftwareId(db);
 
                 return softwares.map(
                     ({
@@ -381,7 +365,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "cs.latestVersion",
             "s.referencedSinceTime as addedTime",
             "s.updateTime",
-            "s.lastExtraDataFetchAt",
             "s.dereferencing",
             "s.categories",
             ({ ref }) =>
