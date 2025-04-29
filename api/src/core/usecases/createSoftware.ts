@@ -81,11 +81,13 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                     softwareExternalData: savedExternalData
                 });
             } else {
-                await dbApi.softwareExternalData.insert({
-                    externalId: externalIdForSource,
-                    sourceSlug,
-                    softwareId: softwareId
-                });
+                await dbApi.softwareExternalData.insert([
+                    {
+                        externalId: externalIdForSource,
+                        sourceSlug,
+                        softwareId: softwareId
+                    }
+                ]);
             }
         }
 
@@ -95,6 +97,12 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
         );
 
         if (similarSoftwareExternalDataIds && similarSoftwareExternalDataIds.length > 0) {
+            await dbApi.softwareExternalData.insert(
+                similarSoftwareExternalDataIds.map(externalSimiliarId => ({
+                    sourceSlug,
+                    externalId: externalSimiliarId
+                }))
+            );
             await dbApi.similarSoftware.insert({
                 softwareId,
                 externalIds: similarSoftwareExternalDataIds.map(similarId => ({

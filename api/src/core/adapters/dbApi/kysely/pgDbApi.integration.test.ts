@@ -171,7 +171,7 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+            const softwares = await dbApi.software.getAll();
 
             const actualSoftware = softwares[0];
 
@@ -186,7 +186,7 @@ describe("pgDbApi", () => {
                     url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
-                comptoirDuLibreId: 50,
+                comptoirDuLibreId: undefined,
                 comptoirDuLibreServiceProviderCount: 0,
                 dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,

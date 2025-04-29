@@ -2,10 +2,9 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import { DatabaseRow } from "../adapters/dbApi/kysely/kysely.database";
 import { wikidataSourceGateway } from "../adapters/wikidata";
 import { halSourceGateway } from "../adapters/hal";
-import { DbApiV2 } from "../ports/DbApiV2";
+import { DatabaseDataType, DbApiV2 } from "../ports/DbApiV2";
 import type { GetSoftwareExternalData } from "../ports/GetSoftwareExternalData";
 import { buildIndex } from "../utils";
 import { Catalogi } from "../../types/Catalogi";
@@ -44,6 +43,8 @@ export const makeRefreshExternalDataForSoftware: (
 
         const externalDataBinded = await dbApi.softwareExternalData.getBySoftwareId({ softwareId });
 
+        const simularExternalDataIDs = await dbApi.similarSoftware.getById({ softwareId });
+
         if (!externalDataBinded) {
             console.error(`${useCaseLogTitle} No external data found for this software`);
             return false;
@@ -53,7 +54,7 @@ export const makeRefreshExternalDataForSoftware: (
             externalId: externdalDataItem.externalId,
             sourceSlug: externdalDataItem.sourceSlug
         }));
-        return refreshExternalDataByExternalIdAndSlug({ dbApi, ids: idsArray });
+        return refreshExternalDataByExternalIdAndSlug({ dbApi, ids: idsArray.concat(simularExternalDataIDs) });
     };
 };
 
@@ -64,7 +65,7 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
     const { dbApi, ids } = args;
 
     const sources = await dbApi.source.getAll();
-    const sourceIndex: Record<string, DatabaseRow.SourceRow> = buildIndex({
+    const sourceIndex: Record<string, DatabaseDataType.SourceRow> = buildIndex({
         arrayOfObject: sources,
         fieldObject: "slug"
     });
@@ -76,15 +77,20 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
         console.log(`[UC.refreshExternalData] 🚀 Update for ${externalId} on ${sourceSlug} : Starting 🚀`);
         const source = sourceIndex[sourceSlug];
 
+        const actualExternalDataRow = await dbApi.softwareExternalData.get({ sourceSlug, externalId });
+
         const getCaller = getSoftwareExternalDataFunction(source.kind);
         const externalData = await getCaller({ externalId: externalId, source: source });
 
         if (externalData) {
             await dbApi.softwareExternalData.update({
-                sourceSlug: source.slug,
-                externalId: externalId,
-                lastDataFetchAt: new Date().valueOf(),
-                softwareExternalData: externalData
+                ...{
+                    sourceSlug: source.slug,
+                    externalId: externalId,
+                    lastDataFetchAt: Date.now(),
+                    softwareExternalData: externalData
+                },
+                ...(actualExternalDataRow?.softwareId ? { softwareId: actualExternalDataRow.softwareId } : {})
             });
         }
         console.timeEnd(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
