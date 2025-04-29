@@ -1,22 +1,26 @@
 import { Kysely } from "kysely";
 import { SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
-import { Database } from "./kysely.database";
-import { stripNullOrUndefinedValues } from "./kysely.utils";
+import { Database, DatabaseRowOutput } from "./kysely.database";
+import { stripNullOrUndefinedValues, transformNullToUndefined, parseBigIntToNumber } from "./kysely.utils";
+
+const cleanDataForExternalData = (row: DatabaseRowOutput.SoftwareExternalData) =>
+    transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"]));
 
 export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): SoftwareExternalDataRepository => ({
-    insert: async params => {
-        const { externalId, sourceSlug, softwareId } = params;
-
+    insert: async externalDataIds => {
         await db
             .insertInto("software_external_datas")
-            .values({
-                externalId,
-                sourceSlug,
-                softwareId,
-                developers: JSON.stringify([]),
-                label: JSON.stringify({}),
-                description: JSON.stringify({})
-            })
+            .values(
+                externalDataIds.map(({ externalId, sourceSlug, softwareId = null }) => ({
+                    externalId,
+                    sourceSlug,
+                    softwareId,
+                    developers: JSON.stringify([]),
+                    label: JSON.stringify({}),
+                    description: JSON.stringify({})
+                }))
+            )
+            .onConflict(oc => oc.columns(["sourceSlug", "externalId"]).doNothing())
             .executeTakeFirst();
     },
     update: async params => {
@@ -68,7 +72,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .where("externalId", "=", externalId)
             .where("sourceSlug", "=", sourceSlug)
             .executeTakeFirst()
-            .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
+            .then(row => (row ? cleanDataForExternalData(row) : undefined));
     },
     getIds: async ({ minuteSkipSince }) => {
         let request = db.selectFrom("software_external_datas").select(["externalId", "sourceSlug"]);
@@ -89,7 +93,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .where("softwareId", "=", softwareId)
             .where("sourceSlug", "=", sourceSlug)
             .executeTakeFirst()
-            .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
+            .then(row => (row ? cleanDataForExternalData(row) : undefined));
     },
     getBySoftwareId: async ({ softwareId }) => {
         return db
@@ -97,7 +101,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .selectAll()
             .where("softwareId", "=", softwareId)
             .execute()
-            .then(rows => rows.map(row => stripNullOrUndefinedValues(row)));
+            .then(rows => rows.map(cleanDataForExternalData));
     },
     getIdsBySource: async ({ sourceSlug }) => {
         return db
@@ -113,6 +117,13 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .selectAll()
             .where("sourceSlug", "=", sourceSlug)
             .execute()
-            .then(rows => rows.map(row => stripNullOrUndefinedValues(row)));
+            .then(rows => rows.map(cleanDataForExternalData));
+    },
+    getAll: async () => {
+        return db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .execute()
+            .then(rows => rows.map(cleanDataForExternalData));
     }
 });

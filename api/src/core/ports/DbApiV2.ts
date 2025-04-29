@@ -1,4 +1,5 @@
-import type { Database, DatabaseRow } from "../adapters/dbApi/kysely/kysely.database";
+import type { Database, DatabaseRowOutput } from "../adapters/dbApi/kysely/kysely.database";
+import { TransformRepoToCleanedRow } from "../adapters/dbApi/kysely/kysely.utils";
 import type {
     Agent,
     Instance,
@@ -15,13 +16,9 @@ import type { SoftwareExternalData } from "./GetSoftwareExternalData";
 
 export type WithAgentId = { agentId: number };
 
-type GetSoftwareFilters = {
-    onlyIfUpdatedMoreThan3HoursAgo?: true;
-};
-
 // Other data, intrinsic are managed internally by the database
 export type SoftwareExtrinsicRow = Pick<
-    DatabaseRow.SoftwareRow,
+    DatabaseDataType.SoftwareRow,
     | "name"
     | "description"
     | "license"
@@ -42,13 +39,26 @@ export type SoftwareExtrinsicRow = Pick<
     | "sourceSlug" // TODO Remove
 >;
 
-export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow & Pick<DatabaseRow.SoftwareRow, "referencedSinceTime">;
+export namespace DatabaseDataType {
+    export type AgentRow = TransformRepoToCleanedRow<DatabaseRowOutput.Agent>;
+    export type SoftwareReferentRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareReferent>;
+    export type SoftwareUsertRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareUsert>;
+    export type InstanceRow = TransformRepoToCleanedRow<DatabaseRowOutput.Instance>;
+    export type SoftwareRow = TransformRepoToCleanedRow<DatabaseRowOutput.Software>;
+    export type SoftwareExternalDataRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareExternalData>;
+    export type SimilarExternalSoftwareExternalDataRow =
+        TransformRepoToCleanedRow<DatabaseRowOutput.SimilarExternalSoftwareExternalData>;
+    export type CompiledSoftwaresRow = TransformRepoToCleanedRow<DatabaseRowOutput.CompiledSoftwares>;
+    export type SourceRow = TransformRepoToCleanedRow<DatabaseRowOutput.Source>;
+}
+
+export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow &
+    Pick<DatabaseDataType.SoftwareRow, "referencedSinceTime">;
 
 export interface SoftwareRepository {
     create: (params: { software: SoftwareExtrinsicCreation }) => Promise<number>;
     update: (params: { softwareId: number; software: SoftwareExtrinsicRow }) => Promise<void>;
-    updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
-    getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
+    getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
     getSoftwareIdByExternalIdAndSlug: (params: {
         externalId: string;
@@ -68,7 +78,7 @@ export interface SoftwareRepository {
 }
 
 export interface SoftwareExternalDataRepository {
-    insert: (params: { softwareId?: number; sourceSlug: string; externalId: string }) => Promise<void>;
+    insert: (params: { sourceSlug: string; externalId: string; softwareId?: number }[]) => Promise<void>;
     update: (params: {
         sourceSlug: string;
         externalId: string;
@@ -80,7 +90,7 @@ export interface SoftwareExternalDataRepository {
     get: (params: {
         sourceSlug: string;
         externalId: string;
-    }) => Promise<DatabaseRow.SoftwareExternalDataRow | undefined>;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
     getIds: (params: { minuteSkipSince?: number }) => Promise<
         {
             sourceSlug: string;
@@ -90,10 +100,13 @@ export interface SoftwareExternalDataRepository {
     getBySoftwareIdAndSource: (params: {
         sourceSlug: string;
         softwareId: number;
-    }) => Promise<DatabaseRow.SoftwareExternalDataRow | undefined>;
-    getBySoftwareId: (params: { softwareId: number }) => Promise<DatabaseRow.SoftwareExternalDataRow[] | undefined>;
-    getBySource: (params: { sourceSlug: string }) => Promise<DatabaseRow.SoftwareExternalDataRow[] | undefined>;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
+    getBySoftwareId: (params: {
+        softwareId: number;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    getBySource: (params: { sourceSlug: string }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
+    getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
 }
 
 type CnllPrestataire = {
@@ -160,7 +173,7 @@ export interface SoftwareUserRepository {
 }
 
 export interface SourceRepository {
-    getAll: () => Promise<DatabaseRow.SourceRow[]>;
+    getAll: () => Promise<DatabaseDataType.SourceRow[]>;
     getMainSource: () => Promise<Source>;
     getWikidataSource: () => Promise<Source | undefined>;
 }
