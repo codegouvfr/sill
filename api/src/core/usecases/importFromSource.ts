@@ -71,11 +71,13 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                         console.info(
                             `[UC:Import] Importing ${rawHALSoftwareItem.title_s[0]}(${rawHALSoftwareItem.docid}) from ${source.slug}: Updating external data`
                         );
-                        await dbApi.softwareExternalData.insert({
-                            softwareId: savedSoftware.softwareId,
-                            sourceSlug: source.slug,
-                            externalId: rawHALSoftwareItem.docid
-                        });
+                        await dbApi.softwareExternalData.insert([
+                            {
+                                softwareId: savedSoftware.softwareId,
+                                sourceSlug: source.slug,
+                                externalId: rawHALSoftwareItem.docid
+                            }
+                        ]);
 
                         return savedSoftware.softwareId;
                     }
@@ -125,11 +127,13 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                                 console.log("should do smt");
                             }
 
-                            await dbApi.softwareExternalData.insert({
-                                softwareId: savedSoftware.softwareId,
-                                sourceSlug: source.slug,
-                                externalId: wikidataId
-                            });
+                            await dbApi.softwareExternalData.insert([
+                                {
+                                    softwareId: savedSoftware.softwareId,
+                                    sourceSlug: source.slug,
+                                    externalId: wikidataId
+                                }
+                            ]);
 
                             return savedSoftware.softwareId;
                         }
