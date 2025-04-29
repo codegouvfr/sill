@@ -22,10 +22,14 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     throw new Error(`Unsupported case: ${shouldNotBeReached}`);
 };
 
-export async function startUpdateService(params: { isDevEnvironnement: boolean; databaseUrl: string }) {
+export async function startUpdateService(params: {
+    isDevEnvironnement: boolean;
+    databaseUrl: string;
+    updateSkipTimingInMinutes?: number;
+}) {
     console.log("[RPC:Update] Starting fetching of external data on remote sources");
     console.time("[RPC:Update] Fetching of external data on remote sources: Done");
-    const { isDevEnvironnement, databaseUrl, ...rest } = params;
+    const { isDevEnvironnement, databaseUrl, updateSkipTimingInMinutes, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -40,7 +44,7 @@ export async function startUpdateService(params: { isDevEnvironnement: boolean; 
 
     const refreshExternalData = await makeRefreshExternalDataAll({
         dbApi,
-        minuteSkipSince: 180
+        minuteSkipSince: updateSkipTimingInMinutes ?? 180
     });
 
     await refreshExternalData();
