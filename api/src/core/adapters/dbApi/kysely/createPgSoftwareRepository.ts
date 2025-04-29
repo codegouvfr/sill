@@ -74,19 +74,17 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
+
+                await trx
+                    .insertInto("compiled_softwares")
+                    .values({
+                        softwareId,
+                        serviceProviders: JSON.stringify([])
+                    })
+                    .execute();
+
                 return softwareId;
             });
-        },
-        updateLastExtraDataFetchAt: async ({ softwareId }) => {
-            await db
-                .updateTable("softwares")
-                .set(
-                    "lastExtraDataFetchAt",
-                    sql`now
-              ()`
-                )
-                .where("id", "=", softwareId)
-                .executeTakeFirstOrThrow();
         },
         update: async ({ software, softwareId }) => {
             const {
@@ -222,79 +220,65 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 similarSoftwaresExternalIds: similarSoftwaresExternalIds ?? []
             };
         },
-        getAll: ({ onlyIfUpdatedMoreThan3HoursAgo } = {}): Promise<Software[]> => {
-            let builder = makeGetSoftwareBuilder(db);
+        getAll: (): Promise<Software[]> => {
+            return makeGetSoftwareBuilder(db)
+                .execute()
+                .then(async softwares => {
+                    const userAndReferentCountByOrganization =
+                        await getUserAndReferentCountByOrganizationBySoftwareId(db);
 
-            builder = onlyIfUpdatedMoreThan3HoursAgo
-                ? builder.where(eb =>
-                      eb.or([
-                          eb("lastExtraDataFetchAt", "is", null),
-                          eb(
-                              "lastExtraDataFetchAt",
-                              "<",
-                              sql<Date>`now
-                  ()
-                  - interval '3 hours'`
-                          )
-                      ])
-                  )
-                : builder;
-
-            return builder.execute().then(async softwares => {
-                const userAndReferentCountByOrganization = await getUserAndReferentCountByOrganizationBySoftwareId(db);
-
-                return softwares.map(
-                    ({
-                        serviceProviders,
-                        updateTime,
-                        addedTime,
-                        softwareExternalData,
-                        similarExternalSoftwares,
-                        externalIdForSource,
-                        ...software
-                    }): Software => {
-                        return stripNullOrUndefinedValues({
-                            ...software,
-                            externalId: externalIdForSource,
-                            updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
-                            serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
-                            latestVersion: software.latestVersion ?? {
-                                semVer: softwareExternalData?.softwareVersion ?? undefined,
-                                publicationTime: dateParser(softwareExternalData.publicationTime)
-                            },
-                            logoUrl: softwareExternalData?.logoUrl,
-                            userAndReferentCountByOrganization:
-                                userAndReferentCountByOrganization[software.softwareId] ?? {},
-                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                "@type": "Person",
-                                name: dev.name,
-                                url: dev.url,
-                                affiliations: dev.affiliations
-                            })),
-                            officialWebsiteUrl:
-                                softwareExternalData?.websiteUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.website ??
-                                undefined,
-                            codeRepositoryUrl:
-                                softwareExternalData?.sourceUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.repository ??
-                                undefined,
-                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                            comptoirDuLibreServiceProviderCount:
-                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            applicationCategories: software.categories.concat(
-                                softwareExternalData?.applicationCategories ?? []
-                            ),
-                            categories: undefined, // merged in applicationCategories, set to undefined to remove it
-                            programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                            referencePublications: softwareExternalData?.referencePublications,
-                            identifiers: softwareExternalData?.identifiers
-                        });
-                    }
-                );
-            });
+                    return softwares.map(
+                        ({
+                            serviceProviders,
+                            updateTime,
+                            addedTime,
+                            softwareExternalData,
+                            similarExternalSoftwares,
+                            externalIdForSource,
+                            ...software
+                        }): Software => {
+                            return stripNullOrUndefinedValues({
+                                ...software,
+                                externalId: externalIdForSource,
+                                updateTime: new Date(+updateTime).getTime(),
+                                addedTime: new Date(+addedTime).getTime(),
+                                serviceProviders: serviceProviders ?? [],
+                                similarSoftwares: similarExternalSoftwares,
+                                latestVersion: software.latestVersion ?? {
+                                    semVer: softwareExternalData?.softwareVersion ?? undefined,
+                                    publicationTime: dateParser(softwareExternalData.publicationTime)
+                                },
+                                logoUrl: softwareExternalData?.logoUrl,
+                                userAndReferentCountByOrganization:
+                                    userAndReferentCountByOrganization[software.softwareId] ?? {},
+                                authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                    "@type": "Person",
+                                    name: dev.name,
+                                    url: dev.url,
+                                    affiliations: dev.affiliations
+                                })),
+                                officialWebsiteUrl:
+                                    softwareExternalData?.websiteUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.website ??
+                                    undefined,
+                                codeRepositoryUrl:
+                                    softwareExternalData?.sourceUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                    undefined,
+                                documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                                comptoirDuLibreServiceProviderCount:
+                                    software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                                applicationCategories: software.categories.concat(
+                                    softwareExternalData?.applicationCategories ?? []
+                                ),
+                                categories: undefined, // merged in applicationCategories, set to undefined to remove it
+                                programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                                referencePublications: softwareExternalData?.referencePublications,
+                                identifiers: softwareExternalData?.identifiers
+                            });
+                        }
+                    );
+                });
         },
         getAllSillSoftwareExternalIds: async sourceSlug =>
             db
@@ -381,7 +365,6 @@ const makeGetSoftwareBuilder = (db: Kysely<Database>) =>
             "cs.latestVersion",
             "s.referencedSinceTime as addedTime",
             "s.updateTime",
-            "s.lastExtraDataFetchAt",
             "s.dereferencing",
             "s.categories",
             ({ ref }) =>
