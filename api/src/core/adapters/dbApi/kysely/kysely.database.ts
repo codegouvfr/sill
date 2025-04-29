@@ -1,7 +1,7 @@
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
 import { Catalogi } from "../../../../types/Catalogi";
-import { TransformRepoToRaw } from "./kysely.utils";
+import { TransformRepoToRowOutput } from "./kysely.utils";
 
 // from https://schema.org/Organization
 type SchemaOrganization = {
@@ -80,7 +80,7 @@ type SourcesTable = {
     description: JSONColumnType<LocalizedString> | null;
 };
 
-type SoftwareExternalDatasTable = {
+export type SoftwareExternalDatasTable = {
     externalId: ExternalId;
     sourceSlug: string;
     softwareId: number | null;
@@ -126,7 +126,6 @@ type SoftwaresTable = {
     description: string;
     referencedSinceTime: number;
     updateTime: number;
-    lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{
         reason?: string;
         time: number;
@@ -150,16 +149,17 @@ type SoftwaresTable = {
     keywords: JSONColumnType<string[]>;
 };
 
-export namespace DatabaseRow {
-    export type AgentRow = TransformRepoToRaw<AgentsTable>;
-    export type SoftwareReferentRow = TransformRepoToRaw<SoftwareReferentsTable>;
-    export type SoftwareUsertRow = TransformRepoToRaw<SoftwareUsersTable>;
-    export type InstanceRow = TransformRepoToRaw<InstancesTable>;
-    export type SoftwareRow = TransformRepoToRaw<SoftwaresTable>;
-    export type SoftwareExternalDataRow = TransformRepoToRaw<SoftwareExternalDatasTable>;
-    export type SimilarExternalSoftwareExternalDataRow = TransformRepoToRaw<SimilarExternalSoftwareExternalDataTable>;
-    export type CompiledSoftwaresRow = TransformRepoToRaw<CompiledSoftwaresTable>;
-    export type SourceRow = TransformRepoToRaw<SourcesTable>;
+export namespace DatabaseRowOutput {
+    export type Agent = TransformRepoToRowOutput<AgentsTable>;
+    export type SoftwareReferent = TransformRepoToRowOutput<SoftwareReferentsTable>;
+    export type SoftwareUsert = TransformRepoToRowOutput<SoftwareUsersTable>;
+    export type Instance = TransformRepoToRowOutput<InstancesTable>;
+    export type Software = TransformRepoToRowOutput<SoftwaresTable>;
+    export type SoftwareExternalData = TransformRepoToRowOutput<SoftwareExternalDatasTable>;
+    export type SimilarExternalSoftwareExternalData =
+        TransformRepoToRowOutput<SimilarExternalSoftwareExternalDataTable>;
+    export type CompiledSoftwares = TransformRepoToRowOutput<CompiledSoftwaresTable>;
+    export type Source = TransformRepoToRowOutput<SourcesTable>;
 }
 
 // ---------- compiled data ----------
