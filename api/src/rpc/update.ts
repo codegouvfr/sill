@@ -26,10 +26,17 @@ export async function startUpdateService(params: {
     githubPersonalAccessTokenForApiRateLimit: string;
     isDevEnvironnement: boolean;
     databaseUrl: string;
+    updateSkipTimingInMinutes?: number;
 }) {
     console.log("[RPC:Update] Starting fetching of external data on remote sources");
     console.time("[RPC:Update] Fetching of external data on remote sources: Done");
-    const { githubPersonalAccessTokenForApiRateLimit, isDevEnvironnement, databaseUrl, ...rest } = params;
+    const {
+        githubPersonalAccessTokenForApiRateLimit,
+        isDevEnvironnement,
+        databaseUrl,
+        updateSkipTimingInMinutes,
+        ...rest
+    } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -44,7 +51,7 @@ export async function startUpdateService(params: {
 
     const refreshExternalData = await makeRefreshExternalDataAll({
         dbApi,
-        minuteSkipSince: 180
+        minuteSkipSince: updateSkipTimingInMinutes ?? 180
     });
 
     await refreshExternalData();

@@ -19,7 +19,8 @@ const zEnvConfiguration = z.object({
     "databaseUrl": z.string(),
     "initializeSoftwareFromSource": z.boolean(),
     "botAgentEmail": z.string().optional(),
-    "listToImport": z.array(z.string()).optional()
+    "listToImport": z.array(z.string()).optional(),
+    "updateSkipTimingInMinutes": z.number().optional()
 });
 
 const envConfiguration = zEnvConfiguration.parse({
@@ -37,7 +38,8 @@ const envConfiguration = zEnvConfiguration.parse({
     "databaseUrl": process.env.DATABASE_URL,
     "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
     "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
-    "listToImport": process.env?.SILL_IMPORT_WIKIDATA?.split(",")
+    "listToImport": process.env?.SILL_IMPORT_DATA_IDS?.split(","),
+    "updateSkipTimingInMinutes": process.env?.SILL_UPDATE_SKIP_TIMING
 });
 
 export const env = {
