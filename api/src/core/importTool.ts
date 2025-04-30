@@ -15,6 +15,7 @@ type DbConfig = PgDbConfig;
 type ParamsOfImportTool = {
     dbConfig: DbConfig;
     botAgentEmail: string | undefined;
+    sourceSlug: string;
     listToImport?: string[];
 };
 
@@ -26,27 +27,27 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     }
 
     const shouldNotBeReached: never = dbConfig.dbKind;
-    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+    throw new Error(`[Loader:Import] Unsupported case: ${shouldNotBeReached}`);
 };
 
 export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
-    const { dbConfig, botAgentEmail, listToImport } = params;
+    const { dbConfig, botAgentEmail, listToImport, sourceSlug } = params;
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
-    if (!botAgentEmail) throw new Error("No bot agent email provided");
+    if (!botAgentEmail) throw new Error("[Loader:Import] No bot agent email provided");
 
     // Todo Choose Source
-    const mainSource = await dbApi.source.getMainSource();
+    const source = await dbApi.source.getByName({ name: sourceSlug });
+    if (!source) throw new Error("[Loader:Import] Couldn't find the source to connect to");
 
     const importService = importFromSource(dbApi);
 
-    console.time(`[Import] Feeding database with software package from ${mainSource.slug}`);
-    return importService({ agentEmail: botAgentEmail, source: mainSource, softwareIdOnSource: listToImport }).then(
-        promises =>
-            Promise.all(promises).then(() => {
-                console.timeEnd(`[Import] Feeding database with software package from ${mainSource.slug}`);
-                return true;
-            })
+    console.time(`[Loader:Import] Feeding database with software package from ${source.slug}`);
+    return importService({ agentEmail: botAgentEmail, source, softwareIdOnSource: listToImport }).then(promises =>
+        Promise.all(promises).then(() => {
+            console.timeEnd(`[Loader:Import] Feeding database with software package from ${source.slug}`);
+            return true;
+        })
     );
 }

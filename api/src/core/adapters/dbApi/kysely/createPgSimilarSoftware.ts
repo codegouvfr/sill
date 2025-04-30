@@ -8,20 +8,17 @@ import { Database } from "./kysely.database";
 
 export const createPgSimilarSoftwareRepository = (db: Kysely<Database>): SimilarSoftwareRepository => ({
     insert: async params => {
-        const { softwareId, externalIds } = params;
+        const dataToInsert = params
+            .map(({ softwareId, externalIds }) => {
+                return externalIds.map(({ externalId, sourceSlug }) => ({
+                    similarExternalId: externalId,
+                    sourceSlug,
+                    softwareId
+                }));
+            })
+            .flat();
 
-        if (externalIds.length > 0) {
-            await db
-                .insertInto("softwares__similar_software_external_datas")
-                .values(
-                    externalIds.map(({ externalId, sourceSlug }) => ({
-                        similarExternalId: externalId,
-                        sourceSlug,
-                        softwareId
-                    }))
-                )
-                .execute();
-        }
+        await db.insertInto("softwares__similar_software_external_datas").values(dataToInsert).execute();
     },
     getById: async params => {
         const { softwareId } = params;
@@ -36,5 +33,13 @@ export const createPgSimilarSoftwareRepository = (db: Kysely<Database>): Similar
             externalId: silimarRow.similarExternalId,
             sourceSlug: silimarRow.sourceSlug
         }));
+    },
+    getByExternalId: async ({ externalId, sourceSlug }) => {
+        return db
+            .selectFrom("softwares__similar_software_external_datas")
+            .select("softwareId")
+            .where("similarExternalId", "=", externalId)
+            .where("sourceSlug", "=", sourceSlug)
+            .execute();
     }
 });
