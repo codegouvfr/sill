@@ -13,17 +13,9 @@ import { assert } from "tsafe/assert";
 import { bootstrapCore } from "../core";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import { halSourceGateway } from "../core/adapters/hal";
-import { wikidataSourceGateway } from "../core/adapters/wikidata";
 import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
 import { DbApiV2 } from "../core/ports/DbApiV2";
-import {
-    ExternalDataOrigin,
-    GetSoftwareExternalData,
-    Language,
-    languages
-} from "../core/ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { Language, languages } from "../core/ports/GetSoftwareExternalData";
 import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
@@ -46,25 +38,10 @@ export async function startRpcService(params: {
     oidcParams: OidcParams;
     port: number;
     isDevEnvironnement: boolean;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     redirectUrl?: string;
     databaseUrl: string;
-    initializeSoftwareFromSource: boolean;
-    botAgentEmail?: string;
-    listToImport?: string[];
 }) {
-    const {
-        redirectUrl,
-        oidcParams,
-        port,
-        isDevEnvironnement,
-        externalSoftwareDataOrigin,
-        databaseUrl,
-        botAgentEmail,
-        initializeSoftwareFromSource,
-        listToImport,
-        ...rest
-    } = params;
+    const { redirectUrl, oidcParams, port, isDevEnvironnement, databaseUrl, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -77,8 +54,7 @@ export async function startRpcService(params: {
             "dbConfig": {
                 "dbKind": "kysely",
                 "kyselyDb": kyselyDb
-            },
-            "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+            }
         }),
         createContextFactory({
             "oidcParams": {
@@ -87,17 +63,11 @@ export async function startRpcService(params: {
         })
     ]);
 
-    const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
-        getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
-
     const { router } = createRouter({
         useCases,
         dbApi,
-        getSoftwareExternalDataOptions,
-        getSoftwareExternalData,
         oidcParams,
         redirectUrl,
-        externalSoftwareDataOrigin,
         uiConfig
     });
 
@@ -146,25 +116,4 @@ export async function startRpcService(params: {
             })()
         )
         .listen(port, () => console.log(`Listening on port ${port}`));
-}
-
-function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
-    "getSoftwareExternalDataOptions": GetSoftwareExternalDataOptions;
-    "getSoftwareExternalData": GetSoftwareExternalData;
-} {
-    switch (externalSoftwareDataOrigin) {
-        case "wikidata":
-            return {
-                "getSoftwareExternalDataOptions": wikidataSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": wikidataSourceGateway.softwareExternalData.getById
-            };
-        case "HAL":
-            return {
-                "getSoftwareExternalDataOptions": halSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": halSourceGateway.softwareExternalData.getById
-            };
-        default:
-            const unreachableCase: never = externalSoftwareDataOrigin;
-            throw new Error(`Unreachable case: ${unreachableCase}`);
-    }
 }

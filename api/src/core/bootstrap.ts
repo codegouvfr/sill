@@ -6,12 +6,8 @@ import { Kysely } from "kysely";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
-import { wikidataSourceGateway } from "./adapters/wikidata";
-import { halSourceGateway } from "./adapters/hal";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
-import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
 import { UiConfig, uiConfigSchema } from "./uiConfigSchema";
 import { UseCasesUsedOnRouter } from "../rpc/router";
 import { makeGetAgent } from "./usecases/getAgent";
@@ -26,14 +22,12 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfBootstrapCore = {
     dbConfig: DbConfig;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
 };
 
 export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     dbApi: DbApiV2;
     comptoirDuLibreApi: ComptoirDuLibreApi;
-    getSoftwareExternalData: GetSoftwareExternalData;
 };
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
@@ -50,18 +44,15 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
 ): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCasesUsedOnRouter; uiConfig: UiConfig }> {
-    const { dbConfig, externalSoftwareDataOrigin } = params;
+    const { dbConfig } = params;
     const uiConfig = uiConfigSchema.parse(rawUiConfig);
-
-    const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
     const context: Context = {
         "paramsOfBootstrapCore": params,
         dbApi,
-        comptoirDuLibreApi,
-        getSoftwareExternalData
+        comptoirDuLibreApi
     };
 
     const useCases: UseCasesUsedOnRouter = {
@@ -73,25 +64,4 @@ export async function bootstrapCore(
     };
 
     return { dbApi, context, useCases, uiConfig };
-}
-
-function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
-    "getSoftwareExternalDataOptions": GetSoftwareExternalDataOptions;
-    "getSoftwareExternalData": GetSoftwareExternalData;
-} {
-    switch (externalSoftwareDataOrigin) {
-        case "wikidata":
-            return {
-                "getSoftwareExternalDataOptions": wikidataSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": wikidataSourceGateway.softwareExternalData.getById
-            };
-        case "HAL":
-            return {
-                "getSoftwareExternalDataOptions": halSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": halSourceGateway.softwareExternalData.getById
-            };
-        default:
-            const unreachableCase: never = externalSoftwareDataOrigin;
-            throw new Error(`Unreachable case: ${unreachableCase}`);
-    }
 }
