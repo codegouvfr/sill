@@ -15,9 +15,8 @@ const zEnvConfiguration = z.object({
     "isDevEnvironnement": z.boolean().optional(),
     // Completely disable this instance and redirect to another url
     "redirectUrl": z.string().optional(),
-    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional().default("wikidata"),
+    "importDataSourceOrigin": z.string().optional().default("wikidata"),
     "databaseUrl": z.string(),
-    "initializeSoftwareFromSource": z.boolean(),
     "botAgentEmail": z.string().optional(),
     "listToImport": z.array(z.string()).optional(),
     "updateSkipTimingInMinutes": z.number().optional()
@@ -33,10 +32,9 @@ const envConfiguration = zEnvConfiguration.parse({
     "githubPersonalAccessTokenForApiRateLimit": process.env.SILL_GITHUB_TOKEN,
     "port": parseInt(process.env.SILL_API_PORT ?? ""),
     "isDevEnvironnement": process.env.SILL_IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
-    "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
+    "importDataSourceOrigin": process.env.SILL_IMPORT_DATA_SOURCE_ORIGIN,
     "redirectUrl": process.env.SILL_REDIRECT_URL,
     "databaseUrl": process.env.DATABASE_URL,
-    "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
     "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
     "listToImport": process.env?.SILL_IMPORT_DATA_IDS?.split(","),
     "updateSkipTimingInMinutes": process.env?.SILL_UPDATE_SKIP_TIMING

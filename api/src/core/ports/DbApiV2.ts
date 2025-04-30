@@ -1,12 +1,6 @@
 import type { Database, DatabaseRowOutput } from "../adapters/dbApi/kysely/kysely.database";
 import { TransformRepoToCleanedRow } from "../adapters/dbApi/kysely/kysely.utils";
-import type {
-    Agent,
-    Instance,
-    InstanceFormData,
-    ServiceProvider,
-    Software
-} from "../usecases/readWriteSillData";
+import type { Agent, Instance, InstanceFormData, ServiceProvider, Software } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
@@ -106,6 +100,7 @@ export interface SoftwareExternalDataRepository {
     getBySource: (params: { sourceSlug: string }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
     getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    delete: (params: { sourceSlug: string; externalId: string }) => Promise<boolean>;
 }
 
 type CnllPrestataire = {
@@ -173,16 +168,20 @@ export interface SoftwareUserRepository {
 
 export interface SourceRepository {
     getAll: () => Promise<DatabaseDataType.SourceRow[]>;
+    getByName: (params: { name: string }) => Promise<DatabaseDataType.SourceRow | undefined>;
     getMainSource: () => Promise<DatabaseDataType.SourceRow>;
     getWikidataSource: () => Promise<DatabaseDataType.SourceRow | undefined>;
 }
 
 export interface SimilarSoftwareRepository {
-    insert: (params: {
-        softwareId: number;
-        externalIds: { sourceSlug: string; externalId: string }[];
-    }) => Promise<void>;
+    insert: (
+        params: {
+            softwareId: number;
+            externalIds: { sourceSlug: string; externalId: string }[];
+        }[]
+    ) => Promise<void>;
     getById: (params: { softwareId: number }) => Promise<{ sourceSlug: string; externalId: string }[]>;
+    getByExternalId: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
 }
 
 export type DbApiV2 = {

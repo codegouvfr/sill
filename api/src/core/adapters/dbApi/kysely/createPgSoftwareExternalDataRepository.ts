@@ -125,5 +125,13 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .selectAll()
             .execute()
             .then(rows => rows.map(cleanDataForExternalData));
+    },
+    delete: async ({ externalId, sourceSlug }) => {
+        return db
+            .deleteFrom("software_external_datas")
+            .where("externalId", "=", externalId)
+            .where("sourceSlug", "=", sourceSlug)
+            .execute()
+            .then(rows => rows.length > 0);
     }
 });
