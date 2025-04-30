@@ -1,9 +1,6 @@
-import { wikidataSourceGateway } from "../adapters/wikidata";
-import { halSourceGateway } from "../adapters/hal";
 import { DatabaseDataType, DbApiV2 } from "../ports/DbApiV2";
-import type { GetSoftwareExternalData } from "../ports/GetSoftwareExternalData";
 import { buildIndex } from "../utils";
-import { Catalogi } from "../../types/Catalogi";
+import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 type ParamsOfrefreshExternalDataUseCase = {
     dbApi: DbApiV2;
@@ -75,8 +72,11 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
 
         const actualExternalDataRow = await dbApi.softwareExternalData.get({ sourceSlug, externalId });
 
-        const getCaller = getSoftwareExternalDataFunction(source.kind);
-        const externalData = await getCaller({ externalId: externalId, source: source });
+        const sourceGateway = resolveAdapterFromSource(source);
+        const externalData = await sourceGateway.softwareExternalData.getById({
+            externalId: externalId,
+            source: source
+        });
 
         if (externalData) {
             await dbApi.softwareExternalData.update({
@@ -93,24 +93,4 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
     }
     console.timeEnd(useCaseLogTimer);
     return true;
-};
-
-const getSoftwareExternalDataFunction = (sourceKind: Catalogi.SourceKind): GetSoftwareExternalData => {
-    switch (sourceKind) {
-        case "wikidata":
-            return wikidataSourceGateway.softwareExternalData.getById;
-        case "HAL":
-            return halSourceGateway.softwareExternalData.getById;
-        case "ComptoirDuLibre":
-        case "FramaLibre":
-        case "GitHub":
-        case "GitLab":
-        case "Orcid":
-        case "SWH":
-        case "doi":
-            throw new Error("Not Implemented yet");
-        default:
-            const unreachableCase: never = sourceKind;
-            throw new Error(`Unreachable case: ${unreachableCase}`);
-    }
 };
