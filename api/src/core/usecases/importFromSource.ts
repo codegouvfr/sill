@@ -4,10 +4,10 @@
 
 import { DbApiV2 } from "../ports/DbApiV2";
 import { halAPIGateway } from "../adapters/hal/HalAPI";
-import { halRawSoftwareToSoftwareForm } from "../adapters/hal/getSoftwareForm";
-import { getWikidataForm } from "../adapters/wikidata/getSoftwareForm";
 import { makeCreateSofware } from "./createSoftware";
 import { Source } from "./readWriteSillData";
+import { GetSoftwareFormData } from "../ports/GetSoftwareFormData";
+import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 export type ImportFromSource = (params: {
     agentEmail: string;
@@ -27,126 +27,111 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                   about: "This is a bot user created to import data."
               });
 
+        const getSoftwareForm = resolveAdapterFromSource(source).softwareForm.getById;
+
         switch (source.kind) {
             case "HAL":
                 // Get All or Request
-                const rawHALSoftware =
+                const rawHALSoftwareIds =
                     softwareIdOnSource && softwareIdOnSource.length > 0
-                        ? (await Promise.all(softwareIdOnSource.map(id => halAPIGateway.software.getById(id)))).filter(
-                              a => a !== undefined
-                          )
-                        : await halAPIGateway.software.getAll({ SWHFilter: true });
+                        ? softwareIdOnSource
+                        : (await halAPIGateway.software.getAll({ SWHFilter: true })).map(doc => doc.docid);
 
-                return rawHALSoftware.map(async rawHALSoftwareItem => {
-                    // Check if already present in DB
-                    const externalData = await dbApi.softwareExternalData.get({
-                        externalId: rawHALSoftwareItem.docid,
-                        sourceSlug: source.slug
-                    });
-                    if (externalData) {
-                        console.info(
-                            `[Import] Importing ${rawHALSoftwareItem.title_s[0]}(${rawHALSoftwareItem.docid}) from ${source.slug}: Already there`
-                        );
-                        return externalData.softwareId;
-                    }
+                console.info(
+                    `[UC:Import] Importing  ${rawHALSoftwareIds.length} software packages from ${source.slug}`
+                );
+                return rawHALSoftwareIds.map(docId => checkSoftware(dbApi, source, docId, getSoftwareForm, agentId));
 
-                    // Check if same name
-                    const savedSoftware = await dbApi.software.getByName(rawHALSoftwareItem.title_s[0]);
-                    if (savedSoftware) {
-                        // Check if a external id exist for this source and name
-                        const oldVersion = await dbApi.softwareExternalData.getBySoftwareIdAndSource({
-                            softwareId: savedSoftware.softwareId,
-                            sourceSlug: source.slug
-                        });
-
-                        if (oldVersion) {
-                            // delete this old document and insert a new ! Careful on external Id similar
-                            console.info(
-                                `[UC:Import] Importing ${rawHALSoftwareItem.title_s[0]}(${rawHALSoftwareItem.docid}) from ${source.slug}: Need to delete and update`
-                            );
-                            console.log("should do smt");
-                        }
-
-                        // There is no document for this source, just insert the external data
-                        console.info(
-                            `[UC:Import] Importing ${rawHALSoftwareItem.title_s[0]}(${rawHALSoftwareItem.docid}) from ${source.slug}: Updating external data`
-                        );
-                        await dbApi.softwareExternalData.insert([
-                            {
-                                softwareId: savedSoftware.softwareId,
-                                sourceSlug: source.slug,
-                                externalId: rawHALSoftwareItem.docid
-                            }
-                        ]);
-
-                        return savedSoftware.softwareId;
-                    }
-
-                    console.info(
-                        `[UC:Import] Importing ${rawHALSoftwareItem.title_s[0]}(${rawHALSoftwareItem.docid}) from ${source.slug} `
-                    );
-                    const newSoft = await halRawSoftwareToSoftwareForm(rawHALSoftwareItem);
-                    const createSoftware = makeCreateSofware(dbApi);
-                    return createSoftware({ formData: newSoft, agentId: agentId });
-                });
             case "wikidata":
-                if (!softwareIdOnSource) {
+                if (!softwareIdOnSource || softwareIdOnSource.length === 0) {
                     return [];
                 }
 
+                console.info(
+                    `[UC:Import] Importing  ${softwareIdOnSource.length} software packages from ${source.slug}`
+                );
                 return softwareIdOnSource
-                    .map(async (wikidataId: string) => {
-                        // Check if already present
-                        const externalData = await dbApi.softwareExternalData.get({
-                            sourceSlug: source.slug,
-                            externalId: wikidataId
-                        });
-                        if (externalData) {
-                            return externalData.softwareId;
-                        }
-
-                        // Get software
-                        const wikidataSoftwareForm = await getWikidataForm(wikidataId);
-                        if (!wikidataSoftwareForm || !wikidataSoftwareForm.softwareName) {
-                            return undefined;
-                        }
-
-                        // Check if same name
-                        const savedSoftware = await dbApi.software.getByName(wikidataSoftwareForm.softwareName);
-                        if (savedSoftware) {
-                            // Check if it's related to another source
-                            const concurentExternalData = await dbApi.softwareExternalData.getBySoftwareIdAndSource({
-                                sourceSlug: source.slug,
-                                softwareId: savedSoftware.softwareId
-                            });
-                            if (concurentExternalData) {
-                                // delete this old document and insert a new ! Careful on external Id similar
-                                console.info(
-                                    `[UC:Import] Importing ${wikidataSoftwareForm.softwareName}(${wikidataId}) from ${source.slug}: Need to delete and update`
-                                );
-                                console.log("should do smt");
-                            }
-
-                            await dbApi.softwareExternalData.insert([
-                                {
-                                    softwareId: savedSoftware.softwareId,
-                                    sourceSlug: source.slug,
-                                    externalId: wikidataId
-                                }
-                            ]);
-
-                            return savedSoftware.softwareId;
-                        }
-
-                        console.info(
-                            `[UC:Import] Importing ${wikidataSoftwareForm.softwareName}(${wikidataId}) from ${source.slug} `
-                        );
-                        const createSoftware = makeCreateSofware(dbApi);
-                        return createSoftware({ formData: wikidataSoftwareForm, agentId: agentId });
-                    })
+                    .map(externalId => checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId))
                     .filter(val => val != undefined);
             default:
                 throw Error("[UC:Import] Not Implemented");
         }
     };
+};
+
+const checkSoftware = async (
+    dbApi: DbApiV2,
+    source: Source,
+    externalId: string,
+    getSoftwareForm: GetSoftwareFormData,
+    agentId: number
+) => {
+    // Check if already present
+    const externalData = await dbApi.softwareExternalData.get({
+        sourceSlug: source.slug,
+        externalId: externalId
+    });
+    if (externalData) {
+        console.info(`[UC:Import] Importing (${externalId}) from ${source.slug}: Already there ⏭️`);
+        return externalData.softwareId;
+    }
+
+    // Get software form from source
+    const softwareForm = await getSoftwareForm(externalId);
+    if (!softwareForm || !softwareForm.softwareName) {
+        return undefined;
+    }
+
+    // Check if same name
+    const savedSoftware = await dbApi.software.getByName(softwareForm.softwareName);
+    if (savedSoftware) {
+        // Check if it's related to another source
+        const concurentExternalData = await dbApi.softwareExternalData.getBySoftwareIdAndSource({
+            sourceSlug: source.slug,
+            softwareId: savedSoftware.softwareId
+        });
+        let relatedSoftwareIds: { softwareId: number }[] = [];
+        if (concurentExternalData) {
+            // delete this old document and insert a new ! Careful on external Id similar
+            console.info(
+                `[UC:Import] Importing ${softwareForm.softwareName}(${externalId}) from ${source.slug}: Need to delete and insert`
+            );
+            relatedSoftwareIds = await dbApi.similarSoftware.getByExternalId({
+                sourceSlug: source.slug,
+                externalId: concurentExternalData.externalId
+            });
+            await dbApi.softwareExternalData.delete({
+                sourceSlug: source.slug,
+                externalId: concurentExternalData.externalId
+            });
+        }
+
+        // There is no externalId for this source, just insert the external data
+        console.info(
+            `[UC:Import] Importing  ${softwareForm.softwareName}(${externalId}) from ${source.slug}: Adding externalData`
+        );
+        await dbApi.softwareExternalData.insert([
+            {
+                softwareId: savedSoftware.softwareId,
+                sourceSlug: source.slug,
+                externalId: externalId
+            }
+        ]);
+
+        if (concurentExternalData && relatedSoftwareIds.length > 0) {
+            const obj = relatedSoftwareIds.map(({ softwareId }) => ({
+                softwareId,
+                externalIds: [{ sourceSlug: source.slug, externalId: concurentExternalData.externalId }]
+            }));
+            await dbApi.similarSoftware.insert(obj);
+        }
+
+        return savedSoftware.softwareId;
+    }
+
+    console.info(
+        `[UC:Import] Importing ${softwareForm.softwareName}(${externalId}) from ${source.slug} : Adding software and externalData `
+    );
+    const createSoftware = makeCreateSofware(dbApi);
+    return createSoftware({ formData: softwareForm, agentId: agentId });
 };

@@ -14,6 +14,14 @@ export const createPgSourceRepository = (db: Kysely<Database>): SourceRepository
             .selectAll()
             .execute()
             .then(rows => rows.map(row => stripNullOrUndefinedValues(row))),
+    getByName: async (params: { name: string }) =>
+        db
+            .selectFrom("sources")
+            .selectAll()
+            .where("slug", "=", params.name)
+            .orderBy("priority", "asc")
+            .executeTakeFirstOrThrow()
+            .then(row => stripNullOrUndefinedValues(row)),
     getMainSource: async () =>
         db
             .selectFrom("sources")
