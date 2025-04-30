@@ -9,14 +9,7 @@ import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
 import { DbApiV2 } from "../core/ports/DbApiV2";
-import {
-    ExternalDataOrigin,
-    GetSoftwareExternalData,
-    Language,
-    languages,
-    type LocalizedString
-} from "../core/ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { Language, languages, type LocalizedString } from "../core/ports/GetSoftwareExternalData";
 import type { UseCases } from "../core/usecases";
 import {
     DeclarationFormData,
@@ -30,6 +23,7 @@ import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
 import { User } from "./user";
+import { resolveAdapterFromSource } from "../core/adapters/resolveAdapter";
 
 export type UseCasesUsedOnRouter = Pick<
     UseCases,
@@ -42,19 +36,8 @@ export function createRouter(params: {
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
     redirectUrl: string | undefined;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
-    getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
-    getSoftwareExternalData: GetSoftwareExternalData;
 }) {
-    const {
-        useCases,
-        dbApi,
-        oidcParams,
-        termsOfServiceUrl,
-        redirectUrl,
-        externalSoftwareDataOrigin: externalDataOrigin,
-        getSoftwareExternalDataOptions
-    } = params;
+    const { useCases, dbApi, oidcParams, termsOfServiceUrl, redirectUrl } = params;
 
     const t = initTRPC.context<Context>().create({
         "transformer": superjson
@@ -77,7 +60,7 @@ export function createRouter(params: {
 
     const router = t.router({
         "getRedirectUrl": loggedProcedure.query(() => redirectUrl),
-        "getExternalSoftwareDataOrigin": loggedProcedure.query(() => externalDataOrigin),
+        "getExternalSoftwareDataOrigin": loggedProcedure.query(async () => (await dbApi.source.getMainSource()).kind),
         "getApiVersion": loggedProcedure.query(
             (() => {
                 const out: string = JSON.parse(
@@ -110,9 +93,10 @@ export function createRouter(params: {
 
                 const { queryString, language } = input;
                 const mainSource = await dbApi.source.getMainSource();
+                const sourceGateway = resolveAdapterFromSource(mainSource);
 
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
-                    getSoftwareExternalDataOptions({ queryString, language, source: mainSource }),
+                    sourceGateway.softwareOptions.getById({ queryString, language, source: mainSource }),
                     dbApi.software.getAllSillSoftwareExternalIds(mainSource.slug)
                 ]);
 
