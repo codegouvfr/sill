@@ -10,9 +10,8 @@ const zEnvConfiguration = z.object({
     "isDevEnvironnement": z.boolean().optional(),
     // Completely disable this instance and redirect to another url
     "redirectUrl": z.string().optional(),
-    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional().default("wikidata"),
+    "importDataSourceOrigin": z.string().optional().default("wikidata"),
     "databaseUrl": z.string(),
-    "initializeSoftwareFromSource": z.boolean(),
     "botAgentEmail": z.string().optional(),
     "listToImport": z.array(z.string()).optional(),
     "updateSkipTimingInMinutes": z.number().optional()
@@ -25,10 +24,9 @@ const envConfiguration = zEnvConfiguration.parse({
     },
     "port": parseInt(process.env.API_PORT ?? ""),
     "isDevEnvironnement": process.env.IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
-    "externalSoftwareDataOrigin": process.env.EXTERNAL_SOFTWARE_DATA_ORIGIN,
+    "importDataSourceOrigin": process.env.IMPORT_DATA_SOURCE_ORIGIN,
     "redirectUrl": process.env.REDIRECT_URL,
     "databaseUrl": process.env.DATABASE_URL,
-    "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
     "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
     "listToImport": process.env?.IMPORT_DATA_IDS?.split(","),
     "updateSkipTimingInMinutes": process.env?.UPDATE_SKIP_TIMING
