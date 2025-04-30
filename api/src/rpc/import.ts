@@ -9,11 +9,10 @@ export async function startImportService(params: {
     isDevEnvironnement: boolean;
     databaseUrl: string;
     botAgentEmail?: string;
-    initializeSoftwareFromSource: boolean;
+    importDataSourceOrigin: string;
     listToImport?: string[];
 }) {
-    const { isDevEnvironnement, databaseUrl, initializeSoftwareFromSource, botAgentEmail, listToImport, ...rest } =
-        params;
+    const { isDevEnvironnement, databaseUrl, botAgentEmail, listToImport, importDataSourceOrigin, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -27,8 +26,9 @@ export async function startImportService(params: {
             "kyselyDb": kyselyDb
         },
         "botAgentEmail": botAgentEmail,
+        "sourceSlug": importDataSourceOrigin,
         "listToImport": listToImport ?? []
     });
 
-    success ? console.log("Importation successful") : console.error("Error");
+    success ? console.info("[RPC:Import] ✅ Importation successful ✅") : console.error("[RPC:Import] ❌ Error ❌");
 }
