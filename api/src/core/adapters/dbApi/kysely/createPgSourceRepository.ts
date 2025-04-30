@@ -18,7 +18,7 @@ export const createPgSourceRepository = (db: Kysely<Database>): SourceRepository
         db
             .selectFrom("sources")
             .selectAll()
-            .orderBy("priority", "desc")
+            .orderBy("priority", "asc")
             .executeTakeFirstOrThrow()
             .then(row => stripNullOrUndefinedValues(row)),
     getWikidataSource: async () =>
@@ -26,7 +26,7 @@ export const createPgSourceRepository = (db: Kysely<Database>): SourceRepository
             .selectFrom("sources")
             .selectAll()
             .where("kind", "=", "wikidata")
-            .orderBy("priority", "desc")
+            .orderBy("priority", "asc")
             .executeTakeFirstOrThrow()
             .then(row => stripNullOrUndefinedValues(row))
 });
