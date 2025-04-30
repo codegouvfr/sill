@@ -99,13 +99,15 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                     externalId: externalSimiliarId
                 }))
             );
-            await dbApi.similarSoftware.insert({
-                softwareId,
-                externalIds: similarSoftwareExternalDataIds.map(similarId => ({
-                    externalId: similarId,
-                    sourceSlug: sourceSlug
-                }))
-            });
+            await dbApi.similarSoftware.insert([
+                {
+                    softwareId,
+                    externalIds: similarSoftwareExternalDataIds.map(similarId => ({
+                        externalId: similarId,
+                        sourceSlug: sourceSlug
+                    }))
+                }
+            ]);
         }
 
         console.log("all good");

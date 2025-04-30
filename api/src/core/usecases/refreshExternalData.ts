@@ -93,4 +93,4 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
     }
     console.timeEnd(useCaseLogTimer);
     return true;
-}
+};
