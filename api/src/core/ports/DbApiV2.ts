@@ -5,8 +5,7 @@ import type {
     Instance,
     InstanceFormData,
     ServiceProvider,
-    Software,
-    Source
+    Software
 } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
@@ -174,8 +173,8 @@ export interface SoftwareUserRepository {
 
 export interface SourceRepository {
     getAll: () => Promise<DatabaseDataType.SourceRow[]>;
-    getMainSource: () => Promise<Source>;
-    getWikidataSource: () => Promise<Source | undefined>;
+    getMainSource: () => Promise<DatabaseDataType.SourceRow>;
+    getWikidataSource: () => Promise<DatabaseDataType.SourceRow | undefined>;
 }
 
 export interface SimilarSoftwareRepository {
