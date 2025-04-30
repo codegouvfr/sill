@@ -1,13 +1,6 @@
 import type { Database, DatabaseRowOutput } from "../adapters/dbApi/kysely/kysely.database";
 import { TransformRepoToCleanedRow } from "../adapters/dbApi/kysely/kysely.utils";
-import type {
-    Agent,
-    Instance,
-    InstanceFormData,
-    ServiceProvider,
-    Software,
-    Source
-} from "../usecases/readWriteSillData";
+import type { Agent, Instance, InstanceFormData, ServiceProvider, Software } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
@@ -174,8 +167,8 @@ export interface SoftwareUserRepository {
 
 export interface SourceRepository {
     getAll: () => Promise<DatabaseDataType.SourceRow[]>;
-    getMainSource: () => Promise<Source>;
-    getWikidataSource: () => Promise<Source | undefined>;
+    getMainSource: () => Promise<DatabaseDataType.SourceRow>;
+    getWikidataSource: () => Promise<DatabaseDataType.SourceRow | undefined>;
 }
 
 export interface SimilarSoftwareRepository {
