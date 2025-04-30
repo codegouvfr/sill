@@ -2,10 +2,10 @@ import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
 import { expectPromiseToFailWith, expectToEqual, testPgUrl } from "../../../../tools/test.helpers";
 import { DbAgent, DbApiV2 } from "../../../ports/DbApiV2";
-import { ExternalDataOrigin, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
 import { DeclarationFormData, SoftwareFormData, Source } from "../../../usecases/readWriteSillData";
 import { createKyselyPgDbApi } from "./createPgDbApi";
-import { Database } from "./kysely.database";
+import { Database, ExternalDataOriginKind } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 import { makeCreateSofware } from "../../../usecases/createSoftware";
 // import * as fs from "node:fs";
@@ -140,7 +140,7 @@ describe("pgDbApi", () => {
             .insertInto("sources")
             .values({
                 ...source,
-                kind: source.kind as ExternalDataOrigin
+                kind: source.kind as ExternalDataOriginKind
             })
             .execute();
     });

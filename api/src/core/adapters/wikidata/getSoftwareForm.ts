@@ -1,7 +1,11 @@
-import { SoftwareFormData } from "../../usecases/readWriteSillData";
+import { SoftwareFormData, Source } from "../../usecases/readWriteSillData";
 import { createGetClaimDataValue, fetchEntity, WikidataFetchError } from "./getWikidataSoftware";
 
-export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormData | undefined> => {
+export const getWikidataForm = async (params: {
+    externalId: string;
+    source: Source;
+}): Promise<SoftwareFormData | undefined> => {
+    const wikidataId = params.externalId;
     try {
         console.info(`   -> fetching wiki soft : ${wikidataId}`);
         const { entity } =

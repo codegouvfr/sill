@@ -2,10 +2,9 @@ import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
 import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
 import type { DbApiV2 } from "../ports/DbApiV2";
-import { ExternalDataOrigin } from "../ports/GetSoftwareExternalData";
 import type { SoftwareFormData, Source } from "./readWriteSillData";
 import { createKyselyPgDbApi } from "../adapters/dbApi/kysely/createPgDbApi";
-import type { Database } from "../adapters/dbApi/kysely/kysely.database";
+import type { Database, ExternalDataOriginKind } from "../adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../adapters/dbApi/kysely/kysely.dialect";
 import { makeCreateSofware } from "./createSoftware";
 import { makeRefreshExternalDataForSoftware } from "./refreshExternalData";
@@ -203,7 +202,7 @@ describe("fetches software extra data (from different providers)", () => {
             .insertInto("sources")
             .values({
                 ...source,
-                kind: source.kind as ExternalDataOrigin
+                kind: source.kind as ExternalDataOriginKind
             })
             .execute();
 

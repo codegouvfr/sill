@@ -73,7 +73,7 @@ const checkSoftware = async (
     }
 
     // Get software form from source
-    const softwareForm = await getSoftwareForm(externalId);
+    const softwareForm = await getSoftwareForm({ externalId, source });
     if (!softwareForm || !softwareForm.softwareName) {
         return undefined;
     }
