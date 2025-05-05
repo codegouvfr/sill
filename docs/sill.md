@@ -48,7 +48,7 @@ Les agents publics peuvent ouvrir un compte et contribuer au SILL, mais ils ne p
 
 **Tout agent public** titulaire ou contractuel travaillant dans un organisme public de l'une des trois fonctions publiques peut être référent d'un logiciel libre dont il a l'usage sur son poste de travail ou dont il connaît l'usage dans son administration.
 
-Les référents doivent s'inscrire avec leur adresse mail nominative : les adresses fonctionnelles (du type sill@ministere.gouv.fr) ne sont pas admises.
+Les référents doivent s'inscrire avec leur adresse mail nominative : les adresses génériques, ou non-nominatives, du type sill@ministere.gouv.fr, ne sont pas admises.
 
 ### Quelles sont les tâches du référent ?
 
