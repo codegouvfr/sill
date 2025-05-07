@@ -143,7 +143,8 @@ const emptyExternalData = (params: { softwareId?: number; externalId: string; so
         identifiers: null,
         sourceSlug,
         softwareId,
-        lastDataFetchAt: null
+        lastDataFetchAt: null,
+        providers: []
     };
 };
 
@@ -169,7 +170,8 @@ const emptyExternalDataCleaned = (params: { softwareId?: number; externalId: str
         identifiers: undefined,
         sourceSlug,
         softwareId,
-        lastDataFetchAt: undefined
+        lastDataFetchAt: undefined,
+        providers: []
     };
 };
 
@@ -322,7 +324,8 @@ describe("fetches software extra data (from different providers)", () => {
                     identifiers: [],
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z"),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 },
                 {
                     applicationCategories: undefined,
@@ -330,7 +333,12 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             "@type": "Person",
-                            identifier: "Q58482636",
+                            identifiers: [
+                                {
+                                    value: "Q58482636",
+                                    "@type": "PropertyValue"
+                                }
+                            ],
                             name: "Evan You",
                             url: `https://www.wikidata.org/wiki/Q58482636`
                         }
@@ -352,7 +360,8 @@ describe("fetches software extra data (from different providers)", () => {
                     identifiers: [],
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 }
             ]);
 
@@ -409,7 +418,12 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             "@type": "Organization",
-                            identifier: "Q489709",
+                            identifiers: [
+                                {
+                                    value: "Q489709",
+                                    "@type": "PropertyValue"
+                                }
+                            ],
                             name: "Apache Software Foundation",
                             url: "https://www.wikidata.org/wiki/Q489709"
                         }
@@ -431,7 +445,8 @@ describe("fetches software extra data (from different providers)", () => {
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z"),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 },
                 emptyExternalDataCleaned({
                     externalId: "Q118629387",

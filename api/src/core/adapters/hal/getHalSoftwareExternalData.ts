@@ -1,16 +1,17 @@
 import memoize from "memoizee";
 import { JSDOM } from "jsdom";
-import { SILL } from "../../../types/SILL";
 import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { Source } from "../../usecases/readWriteSillData";
 import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
+import { SchemaIdentifier, SchemaOrganization, SchemaPerson, ScholarlyArticle } from "../dbApi/kysely/kysely.database";
+import { identifersUtils } from "../../utils";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<SILL.Organization[]> => {
+): Promise<SchemaOrganization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -34,7 +35,7 @@ const buildParentOrganizationTree = async (
 const buildReferencePublication = async (
     source: HAL.ArticleIdentifierOrigin,
     valueId: string
-): Promise<SILL.ScholarlyArticle | undefined> => {
+): Promise<ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
             return getScholarlyArticle(valueId);
@@ -67,27 +68,6 @@ const resolveStructId = (parsedXMLLabel: JSDOM, structAcronym: string) => {
     });
 
     return Number(org[0].getAttribute("xml:id")?.split("-")[1]);
-};
-
-const HALSource: SILL.WebSite = {
-    "@type": "Website" as const,
-    name: "HAL instance",
-    url: new URL("https://hal.science"),
-    additionalType: "HAL"
-};
-
-const SWHSource: SILL.WebSite = {
-    "@type": "Website" as const,
-    name: "Software Heritage instance",
-    url: new URL("https://www.softwareheritage.org/"),
-    additionalType: "SWH"
-};
-
-const DOISource: SILL.WebSite = {
-    "@type": "Website" as const,
-    name: "DOI instance",
-    url: new URL("https://www.doi.org"),
-    additionalType: "doi"
 };
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
@@ -124,14 +104,23 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         const authors = await Promise.all(
             codemetaSoftware.author.map(async role => {
                 const author = role.author;
-                const id = author?.["@id"]?.[0];
+                const id = author?.["@id"]?.[0] ?? "fuck that shit";
                 const affiliation = author.affiliation;
 
-                const base: SILL.Person = {
+                if (!id) throw new Error("Could find the author id");
+
+                const base: SchemaPerson = {
                     "@type": "Person",
-                    "name": `${author.givenName} ${author.familyName}`,
-                    "identifier": id,
-                    "affiliations": [] as SILL.Organization[]
+                    name: `${author.givenName} ${author.familyName}`,
+                    identifiers: [
+                        {
+                            "@type": "PropertyValue",
+                            value: id,
+                            additionalType: "Person",
+                            name: ""
+                        }
+                    ],
+                    affiliations: [] as SchemaOrganization[]
                 };
 
                 if (affiliation?.length && affiliation.length > 0) {
@@ -172,20 +161,31 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             })
         );
 
-        const identifiers: SILL.Identification[] =
-            codemetaSoftware?.identifier?.map(halIdentifier => {
+        const identifiers: SchemaIdentifier[] =
+            codemetaSoftware?.identifier?.map(identifierItem => {
                 const base = {
                     "@type": "PropertyValue" as const,
-                    value: halIdentifier.value,
-                    url: new URL(halIdentifier.propertyID)
+                    value: identifierItem.value,
+                    url: new URL(identifierItem.propertyID)
                 };
-                switch (halIdentifier["@type"]) {
+                switch (identifierItem["@type"]) {
                     case "hal":
-                        return { ...base, subjectOf: HALSource };
+                        return identifersUtils.makeHALIdentifier({
+                            halId: identifierItem.value,
+                            additionalType: "Software",
+                            url: identifierItem.propertyID
+                        });
                     case "swhid":
-                        return { ...base, subjectOf: SWHSource };
+                        return identifersUtils.makeSWHIdentifier({
+                            swhId: identifierItem.value,
+                            additionalType: "Software",
+                            url: identifierItem.propertyID
+                        });
                     case "doi":
-                        return { ...base, subjectOf: DOISource };
+                        return identifersUtils.makeDOIIdentifier({
+                            doi: identifierItem.value,
+                            additionalType: "Software"
+                        });
                     case "bibcode":
                     case "cern":
                     case "prodinra":
@@ -229,7 +229,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
                     )
                 ).filter(val => val !== undefined),
-            identifiers: identifiers
+            identifiers: identifiers,
+            providers: []
         };
     },
     {
