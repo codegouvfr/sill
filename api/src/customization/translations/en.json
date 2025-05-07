@@ -1,4 +1,5 @@
 {
+    "$schema": "./schema.json",
     "common": {
         "user_one": "user",
         "user_other": "users",

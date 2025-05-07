@@ -1,39 +1,62 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Catalogi translations schema",
     "type": "object",
     "properties": {
+        "$schema": {
+            "type": "string",
+            "examples": ["./schema.json"]
+        },
         "common": {
             "type": "object",
             "properties": {
                 "user_one": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "user_other": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "referent_one": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "referent_other": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "provider_one": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "providers_other": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 },
                 "appAccronym": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Common reusable translation"
                 }
-            }
+            },
+            "description": "Common reusable translation",
+            "additionalProperties": false,
+            "required": [
+                "user_one",
+                "user_other",
+                "referent_one",
+                "referent_other",
+                "provider_one",
+                "providers_other",
+                "appAccronym"
+            ]
         },
         "app": {
             "type": "object",
             "properties": {
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "yes": {
                     "type": "string"
@@ -98,13 +121,39 @@
                 "close": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "yes",
+                "no",
+                "not applicable",
+                "previous",
+                "next",
+                "add software",
+                "update software",
+                "add software or service",
+                "add instance",
+                "update instance",
+                "required",
+                "invalid url",
+                "invalid version",
+                "all",
+                "allFeminine",
+                "loading",
+                "no result",
+                "search",
+                "validate",
+                "not provided",
+                "close"
+            ]
         },
         "home": {
             "type": "object",
             "properties": {
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "subTitle": {
                     "type": "string"
@@ -193,7 +242,40 @@
                 "accessCatalog": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "subTitle",
+                "softwareSelection",
+                "lastAdded",
+                "mostUsed",
+                "essential",
+                "recentlyUpdated",
+                "waitingForReferent",
+                "inSupportMarket",
+                "SILLNumbers",
+                "softwareCount",
+                "registeredUserCount",
+                "agentReferentCount",
+                "organizationCount",
+                "programmerCount",
+                "institutionCount",
+                "helpUs",
+                "theSillInAFewWords",
+                "theSillInAFewWordsParagraph",
+                "illustrationImage",
+                "declareReferentTitle",
+                "editSoftwareTitle",
+                "addSoftwareOrServiceTitle",
+                "declareReferentDesc",
+                "editSoftwareDesc",
+                "addSoftwareOrServiceDesc",
+                "declareReferentButtonLabel",
+                "editSoftwareButtonLabel",
+                "addSoftwareOrServiceButtonLabel",
+                "accessCatalog"
+            ]
         },
         "about": {
             "type": "object",
@@ -201,75 +283,106 @@
                 "text": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["text"]
         },
         "addSoftwareLanding": {
             "type": "object",
             "properties": {
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "subtitle": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "who can add software": {
                     "type": "string"
                 },
                 "discover as agent label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "discover as agent description": {
                     "type": "string"
                 },
                 "discover as DSI label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "discover as DSI description": {
                     "type": "string"
                 },
                 "contribute as agent label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "contribute as agent description": {
                     "type": "string"
                 },
                 "contribute as DSI label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "contribute as DSI description": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "subtitle",
+                "who can add software",
+                "discover as agent label",
+                "discover as agent description",
+                "discover as DSI label",
+                "discover as DSI description",
+                "contribute as agent label",
+                "contribute as agent description",
+                "contribute as DSI label",
+                "contribute as DSI description"
+            ]
         },
         "softwareForm": {
             "type": "object",
             "properties": {
                 "stepper title_add_unnamed": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_add_named": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_update": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_info_unnamed": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_info_named": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_prerequisites_unnamed": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_prerequisites_named": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_similar_software_unnamed": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper title_similar_software_named": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "add unamed software": {
                     "type": "string"
@@ -281,12 +394,31 @@
                     "type": "string"
                 },
                 "add software button": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Text for a button"
                 },
                 "update software button": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Text for a button"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "stepper title_add_unnamed",
+                "stepper title_add_named",
+                "stepper title_update",
+                "stepper title_info_unnamed",
+                "stepper title_info_named",
+                "stepper title_prerequisites_unnamed",
+                "stepper title_prerequisites_named",
+                "stepper title_similar_software_unnamed",
+                "stepper title_similar_software_named",
+                "add unamed software",
+                "add software",
+                "update software",
+                "add software button",
+                "update software button"
+            ]
         },
         "softwareFormStep1": {
             "type": "object",
@@ -298,18 +430,29 @@
                     "type": "string"
                 },
                 "software cloud hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "module": {
                     "type": "string"
                 },
                 "module hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "checkbox legend": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "software desktop",
+                "software cloud",
+                "software cloud hint",
+                "module",
+                "module hint",
+                "checkbox legend"
+            ]
         },
         "softwareFormStep2": {
             "type": "object",
@@ -318,13 +461,15 @@
                     "type": "string"
                 },
                 "external id hint_fill": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "comptoir du libre id": {
                     "type": "string"
                 },
                 "comptoir du libre id hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "software name": {
                     "type": "string"
@@ -333,19 +478,22 @@
                     "type": "string"
                 },
                 "software feature hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "license": {
                     "type": "string"
                 },
                 "license hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "minimal version": {
                     "type": "string"
                 },
                 "minimal version hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "url or numeric id": {
                     "type": "string"
@@ -357,7 +505,8 @@
                     "type": "string"
                 },
                 "logo url hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "must be an url": {
                     "type": "string"
@@ -366,7 +515,8 @@
                     "type": "string"
                 },
                 "keywords hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "logo preview alt": {
                     "type": "string"
@@ -374,7 +524,30 @@
                 "invalid comptoir du libre id": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "external id",
+                "external id hint_fill",
+                "comptoir du libre id",
+                "comptoir du libre id hint",
+                "software name",
+                "software feature",
+                "software feature hint",
+                "license",
+                "license hint",
+                "minimal version",
+                "minimal version hint",
+                "url or numeric id",
+                "autofill notice",
+                "logo url",
+                "logo url hint",
+                "must be an url",
+                "keywords",
+                "keywords hint",
+                "logo preview alt",
+                "invalid comptoir du libre id"
+            ]
         },
         "softwareFormStep3": {
             "type": "object",
@@ -388,7 +561,9 @@
                 "do respect RGAA": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["is present in support market", "is from french public service", "do respect RGAA"]
         },
         "softwareFormStep4": {
             "type": "object",
@@ -397,9 +572,12 @@
                     "type": "string"
                 },
                 "similar software hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["similar software", "similar software hint"]
         },
         "instanceForm": {
             "type": "object",
@@ -411,21 +589,35 @@
                     "type": "string"
                 },
                 "title add instance form": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "title update instance form": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper-title_1": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "stepper-title_2": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "submit": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "breadcrumb add instance",
+                "breadcrumb update instance",
+                "title add instance form",
+                "title update instance form",
+                "stepper-title_1",
+                "stepper-title_2",
+                "submit"
+            ]
         },
         "instanceFormStep1": {
             "type": "object",
@@ -436,36 +628,57 @@
                 "other software": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["software instance", "other software"]
         },
         "instanceFormStep2": {
             "type": "object",
             "properties": {
                 "is in public access label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "is in public access hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "instance url label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "instance url hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "organization label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "organization hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "targeted public label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "targeted public hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "is in public access label",
+                "is in public access hint",
+                "instance url label",
+                "instance url hint",
+                "organization label",
+                "organization hint",
+                "targeted public label",
+                "targeted public hint"
+            ]
         },
         "softwareCatalogCard": {
             "type": "object",
@@ -491,7 +704,17 @@
                 "youAreReferent": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "latestVersion",
+                "declareOneselfReferent",
+                "hasDesktopApp",
+                "isFromFrenchPublicService",
+                "isPresentInSupportMarket",
+                "youAreUser",
+                "youAreReferent"
+            ]
         },
         "softwareCatalogControlled": {
             "type": "object",
@@ -532,7 +755,22 @@
                 "mySoftware": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "searchResults",
+                "sortBy",
+                "addedTime",
+                "updateTime",
+                "referentCount",
+                "referentCountASC",
+                "userCount",
+                "userCountASC",
+                "latestVersionPublicationDate",
+                "noSoftwareFound",
+                "bestMatch",
+                "mySoftware"
+            ]
         },
         "softwareCatalogSearch": {
             "type": "object",
@@ -550,13 +788,15 @@
                     "type": "string"
                 },
                 "environnement label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "prerogativesLabel": {
                     "type": "string"
                 },
                 "programmingLanguages label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "filters": {
                     "type": "string"
@@ -577,7 +817,8 @@
                     "type": "string"
                 },
                 "organization filter hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "linux": {
                     "type": "string"
@@ -606,7 +847,33 @@
                 "android": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "placeholder",
+                "filtersButton",
+                "organizationLabel",
+                "categoriesLabel",
+                "environnement label",
+                "prerogativesLabel",
+                "programmingLanguages label",
+                "filters",
+                "isInstallableOnUserComputer",
+                "isAvailableAsMobileApp",
+                "isFromFrenchPublicServices",
+                "doRespectRgaa",
+                "isPresentInSupportContract",
+                "organization filter hint",
+                "linux",
+                "mac",
+                "windows",
+                "browser",
+                "stack",
+                "number of prerogatives selected_zero",
+                "number of prerogatives selected_other",
+                "ios",
+                "android"
+            ]
         },
         "softwareDetails": {
             "type": "object",
@@ -621,16 +888,19 @@
                     "type": "string"
                 },
                 "tab title overview": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "tab title instance": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "tab service providers": {
                     "type": "string"
                 },
                 "tab title alike software": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "list of service providers": {
                     "type": "string"
@@ -701,7 +971,40 @@
                 "unreference software": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "catalog breadcrumb",
+                "tabReferencePublication",
+                "tabReferencePublicationTitle",
+                "tab title overview",
+                "tab title instance",
+                "tab service providers",
+                "tab title alike software",
+                "list of service providers",
+                "prerogatives",
+                "last version",
+                "last version date",
+                "register",
+                "register date",
+                "minimal version",
+                "license",
+                "declare oneself referent",
+                "hasDesktopApp",
+                "isPresentInSupportMarket",
+                "isFromFrenchPublicService",
+                "isRGAACompliant",
+                "comptoire du libre sheet",
+                "wikiData sheet",
+                "share software",
+                "declare referent",
+                "edit software",
+                "stop being user",
+                "stop being referent",
+                "become referent",
+                "please provide a reason for unreferencing this software",
+                "unreference software"
+            ]
         },
         "headerDetailCard": {
             "type": "object",
@@ -733,7 +1036,19 @@
                 "software dereferenced last version": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "authors",
+                "website",
+                "documentation",
+                "repository",
+                "software logo",
+                "you are user",
+                "you are referent",
+                "software dereferenced",
+                "software dereferenced last version"
+            ]
         },
         "previewTab": {
             "type": "object",
@@ -810,7 +1125,34 @@
                 "supportedOS": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "about",
+                "use full links",
+                "prerogatives",
+                "last version",
+                "register",
+                "minimal version",
+                "metadata",
+                "license",
+                "hasDesktopApp",
+                "isAvailableAsMobileApp",
+                "isPresentInSupportMarket",
+                "isFromFrenchPublicService",
+                "isRGAACompliant",
+                "comptoire du libre sheet",
+                "wikiData sheet",
+                "what is the support market",
+                "programming languages",
+                "keywords",
+                "application categories",
+                "softwareType",
+                "softwareType-desktop/mobile",
+                "softwareType-stack",
+                "softwareType-cloud",
+                "supportedOS"
+            ]
         },
         "referencedInstancesTab": {
             "type": "object",
@@ -848,7 +1190,21 @@
                 "connect to see private instances": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "publicInstanceCount",
+                "instance_one",
+                "instance_other",
+                "organization_one",
+                "organization_other",
+                "privateInstanceCount",
+                "concerned public",
+                "go to instance",
+                "add instance",
+                "edit instance",
+                "connect to see private instances"
+            ]
         },
         "similarSoftwareTab": {
             "type": "object",
@@ -862,7 +1218,9 @@
                 "libre software": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["similar software in sill", "similar software not in sill", "libre software"]
         },
         "cnllServiceProviderModal": {
             "type": "object",
@@ -874,9 +1232,12 @@
                     "type": "string"
                 },
                 "modal title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["close", "content description", "modal title"]
         },
         "detailUsersAndReferents": {
             "type": "object",
@@ -887,7 +1248,9 @@
                 "referents": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["users", "referents"]
         },
         "softwareUserAndReferent": {
             "type": "object",
@@ -899,7 +1262,8 @@
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "category": {
                     "type": "string"
@@ -928,7 +1292,22 @@
                 "use case": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "catalog breadcrumb",
+                "user and referent breadcrumb",
+                "title",
+                "category",
+                "softwareDetails",
+                "declare user",
+                "declare referent",
+                "is technical expert",
+                "organization",
+                "is user of",
+                "is referent of",
+                "use case"
+            ]
         },
         "declarationForm": {
             "type": "object",
@@ -940,35 +1319,53 @@
                     "type": "string"
                 },
                 "title step 1": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "title step 2 user": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "title step 2 referent": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "submit declaration": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "catalog breadcrumb",
+                "declare yourself user or referent breadcrumb",
+                "title step 1",
+                "title step 2 user",
+                "title step 2 referent",
+                "submit declaration"
+            ]
         },
         "declarationFormStep1": {
             "type": "object",
             "properties": {
                 "user type label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "user type hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "referent type label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "referent type hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["user type label", "user type hint", "referent type label", "referent type hint"]
         },
         "declarationFormStep2User": {
             "type": "object",
@@ -985,16 +1382,20 @@
                 "service": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["useCase", "environment", "version", "service"]
         },
         "declarationFormStep2Referent": {
             "type": "object",
             "properties": {
                 "legend title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "legend hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "useCase": {
                     "type": "string"
@@ -1002,13 +1403,16 @@
                 "service": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["legend title", "legend hint", "useCase", "service"]
         },
         "account": {
             "type": "object",
             "properties": {
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "mail": {
                     "type": "string"
@@ -1032,21 +1436,40 @@
                     "type": "string"
                 },
                 "about title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "about description": {
                     "type": "string"
                 },
                 "isPublic label": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Label for a form field or button"
                 },
                 "isPublic hint": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Helper text explaining the field"
                 },
                 "go to profile": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "title",
+                "mail",
+                "organization",
+                "manage account",
+                "no organization",
+                "update",
+                "not a valid email",
+                "email domain not allowed",
+                "about title",
+                "about description",
+                "isPublic label",
+                "isPublic hint",
+                "go to profile"
+            ]
         },
         "userProfile": {
             "type": "object",
@@ -1075,7 +1498,18 @@
                 "badge text_user": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "agent profile",
+                "agent profile with orga",
+                "send email",
+                "no description",
+                "edit my profile",
+                "badge text_expert",
+                "badge text_referent",
+                "badge text_user"
+            ]
         },
         "header": {
             "type": "object",
@@ -1084,10 +1518,12 @@
                     "type": "string"
                 },
                 "home title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "navigation welcome": {
                     "type": "string"
@@ -1107,7 +1543,19 @@
                 "navigation about": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "siteTitle",
+                "home title",
+                "title",
+                "navigation welcome",
+                "navigation catalog",
+                "navigation add software",
+                "navigation update software",
+                "navigation support request",
+                "navigation about"
+            ]
         },
         "authButtons": {
             "type": "object",
@@ -1124,7 +1572,9 @@
                 "account": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["login", "register", "logout", "account"]
         },
         "authorCard": {
             "type": "object",
@@ -1132,7 +1582,9 @@
                 "affiliatedStructure": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["affiliatedStructure"]
         },
         "footer": {
             "type": "object",
@@ -1140,7 +1592,9 @@
                 "contribute": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["contribute"]
         },
         "declarationRemovalModal": {
             "type": "object",
@@ -1163,7 +1617,16 @@
                 "stop being_referent": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": [
+                "confirm",
+                "cancel",
+                "do you confirm_referent",
+                "do you confirm_using",
+                "stop being_user",
+                "stop being_referent"
+            ]
         },
         "smartLogo": {
             "type": "object",
@@ -1171,13 +1634,16 @@
                 "software logo": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["software logo"]
         },
         "promptForOrganization": {
             "type": "object",
             "properties": {
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Title text"
                 },
                 "organization is required": {
                     "type": "string"
@@ -1188,7 +1654,65 @@
                 "organization": {
                     "type": "string"
                 }
-            }
+            },
+            "additionalProperties": false,
+            "required": ["title", "organization is required", "update", "organization"]
         }
-    }
+    },
+    "description": "Schema for translation files with support for pluralization and validation",
+    "patternProperties": {
+        "^.*_one$": {
+            "type": "string",
+            "description": "Singular form for translation"
+        },
+        "^.*_other$": {
+            "type": "string",
+            "description": "Plural form for translation"
+        },
+        "^.*_zero$": {
+            "type": "string",
+            "description": "Zero form for translation"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "$schema",
+        "common",
+        "app",
+        "home",
+        "about",
+        "addSoftwareLanding",
+        "softwareForm",
+        "softwareFormStep1",
+        "softwareFormStep2",
+        "softwareFormStep3",
+        "softwareFormStep4",
+        "instanceForm",
+        "instanceFormStep1",
+        "instanceFormStep2",
+        "softwareCatalogCard",
+        "softwareCatalogControlled",
+        "softwareCatalogSearch",
+        "softwareDetails",
+        "headerDetailCard",
+        "previewTab",
+        "referencedInstancesTab",
+        "similarSoftwareTab",
+        "cnllServiceProviderModal",
+        "detailUsersAndReferents",
+        "softwareUserAndReferent",
+        "declarationForm",
+        "declarationFormStep1",
+        "declarationFormStep2User",
+        "declarationFormStep2Referent",
+        "account",
+        "userProfile",
+        "header",
+        "authButtons",
+        "authorCard",
+        "footer",
+        "declarationRemovalModal",
+        "smartLogo",
+        "promptForOrganization"
+    ]
 }

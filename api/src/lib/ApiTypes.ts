@@ -16,3 +16,5 @@ export type {
     ServiceProvider,
     Source
 } from "../core/usecases/readWriteSillData";
+
+export type Translations = { translations: typeof import("../customization/translations/en.json") };
