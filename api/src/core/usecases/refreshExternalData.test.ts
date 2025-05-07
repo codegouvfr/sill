@@ -4,7 +4,7 @@
 
 import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
-import { expectToEqual, testPgUrl } from "../../tools/test.helpers";
+import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
 import type { DbApiV2 } from "../ports/DbApiV2";
 import { ExternalDataOrigin } from "../ports/GetSoftwareExternalData";
 import type { SoftwareFormData, Source } from "./readWriteSillData";
@@ -235,7 +235,17 @@ describe("fetches software extra data (from different providers)", () => {
     });
 
     it("does nothing if the software is not found", async () => {
-        const notFetched = [
+        const initialExternalSoftwarePackagesBeforeFetching = [
+            emptyExternalData({
+                "externalId": "Q2822666",
+                "softwareId": 2,
+                "sourceSlug": "wikidata"
+            }),
+            emptyExternalData({
+                "externalId": "Q11354",
+                "softwareId": 6,
+                "sourceSlug": "wikidata"
+            }),
             emptyExternalData({
                 externalId: "Q118629387",
                 sourceSlug: "wikidata",
@@ -244,26 +254,26 @@ describe("fetches software extra data (from different providers)", () => {
             emptyExternalData({
                 externalId: "Q111590996",
                 sourceSlug: "wikidata"
-            }),
-            emptyExternalData({
-                "externalId": "Q11354",
-                "softwareId": 6,
-                "sourceSlug": "wikidata"
-            }),
-            emptyExternalData({
-                "externalId": "Q2822666",
-                "softwareId": 2,
-                "sourceSlug": "wikidata"
             })
         ];
 
-        const softwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(softwareExternalDatas, notFetched);
+        const softwareExternalDatas = await db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .orderBy("softwareId", "asc")
+            .execute();
+
+        expectToMatchObject(softwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
 
         await fetchAndSaveSoftwareExtraDataBySoftwareId({ softwareId: 404 });
 
-        const updatedSoftwareExternalDatas = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(updatedSoftwareExternalDatas, notFetched);
+        const updatedSoftwareExternalDatas = await db
+            .selectFrom("software_external_datas")
+            .selectAll()
+            .orderBy("softwareId", "asc")
+            .execute();
+
+        expectToEqual(updatedSoftwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
     });
 
     it(
