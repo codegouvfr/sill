@@ -385,6 +385,7 @@ describe("fetches software extra data (from different providers)", () => {
                 .selectAll()
                 .orderBy("priority", "desc")
                 .executeTakeFirstOrThrow();
+
             if (!source) throw new Error("Source not found");
 
             const softwareExternalDatas = await dbApi.softwareExternalData.getAll();
@@ -394,15 +395,6 @@ describe("fetches software extra data (from different providers)", () => {
 
             const updatedSoftwareExternalDatas = await dbApi.softwareExternalData.getAll();
             expectToEqual(updatedSoftwareExternalDatas, [
-                emptyExternalDataCleaned({
-                    externalId: "Q118629387",
-                    sourceSlug: "wikidata",
-                    softwareId: 11
-                }),
-                emptyExternalDataCleaned({
-                    externalId: "Q111590996",
-                    sourceSlug: "wikidata"
-                }),
                 emptyExternalDataCleaned({
                     "externalId": "Q2822666",
                     "softwareId": 2,
@@ -440,7 +432,16 @@ describe("fetches software extra data (from different providers)", () => {
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z"),
                     lastDataFetchAt: expect.any(Number)
-                }
+                },
+                emptyExternalDataCleaned({
+                    externalId: "Q118629387",
+                    sourceSlug: "wikidata",
+                    softwareId: 11
+                }),
+                emptyExternalDataCleaned({
+                    externalId: "Q111590996",
+                    sourceSlug: "wikidata"
+                })
             ]);
         },
         { timeout: 20_000 }
