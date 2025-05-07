@@ -7,6 +7,7 @@ import { DeclarationFormData, SoftwareFormData, Source } from "../../../usecases
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+import { makeCreateSofware } from "../../../usecases/createSoftware";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
@@ -15,7 +16,7 @@ const source = {
     slug: "wikidata",
     priority: 1,
     url: "https://www.wikidata.org",
-    description: null,
+    description: undefined,
     kind: "wikidata"
 } satisfies Source;
 const similarExternalId = "external-id-222";
@@ -166,7 +167,7 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+            const softwares = await dbApi.software.getAll();
 
             const actualSoftware = softwares[0];
 
@@ -181,7 +182,7 @@ describe("pgDbApi", () => {
                     url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
-                comptoirDuLibreId: 50,
+                comptoirDuLibreId: undefined,
                 comptoirDuLibreServiceProviderCount: 0,
                 dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,
@@ -277,7 +278,9 @@ describe("pgDbApi", () => {
             console.log("------ agent scenario------");
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
-            const softwareId = await dbApi.software.create({
+
+            const makeSoftware = makeCreateSofware(dbApi);
+            const softwareId = await makeSoftware({
                 formData: softwareFormData,
                 agentId
             });
@@ -452,7 +455,8 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await dbApi.software.create({
+        const makeSoftware = makeCreateSofware(dbApi);
+        const softwareId = await makeSoftware({
             formData: softwareFormData,
             agentId
         });

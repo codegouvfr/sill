@@ -1,13 +1,6 @@
-import type { Database } from "../adapters/dbApi/kysely/kysely.database";
-import type {
-    Agent,
-    Instance,
-    InstanceFormData,
-    ServiceProvider,
-    Software,
-    SoftwareFormData,
-    Source
-} from "../usecases/readWriteSillData";
+import type { Database, DatabaseRowOutput } from "../adapters/dbApi/kysely/kysely.database";
+import { TransformRepoToCleanedRow } from "../adapters/dbApi/kysely/kysely.utils";
+import type { Agent, Instance, InstanceFormData, ServiceProvider, Software } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
 import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
@@ -16,24 +9,49 @@ import type { SoftwareExternalData } from "./GetSoftwareExternalData";
 
 export type WithAgentId = { agentId: number };
 
-type GetSoftwareFilters = {
-    onlyIfUpdatedMoreThan3HoursAgo?: true;
-};
+// Other data, intrinsic are managed internally by the database
+export type SoftwareExtrinsicRow = Pick<
+    DatabaseDataType.SoftwareRow,
+    | "name"
+    | "description"
+    | "license"
+    | "logoUrl"
+    | "versionMin"
+    | "dereferencing"
+    | "isStillInObservation"
+    | "doRespectRgaa"
+    | "isFromFrenchPublicService"
+    | "isPresentInSupportContract"
+    | "softwareType"
+    | "workshopUrls"
+    | "categories"
+    | "generalInfoMd"
+    | "keywords"
+    | "addedByAgentId"
+    | "externalIdForSource" // TODO Remove
+    | "sourceSlug" // TODO Remove
+>;
+
+export namespace DatabaseDataType {
+    export type AgentRow = TransformRepoToCleanedRow<DatabaseRowOutput.Agent>;
+    export type SoftwareReferentRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareReferent>;
+    export type SoftwareUsertRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareUsert>;
+    export type InstanceRow = TransformRepoToCleanedRow<DatabaseRowOutput.Instance>;
+    export type SoftwareRow = TransformRepoToCleanedRow<DatabaseRowOutput.Software>;
+    export type SoftwareExternalDataRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareExternalData>;
+    export type SimilarExternalSoftwareExternalDataRow =
+        TransformRepoToCleanedRow<DatabaseRowOutput.SimilarExternalSoftwareExternalData>;
+    export type CompiledSoftwaresRow = TransformRepoToCleanedRow<DatabaseRowOutput.CompiledSoftwares>;
+    export type SourceRow = TransformRepoToCleanedRow<DatabaseRowOutput.Source>;
+}
+
+export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow &
+    Pick<DatabaseDataType.SoftwareRow, "referencedSinceTime">;
 
 export interface SoftwareRepository {
-    create: (
-        params: {
-            formData: SoftwareFormData;
-        } & WithAgentId
-    ) => Promise<number>;
-    update: (
-        params: {
-            softwareSillId: number;
-            formData: SoftwareFormData;
-        } & WithAgentId
-    ) => Promise<void>;
-    updateLastExtraDataFetchAt: (params: { softwareId: number }) => Promise<void>;
-    getAll: (filters?: GetSoftwareFilters) => Promise<Software[]>;
+    create: (params: { software: SoftwareExtrinsicCreation }) => Promise<number>;
+    update: (params: { softwareId: number; software: SoftwareExtrinsicRow }) => Promise<void>;
+    getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
     getSoftwareIdByExternalIdAndSlug: (params: {
         externalId: string;
@@ -53,7 +71,36 @@ export interface SoftwareRepository {
 }
 
 export interface SoftwareExternalDataRepository {
-    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>;
+    insert: (params: { sourceSlug: string; externalId: string; softwareId?: number }[]) => Promise<void>;
+    update: (params: {
+        sourceSlug: string;
+        externalId: string;
+        softwareId?: number;
+        lastDataFetchAt?: number;
+        softwareExternalData: SoftwareExternalData;
+    }) => Promise<void>;
+    save: (params: { softwareExternalData: SoftwareExternalData; softwareId: number | undefined }) => Promise<void>; // TODO
+    get: (params: {
+        sourceSlug: string;
+        externalId: string;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
+    getIds: (params: { minuteSkipSince?: number }) => Promise<
+        {
+            sourceSlug: string;
+            externalId: string;
+        }[]
+    >;
+    getBySoftwareIdAndSource: (params: {
+        sourceSlug: string;
+        softwareId: number;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
+    getBySoftwareId: (params: {
+        softwareId: number;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    getBySource: (params: { sourceSlug: string }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
+    getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
+    delete: (params: { sourceSlug: string; externalId: string }) => Promise<boolean>;
 }
 
 type CnllPrestataire = {
@@ -120,13 +167,27 @@ export interface SoftwareUserRepository {
 }
 
 export interface SourceRepository {
-    getMainSource: () => Promise<Source>;
-    getWikidataSource: () => Promise<Source | undefined>;
+    getAll: () => Promise<DatabaseDataType.SourceRow[]>;
+    getByName: (params: { name: string }) => Promise<DatabaseDataType.SourceRow | undefined>;
+    getMainSource: () => Promise<DatabaseDataType.SourceRow>;
+    getWikidataSource: () => Promise<DatabaseDataType.SourceRow | undefined>;
+}
+
+export interface SimilarSoftwareRepository {
+    insert: (
+        params: {
+            softwareId: number;
+            externalIds: { sourceSlug: string; externalId: string }[];
+        }[]
+    ) => Promise<void>;
+    getById: (params: { softwareId: number }) => Promise<{ sourceSlug: string; externalId: string }[]>;
+    getByExternalId: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
 }
 
 export type DbApiV2 = {
     source: SourceRepository;
     software: SoftwareRepository;
+    similarSoftware: SimilarSoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
     otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;

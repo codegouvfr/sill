@@ -2,18 +2,13 @@ import { Kysely } from "kysely";
 import { comptoirDuLibreApi } from "./adapters/comptoirDuLibreApi";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
-import { makeFetchAndSaveExternalDataForAllSoftwares } from "./adapters/fetchExternalData";
-import { getCnllPrestatairesSill } from "./adapters/getCnllPrestatairesSill";
-import { getServiceProviders } from "./adapters/getServiceProviders";
-import { wikidataSourceGateway } from "./adapters/wikidata";
-import { halSourceGateway } from "./adapters/hal";
 import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
-import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
-import { UseCases } from "./usecases";
+import { UseCasesUsedOnRouter } from "../rpc/router";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import { makeCreateSofware } from "./usecases/createSoftware";
+import { makeUpdateSoftware } from "./usecases/updateSoftware";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -22,14 +17,12 @@ type DbConfig = PgDbConfig;
 type ParamsOfBootstrapCore = {
     dbConfig: DbConfig;
     githubPersonalAccessTokenForApiRateLimit: string;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
 };
 
 export type Context = {
     paramsOfBootstrapCore: ParamsOfBootstrapCore;
     dbApi: DbApiV2;
     comptoirDuLibreApi: ComptoirDuLibreApi;
-    getSoftwareExternalData: GetSoftwareExternalData;
 };
 
 const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
@@ -45,56 +38,24 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
-): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
-    const { dbConfig, externalSoftwareDataOrigin } = params;
-
-    const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
+): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCasesUsedOnRouter }> {
+    const { dbConfig } = params;
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
     const context: Context = {
         "paramsOfBootstrapCore": params,
         dbApi,
-        comptoirDuLibreApi,
-        getSoftwareExternalData
+        comptoirDuLibreApi
     };
 
-    const wikidataSource = await dbApi.source.getWikidataSource();
-
-    const useCases: UseCases = {
+    const useCases: UseCasesUsedOnRouter = {
         getSoftwareFormAutoFillDataFromExternalAndOtherSources:
             makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources(context, {}),
-        fetchAndSaveExternalDataForAllSoftwares: await makeFetchAndSaveExternalDataForAllSoftwares({
-            getSoftwareExternalData,
-            getCnllPrestatairesSill,
-            comptoirDuLibreApi,
-            getServiceProviders,
-            dbApi,
-            wikidataSource
-        }),
-        getAgent: makeGetAgent({ agentRepository: dbApi.agent })
+        getAgent: makeGetAgent({ agentRepository: dbApi.agent }),
+        createSoftware: makeCreateSofware(dbApi),
+        updateSoftware: makeUpdateSoftware(dbApi)
     };
 
     return { dbApi, context, useCases };
-}
-
-function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
-    "getSoftwareExternalDataOptions": GetSoftwareExternalDataOptions;
-    "getSoftwareExternalData": GetSoftwareExternalData;
-} {
-    switch (externalSoftwareDataOrigin) {
-        case "wikidata":
-            return {
-                "getSoftwareExternalDataOptions": wikidataSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": wikidataSourceGateway.softwareExternalData.getById
-            };
-        case "HAL":
-            return {
-                "getSoftwareExternalDataOptions": halSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": halSourceGateway.softwareExternalData.getById
-            };
-        default:
-            const unreachableCase: never = externalSoftwareDataOrigin;
-            throw new Error(`Unreachable case: ${unreachableCase}`);
-    }
 }
