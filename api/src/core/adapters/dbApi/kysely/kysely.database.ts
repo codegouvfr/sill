@@ -14,13 +14,13 @@ export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";
 
 // from https://schema.org/PropertyValue
 export interface ArticleIdentifier extends SchemaIdentifier {
-    subjectOf: WebSite<ArticleIdentifierOrigin>;
+    subjectOf: WebSite;
     additionalType: "Article";
 }
 
 export type OrganizationIdentifierOrigin = "wikidata" | "HAL";
 export interface OrganizationIdentifer extends SchemaIdentifier {
-    subjectOf: WebSite<OrganizationIdentifierOrigin>;
+    subjectOf: WebSite;
     additionalType: "Organization";
 }
 
@@ -43,12 +43,12 @@ export type SchemaPerson = {
 };
 
 // from https://schema.org/WebSite
-export type WebSite<T> = {
+export type WebSite = {
     "@type": "Website";
     name: string; // Name of the website or database
     description?: string;
     url: URL; // Name of the website or database
-    additionalType?: T; // Type of the database
+    additionalType?: string; // Type of the database
 };
 
 // from https://schema.org/identifier & https://schema.org/PropertyValue
@@ -58,7 +58,7 @@ export type SchemaIdentifier = {
     value: string; // Value of the property
     url?: string | URL; // Url to direct access to the element on the database
     valueReference?: string; // Value of the instance / database
-    subjectOf?: WebSite<any>; // Value of the instance / database
+    subjectOf?: WebSite; // Value of the instance / database
     additionalType?: string; // Organization | Article | Person | ...
 };
 
