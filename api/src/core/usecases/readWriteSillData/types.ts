@@ -57,6 +57,7 @@ export type Software = {
     programmingLanguages: string[];
     referencePublications?: SILL.ScholarlyArticle[];
     identifiers?: SILL.Identification[];
+    repoMetadata?: SILL.RepoMetadata;
 };
 
 export type Source = {
