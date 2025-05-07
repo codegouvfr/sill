@@ -23,9 +23,9 @@ import {
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
-import { SILL } from "../../../types/SILL";
 import { Source } from "../../usecases/readWriteSillData";
-import { SchemaIdentifier, SchemaOrganization, SchemaPerson } from "../dbApi/kysely/kysely.database";
+import { SchemaOrganization, SchemaPerson } from "../dbApi/kysely/kysely.database";
+import { identifersUtils } from "../../utils";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
@@ -119,16 +119,6 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             : undefined;
 
         const framaLibreId = getClaimDataValue<"string">("P4107")[0];
-
-        const makeFramaIndentifer = (framaLibreId: string): SchemaIdentifier => {
-            return {
-                "@type": "PropertyValue",
-                name: "ID of FramaLibre",
-                value: framaLibreId,
-                url: new URL(framaLibreId),
-                subjectOf: SILL.framaLibreSource
-            };
-        };
 
         return {
             externalId,
@@ -256,13 +246,10 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                             "@type": "Person",
                             name,
                             identifiers: [
-                                {
-                                    value: entity.id,
-                                    "@type": "PropertyValue",
-                                    url: `https://www.wikidata.org/wiki/${entity.id}`,
-                                    subjectOf: SILL.wikidataSource,
-                                    name: "Wikidata Id"
-                                }
+                                identifersUtils.makeWikidataIdentifier({
+                                    wikidataId: entity.id,
+                                    additionalType: "Person"
+                                })
                             ],
                             url: `https://www.wikidata.org/wiki/${entity.id}`
                         };
@@ -272,14 +259,10 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                         "@type": "Organization",
                         name,
                         identifiers: [
-                            {
-                                value: entity.id,
-                                "@type": "PropertyValue",
-                                url: `https://www.wikidata.org/wiki/${entity.id}`,
-                                subjectOf: SILL.wikidataSource,
-                                name: "Wikidata Id",
+                            identifersUtils.makeWikidataIdentifier({
+                                wikidataId: entity.id,
                                 additionalType: "Organization"
-                            }
+                            })
                         ],
                         url: `https://www.wikidata.org/wiki/${entity.id}`
                     };
@@ -301,7 +284,13 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             applicationCategories: undefined, // doesn't exit on wiki data
             referencePublications: undefined, // doesn't exit on wiki data
             publicationTime: publicationTimeDate,
-            identifiers: framaLibreId?.includes("https") ? [makeFramaIndentifer(framaLibreId)] : []
+            identifiers: [
+                ...(framaLibreId
+                    ? [identifersUtils.makeFramaIndentifier({ framaLibreId, additionalType: "Software" })]
+                    : []),
+                identifersUtils.makeWikidataIdentifier({ wikidataId: externalId, additionalType: "Software" })
+            ],
+            providers: []
         };
     },
     {
