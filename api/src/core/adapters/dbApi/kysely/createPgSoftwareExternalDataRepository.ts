@@ -127,6 +127,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
         return db
             .selectFrom("software_external_datas")
             .selectAll()
+            .orderBy("softwareId", "asc")
             .execute()
             .then(rows => rows.map(cleanDataForExternalData));
     },
