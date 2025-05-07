@@ -14,7 +14,7 @@
         "db:up": "yarn migrate latest",
         "test": "vitest --watch=false --no-file-parallelism",
         "dev": "yarn build && yarn start",
-        "build": "tsc",
+        "build": "tsc && cp -r src/customization dist/src/",
         "start": "yarn db:up && dotenv -e ../.env -- node dist/src/entrypoints/start-api.js",
         "update": "dotenv -e ../.env -- node dist/src/entrypoints/update.js",
         "update-then-wait": "./update-then-wait.sh",

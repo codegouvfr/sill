@@ -22,6 +22,12 @@ import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
 
+import translationEn from "../customization/translations/en.json";
+import translationFr from "../customization/translations/fr.json";
+
+const isAssignable = (fr: typeof translationFr): typeof translationEn => fr;
+console.info(isAssignable(translationFr) ?? "isAssignable : true"); // this is just to avoid the TS error : _isAssignable is not used. TODO : use eslint rule instead (no eslint in backend for now)
+
 export async function startRpcService(params: {
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
@@ -92,6 +98,16 @@ export async function startRpcService(params: {
         .use(compression() as any)
         .use((req, _res, next) => (console.log("⬅", req.method, req.path, req.body ?? req.query), next()))
         .use("/public/healthcheck", (...[, res]) => res.sendStatus(200))
+        .get("/:lang/translations.json", async (req, res) => {
+            try {
+                const translations = await import(`../customization/translations/${req.params.lang}.json`);
+                return res.json(translations);
+            } catch (error: any) {
+                return res
+                    .status(404)
+                    .json({ message: `No translations found for language : ${req.params.lang}`, error: error.message });
+            }
+        })
         .get(`*/sill.json`, async (req, res) => {
             if (redirectUrl !== undefined) {
                 return res.redirect(redirectUrl + req.originalUrl);
@@ -104,7 +120,10 @@ export async function startRpcService(params: {
         })
         .use(
             (() => {
-                const trpcMiddleware = trpcExpress.createExpressMiddleware({ router, createContext });
+                const trpcMiddleware = trpcExpress.createExpressMiddleware({
+                    router,
+                    createContext
+                });
 
                 return (req, res, next) => {
                     const proxyReq = new Proxy(req, {
