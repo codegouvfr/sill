@@ -5,6 +5,7 @@ import { startReactDsfr } from "@codegouvfr/react-dsfr/spa";
 import { assert } from "tsafe/assert";
 import "./ui/i18n/i18next";
 import { handleOidcCallback } from "oidc-spa/oidc/handleOidcCallback";
+
 handleOidcCallback();
 
 startReactDsfr({ defaultColorScheme: "system" });
