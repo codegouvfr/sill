@@ -20,10 +20,11 @@
     "turbo": "^1.12.5"
   },
   "engines": {
-    "node": "^22.0.0"
+    "node": "^22"
   },
   "workspaces": [
     "api",
     "web"
-  ]
+  ],
+  "dependencies": {}
 }
