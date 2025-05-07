@@ -1,5 +1,4 @@
 import { DatabaseDataType, DbApiV2 } from "../ports/DbApiV2";
-import { buildIndex } from "../utils";
 import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 type ParamsOfrefreshExternalDataUseCase = {
@@ -58,17 +57,18 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
     const { dbApi, ids } = args;
 
     const sources = await dbApi.source.getAll();
-    const sourceIndex: Record<string, DatabaseDataType.SourceRow> = buildIndex({
-        arrayOfObject: sources,
-        fieldObject: "slug"
-    });
+
+    const sourceBySlug = sources.reduce<Record<string, DatabaseDataType.SourceRow>>((acc, source) => {
+        acc[source.slug] = source;
+        return acc;
+    }, {});
 
     console.log(`[UC.refreshExternalData] ${ids.length} software to update`);
 
     for (const { sourceSlug, externalId } of ids) {
         console.time(`[UC.refreshExternalData] 💾 Update for ${externalId} on ${sourceSlug} : Done 💾`);
         console.log(`[UC.refreshExternalData] 🚀 Update for ${externalId} on ${sourceSlug} : Starting 🚀`);
-        const source = sourceIndex[sourceSlug];
+        const source = sourceBySlug[sourceSlug];
 
         const actualExternalDataRow = await dbApi.softwareExternalData.get({ sourceSlug, externalId });
 
