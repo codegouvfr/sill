@@ -1,8 +1,8 @@
 {
+    "$schema": "https://github.com/codegouvfr/sill/blob/move-transalations-to-backend/api/src/customization/translations/schema.json",
     "common": {
         "user_one": "utilisateur",
         "user_other": "utilisateurs",
-        "referent_one": "référent",
         "referent_other": "référents",
         "provider_one": "fournisseur",
         "providers_other": "fournisseurs",
