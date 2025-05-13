@@ -26,7 +26,12 @@ describe("HAL", () => {
                     {
                         "@type": "Person",
                         "affiliations": [],
-                        "identifier": "0000-0002-9777-5560",
+                        "identifiers": [
+                            {
+                                value: "0000-0002-9777-5560",
+                                "@type": "PropertyValue"
+                            }
+                        ],
                         "name": "Morane Gruenpeter",
                         "url": "https://orcid.org/0000-0002-9777-5560"
                     }

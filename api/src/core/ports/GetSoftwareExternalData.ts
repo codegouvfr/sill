@@ -2,8 +2,13 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
-import { SILL } from "../../types/SILL";
 import { Source } from "../usecases/readWriteSillData";
+import {
+    SchemaIdentifier,
+    SchemaOrganization,
+    SchemaPerson,
+    ScholarlyArticle
+} from "../adapters/dbApi/kysely/kysely.database";
 
 type ExternalId = string;
 
@@ -17,7 +22,7 @@ export type GetSoftwareExternalData = {
 export type SoftwareExternalData = {
     externalId: ExternalId;
     sourceSlug: string;
-    developers: Array<SILL.Person | SILL.Organization>;
+    developers: Array<SchemaPerson | SchemaOrganization>;
     label: LocalizedString;
     description: LocalizedString;
 } & PartialNoOptional<{
@@ -32,8 +37,8 @@ export type SoftwareExternalData = {
     programmingLanguages: string[];
     applicationCategories: string[];
     publicationTime: Date;
-    referencePublications: SILL.ScholarlyArticle[];
-    identifiers: SILL.Identification[];
+    referencePublications: ScholarlyArticle[];
+    identifiers: SchemaIdentifier[];
 }>;
 
 export type SimilarSoftwareExternalData = Pick<
