@@ -77,56 +77,9 @@ const checkSoftware = async (
     }
 
     // Get software form from source
-    const softwareForm = await getSoftwareForm(externalId);
+    const softwareForm = await getSoftwareForm({ externalId, source });
     if (!softwareForm || !softwareForm.softwareName) {
         return undefined;
-    }
-
-    // Check if same name
-    const savedSoftware = await dbApi.software.getByName(softwareForm.softwareName);
-    if (savedSoftware) {
-        // Check if it's related to another source
-        const concurentExternalData = await dbApi.softwareExternalData.getBySoftwareIdAndSource({
-            sourceSlug: source.slug,
-            softwareId: savedSoftware.softwareId
-        });
-        let relatedSoftwareIds: { softwareId: number }[] = [];
-        if (concurentExternalData) {
-            // delete this old document and insert a new ! Careful on external Id similar
-            console.info(
-                `[UC:Import] Importing ${softwareForm.softwareName}(${externalId}) from ${source.slug}: Need to delete and insert`
-            );
-            relatedSoftwareIds = await dbApi.similarSoftware.getByExternalId({
-                sourceSlug: source.slug,
-                externalId: concurentExternalData.externalId
-            });
-            await dbApi.softwareExternalData.delete({
-                sourceSlug: source.slug,
-                externalId: concurentExternalData.externalId
-            });
-        }
-
-        // There is no externalId for this source, just insert the external data
-        console.info(
-            `[UC:Import] Importing  ${softwareForm.softwareName}(${externalId}) from ${source.slug}: Adding externalData`
-        );
-        await dbApi.softwareExternalData.insert([
-            {
-                softwareId: savedSoftware.softwareId,
-                sourceSlug: source.slug,
-                externalId: externalId
-            }
-        ]);
-
-        if (concurentExternalData && relatedSoftwareIds.length > 0) {
-            const obj = relatedSoftwareIds.map(({ softwareId }) => ({
-                softwareId,
-                externalIds: [{ sourceSlug: source.slug, externalId: concurentExternalData.externalId }]
-            }));
-            await dbApi.similarSoftware.insert(obj);
-        }
-
-        return savedSoftware.softwareId;
     }
 
     console.info(

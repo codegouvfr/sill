@@ -29,7 +29,11 @@ import { resolveAdapterFromSource } from "../core/adapters/resolveAdapter";
 
 export type UseCasesUsedOnRouter = Pick<
     UseCases,
-    "getAgent" | "getSoftwareFormAutoFillDataFromExternalAndOtherSources" | "createSoftware" | "updateSoftware"
+    | "getAgent"
+    | "getSoftwareFormAutoFillDataFromExternalAndOtherSources"
+    | "createSoftware"
+    | "updateSoftware"
+    | "fetchAndSaveExternalDataForOneSoftwarePackage"
 >;
 
 export function createRouter(params: {
@@ -162,10 +166,12 @@ export function createRouter(params: {
                         });
                     }
 
-                    await useCases.createSoftware({
+                    const createdSoftwareId = await useCases.createSoftware({
                         formData,
                         agentId
                     });
+
+                    await useCases.fetchAndSaveExternalDataForOneSoftwarePackage({ softwareId: createdSoftwareId });
                 } catch (e) {
                     throw new TRPCError({
                         "code": "INTERNAL_SERVER_ERROR",

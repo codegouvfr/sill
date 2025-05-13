@@ -2,10 +2,7 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
-
-import { DbApiV2, WithAgentId } from "../ports/DbApiV2";
+import { DbApiV2, SoftwareExtrinsicCreation, WithAgentId } from "../ports/DbApiV2";
 import { SoftwareFormData } from "./readWriteSillData";
 
 export type CreateSoftware = (
@@ -14,64 +11,75 @@ export type CreateSoftware = (
     } & WithAgentId
 ) => Promise<number>;
 
+export const formDataToSoftwareRow = (softwareForm: SoftwareFormData, agentId: number): SoftwareExtrinsicCreation => ({
+    name: softwareForm.softwareName,
+    description: softwareForm.softwareDescription,
+    license: softwareForm.softwareLicense,
+    logoUrl: softwareForm.softwareLogoUrl,
+    versionMin: softwareForm.softwareMinimalVersion,
+    referencedSinceTime: Date.now(),
+    dereferencing: undefined,
+    isStillInObservation: false,
+    doRespectRgaa: softwareForm.doRespectRgaa ?? undefined,
+    isFromFrenchPublicService: softwareForm.isFromFrenchPublicService,
+    isPresentInSupportContract: softwareForm.isPresentInSupportContract,
+    softwareType: softwareForm.softwareType,
+    workshopUrls: [],
+    categories: [],
+    generalInfoMd: undefined,
+    addedByAgentId: agentId,
+    keywords: softwareForm.softwareKeywords,
+    externalIdForSource: softwareForm.externalIdForSource, // TODO Remove
+    sourceSlug: softwareForm.sourceSlug // TODO Remove
+});
+
+const textUC = "CreateSoftware";
+
 export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
     (dbApi: DbApiV2) =>
     async ({ formData, agentId }) => {
-        const {
-            softwareName,
-            softwareDescription,
-            softwareLicense,
-            softwareLogoUrl,
-            softwareMinimalVersion,
-            isPresentInSupportContract,
-            isFromFrenchPublicService,
-            doRespectRgaa,
-            similarSoftwareExternalDataIds,
-            softwareType,
-            externalIdForSource,
-            sourceSlug,
-            comptoirDuLibreId,
-            softwareKeywords,
-            ...rest
-        } = formData;
+        const { softwareName, similarSoftwareExternalDataIds, externalIdForSource, sourceSlug } = formData;
+        const logTitle = `[UC:${textUC}] (${softwareName} from ${sourceSlug}) -`;
 
-        assert<Equals<typeof rest, {}>>();
+        console.time(`${logTitle} 💾 Saved`);
 
-        const now = Date.now();
+        let softwareId: number | undefined = undefined;
 
-        const softwareId = await dbApi.software.create({
-            software: {
-                name: softwareName,
-                description: softwareDescription,
-                license: softwareLicense,
-                logoUrl: softwareLogoUrl,
-                versionMin: softwareMinimalVersion,
-                referencedSinceTime: now,
-                dereferencing: undefined,
-                isStillInObservation: false,
-                doRespectRgaa: doRespectRgaa ?? undefined,
-                isFromFrenchPublicService: isFromFrenchPublicService,
-                isPresentInSupportContract: isPresentInSupportContract,
-                softwareType: softwareType,
-                workshopUrls: [],
-                categories: [],
-                generalInfoMd: undefined,
-                addedByAgentId: agentId,
-                keywords: softwareKeywords,
-                externalIdForSource, // TODO Remove
-                sourceSlug // TODO Remove
+        const named = await dbApi.software.getByName(softwareName);
+
+        if (named) {
+            console.log(logTitle, "Name already present, let's take this one");
+            softwareId = named.softwareId;
+        }
+
+        if (!softwareId && externalIdForSource) {
+            const savedSoftware = await dbApi.software.getSoftwareIdByExternalIdAndSlug({
+                sourceSlug,
+                externalId: externalIdForSource
+            });
+            if (savedSoftware) {
+                console.log(logTitle, `External Id from ${sourceSlug} already present`);
+                softwareId = savedSoftware;
             }
-        });
+        }
 
-        console.log(
-            `inserted software correctly, softwareId is : ${softwareId} (${softwareName}), about to external identifiers : ${externalIdForSource} from ${sourceSlug}`
-        );
+        // TODO Resolve with other identifiers
+
+        if (!softwareId) {
+            console.log(logTitle, `The software package isn't save yet, let's create it`);
+            softwareId = await dbApi.software.create({
+                software: formDataToSoftwareRow(formData, agentId)
+            });
+        }
+
+        if (!softwareId) throw Error(`${logTitle} Error while saving the software`);
 
         if (externalIdForSource) {
             const savedExternalData = await dbApi.softwareExternalData.get({
                 sourceSlug,
                 externalId: externalIdForSource
             });
+
             if (savedExternalData && savedExternalData.softwareId === undefined) {
                 await dbApi.softwareExternalData.update({
                     sourceSlug,
@@ -80,30 +88,33 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                     lastDataFetchAt: savedExternalData?.lastDataFetchAt,
                     softwareExternalData: savedExternalData
                 });
-            } else {
-                await dbApi.softwareExternalData.insert([
+                console.log(`${logTitle} 💾 ${externalIdForSource} now binded with this software`);
+            }
+
+            if (!savedExternalData) {
+                await dbApi.softwareExternalData.saveIds([
                     {
                         externalId: externalIdForSource,
                         sourceSlug,
                         softwareId: softwareId
                     }
                 ]);
+                console.log(`${logTitle} 💾 ${externalIdForSource} now saved and binded with this software`);
             }
+
+            // Do nothing when exist and already linked to software
         }
 
-        console.log(
-            `inserted external identifiers correctly, softwareId is : ${softwareId} (${softwareName}), about to bind similars : `,
-            similarSoftwareExternalDataIds
-        );
-
         if (similarSoftwareExternalDataIds && similarSoftwareExternalDataIds.length > 0) {
-            await dbApi.softwareExternalData.insert(
+            // Add and update table if similar software
+            await dbApi.softwareExternalData.saveIds(
                 similarSoftwareExternalDataIds.map(externalSimiliarId => ({
                     sourceSlug,
                     externalId: externalSimiliarId
                 }))
             );
-            await dbApi.similarSoftware.insert([
+
+            await dbApi.software.saveSimilarSoftware([
                 {
                     softwareId,
                     externalIds: similarSoftwareExternalDataIds.map(similarId => ({
@@ -112,9 +123,9 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                     }))
                 }
             ]);
+            console.log(`${logTitle} 💾 Saved externalDataIds [${similarSoftwareExternalDataIds}]`);
         }
 
-        console.log("all good");
-
+        console.timeEnd(`${logTitle} 💾 Saved`);
         return softwareId;
     };
