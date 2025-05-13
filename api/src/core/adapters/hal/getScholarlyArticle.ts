@@ -1,3 +1,4 @@
+import { Catalogi } from "../../../types/Catalogi";
 import { GetScholarlyArticle } from "../../ports/GetScholarlyArticle";
 import { halAPIGateway } from "./HalAPI";
 
@@ -14,12 +15,16 @@ export const getScholarlyArticle: GetScholarlyArticle = async halDocId => {
     return {
         "@id": halDocId,
         "@type": "ScholarlyArticle",
-        identifier: {
-            "@type": "PropertyValue",
-            "propertyID": "HAL",
-            "url": new URL(`https://hal.science/${halDocId}`),
-            "value": halDocId
-        },
+        identifiers: [
+            {
+                "@type": "PropertyValue",
+                name: "DOI id",
+                url: new URL(`https://hal.science/${halDocId}`),
+                value: halDocId,
+                additionalType: "Article",
+                subjectOf: Catalogi.halSource
+            }
+        ],
         headline: articleData.en_title_s?.[0] ?? articleData.fr_title_s?.[0] ?? articleData.title_s[0]
     };
 };
