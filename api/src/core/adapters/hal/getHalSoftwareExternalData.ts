@@ -229,7 +229,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
                     )
                 ).filter(val => val !== undefined),
-            identifiers: identifiers
+            identifiers: identifiers,
+            providers: []
         };
     },
     {

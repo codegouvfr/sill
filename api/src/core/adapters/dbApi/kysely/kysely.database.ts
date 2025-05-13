@@ -152,6 +152,7 @@ export type SoftwareExternalDatasTable = {
     publicationTime: Date | null;
     identifiers: JSONColumnType<SchemaIdentifier[]> | null;
     lastDataFetchAt: number | null;
+    providers: JSONColumnType<Array<SchemaOrganization>> | null;
 };
 
 type SoftwareType =
