@@ -53,14 +53,26 @@ export type SoftwareExtrinsicCreation = SoftwareExtrinsicRow &
     Pick<DatabaseDataType.SoftwareRow, "referencedSinceTime">;
 
 export interface SoftwareRepository {
+    // Primary
     create: (params: { software: SoftwareExtrinsicCreation }) => Promise<number>;
     update: (params: { softwareId: number; software: SoftwareExtrinsicRow }) => Promise<void>;
-    getAll: () => Promise<Software[]>;
-    getById: (id: number) => Promise<Software | undefined>;
     getSoftwareIdByExternalIdAndSlug: (params: {
         externalId: string;
         sourceSlug: string;
     }) => Promise<number | undefined>;
+    // Save = insert or update
+    saveSimilarSoftware: (
+        params: {
+            softwareId: number;
+            externalIds: { sourceSlug: string; externalId: string }[];
+        }[]
+    ) => Promise<void>;
+    getSimilarSoftwareExternalDataPks: (params: {
+        softwareId: number;
+    }) => Promise<{ sourceSlug: string; externalId: string }[]>;
+    // Secondary
+    getAll: () => Promise<Software[]>;
+    getById: (id: number) => Promise<Software | undefined>;
     getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
         | {
               software: Software;
@@ -75,7 +87,7 @@ export interface SoftwareRepository {
 }
 
 export interface SoftwareExternalDataRepository {
-    insert: (params: { sourceSlug: string; externalId: string; softwareId?: number }[]) => Promise<void>;
+    saveIds: (params: { sourceSlug: string; externalId: string; softwareId?: number }[]) => Promise<void>;
     update: (params: {
         sourceSlug: string;
         externalId: string;
@@ -105,6 +117,7 @@ export interface SoftwareExternalDataRepository {
     getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
     getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     delete: (params: { sourceSlug: string; externalId: string }) => Promise<boolean>;
+    getSimilarSoftwarePk: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
 }
 
 type CnllPrestataire = {
@@ -177,21 +190,9 @@ export interface SourceRepository {
     getWikidataSource: () => Promise<DatabaseDataType.SourceRow | undefined>;
 }
 
-export interface SimilarSoftwareRepository {
-    insert: (
-        params: {
-            softwareId: number;
-            externalIds: { sourceSlug: string; externalId: string }[];
-        }[]
-    ) => Promise<void>;
-    getById: (params: { softwareId: number }) => Promise<{ sourceSlug: string; externalId: string }[]>;
-    getByExternalId: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
-}
-
 export type DbApiV2 = {
     source: SourceRepository;
     software: SoftwareRepository;
-    similarSoftware: SimilarSoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
     otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;

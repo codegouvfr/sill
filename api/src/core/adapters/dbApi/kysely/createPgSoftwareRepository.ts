@@ -318,6 +318,35 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 })
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
+        },
+        saveSimilarSoftware: async params => {
+            const dataToInsert = params
+                .map(({ softwareId, externalIds }) => {
+                    return externalIds.map(({ externalId, sourceSlug }) => ({
+                        similarExternalId: externalId,
+                        sourceSlug,
+                        softwareId
+                    }));
+                })
+                .flat();
+
+            await db
+                .insertInto("softwares__similar_software_external_datas")
+                .values(dataToInsert)
+                .onConflict(oc => oc.columns(["softwareId", "sourceSlug", "similarExternalId"]).doNothing())
+                .execute();
+        },
+        getSimilarSoftwareExternalDataPks: async ({ softwareId }) => {
+            const similarIds = await db
+                .selectFrom("softwares__similar_software_external_datas")
+                .selectAll()
+                .where("softwareId", "=", softwareId)
+                .execute();
+
+            return similarIds.map(silimarRow => ({
+                externalId: silimarRow.similarExternalId,
+                sourceSlug: silimarRow.sourceSlug
+            }));
         }
     };
 };

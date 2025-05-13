@@ -4,10 +4,16 @@
 
 import { Kysely, sql } from "kysely";
 import { describe, it, beforeEach, expect } from "vitest";
-import { expectToEqual, expectToMatchObject, testPgUrl } from "../../tools/test.helpers";
+import {
+    emptyExternalData,
+    emptyExternalDataCleaned,
+    expectToEqual,
+    expectToMatchObject,
+    resetDB,
+    testPgUrl
+} from "../../tools/test.helpers";
 import type { DbApiV2 } from "../ports/DbApiV2";
-import { ExternalDataOrigin } from "../ports/GetSoftwareExternalData";
-import type { SoftwareFormData, Source } from "./readWriteSillData";
+import type { SoftwareFormData } from "./readWriteSillData";
 import { createKyselyPgDbApi } from "../adapters/dbApi/kysely/createPgDbApi";
 import type { Database } from "../adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../adapters/dbApi/kysely/kysely.dialect";
@@ -125,66 +131,6 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
     return acceleroId;
 };
 
-const emptyExternalData = (params: { softwareId?: number; externalId: string; sourceSlug: string }) => {
-    const { softwareId = null, externalId, sourceSlug } = params;
-    return {
-        externalId,
-        developers: [],
-        label: {},
-        description: {},
-        isLibreSoftware: null,
-        logoUrl: null,
-        websiteUrl: null,
-        sourceUrl: null,
-        documentationUrl: null,
-        license: null,
-        softwareVersion: null,
-        publicationTime: null,
-        keywords: null,
-        programmingLanguages: null,
-        applicationCategories: null,
-        referencePublications: null,
-        identifiers: null,
-        sourceSlug,
-        softwareId,
-        lastDataFetchAt: null
-    };
-};
-
-const emptyExternalDataCleaned = (params: { softwareId?: number; externalId: string; sourceSlug: string }) => {
-    const { softwareId = undefined, externalId, sourceSlug } = params;
-    return {
-        externalId,
-        developers: [],
-        label: {},
-        description: {},
-        isLibreSoftware: undefined,
-        logoUrl: undefined,
-        websiteUrl: undefined,
-        sourceUrl: undefined,
-        documentationUrl: undefined,
-        license: undefined,
-        softwareVersion: undefined,
-        publicationTime: undefined,
-        keywords: undefined,
-        programmingLanguages: undefined,
-        applicationCategories: undefined,
-        referencePublications: undefined,
-        identifiers: undefined,
-        sourceSlug,
-        softwareId,
-        lastDataFetchAt: undefined
-    };
-};
-
-const source = {
-    slug: "wikidata",
-    priority: 1,
-    url: "https://www.wikidata.org",
-    description: undefined,
-    kind: "wikidata"
-} satisfies Source;
-
 describe("fetches software extra data (from different providers)", () => {
     let fetchAndSaveSoftwareExtraDataBySoftwareId: Awaited<ReturnType<typeof makeRefreshExternalDataForSoftware>>;
     let dbApi: DbApiV2;
@@ -193,21 +139,7 @@ describe("fetches software extra data (from different providers)", () => {
 
     beforeEach(async () => {
         db = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
-        await db.deleteFrom("compiled_softwares").execute();
-        await db.deleteFrom("software_external_datas").execute();
-        await db.deleteFrom("software_users").execute();
-        await db.deleteFrom("software_referents").execute();
-        await db.deleteFrom("softwares").execute();
-        await db.deleteFrom("agents").execute();
-        await db.deleteFrom("sources").execute();
-
-        await db
-            .insertInto("sources")
-            .values({
-                ...source,
-                kind: source.kind as ExternalDataOrigin
-            })
-            .execute();
+        await resetDB(db);
 
         await sql`SELECT setval('softwares_id_seq', 11, false)`.execute(db);
 
@@ -297,13 +229,13 @@ describe("fetches software extra data (from different providers)", () => {
 
             expectToEqual(updatedSoftwareExternalDatas, [
                 emptyExternalDataCleaned({
-                    "externalId": "Q11354",
-                    "softwareId": 6,
+                    "externalId": "Q2822666",
+                    "softwareId": 2,
                     "sourceSlug": "wikidata"
                 }),
                 emptyExternalDataCleaned({
-                    "externalId": "Q2822666",
-                    "softwareId": 2,
+                    "externalId": "Q11354",
+                    "softwareId": 6,
                     "sourceSlug": "wikidata"
                 }),
                 {

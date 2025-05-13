@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: MIT
 
 import { expect } from "vitest";
-import { DeclarationFormData, InstanceFormData, SoftwareFormData } from "../core/usecases/readWriteSillData";
+import { DeclarationFormData, InstanceFormData, SoftwareFormData, Source } from "../core/usecases/readWriteSillData";
+import { Kysely } from "kysely";
+import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
+import { ExternalDataOrigin } from "../lib/ApiTypes";
 
 export const testPgUrl = "postgresql://catalogi:pg_password@localhost:5432/db";
 
@@ -66,3 +69,81 @@ export const createInstanceFormData = makeObjectFactory<InstanceFormData>({
     instanceUrl: "https://example.com",
     isPublic: true
 });
+
+export const emptyExternalData = (params: { softwareId?: number; externalId: string; sourceSlug: string }) => {
+    const { softwareId = null, externalId, sourceSlug } = params;
+    return {
+        externalId,
+        developers: [],
+        label: {},
+        description: {},
+        isLibreSoftware: null,
+        logoUrl: null,
+        websiteUrl: null,
+        sourceUrl: null,
+        documentationUrl: null,
+        license: null,
+        softwareVersion: null,
+        publicationTime: null,
+        keywords: null,
+        programmingLanguages: null,
+        applicationCategories: null,
+        referencePublications: null,
+        identifiers: null,
+        sourceSlug,
+        softwareId,
+        lastDataFetchAt: null
+    };
+};
+
+export const emptyExternalDataCleaned = (params: { softwareId?: number; externalId: string; sourceSlug: string }) => {
+    const { softwareId = undefined, externalId, sourceSlug } = params;
+    return {
+        externalId,
+        developers: [],
+        label: {},
+        description: {},
+        isLibreSoftware: undefined,
+        logoUrl: undefined,
+        websiteUrl: undefined,
+        sourceUrl: undefined,
+        documentationUrl: undefined,
+        license: undefined,
+        softwareVersion: undefined,
+        publicationTime: undefined,
+        keywords: undefined,
+        programmingLanguages: undefined,
+        applicationCategories: undefined,
+        referencePublications: undefined,
+        identifiers: undefined,
+        sourceSlug,
+        softwareId,
+        lastDataFetchAt: undefined
+    };
+};
+
+export const testSource = {
+    slug: "wikidata",
+    priority: 1,
+    url: "https://www.wikidata.org",
+    description: undefined,
+    kind: "wikidata"
+} satisfies Source;
+
+export const resetDB = async (db: Kysely<Database>) => {
+    await db.deleteFrom("compiled_softwares").execute();
+    await db.deleteFrom("software_external_datas").execute();
+    await db.deleteFrom("software_users").execute();
+    await db.deleteFrom("software_referents").execute();
+    await db.deleteFrom("softwares").execute();
+    await db.deleteFrom("agents").execute();
+    await db.deleteFrom("sources").execute();
+
+    return db
+        .insertInto("sources")
+        .values({
+            ...testSource,
+            kind: testSource.kind as ExternalDataOrigin
+        })
+        .execute();
+};
