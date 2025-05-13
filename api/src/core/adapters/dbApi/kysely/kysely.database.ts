@@ -114,7 +114,7 @@ type InstancesTable = {
 };
 
 type ExternalId = string;
-type ExternalDataOriginKind = "wikidata" | "HAL";
+export type ExternalDataOriginKind = "wikidata" | "HAL" | "ComptoirDuLibre";
 type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
@@ -240,9 +240,46 @@ export namespace PgComptoirDuLibre {
         external_resources: {
             website: string | null;
             repository: string | null;
+            wikidata: WikidataIdentifier | any[];
+            sill: SILLIdentifier | any[];
+            wikipedia: WikipediaIdentifier | any[];
+            cnll: CNLLIdentifier | any[];
+            framalibre: FramaLibreIdentifier | any[];
         };
         providers: Provider[];
         users: User[];
+    };
+
+    type CNLLIdentifier = {
+        url: string;
+    };
+
+    type FramaLibreIdentifier = {
+        slug: string;
+        url: string;
+    };
+
+    type WikidataIdentifier = {
+        id: string;
+        url: string;
+        data: string;
+    };
+
+    type SILLIdentifier = {
+        id: number;
+        url: string;
+        i18n_url: {
+            fr: string;
+            en: string;
+        };
+    };
+
+    type WikipediaIdentifier = {
+        url: string;
+        i18n_url: {
+            fr: string;
+            en: string;
+        };
     };
 }
 

@@ -1,15 +1,15 @@
-import { ExternalDataOrigin } from "api";
+import { ExternalDataOriginKind } from "api";
 import type { Thunks } from "core/bootstrap";
 import { createUsecaseContextApi } from "redux-clean-architecture";
 
 const { getContext, setContext } = createUsecaseContextApi<{
-    externalDataOrigin: ExternalDataOrigin;
+    externalDataOrigin: ExternalDataOriginKind;
 }>();
 
 export const thunks = {
     getExternalDataOrigin:
         () =>
-        (...args): ExternalDataOrigin => {
+        (...args): ExternalDataOriginKind => {
             const [, , rootContext] = args;
 
             const { externalDataOrigin } = getContext(rootContext);
