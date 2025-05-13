@@ -1,8 +1,7 @@
 import memoize from "memoizee";
-import { SoftwareFormData, SoftwareType } from "../../usecases/readWriteSillData";
+import { SoftwareFormData, SoftwareType, Source } from "../../usecases/readWriteSillData";
 import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
-import { Source } from "../../usecases/readWriteSillData";
 import { GetSoftwareFormData } from "../../ports/GetSoftwareFormData";
 
 const stringOfArrayIncluded = (stringArray: Array<string>, text: string): boolean => {
