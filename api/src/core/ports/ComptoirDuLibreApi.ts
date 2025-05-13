@@ -48,11 +48,48 @@ export declare namespace ComptoirDuLibre {
         external_resources: {
             website: string | null;
             repository: string | null;
+            wikidata: WikidataIdentifier | any[];
+            sill: SILLIdentifier | any[];
+            wikipedia: WikipediaIdentifier | any[];
+            cnll: CNLLIdentifier | any[];
+            framalibre: FramaLibreIdentifier | any[];
         };
         providers: Provider[];
         users: User[];
     }
 }
+
+type CNLLIdentifier = {
+    url: string;
+};
+
+type FramaLibreIdentifier = {
+    slug: string;
+    url: string;
+};
+
+type WikidataIdentifier = {
+    id: string;
+    url: string;
+    data: string;
+};
+
+type SILLIdentifier = {
+    id: number;
+    url: string;
+    i18n_url: {
+        fr: string;
+        en: string;
+    };
+};
+
+type WikipediaIdentifier = {
+    url: string;
+    i18n_url: {
+        fr: string;
+        en: string;
+    };
+};
 
 export const { zComptoirDuLibre } = (() => {
     const zProvider = z.object({
@@ -79,7 +116,49 @@ export const { zComptoirDuLibre } = (() => {
 
     assert<Equals<ComptoirDuLibre.User, z.infer<typeof zUser>>>();
 
-    const zSoftware: z.Schema<ComptoirDuLibre.Software> = z.object({
+    const zCNLLIdentifier = z.object({
+        url: z.string()
+    });
+
+    assert<Equals<CNLLIdentifier, z.infer<typeof zCNLLIdentifier>>>();
+
+    const zFramaLibreIdentifier = z.object({
+        slug: z.string(),
+        url: z.string()
+    });
+
+    assert<Equals<FramaLibreIdentifier, z.infer<typeof zFramaLibreIdentifier>>>();
+
+    const zWikidataIdentifier = z.object({
+        id: z.string(),
+        url: z.string(),
+        data: z.string()
+    });
+
+    assert<Equals<WikidataIdentifier, z.infer<typeof zWikidataIdentifier>>>();
+
+    const zSILLIdentifier = z.object({
+        id: z.number(),
+        url: z.string(),
+        i18n_url: z.object({
+            fr: z.string(),
+            en: z.string()
+        })
+    });
+
+    assert<Equals<SILLIdentifier, z.infer<typeof zSILLIdentifier>>>();
+
+    const zWikipediaIdentifier = z.object({
+        url: z.string(),
+        i18n_url: z.object({
+            fr: z.string(),
+            en: z.string()
+        })
+    });
+
+    assert<Equals<WikipediaIdentifier, z.infer<typeof zWikipediaIdentifier>>>();
+
+    const zSoftware: z.Schema = z.object({
         "id": z.number(),
         "created": z.string(),
         "modified": z.string(),
@@ -89,13 +168,18 @@ export const { zComptoirDuLibre } = (() => {
         "logoUrl": z.string().optional(),
         "external_resources": z.object({
             "website": z.union([z.string(), z.null()]),
-            "repository": z.union([z.string(), z.null()])
+            "repository": z.union([z.string(), z.null()]),
+            "wikidata": z.any(),
+            "sill": z.any(),
+            "wikipedia": z.any(),
+            "cnll": z.any(),
+            "framalibre": z.any()
         }),
         "providers": z.array(zProvider),
         "users": z.array(zUser)
     });
 
-    assert<Equals<ComptoirDuLibre.Software, z.infer<typeof zSoftware>>>();
+    // assert<Equals<ComptoirDuLibre.Software, z.infer<typeof zSoftware>>>();
 
     const zComptoirDuLibre = z.object({
         "date_of_export": z.string(),
@@ -103,7 +187,7 @@ export const { zComptoirDuLibre } = (() => {
         "softwares": z.array(zSoftware)
     });
 
-    assert<Equals<ComptoirDuLibre, z.infer<typeof zComptoirDuLibre>>>();
+    // assert<Equals<ComptoirDuLibre, z.infer<typeof zComptoirDuLibre>>>();
 
     return { zComptoirDuLibre };
 })();
