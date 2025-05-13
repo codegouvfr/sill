@@ -2,12 +2,13 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import { ExternalDataOrigin, GetSoftwareExternalData } from "./GetSoftwareExternalData";
+import { ExternalDataOriginKind } from "../adapters/dbApi/kysely/kysely.database";
+import { GetSoftwareExternalData } from "./GetSoftwareExternalData";
 import { GetSoftwareExternalDataOptions } from "./GetSoftwareExternalDataOptions";
 import { GetSoftwareFormData } from "./GetSoftwareFormData";
 
 export type SourceGateway = {
-    sourceType: ExternalDataOrigin;
+    sourceType: ExternalDataOriginKind;
     softwareExternalData: {
         getById: GetSoftwareExternalData;
     };
