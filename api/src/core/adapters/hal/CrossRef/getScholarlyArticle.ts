@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
+import { Catalogi } from "../../../../types/Catalogi";
 import { GetScholarlyArticle } from "../../../ports/GetScholarlyArticle";
 import { crossRef } from "./api";
 
@@ -18,12 +19,16 @@ export const getScholarlyArticle: GetScholarlyArticle = async doi => {
     return {
         "@id": workData.message.DOI,
         "@type": "ScholarlyArticle",
-        identifier: {
-            "@type": "PropertyValue",
-            "propertyID": "doi",
-            "url": new URL(`https://doi.org/${doi}`),
-            "value": workData.message.DOI
-        },
+        identifiers: [
+            {
+                "@type": "PropertyValue",
+                name: "DOI id",
+                url: new URL(`https://doi.org/${doi}`),
+                value: workData.message.DOI,
+                additionalType: "Article",
+                subjectOf: Catalogi.doiSource
+            }
+        ],
         headline: workData.message.title[0]
     };
 };

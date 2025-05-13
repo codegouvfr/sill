@@ -47,7 +47,19 @@ const softwareFormData: SoftwareFormData = {
 const softwareExternalData: SoftwareExternalData = {
     externalId: externalIdForSource,
     sourceSlug: testSource.slug,
-    developers: [{ "@type": "Person", name: "Bob", identifier: "bob", url: `https://www.wikidata.org/wiki/bob` }],
+    developers: [
+        {
+            "@type": "Person",
+            name: "Bob",
+            identifiers: [
+                {
+                    value: "bob",
+                    "@type": "PropertyValue"
+                }
+            ],
+            url: `https://www.wikidata.org/wiki/bob`
+        }
+    ],
     label: { en: "Some software" },
     description: { en: "Some software description" },
     isLibreSoftware: true,
@@ -72,7 +84,12 @@ const similarSoftwareExternalData: SoftwareExternalData = {
         {
             "@type": "Person",
             name: "Bobby",
-            identifier: "similar-bob",
+            identifiers: [
+                {
+                    value: "similar-bob",
+                    "@type": "PropertyValue"
+                }
+            ],
             url: `https://www.wikidata.org/wiki/similar-bob`
         }
     ],
@@ -163,7 +180,7 @@ describe("pgDbApi", () => {
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
                     name: dev.name,
-                    url: `https://www.wikidata.org/wiki/${dev.identifier}`
+                    url: `https://www.wikidata.org/wiki/${dev.identifiers}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: undefined,

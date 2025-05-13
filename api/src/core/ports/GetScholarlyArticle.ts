@@ -2,6 +2,6 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import { Catalogi } from "../../types/Catalogi";
+import { ScholarlyArticle } from "../adapters/dbApi/kysely/kysely.database";
 
-export type GetScholarlyArticle = (articleId: string) => Promise<Catalogi.ScholarlyArticle | undefined>;
+export type GetScholarlyArticle = (articleId: string) => Promise<ScholarlyArticle | undefined>;
