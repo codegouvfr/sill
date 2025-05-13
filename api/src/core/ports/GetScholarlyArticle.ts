@@ -1,3 +1,3 @@
-import { SILL } from "../../types/SILL";
+import { ScholarlyArticle } from "../adapters/dbApi/kysely/kysely.database";
 
-export type GetScholarlyArticle = (articleId: string) => Promise<SILL.ScholarlyArticle | undefined>;
+export type GetScholarlyArticle = (articleId: string) => Promise<ScholarlyArticle | undefined>;

@@ -7,10 +7,17 @@ import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
+import {
+    SchemaIdentifier,
+    SchemaOrganization,
+    SchemaPerson,
+    ScholarlyArticle,
+    WebSite
+} from "../dbApi/kysely/kysely.database";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<SILL.Organization[]> => {
+): Promise<SchemaOrganization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -34,7 +41,7 @@ const buildParentOrganizationTree = async (
 const buildReferencePublication = async (
     source: HAL.ArticleIdentifierOrigin,
     valueId: string
-): Promise<SILL.ScholarlyArticle | undefined> => {
+): Promise<ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
             return getScholarlyArticle(valueId);
@@ -69,21 +76,21 @@ const resolveStructId = (parsedXMLLabel: JSDOM, structAcronym: string) => {
     return Number(org[0].getAttribute("xml:id")?.split("-")[1]);
 };
 
-const HALSource: SILL.WebSite = {
+const HALSource: WebSite<SILL.SourceKind> = {
     "@type": "Website" as const,
     name: "HAL instance",
     url: new URL("https://hal.science"),
     additionalType: "HAL"
 };
 
-const SWHSource: SILL.WebSite = {
+const SWHSource: WebSite<SILL.SourceKind> = {
     "@type": "Website" as const,
     name: "Software Heritage instance",
     url: new URL("https://www.softwareheritage.org/"),
     additionalType: "SWH"
 };
 
-const DOISource: SILL.WebSite = {
+const DOISource: WebSite<SILL.SourceKind> = {
     "@type": "Website" as const,
     name: "DOI instance",
     url: new URL("https://www.doi.org"),
@@ -127,11 +134,20 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
-                const base: SILL.Person = {
+                if (!id) throw new Error("Could find the author id");
+
+                const base: SchemaPerson = {
                     "@type": "Person",
-                    "name": `${author.givenName} ${author.familyName}`,
-                    "identifier": id,
-                    "affiliations": [] as SILL.Organization[]
+                    name: `${author.givenName} ${author.familyName}`,
+                    identifiers: [
+                        {
+                            "@type": "PropertyValue",
+                            value: id,
+                            additionalType: "Person",
+                            name: ""
+                        }
+                    ],
+                    affiliations: [] as SchemaOrganization[]
                 };
 
                 if (affiliation?.length && affiliation.length > 0) {
@@ -172,7 +188,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
             })
         );
 
-        const identifiers: SILL.Identification[] =
+        const identifiers: SchemaIdentifier[] =
             codemetaSoftware?.identifier?.map(halIdentifier => {
                 const base = {
                     "@type": "PropertyValue" as const,
