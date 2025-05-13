@@ -7,7 +7,7 @@ export type TrpcRouterOutput = inferRouterOutputs<TrpcRouter>;
 
 export { type User } from "../rpc/user";
 export { type Language, type LocalizedString, languages } from "../core/ports/GetSoftwareExternalData";
-export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
+export type { ExternalDataOriginKind } from "../core/adapters/dbApi/kysely/kysely.database";
 
 import type * as ApiTypes from "./ApiTypes";
 

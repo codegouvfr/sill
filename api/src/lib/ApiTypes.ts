@@ -1,9 +1,9 @@
-export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 export type { SoftwareExternalDataOption } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { Catalogi } from "../types/Catalogi";
 
 export type {
+    ExternalDataOriginKind,
     SchemaIdentifier as Identifier,
     SchemaPerson as Person,
     SchemaOrganization as Organization,
