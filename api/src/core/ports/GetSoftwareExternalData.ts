@@ -12,8 +12,6 @@ import {
 
 type ExternalId = string;
 
-export type ExternalDataOrigin = "wikidata" | "HAL";
-
 export type GetSoftwareExternalData = {
     (params: { externalId: ExternalId; source: Source }): Promise<SoftwareExternalData | undefined>;
     clear: (externalId: ExternalId) => void;
