@@ -258,7 +258,8 @@ describe("fetches software extra data (from different providers)", () => {
                     identifiers: [],
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z"),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 },
                 {
                     applicationCategories: undefined,
@@ -293,7 +294,8 @@ describe("fetches software extra data (from different providers)", () => {
                     identifiers: [],
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 }
             ]);
 
@@ -377,7 +379,8 @@ describe("fetches software extra data (from different providers)", () => {
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z"),
-                    lastDataFetchAt: expect.any(Number)
+                    lastDataFetchAt: expect.any(Number),
+                    providers: []
                 },
                 emptyExternalDataCleaned({
                     externalId: "Q118629387",

@@ -43,6 +43,7 @@ export type SoftwareExternalData = {
     publicationTime: Date;
     referencePublications: ScholarlyArticle[];
     identifiers: SchemaIdentifier[];
+    providers: Array<SchemaOrganization>;
 }>;
 
 export type SimilarSoftwareExternalData = Pick<

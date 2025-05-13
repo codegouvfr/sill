@@ -53,7 +53,8 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
                 programmingLanguages: JSON.stringify(softwareExternalData.programmingLanguages),
                 referencePublications: JSON.stringify(softwareExternalData.referencePublications),
                 identifiers: JSON.stringify(softwareExternalData.identifiers),
-                description: JSON.stringify(softwareExternalData.description)
+                description: JSON.stringify(softwareExternalData.description),
+                providers: JSON.stringify(softwareExternalData.providers)
             })
             .executeTakeFirst();
     },
@@ -68,7 +69,8 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             programmingLanguages: JSON.stringify(softwareExternalData.programmingLanguages),
             referencePublications: JSON.stringify(softwareExternalData.referencePublications),
             identifiers: JSON.stringify(softwareExternalData.identifiers),
-            description: JSON.stringify(softwareExternalData.description)
+            description: JSON.stringify(softwareExternalData.description),
+            providers: JSON.stringify(softwareExternalData.providers)
         };
 
         await db
