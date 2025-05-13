@@ -1,3 +1,5 @@
+import { ArticleIdentifierOrigin, WebSite } from "../core/adapters/dbApi/kysely/kysely.database";
+
 export namespace Catalogi {
     export type SourceKind =
         | "GitLab"
@@ -10,55 +12,74 @@ export namespace Catalogi {
         | "ComptoirDuLibre"
         | "FramaLibre";
 
-    // from https://schema.org/PropertyValue
-    export type Identification = {
-        "@type": "PropertyValue";
-        value: string;
-        url: URL;
-        subjectOf?: WebSite;
+    export const kownWebsite: Record<string, WebSite<any>> = {
+        "siren": {
+            "@type": "Website",
+            name: "SIREN",
+            url: new URL("https://www.insee.fr/fr/information/2406147"),
+            description: "French business identification number"
+        },
+        "cnll": {
+            "@type": "Website",
+            name: "Union des entreprises du logiciel libre et du numérique ouvert",
+            url: new URL("https://cnll.fr/")
+        }
     };
 
-    // from https://schema.org/WebSite
-    export type WebSite = {
-        "@type": "Website";
-        name: string;
-        url: URL;
-        additionalType?: SourceKind;
+    export const framaLibreSource = {
+        url: new URL("https://framalibre.org"),
+        name: "FramaLibre Official instance",
+        "@type": "Website" as const,
+        additionalType: "FramaLibre" as const
     };
 
-    // from https://schema.org/ScholarlyArticle
-    export type ScholarlyArticle = {
-        "@id": string;
-        "@type": "ScholarlyArticle";
-        identifier: ArticleIdentifier;
-        headline?: string;
+    export const doiSource = {
+        "@type": "Website" as const,
+        name: "DOI",
+        url: new URL("https://doi.org/"),
+        additionalType: "doi" as const
     };
 
-    export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";
-
-    // from https://schema.org/PropertyValue
-    export type ArticleIdentifier = {
-        "@type": "PropertyValue";
-        value: string;
-        propertyID: ArticleIdentifierOrigin;
-        url: URL | null;
+    export const halSource = {
+        "@type": "Website" as const,
+        name: "HAL",
+        url: new URL("https://hal.science"),
+        additionalType: "HAL" as const
     };
 
-    // from https://schema.org/Organization
-    export type Organization = {
-        "@type": "Organization";
-        identifier?: string;
-        name: string;
-        url?: string;
-        parentOrganizations?: Organization[];
+    export const wikidataSource = {
+        "@type": "Website" as const,
+        name: "Wikidata",
+        url: new URL("https://www.wikidata.org"),
+        additionalType: "wikidata" as const
     };
 
-    // from https://schema.org/Person
-    export type Person = {
-        "@type": "Person";
-        name: string;
-        identifier?: string;
-        url?: string;
-        affiliations?: Organization[];
+    // TODO Remove partiel
+    type OfficialSource = "GitHub" | "HAL" | "ComptoirDuLibre" | "wikidata";
+    export const knownSources: Record<OfficialSource, WebSite<SourceKind | ArticleIdentifierOrigin>> = {
+        "wikidata": {
+            "@type": "Website",
+            name: "Wikidata",
+            url: new URL("https://www.wikidata.org"),
+            additionalType: "wikidata"
+        },
+        "ComptoirDuLibre": {
+            "@type": "Website",
+            name: "Comptoir du libre",
+            url: new URL("https://comptoir-du-libre.org"),
+            additionalType: "ComptoirDuLibre"
+        },
+        "HAL": {
+            "@type": "Website",
+            name: "HAL",
+            url: new URL("https://hal.science"),
+            additionalType: "HAL"
+        },
+        "GitHub": {
+            "@type": "Website",
+            name: "GitHub",
+            url: new URL("https://github.com"),
+            additionalType: "GitHub"
+        }
     };
 }
