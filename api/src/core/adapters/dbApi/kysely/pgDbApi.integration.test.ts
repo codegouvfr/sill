@@ -70,7 +70,8 @@ const softwareExternalData: SoftwareExternalData = {
     applicationCategories: ["Software Cat I", "Software Cat II"],
     referencePublications: undefined,
     identifiers: undefined,
-    publicationTime: new Date(1561566581000)
+    publicationTime: new Date(1561566581000),
+    providers: []
 };
 
 const similarSoftwareExternalData: SoftwareExternalData = {
@@ -103,7 +104,8 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     applicationCategories: ["Software Cat I", "Software Cat II"],
     referencePublications: undefined,
     identifiers: undefined,
-    publicationTime: new Date(1561566581000)
+    publicationTime: new Date(1561566581000),
+    providers: []
 };
 
 const insertedAgent = {
@@ -445,7 +447,8 @@ describe("pgDbApi", () => {
                     applicationCategories: JSON.stringify(softExtData.applicationCategories),
                     programmingLanguages: JSON.stringify(softExtData.programmingLanguages),
                     identifiers: JSON.stringify(softExtData.identifiers),
-                    referencePublications: JSON.stringify(softExtData.referencePublications)
+                    referencePublications: JSON.stringify(softExtData.referencePublications),
+                    providers: JSON.stringify(softExtData.providers)
                 }))
             )
             .execute();
