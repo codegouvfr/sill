@@ -166,10 +166,10 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         similarSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                            "@type": "Person",
+                            "@type": "Person", // TODO Fix type ?
                             name: dev.name,
                             url: dev.url,
-                            affiliations: dev.affiliations
+                            affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                         })),
                         logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
                         officialWebsiteUrl:
@@ -259,7 +259,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                     "@type": "Person",
                                     name: dev.name,
                                     url: dev.url,
-                                    affiliations: dev.affiliations
+                                    affiliations:
+                                        dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                                 })),
                                 officialWebsiteUrl:
                                     softwareExternalData?.websiteUrl ??
@@ -553,7 +554,7 @@ const makeGetSoftwareById =
                         "@type": "Person",
                         name: dev.name,
                         url: dev.url,
-                        affiliations: dev.affiliations
+                        affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                     })),
                     logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
                     officialWebsiteUrl:

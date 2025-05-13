@@ -266,7 +266,12 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             "@type": "Person",
-                            identifier: "Q58482636",
+                            identifiers: [
+                                {
+                                    value: "Q58482636",
+                                    "@type": "PropertyValue"
+                                }
+                            ],
                             name: "Evan You",
                             url: `https://www.wikidata.org/wiki/Q58482636`
                         }
@@ -345,7 +350,12 @@ describe("fetches software extra data (from different providers)", () => {
                     developers: [
                         {
                             "@type": "Organization",
-                            identifier: "Q489709",
+                            identifiers: [
+                                {
+                                    value: "Q489709",
+                                    "@type": "PropertyValue"
+                                }
+                            ],
                             name: "Apache Software Foundation",
                             url: "https://www.wikidata.org/wiki/Q489709"
                         }

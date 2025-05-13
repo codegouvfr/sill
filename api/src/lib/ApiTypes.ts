@@ -8,6 +8,13 @@ export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareEx
 export type { Catalogi } from "../types/Catalogi";
 
 export type {
+    SchemaIdentifier as Identifier,
+    SchemaPerson as Person,
+    SchemaOrganization as Organization,
+    ScholarlyArticle
+} from "../core/adapters/dbApi/kysely/kysely.database";
+
+export type {
     Agent,
     Instance,
     Os,

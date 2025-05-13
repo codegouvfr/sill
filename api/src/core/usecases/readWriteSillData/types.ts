@@ -2,10 +2,14 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-import { Catalogi } from "../../../types/Catalogi";
 import type { LocalizedString, SimilarSoftwareExternalData } from "../../ports/GetSoftwareExternalData";
-import SourceKind = Catalogi.SourceKind;
 import { DatabaseDataType } from "../../ports/DbApiV2";
+import {
+    SchemaIdentifier,
+    SchemaOrganization,
+    SchemaPerson,
+    ScholarlyArticle
+} from "../../adapters/dbApi/kysely/kysely.database";
 
 export type ServiceProvider = {
     name: string;
@@ -39,7 +43,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: Array<Catalogi.Person | Catalogi.Organization>;
+    authors: Array<SchemaPerson | SchemaOrganization>;
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
@@ -60,8 +64,8 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
-    referencePublications?: Catalogi.ScholarlyArticle[];
-    identifiers?: Catalogi.Identification[];
+    referencePublications?: ScholarlyArticle[];
+    identifiers?: SchemaIdentifier[];
 };
 
 export type Source = DatabaseDataType.SourceRow;
