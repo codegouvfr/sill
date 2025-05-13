@@ -12,10 +12,10 @@ const useCaseLogTimer = `${useCaseLogTitle} Finsihed fetching external data`;
 export type FetchAndSaveExternalDataForAllSoftware = () => Promise<boolean>;
 export type FetchAndSaveExternalDataForSoftware = (args: { softwareId: number }) => Promise<boolean>;
 
-export const makeRefreshExternalDataAll: (
-    params: ParamsOfrefreshExternalDataUseCase
-) => FetchAndSaveExternalDataForAllSoftware = (params: ParamsOfrefreshExternalDataUseCase) => {
-    const { dbApi, minuteSkipSince = 0 } = params;
+export const makeRefreshExternalDataAll = (
+    deps: ParamsOfrefreshExternalDataUseCase
+): FetchAndSaveExternalDataForAllSoftware => {
+    const { dbApi, minuteSkipSince = 0 } = deps;
 
     return async () => {
         console.time(useCaseLogTimer);
@@ -24,20 +24,19 @@ export const makeRefreshExternalDataAll: (
     };
 };
 
-export const makeRefreshExternalDataForSoftware: (
-    params: ParamsOfrefreshExternalDataUseCase
-) => FetchAndSaveExternalDataForSoftware = (params: ParamsOfrefreshExternalDataUseCase) => {
-    const { dbApi } = params;
+export const makeRefreshExternalDataForSoftware = (
+    config: ParamsOfrefreshExternalDataUseCase
+): FetchAndSaveExternalDataForSoftware => {
+    const { dbApi } = config;
 
-    return async (args: { softwareId: number }) => {
+    return async ({ softwareId }: { softwareId: number }) => {
         console.time(useCaseLogTimer);
-        const { softwareId } = args;
 
         const externalDataBinded = await dbApi.softwareExternalData.getBySoftwareId({ softwareId });
 
-        const simularExternalDataIDs = await dbApi.similarSoftware.getById({ softwareId });
+        const simularExternalDataIDs = await dbApi.software.getSimilarSoftwareExternalDataPks({ softwareId });
 
-        if (!externalDataBinded) {
+        if (!externalDataBinded || externalDataBinded.length === 0) {
             console.error(`${useCaseLogTitle} No external data found for this software`);
             return false;
         }
@@ -80,12 +79,10 @@ const refreshExternalDataByExternalIdAndSlug = async (args: {
 
         if (externalData) {
             await dbApi.softwareExternalData.update({
-                ...{
-                    sourceSlug: source.slug,
-                    externalId: externalId,
-                    lastDataFetchAt: Date.now(),
-                    softwareExternalData: externalData
-                },
+                sourceSlug: source.slug,
+                externalId: externalId,
+                lastDataFetchAt: Date.now(),
+                softwareExternalData: externalData,
                 ...(actualExternalDataRow?.softwareId ? { softwareId: actualExternalDataRow.softwareId } : {})
             });
         }
