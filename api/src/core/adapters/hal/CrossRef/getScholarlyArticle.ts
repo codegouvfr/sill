@@ -1,3 +1,4 @@
+import { SILL } from "../../../../types/SILL";
 import { GetScholarlyArticle } from "../../../ports/GetScholarlyArticle";
 import { crossRef } from "./api";
 
@@ -14,12 +15,16 @@ export const getScholarlyArticle: GetScholarlyArticle = async doi => {
     return {
         "@id": workData.message.DOI,
         "@type": "ScholarlyArticle",
-        identifier: {
-            "@type": "PropertyValue",
-            "propertyID": "doi",
-            "url": new URL(`https://doi.org/${doi}`),
-            "value": workData.message.DOI
-        },
+        identifiers: [
+            {
+                "@type": "PropertyValue",
+                name: "DOI id",
+                url: new URL(`https://doi.org/${doi}`),
+                value: workData.message.DOI,
+                additionalType: "Article",
+                subjectOf: SILL.doiSource
+            }
+        ],
         headline: workData.message.title[0]
     };
 };
