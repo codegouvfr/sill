@@ -88,7 +88,8 @@ export const emptyExternalData = (params: { softwareId?: number; externalId: str
         identifiers: null,
         sourceSlug,
         softwareId,
-        lastDataFetchAt: null
+        lastDataFetchAt: null,
+        providers: []
     };
 };
 
@@ -114,7 +115,8 @@ export const emptyExternalDataCleaned = (params: { softwareId?: number; external
         identifiers: undefined,
         sourceSlug,
         softwareId,
-        lastDataFetchAt: undefined
+        lastDataFetchAt: undefined,
+        providers: []
     };
 };
 
