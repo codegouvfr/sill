@@ -3,24 +3,19 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
 import type { DbAgent } from "../core/ports/DbApiV2";
-import type { InstanceFormData, Source } from "../core/usecases/readWriteSillData";
+import type { InstanceFormData } from "../core/usecases/readWriteSillData";
 import {
     createDeclarationFormData,
     createInstanceFormData,
     createSoftwareFormData,
     expectToEqual,
-    expectToMatchObject
+    expectToMatchObject,
+    resetDB,
+    testSource
 } from "../tools/test.helpers";
 import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 
-const mainSource = {
-    slug: "wikidata",
-    priority: 1,
-    url: "https://www.wikidata.org",
-    description: undefined,
-    kind: "wikidata"
-} satisfies Source;
-const softwareFormData = createSoftwareFormData({ sourceSlug: mainSource.slug });
+const softwareFormData = createSoftwareFormData({ sourceSlug: testSource.slug });
 const declarationFormData = createDeclarationFormData();
 
 describe("RPC e2e tests", () => {
@@ -93,15 +88,7 @@ describe("RPC e2e tests", () => {
 
         beforeAll(async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller());
-            await kyselyDb.deleteFrom("software_referents").execute();
-            await kyselyDb.deleteFrom("software_users").execute();
-            await kyselyDb.deleteFrom("instances").execute();
-            await kyselyDb.deleteFrom("software_external_datas").execute();
-            await kyselyDb.deleteFrom("softwares").execute();
-            await kyselyDb.deleteFrom("agents").execute();
-            await kyselyDb.deleteFrom("sources").execute();
-
-            await kyselyDb.insertInto("sources").values(mainSource).executeTakeFirst();
+            await resetDB(kyselyDb);
         });
 
         it("gets the list of agents, which is initially empty", async () => {

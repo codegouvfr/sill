@@ -1,3 +1,6 @@
-import { SoftwareFormData } from "../usecases/readWriteSillData";
+import { SoftwareFormData, Source } from "../usecases/readWriteSillData";
 
-export type GetSoftwareFormData = (externalId: string) => Promise<SoftwareFormData | undefined>;
+export type GetSoftwareFormData = (params: {
+    externalId: string;
+    source: Source;
+}) => Promise<SoftwareFormData | undefined>;
