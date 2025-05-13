@@ -1,14 +1,64 @@
 import { Generated, JSONColumnType } from "kysely";
-// Only allowed import on JSONColumnType
-import { Catalogi } from "../../../../types/Catalogi";
 import { TransformRepoToRowOutput } from "./kysely.utils";
 
+// from https://schema.org/ScholarlyArticle
+export type ScholarlyArticle = {
+    "@id": string;
+    "@type": "ScholarlyArticle";
+    identifiers: ArticleIdentifier[];
+    headline?: string;
+};
+
+export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";
+
+// from https://schema.org/PropertyValue
+export interface ArticleIdentifier extends SchemaIdentifier {
+    subjectOf: WebSite<ArticleIdentifierOrigin>;
+    additionalType: "Article";
+}
+
+export type OrganizationIdentifierOrigin = "wikidata" | "HAL";
+export interface OrganizationIdentifer extends SchemaIdentifier {
+    subjectOf: WebSite<OrganizationIdentifierOrigin>;
+    additionalType: "Organization";
+}
+
 // from https://schema.org/Organization
-type SchemaOrganization = {
+export type SchemaOrganization = {
     "@type": "Organization";
     name: string;
-    url: string | undefined;
+    url?: string;
+    identifiers?: SchemaIdentifier[];
     parentOrganizations?: SchemaOrganization[];
+};
+
+// from https://schema.org/Person
+export type SchemaPerson = {
+    "@type": "Person";
+    name: string;
+    identifiers?: SchemaIdentifier[];
+    url?: string;
+    affiliations?: SchemaOrganization[];
+};
+
+// from https://schema.org/WebSite
+export type WebSite<T> = {
+    "@type": "Website";
+    name: string; // Name of the website or database
+    description?: string;
+    url: URL; // Name of the website or database
+    additionalType?: T; // Type of the database
+};
+
+// from https://schema.org/identifier & https://schema.org/PropertyValue
+export type SchemaIdentifier = {
+    "@type": "PropertyValue";
+    name?: string; // Name of the property
+    value: string; // Value of the property
+    url?: string | URL; // Url to direct access to the element on the database
+    valueReference?: string; // Value of the instance / database
+    subjectOf?: WebSite<any>; // Value of the instance / database
+    additionalType?: string; // Organization | Article | Person | ...
 };
 
 export type Database = {
@@ -84,16 +134,7 @@ export type SoftwareExternalDatasTable = {
     externalId: ExternalId;
     sourceSlug: string;
     softwareId: number | null;
-    developers: JSONColumnType<
-        {
-            "@type": "Organization" | "Person";
-            name: string;
-            identifier?: string;
-            url: string;
-            affiliations?: SchemaOrganization[];
-            parentOrganizations?: SchemaOrganization[];
-        }[]
-    >;
+    developers: JSONColumnType<Array<SchemaOrganization | SchemaPerson>>;
     label: string | JSONColumnType<LocalizedString>;
     description: string | JSONColumnType<LocalizedString>;
     isLibreSoftware: boolean | null;
@@ -106,9 +147,9 @@ export type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguages: JSONColumnType<string[]> | null;
     applicationCategories: JSONColumnType<string[]> | null;
-    referencePublications: JSONColumnType<Catalogi.ScholarlyArticle[]> | null;
+    referencePublications: JSONColumnType<ScholarlyArticle[]> | null;
     publicationTime: Date | null;
-    identifiers: JSONColumnType<Catalogi.Identification[]> | null;
+    identifiers: JSONColumnType<SchemaIdentifier[]> | null;
     lastDataFetchAt: number | null;
 };
 
