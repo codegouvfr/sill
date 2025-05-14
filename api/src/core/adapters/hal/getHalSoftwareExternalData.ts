@@ -112,14 +112,6 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 const base: SchemaPerson = {
                     "@type": "Person",
                     name: `${author.givenName} ${author.familyName}`,
-                    identifiers: [
-                        {
-                            "@type": "PropertyValue",
-                            value: id,
-                            additionalType: "Person",
-                            name: ""
-                        }
-                    ],
                     affiliations: [] as SchemaOrganization[]
                 };
 
@@ -147,16 +139,34 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 }
 
                 if (id?.split("-")?.length === 4 && id?.length === 19) {
-                    return { ...base, "url": `https://orcid.org/${id}` };
+                    return {
+                        ...base,
+                        identifiers: [identifersUtils.makeOrcidIdentifer({ orcidId: id, additionalType: "Person" })]
+                    };
                 }
 
                 if (id) {
-                    return { ...base, "url": `${source.url}/search/index/q/*/authIdHal_s/${id}` };
+                    return {
+                        ...base,
+                        identifiers: [
+                            identifersUtils.makeHALIdentifier({
+                                halId: id,
+                                additionalType: "Person",
+                                url: `${source.url}/search/index/q/*/authIdHal_s/${id}`
+                            })
+                        ]
+                    };
                 }
 
                 return {
                     ...base,
-                    "url": `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                    identifiers: [
+                        identifersUtils.makeHALIdentifier({
+                            halId: id,
+                            additionalType: "Person",
+                            url: `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                        })
+                    ]
                 };
             })
         );
