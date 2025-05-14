@@ -40,10 +40,8 @@ export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
     const importService = importFromSource(dbApi);
 
     console.time(`[Loader:Import] Feeding database with software package from ${source.slug}`);
-    return importService({ agentEmail: botAgentEmail, source, softwareIdOnSource: listToImport }).then(promises =>
-        Promise.all(promises).then(() => {
-            console.timeEnd(`[Loader:Import] Feeding database with software package from ${source.slug}`);
-            return true;
-        })
-    );
+    return importService({ agentEmail: botAgentEmail, source, softwareIdOnSource: listToImport }).then(result => {
+        console.timeEnd(`[Loader:Import] Feeding database with ${result.length} software packages from ${source.slug}`);
+        return true;
+    });
 }

@@ -9,7 +9,7 @@ export type ImportFromSource = (params: {
     agentEmail: string;
     source: Source;
     softwareIdOnSource?: string[];
-}) => Promise<Promise<number | undefined>[]>;
+}) => Promise<number[]>;
 
 export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: DbApiV2) => {
     return async ({ agentEmail, source, softwareIdOnSource }) => {
@@ -24,19 +24,25 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
               });
 
         const getSoftwareForm = resolveAdapterFromSource(source).softwareForm.getById;
+        let result = [];
 
         switch (source.kind) {
             case "HAL":
                 // Get All or Request
                 const rawHALSoftwareIds =
-                    softwareIdOnSource && softwareIdOnSource.length > 0
+                    softwareIdOnSource && softwareIdOnSource.length > 0 && softwareIdOnSource[0] !== ""
                         ? softwareIdOnSource
                         : (await halAPIGateway.software.getAll({ SWHFilter: true })).map(doc => doc.docid);
 
                 console.info(
                     `[UC:Import] Importing  ${rawHALSoftwareIds.length} software packages from ${source.slug}`
                 );
-                return rawHALSoftwareIds.map(docId => checkSoftware(dbApi, source, docId, getSoftwareForm, agentId));
+
+                for (const docId of rawHALSoftwareIds) {
+                    const newId = await checkSoftware(dbApi, source, docId, getSoftwareForm, agentId);
+                    result.push(newId);
+                }
+                return Promise.resolve(result.filter(val => val != undefined));
 
             case "wikidata":
                 if (!softwareIdOnSource || softwareIdOnSource.length === 0) {
@@ -46,9 +52,13 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                 console.info(
                     `[UC:Import] Importing  ${softwareIdOnSource.length} software packages from ${source.slug}`
                 );
-                return softwareIdOnSource
-                    .map(externalId => checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId))
-                    .filter(val => val != undefined);
+
+                for (const externalId of softwareIdOnSource) {
+                    const newId = await checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId);
+                    result.push(newId);
+                }
+                return Promise.resolve(result.filter(val => val != undefined));
+
             default:
                 throw Error("[UC:Import] Not Implemented");
         }
@@ -62,16 +72,6 @@ const checkSoftware = async (
     getSoftwareForm: GetSoftwareFormData,
     agentId: number
 ) => {
-    // Check if already present
-    const externalData = await dbApi.softwareExternalData.get({
-        sourceSlug: source.slug,
-        externalId: externalId
-    });
-    if (externalData) {
-        console.info(`[UC:Import] Importing (${externalId}) from ${source.slug}: Already there ⏭️`);
-        return externalData.softwareId;
-    }
-
     // Get software form from source
     const softwareForm = await getSoftwareForm({ externalId, source });
     if (!softwareForm || !softwareForm.softwareName) {
