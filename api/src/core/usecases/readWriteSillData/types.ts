@@ -11,20 +11,12 @@ import {
     ScholarlyArticle
 } from "../../adapters/dbApi/kysely/kysely.database";
 
-export type ServiceProvider = {
-    name: string;
-    website?: string;
-    cdlUrl?: string;
-    cnllUrl?: string;
-    siren?: string;
-};
-
 export type Software = {
     logoUrl: string | undefined;
     softwareId: number;
     softwareName: string;
     softwareDescription: string;
-    serviceProviders: ServiceProvider[];
+    serviceProviders: SchemaOrganization[];
     latestVersion:
         | {
               semVer?: string;
@@ -183,4 +175,14 @@ export type InstanceFormData = {
     targetAudience: string;
     instanceUrl: string | undefined;
     isPublic: boolean;
+};
+
+/* Obselete data for Compile Data : TODO Remove that */
+
+export type ServiceProvider = {
+    name: string;
+    website?: string;
+    cdlUrl?: string;
+    cnllUrl?: string;
+    siren?: string;
 };
