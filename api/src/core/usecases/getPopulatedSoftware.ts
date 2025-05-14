@@ -16,7 +16,6 @@ const dateParser = (str: string | Date | undefined | null) => {
 
 type MissingData = Pick<
     Software,
-    | "serviceProviders"
     | "userAndReferentCountByOrganization"
     | "comptoirDuLibreServiceProviderCount"
     | "annuaireCnllServiceProviders"
@@ -44,14 +43,12 @@ export const makeGetPopulatedSoftware: MakeGetPopulatedSoftware = (dbApi: DbApiV
             const mergedFormatedExternalDataItem = formatExternalDataRowToUISoftware(mergedExternalDataItem);
 
             const missingData: MissingData = {
-                serviceProviders: [],
                 userAndReferentCountByOrganization: {},
                 comptoirDuLibreServiceProviderCount: 0,
                 annuaireCnllServiceProviders: undefined,
                 comptoirDuLibreId: undefined,
                 similarSoftwares: []
             };
-            // TODO serviceProviders: serviceProviders ?? [],
             // TODO userAndReferentCountByOrganization: {},
             // TODO comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
             // TODO annuaireCnllServiceProviders
@@ -126,6 +123,7 @@ type DataFromExternalRow = Pick<
     | "license"
     | "applicationCategories"
     | "latestVersion"
+    | "serviceProviders"
 >;
 const formatExternalDataRowToUISoftware = (
     externalDataRow: DatabaseDataType.SoftwareExternalDataRow
@@ -150,7 +148,8 @@ const formatExternalDataRowToUISoftware = (
         latestVersion: {
             semVer: externalDataRow.softwareVersion,
             publicationTime: dateParser(externalDataRow.publicationTime)
-        }
+        },
+        serviceProviders: externalDataRow.providers ?? []
     };
 };
 
