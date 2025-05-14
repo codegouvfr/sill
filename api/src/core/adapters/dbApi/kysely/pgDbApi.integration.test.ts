@@ -182,7 +182,7 @@ describe("pgDbApi", () => {
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
                     name: dev.name,
-                    url: `https://www.wikidata.org/wiki/${dev.identifiers}`
+                    url: dev.url
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
                 comptoirDuLibreId: undefined,

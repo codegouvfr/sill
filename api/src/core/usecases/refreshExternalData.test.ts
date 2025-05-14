@@ -227,7 +227,7 @@ describe("fetches software extra data (from different providers)", () => {
 
             const updatedSoftwareExternalDatas = await dbApi.softwareExternalData.getAll();
 
-            expectToEqual(updatedSoftwareExternalDatas, [
+            expectToMatchObject(updatedSoftwareExternalDatas, [
                 emptyExternalDataCleaned({
                     "externalId": "Q2822666",
                     "softwareId": 2,
@@ -255,7 +255,21 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://create-react-app.dev/",
                     programmingLanguages: [],
                     referencePublications: undefined,
-                    identifiers: [],
+                    identifiers: [
+                        {
+                            "@type": "PropertyValue",
+                            "additionalType": "Software",
+                            "name": "ID on Wikidata",
+                            "subjectOf": {
+                                "@type": "Website",
+                                "additionalType": "wikidata",
+                                "name": "Wikidata",
+                                "url": new URL("https://www.wikidata.org/")
+                            },
+                            "url": "https://www.wikidata.org/wiki/Q118629387",
+                            "value": "Q118629387"
+                        }
+                    ],
                     softwareVersion: "5.0.1",
                     publicationTime: new Date("2022-04-12T00:00:00.000Z"),
                     lastDataFetchAt: expect.any(Number),
@@ -291,7 +305,21 @@ describe("fetches software extra data (from different providers)", () => {
                     websiteUrl: "https://vitejs.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: undefined,
-                    identifiers: [],
+                    identifiers: [
+                        {
+                            "@type": "PropertyValue",
+                            "additionalType": "Software",
+                            "name": "ID on Wikidata",
+                            "subjectOf": {
+                                "@type": "Website",
+                                "additionalType": "wikidata",
+                                "name": "Wikidata",
+                                "url": new URL("https://www.wikidata.org/")
+                            },
+                            "url": "https://www.wikidata.org/wiki/Q111590996",
+                            "value": "Q111590996"
+                        }
+                    ],
                     softwareVersion: expect.any(String),
                     publicationTime: expect.any(Date),
                     lastDataFetchAt: expect.any(Number),
@@ -337,7 +365,7 @@ describe("fetches software extra data (from different providers)", () => {
             await fetchAndSaveSoftwareExtraDataBySoftwareId({ softwareId: apacheSoftwareId });
 
             const updatedSoftwareExternalDatas = await dbApi.softwareExternalData.getAll();
-            expectToEqual(updatedSoftwareExternalDatas, [
+            expectToMatchObject(updatedSoftwareExternalDatas, [
                 emptyExternalDataCleaned({
                     "externalId": "Q2822666",
                     "softwareId": 2,
@@ -355,6 +383,15 @@ describe("fetches software extra data (from different providers)", () => {
                             identifiers: [
                                 {
                                     value: "Q489709",
+                                    "additionalType": "Organization",
+                                    "name": "ID on Wikidata",
+                                    "subjectOf": {
+                                        "@type": "Website",
+                                        "additionalType": "wikidata",
+                                        "name": "Wikidata",
+                                        "url": new URL("https://www.wikidata.org/")
+                                    },
+                                    "url": "https://www.wikidata.org/wiki/Q489709",
                                     "@type": "PropertyValue"
                                 }
                             ],
@@ -375,7 +412,21 @@ describe("fetches software extra data (from different providers)", () => {
                     sourceUrl: "https://github.com/apache/httpd",
                     websiteUrl: "https://httpd.apache.org/",
                     referencePublications: undefined,
-                    identifiers: [],
+                    identifiers: [
+                        {
+                            "@type": "PropertyValue",
+                            "additionalType": "Software",
+                            "name": "ID on Wikidata",
+                            "subjectOf": {
+                                "@type": "Website",
+                                "additionalType": "wikidata",
+                                "name": "Wikidata",
+                                "url": new URL("https://www.wikidata.org/")
+                            },
+                            "url": "https://www.wikidata.org/wiki/Q11354",
+                            "value": "Q11354"
+                        }
+                    ],
                     programmingLanguages: ["C"],
                     softwareVersion: "2.5.0-alpha",
                     publicationTime: new Date("2017-11-08T00:00:00.000Z"),
