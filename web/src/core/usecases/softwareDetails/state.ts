@@ -38,7 +38,7 @@ export namespace State {
         softwareId: number;
         softwareName: string;
         softwareDescription: string;
-        serviceProviders: ApiTypes.ServiceProvider[];
+        serviceProviders: ApiTypes.Organization[];
         logoUrl: string | undefined;
         authors: Array<ApiTypes.Person | ApiTypes.Organization>;
         officialWebsiteUrl: string | undefined;

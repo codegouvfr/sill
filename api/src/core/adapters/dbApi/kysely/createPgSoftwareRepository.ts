@@ -166,7 +166,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         externalId: externalIdForSource,
                         updateTime: new Date(+updateTime).getTime(),
                         addedTime: new Date(+addedTime).getTime(),
-                        serviceProviders: serviceProviders ?? [],
+                        serviceProviders: [], // Broken field
                         similarSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
@@ -251,7 +251,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 externalId: externalIdForSource,
                                 updateTime: new Date(+updateTime).getTime(),
                                 addedTime: new Date(+addedTime).getTime(),
-                                serviceProviders: serviceProviders ?? [],
+                                serviceProviders: [], // Broken field
                                 similarSoftwares: similarExternalSoftwares,
                                 latestVersion: software.latestVersion ?? {
                                     semVer: softwareExternalData?.softwareVersion ?? undefined,
@@ -577,7 +577,7 @@ const makeGetSoftwareById =
                     externalId: externalIdForSource,
                     updateTime: new Date(+updateTime).getTime(),
                     addedTime: new Date(+addedTime).getTime(),
-                    serviceProviders: serviceProviders ?? [],
+                    serviceProviders: [], // Broken field
                     similarSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
