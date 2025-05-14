@@ -294,4 +294,6 @@ describe("fetches software extra data (from different providers)", () => {
         });
         expectToEqual(similardExternalDataUpdated?.length, 3);
     });
+
+    // TODO Another case : register
 });
