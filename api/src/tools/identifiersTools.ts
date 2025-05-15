@@ -56,6 +56,13 @@ const orcidSource: WebSite = {
     additionalType: "ORCID"
 };
 
+const nationalSIREN: WebSite = {
+    "@type": "Website" as const,
+    name: "L’Annuaire des Entreprises",
+    url: new URL("https://annuaire-entreprises.data.gouv.fr"),
+    additionalType: "SIREN"
+};
+
 export const identifersUtils = {
     makeGenericIdentifier: (params: { value: string; url?: string | URL }): SchemaIdentifier => {
         const { value, url } = params;
@@ -110,7 +117,7 @@ export const identifersUtils = {
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     },
-    makeCNLLIdentifier: (params: { cNNLId: string; url: string; additionalType?: string }): SchemaIdentifier => {
+    makeCNLLIdentifier: (params: { cNNLId: string; url?: string; additionalType?: string }): SchemaIdentifier => {
         const { cNNLId, url, additionalType } = params;
         return {
             "@type": "PropertyValue" as const,
@@ -164,6 +171,18 @@ export const identifersUtils = {
             value: orcidId,
             url: `https://orcid.org/${orcidId}`,
             subjectOf: orcidSource,
+            ...(additionalType ? { additionalType: additionalType } : {})
+        };
+    },
+    makeSIRENIdentifier: (params: { SIREN: string; additionalType?: string; url?: string }) => {
+        const { SIREN, additionalType, url } = params;
+        return {
+            ...{
+                "@type": "PropertyValue" as const,
+                value: SIREN,
+                url: url ?? undefined,
+                subjectOf: nationalSIREN
+            },
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     }
