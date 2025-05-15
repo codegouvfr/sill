@@ -99,6 +99,9 @@ export function createRouter(params: {
                 const mainSource = await dbApi.source.getMainSource();
                 const sourceGateway = resolveAdapterFromSource(mainSource);
 
+                if (sourceGateway.sourceProfile !== "Primary")
+                    throw new Error("Getting option if not possbile from a secondary source");
+
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
                     sourceGateway.softwareOptions.getById({ queryString, language, source: mainSource }),
                     dbApi.software.getAllSillSoftwareExternalIds(mainSource.slug)
@@ -478,21 +481,21 @@ export function createRouter(params: {
 
                     // prettier-ignore
                     languages
-            .map(lang => createResolveLocalizedString({
-              "currentLanguage": lang,
-              "fallbackLanguage": "en"
-            }))
-            .map(({resolveLocalizedString}) => [termsOfServiceUrl].map(resolveLocalizedString))
-            .flat()
-            .forEach(async function callee(url) {
+                        .map(lang => createResolveLocalizedString({
+                            "currentLanguage": lang,
+                            "fallbackLanguage": "en"
+                        }))
+                        .map(({ resolveLocalizedString }) => [termsOfServiceUrl].map(resolveLocalizedString))
+                        .flat()
+                        .forEach(async function callee(url) {
 
-              memoizedFetch(url);
+                            memoizedFetch(url);
 
-              await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
+                            await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
 
-              callee(url);
+                            callee(url);
 
-            });
+                        });
 
                     return async ({ input }) => {
                         const { language, name } = input;
