@@ -117,7 +117,7 @@ type InstancesTable = {
 };
 
 type ExternalId = string;
-export type ExternalDataOriginKind = "wikidata" | "HAL" | "ComptoirDuLibre";
+export type ExternalDataOriginKind = "wikidata" | "HAL" | "ComptoirDuLibre" | "CNLL";
 type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
