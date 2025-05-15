@@ -32,6 +32,7 @@ export type UseCasesUsedOnRouter = Pick<
     | "createSoftware"
     | "updateSoftware"
     | "fetchAndSaveExternalDataForOneSoftwarePackage"
+    | "getPopulateSoftware"
 >;
 
 export function createRouter(params: {
@@ -80,7 +81,9 @@ export function createRouter(params: {
             return user;
         }),
         "getMainSource": loggedProcedure.query(() => dbApi.source.getMainSource()),
-        "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
+        "getSoftwares": loggedProcedure.query(() => {
+            return useCases.getPopulateSoftware();
+        }),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
         "getExternalSoftwareOptions": loggedProcedure
             .input(
@@ -98,6 +101,9 @@ export function createRouter(params: {
                 const { queryString, language } = input;
                 const mainSource = await dbApi.source.getMainSource();
                 const sourceGateway = resolveAdapterFromSource(mainSource);
+
+                if (sourceGateway.sourceProfile !== "Primary")
+                    throw new Error("Getting option if not possbile from a secondary source");
 
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
                     sourceGateway.softwareOptions.getById({ queryString, language, source: mainSource }),
@@ -478,21 +484,21 @@ export function createRouter(params: {
 
                     // prettier-ignore
                     languages
-            .map(lang => createResolveLocalizedString({
-              "currentLanguage": lang,
-              "fallbackLanguage": "en"
-            }))
-            .map(({resolveLocalizedString}) => [termsOfServiceUrl].map(resolveLocalizedString))
-            .flat()
-            .forEach(async function callee(url) {
+                        .map(lang => createResolveLocalizedString({
+                            "currentLanguage": lang,
+                            "fallbackLanguage": "en"
+                        }))
+                        .map(({ resolveLocalizedString }) => [termsOfServiceUrl].map(resolveLocalizedString))
+                        .flat()
+                        .forEach(async function callee(url) {
 
-              memoizedFetch(url);
+                            memoizedFetch(url);
 
-              await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
+                            await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
 
-              callee(url);
+                            callee(url);
 
-            });
+                        });
 
                     return async ({ input }) => {
                         const { language, name } = input;

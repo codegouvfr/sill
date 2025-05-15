@@ -41,6 +41,9 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
 
         let softwareId: number | undefined = undefined;
 
+        const source = await dbApi.source.getByName({ name: sourceSlug });
+        if (!source) throw new Error("Source slug is unknown");
+
         const named = await dbApi.software.getByName(softwareName);
 
         if (named) {
@@ -59,7 +62,25 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
             }
         }
 
-        // TODO Resolve with other identifiers
+        // Check if identifiers is saved in external data
+        const savedIdentifers = await dbApi.softwareExternalData.getOtherIdentifierIdsBySourceURL({
+            sourceURL: source.url
+        });
+        if (savedIdentifers && externalIdForSource && Object.hasOwn(savedIdentifers, externalIdForSource)) {
+            // There is no externalId for this source, but it's already save and we know where !
+            console.info(
+                `[UC:Import] Importing  ${softwareName}(${externalIdForSource}) from ${source.slug}: Adding externalData to software #${savedIdentifers[externalIdForSource]}`
+            );
+            await dbApi.softwareExternalData.saveIds([
+                {
+                    softwareId: savedIdentifers[externalIdForSource],
+                    sourceSlug: source.slug,
+                    externalId: externalIdForSource
+                }
+            ]);
+
+            softwareId = savedIdentifers[externalIdForSource];
+        }
 
         if (!softwareId) {
             console.log(logTitle, `The software package isn't save yet, let's create it`);
