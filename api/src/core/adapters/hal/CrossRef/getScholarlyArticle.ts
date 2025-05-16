@@ -1,5 +1,5 @@
 import { GetScholarlyArticle } from "../../../ports/GetScholarlyArticle";
-import { identifersUtils } from "../../../utils";
+import { identifersUtils } from "../../../../tools/identifiersTools";
 import { crossRef } from "./api";
 
 export const getScholarlyArticle: GetScholarlyArticle = async doi => {
