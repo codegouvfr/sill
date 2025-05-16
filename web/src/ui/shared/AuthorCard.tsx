@@ -90,7 +90,7 @@ export function AuthorCard(props: Props) {
                     <div className={classes.externalLinkButtons}>
                         <LogoURLButton url={identifier.url} labelFromURL={true} />
                     </div>
-                )
+                );
             })}
         </Card>
     );
