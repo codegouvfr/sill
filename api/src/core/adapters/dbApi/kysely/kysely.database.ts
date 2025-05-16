@@ -239,11 +239,11 @@ export namespace PgComptoirDuLibre {
         external_resources: {
             website: string | null;
             repository: string | null;
-            wikidata: WikidataIdentifier | any[];
-            sill: SILLIdentifier | any[];
-            wikipedia: WikipediaIdentifier | any[];
-            cnll: CNLLIdentifier | any[];
-            framalibre: FramaLibreIdentifier | any[];
+            wikidata: WikidataIdentifier | never[];
+            sill: SILLIdentifier | never[];
+            wikipedia: WikipediaIdentifier | never[];
+            cnll: CNLLIdentifier | never[];
+            framalibre: FramaLibreIdentifier | never[];
         };
         providers: Provider[];
         users: User[];
