@@ -48,11 +48,11 @@ export declare namespace ComptoirDuLibre {
         external_resources: {
             website: string | null;
             repository: string | null;
-            wikidata: WikidataIdentifier | any[];
-            sill: SILLIdentifier | any[];
-            wikipedia: WikipediaIdentifier | any[];
-            cnll: CNLLIdentifier | any[];
-            framalibre: FramaLibreIdentifier | any[];
+            wikidata: WikidataIdentifier | never[];
+            sill: SILLIdentifier | never[];
+            wikipedia: WikipediaIdentifier | never[];
+            cnll: CNLLIdentifier | never[];
+            framalibre: FramaLibreIdentifier | never[];
         };
         providers: Provider[];
         users: User[];
@@ -169,11 +169,11 @@ export const { zComptoirDuLibre } = (() => {
         "external_resources": z.object({
             "website": z.union([z.string(), z.null()]),
             "repository": z.union([z.string(), z.null()]),
-            "wikidata": z.any(),
-            "sill": z.any(),
-            "wikipedia": z.any(),
-            "cnll": z.any(),
-            "framalibre": z.any()
+            "wikidata": zWikidataIdentifier.or(z.array(z.never()).max(0)),
+            "sill": zSILLIdentifier.or(z.array(z.never()).max(0)),
+            "wikipedia": zWikipediaIdentifier.or(z.array(z.never()).max(0)),
+            "cnll": zCNLLIdentifier.or(z.array(z.never()).max(0)),
+            "framalibre": zFramaLibreIdentifier.or(z.array(z.never()).max(0))
         }),
         "providers": z.array(zProvider),
         "users": z.array(zUser)
