@@ -46,7 +46,7 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                     const newId = await checkSoftware(dbApi, source, docId, getSoftwareForm, agentId);
                     result.push(newId);
                 }
-                return Promise.resolve(result.filter(val => val != undefined));
+                return result.filter(val => val != undefined);
 
             case "wikidata":
                 if (!softwareIdOnSource || softwareIdOnSource.length === 0) {
@@ -61,10 +61,10 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                     const newId = await checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId);
                     result.push(newId);
                 }
-                return Promise.resolve(result.filter(val => val != undefined));
+                return result.filter(val => val != undefined);
 
             default:
-                throw Error("[UC:Import] Not Implemented");
+                throw new Error("[UC:Import] Not Implemented");
         }
     };
 };
