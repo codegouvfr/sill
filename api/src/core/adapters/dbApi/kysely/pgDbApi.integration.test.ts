@@ -1,29 +1,24 @@
 import { Kysely } from "kysely";
 import { beforeEach, describe, expect, it, afterEach } from "vitest";
-import { expectPromiseToFailWith, expectToEqual, testPgUrl } from "../../../../tools/test.helpers";
+import { expectPromiseToFailWith, expectToEqual, resetDB, testPgUrl, testSource } from "../../../../tools/test.helpers";
 import { DbAgent, DbApiV2 } from "../../../ports/DbApiV2";
-import { ExternalDataOrigin, SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
-import { DeclarationFormData, SoftwareFormData, Source } from "../../../usecases/readWriteSillData";
+import { SoftwareExternalData } from "../../../ports/GetSoftwareExternalData";
+import { DeclarationFormData, SoftwareFormData } from "../../../usecases/readWriteSillData";
 import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
+import { makeCreateSofware } from "../../../usecases/createSoftware";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
 const externalIdForSource = "external-id-111";
-const source = {
-    slug: "wikidata",
-    priority: 1,
-    url: "https://www.wikidata.org",
-    description: null,
-    kind: "wikidata"
-} satisfies Source;
+
 const similarExternalId = "external-id-222";
 const softwareFormData: SoftwareFormData = {
     comptoirDuLibreId: 50,
     doRespectRgaa: true,
     externalIdForSource,
-    sourceSlug: source.slug,
+    sourceSlug: testSource.slug,
     isFromFrenchPublicService: false,
     isPresentInSupportContract: true,
     similarSoftwareExternalDataIds: [similarExternalId],
@@ -47,7 +42,7 @@ const softwareFormData: SoftwareFormData = {
 
 const softwareExternalData: SoftwareExternalData = {
     externalId: externalIdForSource,
-    sourceSlug: source.slug,
+    sourceSlug: testSource.slug,
     developers: [{ "@type": "Person", name: "Bob", identifier: "bob", url: `https://www.wikidata.org/wiki/bob` }],
     label: { en: "Some software" },
     description: { en: "Some software description" },
@@ -68,7 +63,7 @@ const softwareExternalData: SoftwareExternalData = {
 
 const similarSoftwareExternalData: SoftwareExternalData = {
     externalId: similarExternalId,
-    sourceSlug: source.slug,
+    sourceSlug: testSource.slug,
     developers: [
         {
             "@type": "Person",
@@ -108,21 +103,7 @@ describe("pgDbApi", () => {
 
     beforeEach(async () => {
         dbApi = createKyselyPgDbApi(db);
-        await db.deleteFrom("software_referents").execute();
-        await db.deleteFrom("software_users").execute();
-        await db.deleteFrom("software_external_datas").execute();
-        await db.deleteFrom("softwares").execute();
-        await db.deleteFrom("instances").execute();
-        await db.deleteFrom("agents").execute();
-        await db.deleteFrom("sources").execute();
-
-        await db
-            .insertInto("sources")
-            .values({
-                ...source,
-                kind: source.kind as ExternalDataOrigin
-            })
-            .execute();
+        await resetDB(db);
     });
 
     afterEach(() => {
@@ -166,7 +147,7 @@ describe("pgDbApi", () => {
                 serviceUrl: "https://example.com"
             });
 
-            const softwares = await dbApi.software.getAll({ onlyIfUpdatedMoreThan3HoursAgo: true });
+            const softwares = await dbApi.software.getAll();
 
             const actualSoftware = softwares[0];
 
@@ -181,11 +162,11 @@ describe("pgDbApi", () => {
                     url: `https://www.wikidata.org/wiki/${dev.identifier}`
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
-                comptoirDuLibreId: 50,
+                comptoirDuLibreId: undefined,
                 comptoirDuLibreServiceProviderCount: 0,
                 dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,
-                sourceSlug: source.slug,
+                sourceSlug: testSource.slug,
                 externalId: externalIdForSource,
                 keywords: ["bob", "l'éponge"],
                 latestVersion: {
@@ -204,7 +185,7 @@ describe("pgDbApi", () => {
                 serviceProviders: [],
                 similarSoftwares: [
                     {
-                        sourceSlug: source.slug,
+                        sourceSlug: testSource.slug,
                         externalId: similarSoftwareExternalData.externalId,
                         label: similarSoftwareExternalData.label,
                         description: similarSoftwareExternalData.description,
@@ -277,7 +258,9 @@ describe("pgDbApi", () => {
             console.log("------ agent scenario------");
             console.log("inserting agent");
             const agentId = await dbApi.agent.add(insertedAgent);
-            const softwareId = await dbApi.software.create({
+
+            const makeSoftware = makeCreateSofware(dbApi);
+            const softwareId = await makeSoftware({
                 formData: softwareFormData,
                 agentId
             });
@@ -437,7 +420,7 @@ describe("pgDbApi", () => {
             .values(
                 [softwareExternalData, similarSoftwareExternalData].map(softExtData => ({
                     ...softExtData,
-                    sourceSlug: source.slug,
+                    sourceSlug: testSource.slug,
                     developers: JSON.stringify(softExtData.developers),
                     label: JSON.stringify(softExtData.label),
                     description: JSON.stringify(softExtData.description),
@@ -452,7 +435,8 @@ describe("pgDbApi", () => {
 
         const agentId = await dbApi.agent.add(insertedAgent);
 
-        const softwareId = await dbApi.software.create({
+        const makeSoftware = makeCreateSofware(dbApi);
+        const softwareId = await makeSoftware({
             formData: softwareFormData,
             agentId
         });

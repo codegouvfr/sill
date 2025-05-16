@@ -9,15 +9,8 @@ import { assert } from "tsafe/assert";
 import { bootstrapCore } from "../core";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import { halSourceGateway } from "../core/adapters/hal";
-import { wikidataSourceGateway } from "../core/adapters/wikidata";
 import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
-import type {
-    ExternalDataOrigin,
-    GetSoftwareExternalData,
-    LocalizedString
-} from "../core/ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import type { LocalizedString } from "../core/ports/GetSoftwareExternalData";
 import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
@@ -34,12 +27,8 @@ export async function startRpcService(params: {
     githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     redirectUrl?: string;
     databaseUrl: string;
-    initializeSoftwareFromSource: boolean;
-    botAgentEmail?: string;
-    listToImport?: string[];
 }) {
     const {
         redirectUrl,
@@ -48,11 +37,7 @@ export async function startRpcService(params: {
         port,
         githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
-        externalSoftwareDataOrigin,
         databaseUrl,
-        botAgentEmail,
-        initializeSoftwareFromSource,
-        listToImport,
         ...rest
     } = params;
 
@@ -68,9 +53,7 @@ export async function startRpcService(params: {
                 "dbKind": "kysely",
                 "kyselyDb": kyselyDb
             },
-            githubPersonalAccessTokenForApiRateLimit,
-            // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
-            "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+            githubPersonalAccessTokenForApiRateLimit
         }),
         createContextFactory({
             "oidcParams": {
@@ -79,18 +62,12 @@ export async function startRpcService(params: {
         })
     ]);
 
-    const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
-        getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
-
     const { router } = createRouter({
         useCases,
         dbApi,
-        getSoftwareExternalDataOptions,
-        getSoftwareExternalData,
         oidcParams,
         termsOfServiceUrl,
-        redirectUrl,
-        externalSoftwareDataOrigin
+        redirectUrl
     });
 
     express()
@@ -140,25 +117,4 @@ export async function startRpcService(params: {
             })()
         )
         .listen(port, () => console.log(`Listening on port ${port}`));
-}
-
-function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {
-    "getSoftwareExternalDataOptions": GetSoftwareExternalDataOptions;
-    "getSoftwareExternalData": GetSoftwareExternalData;
-} {
-    switch (externalSoftwareDataOrigin) {
-        case "wikidata":
-            return {
-                "getSoftwareExternalDataOptions": wikidataSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": wikidataSourceGateway.softwareExternalData.getById
-            };
-        case "HAL":
-            return {
-                "getSoftwareExternalDataOptions": halSourceGateway.softwareOptions.getById,
-                "getSoftwareExternalData": halSourceGateway.softwareExternalData.getById
-            };
-        default:
-            const unreachableCase: never = externalSoftwareDataOrigin;
-            throw new Error(`Unreachable case: ${unreachableCase}`);
-    }
 }

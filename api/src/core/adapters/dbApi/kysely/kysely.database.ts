@@ -1,6 +1,7 @@
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
 import { SILL } from "../../../../types/SILL";
+import { TransformRepoToRowOutput } from "./kysely.utils";
 
 // from https://schema.org/Organization
 type SchemaOrganization = {
@@ -79,7 +80,7 @@ type SourcesTable = {
     description: JSONColumnType<LocalizedString> | null;
 };
 
-type SoftwareExternalDatasTable = {
+export type SoftwareExternalDatasTable = {
     externalId: ExternalId;
     sourceSlug: string;
     softwareId: number | null;
@@ -95,7 +96,7 @@ type SoftwareExternalDatasTable = {
     >;
     label: string | JSONColumnType<LocalizedString>;
     description: string | JSONColumnType<LocalizedString>;
-    isLibreSoftware: boolean;
+    isLibreSoftware: boolean | null;
     logoUrl: string | null;
     websiteUrl: string | null;
     sourceUrl: string | null;
@@ -108,6 +109,7 @@ type SoftwareExternalDatasTable = {
     referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
     identifiers: JSONColumnType<SILL.Identification[]> | null;
+    lastDataFetchAt: number | null;
 };
 
 type SoftwareType =
@@ -124,7 +126,6 @@ type SoftwaresTable = {
     description: string;
     referencedSinceTime: number;
     updateTime: number;
-    lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{
         reason?: string;
         time: number;
@@ -147,6 +148,19 @@ type SoftwaresTable = {
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
 };
+
+export namespace DatabaseRowOutput {
+    export type Agent = TransformRepoToRowOutput<AgentsTable>;
+    export type SoftwareReferent = TransformRepoToRowOutput<SoftwareReferentsTable>;
+    export type SoftwareUsert = TransformRepoToRowOutput<SoftwareUsersTable>;
+    export type Instance = TransformRepoToRowOutput<InstancesTable>;
+    export type Software = TransformRepoToRowOutput<SoftwaresTable>;
+    export type SoftwareExternalData = TransformRepoToRowOutput<SoftwareExternalDatasTable>;
+    export type SimilarExternalSoftwareExternalData =
+        TransformRepoToRowOutput<SimilarExternalSoftwareExternalDataTable>;
+    export type CompiledSoftwares = TransformRepoToRowOutput<CompiledSoftwaresTable>;
+    export type Source = TransformRepoToRowOutput<SourcesTable>;
+}
 
 // ---------- compiled data ----------
 
