@@ -4,7 +4,7 @@
 
 import { ArticleIdentifier, SchemaIdentifier, WebSite } from "../core/adapters/dbApi/kysely/kysely.database";
 
-const cNNLSource: WebSite = {
+const cnllSource: WebSite = {
     "@type": "Website" as const,
     name: "Union des entreprises du logiciel libre et du numérique ouvert",
     url: new URL("https://cnll.fr"),
@@ -39,14 +39,14 @@ const wikidataSource: WebSite = {
     additionalType: "wikidata"
 };
 
-const cDLSource: WebSite = {
+const cdlSource: WebSite = {
     "@type": "Website" as const,
     name: "Comptoir du libre",
     url: new URL("https://comptoir-du-libre.org"),
     additionalType: "ComptoirDuLibre"
 };
 
-const sWHSource: WebSite = {
+const swhSource: WebSite = {
     "@type": "Website" as const,
     name: "Software Heritage instance",
     url: new URL("https://www.softwareheritage.org/"),
@@ -110,7 +110,7 @@ export const identifersUtils = {
             additionalType: "Organization",
             value: cdlId,
             url: url,
-            subjectOf: cDLSource,
+            subjectOf: cdlSource,
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     },
@@ -120,7 +120,7 @@ export const identifersUtils = {
             "@type": "PropertyValue" as const,
             value: cNNLId,
             url: url,
-            subjectOf: cNNLSource,
+            subjectOf: cnllSource,
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     },
@@ -157,7 +157,7 @@ export const identifersUtils = {
             "@type": "PropertyValue" as const,
             value: swhId,
             url: url,
-            subjectOf: sWHSource,
+            subjectOf: swhSource,
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     },
