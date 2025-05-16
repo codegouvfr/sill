@@ -7,7 +7,7 @@ import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
 import { SchemaIdentifier, SchemaOrganization, SchemaPerson, ScholarlyArticle } from "../dbApi/kysely/kysely.database";
-import { identifersUtils } from "../../utils";
+import { identifersUtils } from "../../../tools/identifiersTools";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
