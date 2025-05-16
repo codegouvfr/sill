@@ -53,7 +53,7 @@ const homeSchema = z.object({
         enabled: z.boolean()
     }),
     statistics: z.object({
-        catgegories: z.array(statsSchema)
+        categories: z.array(statsSchema)
     }),
     usecases,
     quickAccess: z.object({

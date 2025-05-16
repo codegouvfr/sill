@@ -48,7 +48,7 @@ export default function Home(props: Props) {
         setLinkSearch(`/list?search=${value}&sort=best_match`);
     };
 
-    const statsCases = uiConfig.home.statistics.catgegories;
+    const statsCases = uiConfig.home.statistics.categories;
 
     const configUseCases = uiConfig.home.usecases;
     const useCaseNames = (

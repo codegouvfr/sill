@@ -39,7 +39,7 @@
             "enabled": false
         },
         "statistics": {
-            "catgegories": ["softwareCount", "registeredUserCount", "agentReferentCount", "organizationCount"]
+            "categories": ["softwareCount", "registeredUserCount", "agentReferentCount", "organizationCount"]
         },
         "usecases": {
             "declareReferent": {
