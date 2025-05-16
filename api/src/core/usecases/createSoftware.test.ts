@@ -34,7 +34,7 @@ const craSoftwareFormData = {
     doRespectRgaa: true
 } satisfies SoftwareFormData;
 
-describe("fetches software extra data (from different providers)", () => {
+describe("Create software - Trying all the cases", () => {
     let dbApi: DbApiV2;
     let db: Kysely<Database>;
     let craSoftwareId: number;
@@ -57,13 +57,12 @@ describe("fetches software extra data (from different providers)", () => {
         useCaseCreate = makeCreateSofware(dbApi);
     });
 
-    it("Insert a software and check if it's imported correctly", async () => {
+    it("Insert a software, should insert into three tables", async () => {
         craSoftwareId = await useCaseCreate({
             formData: craSoftwareFormData,
             agentId
         });
 
-        // Insert into software
         const softwareList = await db.selectFrom("softwares").selectAll().execute();
 
         expectToEqual(softwareList.length, 1);
@@ -91,7 +90,6 @@ describe("fetches software extra data (from different providers)", () => {
             "workshopUrls": []
         });
 
-        // Insert into software external data
         const initialExternalSoftwarePackagesBeforeFetching = [
             emptyExternalData({
                 externalId: "Q118629387",
@@ -112,16 +110,13 @@ describe("fetches software extra data (from different providers)", () => {
 
         expectToMatchObject(softwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
 
-        // Insert into similar software
         const similarId = await dbApi.software.getSimilarSoftwareExternalDataPks({ softwareId: craSoftwareId });
-
         expectToMatchObject(similarId, [{ sourceSlug: testSource.slug, externalId: "Q111590996" }]);
 
         console.log(craSoftwareId);
     });
 
-    // What if the name is already present ?
-    it("Insert two software with the same name", async () => {
+    it("Insert two software with the same name, should not duplicate the software", async () => {
         craSoftwareId = await useCaseCreate({
             formData: craSoftwareFormData,
             agentId
@@ -132,14 +127,11 @@ describe("fetches software extra data (from different providers)", () => {
             agentId
         });
 
-        // Insert into software
         const softwareList = await db.selectFrom("softwares").selectAll().execute();
-
         expectToEqual(softwareList.length, 1);
     });
 
-    // What if the name is already present ?
-    it("Insert two software with the same name but different external Id", async () => {
+    it("Insert two software with the same name but different external Id, should create a new externalData linked with the saved software package", async () => {
         craSoftwareId = await useCaseCreate({
             formData: craSoftwareFormData,
             agentId
@@ -163,8 +155,7 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(externalIdForSoft?.length, 2);
     });
 
-    // What if the external data is already present (with no related Software)
-    it("Insert a software when externalData is already saved (with no related Software)", async () => {
+    it("Insert a software when externalData is already saved with no related software, should not create another externalData and linked the existing one to the new software", async () => {
         await dbApi.softwareExternalData.saveIds([
             {
                 sourceSlug: testSource.slug,
@@ -180,9 +171,7 @@ describe("fetches software extra data (from different providers)", () => {
             agentId
         });
 
-        // Insert into software
         const softwareList = await db.selectFrom("softwares").selectAll().execute();
-
         expectToEqual(softwareList.length, 1);
 
         const externdalDataList = await db.selectFrom("software_external_datas").selectAll().execute();
@@ -193,8 +182,7 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(externalDataUpdated?.[0].externalId, "Q118629387");
     });
 
-    // What if the external data is already present (with related Software)
-    it("Insert a software when externalData is already saved (with related Software)", async () => {
+    it("Insert a software when externalData is already saved with related software, should not create another software neither new externalData", async () => {
         craSoftwareId = await useCaseCreate({
             formData: craSoftwareFormData,
             agentId
@@ -224,8 +212,7 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(externalDataUpdated?.[0].externalId, "Q118629387");
     });
 
-    // What if
-    it("Insert a software when similarExternalData is already saved", async () => {
+    it("Insert a software when similarExternalData is already saved, should linked the existing externalData to the new software row", async () => {
         await dbApi.softwareExternalData.saveIds([
             {
                 sourceSlug: testSource.slug,
@@ -241,9 +228,7 @@ describe("fetches software extra data (from different providers)", () => {
             agentId
         });
 
-        // Insert software
         const softwareList = await db.selectFrom("softwares").selectAll().execute();
-
         expectToEqual(softwareList.length, 1);
 
         const externdalDataList = await db.selectFrom("software_external_datas").selectAll().execute();
@@ -254,7 +239,7 @@ describe("fetches software extra data (from different providers)", () => {
         expectToEqual(externalDataUpdated?.[0].externalId, "Q118629387");
     });
 
-    it("Insert a software when similarExternalData, update similar", async () => {
+    it("Insert a software with multiples similarExternalData with one already existing, should create one and update the other one", async () => {
         await dbApi.softwareExternalData.saveIds([
             {
                 sourceSlug: testSource.slug,

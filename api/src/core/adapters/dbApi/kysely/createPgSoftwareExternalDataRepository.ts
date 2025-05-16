@@ -7,7 +7,7 @@ const cleanDataForExternalData = (row: DatabaseRowOutput.SoftwareExternalData) =
     transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"]));
 
 export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): SoftwareExternalDataRepository => ({
-    getSimilarSoftwarePk: async ({ externalId, sourceSlug }) => {
+    getSimilarSoftwareId: async ({ externalId, sourceSlug }) => {
         return db
             .selectFrom("softwares__similar_software_external_datas")
             .select("softwareId")
