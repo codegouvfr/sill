@@ -162,7 +162,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         similarSoftwares: similarExternalSoftwares,
                         userAndReferentCountByOrganization: {},
                         authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                            "@type": "Person", // TODO Fix type ?
+                            "@type": dev["@type"],
                             name: dev.name,
                             url: dev.url,
                             affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
@@ -227,59 +227,59 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     const userAndReferentCountByOrganization =
                         await getUserAndReferentCountByOrganizationBySoftwareId(db);
 
-                return softwares.map(
-                    ({
-                        serviceProviders,
-                        updateTime,
-                        addedTime,
-                        softwareExternalData,
-                        similarExternalSoftwares,
-                        externalIdForSource,
-                        ...software
-                    }): Software => {
-                        return stripNullOrUndefinedValues({
-                            ...software,
-                            externalId: externalIdForSource,
-                            updateTime: new Date(+updateTime).getTime(),
-                            addedTime: new Date(+addedTime).getTime(),
-                            serviceProviders: serviceProviders ?? [],
-                            similarSoftwares: similarExternalSoftwares,
-                            latestVersion: software.latestVersion ?? {
-                                semVer: softwareExternalData?.softwareVersion ?? undefined,
-                                publicationTime: dateParser(softwareExternalData.publicationTime)
-                            },
-                            logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
-                            userAndReferentCountByOrganization:
-                                userAndReferentCountByOrganization[software.softwareId] ?? {},
-                            authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                                "@type": "Person",
-                                name: dev.name,
-                                url: dev.url,
-                                affiliations:
+                    return softwares.map(
+                        ({
+                            serviceProviders,
+                            updateTime,
+                            addedTime,
+                            softwareExternalData,
+                            similarExternalSoftwares,
+                            externalIdForSource,
+                            ...software
+                        }): Software => {
+                            return stripNullOrUndefinedValues({
+                                ...software,
+                                externalId: externalIdForSource,
+                                updateTime: new Date(+updateTime).getTime(),
+                                addedTime: new Date(+addedTime).getTime(),
+                                serviceProviders: serviceProviders ?? [],
+                                similarSoftwares: similarExternalSoftwares,
+                                latestVersion: software.latestVersion ?? {
+                                    semVer: softwareExternalData?.softwareVersion ?? undefined,
+                                    publicationTime: dateParser(softwareExternalData.publicationTime)
+                                },
+                                logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
+                                userAndReferentCountByOrganization:
+                                    userAndReferentCountByOrganization[software.softwareId] ?? {},
+                                authors: (softwareExternalData?.developers ?? []).map(dev => ({
+                                    "@type": dev["@type"],
+                                    name: dev.name,
+                                    url: dev.url,
+                                    affiliations:
                                         dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
-                            })),
-                            officialWebsiteUrl:
-                                softwareExternalData?.websiteUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.website ??
-                                undefined,
-                            codeRepositoryUrl:
-                                softwareExternalData?.sourceUrl ??
-                                software.comptoirDuLibreSoftware?.external_resources.repository ??
-                                undefined,
-                            documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
-                            comptoirDuLibreServiceProviderCount:
-                                software.comptoirDuLibreSoftware?.providers.length ?? 0,
-                            applicationCategories: software.categories.concat(
-                                softwareExternalData?.applicationCategories ?? []
-                            ),
-                            categories: undefined, // merged in applicationCategories, set to undefined to remove it
-                            programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
-                            referencePublications: softwareExternalData?.referencePublications,
-                            identifiers: softwareExternalData?.identifiers
-                        });
-                    }
-                );
-            });
+                                })),
+                                officialWebsiteUrl:
+                                    softwareExternalData?.websiteUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.website ??
+                                    undefined,
+                                codeRepositoryUrl:
+                                    softwareExternalData?.sourceUrl ??
+                                    software.comptoirDuLibreSoftware?.external_resources.repository ??
+                                    undefined,
+                                documentationUrl: softwareExternalData?.documentationUrl ?? undefined,
+                                comptoirDuLibreServiceProviderCount:
+                                    software.comptoirDuLibreSoftware?.providers.length ?? 0,
+                                applicationCategories: software.categories.concat(
+                                    softwareExternalData?.applicationCategories ?? []
+                                ),
+                                categories: undefined, // merged in applicationCategories, set to undefined to remove it
+                                programmingLanguages: softwareExternalData?.programmingLanguages ?? [],
+                                referencePublications: softwareExternalData?.referencePublications,
+                                identifiers: softwareExternalData?.identifiers
+                            });
+                        }
+                    );
+                });
         },
         getAllSillSoftwareExternalIds: async sourceSlug =>
             db
@@ -547,7 +547,7 @@ const makeGetSoftwareById =
                     similarSoftwares: similarExternalSoftwares,
                     userAndReferentCountByOrganization: {},
                     authors: (softwareExternalData?.developers ?? []).map(dev => ({
-                        "@type": "Person",
+                        "@type": dev["@type"],
                         name: dev.name,
                         url: dev.url,
                         affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
