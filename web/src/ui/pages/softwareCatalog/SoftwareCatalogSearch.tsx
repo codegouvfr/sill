@@ -20,7 +20,7 @@ import { SelectNext } from "ui/shared/SelectNext";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import { useEffectOnValueChange } from "powerhooks/useEffectOnValueChange";
-import config from "../../config-ui.json";
+import { useCoreState } from "../../../core";
 
 export type Props = {
     className?: string;
@@ -95,6 +95,7 @@ export function SoftwareCatalogSearch(props: Props) {
 
         ...rest
     } = props;
+    const uiConfig = useCoreState("uiConfig", "main")!;
 
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
@@ -182,7 +183,7 @@ export function SoftwareCatalogSearch(props: Props) {
                 id={filtersWrapperId}
                 ref={setFiltersWrapperDivElement}
             >
-                {config.catalog.search.options.organisation && (
+                {uiConfig?.catalog.search.options.organisation && (
                     <SelectNext
                         className={classes.filterSelectGroup}
                         label={
@@ -221,7 +222,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     />
                 )}
 
-                {config.catalog.search.options.applicationCategories && (
+                {uiConfig?.catalog.search.options.applicationCategories && (
                     <SelectNext
                         className={classes.filterSelectGroup}
                         label={t("softwareCatalogSearch.categoriesLabel")}
@@ -258,7 +259,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     />
                 )}
 
-                {config.catalog.search.options.softwareType && (
+                {uiConfig?.catalog.search.options.softwareType && (
                     <SelectNext
                         className={classes.filterSelectGroup}
                         label={t("softwareCatalogSearch.environnement label")}
@@ -284,7 +285,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     />
                 )}
 
-                {config.catalog.search.options.prerogatives && (
+                {uiConfig?.catalog.search.options.prerogatives && (
                     <div className={classes.filterSelectGroup}>
                         <label htmlFor="prerogatives-label">
                             {t("softwareCatalogSearch.prerogativesLabel")}
@@ -353,7 +354,7 @@ export function SoftwareCatalogSearch(props: Props) {
                     </div>
                 )}
 
-                {config.catalog.search.options.programmingLanguages && (
+                {uiConfig?.catalog.search.options.programmingLanguages && (
                     <SelectNext
                         className={classes.filterSelectGroup}
                         label={t("softwareCatalogSearch.programmingLanguages label")}

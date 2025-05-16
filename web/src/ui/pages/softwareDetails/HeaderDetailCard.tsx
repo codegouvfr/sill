@@ -10,8 +10,8 @@ import type { ApiTypes } from "api";
 import { Popover } from "@mui/material";
 import React from "react";
 import { AuthorCard } from "ui/shared/AuthorCard";
-import config from "../../config-ui.json";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
+import { useCoreState } from "../../../core";
 
 export type Props = {
     className?: string;
@@ -51,6 +51,7 @@ export const HeaderDetailCard = memo((props: Props) => {
         softwareDereferencing,
         ...rest
     } = props;
+    const uiConfig = useCoreState("uiConfig", "main")!;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -129,7 +130,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                 <span>
                                     {authors.map(author => (
                                         <>
-                                            {(!config.softwareDetails.authorCard ||
+                                            {(!uiConfig?.softwareDetails.authorCard ||
                                                 author["@type"] === "Organization" ||
                                                 (author["@type"] === "Person" &&
                                                     (!author.affiliations ||
@@ -144,7 +145,7 @@ export const HeaderDetailCard = memo((props: Props) => {
                                                 </a>
                                             )}
 
-                                            {config.softwareDetails.authorCard &&
+                                            {uiConfig?.softwareDetails.authorCard &&
                                                 author["@type"] === "Person" &&
                                                 author.affiliations &&
                                                 author.affiliations?.length > 0 && (

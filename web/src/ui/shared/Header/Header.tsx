@@ -4,9 +4,9 @@ import type { Equals } from "tsafe";
 import { Trans, useTranslation } from "react-i18next";
 import { Header as HeaderDsfr, HeaderProps } from "@codegouvfr/react-dsfr/Header";
 import { routes } from "ui/routes";
+import { useCoreState } from "../../../core";
 import { LanguageSelect } from "./LanguageSelect";
 import { AuthButtons } from "./AuthButtons";
-import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -26,6 +26,7 @@ type Props = {
 export const Header = memo(
     forwardRef<HTMLDivElement, Props>((props, ref) => {
         const { className, routeName, userAuthenticationApi, ...rest } = props;
+        const uiConfig = useCoreState("uiConfig", "main");
 
         assert<Equals<typeof rest, {}>>();
 
@@ -37,14 +38,14 @@ export const Header = memo(
         });
         */
         const navigations = [];
-        if (config.header.menu.welcome.enabled) {
+        if (uiConfig?.header.menu.welcome.enabled) {
             navigations.push({
                 isActive: routeName === routes.home.name,
                 linkProps: routes.home().link,
                 text: t("header.navigation welcome")
             });
         }
-        if (config.header.menu.catalog.enabled) {
+        if (uiConfig?.header.menu.catalog.enabled) {
             navigations.push({
                 isActive:
                     routeName === routes.softwareCatalog.name ||
@@ -54,7 +55,7 @@ export const Header = memo(
                 text: t("header.navigation catalog")
             });
         }
-        if (config.header.menu.addSoftware.enabled) {
+        if (uiConfig?.header.menu.addSoftware.enabled) {
             navigations.push({
                 isActive:
                     routeName === routes.addSoftwareLanding.name ||
@@ -67,28 +68,28 @@ export const Header = memo(
                         : t("header.navigation add software")
             });
         }
-        if (config.header.menu.about.enabled) {
+        if (uiConfig?.header.menu.about.enabled) {
             navigations.push({
                 isActive: routeName === routes.readme.name,
                 linkProps: routes.readme().link,
                 text: t("header.navigation about")
             });
         }
-        if (config.header.menu.contribute.enabled) {
+        if (uiConfig?.header.menu.contribute.enabled) {
             navigations.push({
                 linkProps: {
                     target: "_blank",
-                    href: config.header.menu.contribute.href
+                    href: uiConfig.header.menu.contribute.href
                 },
                 text: t("header.navigation support request")
             });
         }
 
-        const link: HeaderProps.QuickAccessItem | null = config.header.link
+        const link: HeaderProps.QuickAccessItem | null = uiConfig?.header.link
             ? {
                   iconId: "fr-icon-bank-fill",
-                  linkProps: config.header.link.linkProps,
-                  text: config.header.link.text
+                  linkProps: uiConfig.header.link.linkProps,
+                  text: uiConfig.header.link.text
               }
             : null;
 

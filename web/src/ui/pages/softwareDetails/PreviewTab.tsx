@@ -5,9 +5,9 @@ import { tss } from "tss-react";
 import { shortEndMonthDate, monthDate } from "ui/datetimeUtils";
 import Tooltip from "@mui/material/Tooltip";
 import { capitalize } from "tsafe/capitalize";
+import { useCoreState } from "../../../core";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
-import config from "../../config-ui.json";
 import { SILL, SoftwareType } from "api/dist/src/lib/ApiTypes";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
@@ -68,6 +68,7 @@ export const PreviewTab = (props: Props) => {
         identifiers,
         officialWebsiteUrl
     } = props;
+    const uiConfig = useCoreState("uiConfig", "main");
 
     const { classes, cx } = useStyles();
 
@@ -78,13 +79,14 @@ export const PreviewTab = (props: Props) => {
         <>
             <section className={classes.tabContainer}>
                 <p style={{ gridColumn: "span 2" }}>{softwareDescription}</p>
-                {config.softwareDetails.details.enabled && (
+                {uiConfig?.softwareDetails.details.enabled && (
                     <div className="section">
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.about")}
                         </p>
-                        {(config.softwareDetails.details.fields.softwareCurrentVersion ||
-                            config.softwareDetails.details.fields
+                        {(uiConfig?.softwareDetails.details.fields
+                            .softwareCurrentVersion ||
+                            uiConfig?.softwareDetails.details.fields
                                 .softwareCurrentVersionDate) &&
                             (softwareCurrentVersion || softwareDateCurrentVersion) && (
                                 <p
@@ -96,7 +98,7 @@ export const PreviewTab = (props: Props) => {
                                     <span className={classes.labelDetail}>
                                         {t("previewTab.last version")}
                                     </span>
-                                    {config.softwareDetails.details.fields
+                                    {uiConfig?.softwareDetails.details.fields
                                         .softwareCurrentVersion &&
                                         softwareCurrentVersion && (
                                             <span
@@ -113,7 +115,7 @@ export const PreviewTab = (props: Props) => {
                                             </span>
                                         )}
 
-                                    {config.softwareDetails.details.fields
+                                    {uiConfig?.softwareDetails.details.fields
                                         .softwareCurrentVersionDate &&
                                         softwareDateCurrentVersion &&
                                         capitalize(
@@ -124,7 +126,7 @@ export const PreviewTab = (props: Props) => {
                                         )}
                                 </p>
                             )}
-                        {config.softwareDetails.details.fields.registerDate &&
+                        {uiConfig?.softwareDetails.details.fields.registerDate &&
                             registerDate && (
                                 <p
                                     className={cx(
@@ -139,7 +141,8 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                             )}
 
-                        {config.softwareDetails.details.fields.minimalVersionRequired &&
+                        {uiConfig?.softwareDetails.details.fields
+                            .minimalVersionRequired &&
                             minimalVersionRequired && (
                                 <p
                                     className={cx(
@@ -165,7 +168,7 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                             )}
 
-                        {config.softwareDetails.details.fields.license && license && (
+                        {uiConfig?.softwareDetails.details.fields.license && license && (
                             <p className={cx(fr.cx("fr-text--regular"), classes.item)}>
                                 <span className={classes.labelDetail}>
                                     {t("previewTab.license")}
@@ -176,7 +179,7 @@ export const PreviewTab = (props: Props) => {
                     </div>
                 )}
 
-                {config.softwareDetails.prerogatives.enabled && (
+                {uiConfig?.softwareDetails.prerogatives.enabled && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.prerogatives")}
@@ -266,12 +269,12 @@ export const PreviewTab = (props: Props) => {
                     </div>
                 )}
 
-                {config.softwareDetails.metadata.enabled && (
+                {uiConfig?.softwareDetails.metadata.enabled && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.metadata")}
                         </p>
-                        {config.softwareDetails.metadata.fields.keywords &&
+                        {uiConfig?.softwareDetails.metadata.fields.keywords &&
                             keywords &&
                             keywords.length > 0 && (
                                 <p
@@ -287,7 +290,7 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                             )}
 
-                        {config.softwareDetails.metadata.fields.programmingLanguages &&
+                        {uiConfig?.softwareDetails.metadata.fields.programmingLanguages &&
                             programmingLanguages &&
                             programmingLanguages.length > 0 && (
                                 <p
@@ -303,7 +306,8 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                             )}
 
-                        {config.softwareDetails.metadata.fields.applicationCategories &&
+                        {uiConfig?.softwareDetails.metadata.fields
+                            .applicationCategories &&
                             applicationCategories &&
                             applicationCategories.length > 0 && (
                                 <p
@@ -319,7 +323,7 @@ export const PreviewTab = (props: Props) => {
                                 </p>
                             )}
 
-                        {config.softwareDetails.metadata.fields.softwareType &&
+                        {uiConfig?.softwareDetails.metadata.fields.softwareType &&
                             applicationCategories &&
                             applicationCategories.length > 0 && (
                                 <p
@@ -347,7 +351,7 @@ export const PreviewTab = (props: Props) => {
                     </div>
                 )}
 
-                {config.softwareDetails.links.enabled && (
+                {uiConfig?.softwareDetails.links.enabled && (
                     <div className={classes.section}>
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.use full links")}

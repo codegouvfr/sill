@@ -62,7 +62,7 @@ export async function startRpcService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const [{ dbApi, useCases }, { createContext }] = await Promise.all([
+    const [{ dbApi, useCases, uiConfig }, { createContext }] = await Promise.all([
         bootstrapCore({
             "dbConfig": {
                 "dbKind": "kysely",
@@ -90,7 +90,8 @@ export async function startRpcService(params: {
         oidcParams,
         termsOfServiceUrl,
         redirectUrl,
-        externalSoftwareDataOrigin
+        externalSoftwareDataOrigin,
+        uiConfig
     });
 
     express()

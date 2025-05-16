@@ -17,4 +17,6 @@ export type {
     Source
 } from "../core/usecases/readWriteSillData";
 
+export type { UiConfig, ConfigurableUseCaseName } from "../core/uiConfigSchema";
+
 export type Translations = { translations: typeof import("../customization/translations/en.json") };

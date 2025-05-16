@@ -51,6 +51,9 @@ export function createSillApi(params: {
             { promise: true }
         ),
         getRedirectUrl: params => trpcClient.getRedirectUrl.query(params),
+        getUiConfig: memoize(() => trpcClient.getUiConfig.query(), {
+            promise: true
+        }),
         getApiVersion: memoize(() => trpcClient.getApiVersion.query(), {
             promise: true
         }),

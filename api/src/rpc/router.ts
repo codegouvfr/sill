@@ -17,6 +17,7 @@ import {
     type LocalizedString
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { UiConfig } from "../core/uiConfigSchema";
 import type { UseCases } from "../core/usecases";
 import {
     DeclarationFormData,
@@ -40,6 +41,7 @@ export function createRouter(params: {
     externalSoftwareDataOrigin: ExternalDataOrigin;
     getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
     getSoftwareExternalData: GetSoftwareExternalData;
+    uiConfig: UiConfig;
 }) {
     const {
         useCases,
@@ -48,7 +50,8 @@ export function createRouter(params: {
         termsOfServiceUrl,
         redirectUrl,
         externalSoftwareDataOrigin: externalDataOrigin,
-        getSoftwareExternalDataOptions
+        getSoftwareExternalDataOptions,
+        uiConfig
     } = params;
 
     const t = initTRPC.context<Context>().create({
@@ -87,6 +90,7 @@ export function createRouter(params: {
             if (!user) throw new TRPCError({ "code": "UNAUTHORIZED" });
             return user;
         }),
+        "getUiConfig": loggedProcedure.query(() => uiConfig),
         "getMainSource": loggedProcedure.query(() => dbApi.source.getMainSource()),
         "getSoftwares": loggedProcedure.query(() => dbApi.software.getAll()),
         "getInstances": loggedProcedure.query(() => dbApi.instance.getAll()),
