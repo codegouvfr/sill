@@ -77,9 +77,7 @@ const resolveLogoFromType = (
             };
         case "Orcid":
             return {
-                URLlogo: new URL(
-                    "https://orcid.org/assets/vectors/orcid.logo.icon.svg"
-                ),
+                URLlogo: new URL("https://orcid.org/assets/vectors/orcid.logo.icon.svg"),
                 textFromURL: "ORCID"
             };
         case "wikidata":
