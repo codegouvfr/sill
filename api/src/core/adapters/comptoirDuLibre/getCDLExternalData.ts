@@ -9,7 +9,7 @@ import { Source } from "../../usecases/readWriteSillData";
 import { comptoirDuLibreApi } from "../comptoirDuLibreApi";
 import { ComptoirDuLibre } from "../../ports/ComptoirDuLibreApi";
 import { SchemaOrganization } from "../dbApi/kysely/kysely.database";
-import { identifersUtils } from "../../utils";
+import { identifersUtils } from "../../../tools/identifiersTools";
 
 export const getCDLSoftwareExternalData: GetSoftwareExternalData = memoize(
     async ({
@@ -26,10 +26,13 @@ export const getCDLSoftwareExternalData: GetSoftwareExternalData = memoize(
         if (!comptoirSoftware) return undefined;
 
         return formatCDLSoftwareToExternalData(comptoirSoftware, source);
+    },
+    {
+        maxAge: 3 * 3600 * 1000
     }
 );
 
-const cDLproviderToCMProdivers = (provider: ComptoirDuLibre.Provider): SchemaOrganization => {
+const cdlProviderToCMProdivers = (provider: ComptoirDuLibre.Provider): SchemaOrganization => {
     return {
         "@type": "Organization" as const,
         name: provider.name,
@@ -45,26 +48,26 @@ const cDLproviderToCMProdivers = (provider: ComptoirDuLibre.Provider): SchemaOrg
 };
 
 const formatCDLSoftwareToExternalData = (
-    cDLSoftwareItem: ComptoirDuLibre.Software,
+    cdlSoftwareItem: ComptoirDuLibre.Software,
     source: Source
 ): SoftwareExternalData => {
-    const splittedCNLLUrl = !Array.isArray(cDLSoftwareItem.external_resources.cnll)
-        ? cDLSoftwareItem.external_resources.cnll.url.split("/")
+    const splittedCNLLUrl = !Array.isArray(cdlSoftwareItem.external_resources.cnll)
+        ? cdlSoftwareItem.external_resources.cnll.url.split("/")
         : undefined;
 
     return {
-        externalId: cDLSoftwareItem.id.toString(),
+        externalId: cdlSoftwareItem.id.toString(),
         sourceSlug: source.slug,
         developers: [],
-        label: { "fr": cDLSoftwareItem.name },
+        label: { "fr": cdlSoftwareItem.name },
         description: { "fr": "" },
         isLibreSoftware: true,
         //
         logoUrl: undefined, // Use scrapper ?
-        websiteUrl: cDLSoftwareItem.external_resources.website ?? undefined,
-        sourceUrl: cDLSoftwareItem.external_resources.repository ?? undefined,
+        websiteUrl: cdlSoftwareItem.external_resources.website ?? undefined,
+        sourceUrl: cdlSoftwareItem.external_resources.repository ?? undefined,
         documentationUrl: undefined,
-        license: cDLSoftwareItem.licence,
+        license: cdlSoftwareItem.licence,
         softwareVersion: undefined,
         keywords: [],
         programmingLanguages: [],
@@ -73,37 +76,37 @@ const formatCDLSoftwareToExternalData = (
         referencePublications: [],
         identifiers: [
             identifersUtils.makeCDLIdentifier({
-                cdlId: cDLSoftwareItem.id.toString(),
-                url: cDLSoftwareItem.url,
+                cdlId: cdlSoftwareItem.id.toString(),
+                url: cdlSoftwareItem.url,
                 additionalType: "Software"
             }),
-            ...(!Array.isArray(cDLSoftwareItem.external_resources.cnll) && splittedCNLLUrl
+            ...(!Array.isArray(cdlSoftwareItem.external_resources.cnll) && splittedCNLLUrl
                 ? [
                       identifersUtils.makeCNLLIdentifier({
                           cNNLId: splittedCNLLUrl[splittedCNLLUrl.length - 1],
-                          url: cDLSoftwareItem.external_resources.cnll.url
+                          url: cdlSoftwareItem.external_resources.cnll.url
                       })
                   ]
                 : []),
-            ...(!Array.isArray(cDLSoftwareItem.external_resources.framalibre)
+            ...(!Array.isArray(cdlSoftwareItem.external_resources.framalibre)
                 ? [
                       identifersUtils.makeFramaIndentifier({
-                          framaLibreId: cDLSoftwareItem.external_resources.framalibre.slug,
-                          url: cDLSoftwareItem.external_resources.framalibre.url,
+                          framaLibreId: cdlSoftwareItem.external_resources.framalibre.slug,
+                          url: cdlSoftwareItem.external_resources.framalibre.url,
                           additionalType: "Software"
                       })
                   ]
                 : []),
-            ...(!Array.isArray(cDLSoftwareItem.external_resources.wikidata)
+            ...(!Array.isArray(cdlSoftwareItem.external_resources.wikidata)
                 ? [
                       identifersUtils.makeWikidataIdentifier({
-                          wikidataId: cDLSoftwareItem.external_resources.wikidata.id,
-                          url: cDLSoftwareItem.external_resources.wikidata.url,
+                          wikidataId: cdlSoftwareItem.external_resources.wikidata.id,
+                          url: cdlSoftwareItem.external_resources.wikidata.url,
                           additionalType: "Software"
                       })
                   ]
                 : [])
         ],
-        providers: cDLSoftwareItem.providers.map(prodiver => cDLproviderToCMProdivers(prodiver))
+        providers: cdlSoftwareItem.providers.map(prodiver => cdlProviderToCMProdivers(prodiver))
     };
 };

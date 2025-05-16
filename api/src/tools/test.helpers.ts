@@ -6,7 +6,7 @@ import { expect } from "vitest";
 import { DeclarationFormData, InstanceFormData, SoftwareFormData, Source } from "../core/usecases/readWriteSillData";
 import { Kysely } from "kysely";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
-import { ExternalDataOrigin } from "../lib/ApiTypes";
+import { ExternalDataOriginKind } from "../lib/ApiTypes";
 
 export const testPgUrl = "postgresql://catalogi:pg_password@localhost:5432/db";
 
@@ -145,7 +145,7 @@ export const resetDB = async (db: Kysely<Database>) => {
         .insertInto("sources")
         .values({
             ...testSource,
-            kind: testSource.kind as ExternalDataOrigin
+            kind: testSource.kind as ExternalDataOriginKind
         })
         .execute();
 };
