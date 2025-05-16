@@ -31,6 +31,61 @@ export const formDataToSoftwareRow = (softwareForm: SoftwareFormData, agentId: n
 
 const textUC = "CreateSoftware";
 
+const resolveExistingSoftwareId = async ({
+    dbApi,
+    formData
+}: {
+    dbApi: DbApiV2;
+    formData: SoftwareFormData;
+}): Promise<number | undefined> => {
+    const { softwareName, externalIdForSource, sourceSlug } = formData;
+    const logTitle = `[UC:${textUC}] (${softwareName} from ${sourceSlug}) -`;
+
+    const named = await dbApi.software.getByName(softwareName);
+
+    if (named) {
+        console.log(logTitle, "Name already present, let's take this one");
+        return named.softwareId;
+    }
+
+    if (externalIdForSource) {
+        const savedSoftwareId = await dbApi.software.getSoftwareIdByExternalIdAndSlug({
+            sourceSlug,
+            externalId: externalIdForSource
+        });
+        if (savedSoftwareId) {
+            console.log(logTitle, `External Id from ${sourceSlug} already present`);
+            return savedSoftwareId;
+        }
+    }
+
+    // TODO Resolve with other identifiers
+
+    return undefined;
+};
+
+const resolveOrCreateSoftwareId = async ({
+    dbApi,
+    formData,
+    agentId
+}: {
+    dbApi: DbApiV2;
+    formData: SoftwareFormData;
+    agentId: number;
+}) => {
+    const { softwareName, sourceSlug } = formData;
+    const logTitle = `[UC:${textUC}] (${softwareName} from ${sourceSlug}) -`;
+
+    const resolvedId = await resolveExistingSoftwareId({ dbApi, formData });
+
+    if (resolvedId) return resolvedId;
+
+    console.log(logTitle, `The software package isn't save yet, let's create it`);
+    return dbApi.software.create({
+        software: formDataToSoftwareRow(formData, agentId)
+    });
+};
+
 export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
     (dbApi: DbApiV2) =>
     async ({ formData, agentId }) => {
@@ -39,36 +94,7 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
 
         console.time(`${logTitle} 💾 Saved`);
 
-        let softwareId: number | undefined = undefined;
-
-        const named = await dbApi.software.getByName(softwareName);
-
-        if (named) {
-            console.log(logTitle, "Name already present, let's take this one");
-            softwareId = named.softwareId;
-        }
-
-        if (!softwareId && externalIdForSource) {
-            const savedSoftware = await dbApi.software.getSoftwareIdByExternalIdAndSlug({
-                sourceSlug,
-                externalId: externalIdForSource
-            });
-            if (savedSoftware) {
-                console.log(logTitle, `External Id from ${sourceSlug} already present`);
-                softwareId = savedSoftware;
-            }
-        }
-
-        // TODO Resolve with other identifiers
-
-        if (!softwareId) {
-            console.log(logTitle, `The software package isn't save yet, let's create it`);
-            softwareId = await dbApi.software.create({
-                software: formDataToSoftwareRow(formData, agentId)
-            });
-        }
-
-        if (!softwareId) throw Error(`${logTitle} Error while saving the software`);
+        const softwareId = await resolveOrCreateSoftwareId({ formData, agentId, dbApi });
 
         if (externalIdForSource) {
             const savedExternalData = await dbApi.softwareExternalData.get({
