@@ -29,9 +29,9 @@ export const makeRefreshExternalDataAll = (
 };
 
 export const makeRefreshExternalDataForSoftware = (
-    config: ParamsOfrefreshExternalDataUseCase
+    deps: ParamsOfrefreshExternalDataUseCase
 ): FetchAndSaveExternalDataForSoftware => {
-    const { dbApi } = config;
+    const { dbApi } = deps;
 
     return async ({ softwareId }: { softwareId: number }) => {
         console.time(useCaseLogTimer);
