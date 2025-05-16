@@ -33,7 +33,6 @@ export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
 
     if (!botAgentEmail) throw new Error("[Loader:Import] No bot agent email provided");
 
-    // Todo Choose Source
     const source = await dbApi.source.getByName({ name: sourceSlug });
     if (!source) throw new Error("[Loader:Import] Couldn't find the source to connect to");
 
