@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { GetScholarlyArticle } from "../../ports/GetScholarlyArticle";
-import { identifersUtils } from "../../utils";
+import { identifersUtils } from "../../../tools/identifiersTools";
 import { halAPIGateway } from "./HalAPI";
 
 export const getScholarlyArticle: GetScholarlyArticle = async halDocId => {

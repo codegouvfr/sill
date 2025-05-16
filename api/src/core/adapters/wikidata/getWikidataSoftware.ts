@@ -29,7 +29,7 @@ import {
 } from "../../../tools/WikidataEntity";
 import { Source } from "../../usecases/readWriteSillData";
 import { SchemaOrganization, SchemaPerson } from "../dbApi/kysely/kysely.database";
-import { identifersUtils } from "../../utils";
+import { identifersUtils } from "../../../tools/identifiersTools";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),

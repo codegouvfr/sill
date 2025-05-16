@@ -141,7 +141,10 @@ export const HeaderDetailCard = memo((props: Props) => {
                                                         author.affiliations?.length <=
                                                             0))) && (
                                                 <a
-                                                    href={author.url ?? author?.identifiers?.[0].url?.toString()}
+                                                    href={
+                                                        author.url ??
+                                                        author?.identifiers?.[0]?.url?.toString()
+                                                    }
                                                     className={classes.authorLink}
                                                     key={author.name}
                                                 >
