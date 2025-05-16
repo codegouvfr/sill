@@ -23,6 +23,12 @@ export type SillApi = {
     getRedirectUrl: (
         params: TrpcRouterInput["getRedirectUrl"]
     ) => Promise<TrpcRouterOutput["getRedirectUrl"]>;
+    getUiConfig: {
+        (
+            params: TrpcRouterInput["getUiConfig"]
+        ): Promise<TrpcRouterOutput["getUiConfig"]>;
+        clear: () => void;
+    };
     getApiVersion: {
         (
             params: TrpcRouterInput["getApiVersion"]

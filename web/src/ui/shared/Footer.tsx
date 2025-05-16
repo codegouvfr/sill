@@ -6,7 +6,7 @@ import { Footer as DsfrFooter } from "@codegouvfr/react-dsfr/Footer";
 import { routes } from "ui/routes";
 import { headerFooterDisplayItem } from "@codegouvfr/react-dsfr/Display";
 import { apiUrl } from "urls";
-import configUI from "../../ui/config-ui.json";
+import { useCoreState } from "../../core";
 
 export type Props = {
     className?: string;
@@ -17,6 +17,7 @@ export type Props = {
 export const Footer = memo(
     forwardRef<HTMLDivElement, Props>((props, ref) => {
         const { className, apiVersion, webVersion, ...rest } = props;
+        const uiConfig = useCoreState("uiConfig", "main");
 
         assert<Equals<typeof rest, {}>>();
 
@@ -74,7 +75,7 @@ export const Footer = memo(
                         },
                         headerFooterDisplayItem
                     ]}
-                    domains={configUI.footer.domains}
+                    domains={uiConfig?.footer.domains}
                 />
             </>
         );

@@ -11,7 +11,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { DetailUsersAndReferents } from "ui/shared/DetailUsersAndReferents";
 import softwareLogoPlaceholder from "ui/assets/software_logo_placeholder.png";
 import Markdown from "react-markdown";
-import config from "../../config-ui.json";
+import { useCoreState } from "../../../core";
 
 export type Props = {
     className?: string;
@@ -63,6 +63,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
         userDeclaration,
         ...rest
     } = props;
+    const uiConfig = useCoreState("uiConfig", "main");
 
     /** Assert to make sure all props are deconstructed */
     assert<Equals<typeof rest, {}>>();
@@ -70,7 +71,8 @@ export const SoftwareCatalogCard = memo((props: Props) => {
     const { t } = useTranslation();
     const { resolveLocalizedString } = useResolveLocalizedString();
     const { classes, cx } = useStyles({
-        isSearchHighlighted: searchHighlight !== undefined
+        isSearchHighlighted:
+            searchHighlight !== undefined || !uiConfig?.catalog.cardOptions.referentCount
     });
     const { fromNowText } = useFromNow({ dateTime: latestVersion?.publicationTime });
 
@@ -78,7 +80,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
         <div className={cx(fr.cx("fr-card"), classes.root, className)}>
             <div className={classes.cardBody}>
                 <a className={cx(classes.headerContainer)} {...softwareDetailsLink}>
-                    {(logoUrl || config.catalog.defaultLogo) && (
+                    {(logoUrl || uiConfig?.catalog.defaultLogo) && (
                         <div className={classes.logoWrapper}>
                             <img
                                 className={cx(classes.logo)}
@@ -200,7 +202,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                     <Markdown>{resolveLocalizedString(softwareDescription)}</Markdown>
                 </div>
 
-                {config.catalog.cardOptions.referentCount && (
+                {uiConfig?.catalog.cardOptions.referentCount && (
                     <DetailUsersAndReferents
                         seeUserAndReferent={
                             referentCount > 0 || userCount > 0
@@ -214,7 +216,7 @@ export const SoftwareCatalogCard = memo((props: Props) => {
                 )}
             </div>
             <div className={classes.footer}>
-                {config.catalog.cardOptions.userCase &&
+                {uiConfig?.catalog.cardOptions.userCase &&
                     !userDeclaration?.isReferent &&
                     !userDeclaration?.isUser && (
                         <a
@@ -331,10 +333,7 @@ const useStyles = tss
             overflow: "hidden",
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp:
-                isSearchHighlighted || !config.catalog.cardOptions.referentCount
-                    ? "5"
-                    : "3",
+            WebkitLineClamp: isSearchHighlighted ? "5" : "3",
             whiteSpace: "pre-wrap"
         },
         detailUsersAndReferents: {

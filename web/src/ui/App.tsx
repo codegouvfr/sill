@@ -1,3 +1,5 @@
+import { fr } from "@codegouvfr/react-dsfr";
+import Alert from "@codegouvfr/react-dsfr/Alert";
 import { Suspense, useEffect } from "react";
 import { tss, useStyles as useCss } from "tss-react";
 import { useRoute } from "ui/routes";

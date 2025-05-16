@@ -1,28 +1,27 @@
-import { ChangeEventHandler, useState } from "react";
-import { tss } from "tss-react";
-import { keyframes } from "tss-react";
-import { assert } from "tsafe/assert";
-import type { Equals } from "tsafe";
-import { routes } from "ui/routes";
 import { fr } from "@codegouvfr/react-dsfr";
 import { Button } from "@codegouvfr/react-dsfr/Button";
-import Tile from "@codegouvfr/react-dsfr/Tile";
 import Card from "@codegouvfr/react-dsfr/Card";
-import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
-import illustration_sill from "ui/assets/illustration_sill.svg";
-import { useCoreState } from "core";
-import type { PageRoute } from "./route";
-import { useMetricCountUpAnimation } from "ui/tools/useMetricCountUpAnimation";
-import { Waypoint } from "react-waypoint";
-import HomepageWaveSvg from "ui/assets/homepage_wave.svg?react";
 
 import codingSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/digital/coding.svg";
-import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
 import documentSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/document/document.svg";
+import humanCooperationSvgUrl from "@codegouvfr/react-dsfr/dsfr/artwork/pictograms/environment/human-cooperation.svg";
+import { SearchBar } from "@codegouvfr/react-dsfr/SearchBar";
+import Tile from "@codegouvfr/react-dsfr/Tile";
+import { Grid } from "@mui/material";
+import { useCoreState } from "core";
+import { useState } from "react";
 
 import { Trans, useTranslation } from "react-i18next";
-import config from "../../../ui/config-ui.json";
-import { Grid } from "@mui/material";
+import { Waypoint } from "react-waypoint";
+import type { Equals } from "tsafe";
+import { assert } from "tsafe/assert";
+import { keyframes, tss } from "tss-react";
+import HomepageWaveSvg from "ui/assets/homepage_wave.svg?react";
+import illustration_sill from "ui/assets/illustration_sill.svg";
+import { routes } from "ui/routes";
+import { useMetricCountUpAnimation } from "ui/tools/useMetricCountUpAnimation";
+import type { PageRoute } from "./route";
+import type { ApiTypes } from "api";
 
 type Props = {
     className?: string;
@@ -31,6 +30,7 @@ type Props = {
 
 export default function Home(props: Props) {
     const { className, route, ...rest } = props;
+    const uiConfig = useCoreState("uiConfig", "main")!;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -48,30 +48,12 @@ export default function Home(props: Props) {
         setLinkSearch(`/list?search=${value}&sort=best_match`);
     };
 
-    type AvailableStat =
-        | "softwareCount"
-        | "registeredUserCount"
-        | "agentReferentCount"
-        | "organizationCount";
-    const statsCases = config.home.statistics.catgegories as Array<AvailableStat>;
+    const statsCases = uiConfig.home.statistics.catgegories;
 
-    type AvailableUseCase = "declareReferent" | "editSoftware" | "addSoftwareOrService";
-    type UseCaseConfig = {
-        enabled: boolean;
-        labelLinks: any;
-        buttonEnabled: boolean;
-        buttonLink: string;
-    };
-    type UsesCaseConfig = Record<AvailableUseCase, UseCaseConfig>;
-
-    const configUseCases: UsesCaseConfig = config.home.usecases;
-    const keys: Array<AvailableUseCase> = Object.keys(
-        configUseCases
-    ) as Array<AvailableUseCase>;
-
-    const useCases: Array<AvailableUseCase> = keys.filter((key: AvailableUseCase) => {
-        return configUseCases[key].enabled;
-    });
+    const configUseCases = uiConfig.home.usecases;
+    const useCaseNames = (
+        Object.keys(configUseCases) as ApiTypes.ConfigurableUseCaseName[]
+    ).filter(key => configUseCases[key].enabled);
 
     const softwareSelectionList = [
         {
@@ -131,7 +113,7 @@ export default function Home(props: Props) {
                 />
             </div>
 
-            {config?.home?.softwareSelection?.enabled && (
+            {uiConfig?.home?.softwareSelection?.enabled && (
                 <section
                     className={cx(classes.softwareSelectionBackground, classes.section)}
                 >
@@ -148,7 +130,7 @@ export default function Home(props: Props) {
                 </section>
             )}
 
-            {config?.home?.quickAccess?.enabled && (
+            {uiConfig?.home?.quickAccess?.enabled && (
                 <section
                     className={cx(classes.softwareSelectionBackground, classes.section)}
                 >
@@ -177,7 +159,7 @@ export default function Home(props: Props) {
                 className={cx(fr.cx("fr-container"), classes.section)}
             />
 
-            {config?.home?.searchBar?.enabled && (
+            {uiConfig?.home?.searchBar?.enabled && (
                 <section className={cx(fr.cx("fr-container"), classes.section)}>
                     <Grid
                         container
@@ -246,7 +228,7 @@ export default function Home(props: Props) {
                             alignItems: "center"
                         }}
                     >
-                        {statsCases.map((metricName: AvailableStat) => (
+                        {statsCases.map(metricName => (
                             <Grid item xs={3}>
                                 <div key={metricName}>
                                     <AnimatedMetric
@@ -279,13 +261,13 @@ export default function Home(props: Props) {
                             alignContent: "stretch"
                         }}
                     >
-                        {useCases.map((cardName: AvailableUseCase) => {
+                        {useCaseNames.map(useCaseName => {
                             const link = (() => {
-                                const configLink = configUseCases[cardName].buttonLink;
+                                const configLink = configUseCases[useCaseName].buttonLink;
                                 const renderedConfigLink = {
                                     href: configLink
                                 };
-                                switch (cardName) {
+                                switch (useCaseName) {
                                     case "addSoftwareOrService":
                                         return configLink && configLink !== ""
                                             ? renderedConfigLink
@@ -309,13 +291,13 @@ export default function Home(props: Props) {
                                                 }
                                             })
                                         }}
-                                        key={cardName}
-                                        title={t(`home.${cardName}Title`)}
+                                        key={useCaseName}
+                                        title={t(`home.${useCaseName}Title`)}
                                         desc={
                                             <Trans
-                                                i18nKey={`home.${cardName}Desc`}
+                                                i18nKey={`home.${useCaseName}Desc`}
                                                 components={configUseCases[
-                                                    cardName
+                                                    useCaseName
                                                 ].labelLinks.reduce(
                                                     (
                                                         map: Record<string, JSX.Element>,
@@ -349,7 +331,7 @@ export default function Home(props: Props) {
                                         imageAlt={t("home.illustrationImage")}
                                         linkProps={link}
                                         imageUrl={(() => {
-                                            switch (cardName) {
+                                            switch (useCaseName) {
                                                 case "declareReferent":
                                                     return humanCooperationSvgUrl;
                                                 case "editSoftware":
@@ -359,12 +341,12 @@ export default function Home(props: Props) {
                                             }
                                         })()}
                                         footer={
-                                            configUseCases[cardName].buttonEnabled && (
+                                            configUseCases[useCaseName].buttonEnabled && (
                                                 <Button
                                                     priority="primary"
                                                     linkProps={link}
                                                 >
-                                                    {t(`home.${cardName}ButtonLabel`)}
+                                                    {t(`home.${useCaseName}ButtonLabel`)}
                                                 </Button>
                                             )
                                         }
@@ -524,6 +506,7 @@ const { WhatIsTheSillSection } = (() => {
 
     function WhatIsTheSillSection(props: Props) {
         const { className } = props;
+        const uiConfig = useCoreState("uiConfig", "main")!;
 
         const [isVisible, setIsVisible] = useState(false);
 
@@ -542,7 +525,7 @@ const { WhatIsTheSillSection } = (() => {
                         components={
                             {
                                 space: <span> </span>,
-                                ...config.home.theSillInAFewWordsParagraphLinks.reduce(
+                                ...uiConfig?.home.theSillInAFewWordsParagraphLinks.reduce(
                                     (
                                         map: Record<string, JSX.Element>,
                                         link: string,

@@ -11,9 +11,11 @@ import type { ComptoirDuLibreApi } from "./ports/ComptoirDuLibreApi";
 import { DbApiV2 } from "./ports/DbApiV2";
 import type { ExternalDataOrigin, GetSoftwareExternalData } from "./ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "./ports/GetSoftwareExternalDataOptions";
+import { UiConfig, uiConfigSchema } from "./uiConfigSchema";
 import { UseCases } from "./usecases";
 import { makeGetAgent } from "./usecases/getAgent";
 import { makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./usecases/getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import rawUiConfig from "../customization/ui-config.json";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -45,8 +47,9 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
 
 export async function bootstrapCore(
     params: ParamsOfBootstrapCore
-): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases }> {
+): Promise<{ dbApi: DbApiV2; context: Context; useCases: UseCases; uiConfig: UiConfig }> {
     const { dbConfig, externalSoftwareDataOrigin } = params;
+    const uiConfig = uiConfigSchema.parse(rawUiConfig);
 
     const { getSoftwareExternalData } = getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
 
@@ -75,7 +78,7 @@ export async function bootstrapCore(
         getAgent: makeGetAgent({ agentRepository: dbApi.agent })
     };
 
-    return { dbApi, context, useCases };
+    return { dbApi, context, useCases, uiConfig };
 }
 
 function getSoftwareExternalDataFunctions(externalSoftwareDataOrigin: ExternalDataOrigin): {

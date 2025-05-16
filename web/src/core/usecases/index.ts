@@ -14,12 +14,14 @@ import * as declarationRemoval from "./declarationRemoval";
 import * as userProfile from "./userProfile";
 import * as externalDataOrigin from "./externalDataOrigin";
 import * as source from "./source.slice";
+import * as uiConfig from "./uiConfig.slice";
 
 export const usecases = {
     source,
     softwareCatalog,
     softwareDetails,
     softwareForm,
+    uiConfig,
     declarationForm,
     instanceForm,
     userAccountManagement,

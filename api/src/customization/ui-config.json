@@ -39,12 +39,7 @@
             "enabled": false
         },
         "statistics": {
-            "catgegories": [
-                "softwareCount",
-                "registeredUserCount",
-                "agentReferentCount",
-                "organizationCount"
-            ]
+            "catgegories": ["softwareCount", "registeredUserCount", "agentReferentCount", "organizationCount"]
         },
         "usecases": {
             "declareReferent": {
@@ -128,11 +123,6 @@
         }
     },
     "footer": {
-        "domains": [
-            "info.gouv.fr",
-            "service-public.fr",
-            "legifrance.gouv.fr",
-            "data.gouv.fr"
-        ]
+        "domains": ["info.gouv.fr", "service-public.fr", "legifrance.gouv.fr", "data.gouv.fr"]
     }
 }

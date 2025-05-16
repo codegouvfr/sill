@@ -23,7 +23,6 @@ import {
 } from "ui/shared/DeclarationRemovalModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import type { ApiTypes } from "api";
-import config from "../../config-ui.json";
 
 type Props = {
     className?: string;
@@ -34,6 +33,7 @@ export default function SoftwareDetails(props: Props) {
     const { route, className } = props;
 
     const { softwareDetails, userAuthentication } = useCore().functions;
+    const uiConfig = useCoreState("uiConfig", "main");
 
     const { cx, classes } = useStyles();
 
@@ -77,7 +77,7 @@ export default function SoftwareDetails(props: Props) {
                     />
                     <HeaderDetailCard
                         softwareLogoUrl={
-                            (software?.logoUrl ?? config.softwareDetails.defaultLogo)
+                            (software?.logoUrl ?? uiConfig?.softwareDetails.defaultLogo)
                                 ? softwareLogoPlaceholder
                                 : undefined
                         }
@@ -278,7 +278,7 @@ export default function SoftwareDetails(props: Props) {
                         ]}
                     />
                 </div>
-                {config.softwareDetails.userActions.enabled && (
+                {uiConfig?.softwareDetails.userActions.enabled && (
                     <ActionsFooter className={classes.container}>
                         <DetailUsersAndReferents
                             className={cx(

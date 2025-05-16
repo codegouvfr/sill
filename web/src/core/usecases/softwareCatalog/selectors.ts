@@ -11,7 +11,7 @@ import { exclude } from "tsafe/exclude";
 import type { ApiTypes } from "api";
 import { createResolveLocalizedString } from "i18nifty";
 import { name, type State } from "./state";
-import config from "../../../ui/config-ui.json";
+import { selectors as uiConfigSelectors } from "../uiConfig.slice";
 
 const internalSoftwares = (rootState: RootState) => {
     return rootState[name].softwares;
@@ -29,25 +29,28 @@ const sortOptions = createSelector(
     searchResults,
     sort,
     userEmail,
-    (searchResults, sort, userEmail): State.Sort[] => {
+    uiConfigSelectors.main,
+    (searchResults, sort, userEmail, uiConfig): State.Sort[] => {
         const sorts: State.Sort[] = [
             ...(searchResults !== undefined || sort === "best_match"
                 ? ["best_match" as const]
                 : []),
             ...(userEmail === undefined ? [] : ["my_software" as const]),
-            ...(config.catalog.sortOptions.referent_count
+            ...(uiConfig?.catalog.sortOptions.referent_count
                 ? ["referent_count" as const]
                 : []),
-            ...(config.catalog.sortOptions.user_count ? ["user_count" as const] : []),
-            ...(config.catalog.sortOptions.added_time ? ["added_time" as const] : []),
-            ...(config.catalog.sortOptions.update_time ? ["update_time" as const] : []),
-            ...(config.catalog.sortOptions.latest_version_publication_date
+            ...(uiConfig?.catalog.sortOptions.user_count ? ["user_count" as const] : []),
+            ...(uiConfig?.catalog.sortOptions.added_time ? ["added_time" as const] : []),
+            ...(uiConfig?.catalog.sortOptions.update_time
+                ? ["update_time" as const]
+                : []),
+            ...(uiConfig?.catalog.sortOptions.latest_version_publication_date
                 ? ["latest_version_publication_date" as const]
                 : []),
-            ...(config.catalog.sortOptions.user_count_ASC
+            ...(uiConfig?.catalog.sortOptions.user_count_ASC
                 ? ["user_count_ASC" as const]
                 : []),
-            ...(config.catalog.sortOptions.referent_count_ASC
+            ...(uiConfig?.catalog.sortOptions.referent_count_ASC
                 ? ["referent_count_ASC" as const]
                 : [])
         ];
