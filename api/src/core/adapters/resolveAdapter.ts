@@ -3,6 +3,7 @@ import { DatabaseDataType } from "../ports/DbApiV2";
 import { halSourceGateway } from "./hal";
 import { wikidataSourceGateway } from "./wikidata";
 import { comptoirDuLibreSourceGateway } from "./comptoirDuLibre";
+import { zenodoSourceGateway } from "./zenodo";
 import { cnllSourceGateway } from "./CNLL";
 
 export const resolveAdapterFromSource = (
@@ -17,6 +18,8 @@ export const resolveAdapterFromSource = (
             return comptoirDuLibreSourceGateway;
         case "CNLL":
             return cnllSourceGateway;
+        case "Zenodo":
+            return zenodoSourceGateway;
         default:
             const unreachableCase: never = source.kind;
             throw new Error(`Unreachable case: ${unreachableCase}`);
