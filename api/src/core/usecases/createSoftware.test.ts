@@ -279,4 +279,6 @@ describe("Create software - Trying all the cases", () => {
         });
         expectToEqual(similardExternalDataUpdated?.length, 3);
     });
+
+    // TODO Another case : register
 });
