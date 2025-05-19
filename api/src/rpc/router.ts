@@ -43,14 +43,7 @@ export function createRouter(params: {
     redirectUrl: string | undefined;
     uiConfig: UiConfig;
 }) {
-    const {
-        useCases,
-        dbApi,
-        oidcParams,
-        termsOfServiceUrl,
-        redirectUrl,
-        uiConfig
-    } = params;
+    const { useCases, dbApi, oidcParams, termsOfServiceUrl, redirectUrl, uiConfig } = params;
 
     const t = initTRPC.context<Context>().create({
         "transformer": superjson
