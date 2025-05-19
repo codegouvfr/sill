@@ -119,6 +119,7 @@ export interface SoftwareExternalDataRepository {
     getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     delete: (params: { sourceSlug: string; externalId: string }) => Promise<boolean>;
     getSimilarSoftwareId: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
+    getOtherIdentifierIdsBySourceURL: (params: { sourceURL: string }) => Promise<Record<string, number> | undefined>;
 }
 
 type CnllPrestataire = {
