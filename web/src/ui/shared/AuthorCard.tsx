@@ -11,7 +11,7 @@ import Button from "@codegouvfr/react-dsfr/Button";
 import { LogoURLButton } from "./LogoURLButton";
 
 export type Props = {
-    author: ApiTypes.Catalogi.Person;
+    author: ApiTypes.Person;
     handleClose?: MouseEventHandler<HTMLButtonElement>;
 };
 

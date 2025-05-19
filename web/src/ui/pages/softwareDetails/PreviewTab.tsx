@@ -12,7 +12,7 @@ import { capitalize } from "tsafe/capitalize";
 import { useCoreState } from "../../../core";
 import { CnllServiceProviderModal } from "./CnllServiceProviderModal";
 import { assert, type Equals } from "tsafe/assert";
-import { Catalogi, SoftwareType } from "api/dist/src/lib/ApiTypes";
+import { Identifier, SoftwareType } from "api/dist/src/lib/ApiTypes";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
 
@@ -44,7 +44,7 @@ export type Props = {
     keywords?: string[];
     applicationCategories: string[];
     softwareType: SoftwareType;
-    identifiers: Catalogi.Identification[];
+    identifiers: Identifier[];
     officialWebsiteUrl?: string;
 };
 export const PreviewTab = (props: Props) => {
@@ -388,9 +388,10 @@ export const PreviewTab = (props: Props) => {
                                 {identifiers
                                     .filter(identifier => {
                                         const identifierURLString =
-                                            identifier.url.toString();
+                                            identifier?.url?.toString();
                                         return (
                                             officialWebsiteUrl &&
+                                            identifierURLString &&
                                             !officialWebsiteUrl.startsWith(
                                                 identifierURLString
                                             )
