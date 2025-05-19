@@ -3,7 +3,7 @@ import memoize from "memoizee";
 import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { Source } from "../../usecases/readWriteSillData";
 import { SchemaOrganization } from "../dbApi/kysely/kysely.database";
-import { identifersUtils } from "../../utils";
+import { identifersUtils } from "../../../tools/identifiersTools";
 import { getCnllPrestatairesSill } from "../getCnllPrestatairesSill";
 import { CnllPrestatairesSill } from "../../ports/GetCnllPrestatairesSill";
 
