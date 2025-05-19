@@ -81,7 +81,7 @@ export namespace State {
                 | undefined;
             programmingLanguages: string[];
             applicationCategories: string[];
-            referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
+            referencePublications?: ApiTypes.ScholarlyArticle[];
         };
 
         export type External = Common & {
