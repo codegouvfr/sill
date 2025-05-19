@@ -49,6 +49,7 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                 }
                 return result.filter(val => val != undefined);
 
+            case "Zenodo":
             case "wikidata":
                 if (!softwareIdOnSource || softwareIdOnSource.length === 0) {
                     return [];

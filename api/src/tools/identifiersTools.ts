@@ -63,6 +63,13 @@ const nationalSIREN: WebSite = {
     additionalType: "SIREN"
 };
 
+const zenodoSource: WebSite = {
+    "@type": "Website" as const,
+    name: "Zenodo",
+    url: new URL("https://zenodo.org/"),
+    additionalType: "ZENODO"
+};
+
 export const identifersUtils = {
     makeGenericIdentifier: (params: { value: string; url?: string | URL }): SchemaIdentifier => {
         const { value, url } = params;
@@ -154,7 +161,7 @@ export const identifersUtils = {
     makeHALArticleIdentifier: (params: { halId: string; url?: string }): ArticleIdentifier => {
         return identifersUtils.makeHALIdentifier({ ...params, additionalType: "Aritcle" }) as ArticleIdentifier;
     },
-    makeSWHIdentifier: (params: { swhId: string; additionalType?: string; url: string }): SchemaIdentifier => {
+    makeSWHIdentifier: (params: { swhId: string; additionalType?: string; url?: string }): SchemaIdentifier => {
         const { swhId, additionalType, url } = params;
         return {
             "@type": "PropertyValue" as const,
@@ -181,6 +188,16 @@ export const identifersUtils = {
             value: SIREN,
             url: url ?? undefined,
             subjectOf: nationalSIREN,
+            ...(additionalType ? { additionalType: additionalType } : {})
+        };
+    },
+    makeZenodoIdentifer: (params: { zenodoId: string; additionalType?: string; url: string }): SchemaIdentifier => {
+        const { zenodoId: orcidId, url, additionalType } = params;
+        return {
+            "@type": "PropertyValue" as const,
+            value: orcidId,
+            url: url,
+            subjectOf: zenodoSource,
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     }
