@@ -24,7 +24,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: Array<ApiTypes.Catalogi.Person | ApiTypes.Catalogi.Organization>;
+    authors: Array<ApiTypes.Person | ApiTypes.Organization>;
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;
