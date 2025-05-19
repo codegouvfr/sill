@@ -158,5 +158,42 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .where("sourceSlug", "=", sourceSlug)
             .execute()
             .then(rows => rows.length > 0);
+    },
+    getOtherIdentifierIdsBySourceURL: async ({ sourceURL }) => {
+        const request = db
+            .selectFrom("software_external_datas")
+            .leftJoin("sources", "sources.slug", "software_external_datas.sourceSlug")
+            .select(["softwareId", "identifiers"])
+            .where("sources.url", "!=", sourceURL);
+
+        const externalData = await request.execute();
+
+        if (!externalData) return undefined;
+
+        return externalData.reduce(
+            (acc, externalDataItem) => {
+                if (
+                    !externalDataItem.identifiers ||
+                    externalDataItem.identifiers.length === 0 ||
+                    !externalDataItem.softwareId
+                )
+                    return acc;
+
+                const formatedUrl = new URL(sourceURL).toString();
+
+                const foundIdentiers = externalDataItem.identifiers.filter(
+                    identifer => identifer.subjectOf?.url.toString() === formatedUrl
+                );
+
+                if (foundIdentiers.length === 0) return acc;
+
+                if (foundIdentiers.length > 2)
+                    throw Error("Database corrupted, shouldn't have same source on this object");
+
+                acc[foundIdentiers[0].value] = externalDataItem.softwareId;
+                return acc;
+            },
+            {} as Record<string, number>
+        );
     }
 });

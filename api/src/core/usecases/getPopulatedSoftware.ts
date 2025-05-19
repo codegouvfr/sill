@@ -1,4 +1,5 @@
 import { DatabaseDataType, DbApiV2, PopulatedExternalData } from "../ports/DbApiV2";
+import { mergeObjects } from "../utils";
 import { Software } from "./readWriteSillData";
 
 export type MakeGetPopulatedSoftware = (dbApi: DbApiV2) => GetPopulatedSoftware;
@@ -30,8 +31,11 @@ export const makeGetPopulatedSoftware: MakeGetPopulatedSoftware = (dbApi: DbApiV
         sofware.map(async softwareItem => {
             const formatedSoftwareUI = formatSoftwareRowToUISoftware(softwareItem);
 
-            const similarSoftwareIds = await dbApi.similarSoftware.getById({ softwareId: softwareItem.id });
+            const similarSoftwareIds = await dbApi.software.getSimilarSoftwareExternalDataPks({
+                softwareId: softwareItem.id
+            });
             console.log(similarSoftwareIds);
+            // WIP : Either we point to an actual software or we compute a softwareUI from ExternalData
 
             const externalData = await dbApi.softwareExternalData.getPopulatedBySoftwareId({
                 softwareId: softwareItem.id
@@ -134,6 +138,7 @@ const formatExternalDataRowToUISoftware = (
             "@type": "Person",
             name: dev.name,
             url: dev.url,
+            identifiers: dev.identifiers,
             affiliations: dev["@type"] === "Person" ? dev.affiliations : []
         })),
         officialWebsiteUrl: externalDataRow.websiteUrl,
@@ -157,13 +162,9 @@ const mergeExternalData = (externalData: PopulatedExternalData[]) => {
     if (externalData.length === 0) throw Error("Nothing to merge, the array should be filled");
     if (externalData.length === 1) return stripExternalDataFromSource(externalData[0]);
 
-    const sortedExternalData = externalData.sort((firstItem, secondItem) => firstItem.priority - secondItem.priority);
+    const [first, ...nexts] = externalData.sort((firstItem, secondItem) => secondItem.priority - firstItem.priority);
 
-    // TODO Merge
-    const mergedItem = sortedExternalData.reduce((savedExternalDataItem, currentExternalDataItem) => {
-        console.error(savedExternalDataItem);
-        return currentExternalDataItem;
-    }, sortedExternalData[0]);
+    const mergedItem = mergeObjects(first, nexts);
 
     return stripExternalDataFromSource(mergedItem);
 };
@@ -175,24 +176,3 @@ const stripExternalDataFromSource = (
 
     return externalDataItem;
 };
-
-/* const mergeObjects = (obj1: PopulatedExternalData, obj2: PopulatedExternalData): PopulatedExternalData => {
-    const result: PopulatedExternalData = { ...obj1 };
-
-    for (const key in obj2) {
-        if (obj2.hasOwnProperty(key)) {
-            const value1 = obj1[key as keyof PopulatedExternalData];
-            const value2 = obj2[key as keyof PopulatedExternalData];
-
-            if (value1 === undefined || value1 === null || value1 === '') {
-                result[key as keyof PopulatedExternalData] = value2;
-            } else if (Array.isArray(value1) && Array.isArray(value2)) {
-                result[key] = Array.from(new Set([...value1, ...value2]));
-            } else {
-                result[key] = value1;
-            }
-        }
-    }
-
-    return result;
-} */
