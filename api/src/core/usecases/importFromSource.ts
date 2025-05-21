@@ -8,6 +8,7 @@ import { makeCreateSofware } from "./createSoftware";
 import { Source } from "./readWriteSillData";
 import { GetSoftwareFormData } from "../ports/GetSoftwareFormData";
 import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
+import { makeZenodoApi } from "../adapters/zenodo/zenodoAPI";
 
 export type ImportFromSource = (params: {
     agentEmail: string;
@@ -35,44 +36,36 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
         const getSoftwareForm = sourceGateway.softwareForm.getById;
         let result = [];
 
-        switch (source.kind) {
-            case "HAL":
-                // Get All or Request
-                const rawHALSoftwareIds =
-                    softwareIdOnSource && softwareIdOnSource.length > 0 && softwareIdOnSource[0] !== ""
-                        ? softwareIdOnSource
-                        : (await halAPIGateway.software.getAll({ SWHFilter: true })).map(doc => doc.docid);
+        const softwareIds =
+            softwareIdOnSource && softwareIdOnSource.length > 0 && softwareIdOnSource[0] !== ""
+                ? softwareIdOnSource
+                : await resolveAllIdsAccordingToSource(source);
 
-                console.info(
-                    `[UC:Import] Importing  ${rawHALSoftwareIds.length} software packages from ${source.slug}`
-                );
+        console.info(`[UC:Import] Importing  ${softwareIds.length} software packages from ${source.slug}`);
 
-                for (const docId of rawHALSoftwareIds) {
-                    const newId = await checkSoftware(dbApi, source, docId, getSoftwareForm, agentId);
-                    result.push(newId);
-                }
-                return result.filter(val => val != undefined);
-
-            case "Zenodo":
-            case "wikidata":
-                if (!softwareIdOnSource || softwareIdOnSource.length === 0) {
-                    return [];
-                }
-
-                console.info(
-                    `[UC:Import] Importing  ${softwareIdOnSource.length} software packages from ${source.slug}`
-                );
-
-                for (const externalId of softwareIdOnSource) {
-                    const newId = await checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId);
-                    result.push(newId);
-                }
-                return result.filter(val => val != undefined);
-
-            default:
-                throw new Error("[UC:Import] Not Implemented");
+        for (const externalId of softwareIds) {
+            const newId = await checkSoftware(dbApi, source, externalId, getSoftwareForm, agentId);
+            result.push(newId);
         }
+        return result.filter(val => val != undefined);
     };
+};
+
+const resolveAllIdsAccordingToSource = async (source: Source): Promise<string[]> => {
+    switch (source.kind) {
+        case "HAL":
+            return (await halAPIGateway.software.getAll({ SWHFilter: true })).map(doc => doc.docid);
+        case "Zenodo":
+            const zenodoAPI = makeZenodoApi();
+            return (await zenodoAPI.records.getAllSoftware()).hits.hits.map(item => item.id.toString());
+        case "ComptoirDuLibre":
+        case "CNLL":
+        case "wikidata":
+            return [];
+        default:
+            const shouldNotBeReached: never = source.kind;
+            throw new Error("[UC:Import] Not Implemented", shouldNotBeReached);
+    }
 };
 
 const checkSoftware = async (
