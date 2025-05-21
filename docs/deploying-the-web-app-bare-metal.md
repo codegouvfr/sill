@@ -53,11 +53,10 @@ Create a `.env` file with a content like this
 ```
 OIDC_ISSUER_URI=http://localhost:8081/auth/realms/codegouv
 OIDC_CLIENT_ID=sill
-SILL_README_URL=https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/docs/sill.md
-SILL_TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
-SILL_GITHUB_TOKEN=ghp_xxxxxx
-SILL_API_PORT=3084
-SILL_IS_DEV_ENVIRONNEMENT=true
+TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
+GITHUB_TOKEN=ghp_xxxxxx
+API_PORT=3084
+IS_DEV_ENVIRONNEMENT=true
 DATABASE_URL=postgresql://sill:pg_password@localhost:5432/sill
 ```
 
