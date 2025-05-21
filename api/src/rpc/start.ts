@@ -26,7 +26,7 @@ import translationEn from "../customization/translations/en.json";
 import translationFr from "../customization/translations/fr.json";
 
 const isAssignable = (fr: typeof translationFr): typeof translationEn => fr;
-console.info(isAssignable(translationFr) ?? "isAssignable : true"); // this is just to avoid the TS error : _isAssignable is not used. TODO : use eslint rule instead (no eslint in backend for now)
+console.info(isAssignable(translationFr) ? "isAssignable : true" : "isAssignable : false"); // this is just to avoid the TS error : _isAssignable is not used. TODO : use eslint rule instead (no eslint in backend for now)
 
 export async function startRpcService(params: {
     oidcParams: OidcParams;
