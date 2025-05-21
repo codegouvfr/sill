@@ -7,7 +7,7 @@ import Button from "@codegouvfr/react-dsfr/Button";
 import { LogoURLButton } from "./LogoURLButton";
 
 export type Props = {
-    author: ApiTypes.SILL.Person;
+    author: ApiTypes.Person;
     handleClose?: MouseEventHandler<HTMLButtonElement>;
 };
 
@@ -80,9 +80,18 @@ export function AuthorCard(props: Props) {
                     </>
                 );
             })}
-            <div className={classes.externalLinkButtons}>
-                <LogoURLButton url={author.url} labelFromURL={true} />
-            </div>
+            {author.url && (
+                <div className={classes.externalLinkButtons}>
+                    <LogoURLButton url={author.url} label="Personal website" />
+                </div>
+            )}
+            {author.identifiers?.map(identifier => {
+                return (
+                    <div className={classes.externalLinkButtons}>
+                        <LogoURLButton url={identifier.url} labelFromURL={true} />
+                    </div>
+                );
+            })}
         </Card>
     );
 }

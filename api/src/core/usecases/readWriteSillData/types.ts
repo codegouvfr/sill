@@ -1,6 +1,11 @@
-import { SILL } from "../../../types/SILL";
 import type { LocalizedString, SimilarSoftwareExternalData } from "../../ports/GetSoftwareExternalData";
-import SourceKind = SILL.SourceKind;
+import { DatabaseDataType } from "../../ports/DbApiV2";
+import {
+    SchemaIdentifier,
+    SchemaOrganization,
+    SchemaPerson,
+    ScholarlyArticle
+} from "../../adapters/dbApi/kysely/kysely.database";
 
 export type ServiceProvider = {
     name: string;
@@ -34,7 +39,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: Array<SILL.Person | SILL.Organization>;
+    authors: Array<SchemaPerson | SchemaOrganization>;
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
@@ -55,17 +60,11 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
-    referencePublications?: SILL.ScholarlyArticle[];
-    identifiers?: SILL.Identification[];
+    referencePublications?: ScholarlyArticle[];
+    identifiers?: SchemaIdentifier[];
 };
 
-export type Source = {
-    slug: string;
-    kind: SourceKind;
-    url: string;
-    priority: number;
-    description: LocalizedString | null;
-};
+export type Source = DatabaseDataType.SourceRow;
 
 export namespace Software {
     export type SimilarSoftware = SimilarSoftware.SimilarSoftwareNotInSill | SimilarSoftware.Sill;
@@ -75,7 +74,7 @@ export namespace Software {
             isInSill: false;
             sourceSlug: string;
             externalId: string;
-            isLibreSoftware: boolean;
+            isLibreSoftware: boolean | undefined;
             label: LocalizedString;
             description: LocalizedString;
         };

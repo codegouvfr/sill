@@ -1,13 +1,65 @@
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
-import { SILL } from "../../../../types/SILL";
+import { TransformRepoToRowOutput } from "./kysely.utils";
+
+// from https://schema.org/ScholarlyArticle
+export type ScholarlyArticle = {
+    "@id": string;
+    "@type": "ScholarlyArticle";
+    identifiers: ArticleIdentifier[];
+    headline?: string;
+};
+
+export type ArticleIdentifierOrigin = "doi" | "arxiv" | "HAL";
+
+// from https://schema.org/PropertyValue
+export interface ArticleIdentifier extends SchemaIdentifier {
+    subjectOf: WebSite;
+    additionalType: "Article";
+}
+
+export type OrganizationIdentifierOrigin = "wikidata" | "HAL";
+export interface OrganizationIdentifer extends SchemaIdentifier {
+    subjectOf: WebSite;
+    additionalType: "Organization";
+}
 
 // from https://schema.org/Organization
-type SchemaOrganization = {
+export type SchemaOrganization = {
     "@type": "Organization";
     name: string;
-    url: string | undefined;
+    url?: string;
+    identifiers?: SchemaIdentifier[];
     parentOrganizations?: SchemaOrganization[];
+};
+
+// from https://schema.org/Person
+export type SchemaPerson = {
+    "@type": "Person";
+    name: string;
+    identifiers?: SchemaIdentifier[];
+    url?: string;
+    affiliations?: SchemaOrganization[];
+};
+
+// from https://schema.org/WebSite
+export type WebSite = {
+    "@type": "Website";
+    name: string; // Name of the website or database
+    description?: string;
+    url: URL; // Name of the website or database
+    additionalType?: string; // Type of the database
+};
+
+// from https://schema.org/identifier & https://schema.org/PropertyValue
+export type SchemaIdentifier = {
+    "@type": "PropertyValue";
+    name?: string; // Name of the property
+    value: string; // Value of the property
+    url?: string | URL; // Url to direct access to the element on the database
+    valueReference?: string; // Value of the instance / database
+    subjectOf?: WebSite; // Value of the instance / database
+    additionalType?: string; // Organization | Article | Person | ...
 };
 
 export type Database = {
@@ -62,7 +114,7 @@ type InstancesTable = {
 };
 
 type ExternalId = string;
-type ExternalDataOriginKind = "wikidata" | "HAL";
+export type ExternalDataOriginKind = "wikidata" | "HAL" | "ComptoirDuLibre";
 type LocalizedString = Partial<Record<string, string>>;
 
 type SimilarExternalSoftwareExternalDataTable = {
@@ -79,23 +131,14 @@ type SourcesTable = {
     description: JSONColumnType<LocalizedString> | null;
 };
 
-type SoftwareExternalDatasTable = {
+export type SoftwareExternalDatasTable = {
     externalId: ExternalId;
     sourceSlug: string;
     softwareId: number | null;
-    developers: JSONColumnType<
-        {
-            "@type": "Organization" | "Person";
-            name: string;
-            identifier?: string;
-            url: string;
-            affiliations?: SchemaOrganization[];
-            parentOrganizations?: SchemaOrganization[];
-        }[]
-    >;
+    developers: JSONColumnType<Array<SchemaOrganization | SchemaPerson>>;
     label: string | JSONColumnType<LocalizedString>;
     description: string | JSONColumnType<LocalizedString>;
-    isLibreSoftware: boolean;
+    isLibreSoftware: boolean | null;
     logoUrl: string | null;
     websiteUrl: string | null;
     sourceUrl: string | null;
@@ -105,9 +148,11 @@ type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguages: JSONColumnType<string[]> | null;
     applicationCategories: JSONColumnType<string[]> | null;
-    referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
+    referencePublications: JSONColumnType<ScholarlyArticle[]> | null;
     publicationTime: Date | null;
-    identifiers: JSONColumnType<SILL.Identification[]> | null;
+    identifiers: JSONColumnType<SchemaIdentifier[]> | null;
+    lastDataFetchAt: number | null;
+    providers: JSONColumnType<Array<SchemaOrganization>> | null;
 };
 
 type SoftwareType =
@@ -124,7 +169,6 @@ type SoftwaresTable = {
     description: string;
     referencedSinceTime: number;
     updateTime: number;
-    lastExtraDataFetchAt: Date | null;
     dereferencing: JSONColumnType<{
         reason?: string;
         time: number;
@@ -147,6 +191,19 @@ type SoftwaresTable = {
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
 };
+
+export namespace DatabaseRowOutput {
+    export type Agent = TransformRepoToRowOutput<AgentsTable>;
+    export type SoftwareReferent = TransformRepoToRowOutput<SoftwareReferentsTable>;
+    export type SoftwareUsert = TransformRepoToRowOutput<SoftwareUsersTable>;
+    export type Instance = TransformRepoToRowOutput<InstancesTable>;
+    export type Software = TransformRepoToRowOutput<SoftwaresTable>;
+    export type SoftwareExternalData = TransformRepoToRowOutput<SoftwareExternalDatasTable>;
+    export type SimilarExternalSoftwareExternalData =
+        TransformRepoToRowOutput<SimilarExternalSoftwareExternalDataTable>;
+    export type CompiledSoftwares = TransformRepoToRowOutput<CompiledSoftwaresTable>;
+    export type Source = TransformRepoToRowOutput<SourcesTable>;
+}
 
 // ---------- compiled data ----------
 
@@ -183,9 +240,46 @@ export namespace PgComptoirDuLibre {
         external_resources: {
             website: string | null;
             repository: string | null;
+            wikidata: WikidataIdentifier | never[];
+            sill: SILLIdentifier | never[];
+            wikipedia: WikipediaIdentifier | never[];
+            cnll: CNLLIdentifier | never[];
+            framalibre: FramaLibreIdentifier | never[];
         };
         providers: Provider[];
         users: User[];
+    };
+
+    type CNLLIdentifier = {
+        url: string;
+    };
+
+    type FramaLibreIdentifier = {
+        slug: string;
+        url: string;
+    };
+
+    type WikidataIdentifier = {
+        id: string;
+        url: string;
+        data: string;
+    };
+
+    type SILLIdentifier = {
+        id: number;
+        url: string;
+        i18n_url: {
+            fr: string;
+            en: string;
+        };
+    };
+
+    type WikipediaIdentifier = {
+        url: string;
+        i18n_url: {
+            fr: string;
+            en: string;
+        };
     };
 }
 
