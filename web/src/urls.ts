@@ -11,7 +11,8 @@ export const appPath = (() => {
         return "";
     }
 
-    return envValue;
+    // Remove trailing slash if present
+    return envValue.endsWith("/") ? envValue.slice(0, -1) : envValue;
 })();
 
 console.log({ appPath });
