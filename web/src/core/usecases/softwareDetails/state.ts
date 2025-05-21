@@ -34,9 +34,9 @@ export namespace State {
         softwareId: number;
         softwareName: string;
         softwareDescription: string;
-        serviceProviders: ApiTypes.ServiceProvider[];
+        serviceProviders: ApiTypes.Organization[];
         logoUrl: string | undefined;
-        authors: Array<ApiTypes.SILL.Person | ApiTypes.SILL.Organization>;
+        authors: Array<ApiTypes.Person | ApiTypes.Organization>;
         officialWebsiteUrl: string | undefined;
         documentationUrl: string | undefined;
         codeRepositoryUrl: string | undefined;
@@ -87,9 +87,9 @@ export namespace State {
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
-        referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
+        referencePublications?: ApiTypes.ScholarlyArticle[];
         softwareType: ApiTypes.SoftwareType;
-        identifiers: ApiTypes.SILL.Identification[];
+        identifiers: ApiTypes.Identifier[];
     };
 }
 

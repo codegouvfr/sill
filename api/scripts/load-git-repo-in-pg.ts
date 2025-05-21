@@ -2,12 +2,12 @@ import { InsertObject, Kysely, sql } from "kysely";
 import { z } from "zod";
 import { createGitDbApi, GitDbApiParams } from "../src/core/adapters/dbApi/createGitDbApi";
 import { makeGetAgentIdByEmail } from "../src/core/adapters/dbApi/kysely/createPgAgentRepository";
-import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
+import { Database, ExternalDataOriginKind } from "../src/core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
 import { CompiledData } from "../src/core/ports/CompileData";
 import { Db } from "../src/core/ports/DbApi";
-import { ExternalDataOrigin } from "../src/core/ports/GetSoftwareExternalData";
 import { Source } from "../src/core/usecases/readWriteSillData";
+import { stripNullOrUndefinedValues } from "../src/core/adapters/dbApi/kysely/kysely.utils";
 
 export type Params = {
     pgConfig: { dbUrl: string };
@@ -21,7 +21,12 @@ const saveGitDbInPostgres = async ({ pgConfig, gitDbConfig }: Params) => {
 
     const { softwareRows, agentRows, softwareReferentRows, softwareUserRows, instanceRows } = await gitDbApi.fetchDb();
 
-    const mainSource = await pgDb.selectFrom("sources").selectAll().orderBy("priority", "desc").executeTakeFirst();
+    const mainSource = await pgDb
+        .selectFrom("sources")
+        .selectAll()
+        .orderBy("priority", "desc")
+        .executeTakeFirst()
+        .then(row => (row ? stripNullOrUndefinedValues(row) : undefined));
 
     if (!mainSource) throw new Error("No source found, there should be at least one source");
 
@@ -251,7 +256,7 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async ({
                         ): software is CompiledData.Software.Private & {
                             softwareExternalData: {
                                 externalId: string;
-                                externalDataOrigin: ExternalDataOrigin;
+                                externalDataOrigin: ExternalDataOriginKind;
                             };
                         } =>
                             software.softwareExternalData?.externalId !== undefined &&
