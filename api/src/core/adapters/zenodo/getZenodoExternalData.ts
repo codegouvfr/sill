@@ -25,7 +25,9 @@ export const getZenodoExternalData: GetSoftwareExternalData = memoize(
         if (record.metadata.resource_type.type !== "software")
             throw new TypeError(`The record corresponding at ${externalId} is not a software`);
 
-        return formatRecordToExternalData(record, source);
+        const communities = await zenodoApi.records.getCommunities(Number(externalId));
+
+        return formatRecordToExternalData(record, communities.hits.hits, source);
     }
 );
 
@@ -45,7 +47,11 @@ const creatorToPerson = (creator: Zenodo.Creator): SchemaPerson => {
     };
 };
 
-const formatRecordToExternalData = (recordSoftwareItem: Zenodo.Record, source: Source): SoftwareExternalData => {
+const formatRecordToExternalData = (
+    recordSoftwareItem: Zenodo.Record,
+    communities: Zenodo.Community[],
+    source: Source
+): SoftwareExternalData => {
     return {
         externalId: recordSoftwareItem.id.toString(),
         sourceSlug: source.slug,
@@ -60,11 +66,13 @@ const formatRecordToExternalData = (recordSoftwareItem: Zenodo.Record, source: S
                 identifier => identifier.relation === "isSupplementTo"
             )?.[0]?.identifier ?? undefined,
         documentationUrl: undefined,
-        license: recordSoftwareItem.metadata.license.id,
+        license: recordSoftwareItem.metadata.license?.id ?? "Copyright",
         softwareVersion: recordSoftwareItem.metadata.version,
         keywords: recordSoftwareItem.metadata.keywords ?? [],
-        programmingLanguages: [],
-        applicationCategories: recordSoftwareItem.metadata.communities?.map(commu => commu.id),
+        programmingLanguages: recordSoftwareItem.metadata.custom?.["code:programmingLanguage"]?.map(
+            item => item.title.en
+        ),
+        applicationCategories: communities?.map(commu => commu.metadata.title),
         publicationTime: recordSoftwareItem.metadata.publication_date,
         referencePublications: [], // TODO reliotated identifers // relation type // ??
         identifiers: [
