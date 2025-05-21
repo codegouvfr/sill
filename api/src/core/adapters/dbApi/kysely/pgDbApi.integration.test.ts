@@ -8,6 +8,7 @@ import { createKyselyPgDbApi } from "./createPgDbApi";
 import { Database } from "./kysely.database";
 import { createPgDialect } from "./kysely.dialect";
 import { makeCreateSofware } from "../../../usecases/createSoftware";
+import { identifersUtils } from "../../../../tools/identifiersTools";
 // import * as fs from "node:fs";
 // import { compiledDataPrivateToPublic } from "../../../ports/CompileData";
 
@@ -47,12 +48,7 @@ const softwareExternalData: SoftwareExternalData = {
         {
             "@type": "Person",
             name: "Bob",
-            identifiers: [
-                {
-                    value: "bob",
-                    "@type": "PropertyValue"
-                }
-            ],
+            identifiers: [identifersUtils.makeWikidataIdentifier({ wikidataId: "QXXXXXX", additionalType: "Person" })],
             url: `https://www.wikidata.org/wiki/bob`
         }
     ],
@@ -81,12 +77,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
         {
             "@type": "Person",
             name: "Bobby",
-            identifiers: [
-                {
-                    value: "similar-bob",
-                    "@type": "PropertyValue"
-                }
-            ],
+            identifiers: [identifersUtils.makeWikidataIdentifier({ wikidataId: "QXXXXXX", additionalType: "Person" })],
             url: `https://www.wikidata.org/wiki/similar-bob`
         }
     ],
@@ -173,17 +164,30 @@ describe("pgDbApi", () => {
             expectToEqual(actualSoftware, {
                 addedTime: expect.any(Number),
                 updateTime: expect.any(Number),
-                annuaireCnllServiceProviders: undefined,
                 applicationCategories: ["Software Cat I", "Software Cat II"],
                 authors: softwareExternalData.developers.map(dev => ({
                     "@type": "Person" as const,
                     name: dev.name,
+                    "affiliations": undefined,
+                    "identifiers": [
+                        {
+                            "@type": "PropertyValue" as const,
+                            "value": "QXXXXXX",
+                            additionalType: "Person",
+                            name: "ID on Wikidata",
+                            subjectOf: {
+                                "@type": "Website" as const,
+                                "additionalType": "wikidata",
+                                "name": "Wikidata",
+                                "url": expect.any(String)
+                            },
+                            url: "https://www.wikidata.org/wiki/QXXXXXX"
+                        }
+                    ],
                     url: dev.url
                 })),
                 codeRepositoryUrl: softwareExternalData.sourceUrl,
-                comptoirDuLibreId: undefined,
                 comptoirDuLibreServiceProviderCount: 0,
-                dereferencing: undefined,
                 documentationUrl: softwareExternalData.documentationUrl,
                 sourceSlug: testSource.slug,
                 externalId: externalIdForSource,
