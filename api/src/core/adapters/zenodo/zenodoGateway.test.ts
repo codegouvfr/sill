@@ -60,7 +60,7 @@ const admtoolsSoftware = {
                 "@type": "Website",
                 name: "Zenodo",
                 url: new URL("https://zenodo.org/"),
-                additionalType: "ZENODO"
+                additionalType: "Zenodo"
             },
             additionalType: "Software"
         },
