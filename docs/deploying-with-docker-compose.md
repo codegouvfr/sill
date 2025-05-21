@@ -10,7 +10,7 @@ cp .env.sample .env
 
 You will need to provide an ssh key in SILL_SSH_PRIVATE_KEY, and it should have the access to the repo you provide in SILL_DATA_REPO_SSH_URL
 
-You will also need to provide a SILL_GITHUB_TOKEN.
+You will also need to provide a GITHUB_TOKEN.
 
 You can change the way you handle the frontal part in the [nging configuration file](https://github.com/codegouvfr/sill/blob/main/deployments/docker-compose-example/nginx/default.conf).
 The provided example is basic, and for example it does not provide support for `https` (you would need to configure it with you SSL certificates).

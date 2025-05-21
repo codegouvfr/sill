@@ -24,20 +24,19 @@ const zEnvConfiguration = z.object({
 
 const envConfiguration = zEnvConfiguration.parse({
     "oidcParams": {
-        "issuerUri":
-            process.env.OIDC_ISSUER_URI ?? `${process.env.SILL_KEYCLOAK_URL}/realms/${process.env.SILL_KEYCLOAK_REALM}`,
-        "clientId": process.env.OIDC_CLIENT_ID ?? process.env.SILL_KEYCLOAK_CLIENT_ID
+        "issuerUri": process.env.OIDC_ISSUER_URI,
+        "clientId": process.env.OIDC_CLIENT_ID
     },
-    "termsOfServiceUrl": process.env.SILL_TERMS_OF_SERVICE_URL,
-    "githubPersonalAccessTokenForApiRateLimit": process.env.SILL_GITHUB_TOKEN,
-    "port": parseInt(process.env.SILL_API_PORT ?? ""),
-    "isDevEnvironnement": process.env.SILL_IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
-    "externalSoftwareDataOrigin": process.env.SILL_EXTERNAL_SOFTWARE_DATA_ORIGIN,
-    "redirectUrl": process.env.SILL_REDIRECT_URL,
+    "termsOfServiceUrl": process.env.TERMS_OF_SERVICE_URL,
+    "githubPersonalAccessTokenForApiRateLimit": process.env.GITHUB_TOKEN,
+    "port": parseInt(process.env.API_PORT ?? ""),
+    "isDevEnvironnement": process.env.IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
+    "externalSoftwareDataOrigin": process.env.EXTERNAL_SOFTWARE_DATA_ORIGIN,
+    "redirectUrl": process.env.REDIRECT_URL,
     "databaseUrl": process.env.DATABASE_URL,
     "initializeSoftwareFromSource": process.env.INIT_SOFT_FROM_SOURCE?.toLowerCase() === "true",
     "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
-    "listToImport": process.env?.SILL_IMPORT_WIKIDATA?.split(",")
+    "listToImport": process.env?.IMPORT_WIKIDATA?.split(",")
 });
 
 export const env = {
