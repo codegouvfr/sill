@@ -1,36 +1,93 @@
 import { Zenodo } from "./type";
 
-export const makeZenodoApi = () => {
+export const makeZenodoApi = (config?: { timeOut?: number }) => {
+    const { timeOut = 500 } = config ?? {};
+    const getRecord = async (zenodoRecordId: number): Promise<Zenodo.Record> => {
+        const url = `https://zenodo.org/api/records/${zenodoRecordId}`;
+
+        const res = await fetch(url).catch(err => {
+            console.error(err);
+            throw new Error(err);
+        });
+
+        if (res.status === 404) {
+            throw new Error(`Could find ${zenodoRecordId}`);
+        }
+
+        if (res.status === 429) {
+            await new Promise(resolve => setTimeout(resolve, timeOut));
+            return getRecord(zenodoRecordId);
+        }
+
+        return res.json();
+    };
+
+    const getRecordByName = async (name: string, type: string): Promise<Zenodo.Response<Zenodo.Record>> => {
+        const url = `https://zenodo.org/api/records?q=title:${name} AND type:${type}`;
+
+        const res = await fetch(url).catch(err => {
+            console.error(err);
+            throw new Error(err);
+        });
+
+        if (res.status === 404) {
+            throw new Error(`Could find endpoint`);
+        }
+
+        if (res.status === 429) {
+            await new Promise(resolve => setTimeout(resolve, timeOut));
+            return getRecordByName(name, type);
+        }
+
+        return res.json();
+    };
+
+    const getAllSoftware = async (): Promise<Zenodo.Response<Zenodo.Record>> => {
+        const url = `https://zenodo.org/api/records?q=type:software&size=100`;
+
+        const res = await fetch(url).catch(err => {
+            console.error(err);
+            throw new Error(err);
+        });
+
+        if (res.status === 404) {
+            throw new Error(`Could find endpoint`);
+        }
+
+        if (res.status === 429) {
+            await new Promise(resolve => setTimeout(resolve, timeOut));
+            return getAllSoftware();
+        }
+
+        return res.json();
+    };
+
+    const getCommunities = async (zenodoRecordId: number): Promise<Zenodo.Response<Zenodo.Community>> => {
+        const url = `https://zenodo.org/api/records/${zenodoRecordId}/communities`;
+
+        const res = await fetch(url).catch(err => {
+            console.error(err);
+            throw new Error(err);
+        });
+
+        if (res.status === 404) {
+            throw new Error(`Could find ${zenodoRecordId}`);
+        }
+
+        if (res.status === 429) {
+            await new Promise(resolve => setTimeout(resolve, timeOut));
+            return getCommunities(zenodoRecordId);
+        }
+
+        return res.json();
+    };
+
     return {
         records: {
-            get: async (zenodoRecordId: number): Promise<Zenodo.Record> => {
-                const url = `https://zenodo.org/api/records/${zenodoRecordId}`;
-
-                const res = await fetch(url).catch(err => {
-                    console.error(err);
-                    throw new Error(err);
-                });
-
-                if (res.status === 404) {
-                    throw new Error(`Could find ${zenodoRecordId}`);
-                }
-
-                return res.json();
-            },
-            getByNameAndType: async (name: string, type: string): Promise<Zenodo.Record[]> => {
-                const url = `https://zenodo.org/api/records/q=title:${name} AND type:${type}`;
-
-                const res = await fetch(url).catch(err => {
-                    console.error(err);
-                    throw new Error(err);
-                });
-
-                if (res.status === 404) {
-                    throw new Error(`Could find endpoint`);
-                }
-
-                return res.json();
-            }
+            get: getRecord,
+            getByNameAndType: getRecordByName,
+            getCommunities: getCommunities,
+            getAllSoftware: getAllSoftware
         }
     };
 };
