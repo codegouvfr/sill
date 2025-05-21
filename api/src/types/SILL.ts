@@ -8,5 +8,6 @@ export namespace SILL {
         | "doi"
         | "GitHub"
         | "ComptoirDuLibre"
-        | "FramaLibre";
+        | "FramaLibre"
+        | "Zenodo";
 }
