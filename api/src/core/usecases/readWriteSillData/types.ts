@@ -29,7 +29,7 @@ export type Software = {
         | undefined;
     addedTime: number;
     updateTime: number;
-    dereferencing:
+    dereferencing?:
         | {
               reason?: string;
               time: number;
@@ -46,14 +46,14 @@ export type Software = {
     versionMin: string | undefined;
     license: string;
     comptoirDuLibreServiceProviderCount: number;
-    annuaireCnllServiceProviders:
+    annuaireCnllServiceProviders?:
         | {
               name: string;
               siren: string;
               url: string;
           }[]
-        | undefined;
-    comptoirDuLibreId: number | undefined;
+        | undefined; // TODO Delete
+    comptoirDuLibreId?: number | undefined; // TODO Delete
     externalId: string | undefined;
     sourceSlug: string | undefined;
     softwareType: SoftwareType;

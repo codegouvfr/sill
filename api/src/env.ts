@@ -38,6 +38,8 @@ const envConfiguration = zEnvConfiguration.parse({
     "botAgentEmail": process.env?.BOT_AGENT_EMAIL,
     "listToImport": process.env?.SILL_IMPORT_DATA_IDS?.split(","),
     "updateSkipTimingInMinutes": process.env?.SILL_UPDATE_SKIP_TIMING
+        ? parseInt(process.env.SILL_UPDATE_SKIP_TIMING)
+        : undefined
 });
 
 export const env = {
