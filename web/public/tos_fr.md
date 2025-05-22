@@ -27,7 +27,7 @@ formulaire d'inscription, vous pouvez écrire à
 ### Licence des données du SILL
 
 Les données du SILL sont
-[téléchargeables](https://code.gouv.fr/sill/api/sill.json) au format
+[téléchargeables](https://code.gouv.fr/sill/api/catalogi.json) au format
 `json` et sont publiées sous [licence Ouverte
 2.0](https://github.com/etalab/licence-ouverte/blob/master/LO.md).
 
