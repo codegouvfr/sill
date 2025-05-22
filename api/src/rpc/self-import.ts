@@ -29,5 +29,7 @@ export async function startSelfImportService(params: {
 
     const success = await selfImport();
 
-    success ? console.info("[RPC:Self-Import] ✅ Self-Importation successful ✅") : console.error("[RPC:Self-Import] ❌ Error ❌");
+    success
+        ? console.info("[RPC:Self-Import] ✅ Self-Importation successful ✅")
+        : console.error("[RPC:Self-Import] ❌ Error ❌");
 }

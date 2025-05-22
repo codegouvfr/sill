@@ -2,7 +2,7 @@ import { Zenodo } from "./type";
 
 export const makeZenodoApi = (config?: { timeOut?: number }) => {
     const { timeOut = 500 } = config ?? {};
-    const getRecord = async (zenodoRecordId: number): Promise<Zenodo.Record> => {
+    const getRecord = async (zenodoRecordId: number): Promise<Zenodo.Record | undefined> => {
         const url = `https://zenodo.org/api/records/${zenodoRecordId}`;
 
         const res = await fetch(url).catch(err => {
@@ -11,7 +11,8 @@ export const makeZenodoApi = (config?: { timeOut?: number }) => {
         });
 
         if (res.status === 404) {
-            throw new Error(`Could find ${zenodoRecordId}`);
+            console.debug(`Could not find ${zenodoRecordId}`);
+            return undefined;
         }
 
         if (res.status === 429) {
@@ -62,7 +63,7 @@ export const makeZenodoApi = (config?: { timeOut?: number }) => {
         return res.json();
     };
 
-    const getCommunities = async (zenodoRecordId: number): Promise<Zenodo.Response<Zenodo.Community>> => {
+    const getCommunities = async (zenodoRecordId: number): Promise<Zenodo.Response<Zenodo.Community> | undefined> => {
         const url = `https://zenodo.org/api/records/${zenodoRecordId}/communities`;
 
         const res = await fetch(url).catch(err => {
@@ -71,7 +72,8 @@ export const makeZenodoApi = (config?: { timeOut?: number }) => {
         });
 
         if (res.status === 404) {
-            throw new Error(`Could find ${zenodoRecordId}`);
+            console.debug(`Could not find ${zenodoRecordId}`);
+            return undefined;
         }
 
         if (res.status === 429) {
