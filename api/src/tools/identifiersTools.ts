@@ -202,3 +202,17 @@ export const identifersUtils = {
         };
     }
 };
+
+const compareIdentifier = (id1: SchemaIdentifier, id2: SchemaIdentifier): boolean => {
+    if (id1.value === id2.value && id1.subjectOf?.url === id2.subjectOf?.url) return true;
+    return false;
+};
+
+export const mergeDepuplicateIdentifierArray = (
+    arr1: SchemaIdentifier[],
+    arr2: SchemaIdentifier[]
+): SchemaIdentifier[] => {
+    const filtered = arr2.filter(identier => !arr1.some(identier1 => compareIdentifier(identier1, identier)));
+
+    return arr1.concat(filtered);
+};
