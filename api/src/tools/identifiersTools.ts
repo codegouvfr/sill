@@ -18,7 +18,7 @@ const framaLibreSource: WebSite = {
     additionalType: "FramaLibre"
 };
 
-const doiSource: WebSite = {
+export const doiSource: WebSite = {
     "@type": "Website" as const,
     name: "DOI instance",
     url: new URL("https://doi.org"),
