@@ -1,7 +1,7 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import compression from "compression";
 import cors from "cors";
-import express from "express";
+import express, { Handler } from "express";
 import { Kysely } from "kysely";
 import { basename as pathBasename } from "path";
 import type { Equals } from "tsafe";
@@ -12,6 +12,7 @@ import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
 import { halSourceGateway } from "../core/adapters/hal";
 import { wikidataSourceGateway } from "../core/adapters/wikidata";
 import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
+import { DbApiV2 } from "../core/ports/DbApiV2";
 import {
     ExternalDataOrigin,
     GetSoftwareExternalData,
@@ -23,6 +24,19 @@ import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
 import { getTranslations } from "./translations/getTranslations";
+
+const makeGetCatalogiJson =
+    (redirectUrl: string | undefined, dbApi: DbApiV2): Handler =>
+    async (req, res) => {
+        if (redirectUrl !== undefined) {
+            return res.redirect(redirectUrl + req.originalUrl);
+        }
+
+        const privateCompiledData = await dbApi.getCompiledDataPrivate();
+        const compiledDataPublicJson = JSON.stringify(compiledDataPrivateToPublic(privateCompiledData));
+
+        res.setHeader("Content-Type", "application/json").send(Buffer.from(compiledDataPublicJson, "utf8"));
+    };
 
 export async function startRpcService(params: {
     oidcParams: OidcParams;
@@ -103,16 +117,9 @@ export async function startRpcService(params: {
                     .json({ message: `No translations found for language : ${lang}`, error: error.message });
             }
         })
-        .get(`*/sill.json`, async (req, res) => {
-            if (redirectUrl !== undefined) {
-                return res.redirect(redirectUrl + req.originalUrl);
-            }
-
-            const privateCompiledData = await dbApi.getCompiledDataPrivate();
-            const compiledDataPublicJson = JSON.stringify(compiledDataPrivateToPublic(privateCompiledData));
-
-            res.setHeader("Content-Type", "application/json").send(Buffer.from(compiledDataPublicJson, "utf8"));
-        })
+        .get(`*/catalogi.json`, makeGetCatalogiJson(redirectUrl, dbApi))
+        // the following is just for backward compatibility
+        .get(`*/sill.json`, makeGetCatalogiJson(redirectUrl, dbApi))
         .use(
             (() => {
                 const trpcMiddleware = trpcExpress.createExpressMiddleware({
