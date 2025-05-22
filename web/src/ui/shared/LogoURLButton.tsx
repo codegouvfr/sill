@@ -14,7 +14,7 @@ export type Props = {
     url: URL | string | undefined;
     labelFromURL?: boolean;
     label?: string;
-    type?: ApiTypes.SILL.SourceKind;
+    type?: ApiTypes.Catalogi.SourceKind;
 };
 
 const resolveLogoFromURL = (
@@ -61,7 +61,7 @@ const resolveLogoFromURL = (
 };
 
 const resolveLogoFromType = (
-    sourceType: ApiTypes.SILL.SourceKind
+    sourceType: ApiTypes.Catalogi.SourceKind
 ): { URLlogo: URL | undefined; textFromURL: string | undefined } => {
     switch (sourceType) {
         case "HAL":

@@ -23,7 +23,7 @@ import {
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
-import { SILL } from "../../../types/SILL";
+import { Catalogi } from "../../../types/Catalogi";
 import { Source } from "../../usecases/readWriteSillData";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
@@ -119,7 +119,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
         const framaLibreId = getClaimDataValue<"string">("P4107")[0];
 
-        const makeFramaIndentifer = (framaLibreId: string): SILL.Identification => {
+        const makeFramaIndentifer = (framaLibreId: string): Catalogi.Identification => {
             return {
                 url: new URL(framaLibreId),
                 "@type": "PropertyValue",
@@ -219,7 +219,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P170"),
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
-                ].map(async ({ id }): Promise<SILL.Person | SILL.Organization | undefined> => {
+                ].map(async ({ id }): Promise<Catalogi.Person | Catalogi.Organization | undefined> => {
                     console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {

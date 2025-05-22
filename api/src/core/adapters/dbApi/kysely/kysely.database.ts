@@ -1,6 +1,6 @@
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
-import { SILL } from "../../../../types/SILL";
+import { Catalogi } from "../../../../types/Catalogi";
 
 // from https://schema.org/Organization
 type SchemaOrganization = {
@@ -105,9 +105,9 @@ type SoftwareExternalDatasTable = {
     keywords: JSONColumnType<string[]> | null;
     programmingLanguages: JSONColumnType<string[]> | null;
     applicationCategories: JSONColumnType<string[]> | null;
-    referencePublications: JSONColumnType<SILL.ScholarlyArticle[]> | null;
+    referencePublications: JSONColumnType<Catalogi.ScholarlyArticle[]> | null;
     publicationTime: Date | null;
-    identifiers: JSONColumnType<SILL.Identification[]> | null;
+    identifiers: JSONColumnType<Catalogi.Identification[]> | null;
 };
 
 type SoftwareType =
