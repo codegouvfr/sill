@@ -1,4 +1,4 @@
-export namespace SILL {
+export namespace Catalogi {
     export type SourceKind =
         | "GitLab"
         | "HAL"

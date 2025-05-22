@@ -2,7 +2,7 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
-import { SILL } from "../../types/SILL";
+import { Catalogi } from "../../types/Catalogi";
 import { Source } from "../usecases/readWriteSillData";
 
 type ExternalId = string;
@@ -17,7 +17,7 @@ export type GetSoftwareExternalData = {
 export type SoftwareExternalData = {
     externalId: ExternalId;
     sourceSlug: string;
-    developers: Array<SILL.Person | SILL.Organization>;
+    developers: Array<Catalogi.Person | Catalogi.Organization>;
     label: LocalizedString;
     description: LocalizedString;
     isLibreSoftware: boolean;
@@ -32,8 +32,8 @@ export type SoftwareExternalData = {
     programmingLanguages: string[];
     applicationCategories: string[];
     publicationTime: Date;
-    referencePublications: SILL.ScholarlyArticle[];
-    identifiers: SILL.Identification[];
+    referencePublications: Catalogi.ScholarlyArticle[];
+    identifiers: Catalogi.Identification[];
 }>;
 
 export type SimilarSoftwareExternalData = Pick<

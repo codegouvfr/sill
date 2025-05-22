@@ -1,6 +1,6 @@
-import { SILL } from "../../../types/SILL";
+import { Catalogi } from "../../../types/Catalogi";
 import type { LocalizedString, SimilarSoftwareExternalData } from "../../ports/GetSoftwareExternalData";
-import SourceKind = SILL.SourceKind;
+import SourceKind = Catalogi.SourceKind;
 
 export type ServiceProvider = {
     name: string;
@@ -34,7 +34,7 @@ export type Software = {
     applicationCategories: string[];
     prerogatives: Prerogatives;
     userAndReferentCountByOrganization: Record<string, { userCount: number; referentCount: number }>;
-    authors: Array<SILL.Person | SILL.Organization>;
+    authors: Array<Catalogi.Person | Catalogi.Organization>;
     officialWebsiteUrl: string | undefined;
     codeRepositoryUrl: string | undefined;
     documentationUrl: string | undefined;
@@ -55,8 +55,8 @@ export type Software = {
     similarSoftwares: Software.SimilarSoftware[];
     keywords: string[];
     programmingLanguages: string[];
-    referencePublications?: SILL.ScholarlyArticle[];
-    identifiers?: SILL.Identification[];
+    referencePublications?: Catalogi.ScholarlyArticle[];
+    identifiers?: Catalogi.Identification[];
 };
 
 export type Source = {
