@@ -61,14 +61,14 @@ describe("RPC e2e tests", () => {
             ).rejects.toThrow("UNAUTHORIZED");
         });
 
-        it("fails when software is not found in SILL", async () => {
+        it("fails when software is not found", async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller());
             await expect(
                 apiCaller.createUserOrReferent({
                     formData: declarationFormData,
                     softwareId: 404
                 })
-            ).rejects.toThrow("Software not found in SILL");
+            ).rejects.toThrow("Software not found");
         });
     });
 

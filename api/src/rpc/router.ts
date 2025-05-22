@@ -230,7 +230,7 @@ export function createRouter(params: {
                 if (!software)
                     throw new TRPCError({
                         "code": "NOT_FOUND",
-                        message: "Software not found in SILL"
+                        message: "Software not found"
                     });
 
                 const agent = await dbApi.agent.getByEmail(user.email);
