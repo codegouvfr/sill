@@ -12,21 +12,18 @@ import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
 import { halSourceGateway } from "../core/adapters/hal";
 import { wikidataSourceGateway } from "../core/adapters/wikidata";
 import { compiledDataPrivateToPublic } from "../core/ports/CompileData";
-import type {
+import {
     ExternalDataOrigin,
     GetSoftwareExternalData,
+    Language,
+    languages,
     LocalizedString
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
-
-import translationEn from "../customization/translations/en.json";
-import translationFr from "../customization/translations/fr.json";
-
-const isAssignable = (fr: typeof translationFr): typeof translationEn => fr;
-console.info(isAssignable(translationFr) ? "isAssignable : true" : "isAssignable : false"); // this is just to avoid the TS error : _isAssignable is not used. TODO : use eslint rule instead (no eslint in backend for now)
+import { getTranslations } from "./translations/getTranslations";
 
 export async function startRpcService(params: {
     oidcParams: OidcParams;
@@ -96,13 +93,18 @@ export async function startRpcService(params: {
         .use((req, _res, next) => (console.log("⬅", req.method, req.path, req.body ?? req.query), next()))
         .use("/public/healthcheck", (...[, res]) => res.sendStatus(200))
         .get("/:lang/translations.json", async (req, res) => {
+            const lang = req.params.lang as Language;
             try {
-                const translations = await import(`../customization/translations/${req.params.lang}.json`);
+                if (!languages.includes(lang))
+                    return res.status(404).json({
+                        message: `No translations found for language : ${lang}. Only ${languages.join(", ")} are supported.`
+                    });
+                const translations = getTranslations(lang);
                 return res.json(translations);
             } catch (error: any) {
                 return res
                     .status(404)
-                    .json({ message: `No translations found for language : ${req.params.lang}`, error: error.message });
+                    .json({ message: `No translations found for language : ${lang}`, error: error.message });
             }
         })
         .get(`*/sill.json`, async (req, res) => {
