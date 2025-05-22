@@ -6,6 +6,7 @@ import { SchemaPerson } from "../dbApi/kysely/kysely.database";
 import { identifersUtils } from "../../../tools/identifiersTools";
 import { makeZenodoApi } from "./zenodoAPI";
 import { Zenodo } from "./zenodoAPI/type";
+import { populateFromDOIIdentifiers } from "../doiResolver";
 
 export const getZenodoExternalData: GetSoftwareExternalData = memoize(
     async ({
@@ -20,14 +21,17 @@ export const getZenodoExternalData: GetSoftwareExternalData = memoize(
 
         const zenodoApi = makeZenodoApi();
         const record = await zenodoApi.records.get(Number(externalId));
+        const communities = await zenodoApi.records.getCommunities(Number(externalId));
 
-        if (!record) return undefined;
+        if (!record || !communities) return undefined;
         if (record.metadata.resource_type.type !== "software")
             throw new TypeError(`The record corresponding at ${externalId} is not a software`);
 
-        const communities = await zenodoApi.records.getCommunities(Number(externalId));
+        const formatedExternalData = formatRecordToExternalData(record, communities.hits.hits, source);
 
-        return formatRecordToExternalData(record, communities.hits.hits, source);
+        formatedExternalData.identifiers = await populateFromDOIIdentifiers(formatedExternalData.identifiers ?? []);
+
+        return formatedExternalData;
     }
 );
 
