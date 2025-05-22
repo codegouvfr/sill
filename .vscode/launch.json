@@ -35,6 +35,17 @@
                 "run",
                 "update"
             ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Self Import",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}/api",
+            "runtimeArgs": [
+                "run",
+                "job:self-import"
+            ],
         }
     ]
 }
