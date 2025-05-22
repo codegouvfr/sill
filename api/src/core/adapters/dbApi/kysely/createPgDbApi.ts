@@ -27,3 +27,16 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
         getCompiledDataPrivate: createGetCompiledData(db)
     };
 };
+
+type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
+
+export const getDbApiAndInitializeCache = (dbConfig: PgDbConfig): { dbApi: DbApiV2 } => {
+    if (dbConfig.dbKind === "kysely") {
+        return {
+            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb)
+        };
+    }
+
+    const shouldNotBeReached: never = dbConfig.dbKind;
+    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+};
