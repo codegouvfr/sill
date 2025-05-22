@@ -58,7 +58,7 @@ export const Footer = memo(
                         {
                             text: "json",
                             linkProps: {
-                                href: `${apiUrl}/sill.json`
+                                href: `${apiUrl}/catalogi.json`
                             }
                         },
                         {
