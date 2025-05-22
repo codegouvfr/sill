@@ -19,4 +19,4 @@ export type {
 
 export type { UiConfig, ConfigurableUseCaseName } from "../core/uiConfigSchema";
 
-export type Translations = { translations: typeof import("../customization/translations/en.json") };
+export type Translations = { translations: typeof import("../rpc/translations/en_default.json") };

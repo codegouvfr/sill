@@ -3,8 +3,8 @@ const fs = require("fs");
 const path = require("path");
 
 // Read the input translation file
-const translationsPath = path.resolve(__dirname, "../src/customization/translations/en.json");
-const outputPath = path.resolve(__dirname, "../src/customization/translations/schema.json");
+const translationsPath = path.resolve(__dirname, "../src/rpc/translations/en_default.json");
+const outputPath = path.resolve(__dirname, "../src/rpc/translations/schema.json");
 const translations = require(translationsPath);
 
 // Generate the base schema
