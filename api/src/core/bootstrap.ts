@@ -23,7 +23,6 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfBootstrapCore = {
     dbConfig: DbConfig;
-    githubPersonalAccessTokenForApiRateLimit: string;
     externalSoftwareDataOrigin: ExternalDataOrigin;
 };
 

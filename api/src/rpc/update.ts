@@ -7,18 +7,11 @@ import type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 import { updateTool } from "../core/updateTools";
 
 export async function startUpdateService(params: {
-    githubPersonalAccessTokenForApiRateLimit: string;
     isDevEnvironnement: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
     databaseUrl: string;
 }) {
-    const {
-        githubPersonalAccessTokenForApiRateLimit,
-        isDevEnvironnement,
-        externalSoftwareDataOrigin,
-        databaseUrl,
-        ...rest
-    } = params;
+    const { isDevEnvironnement, externalSoftwareDataOrigin, databaseUrl, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -31,7 +24,6 @@ export async function startUpdateService(params: {
             "dbKind": "kysely",
             "kyselyDb": kyselyDb
         },
-        githubPersonalAccessTokenForApiRateLimit,
         "externalSoftwareDataOrigin": externalSoftwareDataOrigin
     });
 

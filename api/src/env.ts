@@ -7,9 +7,6 @@ const zEnvConfiguration = z.object({
         "clientId": z.string().nonempty()
     }),
     "termsOfServiceUrl": zLocalizedString,
-    // Only for increasing the rate limit on GitHub API
-    // we use the GitHub API for pre filling the version when adding a software
-    "githubPersonalAccessTokenForApiRateLimit": z.string().nonempty(),
     //Port we listen to
     "port": z.coerce.number().optional().default(8080),
     "isDevEnvironnement": z.boolean().optional(),
@@ -28,7 +25,6 @@ const envConfiguration = zEnvConfiguration.parse({
         "clientId": process.env.OIDC_CLIENT_ID
     },
     "termsOfServiceUrl": process.env.TERMS_OF_SERVICE_URL,
-    "githubPersonalAccessTokenForApiRateLimit": process.env.GITHUB_TOKEN,
     "port": parseInt(process.env.API_PORT ?? ""),
     "isDevEnvironnement": process.env.IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
     "externalSoftwareDataOrigin": process.env.EXTERNAL_SOFTWARE_DATA_ORIGIN,

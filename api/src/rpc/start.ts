@@ -31,7 +31,6 @@ console.info(isAssignable(translationFr) ? "isAssignable : true" : "isAssignable
 export async function startRpcService(params: {
     oidcParams: OidcParams;
     termsOfServiceUrl: LocalizedString;
-    githubPersonalAccessTokenForApiRateLimit: string;
     port: number;
     isDevEnvironnement: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
@@ -46,7 +45,6 @@ export async function startRpcService(params: {
         oidcParams,
         termsOfServiceUrl,
         port,
-        githubPersonalAccessTokenForApiRateLimit,
         isDevEnvironnement,
         externalSoftwareDataOrigin,
         databaseUrl,
@@ -68,8 +66,6 @@ export async function startRpcService(params: {
                 "dbKind": "kysely",
                 "kyselyDb": kyselyDb
             },
-            githubPersonalAccessTokenForApiRateLimit,
-            // "doPerPerformPeriodicalCompilation": !isDevEnvironnement && redirectUrl === undefined,
             "externalSoftwareDataOrigin": externalSoftwareDataOrigin
         }),
         createContextFactory({

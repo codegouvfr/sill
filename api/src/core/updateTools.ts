@@ -17,7 +17,6 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfUpdateService = {
     dbConfig: DbConfig;
-    githubPersonalAccessTokenForApiRateLimit: string;
     externalSoftwareDataOrigin: ExternalDataOrigin;
 };
 

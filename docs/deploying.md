@@ -376,7 +376,6 @@ SSH_PRIVATE_KEY="-----BEGIN OPENSSH PRIVATE KEY-----\nxxxx\nxxxx\nxxxx\nAxxxx\nx
 DATA_REPO_SSH_URL="git@github.com:codegouvfr/sill-data.git" # Replace by the repo you created earlyer
 KEYCLOAK_PASSWORD=yyyyyy # Make sure it's the same that the one you defined earlyer
 WEBHOOK_SECRET=dSdSPxxxxxx # (optional) Some random caracters 
-GITHUB_TOKEN=ghp_xxxxxx # A token, just for the GitHub API rate limit.  
 SOFTWARE_DATA_ORIGIN=wikidata # Can be "wikidata" or "HAL" (See: https://hal.science/)
 
 WEB_VERSION="1.41.2" # To keep up to date with https://github.com/codegouvfr/sill-web/releases/
@@ -433,7 +432,6 @@ api:
         "sshPrivateKeyForGitName": "$SSH_PRIVATE_KEY_NAME",
         "sshPrivateKeyForGit": "$SSH_PRIVATE_KEY",
         "githubWebhookSecret": "$WEBHOOK_SECRET",
-        "githubPersonalAccessTokenForApiRateLimit": "$GITHUB_TOKEN",
         "externalSoftwareDataOrigin": "$SOFTWARE_DATA_ORIGIN"
       }
 
