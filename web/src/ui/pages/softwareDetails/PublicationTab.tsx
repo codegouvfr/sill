@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ApiTypes } from "api";
 
 export type Props = {
-    referencePublications?: ApiTypes.SILL.ScholarlyArticle[];
+    referencePublications?: ApiTypes.Catalogi.ScholarlyArticle[];
 };
 
 export const PublicationTab = (props: Props) => {

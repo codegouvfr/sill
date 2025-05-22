@@ -1,3 +1,3 @@
-import { SILL } from "../../types/SILL";
+import { Catalogi } from "../../types/Catalogi";
 
-export type GetScholarlyArticle = (articleId: string) => Promise<SILL.ScholarlyArticle | undefined>;
+export type GetScholarlyArticle = (articleId: string) => Promise<Catalogi.ScholarlyArticle | undefined>;
