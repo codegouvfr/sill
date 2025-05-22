@@ -75,6 +75,7 @@
         "@octokit/graphql": "^7.0.2",
         "@trpc/server": "^10.18.0",
         "@types/pg": "^8.11.6",
+        "deepmerge": "^4.3.1",
         "generate-schema": "^2.6.0",
         "jsdom": "^26.0.0",
         "jwt-decode": "^3.1.2",
