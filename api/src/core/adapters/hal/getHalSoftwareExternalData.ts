@@ -8,6 +8,7 @@ import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
 import { SchemaIdentifier, SchemaOrganization, SchemaPerson, ScholarlyArticle } from "../dbApi/kysely/kysely.database";
 import { identifersUtils } from "../../../tools/identifiersTools";
+import { populateFromDOIIdentifiers } from "../doiResolver";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
@@ -178,8 +179,9 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 };
                 switch (identifierItem["@type"]) {
                     case "hal":
+                        const halId = identifierItem.value.split("-")[1];
                         return identifersUtils.makeHALIdentifier({
-                            halId: identifierItem.value,
+                            halId: halId.charAt(0) === "0" ? halId.slice(1) : halId,
                             additionalType: "Software",
                             url: identifierItem.propertyID
                         });
@@ -237,7 +239,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
                     )
                 ).filter(val => val !== undefined),
-            identifiers: identifiers,
+            identifiers: await populateFromDOIIdentifiers(identifiers),
             providers: []
         };
     },
