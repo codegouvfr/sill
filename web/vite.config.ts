@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { readFileSync } from "fs";
-import path from "path";
+import { readFileSync } from "node:fs";
+import * as path from "node:path";
 import svgr from "vite-plugin-svgr";
+import { viteEnvs } from "vite-envs";
 
 // Get the root package.json version for the DefinePlugin equivalent
 const getRootPackageJsonVersion = () => {
@@ -25,6 +26,18 @@ export default defineConfig(async () => {
                     ref: true,
                     svgo: false,
                     titleProp: true
+                }
+            }),
+            viteEnvs({
+                declarationFile: ".env.declaration",
+                computedEnv: () => {
+                    return {
+                        // the following are default values, when none are provided
+                        VITE_META_URL: "https://code.gouv.fr/sill/",
+                        VITE_META_TITLE: "Socle Interministériel des Logiciels Libres",
+                        VITE_META_DESCRIPTION:
+                            "Catalogue de référence de logiciels libres recommandés pour l'ensemble de l'administration."
+                    };
                 }
             })
         ],
