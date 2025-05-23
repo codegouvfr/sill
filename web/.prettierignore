@@ -5,4 +5,4 @@ node_modules/
 /public/
 /src/env.ts
 /build_keycloak/
-
+vite-env.d.ts
