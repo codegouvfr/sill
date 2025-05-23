@@ -11,7 +11,7 @@
         "format": "yarn _format --write",
         "format:check": "yarn _format --list-different",
         "analyze": "source-map-explorer 'build/static/js/*.js'",
-        "postinstall": "react-dsfr copy-static-assets",
+        "postinstall": "react-dsfr copy-static-assets && vite-envs update-types",
         "prestart": "react-dsfr update-icons",
         "prebuild": "react-dsfr update-icons",
         "typecheck": "tsc --noEmit",
@@ -50,6 +50,7 @@
         "tsafe": "^1.7.2",
         "tss-react": "^4.9.12",
         "type-route": "^1.0.1",
+        "vite-envs": "^4.6.0",
         "zod": "^3.21.4"
     },
     "devDependencies": {

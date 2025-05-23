@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { readFileSync } from "fs";
-import path from "path";
+import { readFileSync } from "node:fs";
+import * as path from "node:path";
 import svgr from "vite-plugin-svgr";
+import { viteEnvs } from "vite-envs";
 
 // Get the root package.json version for the DefinePlugin equivalent
 const getRootPackageJsonVersion = () => {
@@ -26,6 +27,9 @@ export default defineConfig(async () => {
                     svgo: false,
                     titleProp: true
                 }
+            }),
+            viteEnvs({
+                declarationFile: ".env.declaration"
             })
         ],
         define: {
