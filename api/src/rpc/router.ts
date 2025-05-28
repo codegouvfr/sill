@@ -1,21 +1,12 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import * as fs from "fs";
-import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless";
-import memoize from "memoizee";
-import fetch from "node-fetch";
 import { join as pathJoin } from "path";
 import superjson from "superjson";
 import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
 import { DbApiV2 } from "../core/ports/DbApiV2";
-import {
-    ExternalDataOrigin,
-    GetSoftwareExternalData,
-    Language,
-    languages,
-    type LocalizedString
-} from "../core/ports/GetSoftwareExternalData";
+import { ExternalDataOrigin, GetSoftwareExternalData, Language } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import { UiConfig } from "../core/uiConfigSchema";
 import type { UseCases } from "../core/usecases";
@@ -36,7 +27,6 @@ export function createRouter(params: {
     dbApi: DbApiV2;
     useCases: UseCases;
     oidcParams: OidcParams;
-    termsOfServiceUrl: LocalizedString;
     redirectUrl: string | undefined;
     externalSoftwareDataOrigin: ExternalDataOrigin;
     getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
@@ -47,7 +37,6 @@ export function createRouter(params: {
         useCases,
         dbApi,
         oidcParams,
-        termsOfServiceUrl,
         redirectUrl,
         externalSoftwareDataOrigin: externalDataOrigin,
         getSoftwareExternalDataOptions,
@@ -467,63 +456,6 @@ export function createRouter(params: {
             const referentCount = await dbApi.softwareReferent.getTotalCount();
             return { referentCount };
         }),
-        "getTermsOfServiceUrl": loggedProcedure.query(() => termsOfServiceUrl),
-        "getMarkdown": loggedProcedure
-            .input(
-                z.object({
-                    "language": zLanguage,
-                    "name": z.literal("termsOfService")
-                })
-            )
-            .query(
-                (() => {
-                    const maxAge = (1000 * 3600) / 2;
-
-                    const memoizedFetch = memoize(async (url: string) => fetch(url).then(res => res.text()), {
-                        "promise": true,
-                        maxAge,
-                        "preFetch": true
-                    });
-
-                    // prettier-ignore
-                    languages
-            .map(lang => createResolveLocalizedString({
-              "currentLanguage": lang,
-              "fallbackLanguage": "en"
-            }))
-            .map(({resolveLocalizedString}) => [termsOfServiceUrl].map(resolveLocalizedString))
-            .flat()
-            .forEach(async function callee(url) {
-
-              memoizedFetch(url);
-
-              await new Promise(resolve => setTimeout(resolve, maxAge - 10_000));
-
-              callee(url);
-
-            });
-
-                    return async ({ input }) => {
-                        const { language, name } = input;
-
-                        const { resolveLocalizedString } = createResolveLocalizedString({
-                            "currentLanguage": language,
-                            "fallbackLanguage": "en"
-                        });
-
-                        return memoizedFetch(
-                            resolveLocalizedString(
-                                (() => {
-                                    switch (name) {
-                                        case "termsOfService":
-                                            return termsOfServiceUrl;
-                                    }
-                                })()
-                            )
-                        );
-                    };
-                })()
-            ),
         "unreferenceSoftware": loggedProcedure
             .input(
                 z.object({

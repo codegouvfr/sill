@@ -287,6 +287,16 @@
             "additionalProperties": false,
             "required": ["text"]
         },
+        "terms": {
+            "type": "object",
+            "properties": {
+                "text": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": ["text"]
+        },
         "addSoftwareLanding": {
             "type": "object",
             "properties": {
@@ -1681,6 +1691,7 @@
         "app",
         "home",
         "about",
+        "terms",
         "addSoftwareLanding",
         "softwareForm",
         "softwareFormStep1",

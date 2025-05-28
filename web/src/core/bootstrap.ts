@@ -10,10 +10,7 @@ type ParamsOfBootstrapCore = {
     /** Empty string for using mock */
     apiUrl: string;
     appUrl: string;
-    transformUrlBeforeRedirectToLogin: (params: {
-        url: string;
-        termsOfServiceUrl: LocalizedString<Language>;
-    }) => string;
+    transformUrlBeforeRedirectToLogin: (params: { url: string }) => string;
     getCurrentLang: () => Language;
     getIsDark: () => boolean;
     onMoved: (params: { redirectUrl: string }) => void;
@@ -56,10 +53,7 @@ export async function bootstrapCore(
         await new Promise(() => {});
     }
 
-    const [oidcParams, termsOfServiceUrl] = await Promise.all([
-        sillApi.getOidcParams(),
-        sillApi.getTermsOfServiceUrl()
-    ]);
+    const oidcParams = await sillApi.getOidcParams();
 
     oidc = await (async () => {
         const { createOidc } = await import("core/adapter/oidc");
@@ -70,8 +64,7 @@ export async function bootstrapCore(
             appUrl,
             transformUrlBeforeRedirect: url =>
                 transformUrlBeforeRedirectToLogin({
-                    url,
-                    termsOfServiceUrl
+                    url
                 }),
             getUiLocales: getCurrentLang
         });

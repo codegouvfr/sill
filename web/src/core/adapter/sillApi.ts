@@ -147,10 +147,6 @@ export function createSillApi(params: {
         getRegisteredUserCount: memoize(() => trpcClient.getRegisteredUserCount.query(), {
             promise: true
         }),
-        getTermsOfServiceUrl: memoize(() => trpcClient.getTermsOfServiceUrl.query(), {
-            promise: true
-        }),
-        getMarkdown: params => trpcClient.getMarkdown.query(params),
         getAgent: params => trpcClient.getAgent.query(params),
         getIsAgentProfilePublic: params =>
             trpcClient.getIsAgentProfilePublic.query(params),
