@@ -53,7 +53,6 @@ Create a `.env` file with a content like this
 ```
 OIDC_ISSUER_URI=http://localhost:8081/auth/realms/codegouv
 OIDC_CLIENT_ID=sill
-TERMS_OF_SERVICE_URL=https://code.gouv.fr/sill/tos_fr.md
 API_PORT=3084
 IS_DEV_ENVIRONNEMENT=true
 DATABASE_URL=postgresql://sill:pg_password@localhost:5432/sill

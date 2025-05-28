@@ -16,8 +16,7 @@ import {
     ExternalDataOrigin,
     GetSoftwareExternalData,
     Language,
-    languages,
-    LocalizedString
+    languages
 } from "../core/ports/GetSoftwareExternalData";
 import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 import { OidcParams } from "../tools/oidc";
@@ -27,7 +26,6 @@ import { getTranslations } from "./translations/getTranslations";
 
 export async function startRpcService(params: {
     oidcParams: OidcParams;
-    termsOfServiceUrl: LocalizedString;
     port: number;
     isDevEnvironnement: boolean;
     externalSoftwareDataOrigin: ExternalDataOrigin;
@@ -40,7 +38,6 @@ export async function startRpcService(params: {
     const {
         redirectUrl,
         oidcParams,
-        termsOfServiceUrl,
         port,
         isDevEnvironnement,
         externalSoftwareDataOrigin,
@@ -81,7 +78,6 @@ export async function startRpcService(params: {
         getSoftwareExternalDataOptions,
         getSoftwareExternalData,
         oidcParams,
-        termsOfServiceUrl,
         redirectUrl,
         externalSoftwareDataOrigin,
         uiConfig

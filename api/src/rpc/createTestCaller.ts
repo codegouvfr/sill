@@ -35,7 +35,6 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
         oidcParams: { issuerUri: "http://fake.url", clientId: "fake-client-id" },
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
-        termsOfServiceUrl: "http://terms.url",
         getSoftwareExternalDataOptions: getWikidataSoftwareOptions,
         getSoftwareExternalData: getWikidataSoftware,
         uiConfig

@@ -8,7 +8,6 @@ import * as sillApiVersion from "./sillApiVersion";
 import * as softwareUserAndReferent from "./softwareUserAndReferent";
 import * as generalStats from "./generalStats";
 import * as userAuthentication from "./userAuthentication";
-import * as termsOfServices from "./termsOfServices";
 import * as redirect from "./redirect";
 import * as declarationRemoval from "./declarationRemoval";
 import * as userProfile from "./userProfile";
@@ -30,7 +29,6 @@ export const usecases = {
     softwareUserAndReferent,
     generalStats,
     userAuthentication,
-    termsOfServices,
     redirect,
     declarationRemoval,
     userProfile

@@ -103,15 +103,6 @@ export type SillApi = {
         ): Promise<TrpcRouterOutput["getRegisteredUserCount"]>;
         clear: () => void;
     };
-    getTermsOfServiceUrl: {
-        (
-            params: TrpcRouterInput["getTermsOfServiceUrl"]
-        ): Promise<TrpcRouterOutput["getTermsOfServiceUrl"]>;
-        clear: () => void;
-    };
-    getMarkdown: (
-        params: TrpcRouterInput["getMarkdown"]
-    ) => Promise<TrpcRouterOutput["getMarkdown"]>;
     getIsAgentProfilePublic: (
         params: TrpcRouterInput["getIsAgentProfilePublic"]
     ) => Promise<TrpcRouterOutput["getIsAgentProfilePublic"]>;

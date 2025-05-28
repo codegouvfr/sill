@@ -1,12 +1,10 @@
 import { z } from "zod";
-import { zLocalizedString } from "./core/ports/GetSoftwareExternalData";
 
 const zEnvConfiguration = z.object({
     "oidcParams": z.object({
         "issuerUri": z.string().nonempty(),
         "clientId": z.string().nonempty()
     }),
-    "termsOfServiceUrl": zLocalizedString,
     //Port we listen to
     "port": z.coerce.number().optional().default(8080),
     "isDevEnvironnement": z.boolean().optional(),
@@ -24,7 +22,6 @@ const envConfiguration = zEnvConfiguration.parse({
         "issuerUri": process.env.OIDC_ISSUER_URI,
         "clientId": process.env.OIDC_CLIENT_ID
     },
-    "termsOfServiceUrl": process.env.TERMS_OF_SERVICE_URL,
     "port": parseInt(process.env.API_PORT ?? ""),
     "isDevEnvironnement": process.env.IS_DEV_ENVIRONNEMENT?.toLowerCase() === "true",
     "externalSoftwareDataOrigin": process.env.EXTERNAL_SOFTWARE_DATA_ORIGIN,
