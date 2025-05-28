@@ -21,7 +21,7 @@ pre-commit:
 commit-msg:
   commands:
     commit-msg:
-      run: '{ yarn run commitlint --edit {1}; } || { echo "\nCommit message is not valid. It should start with one of the following types build, chore, ci, docs, feat, fix, perf, refactor, revert, style, test"; exit 1; }'
+      run: yarn run commitlint --edit {1}
 
 pre-push:
   parallel: true
