@@ -4,7 +4,6 @@ import { tss } from "tss-react";
 import { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Accordion } from "@codegouvfr/react-dsfr/Accordion";
-import { groupBy } from "lodash";
 import { Button } from "@codegouvfr/react-dsfr/Button";
 import type { Link } from "type-route";
 import { useCore } from "../../../core";
@@ -67,7 +66,7 @@ const ReferenceInstancesSection = ({
 
     if (instances.length === 0) return null;
 
-    const instancesByOrganisation = groupBy(instances, "organization");
+    const instancesByOrganisation = Object.groupBy(instances, v => v.organization);
 
     if (visibility === "private" && !isUserLoggedIn) {
         return (
@@ -99,7 +98,8 @@ const ReferenceInstancesSection = ({
                 )}
             </p>
             {Object.keys(instancesByOrganisation).map(organization => {
-                const instancesForOrganization = instancesByOrganisation[organization];
+                const instancesForOrganization =
+                    instancesByOrganisation[organization] ?? [];
 
                 return (
                     <Accordion
