@@ -25,6 +25,7 @@
         "format:check": "yarn run _format --list-different",
         "link-in-web": "ts-node --skipProject scripts/link-in-app.ts sill-web",
         "load-git-repo-in-pg": "dotenv -e ../.env -- node --loader ts-node/esm --experimental-specifier-resolution=node scripts/load-git-repo-in-pg.ts",
+        "db:seed": "yarn build && dotenv -e ../.env -- node dist/scripts/seed.js",
         "typecheck": "tsc --noEmit",
         "dev:db": "docker compose -f ../docker-compose.resources.yml up -d",
         "dev:reset": "docker compose -f ../docker-compose.resources.yml down && rm -rf ../docker-data && docker compose -f ../docker-compose.resources.yml up -d"
