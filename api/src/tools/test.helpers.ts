@@ -2,7 +2,7 @@ import { expect } from "vitest";
 import { Db } from "../core/ports/DbApi";
 import { DeclarationFormData, InstanceFormData, SoftwareFormData } from "../core/usecases/readWriteSillData";
 
-export const testPgUrl = "postgresql://sill:pg_password@localhost:5432/sill";
+export const testPgUrl = "postgresql://catalogi:pg_password@localhost:5432/catalogi";
 
 export const expectPromiseToFailWith = (promise: Promise<any>, errorMessage: string) => {
     return expect(promise).rejects.toThrow(errorMessage);
