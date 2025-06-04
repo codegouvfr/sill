@@ -108,7 +108,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         const authors = await Promise.all(
             codemetaSoftware.author.map(async role => {
                 const author = role.author;
-                const id = author?.["@id"]?.[0] ?? "";
+                const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
                 const base: SchemaPerson = {
@@ -147,7 +147,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                     };
                 }
 
-                if (id && id != "") {
+                if (id) {
                     return {
                         ...base,
                         identifiers: [
@@ -164,7 +164,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                     ...base,
                     identifiers: [
                         identifersUtils.makeHALIdentifier({
-                            halId: id,
+                            halId: id ?? "",
                             additionalType: "Person",
                             url: `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
                         })
