@@ -165,6 +165,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             "@type": dev["@type"],
                             name: dev.name,
                             url: dev.url,
+                            identifiers: dev.identifiers,
                             affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                         })),
                         logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
@@ -255,6 +256,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                     "@type": dev["@type"],
                                     name: dev.name,
                                     url: dev.url,
+                                    identifiers: dev.identifiers,
                                     affiliations:
                                         dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                                 })),
@@ -550,6 +552,7 @@ const makeGetSoftwareById =
                         "@type": dev["@type"],
                         name: dev.name,
                         url: dev.url,
+                        identifiers: dev.identifiers,
                         affiliations: dev["@type"] === "Organization" ? dev.parentOrganizations : dev.affiliations
                     })),
                     logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
