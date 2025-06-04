@@ -71,7 +71,7 @@ const zenodoSource: WebSite = {
     "@type": "Website" as const,
     name: "Zenodo",
     url: new URL("https://zenodo.org/"),
-    additionalType: "ZENODO"
+    additionalType: "Zenodo"
 };
 
 export const identifersUtils = {
