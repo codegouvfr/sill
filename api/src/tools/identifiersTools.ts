@@ -177,12 +177,10 @@ export const identifersUtils = {
     makeSIRENIdentifier: (params: { SIREN: string; additionalType?: string; url?: string }) => {
         const { SIREN, additionalType, url } = params;
         return {
-            ...{
-                "@type": "PropertyValue" as const,
-                value: SIREN,
-                url: url ?? undefined,
-                subjectOf: nationalSIREN
-            },
+            "@type": "PropertyValue" as const,
+            value: SIREN,
+            url: url ?? undefined,
+            subjectOf: nationalSIREN,
             ...(additionalType ? { additionalType: additionalType } : {})
         };
     }
