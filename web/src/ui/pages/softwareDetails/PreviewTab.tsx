@@ -390,15 +390,17 @@ export const PreviewTab = (props: Props) => {
                                         const identifierURLString =
                                             identifier?.url?.toString();
                                         return (
-                                            officialWebsiteUrl &&
-                                            identifierURLString &&
-                                            !officialWebsiteUrl.startsWith(
-                                                identifierURLString
-                                            )
+                                            !officialWebsiteUrl ||
+                                            (officialWebsiteUrl &&
+                                                identifierURLString &&
+                                                !officialWebsiteUrl.startsWith(
+                                                    identifierURLString
+                                                ))
                                         );
                                     })
                                     .map(identifier => (
                                         <LogoURLButton
+                                            key={identifier.url?.toString()}
                                             className={cx(fr.cx("fr-ml-4v", "fr-my-2v"))}
                                             priority="secondary"
                                             url={identifier.url}
