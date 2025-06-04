@@ -44,10 +44,14 @@ jobs:
       to_version: ${{ steps.step1.outputs.to_version }}
       is_upgraded_version: ${{ steps.step1.outputs.is_upgraded_version }}
     steps:
-      - uses: garronej/ts-ci@v2.1.0
+      - uses: garronej/ts-ci@v2.1.5
         id: step1
         with:
           action_name: is_package_json_version_upgraded
+      - run: |
+          echo "from_version=${{ steps.step1.outputs.from_version }}"
+          echo "to_version=${{ steps.step1.outputs.to_version }}"
+          echo "is_upgraded_version=${{ steps.step1.outputs.is_upgraded_version }}"
 
   create_tag:
     name: Create version tag
