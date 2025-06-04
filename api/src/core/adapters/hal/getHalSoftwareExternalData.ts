@@ -104,10 +104,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
         const authors = await Promise.all(
             codemetaSoftware.author.map(async role => {
                 const author = role.author;
-                const id = author?.["@id"]?.[0] ?? "fuck that shit";
+                const id = author?.["@id"]?.[0] ?? "";
                 const affiliation = author.affiliation;
-
-                if (!id) throw new Error("Could find the author id");
 
                 const base: SchemaPerson = {
                     "@type": "Person",
@@ -145,7 +143,7 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                     };
                 }
 
-                if (id) {
+                if (id && id != "") {
                     return {
                         ...base,
                         identifiers: [
