@@ -20,14 +20,26 @@ export const getZenodoExternalData: GetSoftwareExternalData = memoize(
             throw new Error(`Not a Zenodo source, was : ${source.kind}`);
 
         const zenodoApi = makeZenodoApi();
-        const record = await zenodoApi.records.get(Number(externalId));
+
+        let record: Zenodo.Record | undefined = undefined;
+
+        if (externalId.includes("10.5281")) {
+            // case where DOI is involved
+            record = await zenodoApi.records.getByDOI(externalId);
+        } else {
+            record = await zenodoApi.records.get(Number(externalId));
+        }
+
         const communities = await zenodoApi.records.getCommunities(Number(externalId));
+        const communitiesRows = communities?.hits?.hits ?? [];
 
-        if (!record || !communities) return undefined;
-        if (record.metadata.resource_type.type !== "software")
-            throw new TypeError(`The record corresponding at ${externalId} is not a software`);
+        if (!record) return undefined;
+        if (record.metadata.resource_type.type !== "software") {
+            console.error(`The record corresponding at ${externalId} is not a software`);
+            return undefined;
+        }
 
-        const formatedExternalData = formatRecordToExternalData(record, communities.hits.hits, source);
+        const formatedExternalData = formatRecordToExternalData(record, communitiesRows, source);
 
         formatedExternalData.identifiers = await populateFromDOIIdentifiers(formatedExternalData.identifiers ?? []);
 

@@ -1,5 +1,6 @@
 import { doiSource, identifersUtils, mergeDepuplicateIdentifierArray } from "../../tools/identifiersTools";
 import { SchemaIdentifier } from "./dbApi/kysely/kysely.database";
+import { makeZenodoApi } from "./zenodo/zenodoAPI";
 
 interface DataValue {
     format: string;
@@ -69,7 +70,22 @@ export const resolveDOIIdentifier = async (doiIdentifier: SchemaIdentifier): Pro
     const urlValue = res.values.filter(value => value.type === "URL")[0] as URLValue;
 
     if (urlValue.data.value.includes("zenodo.org")) {
-        return identifersUtils.makeZenodoIdentifer({ zenodoId: res.handle.split(".")[2], url: urlValue.data.value });
+        if (urlValue.data.value.includes("record"))
+            return identifersUtils.makeZenodoIdentifer({
+                zenodoId: res.handle.split(".")[2],
+                url: urlValue.data.value
+            });
+        if (urlValue.data.value.includes("doi")) {
+            const zenodoApi = makeZenodoApi();
+            const record = await zenodoApi.records.getByDOI(res.handle);
+
+            if (record) {
+                return identifersUtils.makeZenodoIdentifer({
+                    zenodoId: record.id.toString(),
+                    url: urlValue.data.value
+                });
+            }
+        }
     }
 
     return identifersUtils.makeGenericIdentifier({ value: res.handle, url: urlValue.data.value });
