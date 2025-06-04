@@ -79,7 +79,7 @@ export const makeSelfImportFromIdentifiers = (
             };
         };
 
-        const getInstertions = Promise.all(
+        const instertions = await Promise.all(
             Object.keys(index).map(async softwareId => {
                 // Is the source, registered ?
                 const toInsert: { sourceSlug: string; externalId: string; softwareId: number }[] = [];
@@ -96,10 +96,10 @@ export const makeSelfImportFromIdentifiers = (
             })
         );
 
-        await getInstertions.then(async toInsert => {
-            const insertFlatten = toInsert.flat();
-            await dbApi.softwareExternalData.saveIds(insertFlatten);
-        });
+        const insertFlatten = instertions.flat();
+        if (insertFlatten.length === 0) return true;
+
+        await dbApi.softwareExternalData.saveIds(insertFlatten);
 
         return true;
     };
