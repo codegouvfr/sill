@@ -5,12 +5,6 @@ import * as path from "node:path";
 import svgr from "vite-plugin-svgr";
 import { viteEnvs } from "vite-envs";
 
-// Get the root package.json version for the DefinePlugin equivalent
-const getRootPackageJsonVersion = () => {
-    const packageJson = readFileSync("../package.json", "utf-8");
-    return JSON.parse(packageJson).version;
-};
-
 // https://vitejs.dev/config/
 export default defineConfig(async () => {
     // Dynamically import vite-tsconfig-paths
@@ -33,7 +27,6 @@ export default defineConfig(async () => {
             })
         ],
         define: {
-            "import.meta.env.VERSION": JSON.stringify(getRootPackageJsonVersion()),
             "import.meta.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
             // Define any other environment variables needed
             "import.meta.env.PUBLIC_URL": JSON.stringify("")
