@@ -17,7 +17,7 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
         const sourceGateway = resolveAdapterFromSource(source);
 
         if (sourceGateway.sourceProfile !== "Primary")
-            throw new Error("Import if not possible from a secondary source");
+            throw new Error("[UC:Import] Import if not possible from a secondary source");
 
         const agent = await dbApi.agent.getByEmail(agentEmail);
         const agentId = agent
@@ -55,9 +55,11 @@ const resolveAllIdsAccordingToSource = async (source: Source): Promise<string[]>
             const zenodoAPI = makeZenodoApi();
             return (await zenodoAPI.records.getAllSoftware()).hits.hits.map(item => item.id.toString());
         case "ComptoirDuLibre":
-        case "CNLL":
         case "wikidata":
-            return [];
+            throw new Error("[UC:Import] Not Implemented, but you can specify the list of ids you want to import");
+        // Secondary Sources
+        case "CNLL":
+            throw new Error("[UC:Import] Import if not possible from a secondary source");
         default:
             const shouldNotBeReached: never = source.kind;
             throw new Error("[UC:Import] Not Implemented", shouldNotBeReached);
