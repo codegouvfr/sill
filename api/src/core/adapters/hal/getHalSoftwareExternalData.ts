@@ -183,11 +183,10 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 };
                 switch (identifierItem["@type"]) {
                     case "hal":
-                        const halId = identifierItem.value.split("-")[1];
                         return identifersUtils.makeHALIdentifier({
-                            halId: halId.charAt(0) === "0" ? halId.slice(1) : halId,
+                            halId: halRawSoftware.docid,
                             additionalType: "Software",
-                            url: identifierItem.propertyID
+                            url: halRawSoftware.uri_s
                         });
                     case "swhid":
                         return identifersUtils.makeSWHIdentifier({
