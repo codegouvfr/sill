@@ -1,7 +1,7 @@
 import { SecondarySourceGateway } from "../../ports/SourceGateway";
 import { getCNLLSoftwareExternalData } from "./getExternalData";
 
-export const cNLLSourceGateway: SecondarySourceGateway = {
+export const cnllSourceGateway: SecondarySourceGateway = {
     sourceType: "ComptoirDuLibre",
     sourceProfile: "Secondary",
     softwareExternalData: {

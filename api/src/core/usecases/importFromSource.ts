@@ -16,7 +16,7 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
         const sourceGateway = resolveAdapterFromSource(source);
 
         if (sourceGateway.sourceProfile !== "Primary")
-            throw new Error("Import if not possbile from a secondary source");
+            throw new Error("Import if not possible from a secondary source");
 
         const agent = await dbApi.agent.getByEmail(agentEmail);
         const agentId = agent

@@ -3,24 +3,18 @@ import { GetSoftwareExternalData } from "./GetSoftwareExternalData";
 import { GetSoftwareExternalDataOptions } from "./GetSoftwareExternalDataOptions";
 import { GetSoftwareFormData } from "./GetSoftwareFormData";
 
-export type SourceGateway = {
-    sourceType: ExternalDataOriginKind;
+export type BaseSourceGateway = {
     sourceProfile: "Primary" | "Secondary";
-    softwareExternalData: {
-        getById: GetSoftwareExternalData;
-    };
-    softwareOptions: {
-        getById: GetSoftwareExternalDataOptions;
-    };
-    softwareForm: {
-        getById: GetSoftwareFormData;
-    };
+    sourceType: ExternalDataOriginKind;
+    softwareExternalData: { getById: GetSoftwareExternalData };
 };
 
-export type PrimarySourceGateway = SourceGateway & {
+export type PrimarySourceGateway = BaseSourceGateway & {
     sourceProfile: "Primary";
+    softwareOptions: { getById: GetSoftwareExternalDataOptions };
+    softwareForm: { getById: GetSoftwareFormData };
 };
 
-export type SecondarySourceGateway = Pick<SourceGateway, "sourceType" | "sourceProfile" | "softwareExternalData"> & {
+export type SecondarySourceGateway = BaseSourceGateway & {
     sourceProfile: "Secondary";
 };

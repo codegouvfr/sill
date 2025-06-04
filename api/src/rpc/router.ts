@@ -99,7 +99,7 @@ export function createRouter(params: {
                 const sourceGateway = resolveAdapterFromSource(mainSource);
 
                 if (sourceGateway.sourceProfile !== "Primary")
-                    throw new Error("Getting option if not possbile from a secondary source");
+                    throw new Error("Getting option is not possible from a secondary source");
 
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
                     sourceGateway.softwareOptions.getById({ queryString, language, source: mainSource }),
