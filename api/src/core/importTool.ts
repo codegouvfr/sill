@@ -40,11 +40,14 @@ export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
     const source = await dbApi.source.getByName({ name: sourceSlug });
     if (!source) throw new Error("[Loader:Import] Couldn't find the source to connect to");
 
+    const loggerTime = `[Loader:Import] Feeded database with software packages from ${source.slug}`;
+
     const importService = importFromSource(dbApi);
 
-    console.time(`[Loader:Import] Feeding database with software package from ${source.slug}`);
+    console.time(loggerTime);
     return importService({ agentEmail: botAgentEmail, source, softwareIdOnSource: listToImport }).then(result => {
-        console.timeEnd(`[Loader:Import] Feeding database with ${result.length} software packages from ${source.slug}`);
+        console.log(`[Loader:Import] Feeding database with ${result.length} software packages`);
+        console.timeEnd(loggerTime);
         return true;
     });
 }
