@@ -142,14 +142,7 @@ function ContextualizedApp() {
                     })()}
                 </Suspense>
             </main>
-            <Footer
-                webVersion={(() => {
-                    const webVersion = import.meta.env.VERSION;
-                    assert(webVersion !== undefined);
-                    return webVersion;
-                })()}
-                apiVersion={sillApiVersion.getSillApiVersion()}
-            />
+            <Footer version={sillApiVersion.getSillApiVersion()} />
         </div>
     );
 }

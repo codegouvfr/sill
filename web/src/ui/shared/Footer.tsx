@@ -10,13 +10,12 @@ import { useCoreState } from "../../core";
 
 export type Props = {
     className?: string;
-    apiVersion: string;
-    webVersion: string;
+    version: string;
 };
 
 export const Footer = memo(
     forwardRef<HTMLDivElement, Props>((props, ref) => {
-        const { className, apiVersion, webVersion, ...rest } = props;
+        const { className, version, ...rest } = props;
         const uiConfig = useCoreState("uiConfig", "main");
 
         assert<Equals<typeof rest, {}>>();
@@ -32,21 +31,15 @@ export const Footer = memo(
                     termsLinkProps={routes.terms().link}
                     bottomItems={[
                         {
-                            text: `sill-api: v${apiVersion}`,
+                            text: `catalogi: v${version}`,
                             linkProps: {
-                                href: `https://github.com/codegouvfr/sill/tree/v${apiVersion}`
-                            }
-                        },
-                        {
-                            text: `sill-web: v${webVersion}`,
-                            linkProps: {
-                                href: `https://github.com/codegouvfr/sill/tree/v${webVersion}`
+                                href: `https://github.com/codegouvfr/sill/tree/v${version}`
                             }
                         },
                         {
                             text: t("footer.contribute"),
                             linkProps: {
-                                href: "https://github.com/codegouvfr/sill-web/issues/new"
+                                href: "https://github.com/codegouvfr/sill/issues/new"
                             }
                         },
                         {
