@@ -74,8 +74,8 @@ describe("HAL", () => {
                             "name": "HAL main instance",
                             "url": new URL("https://hal.science/")
                         },
-                        "url": "https://hal.science/hal-01715545",
-                        "value": "hal-01715545"
+                        "url": "https://inria.hal.science/hal-01715545v1",
+                        "value": "1715545"
                     },
                     {
                         "@type": "PropertyValue",
