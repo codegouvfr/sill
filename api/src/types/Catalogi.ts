@@ -8,5 +8,6 @@ export namespace Catalogi {
         | "doi"
         | "GitHub"
         | "ComptoirDuLibre"
-        | "FramaLibre";
+        | "FramaLibre"
+        | "Zenodo";
 }
