@@ -1,10 +1,12 @@
-import { SourceGateway } from "../ports/SourceGateway";
+import { PrimarySourceGateway, SecondarySourceGateway } from "../ports/SourceGateway";
 import { DatabaseDataType } from "../ports/DbApiV2";
 import { halSourceGateway } from "./hal";
 import { wikidataSourceGateway } from "./wikidata";
 import { comptoirDuLibreSourceGateway } from "./comptoirDuLibre";
 
-export const resolveAdapterFromSource = (source: DatabaseDataType.SourceRow): SourceGateway => {
+export const resolveAdapterFromSource = (
+    source: DatabaseDataType.SourceRow
+): PrimarySourceGateway | SecondarySourceGateway => {
     switch (source.kind) {
         case "HAL":
             return halSourceGateway;
