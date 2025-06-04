@@ -7,7 +7,10 @@ export async function up(db: Kysely<any>): Promise<void> {
         .execute();
 
     await db.schema.dropType("external_data_origin_type").execute();
-    await db.schema.createType("external_data_origin_type").asEnum(["wikidata", "HAL", "ComptoirDuLibre", "CNLL"]).execute();
+    await db.schema
+        .createType("external_data_origin_type")
+        .asEnum(["wikidata", "HAL", "ComptoirDuLibre", "CNLL"])
+        .execute();
 
     await db.schema
         .alterTable("sources")

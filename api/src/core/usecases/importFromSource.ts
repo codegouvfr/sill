@@ -17,6 +17,11 @@ export type ImportFromSource = (params: {
 
 export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: DbApiV2) => {
     return async ({ agentEmail, source, softwareIdOnSource }) => {
+        const sourceGateway = resolveAdapterFromSource(source);
+
+        if (sourceGateway.sourceProfile !== "Primary")
+            throw new Error("Import if not possbile from a secondary source");
+
         const agent = await dbApi.agent.getByEmail(agentEmail);
         const agentId = agent
             ? agent.id
@@ -27,7 +32,7 @@ export const importFromSource: (dbApi: DbApiV2) => ImportFromSource = (dbApi: Db
                   about: "This is a bot user created to import data."
               });
 
-        const getSoftwareForm = resolveAdapterFromSource(source).softwareForm.getById;
+        const getSoftwareForm = sourceGateway.softwareForm.getById;
         let result = [];
 
         switch (source.kind) {
