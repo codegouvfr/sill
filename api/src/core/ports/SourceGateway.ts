@@ -5,6 +5,7 @@ import { GetSoftwareFormData } from "./GetSoftwareFormData";
 
 export type SourceGateway = {
     sourceType: ExternalDataOriginKind;
+    sourceProfile: "Primary" | "Secondary";
     softwareExternalData: {
         getById: GetSoftwareExternalData;
     };
@@ -14,4 +15,12 @@ export type SourceGateway = {
     softwareForm: {
         getById: GetSoftwareFormData;
     };
+};
+
+export type PrimarySourceGateway = SourceGateway & {
+    sourceProfile: "Primary";
+};
+
+export type SecondarySourceGateway = Pick<SourceGateway, "sourceType" | "sourceProfile" | "softwareExternalData"> & {
+    sourceProfile: "Secondary";
 };
