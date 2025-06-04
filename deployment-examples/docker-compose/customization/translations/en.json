@@ -1,0 +1,6 @@
+{
+    "$schema": "https://raw.githubusercontent.com/codegouvfr/sill/refs/heads/main/api/src/rpc/translations/schema.json",
+    "home": {
+        "title": "This is a custom title"
+    }
+}
