@@ -13,7 +13,7 @@
     "build": "turbo build",
     "job:import": "turbo job:import",
     "job:update": "turbo job:update",
-    "job:self-import": "turbo job:self-import",
+    "job:import-from-inner-identifiers": "turbo job:import-from-inner-identifiers",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
     "format": "turbo format",
