@@ -5,16 +5,15 @@ const zEnvConfiguration = z.object({
         "issuerUri": z.string().nonempty(),
         "clientId": z.string().nonempty()
     }),
-    //Port we listen to
-    "port": z.coerce.number().optional().default(8080),
-    "isDevEnvironnement": z.boolean().optional(),
-    // Completely disable this instance and redirect to another url
-    "redirectUrl": z.string().optional(),
-    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional().default("wikidata"),
     "databaseUrl": z.string(),
-    "initializeSoftwareFromSource": z.boolean(),
+    "isDevEnvironnement": z.boolean().default(false),
+    "port": z.coerce.number().optional().default(8080),
+    "externalSoftwareDataOrigin": z.enum(["wikidata", "HAL"]).optional().default("wikidata"),
+    "initializeSoftwareFromSource": z.boolean().default(false),
     "botAgentEmail": z.string().optional(),
-    "listToImport": z.array(z.string()).optional()
+    "listToImport": z.array(z.string()).optional(),
+    // Completely disable this instance and redirect to another url
+    "redirectUrl": z.string().optional()
 });
 
 const envConfiguration = zEnvConfiguration.parse({
