@@ -6,8 +6,7 @@ import type { Equals, ReturnType } from "tsafe";
 import { assert } from "tsafe/assert";
 import { z } from "zod";
 import { DbApiV2 } from "../core/ports/DbApiV2";
-import { ExternalDataOrigin, GetSoftwareExternalData, Language } from "../core/ports/GetSoftwareExternalData";
-import type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
+import { Language } from "../core/ports/GetSoftwareExternalData";
 import { UiConfig } from "../core/uiConfigSchema";
 import type { UseCases } from "../core/usecases";
 import {
@@ -22,26 +21,25 @@ import { OidcParams } from "../tools/oidc";
 import type { OptionalIfCanBeUndefined } from "../tools/OptionalIfCanBeUndefined";
 import type { Context } from "./context";
 import { User } from "./user";
+import { resolveAdapterFromSource } from "../core/adapters/resolveAdapter";
+
+export type UseCasesUsedOnRouter = Pick<
+    UseCases,
+    | "getAgent"
+    | "getSoftwareFormAutoFillDataFromExternalAndOtherSources"
+    | "createSoftware"
+    | "updateSoftware"
+    | "fetchAndSaveExternalDataForOneSoftwarePackage"
+>;
 
 export function createRouter(params: {
     dbApi: DbApiV2;
-    useCases: UseCases;
+    useCases: UseCasesUsedOnRouter;
     oidcParams: OidcParams;
     redirectUrl: string | undefined;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
-    getSoftwareExternalDataOptions: GetSoftwareExternalDataOptions;
-    getSoftwareExternalData: GetSoftwareExternalData;
     uiConfig: UiConfig;
 }) {
-    const {
-        useCases,
-        dbApi,
-        oidcParams,
-        redirectUrl,
-        externalSoftwareDataOrigin: externalDataOrigin,
-        getSoftwareExternalDataOptions,
-        uiConfig
-    } = params;
+    const { useCases, dbApi, oidcParams, redirectUrl, uiConfig } = params;
 
     const t = initTRPC.context<Context>().create({
         "transformer": superjson
@@ -64,7 +62,7 @@ export function createRouter(params: {
 
     const router = t.router({
         "getRedirectUrl": loggedProcedure.query(() => redirectUrl),
-        "getExternalSoftwareDataOrigin": loggedProcedure.query(() => externalDataOrigin),
+        "getExternalSoftwareDataOrigin": loggedProcedure.query(async () => (await dbApi.source.getMainSource()).kind),
         "getApiVersion": loggedProcedure.query(
             (() => {
                 const out: string = JSON.parse(
@@ -98,9 +96,13 @@ export function createRouter(params: {
 
                 const { queryString, language } = input;
                 const mainSource = await dbApi.source.getMainSource();
+                const sourceGateway = resolveAdapterFromSource(mainSource);
+
+                if (sourceGateway.sourceProfile !== "Primary")
+                    throw new Error("Getting option is not possible from a secondary source");
 
                 const [queryResults, softwareExternalDataIds] = await Promise.all([
-                    getSoftwareExternalDataOptions({ queryString, language, source: mainSource }),
+                    sourceGateway.softwareOptions.getById({ queryString, language, source: mainSource }),
                     dbApi.software.getAllSillSoftwareExternalIds(mainSource.slug)
                 ]);
 
@@ -163,10 +165,12 @@ export function createRouter(params: {
                         });
                     }
 
-                    await dbApi.software.create({
+                    const createdSoftwareId = await useCases.createSoftware({
                         formData,
                         agentId
                     });
+
+                    await useCases.fetchAndSaveExternalDataForOneSoftwarePackage({ softwareId: createdSoftwareId });
                 } catch (e) {
                     throw new TRPCError({
                         "code": "INTERNAL_SERVER_ERROR",
@@ -195,8 +199,8 @@ export function createRouter(params: {
                         message: "Agent not found"
                     });
 
-                await dbApi.software.update({
-                    softwareSillId,
+                await useCases.updateSoftware({
+                    softwareId: softwareSillId,
                     formData,
                     agentId: agent.id
                 });
