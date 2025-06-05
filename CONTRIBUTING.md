@@ -1,8 +1,7 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make via issue. We will than discuss the best way to implement it.
-
-## Code rules
+When contributing to this repository, please first discuss the change you wish to make via issue. We will than discuss the best way to implement it. 
+[Create an issue](https://github.com/codegouvfr/catalogi/issues/new)
 
 ### Backend (API)
 
@@ -13,4 +12,3 @@ The buisness logic is in `api/src/core`. Which is split in different parts:
 - `api/src/core/ports`: the contracts to discuss with the outside world and infrastructure (database, external APIs, etc.)
 - `api/src/core/adapters`: the implementations of the ports. This is the only place where we should have code specific to the sources for example.
 
-If you wish, you can also send your suggestions directly to `floss@numerique.gouv.fr`.
