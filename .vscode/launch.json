@@ -22,7 +22,7 @@
             "cwd": "${workspaceFolder}/api",
             "runtimeArgs": [
                 "run",
-                "import"
+                "job:import"
             ],
         },
         {
@@ -33,7 +33,17 @@
             "cwd": "${workspaceFolder}/api",
             "runtimeArgs": [
                 "run",
-                "update"
+                "job:update"
+            ],
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Fullcheck",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}",
+            "runtimeArgs": [
+                "fullcheck"
             ],
         },
         {
