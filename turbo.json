@@ -7,7 +7,7 @@
     },
     "job:import": {},
     "job:update": {},
-    "job:self-import": {},
+    "job:import-from-inner-identifiers": {},
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
