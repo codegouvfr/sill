@@ -4,9 +4,9 @@ import { assert } from "tsafe/assert";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
 import { getDbApiAndInitializeCache } from "../core/adapters/dbApi/kysely/createPgDbApi";
-import { makeSelfImportFromIdentifiers } from "../core/usecases/selfImport";
+import { makeImportFromInnerIdentifiers } from "../core/usecases/importFromInnerIdentifiers";
 
-export async function startSelfImportService(params: {
+export async function startImportFromInnerIdentifersService(params: {
     isDevEnvironnement: boolean;
     databaseUrl: string;
     botAgentEmail?: string;
@@ -25,11 +25,11 @@ export async function startSelfImportService(params: {
         "kyselyDb": kyselyDb
     });
 
-    const selfImport = makeSelfImportFromIdentifiers({ dbApi });
+    const innerImport = makeImportFromInnerIdentifiers({ dbApi });
 
-    const success = await selfImport();
+    const success = await innerImport();
 
     success
-        ? console.info("[RPC:Self-Import] ✅ Self-Importation successful ✅")
-        : console.error("[RPC:Self-Import] ❌ Error ❌");
+        ? console.info("[RPC:Import-From-Inner-Identifiers] ✅ Importation from identifiers successful ✅")
+        : console.error("[RPC:Import-From-Inner-Identifiers] ❌ Error ❌");
 }
