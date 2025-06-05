@@ -8,8 +8,8 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_LOG_STATEMENTS: all
-      POSTGRES_DB: sill
-      POSTGRES_USER: sill
+      POSTGRES_DB: catalogi
+      POSTGRES_USER: catalogi
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_password}
     volumes:
       - ./docker-data:/var/lib/postgresql/data

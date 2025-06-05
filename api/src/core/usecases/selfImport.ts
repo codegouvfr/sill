@@ -101,6 +101,8 @@ export const makeSelfImportFromIdentifiers = (
 
         await dbApi.softwareExternalData.saveIds(insertFlatten);
 
+        console.timeEnd(useCaseLogTimer);
+
         return true;
     };
 };
