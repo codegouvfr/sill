@@ -7,6 +7,14 @@ pre-commit:
       glob: "{package.json,helm-charts/catalogi/Chart.yaml}"
       run: yarn sync-helm-charts
       stage_fixed: true
+
+    bump-chart-version:
+      glob: "helm-charts/catalogi/**/*"
+      # This exclude is critical to prevent an infinite loop.
+      exclude: "helm-charts/catalogi/Chart.yaml"
+      run: yarn bump-chart-version
+      stage_fixed: true
+    
     lint:
       run: yarn turbo lint
 
