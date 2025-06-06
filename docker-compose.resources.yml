@@ -1,6 +1,7 @@
 # this is for local use only
 
 services:
+# the PG database
   postgres:
     image: postgres:16
     shm_size: 256m
@@ -8,37 +9,27 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_LOG_STATEMENTS: all
-      POSTGRES_DB: sill
-      POSTGRES_USER: sill
+      POSTGRES_DB: ${POSTGRES_DB:-db}
+      POSTGRES_USER: ${POSTGRES_USER:-catalogi}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_password}
     volumes:
       - ./docker-data:/var/lib/postgresql/data
 
-#  To create an easy-to-use interface for PostgreSQL administration,
-#  you can use the Adminer web interface.
-#
+#  Adminer is optional, it provides a basic interface for PostgreSQL access
   adminer:
     image: adminer
     ports:
-      - "8080:8080"
-
-  keycloak:
-    image: quay.io/keycloak/keycloak:18.0.2-legacy
-    container_name: keycloak
-    environment:
-      DB_VENDOR: h2
-      KC_HTTP_RELATIVE_PATH: /auth
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
-      PROXY_ADDRESS_FORWARDING: "true"
-      JAVA_OPTS: -Dkeycloak.profile=preview
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/keycloak-dev-realm.json
-    volumes:
-      - ./keycloak-dev-realm.json:/opt/jboss/keycloak/imports/keycloak-dev-realm.json
-    ports:
       - "8081:8080"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8081/auth/" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+
+# an OIDC provider, Keycloak
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.5
+    container_name: keycloak-standalone
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    command: start-dev --import-realm
+    volumes:
+      - ./catalogi-realm.json:/opt/keycloak/data/import/catalogi-realm.json
+    ports:
+      - "8080:8080"
