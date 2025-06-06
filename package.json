@@ -11,11 +11,13 @@
     "format": "turbo format",
     "format:check": "turbo format:check",
     "fullcheck": "turbo typecheck format:check lint test",
-    "turbo": "turbo"
+    "turbo": "turbo",
+    "sync-helm-charts": "node scripts/sync-helm-app-version.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "js-yaml": "^4.1.0",
     "lefthook": "^1.10.10",
     "turbo": "^1.12.5"
   },

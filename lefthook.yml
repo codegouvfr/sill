@@ -3,6 +3,10 @@ pre-commit:
     format:
       run: yarn format
       stage_fixed: true
+    sync-helm-version:
+      glob: "{package.json,helm-charts/catalogi/Chart.yaml}"
+      run: yarn sync-helm-charts
+      stage_fixed: true
     lint:
       run: yarn turbo lint
 
