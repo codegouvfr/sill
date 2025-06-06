@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
+const { exec, execSync } = require("child_process");
 
 const rootDir = path.join(__dirname, "..");
 const rootPackageJsonPath = path.join(rootDir, "package.json");
@@ -30,6 +31,13 @@ try {
 		const newChartYamlContent = yaml.dump(chartYaml);
 		fs.writeFileSync(chartYamlPath, newChartYamlContent, "utf8");
 		console.log("✅ Helm chart appVersion updated");
+
+		console.log("Calling bump script...");
+		execSync(
+			`node ${path.join(__dirname, "bump-chart-version.js")}`,
+			{ stdio: "inherit" }, // This ensures the output of the bump script is shown
+		);
+
 	} else {
 		console.log("✅ Helm chart appVersion is already in sync.");
 	}
