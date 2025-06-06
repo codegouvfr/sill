@@ -34,7 +34,7 @@ try {
 
 		console.log("Calling bump script...");
 		execSync(
-			`node ${path.join(__dirname, "bump-chart-version.js")}`,
+			`node ${path.join(__dirname, "bump-helm-chart-version.js")}`,
 			{ stdio: "inherit" }, // This ensures the output of the bump script is shown
 		);
 
