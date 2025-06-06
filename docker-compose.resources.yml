@@ -24,7 +24,6 @@ services:
 # an OIDC provider, Keycloak
   keycloak:
     image: quay.io/keycloak/keycloak:26.2.5
-    container_name: keycloak-standalone
     environment:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: admin

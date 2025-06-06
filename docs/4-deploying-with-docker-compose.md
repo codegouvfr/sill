@@ -1,5 +1,12 @@
 ## Deploying the web app with docker-compose
 
+# Requirements
+
+To deploy the app using docker compose you need :
+- Docker
+- Docker Compose
+- An OIDC provider like Keycloak, that is already independently deployed
+
 There is an example of how to deploy the sill web app with docker-compose [here](https://github.com/codegouvfr/sill/tree/main/deployments/docker-compose-example).
 
 You can copy paste the folder. Than you will need `.env` file to configure the environnement variables. You can get it by copying the `.env.sample` file from the sill-api repository and modifying it to your needs.
@@ -8,9 +15,7 @@ You can copy paste the folder. Than you will need `.env` file to configure the e
 cp .env.sample .env
 ```
 
-You will need to provide an ssh key in SILL_SSH_PRIVATE_KEY, and it should have the access to the repo you provide in SILL_DATA_REPO_SSH_URL
-
-You will also need to provide a GITHUB_TOKEN.
+Than ajust the variables in the `.env` file to match your OIDC provider, your database and all. [More details about the variables can be found here]()
 
 You can change the way you handle the frontal part in the [nging configuration file](https://github.com/codegouvfr/sill/blob/main/deployments/docker-compose-example/nginx/default.conf).
 The provided example is basic, and for example it does not provide support for `https` (you would need to configure it with you SSL certificates).

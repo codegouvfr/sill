@@ -13,7 +13,7 @@ The full documentation is available [here](https://codegouvfr.github.io/catalogi
 
 1. [https://code.gouv.fr/sill](https://code.gouv.fr/sill/) for the
 list of recommanded Free Software for French administrations.
-2. [https://logiciels.catalogue-esr.fr/](https://logiciels.catalogue-esr.fr/) for the CNRS, listing mostly HAL softwares.
+2. [https://logiciels.catalogue-esr.fr/](https://logiciels.catalogue-esr.fr/) for the French Research Minister, listing mostly HAL softwares.
 
 ## Code organization
 
