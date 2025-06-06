@@ -1,0 +1,134 @@
+# Default values for catalogi.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- A list of secrets to be used for pulling images from a private registry
+imagePullSecrets: []
+
+# -- Service Account configuration
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+# -- Configuration for the 'web' frontend deployment
+web:
+  replicaCount: 1
+  image:
+    repository: codegouvfr/catalogi-web
+    tag: "" # Defaults to .Chart.AppVersion
+    pullPolicy: IfNotPresent
+  # -- Pod security context (runs commands as a non-root user)
+  podSecurityContext: {}
+  #  runAsUser: 1001
+  #  fsGroup: 1001
+  # -- Container security context (hardening options)
+  securityContext: {}
+  #  allowPrivilegeEscalation: false
+  #  readOnlyRootFilesystem: true
+  #  capabilities:
+  #    drop:
+  #      - ALL
+  # -- Resource requests and limits
+  resources: {}
+  #  limits:
+  #    cpu: 200m
+  #    memory: 128Mi
+  #  requests:
+  #    cpu: 100m
+  #    memory: 64Mi
+  # -- Advanced scheduling options
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# -- Configuration for the 'api' backend deployment
+api:
+  replicaCount: 1
+  image:
+    repository: codegouvfr/catalogi-api
+    tag: "" # Defaults to .Chart.AppVersion
+    pullPolicy: IfNotPresent
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# -- Configuration for the 'update' background job
+update:
+  schedule: "0 */4 * * *"
+  image:
+    repository: codegouvfr/catalogi-api
+    tag: "" # Defaults to .Chart.AppVersion
+    pullPolicy: IfNotPresent
+  podSecurityContext: {}
+  securityContext: {}
+  resources: {}
+
+# -- Ingress configuration. This replaces the nginx container.
+ingress:
+  enabled: true
+  className: "" # For Kubernetes v1.18+, you should specify an IngressClassName e.g., "nginx"
+  annotations: {}
+  #  kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: catalogi.local # IMPORTANT: Change this to your actual domain
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          service:
+            name: web
+            port: 80
+        - path: /api
+          pathType: ImplementationSpecific
+          service:
+            name: api
+            port: 3000
+  tls: []
+  #  - secretName: catalogi-tls
+  #    hosts:
+  #      - catalogi.local
+
+# -- Database configuration
+database:
+  user: "catalogi_user"
+  db: "catalogi_db"
+  password: "change-this-in-production"
+  existingSecret: ""
+  externalHost: ""
+
+# -- PostgreSQL sub-chart configuration.
+postgresql:g
+  enabled: true
+  auth:
+    username: ""
+    database: ""
+    password: ""
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+
+# -- Customization for the API (replaces the volume mount)
+customization:
+  enabled: true
+  uiConfig: |-
+    { "key": "value" }
+  translations:
+    en: |-
+      { "key": "hello" }
+    fr: |-
+      { "key": "bonjour" }
+
+# -- Configuration for Adminer (optional database UI)
+adminer:
+  enabled: false
+  image:
+    repository: adminer
+    tag: "latest"
