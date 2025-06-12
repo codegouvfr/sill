@@ -1,7 +1,7 @@
 
 # Deploying Catalogi with Kubernetes
 
-⚠ WARNING - This page of the documentation is obsolete, and will be updated soon. - ⚠
+⚠️ WARNING - This page of the documentation is obsolete, and will be updated soon. - ⚠️
 
 This is a step by step guide for deploying sill.code.gouv.fr
 
