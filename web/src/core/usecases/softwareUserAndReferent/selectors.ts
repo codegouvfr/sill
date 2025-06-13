@@ -30,7 +30,6 @@ const main = createSelector(
             };
         }
 
-        assert(logoUrl !== undefined);
         assert(users !== undefined);
         assert(referents !== undefined);
 
