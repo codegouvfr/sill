@@ -30,7 +30,7 @@ const softwareFormData: SoftwareFormData = {
     softwareDescription: "Super software",
     softwareKeywords: ["bob", "l'éponge"],
     softwareLicense: "MIT",
-    softwareLogoUrl: "https://example.com/logo.png",
+    softwareLogoUrl: "https://soft-logo-url.com/logo.png",
     softwareMinimalVersion: "",
     softwareName: "",
     softwareType: {
@@ -52,7 +52,7 @@ const softwareExternalData: SoftwareExternalData = {
     label: { en: "Some software" },
     description: { en: "Some software description" },
     isLibreSoftware: true,
-    logoUrl: "https://example.com/logo.png",
+    logoUrl: "https://external-software-logo-url.com/logo.png",
     websiteUrl: "https://example.com",
     sourceUrl: "https://example.com/source",
     documentationUrl: "https://example.com/documentation",
@@ -80,7 +80,7 @@ const similarSoftwareExternalData: SoftwareExternalData = {
     label: "Some similar software",
     description: { en: "Some similar software description" },
     isLibreSoftware: true,
-    logoUrl: "https://example.com/similar-logo.png",
+    logoUrl: "https://similar-software-logo-url.com/similar-logo.png",
     websiteUrl: "https://example.similar.com",
     sourceUrl: "https://example.similar.com/source",
     documentationUrl: "https://example.similar.com/documentation",
@@ -193,7 +193,7 @@ describe("pgDbApi", () => {
                     "semVer": "1.0.0"
                 },
                 license: "MIT",
-                logoUrl: "https://example.com/logo.png",
+                logoUrl: softwareFormData.softwareLogoUrl,
                 officialWebsiteUrl: softwareExternalData.websiteUrl,
                 prerogatives: {
                     doRespectRgaa: true,

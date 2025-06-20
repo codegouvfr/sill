@@ -11,14 +11,14 @@ jobs:
   validations:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://catalogi:pg_password@localhost:5432/catalogi
+      DATABASE_URL: postgresql://catalogi:pg_password@localhost:5432/db
     services:
       postgres:
         image: postgres:16-alpine
         env:
           POSTGRES_USER: catalogi
           POSTGRES_PASSWORD: pg_password
-          POSTGRES_DB: catalogi
+          POSTGRES_DB: db
         ports:
           - 5432:5432
     steps:
