@@ -12,7 +12,7 @@ The full documentation is available [here](https://codegouvfr.github.io/catalogi
 ## It is deployed on several places
 
 1. [https://code.gouv.fr/sill](https://code.gouv.fr/sill/) for the
-list of recommanded Free Software for French administrations.
+   list of recommanded Free Software for French administrations.
 2. [https://logiciels.catalogue-esr.fr/](https://logiciels.catalogue-esr.fr/) for the French Research Minister, listing mostly HAL softwares.
 
 ## Code organization
@@ -22,7 +22,7 @@ This "monorepo" is made of several directories:
 - api: Application API (also includes jobs, that can be run periodically)
 - web: Web frontend
 - docs: Documentation, as deployed [here](https://codegouvfr.github.io/catalogi/)
-- deploy-examples: Examples of deployment. For now, there is only a Docker Compose example.
+- deploy-examples: Examples of deployment, including [Docker Compose](deploy-examples/docker-compose) and [Kubernetes with Helm](docs/5-deploying-with-kubernetes.md).
 
 ## Governance and contributions
 
