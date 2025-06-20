@@ -100,12 +100,13 @@ export function SoftwareFormStep3(props: Step2Props) {
                         })(),
                         doRespectRgaa: (() => {
                             switch (doRespectRgaaInputValue) {
-                                case "not applicable":
-                                    return null;
                                 case "true":
                                     return true;
                                 case "false":
                                     return false;
+                                case "not applicable":
+                                default:
+                                    return null;
                             }
                         })(),
                         isFromFrenchPublicService: (() => {
