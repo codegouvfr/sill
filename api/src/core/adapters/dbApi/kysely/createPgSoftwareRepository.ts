@@ -182,7 +182,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                             url: dev.url,
                             affiliations: dev.affiliations
                         })),
-                        logoUrl: softwareExternalData?.logoUrl,
+                        logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
                         officialWebsiteUrl:
                             softwareExternalData?.websiteUrl ??
                             software.comptoirDuLibreSoftware?.external_resources.website,
@@ -277,7 +277,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                                 semVer: softwareExternalData?.softwareVersion ?? undefined,
                                 publicationTime: dateParser(softwareExternalData.publicationTime)
                             },
-                            logoUrl: softwareExternalData?.logoUrl,
+                            logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
                             userAndReferentCountByOrganization:
                                 userAndReferentCountByOrganization[software.softwareId] ?? {},
                             authors: (softwareExternalData?.developers ?? []).map(dev => ({
@@ -551,7 +551,7 @@ const makeGetSoftwareById =
                         url: dev.url,
                         affiliations: dev.affiliations
                     })),
-                    logoUrl: softwareExternalData?.logoUrl,
+                    logoUrl: software?.logoUrl ?? softwareExternalData?.logoUrl,
                     officialWebsiteUrl:
                         softwareExternalData?.websiteUrl ??
                         software.comptoirDuLibreSoftware?.external_resources.website,
