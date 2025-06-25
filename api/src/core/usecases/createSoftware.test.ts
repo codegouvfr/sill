@@ -111,7 +111,7 @@ describe("Create software - Trying all the cases", () => {
         expectToMatchObject(softwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
 
         const similarId = await dbApi.software.getSimilarSoftwareExternalDataPks({ softwareId: craSoftwareId });
-        expectToMatchObject(similarId, [{ sourceSlug: testSource.slug, externalId: "Q111590996" }]);
+        expectToMatchObject(similarId, [{ sourceSlug: testSource.slug, externalId: "Q111590996", softwareId: 12 }]);
 
         console.log(craSoftwareId);
     });
