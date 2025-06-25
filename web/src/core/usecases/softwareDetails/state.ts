@@ -13,8 +13,8 @@ export const name = "softwareDetails";
 export type State = State.NotReady | State.Ready;
 
 export namespace State {
-    export type SimilarSoftwareNotInSill =
-        ApiTypes.Software.SimilarSoftware.SimilarSoftwareNotInSill;
+    export type SimilarSoftwareNotRegistered =
+        ApiTypes.Software.SimilarSoftware.SimilarSoftwareNotRegistered;
 
     export type NotReady = {
         stateDescription: "not ready";
@@ -83,10 +83,10 @@ export namespace State {
             | undefined;
         similarSoftwares: (
             | {
-                  isInSill: true;
+                  registered: true;
                   software: SoftwareCatalogState.Software.External;
               }
-            | SimilarSoftwareNotInSill
+            | SimilarSoftwareNotRegistered
         )[];
         programmingLanguages: string[];
         keywords: string[];

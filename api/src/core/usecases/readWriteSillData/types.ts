@@ -63,11 +63,13 @@ export type Software = {
 export type Source = DatabaseDataType.SourceRow;
 
 export namespace Software {
-    export type SimilarSoftware = SimilarSoftware.SimilarSoftwareNotInSill | SimilarSoftware.Sill;
+    export type SimilarSoftware =
+        | SimilarSoftware.SimilarSoftwareNotRegistered
+        | SimilarSoftware.SimilarRegisteredSoftware;
 
     export namespace SimilarSoftware {
-        export type SimilarSoftwareNotInSill = {
-            isInSill: false;
+        export type SimilarSoftwareNotRegistered = {
+            registered: false;
             sourceSlug: string;
             externalId: string;
             isLibreSoftware: boolean | undefined;
@@ -75,8 +77,8 @@ export namespace Software {
             description: LocalizedString;
         };
 
-        export type Sill = {
-            isInSill: true;
+        export type SimilarRegisteredSoftware = {
+            registered: true;
             softwareId: number;
             softwareName: string;
             softwareDescription: string;

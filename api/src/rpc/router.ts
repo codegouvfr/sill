@@ -117,7 +117,7 @@ export function createRouter(params: {
                     externalId: externalId,
                     description: description,
                     label: label,
-                    isInSill: softwareExternalDataIds.includes(externalId),
+                    registered: softwareExternalDataIds.includes(externalId),
                     isLibreSoftware,
                     sourceSlug
                 }));
