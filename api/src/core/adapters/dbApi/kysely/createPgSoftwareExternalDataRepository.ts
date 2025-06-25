@@ -3,12 +3,32 @@
 // SPDX-License-Identifier: MIT
 
 import { Kysely } from "kysely";
-import { SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
+import { DatabaseDataType, PopulatedExternalData, SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
 import { Database, DatabaseRowOutput } from "./kysely.database";
 import { stripNullOrUndefinedValues, transformNullToUndefined, parseBigIntToNumber } from "./kysely.utils";
+import { mergeObjects } from "../../../utils";
 
 const cleanDataForExternalData = (row: DatabaseRowOutput.SoftwareExternalData) =>
     transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"]));
+
+const mergeExternalData = (externalData: PopulatedExternalData[]) => {
+    if (externalData.length === 0) throw Error("Nothing to merge, the array should be filled");
+    if (externalData.length === 1) return stripExternalDataFromSource(externalData[0]);
+
+    const [first, ...nexts] = externalData.sort((firstItem, secondItem) => secondItem.priority - firstItem.priority);
+
+    const mergedItem = mergeObjects(first, nexts);
+
+    return stripExternalDataFromSource(mergedItem);
+};
+
+const stripExternalDataFromSource = (
+    populatedExternalDataItem: PopulatedExternalData
+): DatabaseDataType.SoftwareExternalDataRow => {
+    const { slug, priority, kind, url, ...externalDataItem } = populatedExternalDataItem;
+
+    return externalDataItem;
+};
 
 export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): SoftwareExternalDataRepository => ({
     getSimilarSoftwareId: async ({ externalId, sourceSlug }) => {
@@ -117,16 +137,6 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .execute()
             .then(rows => rows.map(cleanDataForExternalData));
     },
-    getPopulatedBySoftwareId: async ({ softwareId }) => {
-        const result = await db
-            .selectFrom("software_external_datas as ext")
-            .selectAll("ext")
-            .innerJoin("sources as s", "s.slug", "ext.sourceSlug")
-            .select(["s.kind", "s.priority", "s.url", "s.slug"])
-            .where("softwareId", "=", softwareId)
-            .execute();
-        return result.map(row => transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"])));
-    },
     getIdsBySource: async ({ sourceSlug }) => {
         return db
             .selectFrom("software_external_datas")
@@ -195,5 +205,21 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             },
             {} as Record<string, number>
         );
+    },
+    // Secondary
+    getMergedBySoftwareId: async ({ softwareId }) => {
+        const result = await db
+            .selectFrom("software_external_datas as ext")
+            .selectAll("ext")
+            .innerJoin("sources as s", "s.slug", "ext.sourceSlug")
+            .select(["s.kind", "s.priority", "s.url", "s.slug"])
+            .where("softwareId", "=", softwareId)
+            .execute();
+        const cleanResult = result.map(row => transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"])));
+
+        if (!cleanResult || cleanResult.length === 0)
+            throw new Error("Error in database, a software should have externalData");
+
+        return mergeExternalData(cleanResult);
     }
 });

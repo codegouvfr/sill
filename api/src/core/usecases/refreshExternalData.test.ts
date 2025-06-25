@@ -302,7 +302,7 @@ describe("fetches software extra data (from different providers)", () => {
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/250px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
-                    websiteUrl: "https://vitejs.dev/",
+                    websiteUrl: "https://vite.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: undefined,
                     identifiers: [
