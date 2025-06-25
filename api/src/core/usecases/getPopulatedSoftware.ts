@@ -1,9 +1,14 @@
-import { DatabaseDataType, DbApiV2, PopulatedExternalData } from "../ports/DbApiV2";
-import { mergeObjects } from "../utils";
+import { DatabaseDataType, DbApiV2 } from "../ports/DbApiV2";
 import { Software } from "./readWriteSillData";
 
 export type MakeGetPopulatedSoftware = (dbApi: DbApiV2) => GetPopulatedSoftware;
 export type GetPopulatedSoftware = () => Promise<Software[]>;
+
+export type MakeGetPopulatedSoftwareItem = (dbApi: DbApiV2) => GetPopulatedSoftwareItem;
+export type GetPopulatedSoftwareItem = (
+    softwareItem: DatabaseDataType.SoftwareRow | number,
+    full: boolean
+) => Promise<Software>;
 
 const dateParser = (str: string | Date | undefined | null) => {
     if (str && typeof str === "string") {
@@ -26,46 +31,82 @@ type MissingData = Pick<
 
 export const makeGetPopulatedSoftware: MakeGetPopulatedSoftware = (dbApi: DbApiV2) => async () => {
     const sofware = await dbApi.software.getAllO();
+    const getPopulatedSoftware = makeGetPopulatedSoftwareItem(dbApi);
 
-    const UIsofware = await Promise.all(
-        sofware.map(async softwareItem => {
-            const formatedSoftwareUI = formatSoftwareRowToUISoftware(softwareItem);
+    const UIsofware = await Promise.all(sofware.map(async softwareItem => getPopulatedSoftware(softwareItem, true)));
 
+    return UIsofware;
+};
+
+export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi: DbApiV2) => {
+    return async (softwareData: DatabaseDataType.SoftwareRow | number, full: boolean) => {
+        const softwareItem =
+            typeof softwareData !== "number" ? softwareData : await dbApi.software.getBySoftwareId(softwareData);
+
+        const formatedSoftwareUI = formatSoftwareRowToUISoftware(softwareItem);
+
+        const mergedExternalDataItem = await dbApi.softwareExternalData.getMergedBySoftwareId({
+            softwareId: softwareItem.id
+        });
+        if (!mergedExternalDataItem) throw new Error("Error in database, a software should have externalData");
+        const mergedFormatedExternalDataItem = formatExternalDataRowToUISoftware(mergedExternalDataItem);
+
+        const missingData: MissingData = {
+            userAndReferentCountByOrganization: {},
+            comptoirDuLibreServiceProviderCount: 0, // TO Delete
+            annuaireCnllServiceProviders: undefined, // TO Delete
+            comptoirDuLibreId: undefined, // TO Delete
+            similarSoftwares: []
+        };
+
+        if (full) {
             const similarSoftwareIds = await dbApi.software.getSimilarSoftwareExternalDataPks({
                 softwareId: softwareItem.id
             });
-            console.log(similarSoftwareIds);
-            // WIP : Either we point to an actual software or we compute a softwareUI from ExternalData
+            const similarSoftware = await Promise.all(
+                similarSoftwareIds.map(async softwareData => {
+                    if (softwareData.softwareId) {
+                        const mergedExternalData = await dbApi.softwareExternalData.getMergedBySoftwareId({
+                            softwareId: softwareItem.id
+                        });
 
-            const externalData = await dbApi.softwareExternalData.getPopulatedBySoftwareId({
-                softwareId: softwareItem.id
-            });
-            if (!externalData || externalData.length === 0)
-                throw new Error("Error in database, a software should have externalData");
+                        if (!mergedExternalData) throw new Error("Wrong database values");
 
-            const mergedExternalDataItem = mergeExternalData(externalData);
-            const mergedFormatedExternalDataItem = formatExternalDataRowToUISoftware(mergedExternalDataItem);
+                        return {
+                            registered: true,
+                            softwareId: softwareItem.id,
+                            softwareName: softwareItem.name,
+                            softwareDescription: softwareItem.description,
+                            externalId: "", //TODO Remove,
+                            label: mergedExternalData.label,
+                            description: mergedExternalData.description,
+                            isLibreSoftware: mergedExternalData.isLibreSoftware,
+                            sourceSlug: "" // TODO Remove
+                        };
+                    }
 
-            const missingData: MissingData = {
-                userAndReferentCountByOrganization: {},
-                comptoirDuLibreServiceProviderCount: 0,
-                annuaireCnllServiceProviders: undefined,
-                comptoirDuLibreId: undefined,
-                similarSoftwares: []
-            };
-            // TODO userAndReferentCountByOrganization: {},
-            // TODO comptoirDuLibreServiceProviderCount: software.comptoirDuLibreSoftware?.providers.length ?? 0,
-            // TODO annuaireCnllServiceProviders
-            // TODO REMOVE comptoirDuLibreId
-            // TODO similarSoftwares: similarExternalSoftwares,
+                    const externalData = await dbApi.softwareExternalData.get({
+                        sourceSlug: softwareData.sourceSlug,
+                        externalId: softwareData.externalId
+                    });
 
-            // TODO Which order ?
-            const finalUISoftwareItem = Object.assign(formatedSoftwareUI, mergedFormatedExternalDataItem, missingData);
-            return finalUISoftwareItem;
-        })
-    );
+                    if (externalData) {
+                        return formatToSimularNotRegisteredSoftware(externalData);
+                    }
 
-    return UIsofware;
+                    throw new Error("Wrong database values");
+                })
+            );
+            missingData.similarSoftwares = similarSoftware;
+
+            missingData.userAndReferentCountByOrganization = await dbApi.software.getUserAndReferentCountByOrganization(
+                { softwareId: softwareItem.id }
+            );
+        }
+
+        const finalUISoftwareItem = Object.assign(missingData, mergedFormatedExternalDataItem, formatedSoftwareUI);
+        return finalUISoftwareItem;
+    };
 };
 
 type DataFromSofwareRow = Pick<
@@ -158,21 +199,15 @@ const formatExternalDataRowToUISoftware = (
     };
 };
 
-const mergeExternalData = (externalData: PopulatedExternalData[]) => {
-    if (externalData.length === 0) throw Error("Nothing to merge, the array should be filled");
-    if (externalData.length === 1) return stripExternalDataFromSource(externalData[0]);
-
-    const [first, ...nexts] = externalData.sort((firstItem, secondItem) => secondItem.priority - firstItem.priority);
-
-    const mergedItem = mergeObjects(first, nexts);
-
-    return stripExternalDataFromSource(mergedItem);
-};
-
-const stripExternalDataFromSource = (
-    populatedExternalDataItem: PopulatedExternalData
-): DatabaseDataType.SoftwareExternalDataRow => {
-    const { slug, priority, kind, url, ...externalDataItem } = populatedExternalDataItem;
-
-    return externalDataItem;
+const formatToSimularNotRegisteredSoftware = (
+    externalData: DatabaseDataType.SoftwareExternalDataRow
+): Software.SimilarSoftware.SimilarSoftwareNotRegistered => {
+    return {
+        registered: false,
+        sourceSlug: externalData.sourceSlug,
+        externalId: externalData.externalId,
+        isLibreSoftware: externalData.isLibreSoftware,
+        label: externalData.label,
+        description: externalData.description
+    };
 };

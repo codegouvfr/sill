@@ -251,7 +251,7 @@ function apiSoftwareToSoftware(params: {
         similarSoftwares: similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
                 apiSoftwares,
-                softwareRef: similarSoftware.isInSill
+                softwareRef: similarSoftware.registered
                     ? {
                           type: "name",
                           softwareName: similarSoftware.softwareName
@@ -264,20 +264,20 @@ function apiSoftwareToSoftware(params: {
             });
 
             if (software === undefined) {
-                assert(!similarSoftware.isInSill);
+                assert(!similarSoftware.registered);
 
                 return {
-                    isInSill: false,
+                    registered: false,
                     sourceSlug: similarSoftware.sourceSlug,
                     externalId: similarSoftware.externalId,
                     label: similarSoftware.label,
                     description: similarSoftware.description,
                     isLibreSoftware: similarSoftware.isLibreSoftware
-                } satisfies State.SimilarSoftwareNotInSill;
+                } satisfies State.SimilarSoftwareNotRegistered;
             }
 
             return {
-                isInSill: true,
+                registered: true,
                 software
             };
         }),
