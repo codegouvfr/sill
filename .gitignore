@@ -5,3 +5,4 @@ node_modules
 docker-data
 .dev
 .bruno
+dump*
