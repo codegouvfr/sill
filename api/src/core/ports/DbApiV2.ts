@@ -57,6 +57,7 @@ export interface SoftwareRepository {
         sourceSlug: string;
     }) => Promise<number | undefined>;
     getAllO: () => Promise<DatabaseDataType.SoftwareRow[]>;
+    getBySoftwareId: (id: number) => Promise<DatabaseDataType.SoftwareRow>;
     // Save = insert or update
     saveSimilarSoftwares: (
         params: {
@@ -66,7 +67,7 @@ export interface SoftwareRepository {
     ) => Promise<void>;
     getSimilarSoftwareExternalDataPks: (params: {
         softwareId: number;
-    }) => Promise<{ sourceSlug: string; externalId: string }[]>;
+    }) => Promise<{ sourceSlug: string; externalId: string; softwareId: number | undefined }[]>;
     // Secondary
     getAll: () => Promise<Software[]>;
     getById: (id: number) => Promise<Software | undefined>;
@@ -81,6 +82,15 @@ export interface SoftwareRepository {
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (sourceSlug: string) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
+    getUserAndReferentCountByOrganization: (params: { softwareId: number }) => Promise<
+        Record<
+            string,
+            {
+                userCount: number;
+                referentCount: number;
+            }
+        >
+    >;
 }
 
 export type PopulatedExternalData = DatabaseDataType.SoftwareExternalDataRow &
@@ -113,13 +123,16 @@ export interface SoftwareExternalDataRepository {
     getBySoftwareId: (params: {
         softwareId: number;
     }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
-    getPopulatedBySoftwareId: (params: { softwareId: number }) => Promise<PopulatedExternalData[] | undefined>;
     getBySource: (params: { sourceSlug: string }) => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     getIdsBySource: (params: { sourceSlug: string }) => Promise<string[] | undefined>;
     getAll: () => Promise<DatabaseDataType.SoftwareExternalDataRow[] | undefined>;
     delete: (params: { sourceSlug: string; externalId: string }) => Promise<boolean>;
     getSimilarSoftwareId: (params: { externalId: string; sourceSlug: string }) => Promise<{ softwareId: number }[]>;
     getOtherIdentifierIdsBySourceURL: (params: { sourceURL: string }) => Promise<Record<string, number> | undefined>;
+    // Secondary
+    getMergedBySoftwareId: (params: {
+        softwareId: number;
+    }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
 }
 
 type CnllPrestataire = {

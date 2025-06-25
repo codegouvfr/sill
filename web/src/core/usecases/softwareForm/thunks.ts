@@ -112,7 +112,7 @@ export const thunks = {
                                     step4: {
                                         similarSoftwares: software.similarSoftwares
                                             .map(similarSoftware => {
-                                                if (!similarSoftware.isInSill) {
+                                                if (!similarSoftware.registered) {
                                                     return similarSoftware;
                                                 } else {
                                                     const software = softwares.find(

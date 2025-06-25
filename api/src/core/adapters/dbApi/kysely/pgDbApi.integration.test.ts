@@ -213,7 +213,7 @@ describe("pgDbApi", () => {
                         label: similarSoftwareExternalData.label,
                         description: similarSoftwareExternalData.description,
                         isLibreSoftware: similarSoftwareExternalData.isLibreSoftware,
-                        isInSill: false
+                        registered: false
                     }
                 ],
                 softwareDescription: "Super software",

@@ -918,7 +918,7 @@ function apiSoftwareToInternalSoftware(params: {
                     }),
                     ...similarSoftwares
                         .map(similarSoftware =>
-                            similarSoftware.isInSill
+                            similarSoftware.registered
                                 ? similarSoftware.softwareName
                                 : resolveLocalizedString(similarSoftware.label)
                         )
