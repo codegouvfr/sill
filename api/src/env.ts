@@ -12,11 +12,7 @@ const zEnvConfiguration = z.object({
     "databaseUrl": z.string(),
     "isDevEnvironnement": z.boolean().default(false),
     "port": z.coerce.number().optional().default(8080),
-    "isDevEnvironnement": z.boolean().optional(),
-    // Completely disable this instance and redirect to another url
-    "redirectUrl": z.string().optional(),
     "importDataSourceOrigin": z.string().optional().default("wikidata"),
-    "databaseUrl": z.string(),
     "botAgentEmail": z.string().optional(),
     "listToImport": z.array(z.string()).optional(),
     "updateSkipTimingInMinutes": z.number().optional(),

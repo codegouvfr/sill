@@ -11,6 +11,7 @@ import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
 import { SoftwareFormData, Source } from "../src/lib/ApiTypes";
 import { OmitFromExisting } from "../src/core/utils";
+import { makeCreateSofware } from "../src/core/usecases/createSoftware";
 
 const seed = async () => {
     const dbUrl = process.env.DATABASE_URL;
@@ -35,7 +36,7 @@ const seed = async () => {
     console.info("Adding source");
     const source = {
         slug: "wikidata",
-        description: null,
+        description: undefined,
         url: "https://www.wikidata.org/",
         kind: "wikidata",
         priority: 1
@@ -48,6 +49,8 @@ const seed = async () => {
         isPublic: true,
         organization: "Seed Organization"
     };
+
+    const UCCreateSofware = makeCreateSofware(dbApi);
 
     console.info("Adding agent");
     const agentId = await dbApi.agent.add(someAgent);
@@ -172,7 +175,7 @@ const seed = async () => {
     ];
 
     for (const formData of softwarePackagesFormData) {
-        await dbApi.software.create({ agentId, formData });
+        await UCCreateSofware({ agentId, formData });
     }
 
     // Add instances for Onyxia
