@@ -113,8 +113,6 @@
     "softwareFormStep2": {
         "external id": "Fiche Wikidata",
         "external id hint_fill": "Renseignez le nom du logiciel ou directement l'identifiant (de la forme <code>QXXXXX</code>) pour associer le logiciel à une fiche existante<space /><dataSource>Wikidata</dataSource>.<br />La plupart des informations générales, telles que le logo ou l'URL du dépôt de code, sont extraites de Wikidata. Si le logiciel que vous souhaitez ajouter ne possède pas encore de fiche sur Wikidata, vous pouvez en créer une. Vous trouverez ici un<space /><dataSourceEntry>exemple de fiche Wikidata</dataSourceEntry><space />pour le logiciel<space /><exampleUrl></exampleUrl>.",
-        "comptoir du libre id": "Identifiant Comptoir du Libre (Optionnel)",
-        "comptoir du libre id hint": "Si le logiciel est présent sur le comptoir du libre vous pouvez renseigner son identifiant ou l'URL de sa fiche",
         "software name": "Nom du logiciel",
         "software feature": "Fonction du logiciel",
         "software feature hint": "Décrivez en quelques mots les fonctionnalités du logiciel",
@@ -129,8 +127,7 @@
         "must be an url": "Doit être un URL valide",
         "keywords": "Mot-clés",
         "keywords hint": "mots-clés pour aider à la recherche du logiciel, séparés par des virgules",
-        "logo preview alt": "Aperçu du logo du logiciel",
-        "invalid comptoir du libre id": "Doit être un URL comptoir du libre ou un identifiant numérique"
+        "logo preview alt": "Aperçu du logo du logiciel"
     },
     "softwareFormStep3": {
         "is present in support market": "Le logiciel est-il présent dans le marché de support ?",
