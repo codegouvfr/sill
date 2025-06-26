@@ -245,7 +245,7 @@ describe("fetches software extra data (from different providers)", () => {
                             url: `https://www.wikidata.org/wiki/Q58482636`
                         }
                     ],
-                    documentationUrl: "https://vitejs.dev/guide/",
+                    documentationUrl: "https://ja.vitejs.dev/guide/",
                     sourceSlug: source.slug,
                     softwareId: null,
                     externalId: "Q111590996",
@@ -257,7 +257,7 @@ describe("fetches software extra data (from different providers)", () => {
                     logoUrl:
                         "//upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Vitejs-logo.svg/250px-Vitejs-logo.svg.png",
                     sourceUrl: "https://github.com/vitejs/vite",
-                    websiteUrl: "https://vitejs.dev/",
+                    websiteUrl: "https://vite.dev/",
                     programmingLanguages: ["JavaScript"],
                     referencePublications: null,
                     identifiers: [],
