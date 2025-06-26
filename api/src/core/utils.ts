@@ -1,14 +1,5 @@
 export type OmitFromExisting<T, K extends keyof T> = Omit<T, K>;
 
-function isEmpty(value: any): boolean {
-    return (
-        value === null ||
-        value === undefined ||
-        (Array.isArray(value) && value.length === 0) ||
-        (typeof value === "string" && value.trim() === "")
-    );
-}
-
 const isEqual = (var1: any, var2: any): boolean => {
     // Check if both values are strictly equal
     if (var1 === var2) {
@@ -49,7 +40,6 @@ const isEqual = (var1: any, var2: any): boolean => {
 
         for (let key of keysA) {
             if (!keysB.includes(key) || !isEqual(var1[key], var2[key])) {
-                console.log(var1[key], " !==", var2[key]);
                 return false;
             }
         }
@@ -65,48 +55,10 @@ const isDeepIncludedInArray = (var1: any, arrayToCheck: any[]): boolean => {
     return arrayToCheck.some(element => isEqual(var1, element));
 };
 
-function mergeArrays(arr1: any[], arr2: any[]): any[] {
+export function mergeArrays(arr1: any[], arr2: any[]): any[] {
     const merged = [...arr1, ...arr2];
     return merged.reduce((acc, item) => {
         if (isDeepIncludedInArray(item, acc)) return acc;
         return [item, ...acc];
     }, []);
 }
-
-export const mergeObjects = <T extends Object>(obj1: T, obj2: T | T[]): T => {
-    if (Array.isArray(obj2)) {
-        if (obj2.length === 0) return obj1;
-
-        const [first, ...rest] = obj2;
-        return mergeObjects(obj1, mergeObjects(first, rest));
-    }
-
-    // Case both objects
-    if (Object.keys(obj1).length === 0) return obj2;
-    if (Object.keys(obj2).length === 0) return obj2;
-
-    const result: T = obj1;
-
-    for (const key in obj2) {
-        if (obj2.hasOwnProperty(key)) {
-            const value1 = obj1[key as keyof T];
-            const value2 = obj2[key as keyof T];
-
-            if (isEmpty(value1)) {
-                result[key as keyof T] = value2;
-            } else if (Array.isArray(value1) && Array.isArray(value2)) {
-                if (value1.length === 0) {
-                    result[key as keyof T] = value2;
-                } else {
-                    (result[key as keyof T] as any[]) = mergeArrays(value1, value2);
-                }
-            } else if (typeof value1 === "object" && typeof value2 === "object") {
-                (result[key as keyof T] as Object) = mergeObjects(value1 as Object, value2 as Object);
-            } else {
-                result[key as keyof T] = value2;
-            }
-        }
-    }
-
-    return result;
-};
