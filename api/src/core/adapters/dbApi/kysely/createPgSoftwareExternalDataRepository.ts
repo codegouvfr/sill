@@ -6,18 +6,19 @@ import { Kysely } from "kysely";
 import { DatabaseDataType, PopulatedExternalData, SoftwareExternalDataRepository } from "../../../ports/DbApiV2";
 import { Database, DatabaseRowOutput } from "./kysely.database";
 import { stripNullOrUndefinedValues, transformNullToUndefined, parseBigIntToNumber } from "./kysely.utils";
-import { mergeObjects } from "../../../utils";
+import { mergeArrays } from "../../../utils";
+import merge from "deepmerge";
 
 const cleanDataForExternalData = (row: DatabaseRowOutput.SoftwareExternalData) =>
     transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"]));
 
 const mergeExternalData = (externalData: PopulatedExternalData[]) => {
-    if (externalData.length === 0) throw Error("Nothing to merge, the array should be filled");
+    if (externalData.length === 0) return undefined;
     if (externalData.length === 1) return stripExternalDataFromSource(externalData[0]);
 
-    const [first, ...nexts] = externalData.sort((firstItem, secondItem) => secondItem.priority - firstItem.priority);
+    externalData.sort((firstItem, secondItem) => secondItem.priority - firstItem.priority);
 
-    const mergedItem = mergeObjects(first, nexts);
+    const mergedItem = merge.all<PopulatedExternalData>(externalData, { arrayMerge: mergeArrays });
 
     return stripExternalDataFromSource(mergedItem);
 };
@@ -217,8 +218,7 @@ export const createPgSoftwareExternalDataRepository = (db: Kysely<Database>): So
             .execute();
         const cleanResult = result.map(row => transformNullToUndefined(parseBigIntToNumber(row, ["lastDataFetchAt"])));
 
-        if (!cleanResult || cleanResult.length === 0)
-            throw new Error("Error in database, a software should have externalData");
+        if (!cleanResult) return undefined;
 
         return mergeExternalData(cleanResult);
     }
