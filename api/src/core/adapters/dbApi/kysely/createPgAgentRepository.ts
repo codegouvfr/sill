@@ -109,8 +109,3 @@ const makeGetAgentBuilder = (db: Kysely<Database>) =>
                     .as("referentsDeclarations")
         ])
         .groupBy("a.id");
-
-export const makeGetAgentIdByEmail = async (db: Kysely<Database>): Promise<Record<string, number>> => {
-    const agents = await db.selectFrom("agents").select(["email", "id"]).execute();
-    return agents.reduce((acc, agent) => ({ ...acc, [agent.email]: agent.id }), {});
-};

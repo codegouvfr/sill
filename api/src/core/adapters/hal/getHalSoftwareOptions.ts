@@ -7,7 +7,7 @@ import { Source } from "../../usecases/readWriteSillData";
 import { HAL } from "./HalAPI/types/HAL";
 import { halAPIGateway } from "./HalAPI";
 
-export const rawHalSoftwareToExternalOption =
+const rawHalSoftwareToExternalOption =
     ({ language, source }: { language: Language; source: Source }) =>
     (halSoftware: HAL.API.Software): SoftwareExternalDataOption => {
         const enLabel = halSoftware?.en_title_s?.[0] ?? halSoftware?.title_s?.[0] ?? "-";

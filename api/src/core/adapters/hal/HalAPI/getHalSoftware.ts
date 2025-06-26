@@ -33,7 +33,7 @@ const halSoftwareFieldsToReturn: (keyof HAL.API.Software)[] = [
     "label_xml"
 ];
 
-export const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
+const halSoftwareFieldsToReturnAsString = halSoftwareFieldsToReturn.join(",");
 
 export async function fetchHalSoftwareById(halDocid: string): Promise<HAL.API.Software | undefined> {
     const res = await fetch(
