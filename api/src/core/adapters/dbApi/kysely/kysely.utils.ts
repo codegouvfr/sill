@@ -1,4 +1,4 @@
-import { Expression, FunctionModule, RawBuilder, SelectExpression, Simplify, sql } from "kysely";
+import { Expression, RawBuilder, Simplify, sql } from "kysely";
 
 export const jsonBuildObject = <O extends Record<string, Expression<unknown>>>(
     obj: O
@@ -14,17 +14,6 @@ type StripNullRecursive<T> = {
 };
 export const jsonStripNulls = <T>(obj: RawBuilder<T>): RawBuilder<StripNullRecursive<T>> =>
     sql`json_strip_nulls(${obj})`;
-
-export const jsonAggOrEmptyArray = <Db, E extends Expression<unknown>>(fn: FunctionModule<Db, keyof Db>, value: E) =>
-    emptyArrayIfNull(fn, fn.jsonAgg(value));
-
-export const emptyArrayIfNull = <Db, E extends Expression<unknown>>(fn: FunctionModule<Db, keyof Db>, value: E) =>
-    fn.coalesce(value, sql`'[]'`);
-
-export const castSql = <Db>(
-    expression: SelectExpression<Db, keyof Db>,
-    type: "int" | "text" | "bool" | "uuid"
-): SelectExpression<Db, keyof Db> => sql`CAST(${expression} AS ${sql.raw(type)})` as any;
 
 export const isNotNull = <T>(value: T | null): value is T => value !== null;
 
