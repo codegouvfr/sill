@@ -1,5 +1,4 @@
 import { expect } from "vitest";
-import { Db } from "../core/ports/DbApi";
 import { DeclarationFormData, InstanceFormData, SoftwareFormData } from "../core/usecases/readWriteSillData";
 
 export const testPgUrl = "postgresql://catalogi:pg_password@localhost:5432/db";
@@ -22,13 +21,6 @@ const makeObjectFactory =
         ...defaultValue,
         ...overloads
     });
-
-export const createAgent = makeObjectFactory<Db.AgentRow>({
-    about: "About the default agent",
-    email: "default.agent@mail.com",
-    organization: "Default Organization",
-    isPublic: true
-});
 
 export const createDeclarationFormData = makeObjectFactory<DeclarationFormData>({
     declarationType: "user",

@@ -27,7 +27,8 @@
         "db:seed": "yarn build && dotenv -e ../.env -- node dist/scripts/seed.js",
         "typecheck": "tsc --noEmit",
         "dev:db": "docker compose -f ../docker-compose.resources.yml up -d",
-        "dev:reset": "docker compose -f ../docker-compose.resources.yml down && rm -rf ../docker-data && docker compose -f ../docker-compose.resources.yml up -d"
+        "dev:reset": "docker compose -f ../docker-compose.resources.yml down && rm -rf ../docker-data && docker compose -f ../docker-compose.resources.yml up -d",
+        "knip": "knip"
     },
     "author": "DINUM",
     "license": "MIT",
@@ -61,6 +62,7 @@
         "evt": "^2.5.7",
         "express": "^4.17.2",
         "i18nifty": "^3.2.0",
+        "knip": "^5.61.2",
         "memoizee": "^0.4.15",
         "node-fetch": "^2.6.7",
         "prettier": "^3.5.1",

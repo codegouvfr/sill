@@ -1,0 +1,6 @@
+{
+    "$schema": "https://unpkg.com/knip@5/schema.json",
+    "entry": ["src/entrypoints/*.ts"],
+    "project": ["**/*.{js,ts}"],
+    "ignore": [".config/*", "src/core/adapters/dbApi/kysely/migrations/*.ts"]
+}
