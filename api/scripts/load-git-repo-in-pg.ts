@@ -228,22 +228,6 @@ const insertCompiledSoftwaresAndSoftwareExternalData = async ({
     console.info("Deleting than Inserting compiled softwares");
     console.info("Number of compiled softwares to insert : ", compiledSoftwares.length);
     await pgDb.transaction().execute(async trx => {
-        await trx.deleteFrom("compiled_softwares").execute();
-        await trx
-            .insertInto("compiled_softwares")
-            .values(
-                compiledSoftwares.map(
-                    (software): InsertObject<Database, "compiled_softwares"> => ({
-                        softwareId: software.id,
-                        serviceProviders: JSON.stringify(software.serviceProviders),
-                        comptoirDuLibreSoftware: JSON.stringify(software.comptoirDuLibreSoftware),
-                        annuaireCnllServiceProviders: JSON.stringify(software.annuaireCnllServiceProviders),
-                        latestVersion: JSON.stringify(software.latestVersion)
-                    })
-                )
-            )
-            .executeTakeFirst();
-
         await trx.deleteFrom("software_external_datas").execute();
 
         await trx

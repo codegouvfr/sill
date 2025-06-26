@@ -5,7 +5,6 @@ import type { Language } from "../ports/GetSoftwareExternalData";
 import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 type AutoFillData = {
-    comptoirDuLibreId: number | undefined;
     softwareName: string | undefined;
     softwareDescription: string | undefined;
     softwareLicense: string | undefined;
@@ -40,7 +39,6 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
 
         if (externalSoftwareLabel === undefined) {
             return {
-                comptoirDuLibreId: undefined,
                 keywords: [],
                 softwareDescription: undefined,
                 softwareLicense: undefined,
@@ -82,7 +80,6 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         });
 
         const autoFillData: AutoFillData = {
-            "comptoirDuLibreId": comptoirDuLibreSoftware?.id,
             "softwareName":
                 externalSoftwareLabel === undefined ? undefined : resolveLocalizedString(externalSoftwareLabel),
             "softwareDescription":

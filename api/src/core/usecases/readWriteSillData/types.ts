@@ -37,15 +37,6 @@ export type Software = {
     documentationUrl: string | undefined;
     versionMin: string | undefined;
     license: string;
-    comptoirDuLibreServiceProviderCount: number;
-    annuaireCnllServiceProviders?:
-        | {
-              name: string;
-              siren: string;
-              url: string;
-          }[]
-        | undefined; // TODO Delete
-    comptoirDuLibreId?: number | undefined; // TODO Delete
     externalId: string | undefined;
     sourceSlug: string | undefined;
     softwareType: SoftwareType;
@@ -133,7 +124,6 @@ export type SoftwareFormData = {
     softwareType: SoftwareType;
     externalIdForSource: string | undefined;
     sourceSlug: string;
-    comptoirDuLibreId: number | undefined;
     softwareLicense: string;
     softwareMinimalVersion: string | undefined;
     similarSoftwareExternalDataIds: string[];

@@ -11,6 +11,7 @@ import { assert, type Equals } from "tsafe/assert";
 import { Identifier, SoftwareType } from "api/dist/src/lib/ApiTypes";
 import { SoftwareTypeTable } from "ui/shared/SoftwareTypeTable";
 import { LogoURLButton } from "ui/shared/LogoURLButton";
+import { ApiTypes } from "api";
 
 //TODO: Do not use optional props (?) use ( | undefined ) instead
 // so we are sure that we don't forget to provide some props
@@ -23,14 +24,7 @@ export type Props = {
     registerDate?: number;
     minimalVersionRequired?: string;
     license?: string;
-    comptoirDuLibreServiceProvidersUrl: string | undefined;
-    annuaireCnllServiceProviders: {
-        name: string;
-        siren: string;
-        url: string;
-    }[];
-    comptoireDuLibreUrl: string | undefined;
-    wikiDataUrl: string | undefined;
+    serviceProviders: ApiTypes.Organization[];
     hasDesktopApp: boolean | undefined;
     isAvailableAsMobileApp: boolean | undefined;
     isPresentInSupportMarket: boolean | undefined;
@@ -57,10 +51,7 @@ export const PreviewTab = (props: Props) => {
         isPresentInSupportMarket,
         isFromFrenchPublicService,
         isRGAACompliant,
-        comptoirDuLibreServiceProvidersUrl,
-        annuaireCnllServiceProviders,
-        comptoireDuLibreUrl,
-        wikiDataUrl,
+        serviceProviders,
         programmingLanguages,
         keywords,
         applicationCategories,
@@ -356,29 +347,6 @@ export const PreviewTab = (props: Props) => {
                         <p className={cx(fr.cx("fr-text--bold"), classes.item)}>
                             {t("previewTab.use full links")}
                         </p>
-                        {(comptoirDuLibreServiceProvidersUrl !== undefined ||
-                            comptoireDuLibreUrl !== undefined ||
-                            annuaireCnllServiceProviders.length !== 0 ||
-                            wikiDataUrl !== undefined) && (
-                            <>
-                                {comptoireDuLibreUrl !== undefined && (
-                                    <LogoURLButton
-                                        className={cx(classes.externalLink, classes.item)}
-                                        priority="secondary"
-                                        url={comptoireDuLibreUrl}
-                                        label={t("previewTab.comptoire du libre sheet")}
-                                    />
-                                )}
-                                {wikiDataUrl !== undefined && (
-                                    <LogoURLButton
-                                        className={cx(classes.externalLink, classes.item)}
-                                        priority="secondary"
-                                        url={wikiDataUrl}
-                                        label={t("previewTab.wikiData sheet")}
-                                    />
-                                )}
-                            </>
-                        )}
                         {identifiers && (
                             <>
                                 {identifiers
@@ -410,7 +378,11 @@ export const PreviewTab = (props: Props) => {
             </section>
             <CnllServiceProviderModal
                 softwareName={softwareName}
-                annuaireCnllServiceProviders={annuaireCnllServiceProviders}
+                annuaireCnllServiceProviders={serviceProviders.filter(provider => {
+                    return provider.identifiers?.some(identifier => {
+                        return identifier.subjectOf?.additionalType === "CNLL";
+                    });
+                })}
             />
         </>
     );

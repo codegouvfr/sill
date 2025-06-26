@@ -17,7 +17,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
     console.time("softwares query");
     const compliedSoftwares = await db
         .selectFrom("softwares as s")
-        .leftJoin("compiled_softwares as csft", "csft.softwareId", "s.id")
         .leftJoin("software_referents as referents", "s.id", "referents.softwareId")
         .leftJoin("software_users as users", "s.id", "users.softwareId")
         .leftJoin("instances", "s.id", "instances.mainSoftwareSillId")
@@ -32,7 +31,7 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "softwares__similar_software_external_datas.similarExternalId",
             "similarExt.externalId"
         )
-        .groupBy(["s.id", "csft.softwareId", "ext.externalId"])
+        .groupBy(["s.id", "ext.externalId"])
         .select([
             "s.id",
             "s.addedByAgentId",
@@ -55,11 +54,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             "s.updateTime",
             "s.versionMin",
             "s.workshopUrls",
-            "csft.softwareId as externalDataSoftwareId",
-            "csft.annuaireCnllServiceProviders",
-            "csft.comptoirDuLibreSoftware",
-            "csft.latestVersion",
-            "csft.serviceProviders",
             ({ ref, ...qb }) =>
                 qb
                     .case()
@@ -77,7 +71,8 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                                 websiteUrl: ref("ext.websiteUrl"),
                                 sourceUrl: ref("ext.sourceUrl"),
                                 documentationUrl: ref("ext.documentationUrl"),
-                                license: ref("ext.license")
+                                license: ref("ext.license"),
+                                providers: ref("ext.providers")
                             })
                         ).$castTo<SoftwareExternalData>()
                     )
@@ -95,11 +90,6 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
             const processedSoftwares = results.map(
                 ({
                     addedByAgentId,
-                    externalDataSoftwareId,
-                    annuaireCnllServiceProviders,
-                    comptoirDuLibreSoftware,
-                    latestVersion,
-                    serviceProviders,
                     similarExternalSoftwares,
                     dereferencing,
                     doRespectRgaa,
@@ -111,6 +101,13 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                     referencedSinceTime,
                     ...software
                 }): CompiledData.Software<"private"> => {
+                    const version =
+                        softwareExternalData?.softwareVersion && softwareExternalData?.publicationTime
+                            ? {
+                                  semVer: softwareExternalData.softwareVersion,
+                                  publicationTime: softwareExternalData.publicationTime.valueOf()
+                              }
+                            : undefined;
                     return {
                         ...stripNullOrUndefinedValues(software),
                         addedByAgentEmail: agentById[addedByAgentId].email,
@@ -118,11 +115,9 @@ export const createGetCompiledData = (db: Kysely<Database>) => async (): Promise
                         referencedSinceTime: new Date(+referencedSinceTime).getTime(),
                         doRespectRgaa,
                         softwareExternalData: softwareExternalData ?? undefined,
-                        annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? undefined,
-                        comptoirDuLibreSoftware: comptoirDuLibreSoftware ?? undefined,
-                        latestVersion: latestVersion ?? undefined,
+                        latestVersion: version,
                         dereferencing: dereferencing ?? undefined,
-                        serviceProviders: serviceProviders ?? [],
+                        serviceProviders: softwareExternalData?.providers ?? [],
                         similarExternalSoftwares: (similarExternalSoftwares ?? [])
                             .filter(isNotNull)
                             .map(similar => ({
