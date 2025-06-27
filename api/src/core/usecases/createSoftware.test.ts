@@ -57,7 +57,7 @@ describe("Create software - Trying all the cases", () => {
         useCaseCreate = makeCreateSofware(dbApi);
     });
 
-    it("Insert a software, should insert into three tables", async () => {
+    it("should insert into three tables", async () => {
         craSoftwareId = await useCaseCreate({
             formData: craSoftwareFormData,
             agentId

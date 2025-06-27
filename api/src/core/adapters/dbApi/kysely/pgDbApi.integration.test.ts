@@ -144,7 +144,7 @@ describe("pgDbApi", () => {
     });
 
     describe("software", () => {
-        it("creates a software, than gets it with getAll, than updates adding a parent", async () => {
+        it("gets softwares with getAll, and with getAllSillSoftwareExternalIds", async () => {
             console.log("------ software scenario ------");
             const { softwareId, agentId } = await insertSoftwareExternalDataAndSoftwareAndAgent();
 
