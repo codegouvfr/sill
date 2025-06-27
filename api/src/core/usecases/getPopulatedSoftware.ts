@@ -64,21 +64,17 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
             const similarSoftware = await Promise.all(
                 similarSoftwareIds.map(async softwareData => {
                     if (softwareData.softwareId) {
-                        const mergedExternalData = await dbApi.softwareExternalData.getMergedBySoftwareId({
-                            softwareId: softwareItem.id
-                        });
-
-                        if (!mergedExternalData) throw new Error("Wrong database values");
+                        const software = await dbApi.software.getBySoftwareId(softwareData.softwareId);
 
                         return {
                             registered: true,
-                            softwareId: softwareItem.id,
-                            softwareName: softwareItem.name,
-                            softwareDescription: softwareItem.description,
+                            softwareId: software.id,
+                            softwareName: software.name,
+                            softwareDescription: software.description,
                             externalId: "", //TODO Remove,
-                            label: mergedExternalData.label,
-                            description: mergedExternalData.description,
-                            isLibreSoftware: mergedExternalData.isLibreSoftware,
+                            label: software.name,
+                            description: software.description,
+                            isLibreSoftware: true, // TODO this is only true for SILL, we should have this info store in softwares table
                             sourceSlug: "" // TODO Remove
                         };
                     }
