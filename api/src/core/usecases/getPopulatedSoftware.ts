@@ -39,7 +39,7 @@ export const makeGetPopulatedSoftware: MakeGetPopulatedSoftware = (dbApi: DbApiV
 };
 
 export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi: DbApiV2) => {
-    return async (softwareData: DatabaseDataType.SoftwareRow | number, full: boolean) => {
+    return async (softwareData: DatabaseDataType.SoftwareRow | number, isFull: boolean): Promise<Software> => {
         const softwareItem =
             typeof softwareData !== "number" ? softwareData : await dbApi.software.getBySoftwareId(softwareData);
 
@@ -48,8 +48,6 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
         const mergedExternalDataItem = await dbApi.softwareExternalData.getMergedBySoftwareId({
             softwareId: softwareItem.id
         });
-        if (!mergedExternalDataItem) throw new Error("Error in database, a software should have externalData");
-        const mergedFormatedExternalDataItem = formatExternalDataRowToUISoftware(mergedExternalDataItem);
 
         const missingData: MissingData = {
             userAndReferentCountByOrganization: {},
@@ -59,7 +57,7 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
             similarSoftwares: []
         };
 
-        if (full) {
+        if (isFull) {
             const similarSoftwareIds = await dbApi.software.getSimilarSoftwareExternalDataPks({
                 softwareId: softwareItem.id
             });
@@ -104,8 +102,27 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
             );
         }
 
-        const finalUISoftwareItem = Object.assign(missingData, mergedFormatedExternalDataItem, formatedSoftwareUI);
-        return finalUISoftwareItem;
+        if (mergedExternalDataItem) {
+            return Object.assign(
+                missingData,
+                formatExternalDataRowToUISoftware(mergedExternalDataItem),
+                formatedSoftwareUI
+            );
+        }
+
+        return Object.assign(
+            {
+                serviceProviders: [],
+                latestVersion: {},
+                authors: [],
+                officialWebsiteUrl: undefined,
+                codeRepositoryUrl: undefined,
+                documentationUrl: undefined,
+                programmingLanguages: []
+            },
+            missingData,
+            formatedSoftwareUI
+        );
     };
 };
 
