@@ -322,22 +322,45 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .where("id", "=", softwareId)
                 .executeTakeFirstOrThrow();
         },
-        saveSimilarSoftware: async params => {
-            const dataToInsert = params
-                .map(({ softwareId, externalIds }) => {
-                    return externalIds.map(({ externalId, sourceSlug }) => ({
-                        similarExternalId: externalId,
-                        sourceSlug,
-                        softwareId
-                    }));
-                })
-                .flat();
+        saveSimilarSoftwares: async params => {
+            const dataToInsert = params.flatMap(({ softwareId, externalIds }) => {
+                return externalIds.map(({ externalId, sourceSlug }) => ({
+                    similarExternalId: externalId,
+                    sourceSlug,
+                    softwareId
+                }));
+            });
 
             await db
-                .insertInto("softwares__similar_software_external_datas")
-                .values(dataToInsert)
-                .onConflict(oc => oc.columns(["softwareId", "sourceSlug", "similarExternalId"]).doNothing())
+                .insertInto("software_external_datas")
+                .values(
+                    dataToInsert.map(({ similarExternalId, sourceSlug }) => ({
+                        externalId: similarExternalId,
+                        sourceSlug,
+                        label: JSON.stringify(""),
+                        description: JSON.stringify(""),
+                        developers: JSON.stringify([])
+                    }))
+                )
+                .onConflict(oc => oc.doNothing())
                 .execute();
+
+            await db.transaction().execute(async trx => {
+                await trx
+                    .deleteFrom("softwares__similar_software_external_datas")
+                    .where(
+                        "softwareId",
+                        "in",
+                        params.map(({ softwareId }) => softwareId)
+                    )
+                    .execute();
+
+                await trx
+                    .insertInto("softwares__similar_software_external_datas")
+                    .values(dataToInsert)
+                    .onConflict(oc => oc.columns(["softwareId", "sourceSlug", "similarExternalId"]).doNothing())
+                    .execute();
+            });
         },
         getSimilarSoftwareExternalDataPks: async ({ softwareId }) => {
             const similarIds = await db

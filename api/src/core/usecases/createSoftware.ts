@@ -140,7 +140,7 @@ export const makeCreateSofware: (dbApi: DbApiV2) => CreateSoftware =
                 }))
             );
 
-            await dbApi.software.saveSimilarSoftware([
+            await dbApi.software.saveSimilarSoftwares([
                 {
                     softwareId,
                     externalIds: similarSoftwareExternalDataIds.map(similarId => ({

@@ -63,5 +63,15 @@ export const makeUpdateSoftware: (dbApi: DbApiV2) => UpdateSoftware =
             softwareId: softwareId
         });
 
+        await dbApi.software.saveSimilarSoftwares([
+            {
+                softwareId,
+                externalIds: similarSoftwareExternalDataIds.map(externalId => ({
+                    externalId,
+                    sourceSlug
+                }))
+            }
+        ]);
+
         console.log(`software correctly updated, softwareId is : ${softwareId} (${softwareName})`);
     };
