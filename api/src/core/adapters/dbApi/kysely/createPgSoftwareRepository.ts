@@ -377,15 +377,16 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
         },
         getSimilarSoftwareExternalDataPks: async ({ softwareId }) => {
             const similarIds = await db
-                .selectFrom("softwares__similar_software_external_datas")
-                .selectAll()
-                .where("softwareId", "=", softwareId)
+                .selectFrom("softwares__similar_software_external_datas as similar")
+                .innerJoin("software_external_datas as ext", "ext.externalId", "similar.similarExternalId")
+                .select(["ext.softwareId", "ext.externalId", "ext.sourceSlug"])
+                .where("similar.softwareId", "=", softwareId)
                 .execute();
 
-            return similarIds.map(silimarRow => ({
-                externalId: silimarRow.similarExternalId,
-                sourceSlug: silimarRow.sourceSlug,
-                softwareId: silimarRow.softwareId
+            return similarIds.map(({ externalId, sourceSlug, softwareId }) => ({
+                externalId,
+                sourceSlug,
+                softwareId: softwareId ?? undefined
             }));
         },
         getUserAndReferentCountByOrganization: async ({ softwareId }) => {
