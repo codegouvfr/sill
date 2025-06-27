@@ -61,7 +61,7 @@ export interface SoftwareRepository {
         sourceSlug: string;
     }) => Promise<number | undefined>;
     // Save = insert or update
-    saveSimilarSoftware: (
+    saveSimilarSoftwares: (
         params: {
             softwareId: number;
             externalIds: { sourceSlug: string; externalId: string }[];
