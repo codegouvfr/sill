@@ -114,7 +114,9 @@ describe("Create software, than updates it adding a similar software", () => {
         expectToMatchObject(softwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
 
         const similarSofts = await dbApi.software.getSimilarSoftwareExternalDataPks({ softwareId: craSoftwareId });
-        expectToMatchObject(similarSofts, [{ sourceSlug: testSource.slug, externalId: "Q111590996" }]);
+        expectToMatchObject(similarSofts, [
+            { sourceSlug: testSource.slug, externalId: "Q111590996", softwareId: craSoftwareId }
+        ]);
 
         // than update the software, adding a similar software:
         const formDataWithAnNewSimilarSoftware: SoftwareFormData = {
@@ -135,8 +137,8 @@ describe("Create software, than updates it adding a similar software", () => {
             softwareId: craSoftwareId
         });
         expectToMatchObject(updatedSimilarSofts, [
-            { sourceSlug: testSource.slug, externalId: "Q111590996" },
-            { sourceSlug: testSource.slug, externalId: "Q56062435" }
+            { sourceSlug: testSource.slug, externalId: "Q111590996", softwareId: craSoftwareId },
+            { sourceSlug: testSource.slug, externalId: "Q56062435", softwareId: craSoftwareId }
         ]);
     });
 });
