@@ -291,7 +291,7 @@ describe("fetches software extra data (from different providers)", () => {
                             url: `https://www.wikidata.org/wiki/Q58482636`
                         }
                     ],
-                    documentationUrl: "https://vitejs.dev/guide/",
+                    documentationUrl: "https://ja.vitejs.dev/guide/",
                     sourceSlug: source.slug,
                     softwareId: undefined,
                     externalId: "Q111590996",
