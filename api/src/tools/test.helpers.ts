@@ -46,7 +46,6 @@ export const createSoftwareFormData = makeObjectFactory<SoftwareFormData>({
     },
     externalIdForSource: "Q171985",
     sourceSlug: "some-source-slug",
-    comptoirDuLibreId: undefined,
     softwareName: "Some software",
     softwareDescription: "Some software description",
     softwareLicense: "Some software license",
@@ -129,7 +128,6 @@ export const testSource = {
 } satisfies Source;
 
 export const resetDB = async (db: Kysely<Database>) => {
-    await db.deleteFrom("compiled_softwares").execute();
     await db.deleteFrom("software_external_datas").execute();
     await db.deleteFrom("software_users").execute();
     await db.deleteFrom("software_referents").execute();

@@ -28,7 +28,6 @@ export type FormData = {
     };
     step2: {
         externalId: string | undefined;
-        comptoirDuLibreId: number | undefined;
         softwareName: string;
         softwareDescription: string;
         softwareLicense: string;
@@ -75,7 +74,6 @@ export const { reducer, actions } = createUsecaseActions({
             }: {
                 payload: {
                     externalId: string;
-                    comptoirDuLibreId: number | undefined;
                     softwareName: string;
                     softwareDescription: string;
                     softwareLicense: string;
@@ -87,7 +85,6 @@ export const { reducer, actions } = createUsecaseActions({
         ) => {
             const {
                 externalId,
-                comptoirDuLibreId,
                 softwareName,
                 softwareDescription,
                 softwareLicense,
@@ -101,7 +98,6 @@ export const { reducer, actions } = createUsecaseActions({
                 formData: {
                     step2: {
                         externalId,
-                        comptoirDuLibreId,
                         softwareName,
                         softwareDescription,
                         softwareLicense,
