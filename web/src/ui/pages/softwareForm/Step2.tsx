@@ -59,7 +59,6 @@ export function SoftwareFormStep2(props: Step2Props) {
         wikidataEntry:
             | ReturnType<typeof getLibreSoftwareWikidataOptions>[number]
             | undefined;
-        comptoirDuLibreIdInputValue: string;
         softwareName: string;
         softwareDescription: string;
         softwareLicense: string;
@@ -72,8 +71,7 @@ export function SoftwareFormStep2(props: Step2Props) {
                 return undefined;
             }
 
-            const { comptoirDuLibreId, externalId, softwareKeywords, ...rest } =
-                initialFormData ?? {};
+            const { externalId, softwareKeywords, ...rest } = initialFormData ?? {};
 
             return {
                 ...rest,
@@ -85,10 +83,6 @@ export function SoftwareFormStep2(props: Step2Props) {
                               description: "",
                               label: rest.softwareName
                           },
-                comptoirDuLibreIdInputValue:
-                    comptoirDuLibreId === undefined
-                        ? ""
-                        : comptoirDuLibreIdToComptoirDuLibreInputValue(comptoirDuLibreId),
                 keywordsInputValue: softwareKeywords.join(", ")
             };
         })()
@@ -126,7 +120,6 @@ export function SoftwareFormStep2(props: Step2Props) {
                 setIsAutocompleteInProgress(true);
 
                 const {
-                    comptoirDuLibreId,
                     softwareName,
                     softwareDescription,
                     softwareLicense,
@@ -147,13 +140,6 @@ export function SoftwareFormStep2(props: Step2Props) {
                     assert(wikidataInputElement !== null);
 
                     wikidataInputElement.scrollIntoView({ behavior: "smooth" });
-                }
-
-                if (comptoirDuLibreId !== undefined) {
-                    setValue(
-                        "comptoirDuLibreIdInputValue",
-                        comptoirDuLibreIdToComptoirDuLibreInputValue(comptoirDuLibreId)
-                    );
                 }
 
                 if (softwareDescription !== undefined) {
@@ -193,13 +179,7 @@ export function SoftwareFormStep2(props: Step2Props) {
         <form
             className={className}
             onSubmit={handleSubmit(
-                ({
-                    comptoirDuLibreIdInputValue,
-                    wikidataEntry,
-                    softwareLogoUrl,
-                    keywordsInputValue,
-                    ...rest
-                }) =>
+                ({ wikidataEntry, softwareLogoUrl, keywordsInputValue, ...rest }) =>
                     onSubmit({
                         ...rest,
                         softwareLogoUrl:
@@ -207,12 +187,6 @@ export function SoftwareFormStep2(props: Step2Props) {
                         softwareKeywords: keywordsInputValue
                             .split(",")
                             .map(s => s.trim()),
-                        comptoirDuLibreId:
-                            comptoirDuLibreIdInputValue === ""
-                                ? undefined
-                                : comptoirDuLibreInputValueToComptoirDuLibreId(
-                                      comptoirDuLibreIdInputValue
-                                  ),
                         externalId: wikidataEntry?.externalId
                     })
             )}
@@ -349,43 +323,6 @@ export function SoftwareFormStep2(props: Step2Props) {
                             ...style,
                             marginTop: fr.spacing("4v")
                         }}
-                        label={t("softwareFormStep2.comptoir du libre id")}
-                        hintText={t("softwareFormStep2.comptoir du libre id hint")}
-                        nativeInputProps={{
-                            ...register("comptoirDuLibreIdInputValue", {
-                                validate: value => {
-                                    try {
-                                        comptoirDuLibreInputValueToComptoirDuLibreId(
-                                            value
-                                        );
-                                    } catch {
-                                        return false;
-                                    }
-
-                                    return true;
-                                }
-                            })
-                        }}
-                        state={
-                            errors.comptoirDuLibreIdInputValue !== undefined
-                                ? "error"
-                                : undefined
-                        }
-                        stateRelatedMessage={t(
-                            "softwareFormStep2.invalid comptoir du libre id"
-                        )}
-                    />
-                )}
-            />
-            <CircularProgressWrapper
-                isInProgress={isAutocompleteInProgress}
-                renderChildren={({ style }) => (
-                    <Input
-                        disabled={isAutocompleteInProgress}
-                        style={{
-                            ...style,
-                            marginTop: fr.spacing("4v")
-                        }}
                         label={t("softwareFormStep2.software name")}
                         nativeInputProps={{
                             ...register("softwareName", { required: true })
@@ -476,44 +413,4 @@ export function SoftwareFormStep2(props: Step2Props) {
             />
         </form>
     );
-}
-
-function comptoirDuLibreIdToComptoirDuLibreInputValue(comptoirDuLibreId: number) {
-    return `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`;
-}
-
-function comptoirDuLibreInputValueToComptoirDuLibreId(comptoirDuLibreInputValue: string) {
-    if (comptoirDuLibreInputValue === "") {
-        return undefined;
-    }
-
-    number: {
-        const n = parseInt(comptoirDuLibreInputValue);
-
-        if (isNaN(n)) {
-            break number;
-        }
-
-        return n;
-    }
-
-    url: {
-        if (
-            !comptoirDuLibreInputValue.startsWith(
-                "https://comptoir-du-libre.org/fr/softwares/"
-            )
-        ) {
-            break url;
-        }
-
-        const n = parseInt(comptoirDuLibreInputValue.split("/").reverse()[0]);
-
-        if (isNaN(n)) {
-            break url;
-        }
-
-        return n;
-    }
-
-    assert(false);
 }
