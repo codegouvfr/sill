@@ -26,7 +26,6 @@ const craSoftwareFormData = {
     },
     externalIdForSource: "Q118629387",
     sourceSlug: "wikidata",
-    comptoirDuLibreId: 1,
     softwareName: "Create react app",
     softwareDescription: "To create React apps.",
     softwareLicense: "MIT",
@@ -52,7 +51,6 @@ const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) 
             }),
             externalIdForSource: "Q11354",
             sourceSlug: "wikidata",
-            comptoirDuLibreId: 3737,
             name: "Apache HTTP Server",
             description: "Serveur Web & Reverse Proxy",
             license: "Apache-2.0",
@@ -95,7 +93,6 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
             softwareType: JSON.stringify({ type: "stack" }),
             externalIdForSource: "Q2822666",
             sourceSlug: "wikidata",
-            comptoirDuLibreId: 304,
             name: "Acceleo",
             description: "Outil et/ou plugin de génération de tout ou partie du code",
             license: "EPL-2.0",
@@ -324,17 +321,6 @@ describe("fetches software extra data (from different providers)", () => {
                     publicationTime: expect.any(Date),
                     lastDataFetchAt: expect.any(Number),
                     providers: []
-                }
-            ]);
-
-            const otherExtraData = await db.selectFrom("compiled_softwares").selectAll().execute();
-            expectToEqual(otherExtraData, [
-                {
-                    "annuaireCnllServiceProviders": null,
-                    "comptoirDuLibreSoftware": null,
-                    "latestVersion": null,
-                    "serviceProviders": [],
-                    "softwareId": 11
                 }
             ]);
 

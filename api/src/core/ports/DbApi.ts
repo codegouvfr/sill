@@ -30,9 +30,7 @@ export namespace Db {
         externalId?: string;
         sourceSlug?: string;
         externalDataOrigin?: "wikidata" | "HAL";
-        //Example https://comptoir-du-libre.org/en/softwares/461 -> 461
         /* cspell: disable-next-line */
-        comptoirDuLibreId: number | undefined;
         //// https://spdx.org/licenses/:
         //// https://www.data.gouv.fr/fr/pages/legal/licences/
         license: string;

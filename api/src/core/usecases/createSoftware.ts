@@ -48,11 +48,11 @@ const resolveExistingSoftwareId = async ({
     const source = await dbApi.source.getByName({ name: sourceSlug });
     if (!source) throw new Error("Source slug is unknown");
 
-    const named = await dbApi.software.getByName(softwareName);
+    const named = await dbApi.software.getByName({ softwareName });
 
     if (named) {
         console.log(logTitle, "Name already present, let's take this one");
-        return named.softwareId;
+        return named.id;
     }
 
     if (externalIdForSource) {

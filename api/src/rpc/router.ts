@@ -151,7 +151,7 @@ export function createRouter(params: {
 
                 const { formData } = input;
 
-                const existingSoftware = await dbApi.software.getByName(formData.softwareName.trim());
+                const existingSoftware = await dbApi.software.getByName({ softwareName: formData.softwareName.trim() });
 
                 if (existingSoftware) {
                     throw new TRPCError({
@@ -226,7 +226,7 @@ export function createRouter(params: {
 
                 const { formData, softwareId } = input;
 
-                const software = await dbApi.software.getById(softwareId);
+                const software = await dbApi.software.getBySoftwareId(softwareId);
                 if (!software)
                     throw new TRPCError({
                         "code": "NOT_FOUND",
@@ -288,7 +288,7 @@ export function createRouter(params: {
                         message: "Agent not found"
                     });
 
-                const software = await dbApi.software.getById(softwareId);
+                const software = await dbApi.software.getBySoftwareId(softwareId);
                 if (!software)
                     throw new TRPCError({
                         "code": "NOT_FOUND",
@@ -534,7 +534,6 @@ const zSoftwareFormData = (() => {
         "softwareType": zSoftwareType,
         "externalIdForSource": z.string().optional(),
         "sourceSlug": z.string(),
-        "comptoirDuLibreId": z.number().optional(),
         "softwareName": z.string(),
         "softwareDescription": z.string(),
         "softwareLicense": z.string(),

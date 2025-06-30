@@ -25,7 +25,6 @@ const formatCDLSoftwareToExternalData = async (
         }, // TODO Check Mandatory, Incorrect data
         externalIdForSource: comptoirSoftware.id.toString(),
         sourceSlug: source.slug,
-        comptoirDuLibreId: undefined, // TODO DELETE
         softwareLicense: comptoirSoftware.licence,
         softwareMinimalVersion: undefined,
         similarSoftwareExternalDataIds: [],

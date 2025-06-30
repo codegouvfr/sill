@@ -113,14 +113,7 @@ export default function SoftwareDetails(props: Props) {
                                 content: (
                                     <PreviewTab
                                         softwareName={software.softwareName}
-                                        wikiDataUrl={software.wikidataUrl}
-                                        comptoireDuLibreUrl={software.comptoirDuLibreUrl}
-                                        comptoirDuLibreServiceProvidersUrl={
-                                            software.comptoirDuLibreServiceProviderUrl
-                                        }
-                                        annuaireCnllServiceProviders={
-                                            software.annuaireCnllServiceProviders
-                                        }
+                                        serviceProviders={software.serviceProviders}
                                         softwareDescription={software.softwareDescription}
                                         license={software.license}
                                         hasDesktopApp={

@@ -24,14 +24,7 @@ const dateParser = (str: string | Date | undefined | null) => {
     }
 };
 
-type MissingData = Pick<
-    Software,
-    | "userAndReferentCountByOrganization"
-    | "comptoirDuLibreServiceProviderCount"
-    | "annuaireCnllServiceProviders"
-    | "comptoirDuLibreId"
-    | "similarSoftwares"
->;
+type MissingData = Pick<Software, "userAndReferentCountByOrganization" | "similarSoftwares">;
 
 export const makeGetPopulatedSoftware: MakeGetPopulatedSoftware = (dbApi: DbApiV2) => async () => {
     const sofware = await dbApi.software.getAllO();
@@ -47,6 +40,8 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
         const softwareItem =
             typeof softwareData !== "number" ? softwareData : await dbApi.software.getBySoftwareId(softwareData);
 
+        if (!softwareItem) throw new Error(`Could find a software`);
+
         const formatedSoftwareUI = formatSoftwareRowToUISoftware(softwareItem);
 
         const mergedExternalDataItem = await dbApi.softwareExternalData.getMergedBySoftwareId({
@@ -55,9 +50,6 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
 
         const missingData: MissingData = {
             userAndReferentCountByOrganization: {},
-            comptoirDuLibreServiceProviderCount: 0, // TO Delete
-            annuaireCnllServiceProviders: undefined, // TO Delete
-            comptoirDuLibreId: undefined, // TO Delete
             similarSoftwares: []
         };
 
@@ -143,7 +135,6 @@ type DataFromSofwareRow = Pick<
     | "dereferencing"
     | "sourceSlug"
     | "externalId"
-    | "comptoirDuLibreId"
 >;
 const formatSoftwareRowToUISoftware = (software: DatabaseDataType.SoftwareRow): DataFromSofwareRow => {
     return {
@@ -166,8 +157,7 @@ const formatSoftwareRowToUISoftware = (software: DatabaseDataType.SoftwareRow): 
         dereferencing: software.dereferencing,
         // TODO REMOVE
         sourceSlug: undefined,
-        externalId: undefined,
-        comptoirDuLibreId: undefined
+        externalId: undefined
     };
 };
 

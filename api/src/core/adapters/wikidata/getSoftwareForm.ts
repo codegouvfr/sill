@@ -65,7 +65,6 @@ export const getWikidataForm: GetSoftwareFormData = async ({
             },
             externalIdForSource: externalId,
             sourceSlug: source.slug,
-            comptoirDuLibreId: undefined,
             softwareLicense: license?.label ?? "Copyright",
             softwareMinimalVersion: undefined,
             similarSoftwareExternalDataIds: [],

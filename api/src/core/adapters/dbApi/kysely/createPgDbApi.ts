@@ -7,7 +7,6 @@ import { DbApiV2 } from "../../../ports/DbApiV2";
 import { createGetCompiledData } from "./createGetCompiledData";
 import { createPgAgentRepository } from "./createPgAgentRepository";
 import { createPgInstanceRepository } from "./createPgInstanceRepository";
-import { createPgOtherSoftwareExtraDataRepository } from "./createPgOtherSoftwareExtraDataRepositiory";
 import { createPgSoftwareExternalDataRepository } from "./createPgSoftwareExternalDataRepository";
 import { createPgSoftwareRepository } from "./createPgSoftwareRepository";
 import { createPgSourceRepository } from "./createPgSourceRepository";
@@ -19,7 +18,6 @@ export const createKyselyPgDbApi = (db: Kysely<Database>): DbApiV2 => {
         source: createPgSourceRepository(db),
         software: createPgSoftwareRepository(db),
         softwareExternalData: createPgSoftwareExternalDataRepository(db),
-        otherSoftwareExtraData: createPgOtherSoftwareExtraDataRepository(db),
         instance: createPgInstanceRepository(db),
         agent: createPgAgentRepository(db),
         softwareReferent: createPgReferentRepository(db),
