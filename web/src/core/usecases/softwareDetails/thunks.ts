@@ -187,8 +187,6 @@ function apiSoftwareToSoftware(params: {
         addedTime,
         dereferencing,
         prerogatives,
-        comptoirDuLibreServiceProviderCount,
-        comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
         sourceSlug,
         externalId,
@@ -196,7 +194,6 @@ function apiSoftwareToSoftware(params: {
         versionMin,
         softwareType,
         userAndReferentCountByOrganization,
-        annuaireCnllServiceProviders,
         serviceProviders,
         programmingLanguages,
         keywords,
@@ -227,19 +224,6 @@ function apiSoftwareToSoftware(params: {
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         addedTime,
-        comptoirDuLibreServiceProviderUrl:
-            comptoirDuLibreId === undefined
-                ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${comptoirDuLibreId}`,
-        annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? [],
-        comptoirDuLibreUrl:
-            comptoirDuLibreId === undefined
-                ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
-        wikidataUrl:
-            sourceSlug !== "wikidata" || externalId === undefined
-                ? undefined
-                : `https://www.wikidata.org/wiki/${externalId}`,
         instances:
             softwareType.type !== "cloud"
                 ? undefined
@@ -298,7 +282,6 @@ function apiSoftwareToSoftware(params: {
             isFromFrenchPublicServices: prerogatives.isFromFrenchPublicServices,
             doRespectRgaa: prerogatives.doRespectRgaa ?? undefined
         },
-        comptoirDuLibreServiceProviderCount,
         versionMin,
         programmingLanguages,
         keywords,

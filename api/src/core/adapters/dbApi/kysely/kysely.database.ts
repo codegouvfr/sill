@@ -73,7 +73,6 @@ export type Database = {
     softwares: SoftwaresTable;
     software_external_datas: SoftwareExternalDatasTable;
     softwares__similar_software_external_datas: SimilarExternalSoftwareExternalDataTable;
-    compiled_softwares: CompiledSoftwaresTable;
     sources: SourcesTable;
 };
 
@@ -183,7 +182,6 @@ type SoftwaresTable = {
     isPresentInSupportContract: boolean;
     externalIdForSource: ExternalId | null;
     sourceSlug: string | null;
-    comptoirDuLibreId: number | null;
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
     versionMin: string | null;
@@ -204,12 +202,11 @@ export namespace DatabaseRowOutput {
     export type SoftwareExternalData = TransformRepoToRowOutput<SoftwareExternalDatasTable>;
     export type SimilarExternalSoftwareExternalData =
         TransformRepoToRowOutput<SimilarExternalSoftwareExternalDataTable>;
-    export type CompiledSoftwares = TransformRepoToRowOutput<CompiledSoftwaresTable>;
     export type Source = TransformRepoToRowOutput<SourcesTable>;
 }
 
 // ---------- compiled data ----------
-
+// TODO DELETE ?
 export namespace PgComptoirDuLibre {
     type Provider = {
         id: number;
@@ -285,28 +282,3 @@ export namespace PgComptoirDuLibre {
         };
     };
 }
-
-type ServiceProvider = {
-    name: string;
-    website?: string;
-    cdlUrl?: string;
-    cnllUrl?: string;
-    siren?: string;
-};
-
-type CompiledSoftwaresTable = {
-    softwareId: number;
-    serviceProviders: JSONColumnType<ServiceProvider[]>;
-    comptoirDuLibreSoftware: JSONColumnType<PgComptoirDuLibre.Software> | null;
-    annuaireCnllServiceProviders: JSONColumnType<
-        {
-            name: string;
-            siren: string;
-            url: string;
-        }[]
-    > | null;
-    latestVersion: JSONColumnType<{
-        semVer: string;
-        publicationTime: number;
-    }> | null;
-};

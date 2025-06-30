@@ -53,13 +53,6 @@ export namespace State {
         addedTime: number;
         versionMin: string | undefined;
         license: string;
-        comptoirDuLibreServiceProviderCount: number;
-        comptoirDuLibreServiceProviderUrl: string | undefined;
-        annuaireCnllServiceProviders: {
-            name: string;
-            siren: string;
-            url: string;
-        }[];
         dereferencing:
             | {
                   reason?: string;
@@ -67,8 +60,6 @@ export namespace State {
                   lastRecommendedVersion?: string;
               }
             | undefined;
-        comptoirDuLibreUrl: string | undefined;
-        wikidataUrl: string | undefined;
         prerogatives: Record<SoftwareCatalogState.Prerogative, boolean | undefined>;
         userCount: number;
         referentCount: number;

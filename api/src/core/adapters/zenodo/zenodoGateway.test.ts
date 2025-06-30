@@ -111,7 +111,6 @@ const amdSoftwareForm = {
     },
     externalIdForSource: "15479049",
     sourceSlug: "zenodo",
-    comptoirDuLibreId: undefined,
     softwareLicense: "gpl-3.0",
     softwareMinimalVersion: undefined,
     similarSoftwareExternalDataIds: [],

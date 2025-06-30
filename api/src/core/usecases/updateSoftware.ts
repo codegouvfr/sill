@@ -30,9 +30,8 @@ export const makeUpdateSoftware: (dbApi: DbApiV2) => UpdateSoftware =
             doRespectRgaa,
             similarSoftwareExternalDataIds,
             softwareType,
-            externalIdForSource, // TODO Remove
-            sourceSlug, // TODO Remove
-            comptoirDuLibreId, // TODO Remove
+            externalIdForSource,
+            sourceSlug,
             softwareKeywords,
             ...rest
         } = formData;

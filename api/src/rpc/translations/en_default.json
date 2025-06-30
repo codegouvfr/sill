@@ -111,8 +111,6 @@
     "softwareFormStep2": {
         "external id": "Wikidata item",
         "external id hint_fill": "Fill up a name or directly the id (of the form <code>Qxxxxx</code>) to associate the software with an existing entry <space /><dataSource>Wikidata</dataSource>.<br />Most general information, such as the logo or the URL of the code repository, is extracted from Wikidata. If the software you want to add does not have a Wikidata entry yet, you can create one . Find here an <space /><dataSourceEntry>example of a Wikidata entry</dataSourceEntry><space />for the software<space /><exampleUrl /><space />.",
-        "comptoir du libre id": "Comptoir du Libre identifier (optional)",
-        "comptoir du libre id hint": "If you the software is listed in the Comptoir du Libre you can add its identifier here. The identifier is either a numeric id or the url of the product page.",
         "software name": "Software name",
         "software feature": "Software function",
         "software feature hint": "Describe in a few words the features of the software",
@@ -127,8 +125,7 @@
         "must be an url": "Must be an URL",
         "keywords": "Keywords",
         "keywords hint": "Keywords for making it pop up in the search results, coma separated",
-        "logo preview alt": "Preview of the logo",
-        "invalid comptoir du libre id": "Comptoir du libre ID should be a numeric id or a comptoir du libre url"
+        "logo preview alt": "Preview of the logo"
     },
     "softwareFormStep3": {
         "is present in support market": "Is the software present in the support market?",

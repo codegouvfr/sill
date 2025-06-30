@@ -4,10 +4,9 @@
 
 import type { Database, DatabaseRowOutput } from "../adapters/dbApi/kysely/kysely.database";
 import { TransformRepoToCleanedRow } from "../adapters/dbApi/kysely/kysely.utils";
-import type { Agent, Instance, InstanceFormData, ServiceProvider, Software } from "../usecases/readWriteSillData";
+import type { Agent, Instance, InstanceFormData } from "../usecases/readWriteSillData";
 import type { OmitFromExisting } from "../utils";
 import type { CompiledData } from "./CompileData";
-import { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
 import type { SoftwareExternalData } from "./GetSoftwareExternalData";
 
@@ -45,7 +44,6 @@ export namespace DatabaseDataType {
     export type SoftwareExternalDataRow = TransformRepoToCleanedRow<DatabaseRowOutput.SoftwareExternalData>;
     export type SimilarExternalSoftwareExternalDataRow =
         TransformRepoToCleanedRow<DatabaseRowOutput.SimilarExternalSoftwareExternalData>;
-    export type CompiledSoftwaresRow = TransformRepoToCleanedRow<DatabaseRowOutput.CompiledSoftwares>;
     export type SourceRow = TransformRepoToCleanedRow<DatabaseRowOutput.Source>;
 }
 
@@ -61,7 +59,8 @@ export interface SoftwareRepository {
         sourceSlug: string;
     }) => Promise<number | undefined>;
     getAllO: () => Promise<DatabaseDataType.SoftwareRow[]>;
-    getBySoftwareId: (id: number) => Promise<DatabaseDataType.SoftwareRow>;
+    getBySoftwareId: (id: number) => Promise<DatabaseDataType.SoftwareRow | undefined>;
+    getByName: (params: { softwareName: string }) => Promise<DatabaseDataType.SoftwareRow | undefined>;
     // Save = insert or update
     saveSimilarSoftwares: (
         params: {
@@ -73,16 +72,16 @@ export interface SoftwareRepository {
         softwareId: number;
     }) => Promise<{ sourceSlug: string; externalId: string; softwareId: number | undefined }[]>;
     // Secondary
-    getAll: () => Promise<Software[]>;
-    getById: (id: number) => Promise<Software | undefined>;
-    getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
-        | {
-              software: Software;
-              similarSoftwaresExternalIds: string[];
-          }
-        | undefined
-    >;
-    getByName: (name: string) => Promise<Software | undefined>;
+    // getAll: () => Promise<Software[]>;
+    // getById: (id: number) => Promise<Software | undefined>;
+    // getByIdWithLinkedSoftwaresExternalIds: (id: number) => Promise<
+    //     | {
+    //           software: Software;
+    //           similarSoftwaresExternalIds: string[];
+    //       }
+    //     | undefined
+    // >;
+    // getByName: (name: string) => Promise<Software | undefined>;
     countAddedByAgent: (params: { agentId: number }) => Promise<number>;
     getAllSillSoftwareExternalIds: (sourceSlug: string) => Promise<string[]>;
     unreference: (params: { softwareId: number; reason: string; time: number }) => Promise<void>;
@@ -137,25 +136,6 @@ export interface SoftwareExternalDataRepository {
     getMergedBySoftwareId: (params: {
         softwareId: number;
     }) => Promise<DatabaseDataType.SoftwareExternalDataRow | undefined>;
-}
-
-type CnllPrestataire = {
-    name: string;
-    siren: string;
-    url: string;
-};
-
-export type OtherSoftwareExtraData = {
-    softwareId: number;
-    serviceProviders: ServiceProvider[];
-    comptoirDuLibreSoftware: ComptoirDuLibre.Software | null;
-    annuaireCnllServiceProviders: CnllPrestataire[] | null;
-    latestVersion: { semVer: string; publicationTime: number } | null;
-};
-
-export interface OtherSoftwareExtraDataRepository {
-    save: (otherSoftwareExtraData: OtherSoftwareExtraData) => Promise<void>;
-    getBySoftwareId: (softwareId: number) => Promise<OtherSoftwareExtraData | undefined>;
 }
 
 export interface InstanceRepository {
@@ -213,7 +193,6 @@ export type DbApiV2 = {
     source: SourceRepository;
     software: SoftwareRepository;
     softwareExternalData: SoftwareExternalDataRepository;
-    otherSoftwareExtraData: OtherSoftwareExtraDataRepository;
     instance: InstanceRepository;
     agent: AgentRepository;
     softwareReferent: SoftwareReferentRepository;
