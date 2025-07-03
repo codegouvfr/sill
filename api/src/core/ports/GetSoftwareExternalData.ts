@@ -2,12 +2,15 @@ import { z } from "zod";
 import type { LocalizedString as LocalizedString_generic } from "i18nifty/LocalizedString/reactless";
 import type { PartialNoOptional } from "../../tools/PartialNoOptional";
 import { assert, type Equals } from "tsafe/assert";
-import { Catalogi } from "../../types/Catalogi";
 import { Source } from "../usecases/readWriteSillData";
+import {
+    SchemaIdentifier,
+    SchemaOrganization,
+    SchemaPerson,
+    ScholarlyArticle
+} from "../adapters/dbApi/kysely/kysely.database";
 
 type ExternalId = string;
-
-export type ExternalDataOrigin = "wikidata" | "HAL";
 
 export type GetSoftwareExternalData = {
     (params: { externalId: ExternalId; source: Source }): Promise<SoftwareExternalData | undefined>;
@@ -17,11 +20,11 @@ export type GetSoftwareExternalData = {
 export type SoftwareExternalData = {
     externalId: ExternalId;
     sourceSlug: string;
-    developers: Array<Catalogi.Person | Catalogi.Organization>;
+    developers: Array<SchemaPerson | SchemaOrganization>;
     label: LocalizedString;
     description: LocalizedString;
-    isLibreSoftware: boolean;
 } & PartialNoOptional<{
+    isLibreSoftware: boolean;
     logoUrl: string;
     websiteUrl: string;
     sourceUrl: string;
@@ -32,8 +35,9 @@ export type SoftwareExternalData = {
     programmingLanguages: string[];
     applicationCategories: string[];
     publicationTime: Date;
-    referencePublications: Catalogi.ScholarlyArticle[];
-    identifiers: Catalogi.Identification[];
+    referencePublications: ScholarlyArticle[];
+    identifiers: SchemaIdentifier[];
+    providers: Array<SchemaOrganization>;
 }>;
 
 export type SimilarSoftwareExternalData = Pick<

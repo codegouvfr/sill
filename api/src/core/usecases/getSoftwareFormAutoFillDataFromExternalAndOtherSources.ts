@@ -2,6 +2,7 @@ import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless
 import { assert } from "tsafe/assert";
 import type { Context } from "../bootstrap";
 import type { Language } from "../ports/GetSoftwareExternalData";
+import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 type AutoFillData = {
     comptoirDuLibreId: number | undefined;
@@ -24,12 +25,12 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         const cachedAutoFillData = autoFillDataCache[externalId];
         if (cachedAutoFillData !== undefined) return cachedAutoFillData;
 
-        const { comptoirDuLibreApi, getSoftwareExternalData } = context;
+        const { comptoirDuLibreApi } = context;
 
         const mainSource = await context.dbApi.source.getMainSource();
 
         const [softwareExternalData, comptoirDuLibre] = await Promise.all([
-            getSoftwareExternalData({ externalId, source: mainSource }),
+            resolveAdapterFromSource(mainSource).softwareExternalData.getById({ externalId, source: mainSource }),
             comptoirDuLibreApi.getComptoirDuLibre()
         ]);
 
