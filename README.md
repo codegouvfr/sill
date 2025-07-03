@@ -36,4 +36,4 @@ See [GOVERNANCE.md](GOVERNANCE.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The code in this repository is published under [licence MIT](LICENSES/MIT.txt).
 
-The documentation is published under [licence Ouverte 2.0](LICENSES/Etalab-2.0.md).
+The documentation is published under [licence Ouverte 2.0](LICENSES/Etalab-2.0.md) and CC-BY-4.0.
