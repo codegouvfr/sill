@@ -1,3 +1,8 @@
+<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
+<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+<!-- SPDX-License-Identifier: Etalab-2.0 -->
+
 # Catalogi
 
 Catalogi is a comprehensive tool that provides a catalog of software packages. It allows organizations to list, search, and manage software documentation and information in a modern web application.

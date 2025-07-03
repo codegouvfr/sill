@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 import { fr } from "@codegouvfr/react-dsfr";
 import { useTranslation } from "react-i18next";
 import { ApiTypes } from "api";

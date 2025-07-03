@@ -3,6 +3,11 @@ title: The Interministerial Free Software Catalog
 toc: true
 ---
 
+<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
+<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+<!-- SPDX-License-Identifier: Etalab-2.0 -->
+
 ## Why this catalogue?
 
 The Interministerial Free Software Catalog (aka SILL for "socle interministériel de logiciels libres" in French) is the reference catalogue of free software recommended by the French government for use throughout the public sector.

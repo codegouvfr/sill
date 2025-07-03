@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 /*
 In this file we export utilities for using the core in a React setup.  
 This file is the only place in src/core where it's okay to assume we are 
