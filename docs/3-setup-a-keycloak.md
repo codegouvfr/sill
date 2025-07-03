@@ -1,3 +1,8 @@
+<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
+<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+<!-- SPDX-License-Identifier: Etalab-2.0 -->
+
 # Setting up Keycloak for Production
 
 This document explains how to set up a production-ready Keycloak instance for authentication with the Catalogi project.
