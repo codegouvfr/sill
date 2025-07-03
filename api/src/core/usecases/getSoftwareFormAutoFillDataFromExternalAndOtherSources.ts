@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless";
 import { assert } from "tsafe/assert";
 import type { Context } from "../bootstrap";

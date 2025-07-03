@@ -1,0 +1,30 @@
+version = 1
+SPDX-PackageSupplier = "DINUM <floss@numerique.gouv.fr>"
+SPDX-PackageName = "Catalogi"
+SPDX-PackageDownloadLocation = "https://github.com/codegouvfr/catalogi"
+
+[[annotations]]
+path = "docs/assets/**"
+precedence = "closest"
+SPDX-FileCopyrightText = "French Government"
+SPDX-License-Identifier = "MIT"
+SPDX-FileComment = "https://github.com/GouvernementFR/dsfr/"
+
+[[annotations]]
+path = "*md"
+precedence = "closest"
+SPDX-FileCopyrightText = "DINUM, UGA"
+SPDX-License-Identifier = "CC-BY-4.0"
+SPDX-FileComment = "https://github.com/codegouvfr/catalogi"
+
+[[annotations]]
+path = "web/public/logo/*"
+precedence = "closest"
+SPDX-FileCopyrightText = "Copyrighted file"
+SPDX-License-Identifier = "LicenseRef-Excluded"
+
+[[annotations]]
+path =  "web/src/ui/assets/*"
+precedence = "closest"
+SPDX-FileCopyrightText = "Copyrighted file"
+SPDX-License-Identifier = "LicenseRef-Excluded"

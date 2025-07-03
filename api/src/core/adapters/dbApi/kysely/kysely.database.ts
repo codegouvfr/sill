@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 import { Generated, JSONColumnType } from "kysely";
 // Only allowed import on JSONColumnType
 import { Catalogi } from "../../../../types/Catalogi";
