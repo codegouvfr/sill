@@ -27,7 +27,8 @@ export default defineConfig(async () => {
                 }
             }),
             viteEnvs({
-                declarationFile: ".env.declaration"
+                declarationFile: ".env.declaration",
+                indexAsEjs: true
             })
         ],
         define: {

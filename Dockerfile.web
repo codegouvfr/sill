@@ -28,7 +28,10 @@ COPY web/nginx.conf web/
 # to build only front run
 # docker build . --target web --tag my-web-tag
 FROM nginx:stable-alpine as web
+RUN apk add --update nodejs npm
 COPY --from=build /app/web/nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx
 COPY --from=build /app/web/build ./html
-ENTRYPOINT sh -c "./html/vite-envs.sh && nginx -g 'daemon off;'"
+RUN npm i -g vite-envs@`node -e 'console.log(require("./.vite-envs.json").version)'`
+ENTRYPOINT sh -c "npx vite-envs && nginx -g 'daemon off;'"
+
