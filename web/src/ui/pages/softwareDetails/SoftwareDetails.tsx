@@ -56,6 +56,11 @@ export default function SoftwareDetails(props: Props) {
         return <LoadingFallback />;
     }
 
+    const getLogoUrl = (): string | undefined => {
+        if (software.logoUrl) return software.logoUrl;
+        if (uiConfig?.softwareDetails.defaultLogo) return softwareLogoPlaceholder;
+    };
+
     return (
         <>
             <div className={className}>
@@ -76,11 +81,7 @@ export default function SoftwareDetails(props: Props) {
                         className={classes.breadcrumb}
                     />
                     <HeaderDetailCard
-                        softwareLogoUrl={
-                            (software?.logoUrl ?? uiConfig?.softwareDetails.defaultLogo)
-                                ? softwareLogoPlaceholder
-                                : undefined
-                        }
+                        softwareLogoUrl={getLogoUrl()}
                         softwareName={software.softwareName}
                         softwareDereferencing={software.dereferencing}
                         authors={software.authors}
