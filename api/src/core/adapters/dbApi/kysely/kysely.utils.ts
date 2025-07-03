@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { Expression, RawBuilder, Simplify, sql } from "kysely";
 
 export const jsonBuildObject = <O extends Record<string, Expression<unknown>>>(

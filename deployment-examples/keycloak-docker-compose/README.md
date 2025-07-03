@@ -1,8 +1,3 @@
-<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
-<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
-<!-- SPDX-License-Identifier: CC-BY-4.0 -->
-<!-- SPDX-License-Identifier: Etalab-2.0 -->
-
 # Simple Keycloak with Docker Compose
 
 This directory contains a production-ready Keycloak setup using Docker Compose with PostgreSQL as the database backend and Nginx as a reverse proxy. The configuration is designed for simple email/password authentication with minimal user data requirements.

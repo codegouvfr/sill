@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { decodeJwt as decodeJwt_vanilla } from "oidc-spa/tools/decodeJwt";
 
 export function encodeJwt(obj: Record<string, unknown>) {

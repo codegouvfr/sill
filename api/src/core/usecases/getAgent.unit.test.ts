@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { beforeEach, describe, expect, it } from "vitest";
 import { User } from "../../rpc/user";
 import { expectPromiseToFailWith, expectToEqual } from "../../tools/test.helpers";

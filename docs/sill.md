@@ -3,11 +3,6 @@ title: Le Socle interministériel de Logiciels Libres
 toc: true
 ---
 
-<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
-<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
-<!-- SPDX-License-Identifier: CC-BY-4.0 -->
-<!-- SPDX-License-Identifier: Etalab-2.0 -->
-
 ## Pourquoi ce catalogue ?
 
 Le socle interministériel de logiciels libres (SILL) est le catalogue de référence des logiciels libres recommandés par l'Etat pour toute l'administration.

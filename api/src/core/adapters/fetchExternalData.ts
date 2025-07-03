@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import type { ComptoirDuLibreApi } from "../ports/ComptoirDuLibreApi";
 import { DbApiV2, OtherSoftwareExtraData } from "../ports/DbApiV2";
 import type { GetCnllPrestatairesSill } from "../ports/GetCnllPrestatairesSill";

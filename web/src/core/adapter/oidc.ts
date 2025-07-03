@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { Oidc } from "core/ports/Oidc";
 import { createOidc as createOidcSpa } from "oidc-spa";
 import { addParamToUrl } from "powerhooks/tools/urlSearchParams";

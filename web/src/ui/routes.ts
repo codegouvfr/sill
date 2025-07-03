@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { createRouter } from "type-route";
 import { createTypeRouteMock } from "ui/tools/typeRouteMock";
 import { isStorybook } from "ui/tools/isStorybook";

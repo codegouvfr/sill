@@ -1,8 +1,3 @@
-<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
-<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
-<!-- SPDX-License-Identifier: CC-BY-4.0 -->
-<!-- SPDX-License-Identifier: Etalab-2.0 -->
-
 ## Deploying the web app with docker-compose
 
 # Requirements

@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-// SPDX-License-Identifier: MIT
-
 import { HAL } from "./types/HAL";
 
 const halArticleFieldsToReturn: (keyof HAL.API.Article)[] = ["en_title_s", "fr_title_s", "docid", "title_s"];
