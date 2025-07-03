@@ -1,3 +1,8 @@
+<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
+<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+<!-- SPDX-License-Identifier: Etalab-2.0 -->
+
 # Introduction
 
 Bonjour, je suis [Votre Nom] et je travaille en tant que [Votre Position] dans [Votre Département]. Je travaille dans le service public depuis [Nombre d'Années/Mois] et je suis ravi(e) de faire partie de la communauté du logiciel libre.

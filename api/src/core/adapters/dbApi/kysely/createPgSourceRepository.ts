@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 import { Kysely } from "kysely";
 import { SourceRepository } from "../../../ports/DbApiV2";
 import { Database } from "./kysely.database";

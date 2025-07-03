@@ -1,3 +1,8 @@
+<!-- SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr> -->
+<!-- SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes -->
+<!-- SPDX-License-Identifier: CC-BY-4.0 -->
+<!-- SPDX-License-Identifier: Etalab-2.0 -->
+
 # Introduction
 
 Hello, I am [Your Name] working as [Your Position] in [Your Department]. I've been working in public service for [Number of Years/Months] and I'm excited to be part of the open-source community.
