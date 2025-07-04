@@ -1,13 +1,9 @@
-# SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
-# SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
-# SPDX-License-Identifier: MIT
-
 apiVersion: v2
 name: catalogi
 description: A Helm chart for deploying the Catalogi open source software catalog.
 type: application
-version: 2.0.1
-appVersion: 1.50.4
+version: 2.0.2
+appVersion: 1.50.6
 dependencies:
   - name: postgresql
     version: '16'
