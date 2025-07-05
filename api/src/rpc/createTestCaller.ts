@@ -11,14 +11,14 @@ import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidat
 import { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 import { testPgUrl } from "../tools/test.helpers";
 import { createRouter } from "./router";
-import { User } from "./user";
+import { WithUserSubAndEmail } from "./user";
 
 type TestCallerConfig = {
-    user: User | undefined;
+    user: WithUserSubAndEmail | undefined;
 };
 
-export const defaultUser: User = {
-    id: "1",
+export const defaultUser: WithUserSubAndEmail = {
+    sub: "1",
     email: "default.user@mail.com"
 };
 
@@ -30,13 +30,14 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
 
     const { dbApi, useCases, uiConfig } = await bootstrapCore({
         "dbConfig": { dbKind: "kysely", kyselyDb },
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+        "oidcParams": { issuerUri: "http://fake.url", clientId: "fake-client-id", clientSecret: "fake-client-secret" }
     });
 
     const { router } = createRouter({
         useCases,
         dbApi,
-        oidcParams: { issuerUri: "http://fake.url", clientId: "fake-client-id" },
+        oidcParams: { issuerUri: "http://fake.url", clientId: "fake-client-id", clientSecret: "fake-client-secret" },
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
         getSoftwareExternalDataOptions: getWikidataSoftwareOptions,

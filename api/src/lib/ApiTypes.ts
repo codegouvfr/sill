@@ -8,7 +8,8 @@ export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareEx
 export type { Catalogi } from "../types/Catalogi";
 
 export type {
-    Agent,
+    CreateUserParams,
+    UserWithId,
     Instance,
     Os,
     Prerogative,

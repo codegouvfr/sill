@@ -5,6 +5,7 @@
 import type { Thunks } from "core/bootstrap";
 import { assert } from "tsafe/assert";
 import { name, actions } from "./state";
+import { apiUrl } from "urls";
 
 export const protectedThunks = {
     initialize:
@@ -15,9 +16,9 @@ export const protectedThunks = {
             const state = getState()[name];
             if (state.stateDescription === "ready" || state.isInitializing) return;
             dispatch(actions.initializationStarted());
-            const user = await sillApi.getCurrentUser();
-            const { agent } = await sillApi.getAgent({ email: user.email });
-            dispatch(actions.initialized({ agent }));
+            const currentUser = await sillApi.getCurrentUser();
+            const { user } = await sillApi.getUser({ email: currentUser.email });
+            dispatch(actions.initialized({ user }));
         }
 } satisfies Thunks;
 
@@ -30,14 +31,15 @@ export const thunks = {
         },
     login:
         (params: { doesCurrentHrefRequiresAuth: boolean }) =>
-        (...args): Promise<never> => {
-            const { doesCurrentHrefRequiresAuth } = params;
+        (...args) => {
+            window.location.href = `${apiUrl}/auth/login`;
+            // const { doesCurrentHrefRequiresAuth } = params;
 
-            const [, , { oidc }] = args;
+            // const [, , { oidc }] = args;
 
-            assert(!oidc.isUserLoggedIn);
+            // assert(!oidc.isUserLoggedIn);
 
-            return oidc.login({ doesCurrentHrefRequiresAuth });
+            // return oidc.login({ doesCurrentHrefRequiresAuth });
         },
     register:
         () =>
