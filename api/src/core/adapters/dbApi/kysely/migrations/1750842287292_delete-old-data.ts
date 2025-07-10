@@ -6,6 +6,51 @@ import { type Kysely } from "kysely";
 
 export async function up(db: Kysely<any>): Promise<void> {
     await db.schema.dropTable("compiled_softwares").execute();
+
+    // ComptoirDuLibre
+    const comptoirSlug = "comptoirdulibre";
+    const secondSource = {
+        slug: comptoirSlug,
+        kind: "ComptoirDuLibre",
+        url: "https://comptoir-du-libre.org/",
+        priority: 2
+    };
+    await db.insertInto("sources").values(secondSource).executeTakeFirst();
+
+    const comptoirIds = await db
+        .selectFrom("softwares")
+        .select(["id", "comptoirDuLibreId"])
+        .where("comptoirDuLibreId", "is not", null)
+        .execute();
+
+    if (comptoirIds?.length > 0) {
+        await db
+            .insertInto("software_external_datas")
+            .values(
+                comptoirIds.map(({ comptoirDuLibreId, id = null }) => ({
+                    externalId: comptoirDuLibreId,
+                    sourceSlug: comptoirSlug,
+                    softwareId: id,
+                    developers: JSON.stringify([]),
+                    label: JSON.stringify({}),
+                    description: JSON.stringify({})
+                }))
+            )
+            .onConflict(oc => oc.columns(["sourceSlug", "externalId"]).doNothing())
+            .executeTakeFirst();
+    }
+
+    await db.schema.alterTable("softwares").dropColumn("comptoirDuLibreId").execute();
+
+    // Update with job:update after to load comptoirDuLibre data
+
+    const thirdSource = {
+        slug: comptoirSlug,
+        kind: "CNLL",
+        url: "https://cnll.fr/",
+        priority: 3
+    };
+    await db.insertInto("sources").values(thirdSource).executeTakeFirst();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -27,4 +72,7 @@ export async function down(db: Kysely<any>): Promise<void> {
         .on("compiled_softwares")
         .column("softwareId")
         .execute();
+
+    // comptoirDuLibreId
+    await db.schema.alterTable("softwares").addColumn("comptoirDuLibreId", "integer").execute();
 }
