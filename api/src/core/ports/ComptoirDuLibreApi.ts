@@ -82,16 +82,16 @@ type SILLIdentifier = {
     id: number;
     url: string;
     i18n_url: {
-        fr: string;
-        en: string;
+        fr?: string;
+        en?: string;
     };
 };
 
 type WikipediaIdentifier = {
     url: string;
     i18n_url: {
-        fr: string;
-        en: string;
+        fr?: string;
+        en?: string;
     };
 };
 
@@ -145,8 +145,8 @@ export const { zComptoirDuLibre } = (() => {
         id: z.number(),
         url: z.string(),
         i18n_url: z.object({
-            fr: z.string(),
-            en: z.string()
+            fr: z.string().optional(),
+            en: z.string().optional()
         })
     });
 
@@ -155,8 +155,8 @@ export const { zComptoirDuLibre } = (() => {
     const zWikipediaIdentifier = z.object({
         url: z.string(),
         i18n_url: z.object({
-            fr: z.string(),
-            en: z.string()
+            fr: z.string().optional(),
+            en: z.string().optional()
         })
     });
 
