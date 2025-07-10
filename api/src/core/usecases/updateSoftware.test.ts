@@ -78,7 +78,6 @@ describe("Create software, than updates it adding a similar software", () => {
             "dereferencing": null,
             "description": "To create React apps.",
             "doRespectRgaa": true,
-            "externalIdForSource": "Q118629387",
             "generalInfoMd": null,
             "isFromFrenchPublicService": true,
             "isPresentInSupportContract": true,
@@ -91,7 +90,6 @@ describe("Create software, than updates it adding a similar software", () => {
             "softwareType": {
                 "type": "stack"
             },
-            "sourceSlug": "wikidata",
             "versionMin": "1.0.0",
             "workshopUrls": []
         });

@@ -50,8 +50,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 generalInfoMd,
                 keywords,
                 addedByAgentId,
-                externalIdForSource, // TODO Remove
-                sourceSlug, // TODO Remove
                 ...rest
             } = software;
 
@@ -80,9 +78,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                         categories: JSON.stringify(categories), // Legacy field from SILL imported
                         generalInfoMd, // Legacy field from SILL imported
                         addedByAgentId,
-                        keywords: JSON.stringify(keywords),
-                        externalIdForSource, // TODO Remove
-                        sourceSlug // TODO Remove
+                        keywords: JSON.stringify(keywords)
                     })
                     .returning("id as softwareId")
                     .executeTakeFirstOrThrow();
@@ -108,8 +104,6 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 generalInfoMd,
                 keywords,
                 addedByAgentId,
-                externalIdForSource, // TODO Remove
-                sourceSlug, // TODO Remove
                 ...rest
             } = software;
 
@@ -135,9 +129,7 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                     categories: JSON.stringify(categories),
                     generalInfoMd: generalInfoMd,
                     addedByAgentId,
-                    keywords: JSON.stringify(keywords),
-                    externalIdForSource, // TODO Remove
-                    sourceSlug // TODO Remove
+                    keywords: JSON.stringify(keywords)
                 })
                 .where("id", "=", softwareId)
                 .execute();
@@ -151,14 +143,13 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
                 .executeTakeFirst();
             return result?.softwareId ?? undefined;
         },
-        // TO Remove ?
         getAllSillSoftwareExternalIds: async sourceSlug =>
             db
-                .selectFrom("softwares")
-                .select("externalIdForSource")
+                .selectFrom("software_external_datas")
+                .select("externalId")
                 .where("sourceSlug", "=", sourceSlug)
                 .execute()
-                .then(rows => rows.map(row => row.externalIdForSource!)),
+                .then(rows => rows.map(row => row.externalId!)),
 
         countAddedByAgent: async ({ agentId }) => {
             const { count } = await db

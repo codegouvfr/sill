@@ -75,7 +75,6 @@ describe("Create software - Trying all the cases", () => {
             "dereferencing": null,
             "description": "To create React apps.",
             "doRespectRgaa": true,
-            "externalIdForSource": "Q118629387",
             "generalInfoMd": null,
             "isFromFrenchPublicService": true,
             "isPresentInSupportContract": true,
@@ -88,7 +87,6 @@ describe("Create software - Trying all the cases", () => {
             "softwareType": {
                 "type": "stack"
             },
-            "sourceSlug": "wikidata",
             "versionMin": "1.0.0",
             "workshopUrls": []
         });

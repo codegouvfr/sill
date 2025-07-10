@@ -55,9 +55,7 @@ export const makeUpdateSoftware: (dbApi: DbApiV2) => UpdateSoftware =
                 categories: [],
                 generalInfoMd: undefined,
                 addedByAgentId: agentId,
-                keywords: softwareKeywords,
-                externalIdForSource, // TODO Remove
-                sourceSlug // TODO Remove
+                keywords: softwareKeywords
             },
             softwareId: softwareId
         });

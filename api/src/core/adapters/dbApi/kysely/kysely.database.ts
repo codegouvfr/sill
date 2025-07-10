@@ -180,8 +180,6 @@ type SoftwaresTable = {
     doRespectRgaa: boolean | null;
     isFromFrenchPublicService: boolean;
     isPresentInSupportContract: boolean;
-    externalIdForSource: ExternalId | null;
-    sourceSlug: string | null;
     license: string;
     softwareType: JSONColumnType<SoftwareType>;
     versionMin: string | null;

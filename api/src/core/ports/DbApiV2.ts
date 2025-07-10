@@ -31,8 +31,6 @@ export type SoftwareExtrinsicRow = Pick<
     | "generalInfoMd"
     | "keywords"
     | "addedByAgentId"
-    | "externalIdForSource" // TODO Remove
-    | "sourceSlug" // TODO Remove
 >;
 
 export namespace DatabaseDataType {
