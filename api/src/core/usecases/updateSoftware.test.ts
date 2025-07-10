@@ -26,7 +26,6 @@ const craSoftwareFormData = {
     },
     externalIdForSource: "Q118629387",
     sourceSlug: testSource.slug,
-    comptoirDuLibreId: undefined,
     softwareName: "Create react app",
     softwareDescription: "To create React apps.",
     softwareLicense: "MIT",

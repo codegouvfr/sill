@@ -54,7 +54,7 @@
             "cwd": "${workspaceFolder}/api",
             "runtimeArgs": [
                 "run",
-                "job:import-from-inner-identifer"
+                "job:import-from-inner-identifiers"
             ],
         }
     ]

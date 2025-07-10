@@ -62,6 +62,8 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
                     if (softwareData.softwareId) {
                         const software = await dbApi.software.getBySoftwareId(softwareData.softwareId);
 
+                        if (!software) return undefined;
+
                         return {
                             registered: true,
                             softwareId: software.id,
@@ -87,7 +89,7 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
                     throw new Error("Wrong database values");
                 })
             );
-            missingData.similarSoftwares = similarSoftware;
+            missingData.similarSoftwares = similarSoftware.filter(soft => !!soft);
 
             missingData.userAndReferentCountByOrganization = await dbApi.software.getUserAndReferentCountByOrganization(
                 { softwareId: softwareItem.id }
