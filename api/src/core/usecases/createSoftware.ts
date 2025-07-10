@@ -28,9 +28,7 @@ export const formDataToSoftwareRow = (softwareForm: SoftwareFormData, agentId: n
     categories: [],
     generalInfoMd: undefined,
     addedByAgentId: agentId,
-    keywords: softwareForm.softwareKeywords,
-    externalIdForSource: softwareForm.externalIdForSource, // TODO Remove
-    sourceSlug: softwareForm.sourceSlug // TODO Remove
+    keywords: softwareForm.softwareKeywords
 });
 
 const textUC = "CreateSoftware";

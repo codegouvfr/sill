@@ -51,6 +51,11 @@ export async function up(db: Kysely<any>): Promise<void> {
         priority: 3
     };
     await db.insertInto("sources").values(thirdSource).executeTakeFirst();
+
+    // Rewrite stuff
+
+    // Delete
+    await db.schema.alterTable("softwares").dropColumn("externalIdForSource").dropColumn("sourceSlug").execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

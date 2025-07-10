@@ -49,8 +49,6 @@ const insertApacheWithCorrectId = async (db: Kysely<Database>, agentId: number) 
                 type: "desktop/mobile",
                 os: { ios: false, mac: false, linux: true, android: false, windows: false }
             }),
-            externalIdForSource: "Q11354",
-            sourceSlug: "wikidata",
             name: "Apache HTTP Server",
             description: "Serveur Web & Reverse Proxy",
             license: "Apache-2.0",
@@ -91,8 +89,6 @@ const insertAcceleroWithCorrectId = async (db: Kysely<Database>, agentId: number
         .values({
             id: acceleroId,
             softwareType: JSON.stringify({ type: "stack" }),
-            externalIdForSource: "Q2822666",
-            sourceSlug: "wikidata",
             name: "Acceleo",
             description: "Outil et/ou plugin de génération de tout ou partie du code",
             license: "EPL-2.0",

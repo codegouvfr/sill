@@ -125,7 +125,6 @@ describe("RPC e2e tests", () => {
 
             expectToMatchObject(softwareRows[0], {
                 "description": softwareFormData.softwareDescription,
-                "externalIdForSource": softwareFormData.externalIdForSource,
                 "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
                 "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
                 "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
@@ -141,6 +140,14 @@ describe("RPC e2e tests", () => {
                 "id": expect.any(Number),
                 "addedByAgentId": agent.id
             });
+
+            // Expect to have the created externalData
+            const externalId = await kyselyDb
+                .selectFrom("software_external_datas")
+                .select("externalId")
+                .where("softwareId", "=", actualSoftwareId)
+                .executeTakeFirst();
+            expect(externalId).toEqual(softwareFormData.externalIdForSource);
 
             const similarSoftsInDb = await kyselyDb
                 .selectFrom("softwares__similar_software_external_datas")
