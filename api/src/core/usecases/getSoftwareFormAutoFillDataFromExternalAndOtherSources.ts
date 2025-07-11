@@ -6,9 +6,9 @@ import { createResolveLocalizedString } from "i18nifty/LocalizedString/reactless
 import { assert } from "tsafe/assert";
 import type { Context } from "../bootstrap";
 import type { Language } from "../ports/GetSoftwareExternalData";
+import { resolveAdapterFromSource } from "../adapters/resolveAdapter";
 
 type AutoFillData = {
-    comptoirDuLibreId: number | undefined;
     softwareName: string | undefined;
     softwareDescription: string | undefined;
     softwareLicense: string | undefined;
@@ -28,12 +28,12 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         const cachedAutoFillData = autoFillDataCache[externalId];
         if (cachedAutoFillData !== undefined) return cachedAutoFillData;
 
-        const { comptoirDuLibreApi, getSoftwareExternalData } = context;
+        const { comptoirDuLibreApi } = context;
 
         const mainSource = await context.dbApi.source.getMainSource();
 
         const [softwareExternalData, comptoirDuLibre] = await Promise.all([
-            getSoftwareExternalData({ externalId, source: mainSource }),
+            resolveAdapterFromSource(mainSource).softwareExternalData.getById({ externalId, source: mainSource }),
             comptoirDuLibreApi.getComptoirDuLibre()
         ]);
 
@@ -43,7 +43,6 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
 
         if (externalSoftwareLabel === undefined) {
             return {
-                comptoirDuLibreId: undefined,
                 keywords: [],
                 softwareDescription: undefined,
                 softwareLicense: undefined,
@@ -85,7 +84,6 @@ export const makeGetSoftwareFormAutoFillDataFromExternalAndOtherSources =
         });
 
         const autoFillData: AutoFillData = {
-            "comptoirDuLibreId": comptoirDuLibreSoftware?.id,
             "softwareName":
                 externalSoftwareLabel === undefined ? undefined : resolveLocalizedString(externalSoftwareLabel),
             "softwareDescription":

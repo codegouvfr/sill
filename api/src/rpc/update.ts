@@ -7,15 +7,33 @@ import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
-import { updateTool } from "../core/updateTools";
+import { makeRefreshExternalDataAll } from "../core/usecases/refreshExternalData";
+import { createKyselyPgDbApi } from "../core/adapters/dbApi/kysely/createPgDbApi";
+import { DbApiV2 } from "../core/ports/DbApiV2";
+
+type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
+
+type DbConfig = PgDbConfig;
+
+const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
+    if (dbConfig.dbKind === "kysely") {
+        return {
+            dbApi: createKyselyPgDbApi(dbConfig.kyselyDb)
+        };
+    }
+
+    const shouldNotBeReached: never = dbConfig.dbKind;
+    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+};
 
 export async function startUpdateService(params: {
     isDevEnvironnement: boolean;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     databaseUrl: string;
+    updateSkipTimingInMinutes?: number;
 }) {
-    const { isDevEnvironnement, externalSoftwareDataOrigin, databaseUrl, ...rest } = params;
+    console.log("[RPC:Update] Starting fetching of external data on remote sources");
+    console.time("[RPC:Update] Fetching of external data on remote sources: Done");
+    const { isDevEnvironnement, databaseUrl, updateSkipTimingInMinutes, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -23,13 +41,17 @@ export async function startUpdateService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const result = await updateTool({
-        "dbConfig": {
-            "dbKind": "kysely",
-            "kyselyDb": kyselyDb
-        },
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+    const { dbApi } = getDbApiAndInitializeCache({
+        "dbKind": "kysely",
+        "kyselyDb": kyselyDb
     });
 
-    console.log("Update sucessfull", result);
+    const refreshExternalData = await makeRefreshExternalDataAll({
+        dbApi,
+        minuteSkipSince: updateSkipTimingInMinutes ?? 180
+    });
+
+    await refreshExternalData();
+
+    console.timeEnd("[RPC:Update] Fetching of external data on remote sources: Done");
 }

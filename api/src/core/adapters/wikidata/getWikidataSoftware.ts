@@ -27,8 +27,9 @@ import {
     wikidataTimeToJSDate,
     WikidataTime
 } from "../../../tools/WikidataEntity";
-import { Catalogi } from "../../../types/Catalogi";
 import { Source } from "../../usecases/readWriteSillData";
+import { SchemaOrganization, SchemaPerson } from "../dbApi/kysely/kysely.database";
+import { identifersUtils } from "../../../tools/identifiersTools";
 
 const { resolveLocalizedString } = createResolveLocalizedString({
     "currentLanguage": id<Language>("en"),
@@ -123,20 +124,6 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
 
         const framaLibreId = getClaimDataValue<"string">("P4107")[0];
 
-        const makeFramaIndentifer = (framaLibreId: string): Catalogi.Identification => {
-            return {
-                url: new URL(framaLibreId),
-                "@type": "PropertyValue",
-                value: framaLibreId,
-                subjectOf: {
-                    url: new URL("https://framalibre.org"),
-                    name: "FramaLibre Official instance",
-                    "@type": "Website",
-                    additionalType: "FramaLibre"
-                }
-            };
-        };
-
         return {
             externalId,
             sourceSlug: source.slug,
@@ -223,7 +210,7 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                     ...getClaimDataValue<"wikibase-entityid">("P170"),
                     ...getClaimDataValue<"wikibase-entityid">("P172"),
                     ...getClaimDataValue<"wikibase-entityid">("P178")
-                ].map(async ({ id }): Promise<Catalogi.Person | Catalogi.Organization | undefined> => {
+                ].map(async ({ id }): Promise<SchemaPerson | SchemaOrganization | undefined> => {
                     console.info(`   -> fetching wiki dev : ${id}`);
                     const { entity } = await fetchEntity(id).catch(() => ({ "entity": undefined }));
                     if (entity === undefined) {
@@ -258,11 +245,29 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
                         return undefined;
                     }
 
+                    if (getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5") {
+                        return {
+                            "@type": "Person",
+                            name,
+                            identifiers: [
+                                identifersUtils.makeWikidataIdentifier({
+                                    wikidataId: entity.id,
+                                    additionalType: "Person"
+                                })
+                            ],
+                            url: `https://www.wikidata.org/wiki/${entity.id}`
+                        };
+                    }
+
                     return {
-                        "@type":
-                            getClaimDataValue<"wikibase-entityid">("P31")[0]?.id === "Q5" ? "Person" : "Organization", // Q5 : Humans
+                        "@type": "Organization",
                         name,
-                        identifier: entity.id,
+                        identifiers: [
+                            identifersUtils.makeWikidataIdentifier({
+                                wikidataId: entity.id,
+                                additionalType: "Organization"
+                            })
+                        ],
                         url: `https://www.wikidata.org/wiki/${entity.id}`
                     };
                 })
@@ -283,7 +288,13 @@ export const getWikidataSoftware: GetSoftwareExternalData = memoize(
             applicationCategories: undefined, // doesn't exit on wiki data
             referencePublications: undefined, // doesn't exit on wiki data
             publicationTime: publicationTimeDate,
-            identifiers: framaLibreId?.includes("https") ? [makeFramaIndentifer(framaLibreId)] : []
+            identifiers: [
+                ...(framaLibreId
+                    ? [identifersUtils.makeFramaIndentifier({ framaLibreId, additionalType: "Software" })]
+                    : []),
+                identifersUtils.makeWikidataIdentifier({ wikidataId: externalId, additionalType: "Software" })
+            ],
+            providers: []
         };
     },
     {

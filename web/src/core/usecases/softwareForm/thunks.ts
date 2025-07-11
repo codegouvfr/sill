@@ -54,7 +54,6 @@ export const thunks = {
                         assert(externalId !== undefined);
 
                         const {
-                            comptoirDuLibreId,
                             keywords,
                             softwareDescription,
                             softwareLicense,
@@ -66,7 +65,6 @@ export const thunks = {
                         dispatch(
                             actions.initializedForCreateWithPreSelectedSoftware({
                                 externalId,
-                                comptoirDuLibreId,
                                 softwareName: softwareName ?? "",
                                 softwareDescription: softwareDescription ?? "",
                                 softwareLicense: softwareLicense ?? "",
@@ -96,7 +94,6 @@ export const thunks = {
                                     },
                                     step2: {
                                         externalId: software.externalId,
-                                        comptoirDuLibreId: software.comptoirDuLibreId,
                                         softwareDescription: software.softwareDescription,
                                         softwareLicense: software.license,
                                         softwareMinimalVersion: software.versionMin,
@@ -116,7 +113,7 @@ export const thunks = {
                                     step4: {
                                         similarSoftwares: software.similarSoftwares
                                             .map(similarSoftware => {
-                                                if (!similarSoftware.isInSill) {
+                                                if (!similarSoftware.registered) {
                                                     return similarSoftware;
                                                 } else {
                                                     const software = softwares.find(
@@ -218,7 +215,6 @@ export const thunks = {
                 softwareType: step1.softwareType,
                 externalIdForSource: step2.externalId,
                 sourceSlug: mainSource.slug,
-                comptoirDuLibreId: step2.comptoirDuLibreId,
                 softwareName: step2.softwareName,
                 softwareDescription: step2.softwareDescription,
                 softwareLicense: step2.softwareLicense,

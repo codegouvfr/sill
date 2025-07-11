@@ -2,10 +2,17 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
-export type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 export type { SoftwareExternalDataOption } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { GetSoftwareExternalDataOptions } from "../core/ports/GetSoftwareExternalDataOptions";
 export type { Catalogi } from "../types/Catalogi";
+
+export type {
+    ExternalDataOriginKind,
+    SchemaIdentifier as Identifier,
+    SchemaPerson as Person,
+    SchemaOrganization as Organization,
+    ScholarlyArticle
+} from "../core/adapters/dbApi/kysely/kysely.database";
 
 export type {
     Agent,

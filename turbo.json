@@ -5,6 +5,9 @@
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**", "dist"]
     },
+    "job:import": {},
+    "job:update": {},
+    "job:import-from-inner-identifiers": {},
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
@@ -14,6 +17,11 @@
       "inputs": ["src/**/*.tsx", "src/**/*.ts"]
     },
     "dev": {},
+    "dev:db:down": {},
+    "dev:db:mig:down": {},
+    "dev:db:mig:up": {},
+    "dev:db:up": {},
+    "dev:db:reset": {},
     "format:check": {},
     "format": {}
   }

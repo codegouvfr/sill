@@ -14,7 +14,7 @@ describe("HAL", () => {
         kind: "HAL",
         url: "https://hal.science",
         priority: 1,
-        description: null
+        description: undefined
     };
     describe("getHalSoftwareExternalData", () => {
         it("gets data from Hal and converts it to ExternalSoftware", async () => {
@@ -30,9 +30,21 @@ describe("HAL", () => {
                     {
                         "@type": "Person",
                         "affiliations": [],
-                        "identifier": "0000-0002-9777-5560",
-                        "name": "Morane Gruenpeter",
-                        "url": "https://orcid.org/0000-0002-9777-5560"
+                        "identifiers": [
+                            {
+                                value: "0000-0002-9777-5560",
+                                "@type": "PropertyValue",
+                                "additionalType": "Person",
+                                "subjectOf": {
+                                    "@type": "Website",
+                                    "additionalType": "ORCID",
+                                    "name": "Open Researcher and Contributor ID",
+                                    "url": new URL("https://orcid.org/")
+                                },
+                                "url": "https://orcid.org/0000-0002-9777-5560"
+                            }
+                        ],
+                        "name": "Morane Gruenpeter"
                     }
                 ],
                 "documentationUrl": undefined,
@@ -55,31 +67,32 @@ describe("HAL", () => {
                 "identifiers": [
                     {
                         "@type": "PropertyValue",
+                        "additionalType": "Software",
                         "subjectOf": {
                             "@type": "Website",
                             "additionalType": "HAL",
-                            "name": "HAL instance",
+                            "name": "HAL main instance",
                             "url": new URL("https://hal.science/")
                         },
-                        "url": new URL("https://hal.science/hal-01715545"),
-                        "value": "hal-01715545"
+                        "url": "https://inria.hal.science/hal-01715545v1",
+                        "value": "1715545"
                     },
                     {
                         "@type": "PropertyValue",
+                        "additionalType": "Software",
                         "subjectOf": {
                             "@type": "Website",
                             "additionalType": "SWH",
                             "name": "Software Heritage instance",
                             "url": new URL("https://www.softwareheritage.org/")
                         },
-                        "url": new URL(
-                            "https://archive.softwareheritage.org/swh:1:dir:424f2533fe51aa8a49d891f8413dd089995cc851;origin=https://hal.archives-ouvertes.fr/hal-01715545;visit=swh:1:snp:9f3237e88d818d975a63da2d5e04d9ad38b42581;anchor=swh:1:rev:8b71800feca2e28cc0f7f78d248e49244b554875;path=/"
-                        ),
+                        "url": "https://archive.softwareheritage.org/swh:1:dir:424f2533fe51aa8a49d891f8413dd089995cc851;origin=https://hal.archives-ouvertes.fr/hal-01715545;visit=swh:1:snp:9f3237e88d818d975a63da2d5e04d9ad38b42581;anchor=swh:1:rev:8b71800feca2e28cc0f7f78d248e49244b554875;path=/",
                         "value":
                             "swh:1:dir:424f2533fe51aa8a49d891f8413dd089995cc851;origin=https://hal.archives-ouvertes.fr/hal-01715545;visit=swh:1:snp:9f3237e88d818d975a63da2d5e04d9ad38b42581;anchor=swh:1:rev:8b71800feca2e28cc0f7f78d248e49244b554875;path=/"
                     }
                 ],
-                "publicationTime": new Date(1521545908000)
+                "publicationTime": new Date(1521545908000),
+                "providers": []
             });
         });
     });

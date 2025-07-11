@@ -5,7 +5,6 @@
 import { ServiceProvider } from "../usecases/readWriteSillData";
 import type { Db } from "./DbApi";
 import { SimilarSoftwareExternalData, SoftwareExternalData } from "./GetSoftwareExternalData";
-import type { ComptoirDuLibre } from "./ComptoirDuLibreApi";
 
 export type CompileData = (params: {
     db: Db;
@@ -17,13 +16,6 @@ export namespace CompileData {
         CompiledData.Software<"private">,
         "softwareExternalData" | "latestVersion" | "similarExternalSoftwares"
     > & {
-        comptoirDuLibreSoftware:
-            | {
-                  id: number;
-                  logoUrl: string | undefined;
-                  keywords: string[] | undefined;
-              }
-            | undefined;
         instances: Pick<CompiledData.Instance, "id">[];
     };
 }
@@ -60,16 +52,6 @@ export namespace CompiledData {
             serviceProviders: ServiceProvider[];
             softwareExternalData: SoftwareExternalData | undefined;
             similarExternalSoftwares: SimilarSoftwareExternalData[];
-            comptoirDuLibreSoftware:
-                | (ComptoirDuLibre.Software & { logoUrl: string | undefined; keywords: string[] | undefined })
-                | undefined;
-            annuaireCnllServiceProviders:
-                | {
-                      name: string;
-                      siren: string;
-                      url: string;
-                  }[]
-                | undefined;
             latestVersion:
                 | {
                       semVer: string;
@@ -108,9 +90,7 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
             referents,
             users,
             instances,
-            annuaireCnllServiceProviders,
             categories,
-            comptoirDuLibreSoftware,
             dereferencing,
             description,
             doRespectRgaa,
@@ -136,9 +116,7 @@ export function compiledDataPrivateToPublic(compiledData: CompiledData<"private"
 
         return {
             serviceProviders,
-            annuaireCnllServiceProviders,
             categories,
-            comptoirDuLibreSoftware,
             dereferencing,
             description,
             doRespectRgaa,

@@ -33,7 +33,10 @@ export const comptoirDuLibreApi: ComptoirDuLibreApi = {
                 };
             }
         },
-        { "promise": true }
+        {
+            "promise": true,
+            maxAge: 3 * 3600 * 1000
+        }
     ),
     "getIconUrl": async ({ comptoirDuLibreId }) => {
         let imgSrc: string | undefined;

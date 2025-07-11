@@ -113,14 +113,7 @@ export default function SoftwareDetails(props: Props) {
                                 content: (
                                     <PreviewTab
                                         softwareName={software.softwareName}
-                                        wikiDataUrl={software.wikidataUrl}
-                                        comptoireDuLibreUrl={software.comptoirDuLibreUrl}
-                                        comptoirDuLibreServiceProvidersUrl={
-                                            software.comptoirDuLibreServiceProviderUrl
-                                        }
-                                        annuaireCnllServiceProviders={
-                                            software.annuaireCnllServiceProviders
-                                        }
+                                        serviceProviders={software.serviceProviders}
                                         softwareDescription={software.softwareDescription}
                                         license={software.license}
                                         hasDesktopApp={
@@ -410,28 +403,33 @@ export default function SoftwareDetails(props: Props) {
 }
 
 const ServiceProviderRow = ({
-    serviceProvider: { website, cdlUrl, cnllUrl, name }
+    serviceProvider: { url, name, identifiers }
 }: {
-    serviceProvider: ApiTypes.ServiceProvider;
+    serviceProvider: ApiTypes.Organization;
 }) => (
     <li>
         <span className={fr.cx("fr-text--bold")}>{name}</span>
         {" - "}
-        {website && cdlUrl !== website && (
-            <a href={website} target="_blank" rel="noreferrer">
-                Site
+        {url && (
+            <a href={url} target="_blank" rel="noreferrer">
+                Site officiel TODO Translate
             </a>
         )}{" "}
-        {cdlUrl && (
-            <a href={cdlUrl} target="_blank" rel="noreferrer">
-                Comptoir du libre
-            </a>
-        )}{" "}
-        {cnllUrl && cnllUrl !== website && (
-            <a href={cnllUrl} target="_blank" rel="noreferrer">
-                CNLL
-            </a>
-        )}
+        {identifiers &&
+            identifiers.map(identifier => (
+                <>
+                    -{" "}
+                    {identifier?.url && (
+                        <a
+                            href={identifier.url.toString()}
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            {identifier.subjectOf?.name ?? identifier.name}
+                        </a>
+                    )}
+                </>
+            ))}
     </li>
 );
 

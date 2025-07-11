@@ -4,17 +4,19 @@
 
 import memoize from "memoizee";
 import { JSDOM } from "jsdom";
-import { Catalogi } from "../../../types/Catalogi";
 import { GetSoftwareExternalData, SoftwareExternalData } from "../../ports/GetSoftwareExternalData";
 import { Source } from "../../usecases/readWriteSillData";
 import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
 import { crossRefSource } from "./CrossRef";
 import { getScholarlyArticle } from "./getScholarlyArticle";
+import { SchemaIdentifier, SchemaOrganization, SchemaPerson, ScholarlyArticle } from "../dbApi/kysely/kysely.database";
+import { identifersUtils } from "../../../tools/identifiersTools";
+import { populateFromDOIIdentifiers } from "../doiResolver";
 
 const buildParentOrganizationTree = async (
     structureIdArray: number[] | string[] | undefined
-): Promise<Catalogi.Organization[]> => {
+): Promise<SchemaOrganization[]> => {
     if (!structureIdArray) return [];
 
     const IdsArray = structureIdArray.map(id => Number(id));
@@ -38,7 +40,7 @@ const buildParentOrganizationTree = async (
 const buildReferencePublication = async (
     source: HAL.ArticleIdentifierOrigin,
     valueId: string
-): Promise<Catalogi.ScholarlyArticle | undefined> => {
+): Promise<ScholarlyArticle | undefined> => {
     switch (source) {
         case "hal":
             return getScholarlyArticle(valueId);
@@ -71,27 +73,6 @@ const resolveStructId = (parsedXMLLabel: JSDOM, structAcronym: string) => {
     });
 
     return Number(org[0].getAttribute("xml:id")?.split("-")[1]);
-};
-
-const HALSource: Catalogi.WebSite = {
-    "@type": "Website" as const,
-    name: "HAL instance",
-    url: new URL("https://hal.science"),
-    additionalType: "HAL"
-};
-
-const SWHSource: Catalogi.WebSite = {
-    "@type": "Website" as const,
-    name: "Software Heritage instance",
-    url: new URL("https://www.softwareheritage.org/"),
-    additionalType: "SWH"
-};
-
-const DOISource: Catalogi.WebSite = {
-    "@type": "Website" as const,
-    name: "DOI instance",
-    url: new URL("https://www.doi.org"),
-    additionalType: "doi"
 };
 
 export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
@@ -131,11 +112,10 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 const id = author?.["@id"]?.[0];
                 const affiliation = author.affiliation;
 
-                const base: Catalogi.Person = {
+                const base: SchemaPerson = {
                     "@type": "Person",
-                    "name": `${author.givenName} ${author.familyName}`,
-                    "identifier": id,
-                    "affiliations": [] as Catalogi.Organization[]
+                    name: `${author.givenName} ${author.familyName}`,
+                    affiliations: [] as SchemaOrganization[]
                 };
 
                 if (affiliation?.length && affiliation.length > 0) {
@@ -162,34 +142,63 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                 }
 
                 if (id?.split("-")?.length === 4 && id?.length === 19) {
-                    return { ...base, "url": `https://orcid.org/${id}` };
+                    return {
+                        ...base,
+                        identifiers: [identifersUtils.makeOrcidIdentifer({ orcidId: id, additionalType: "Person" })]
+                    };
                 }
 
                 if (id) {
-                    return { ...base, "url": `${source.url}/search/index/q/*/authIdHal_s/${id}` };
+                    return {
+                        ...base,
+                        identifiers: [
+                            identifersUtils.makeHALIdentifier({
+                                halId: id,
+                                additionalType: "Person",
+                                url: `${source.url}/search/index/q/*/authIdHal_s/${id}`
+                            })
+                        ]
+                    };
                 }
 
                 return {
                     ...base,
-                    "url": `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                    identifiers: [
+                        identifersUtils.makeHALIdentifier({
+                            halId: id ?? "",
+                            additionalType: "Person",
+                            url: `${source.url}/search/index/q/*/authFullName_s/${author.givenName}+${author.familyName}`
+                        })
+                    ]
                 };
             })
         );
 
-        const identifiers: Catalogi.Identification[] =
-            codemetaSoftware?.identifier?.map(halIdentifier => {
+        const identifiers: SchemaIdentifier[] =
+            codemetaSoftware?.identifier?.map(identifierItem => {
                 const base = {
                     "@type": "PropertyValue" as const,
-                    value: halIdentifier.value,
-                    url: new URL(halIdentifier.propertyID)
+                    value: identifierItem.value,
+                    url: new URL(identifierItem.propertyID)
                 };
-                switch (halIdentifier["@type"]) {
+                switch (identifierItem["@type"]) {
                     case "hal":
-                        return { ...base, subjectOf: HALSource };
+                        return identifersUtils.makeHALIdentifier({
+                            halId: halRawSoftware.docid,
+                            additionalType: "Software",
+                            url: halRawSoftware.uri_s
+                        });
                     case "swhid":
-                        return { ...base, subjectOf: SWHSource };
+                        return identifersUtils.makeSWHIdentifier({
+                            swhId: identifierItem.value,
+                            additionalType: "Software",
+                            url: identifierItem.propertyID
+                        });
                     case "doi":
-                        return { ...base, subjectOf: DOISource };
+                        return identifersUtils.makeDOIIdentifier({
+                            doi: identifierItem.value,
+                            additionalType: "Software"
+                        });
                     case "bibcode":
                     case "cern":
                     case "prodinra":
@@ -233,7 +242,8 @@ export const getHalSoftwareExternalData: GetSoftwareExternalData = memoize(
                         halRawSoftware.relatedPublication_s.map(id => buildReferencePublication(parseScolarId(id), id))
                     )
                 ).filter(val => val !== undefined),
-            identifiers: identifiers
+            identifiers: await populateFromDOIIdentifiers(identifiers),
+            providers: []
         };
     },
     {

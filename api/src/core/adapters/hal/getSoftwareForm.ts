@@ -3,9 +3,10 @@
 // SPDX-License-Identifier: MIT
 
 import memoize from "memoizee";
-import { SoftwareFormData, SoftwareType } from "../../usecases/readWriteSillData";
+import { SoftwareFormData, SoftwareType, Source } from "../../usecases/readWriteSillData";
 import { halAPIGateway } from "./HalAPI";
 import { HAL } from "./HalAPI/types/HAL";
+import { GetSoftwareFormData } from "../../ports/GetSoftwareFormData";
 
 const stringOfArrayIncluded = (stringArray: Array<string>, text: string): boolean => {
     return stringArray.some((arg: string) => {
@@ -33,7 +34,10 @@ const textToSoftwareType = (text: string): SoftwareType => {
     };
 };
 
-export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software): Promise<SoftwareFormData> => {
+export const halRawSoftwareToSoftwareForm = async (
+    halSoftware: HAL.API.Software,
+    source: Source
+): Promise<SoftwareFormData> => {
     const codemetaSoftware = await halAPIGateway.software.getCodemetaByUrl(halSoftware.uri_s);
 
     const formData: SoftwareFormData = {
@@ -43,8 +47,7 @@ export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software
             halSoftware.softPlatform_s ? halSoftware.softPlatform_s.join("").toLocaleLowerCase() : ""
         ),
         externalIdForSource: halSoftware.docid,
-        sourceSlug: "hal",
-        comptoirDuLibreId: undefined,
+        sourceSlug: source.slug,
         softwareLicense: codemetaSoftware?.license?.[0] ?? "undefined", // TODO 1 case to copyright
         softwareMinimalVersion: undefined,
         similarSoftwareExternalDataIds: [],
@@ -59,16 +62,18 @@ export const halRawSoftwareToSoftwareForm = async (halSoftware: HAL.API.Software
     return formData;
 };
 
-export const getHalSoftwareForm = memoize(async (halDocId: string): Promise<SoftwareFormData | undefined> => {
-    const halRawSoftware = await halAPIGateway.software.getById(halDocId).catch(error => {
-        if (!(error instanceof HAL.API.FetchError)) throw error;
-        if (error.status === 404 || error.status === undefined) return;
-        throw error;
-    });
+export const getHalSoftwareForm: GetSoftwareFormData = memoize(
+    async ({ externalId, source }): Promise<SoftwareFormData | undefined> => {
+        const halRawSoftware = await halAPIGateway.software.getById(externalId).catch(error => {
+            if (!(error instanceof HAL.API.FetchError)) throw error;
+            if (error.status === 404 || error.status === undefined) return;
+            throw error;
+        });
 
-    if (!halRawSoftware) {
-        throw Error();
+        if (!halRawSoftware) {
+            throw Error();
+        }
+
+        return halRawSoftwareToSoftwareForm(halRawSoftware, source);
     }
-
-    return halRawSoftwareToSoftwareForm(halRawSoftware);
-});
+);

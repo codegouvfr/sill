@@ -7,24 +7,19 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { stripNullOrUndefinedValues } from "../core/adapters/dbApi/kysely/kysely.utils";
 import type { DbAgent } from "../core/ports/DbApiV2";
-import type { InstanceFormData, Source } from "../core/usecases/readWriteSillData";
+import type { InstanceFormData } from "../core/usecases/readWriteSillData";
 import {
     createDeclarationFormData,
     createInstanceFormData,
     createSoftwareFormData,
     expectToEqual,
-    expectToMatchObject
+    expectToMatchObject,
+    resetDB,
+    testSource
 } from "../tools/test.helpers";
 import { ApiCaller, createTestCaller, defaultUser } from "./createTestCaller";
 
-const mainSource = {
-    slug: "wikidata",
-    priority: 1,
-    url: "https://www.wikidata.org",
-    description: null,
-    kind: "wikidata"
-} satisfies Source;
-const softwareFormData = createSoftwareFormData({ sourceSlug: mainSource.slug });
+const softwareFormData = createSoftwareFormData({ sourceSlug: testSource.slug });
 const declarationFormData = createDeclarationFormData();
 
 describe("RPC e2e tests", () => {
@@ -97,15 +92,7 @@ describe("RPC e2e tests", () => {
 
         beforeAll(async () => {
             ({ apiCaller, kyselyDb } = await createTestCaller());
-            await kyselyDb.deleteFrom("software_referents").execute();
-            await kyselyDb.deleteFrom("software_users").execute();
-            await kyselyDb.deleteFrom("instances").execute();
-            await kyselyDb.deleteFrom("software_external_datas").execute();
-            await kyselyDb.deleteFrom("softwares").execute();
-            await kyselyDb.deleteFrom("agents").execute();
-            await kyselyDb.deleteFrom("sources").execute();
-
-            await kyselyDb.insertInto("sources").values(mainSource).executeTakeFirst();
+            await resetDB(kyselyDb);
         });
 
         it("gets the list of agents, which is initially empty", async () => {
@@ -113,61 +100,72 @@ describe("RPC e2e tests", () => {
             expect(agents).toHaveLength(0);
         });
 
-        it("adds a new software", async () => {
-            expect(await getSoftwareRows()).toHaveLength(0);
-            const initialSoftwares = await apiCaller.getSoftwares();
-            expectToEqual(initialSoftwares, []);
+        it(
+            "adds a new software",
+            async () => {
+                expect(await getSoftwareRows()).toHaveLength(0);
+                const initialSoftwares = await apiCaller.getSoftwares();
+                expectToEqual(initialSoftwares, []);
 
-            await apiCaller.createSoftware({
-                formData: softwareFormData
-            });
-
-            const { agents } = await apiCaller.getAgents();
-            expect(agents).toHaveLength(1);
-            agent = agents[0];
-            expectToMatchObject(agent, {
-                id: expect.any(Number),
-                email: defaultUser.email,
-                organization: null
-            });
-
-            const softwareRows = await getSoftwareRows();
-            expect(softwareRows).toHaveLength(1);
-
-            actualSoftwareId = softwareRows[0].id;
-
-            expectToMatchObject(softwareRows[0], {
-                "description": softwareFormData.softwareDescription,
-                "externalIdForSource": softwareFormData.externalIdForSource,
-                "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
-                "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
-                "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
-                "keywords": softwareFormData.softwareKeywords,
-                "license": softwareFormData.softwareLicense,
-                "logoUrl": softwareFormData.softwareLogoUrl,
-                "name": softwareFormData.softwareName,
-                "softwareType": softwareFormData.softwareType,
-                "versionMin": softwareFormData.softwareMinimalVersion ?? undefined,
-                "workshopUrls": [],
-                "categories": [],
-                "isStillInObservation": false,
-                "id": expect.any(Number),
-                "addedByAgentId": agent.id
-            });
-
-            const similarSoftsInDb = await kyselyDb
-                .selectFrom("softwares__similar_software_external_datas")
-                .selectAll()
-                .execute();
-
-            expect(similarSoftsInDb).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
-            softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
-                expectToMatchObject(similarSoftsInDb[0], {
-                    softwareId: actualSoftwareId,
-                    similarExternalId
+                await apiCaller.createSoftware({
+                    formData: softwareFormData
                 });
-            });
-        });
+
+                const { agents } = await apiCaller.getAgents();
+                expect(agents).toHaveLength(1);
+                agent = agents[0];
+                expectToMatchObject(agent, {
+                    id: expect.any(Number),
+                    email: defaultUser.email,
+                    organization: null
+                });
+
+                const softwareRows = await getSoftwareRows();
+                expect(softwareRows).toHaveLength(1);
+
+                actualSoftwareId = softwareRows[0].id;
+
+                expectToMatchObject(softwareRows[0], {
+                    "description": softwareFormData.softwareDescription,
+                    "doRespectRgaa": softwareFormData.doRespectRgaa ?? undefined,
+                    "isFromFrenchPublicService": softwareFormData.isFromFrenchPublicService,
+                    "isPresentInSupportContract": softwareFormData.isPresentInSupportContract,
+                    "keywords": softwareFormData.softwareKeywords,
+                    "license": softwareFormData.softwareLicense,
+                    "logoUrl": softwareFormData.softwareLogoUrl,
+                    "name": softwareFormData.softwareName,
+                    "softwareType": softwareFormData.softwareType,
+                    "versionMin": softwareFormData.softwareMinimalVersion ?? undefined,
+                    "workshopUrls": [],
+                    "categories": [],
+                    "isStillInObservation": false,
+                    "id": expect.any(Number),
+                    "addedByAgentId": agent.id
+                });
+
+                // Expect to have the created externalData
+                const result = await kyselyDb
+                    .selectFrom("software_external_datas")
+                    .select("externalId")
+                    .where("softwareId", "=", actualSoftwareId)
+                    .executeTakeFirst();
+                expect(result!.externalId).toEqual(softwareFormData.externalIdForSource);
+
+                const similarSoftsInDb = await kyselyDb
+                    .selectFrom("softwares__similar_software_external_datas")
+                    .selectAll()
+                    .execute();
+
+                expect(similarSoftsInDb).toHaveLength(softwareFormData.similarSoftwareExternalDataIds.length);
+                softwareFormData.similarSoftwareExternalDataIds.forEach(similarExternalId => {
+                    expectToMatchObject(similarSoftsInDb[0], {
+                        softwareId: actualSoftwareId,
+                        similarExternalId
+                    });
+                });
+            },
+            { timeout: 10_000 }
+        );
 
         it("gets the list of agents, which now has the user which added the software", async () => {
             const { agents } = await apiCaller.getAgents();

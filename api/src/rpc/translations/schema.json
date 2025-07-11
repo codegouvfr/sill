@@ -474,13 +474,6 @@
                     "type": "string",
                     "description": "Helper text explaining the field"
                 },
-                "comptoir du libre id": {
-                    "type": "string"
-                },
-                "comptoir du libre id hint": {
-                    "type": "string",
-                    "description": "Helper text explaining the field"
-                },
                 "software name": {
                     "type": "string"
                 },
@@ -529,9 +522,6 @@
                     "description": "Helper text explaining the field"
                 },
                 "logo preview alt": {
-                    "type": "string"
-                },
-                "invalid comptoir du libre id": {
                     "type": "string"
                 }
             },

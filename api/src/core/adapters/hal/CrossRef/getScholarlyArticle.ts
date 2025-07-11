@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { GetScholarlyArticle } from "../../../ports/GetScholarlyArticle";
+import { identifersUtils } from "../../../../tools/identifiersTools";
 import { crossRef } from "./api";
 
 export const getScholarlyArticle: GetScholarlyArticle = async doi => {
@@ -18,12 +19,7 @@ export const getScholarlyArticle: GetScholarlyArticle = async doi => {
     return {
         "@id": workData.message.DOI,
         "@type": "ScholarlyArticle",
-        identifier: {
-            "@type": "PropertyValue",
-            "propertyID": "doi",
-            "url": new URL(`https://doi.org/${doi}`),
-            "value": workData.message.DOI
-        },
+        identifiers: [identifersUtils.makeArticleDOIIdentifier({ doi: workData.message.DOI })],
         headline: workData.message.title[0]
     };
 };

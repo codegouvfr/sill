@@ -58,6 +58,10 @@ const resolveLogoFromURL = (
         return resolveLogoFromType("HAL");
     }
 
+    if (urlString.includes("zenodo.org")) {
+        return resolveLogoFromType("Zenodo");
+    }
+
     return {
         URLlogo: undefined,
         textFromURL: undefined
@@ -77,9 +81,7 @@ const resolveLogoFromType = (
             };
         case "Orcid":
             return {
-                URLlogo: new URL(
-                    "https://homepage-prod.orcid.org/assets/iD_icon_1-9cfee7d6c7.png"
-                ),
+                URLlogo: new URL("https://orcid.org/assets/vectors/orcid.logo.icon.svg"),
                 textFromURL: "ORCID"
             };
         case "wikidata":
@@ -127,6 +129,13 @@ const resolveLogoFromType = (
                     "https://framasoft.org/nav/img/icons/favicon/sites/libre.png"
                 ),
                 textFromURL: "FramaLibre"
+            };
+        case "Zenodo":
+            return {
+                URLlogo: new URL(
+                    "https://about.zenodo.org/static/img/logos/zenodo-gradient-2500.png"
+                ),
+                textFromURL: "Zenodo"
             };
         default:
             sourceType satisfies never;

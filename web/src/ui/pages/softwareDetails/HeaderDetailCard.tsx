@@ -28,7 +28,7 @@ export type Props = {
               lastRecommendedVersion?: string;
           }
         | undefined;
-    authors: Array<ApiTypes.Catalogi.Person | ApiTypes.Catalogi.Organization>;
+    authors: Array<ApiTypes.Person | ApiTypes.Organization>;
     officialWebsite?: string;
     documentationWebsite?: string;
     sourceCodeRepository?: string;
@@ -141,7 +141,10 @@ export const HeaderDetailCard = memo((props: Props) => {
                                                         author.affiliations?.length <=
                                                             0))) && (
                                                 <a
-                                                    href={author.url}
+                                                    href={
+                                                        author.url ??
+                                                        author?.identifiers?.[0]?.url?.toString()
+                                                    }
                                                     className={classes.authorLink}
                                                     key={author.name}
                                                 >

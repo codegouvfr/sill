@@ -6,8 +6,7 @@ import { Kysely } from "kysely";
 import { createKyselyPgDbApi } from "./adapters/dbApi/kysely/createPgDbApi";
 import { Database } from "./adapters/dbApi/kysely/kysely.database";
 import { DbApiV2 } from "./ports/DbApiV2";
-import type { ExternalDataOrigin } from "./ports/GetSoftwareExternalData";
-import { importFromHALSource, importFromWikidataSource } from "./usecases/importFromSource";
+import { importFromSource } from "./usecases/importFromSource";
 
 type PgDbConfig = { dbKind: "kysely"; kyselyDb: Kysely<Database> };
 
@@ -15,8 +14,8 @@ type DbConfig = PgDbConfig;
 
 type ParamsOfImportTool = {
     dbConfig: DbConfig;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     botAgentEmail: string | undefined;
+    sourceSlug: string;
     listToImport?: string[];
 };
 
@@ -28,34 +27,27 @@ const getDbApiAndInitializeCache = (dbConfig: DbConfig): { dbApi: DbApiV2 } => {
     }
 
     const shouldNotBeReached: never = dbConfig.dbKind;
-    throw new Error(`Unsupported case: ${shouldNotBeReached}`);
+    throw new Error(`[Loader:Import] Unsupported case: ${shouldNotBeReached}`);
 };
 
 export async function importTool(params: ParamsOfImportTool): Promise<boolean> {
-    const { dbConfig, externalSoftwareDataOrigin, botAgentEmail, listToImport } = params;
+    const { dbConfig, botAgentEmail, listToImport, sourceSlug } = params;
 
     const { dbApi } = getDbApiAndInitializeCache(dbConfig);
 
-    if (!botAgentEmail) throw new Error("No bot agent email provided");
-    if (externalSoftwareDataOrigin === "HAL") {
-        console.info(" ------ Feeding database with HAL software started ------");
-        const importHAL = importFromHALSource(dbApi);
-        return importHAL(botAgentEmail).then(promises =>
-            Promise.all(promises).then(() => {
-                console.info(" ------ Feeding database with HAL software finished ------");
-                return true;
-            })
-        );
-    } else if (externalSoftwareDataOrigin === "wikidata") {
-        console.info(" ------ Feeding database with Wikidata software started ------");
-        const importWikidata = importFromWikidataSource(dbApi);
-        return importWikidata(botAgentEmail, listToImport ?? []).then(promises =>
-            Promise.all(promises).then(() => {
-                console.info(" ------ Feeding database with Wikidata software finished ------");
-                return true;
-            })
-        );
-    } else {
-        return Promise.reject(`${externalSoftwareDataOrigin} not supported`);
-    }
+    if (!botAgentEmail) throw new Error("[Loader:Import] No bot agent email provided");
+
+    const source = await dbApi.source.getByName({ name: sourceSlug });
+    if (!source) throw new Error("[Loader:Import] Couldn't find the source to connect to");
+
+    const loggerTime = `[Loader:Import] Feeded database with software packages from ${source.slug}`;
+
+    const importService = importFromSource(dbApi);
+
+    console.time(loggerTime);
+    return importService({ agentEmail: botAgentEmail, source, softwareIdOnSource: listToImport }).then(result => {
+        console.log(`[Loader:Import] Feeding database with ${result.length} software packages`);
+        console.timeEnd(loggerTime);
+        return true;
+    });
 }

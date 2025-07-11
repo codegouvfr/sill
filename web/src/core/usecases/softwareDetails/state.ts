@@ -13,8 +13,8 @@ export const name = "softwareDetails";
 export type State = State.NotReady | State.Ready;
 
 export namespace State {
-    export type SimilarSoftwareNotInSill =
-        ApiTypes.Software.SimilarSoftware.SimilarSoftwareNotInSill;
+    export type SimilarSoftwareNotRegistered =
+        ApiTypes.Software.SimilarSoftware.SimilarSoftwareNotRegistered;
 
     export type NotReady = {
         stateDescription: "not ready";
@@ -38,9 +38,9 @@ export namespace State {
         softwareId: number;
         softwareName: string;
         softwareDescription: string;
-        serviceProviders: ApiTypes.ServiceProvider[];
+        serviceProviders: ApiTypes.Organization[];
         logoUrl: string | undefined;
-        authors: Array<ApiTypes.Catalogi.Person | ApiTypes.Catalogi.Organization>;
+        authors: Array<ApiTypes.Person | ApiTypes.Organization>;
         officialWebsiteUrl: string | undefined;
         documentationUrl: string | undefined;
         codeRepositoryUrl: string | undefined;
@@ -53,13 +53,6 @@ export namespace State {
         addedTime: number;
         versionMin: string | undefined;
         license: string;
-        comptoirDuLibreServiceProviderCount: number;
-        comptoirDuLibreServiceProviderUrl: string | undefined;
-        annuaireCnllServiceProviders: {
-            name: string;
-            siren: string;
-            url: string;
-        }[];
         dereferencing:
             | {
                   reason?: string;
@@ -67,8 +60,6 @@ export namespace State {
                   lastRecommendedVersion?: string;
               }
             | undefined;
-        comptoirDuLibreUrl: string | undefined;
-        wikidataUrl: string | undefined;
         prerogatives: Record<SoftwareCatalogState.Prerogative, boolean | undefined>;
         userCount: number;
         referentCount: number;
@@ -83,17 +74,17 @@ export namespace State {
             | undefined;
         similarSoftwares: (
             | {
-                  isInSill: true;
+                  registered: true;
                   software: SoftwareCatalogState.Software.External;
               }
-            | SimilarSoftwareNotInSill
+            | SimilarSoftwareNotRegistered
         )[];
         programmingLanguages: string[];
         keywords: string[];
         applicationCategories: string[];
-        referencePublications?: ApiTypes.Catalogi.ScholarlyArticle[];
+        referencePublications?: ApiTypes.ScholarlyArticle[];
         softwareType: ApiTypes.SoftwareType;
-        identifiers: ApiTypes.Catalogi.Identification[];
+        identifiers: ApiTypes.Identifier[];
     };
 }
 

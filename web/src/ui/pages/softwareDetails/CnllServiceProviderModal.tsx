@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { createModal } from "@codegouvfr/react-dsfr/Modal";
+import { ApiTypes } from "api";
 import { Trans, useTranslation } from "react-i18next";
 
 const modal = createModal({
@@ -15,11 +16,7 @@ export const { open: openCnllServiceProviderModal } = modal;
 type Props = {
     className?: string;
     softwareName: string;
-    annuaireCnllServiceProviders: {
-        name: string;
-        siren: string;
-        url: string;
-    }[];
+    annuaireCnllServiceProviders: ApiTypes.Organization[];
 };
 
 export function CnllServiceProviderModal(props: Props) {
@@ -51,10 +48,16 @@ export function CnllServiceProviderModal(props: Props) {
                 }}
             />
             <ul>
-                {annuaireCnllServiceProviders.map(({ name, siren, url }) => (
+                {annuaireCnllServiceProviders.map(({ name, identifiers, url }) => (
                     <li key={url}>
                         <a href={url} target="_blank" rel="noreferrer">
-                            {name}, siren: {siren}
+                            {name}, siren:{" "}
+                            {
+                                identifiers?.findLast(
+                                    identifier =>
+                                        identifier.subjectOf?.additionalType === "SIREN"
+                                )?.value
+                            }
                         </a>
                     </li>
                 ))}

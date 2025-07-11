@@ -187,8 +187,6 @@ function apiSoftwareToSoftware(params: {
         addedTime,
         dereferencing,
         prerogatives,
-        comptoirDuLibreServiceProviderCount,
-        comptoirDuLibreId,
         similarSoftwares: similarSoftwares_api,
         sourceSlug,
         externalId,
@@ -196,7 +194,6 @@ function apiSoftwareToSoftware(params: {
         versionMin,
         softwareType,
         userAndReferentCountByOrganization,
-        annuaireCnllServiceProviders,
         serviceProviders,
         programmingLanguages,
         keywords,
@@ -227,19 +224,6 @@ function apiSoftwareToSoftware(params: {
             .map(({ userCount }) => userCount)
             .reduce((prev, curr) => prev + curr, 0),
         addedTime,
-        comptoirDuLibreServiceProviderUrl:
-            comptoirDuLibreId === undefined
-                ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/servicesProviders/${comptoirDuLibreId}`,
-        annuaireCnllServiceProviders: annuaireCnllServiceProviders ?? [],
-        comptoirDuLibreUrl:
-            comptoirDuLibreId === undefined
-                ? undefined
-                : `https://comptoir-du-libre.org/fr/softwares/${comptoirDuLibreId}`,
-        wikidataUrl:
-            sourceSlug !== "wikidata" || externalId === undefined
-                ? undefined
-                : `https://www.wikidata.org/wiki/${externalId}`,
         instances:
             softwareType.type !== "cloud"
                 ? undefined
@@ -255,7 +239,7 @@ function apiSoftwareToSoftware(params: {
         similarSoftwares: similarSoftwares_api.map(similarSoftware => {
             const software = apiSoftwareToExternalCatalogSoftware({
                 apiSoftwares,
-                softwareRef: similarSoftware.isInSill
+                softwareRef: similarSoftware.registered
                     ? {
                           type: "name",
                           softwareName: similarSoftware.softwareName
@@ -268,20 +252,20 @@ function apiSoftwareToSoftware(params: {
             });
 
             if (software === undefined) {
-                assert(!similarSoftware.isInSill);
+                assert(!similarSoftware.registered);
 
                 return {
-                    isInSill: false,
+                    registered: false,
                     sourceSlug: similarSoftware.sourceSlug,
                     externalId: similarSoftware.externalId,
                     label: similarSoftware.label,
                     description: similarSoftware.description,
                     isLibreSoftware: similarSoftware.isLibreSoftware
-                } satisfies State.SimilarSoftwareNotInSill;
+                } satisfies State.SimilarSoftwareNotRegistered;
             }
 
             return {
-                isInSill: true,
+                registered: true,
                 software
             };
         }),
@@ -298,7 +282,6 @@ function apiSoftwareToSoftware(params: {
             isFromFrenchPublicServices: prerogatives.isFromFrenchPublicServices,
             doRespectRgaa: prerogatives.doRespectRgaa ?? undefined
         },
-        comptoirDuLibreServiceProviderCount,
         versionMin,
         programmingLanguages,
         keywords,

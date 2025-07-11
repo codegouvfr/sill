@@ -2,14 +2,18 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
+import { GetSoftwareFormData } from "../../ports/GetSoftwareFormData";
 import { SoftwareFormData } from "../../usecases/readWriteSillData";
 import { createGetClaimDataValue, fetchEntity, WikidataFetchError } from "./getWikidataSoftware";
 
-export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormData | undefined> => {
+export const getWikidataForm: GetSoftwareFormData = async ({
+    externalId,
+    source
+}): Promise<SoftwareFormData | undefined> => {
     try {
-        console.info(`   -> fetching wiki soft : ${wikidataId}`);
+        console.info(`   -> fetching wiki soft : ${externalId}`);
         const { entity } =
-            (await fetchEntity(wikidataId).catch(error => {
+            (await fetchEntity(externalId).catch(error => {
                 if (error instanceof WikidataFetchError) {
                     if (error.status === 404 || error.status === undefined) {
                         return undefined;
@@ -59,9 +63,8 @@ export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormD
                 type: "desktop/mobile",
                 os: { "linux": true, "windows": true, "android": false, "ios": false, "mac": false }
             },
-            externalIdForSource: wikidataId,
-            sourceSlug: "wikidata",
-            comptoirDuLibreId: undefined,
+            externalIdForSource: externalId,
+            sourceSlug: source.slug,
             softwareLicense: license?.label ?? "Copyright",
             softwareMinimalVersion: undefined,
             similarSoftwareExternalDataIds: [],
@@ -72,7 +75,7 @@ export const getWikidataForm = async (wikidataId: string): Promise<SoftwareFormD
             doRespectRgaa: false
         };
     } catch (error) {
-        console.error(`Error for ${wikidataId} : `, error);
+        console.error(`Error for ${externalId} : `, error);
         // Expected output: ReferenceError: nonExistentFunction is not defined
         // (Note: the exact output may be browser-dependent)
     }

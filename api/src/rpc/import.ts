@@ -7,26 +7,16 @@ import type { Equals } from "tsafe";
 import { assert } from "tsafe/assert";
 import { Database } from "../core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../core/adapters/dbApi/kysely/kysely.dialect";
-import type { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 import { importTool } from "../core/importTool";
 
 export async function startImportService(params: {
     isDevEnvironnement: boolean;
-    externalSoftwareDataOrigin: ExternalDataOrigin;
     databaseUrl: string;
     botAgentEmail?: string;
-    initializeSoftwareFromSource: boolean;
+    importDataSourceOrigin: string;
     listToImport?: string[];
 }) {
-    const {
-        isDevEnvironnement,
-        externalSoftwareDataOrigin,
-        databaseUrl,
-        initializeSoftwareFromSource,
-        botAgentEmail,
-        listToImport,
-        ...rest
-    } = params;
+    const { isDevEnvironnement, databaseUrl, botAgentEmail, listToImport, importDataSourceOrigin, ...rest } = params;
 
     assert<Equals<typeof rest, {}>>();
 
@@ -39,10 +29,10 @@ export async function startImportService(params: {
             "dbKind": "kysely",
             "kyselyDb": kyselyDb
         },
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
         "botAgentEmail": botAgentEmail,
+        "sourceSlug": importDataSourceOrigin,
         "listToImport": listToImport ?? []
     });
 
-    success ? console.log("Importation successful") : console.error("Error");
+    success ? console.info("[RPC:Import] ✅ Importation successful ✅") : console.error("[RPC:Import] ❌ Error ❌");
 }

@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { ApiTypes } from "api";
 
 export type Props = {
-    referencePublications?: ApiTypes.Catalogi.ScholarlyArticle[];
+    referencePublications?: ApiTypes.ScholarlyArticle[];
 };
 
 export const PublicationTab = (props: Props) => {
@@ -23,7 +23,7 @@ export const PublicationTab = (props: Props) => {
                     return (
                         <li>
                             <a
-                                href={article.identifier?.url?.toString()}
+                                href={article.identifiers?.[0]?.url?.toString()} // It doesn't matter which id we take
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{

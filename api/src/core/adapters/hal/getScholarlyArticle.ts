@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 
 import { GetScholarlyArticle } from "../../ports/GetScholarlyArticle";
+import { identifersUtils } from "../../../tools/identifiersTools";
 import { halAPIGateway } from "./HalAPI";
 
 export const getScholarlyArticle: GetScholarlyArticle = async halDocId => {
@@ -18,12 +19,7 @@ export const getScholarlyArticle: GetScholarlyArticle = async halDocId => {
     return {
         "@id": halDocId,
         "@type": "ScholarlyArticle",
-        identifier: {
-            "@type": "PropertyValue",
-            "propertyID": "HAL",
-            "url": new URL(`https://hal.science/${halDocId}`),
-            "value": halDocId
-        },
+        identifiers: [identifersUtils.makeHALArticleIdentifier({ halId: halDocId })],
         headline: articleData.en_title_s?.[0] ?? articleData.fr_title_s?.[0] ?? articleData.title_s[0]
     };
 };
