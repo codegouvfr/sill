@@ -27,20 +27,23 @@ export async function up(db: Kysely<any>): Promise<void> {
         .select(["s.id", "s.sourceSlug", "s.externalIdForSource"])
         // Only select if you have data to insert
         .where("s.externalIdForSource", "is not", null)
-        // When joint is not already made
+        // When join is not already made
         .whereRef("ext.softwareId", "!=", "s.id")
+        .where("s.dereferencing", "is", null)
         .execute();
 
     if (idsToWrite?.length > 0) {
-        idsToWrite.map(({ id, externalIdForSource, sourceSlug }) => {
-            db.updateTable("software_external_datas")
-                .set({
-                    sourceSlug,
-                    externalId: externalIdForSource
-                })
-                .where("id", "=", id)
-                .executeTakeFirst();
-        });
+        await Promise.all(
+            idsToWrite.map(({ id, externalIdForSource, sourceSlug }) => {
+                db.updateTable("software_external_datas")
+                    .set({
+                        sourceSlug,
+                        externalId: externalIdForSource
+                    })
+                    .where("softwareId", "=", id)
+                    .executeTakeFirst();
+            })
+        );
     }
 
     // Delete
