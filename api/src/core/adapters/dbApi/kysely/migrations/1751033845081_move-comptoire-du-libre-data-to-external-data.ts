@@ -4,7 +4,6 @@
 
 import type { Kysely } from "kysely";
 
-// `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
 export async function up(db: Kysely<any>): Promise<void> {
     const comptoirDuLibreSourceSlug = "comptoir-du-libre";
     await db
@@ -23,6 +22,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         .selectFrom("softwares")
         .select(["id", "comptoirDuLibreId", "name", "description"])
         .where("comptoirDuLibreId", "is not", null)
+        .where("dereferencing", "is", null)
         .execute();
 
     if (softsWithSourceComptoireDuLibre.length > 0) {
@@ -31,7 +31,7 @@ export async function up(db: Kysely<any>): Promise<void> {
             .values(
                 softsWithSourceComptoireDuLibre.map(s => ({
                     softwareId: s.id,
-                    externalId: s.comptoirDuLibreId!.toString(),
+                    externalId: s.comptoirDuLibreId.toString(),
                     sourceSlug: comptoirDuLibreSourceSlug,
                     label: JSON.stringify(s.name),
                     description: JSON.stringify(s.description),
@@ -45,6 +45,5 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-    // comptoirDuLibreId
     await db.schema.alterTable("softwares").addColumn("comptoirDuLibreId", "integer").execute();
 }
