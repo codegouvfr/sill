@@ -14,10 +14,37 @@ export async function up(db: Kysely<any>): Promise<void> {
             slug: "cnll",
             kind: "CNLL",
             url: "https://cnll.fr/",
+            priority: 3,
             description: JSON.stringify({ fr: "Union des entreprises du logiciel libre et du numérique ouvert" })
         })
         .onConflict(oc => oc.column("slug").doNothing())
         .execute();
+
+    // Ensure the trace of bind between tables
+    const idsToWrite = await db
+        .selectFrom("softwares as s")
+        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalIdForSource")
+        .select(["s.id", "s.sourceSlug", "s.externalIdForSource"])
+        // Only select if you have data to insert
+        .where("s.externalIdForSource", "is not", null)
+        // When joint is not already made
+        .whereRef("ext.softwareId", "!=", "s.id")
+        .execute();
+
+    if (idsToWrite?.length > 0) {
+        idsToWrite.map(({ id, externalIdForSource, sourceSlug }) => {
+            db.updateTable("software_external_datas")
+                .set({
+                    sourceSlug,
+                    externalId: externalIdForSource
+                })
+                .where("id", "=", id)
+                .executeTakeFirst();
+        });
+    }
+
+    // Delete
+    await db.schema.alterTable("softwares").dropColumn("externalIdForSource").dropColumn("sourceSlug").execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -38,5 +65,11 @@ export async function down(db: Kysely<any>): Promise<void> {
         .createIndex(compiledSoftwares_SoftwareIdIdx)
         .on("compiled_softwares")
         .column("softwareId")
+        .execute();
+
+    await db.schema
+        .alterTable("softwares")
+        .addColumn("sourceSlug", "text", col => col.references("sources.slug"))
+        .addColumn("externalIdForSource", "text")
         .execute();
 }
