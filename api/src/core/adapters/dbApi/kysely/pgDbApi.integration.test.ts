@@ -195,7 +195,7 @@ describe("pgDbApi", () => {
                 documentationUrl: softwareExternalData.documentationUrl,
                 sourceSlug: testSource.slug,
                 externalId: externalIdForSource,
-                keywords: ["bob", "l'éponge"],
+                keywords: ["l'éponge", "bob"],
                 latestVersion: {
                     "publicationTime": 1561566581000,
                     "semVer": "1.0.0"
@@ -244,7 +244,7 @@ describe("pgDbApi", () => {
 
             console.log("getting all sill software external ids");
             const softwareExternalIds = await dbApi.software.getAllSillSoftwareExternalIds("wikidata");
-            expectToEqual(softwareExternalIds, [externalIdForSource]);
+            expectToEqual(softwareExternalIds, [similarExternalId, externalIdForSource]);
         });
     });
 

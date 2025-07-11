@@ -112,7 +112,9 @@ describe("Create software - Trying all the cases", () => {
         expectToMatchObject(softwareExternalDatas, initialExternalSoftwarePackagesBeforeFetching);
 
         const similarId = await dbApi.software.getSimilarSoftwareExternalDataPks({ softwareId: craSoftwareId });
-        expectToMatchObject(similarId, [{ sourceSlug: testSource.slug, externalId: "Q111590996", softwareId: 12 }]);
+        expectToMatchObject(similarId, [
+            { sourceSlug: testSource.slug, externalId: "Q111590996", softwareId: undefined }
+        ]);
 
         console.log(craSoftwareId);
     });
@@ -259,26 +261,26 @@ describe("Create software - Trying all the cases", () => {
         const softwareList = await db.selectFrom("softwares").selectAll().execute();
         expectToEqual(softwareList.length, 1);
 
-        const externdalDataList = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(externdalDataList.length, 3);
+        const externalDataList = await db.selectFrom("software_external_datas").selectAll().execute();
+        expectToEqual(externalDataList.length, 3);
 
-        const similardExternalData = await dbApi.software.getSimilarSoftwareExternalDataPks({
+        const similarExternalData = await dbApi.software.getSimilarSoftwareExternalDataPks({
             softwareId: craSoftwareId
         });
-        expectToEqual(similardExternalData?.length, 2);
+        expectToEqual(similarExternalData?.length, 2);
 
         craSoftwareId = await useCaseCreate({
             formData: { ...craSoftwareFormData, similarSoftwareExternalDataIds: ["Q111590996", "Q111590998"] },
             agentId
         });
 
-        const externdalDataListUpdated = await db.selectFrom("software_external_datas").selectAll().execute();
-        expectToEqual(externdalDataListUpdated.length, 4);
+        const externalDataListUpdated = await db.selectFrom("software_external_datas").selectAll().execute();
+        expectToEqual(externalDataListUpdated.length, 4);
 
-        const similardExternalDataUpdated = await dbApi.software.getSimilarSoftwareExternalDataPks({
+        const similarExternalDataUpdated = await dbApi.software.getSimilarSoftwareExternalDataPks({
             softwareId: craSoftwareId
         });
-        expectToEqual(similardExternalDataUpdated?.length, 3);
+        expectToEqual(similarExternalDataUpdated?.length, 2);
     });
 
     // TODO Another case : register

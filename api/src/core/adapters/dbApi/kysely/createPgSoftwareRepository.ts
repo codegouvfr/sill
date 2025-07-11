@@ -16,11 +16,8 @@ export const createPgSoftwareRepository = (db: Kysely<Database>): SoftwareReposi
             return rows.map(row => stripNullOrUndefinedValues(row));
         },
         getBySoftwareId: async (softwareId: number) => {
-            const row = await db
-                .selectFrom("softwares")
-                .selectAll()
-                .where("id", "=", softwareId)
-                .executeTakeFirstOrThrow();
+            const row = await db.selectFrom("softwares").selectAll().where("id", "=", softwareId).executeTakeFirst();
+            if (!row) return;
             return stripNullOrUndefinedValues(row);
         },
         getByName: async ({ softwareName }) => {
