@@ -3,10 +3,9 @@
 // SPDX-License-Identifier: MIT
 
 import type { Kysely } from "kysely";
-import { Database } from "../kysely.database";
 
 // `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-export async function up(db: Kysely<Database>): Promise<void> {
+export async function up(db: Kysely<any>): Promise<void> {
     const comptoirDuLibreSourceSlug = "comptoir-du-libre";
     await db
         .insertInto("sources")
