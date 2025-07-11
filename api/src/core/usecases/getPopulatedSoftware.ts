@@ -2,7 +2,9 @@
 // SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
 // SPDX-License-Identifier: MIT
 
+import merge from "deepmerge";
 import { DatabaseDataType, DbApiV2 } from "../ports/DbApiV2";
+import { mergeArrays, OmitFromExisting } from "../utils";
 import { Software } from "./readWriteSillData";
 
 export type MakeGetPopulatedSoftware = (dbApi: DbApiV2) => GetPopulatedSoftware;
@@ -47,7 +49,6 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
         const mergedExternalDataItem = await dbApi.softwareExternalData.getMergedBySoftwareId({
             softwareId: softwareItem.id
         });
-
         const missingData: MissingData = {
             userAndReferentCountByOrganization: {},
             similarSoftwares: []
@@ -97,25 +98,27 @@ export const makeGetPopulatedSoftwareItem: MakeGetPopulatedSoftwareItem = (dbApi
         }
 
         if (mergedExternalDataItem) {
-            return Object.assign(
-                missingData,
-                formatExternalDataRowToUISoftware(mergedExternalDataItem),
-                formatedSoftwareUI
+            return merge.all<Software>(
+                [missingData, formatExternalDataRowToUISoftware(mergedExternalDataItem), formatedSoftwareUI],
+                { arrayMerge: mergeArrays }
             );
         }
 
-        return Object.assign(
-            {
-                serviceProviders: [],
-                latestVersion: {},
-                authors: [],
-                officialWebsiteUrl: undefined,
-                codeRepositoryUrl: undefined,
-                documentationUrl: undefined,
-                programmingLanguages: []
-            },
-            missingData,
-            formatedSoftwareUI
+        return merge.all<Software>(
+            [
+                {
+                    serviceProviders: [],
+                    latestVersion: {},
+                    authors: [],
+                    officialWebsiteUrl: undefined,
+                    codeRepositoryUrl: undefined,
+                    documentationUrl: undefined,
+                    programmingLanguages: []
+                },
+                missingData,
+                formatedSoftwareUI
+            ],
+            { arrayMerge: mergeArrays }
         );
     };
 };
@@ -138,7 +141,9 @@ type DataFromSofwareRow = Pick<
     | "sourceSlug"
     | "externalId"
 >;
-const formatSoftwareRowToUISoftware = (software: DatabaseDataType.SoftwareRow): DataFromSofwareRow => {
+const formatSoftwareRowToUISoftware = (
+    software: DatabaseDataType.SoftwareRow
+): OmitFromExisting<DataFromSofwareRow, "sourceSlug" | "externalId"> => {
     return {
         softwareId: software.id,
         softwareDescription: software.description,
@@ -156,10 +161,7 @@ const formatSoftwareRowToUISoftware = (software: DatabaseDataType.SoftwareRow): 
             isFromFrenchPublicServices: software.isFromFrenchPublicService,
             doRespectRgaa: software.doRespectRgaa ?? null
         },
-        dereferencing: software.dereferencing,
-        // TODO REMOVE
-        sourceSlug: undefined,
-        externalId: undefined
+        dereferencing: software.dereferencing
     };
 };
 
@@ -178,6 +180,7 @@ type DataFromExternalRow = Pick<
     | "applicationCategories"
     | "latestVersion"
     | "serviceProviders"
+    | "sourceSlug"
 >;
 const formatExternalDataRowToUISoftware = (
     externalDataRow: DatabaseDataType.SoftwareExternalDataRow
@@ -204,7 +207,8 @@ const formatExternalDataRowToUISoftware = (
             semVer: externalDataRow.softwareVersion,
             publicationTime: dateParser(externalDataRow.publicationTime)
         },
-        serviceProviders: externalDataRow.providers ?? []
+        serviceProviders: externalDataRow.providers ?? [],
+        sourceSlug: externalDataRow.sourceSlug
     };
 };
 

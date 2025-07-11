@@ -244,6 +244,7 @@ export function createRouter(params: {
                     });
                 }
 
+                console.log("Yo5");
                 switch (formData.declarationType) {
                     case "user":
                         await dbApi.softwareUser.add({
