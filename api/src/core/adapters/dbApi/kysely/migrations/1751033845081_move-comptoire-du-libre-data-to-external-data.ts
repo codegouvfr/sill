@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021-2025 DINUM <floss@numerique.gouv.fr>
+// SPDX-FileCopyrightText: 2024-2025 Université Grenoble Alpes
+// SPDX-License-Identifier: MIT
+
 import type { Kysely } from "kysely";
 import { Database } from "../kysely.database";
 
@@ -37,9 +41,11 @@ export async function up(db: Kysely<Database>): Promise<void> {
             )
             .execute();
     }
+
+    await db.schema.alterTable("softwares").dropColumn("comptoirDuLibreId").execute();
 }
 
-// `any` is required here since migrations should be frozen in time. alternatively, keep a "snapshot" db interface.
-export async function down(): Promise<void> {
-    // we don't care
+export async function down(db: Kysely<any>): Promise<void> {
+    // comptoirDuLibreId
+    await db.schema.alterTable("softwares").addColumn("comptoirDuLibreId", "integer").execute();
 }
