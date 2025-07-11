@@ -52,7 +52,28 @@ export async function up(db: Kysely<any>): Promise<void> {
     };
     await db.insertInto("sources").values(thirdSource).executeTakeFirst();
 
-    // Rewrite stuff
+    // Ensure the trace of bind between tables
+    const idsToWrite = await db
+        .selectFrom("softwares as s")
+        .leftJoin("software_external_datas as ext", "ext.externalId", "s.externalIdForSource")
+        .leftJoin("software_external_datas as ext", "ext.sourceSlug", "s.sourceSlug")
+        .select(["id", "s.sourceSlug", "s.externalIdForSource"])
+        // Only select if you have data to insert
+        .where("s.externalIdForSource", "is not", null)
+        // When joint is not already made
+        .where("ext.sofrwareId", "is not", "s.id")
+        .execute();
+
+    idsToWrite.map(async ({ id, externalIdForSource, sourceSlug }) => {
+        await db
+            .updateTable("software_external_datas")
+            .set({
+                sourceSlug,
+                externalId: externalIdForSource
+            })
+            .where("id", "=", id)
+            .executeTakeFirst();
+    });
 
     // Delete
     await db.schema.alterTable("softwares").dropColumn("externalIdForSource").dropColumn("sourceSlug").execute();
