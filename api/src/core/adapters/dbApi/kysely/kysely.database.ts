@@ -15,7 +15,7 @@ type SchemaOrganization = {
 };
 
 export type Database = {
-    agents: AgentsTable;
+    users: UsersTable;
     software_referents: SoftwareReferentsTable;
     software_users: SoftwareUsersTable;
     instances: InstancesTable;
@@ -24,21 +24,23 @@ export type Database = {
     softwares__similar_software_external_datas: SimilarExternalSoftwareExternalDataTable;
     compiled_softwares: CompiledSoftwaresTable;
     sources: SourcesTable;
+    sessions: SessionsTable;
 };
 
-type AgentsTable = {
+type UsersTable = {
     id: Generated<number>;
     email: string;
     organization: string | null;
     about: string | null;
     isPublic: boolean;
+    sub: string | null;
 };
 
 type Os = "windows" | "linux" | "mac" | "android" | "ios";
 
 type SoftwareUsersTable = {
     softwareId: number;
-    agentId: number;
+    userId: number;
     useCaseDescription: string;
     os: Os | null;
     version: string;
@@ -47,7 +49,7 @@ type SoftwareUsersTable = {
 
 type SoftwareReferentsTable = {
     softwareId: number;
-    agentId: number;
+    userId: number;
     isExpert: boolean;
     useCaseDescription: string;
     serviceUrl: string | null;
@@ -60,7 +62,7 @@ type InstancesTable = {
     targetAudience: string;
     instanceUrl: string | null;
     isPublic: boolean;
-    addedByAgentId: number;
+    addedByUserId: number;
     referencedSinceTime: number;
     updateTime: number;
 };
@@ -147,9 +149,22 @@ type SoftwaresTable = {
     workshopUrls: JSONColumnType<string[]>;
     categories: JSONColumnType<string[]>;
     generalInfoMd: string | null;
-    addedByAgentId: number;
+    addedByUserId: number;
     logoUrl: string | null;
     keywords: JSONColumnType<string[]>;
+};
+
+type SessionsTable = {
+    id: string;
+    state: string;
+    redirectUrl: string | null;
+    userId: number | null;
+    email: string | null;
+    accessToken: string | null;
+    refreshToken: string | null;
+    expiresAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
 };
 
 // ---------- compiled data ----------

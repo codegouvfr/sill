@@ -6,7 +6,7 @@
 
 import { Kysely } from "kysely";
 import { createKyselyPgDbApi } from "../src/core/adapters/dbApi/kysely/createPgDbApi";
-import { DbAgent, DbApiV2 } from "../src/core/ports/DbApiV2";
+import { DbUser, DbApiV2 } from "../src/core/ports/DbApiV2";
 import { Database } from "../src/core/adapters/dbApi/kysely/kysely.database";
 import { createPgDialect } from "../src/core/adapters/dbApi/kysely/kysely.dialect";
 import { SoftwareFormData, Source } from "../src/lib/ApiTypes";
@@ -27,7 +27,7 @@ const seed = async () => {
     await db.deleteFrom("software_external_datas").execute();
     await db.deleteFrom("softwares__similar_software_external_datas").execute();
     await db.deleteFrom("softwares").execute();
-    await db.deleteFrom("agents").execute();
+    await db.deleteFrom("users").execute();
     await db.deleteFrom("sources").execute();
 
     console.info("Data cleared");
@@ -42,15 +42,16 @@ const seed = async () => {
     } satisfies Source;
     await db.insertInto("sources").values(source).execute();
 
-    const someAgent: OmitFromExisting<DbAgent, "id"> = {
-        email: "some@agent.com",
-        about: "This is a fake agent for seeding purposes.",
+    const someUser: OmitFromExisting<DbUser, "id"> = {
+        email: "some@user.com",
+        about: "This is a fake user for seeding purposes.",
         isPublic: true,
-        organization: "Seed Organization"
+        organization: "Seed Organization",
+        sub: null
     };
 
-    console.info("Adding agent");
-    const agentId = await dbApi.agent.add(someAgent);
+    console.info("Adding user");
+    const userId = await dbApi.user.add(someUser);
 
     console.info("Adding software packages");
     const softwarePackagesFormData: SoftwareFormData[] = [
@@ -172,7 +173,7 @@ const seed = async () => {
     ];
 
     for (const formData of softwarePackagesFormData) {
-        await dbApi.software.create({ agentId, formData });
+        await dbApi.software.create({ userId, formData });
     }
 
     // Add instances for Onyxia
@@ -210,7 +211,7 @@ const seed = async () => {
     ];
 
     for (const instanceData of onyxiaInstances) {
-        await dbApi.instance.create({ agentId, formData: instanceData });
+        await dbApi.instance.create({ userId, formData: instanceData });
     }
 };
 

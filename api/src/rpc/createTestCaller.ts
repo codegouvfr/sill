@@ -11,32 +11,43 @@ import { getWikidataSoftwareOptions } from "../core/adapters/wikidata/getWikidat
 import { ExternalDataOrigin } from "../core/ports/GetSoftwareExternalData";
 import { testPgUrl } from "../tools/test.helpers";
 import { createRouter } from "./router";
-import { User } from "./user";
+import { UserWithId } from "../lib/ApiTypes";
 
 type TestCallerConfig = {
-    user: User | undefined;
+    currentUser: UserWithId | undefined;
 };
 
-export const defaultUser: User = {
-    id: "1",
-    email: "default.user@mail.com"
+export const defaultUser: UserWithId = {
+    id: 1,
+    sub: "default-user-sub",
+    email: "default.user@mail.com",
+    organization: "default",
+    isPublic: false,
+    about: "",
+    declarations: []
 };
 
 export type ApiCaller = Awaited<ReturnType<typeof createTestCaller>>["apiCaller"];
 
-export const createTestCaller = async ({ user }: TestCallerConfig = { user: defaultUser }) => {
+export const createTestCaller = async ({ currentUser }: TestCallerConfig = { currentUser: defaultUser }) => {
     const externalSoftwareDataOrigin: ExternalDataOrigin = "wikidata";
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(testPgUrl) });
 
     const { dbApi, useCases, uiConfig } = await bootstrapCore({
         "dbConfig": { dbKind: "kysely", kyselyDb },
-        "externalSoftwareDataOrigin": externalSoftwareDataOrigin
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+        "oidcParams": { issuerUri: "http://fake.url", clientId: "fake-client-id", clientSecret: "fake-client-secret" }
     });
 
     const { router } = createRouter({
         useCases,
         dbApi,
-        oidcParams: { issuerUri: "http://fake.url", clientId: "fake-client-id" },
+        oidcParams: {
+            issuerUri: "http://fake.url",
+            clientId: "fake-client-id",
+            clientSecret: "fake-client-secret",
+            manageProfileUrl: "http://fake.url/manage-profile"
+        },
         redirectUrl: undefined,
         externalSoftwareDataOrigin,
         getSoftwareExternalDataOptions: getWikidataSoftwareOptions,
@@ -44,5 +55,5 @@ export const createTestCaller = async ({ user }: TestCallerConfig = { user: defa
         uiConfig
     });
 
-    return { apiCaller: router.createCaller({ user }), kyselyDb };
+    return { apiCaller: router.createCaller({ currentUser }), kyselyDb };
 };

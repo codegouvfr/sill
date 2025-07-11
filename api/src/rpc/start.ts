@@ -6,6 +6,7 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import compression from "compression";
 import cors from "cors";
 import express, { Handler } from "express";
+import cookieParser from "cookie-parser";
 import { Kysely } from "kysely";
 import { basename as pathBasename } from "path";
 import type { Equals } from "tsafe";
@@ -28,6 +29,7 @@ import { OidcParams } from "../tools/oidc";
 import { createContextFactory } from "./context";
 import { createRouter } from "./router";
 import { getTranslations } from "./translations/getTranslations";
+import { z } from "zod";
 
 const makeGetCatalogiJson =
     (redirectUrl: string | undefined, dbApi: DbApiV2): Handler =>
@@ -72,20 +74,18 @@ export async function startRpcService(params: {
 
     const kyselyDb = new Kysely<Database>({ dialect: createPgDialect(databaseUrl) });
 
-    const [{ dbApi, useCases, uiConfig }, { createContext }] = await Promise.all([
-        bootstrapCore({
-            "dbConfig": {
-                "dbKind": "kysely",
-                "kyselyDb": kyselyDb
-            },
-            "externalSoftwareDataOrigin": externalSoftwareDataOrigin
-        }),
-        createContextFactory({
-            "oidcParams": {
-                "issuerUri": oidcParams.issuerUri
-            }
-        })
-    ]);
+    const { dbApi, useCases, uiConfig } = await bootstrapCore({
+        "dbConfig": {
+            "dbKind": "kysely",
+            "kyselyDb": kyselyDb
+        },
+        "externalSoftwareDataOrigin": externalSoftwareDataOrigin,
+        oidcParams
+    });
+
+    const { createContext } = await createContextFactory({
+        userRepository: dbApi.user
+    });
 
     const { getSoftwareExternalDataOptions, getSoftwareExternalData } =
         getSoftwareExternalDataFunctions(externalSoftwareDataOrigin);
@@ -102,10 +102,76 @@ export async function startRpcService(params: {
     });
 
     express()
-        .use(cors())
+        .use(
+            cors({
+                origin: "http://localhost:3000",
+                credentials: true
+            })
+        )
         .use(compression() as any)
+        .use(cookieParser())
         .use((req, _res, next) => (console.log("⬅", req.method, req.path, req.body ?? req.query), next()))
         .use("/public/healthcheck", (...[, res]) => res.sendStatus(200))
+        .get("/auth/login", async (req, res) => {
+            console.log("🔴 Login");
+            try {
+                const { authUrl } = await useCases.auth.initiateAuth({
+                    redirectUrl: req.query.redirectUrl as string | undefined
+                });
+
+                console.log("🔴 Auth URL", authUrl);
+
+                res.redirect(authUrl);
+            } catch (error: any) {
+                console.error("Login error: ", error?.message);
+                console.error(error);
+                res.status(500).json({ error: "Authentication failed" });
+            }
+        })
+        .get("/auth/callback", async (req, res) => {
+            try {
+                const { code, state } = z
+                    .object({
+                        code: z.string(),
+                        state: z.string()
+                    })
+                    .parse(req.query);
+
+                const session = await useCases.auth.handleAuthCallback({
+                    code: code as string,
+                    state: state as string
+                });
+
+                // Update session cookie
+                res.cookie("sessionId", session.id, {
+                    httpOnly: true,
+                    secure: !isDevEnvironnement,
+                    sameSite: "lax",
+                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                });
+
+                // Redirect to original URL or default
+                const redirectUrl = session.redirectUrl || "http://localhost:3000/list";
+                res.redirect(redirectUrl);
+            } catch (error) {
+                console.error("Callback error:", error);
+                res.status(500).json({ error: "Authentication callback failed" });
+            }
+        })
+        .get("/auth/logout", async (req, res) => {
+            try {
+                const sessionId = req.cookies.sessionId;
+                if (sessionId) {
+                    await useCases.auth.logout({ sessionId });
+                }
+
+                res.clearCookie("sessionId");
+                res.redirect("/");
+            } catch (error) {
+                console.error("Logout error:", error);
+                res.status(500).json({ error: "Logout failed" });
+            }
+        })
         .get("/:lang/translations.json", async (req, res) => {
             const lang = req.params.lang as Language;
             try {
@@ -132,6 +198,7 @@ export async function startRpcService(params: {
                 });
 
                 return (req, res, next) => {
+                    console.log("cookies in trpc middleware : ", req.cookies);
                     const proxyReq = new Proxy(req, {
                         get: (target, prop) => {
                             if (prop === "path") {

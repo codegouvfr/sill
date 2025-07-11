@@ -3,11 +3,17 @@
 // SPDX-License-Identifier: MIT
 
 import type { FetchAndSaveExternalDataForAllSoftwares } from "../adapters/fetchExternalData";
-import { GetAgent } from "./getAgent";
+import { GetUser } from "./getUser";
 import type { GetSoftwareFormAutoFillDataFromExternalAndOtherSources } from "./getSoftwareFormAutoFillDataFromExternalAndOtherSources";
+import type { InitiateAuth, HandleAuthCallback, Logout } from "./auth";
 
 export type UseCases = {
     getSoftwareFormAutoFillDataFromExternalAndOtherSources: GetSoftwareFormAutoFillDataFromExternalAndOtherSources;
     fetchAndSaveExternalDataForAllSoftwares: FetchAndSaveExternalDataForAllSoftwares;
-    getAgent: GetAgent;
+    getUser: GetUser;
+    auth: {
+        initiateAuth: InitiateAuth;
+        handleAuthCallback: HandleAuthCallback;
+        logout: Logout;
+    };
 };
